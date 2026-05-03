@@ -1,0 +1,336 @@
+/* ═══════════════════════════════════════════════════════════ */
+/* BOT CHARACTER SYSTEM — Fixed Animations                    */
+/* Visible breathing, sway, limb movement, facial expressions */
+/* ═══════════════════════════════════════════════════════════ */
+
+/* ── Character Container ── */
+.bot-char-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: center bottom;
+  transition: transform 0.25s ease-out;
+}
+.bot-char-container:hover {
+  transform: scale(1.06);
+}
+.bot-char-container.char-speaking {
+  transform: scale(1.14);
+}
+.bot-char-container.char-speaking:hover {
+  transform: scale(1.18);
+}
+
+/* ── Image Wrapper ── */
+.char-image-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--char-size);
+  min-height: calc(var(--char-size) * 0.92);
+  isolation: isolate;
+}
+
+
+
+/* ── Character Image ── */
+.char-image {
+  position: relative;
+  z-index: 2;
+  object-fit: contain;
+  pointer-events: none;
+  image-rendering: auto;
+  /* Use lighten or screen to drop black backgrounds */
+  mix-blend-mode: lighten; 
+  /* Boost contrast and add a 3D drop-shadow */
+  filter: brightness(1.1) contrast(1.2) drop-shadow(0px 20px 20px rgba(0, 0, 0, 0.8));
+  /* 3D transformation */
+  transform: perspective(800px) rotateY(-5deg) translateZ(10px);
+  transition: transform 0.3s ease;
+}
+
+.char-image:hover {
+  transform: perspective(800px) rotateY(0deg) translateZ(20px) scale(1.05);
+}
+
+.bot-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent 0%, rgba(56, 189, 248, 0.05) 50%, transparent 100%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 3;
+  animation: scanline 8s linear infinite;
+  opacity: 0.3;
+}
+
+@keyframes scanline {
+  from { background-position: 0 0; }
+  to { background-position: 0 100%; }
+}
+
+.bot-sigil-avatar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 24%;
+  background:
+    radial-gradient(circle at 28% 20%, color-mix(in srgb, var(--bot-accent) 44%, transparent), transparent 34%),
+    radial-gradient(circle at 72% 76%, color-mix(in srgb, var(--bot-primary) 38%, transparent), transparent 36%),
+    linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.02)),
+    #05060d;
+  border: 1px solid color-mix(in srgb, var(--bot-accent) 52%, rgba(255,255,255,0.12));
+  box-shadow:
+    inset 0 0 34px rgba(255,255,255,0.04),
+    0 0 32px color-mix(in srgb, var(--bot-accent) 32%, transparent);
+  color: var(--text-primary);
+  animation: sigil-avatar-float 4.8s ease-in-out infinite;
+}
+
+.bot-sigil-grid,
+.bot-sigil-ring {
+  position: absolute;
+  pointer-events: none;
+}
+
+.bot-sigil-grid {
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.22;
+  mask-image: radial-gradient(circle, black 20%, transparent 78%);
+  animation: live-grid-drift 14s linear infinite;
+}
+
+.bot-sigil-ring {
+  inset: 16%;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--bot-accent) 62%, transparent);
+  opacity: 0.6;
+  animation: live-ring-spin 10s linear infinite;
+}
+
+.bot-sigil-ring.ring-two {
+  inset: 28% 12%;
+  border-style: dashed;
+  opacity: 0.35;
+  animation-duration: 7s;
+  animation-direction: reverse;
+}
+
+.bot-sigil-mark {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: clamp(18px, calc(var(--char-size) * 0.22), 64px);
+  font-weight: 900;
+  letter-spacing: 0;
+  color: var(--text-primary);
+  text-shadow:
+    0 0 12px color-mix(in srgb, var(--bot-accent) 76%, transparent),
+    0 0 28px color-mix(in srgb, var(--bot-accent) 42%, transparent);
+}
+
+.bot-sigil-name {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 9%;
+  z-index: 2;
+  overflow: hidden;
+  color: color-mix(in srgb, var(--bot-accent) 82%, white);
+  font-size: clamp(8px, calc(var(--char-size) * 0.042), 14px);
+  font-weight: 800;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+
+
+/* ── Bot Stage Wrapper ── */
+.bot-stage-wrapper {
+  animation: stage-entrance 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* CHARACTER BODY ANIMATION                                   */
+/* Applied to the wrapper div around the image                */
+/* ═══════════════════════════════════════════════════════════ */
+
+/* The char-image-wrapper gets the body animation so it
+   doesn't conflict with the image's own filter transitions */
+
+/* IDLE — clearly visible float + breathe */
+.char-motion-idle .char-image-wrapper {
+  animation: body-idle 3s ease-in-out infinite;
+}
+
+/* SPEAKING — bob up and down while talking */
+.char-motion-speaking .char-image-wrapper,
+.char-speaking .char-image-wrapper {
+  animation: body-speak 0.8s ease-in-out infinite;
+}
+
+/* WALKING — step side to side */
+.char-motion-walking .char-image-wrapper {
+  animation: body-walk 0.7s ease-in-out infinite;
+}
+
+/* GESTURING — sway and lean */
+.char-motion-gesturing .char-image-wrapper {
+  animation: body-gesture 1.4s ease-in-out infinite;
+}
+
+/* BUILDING — hammer shake */
+.char-motion-building .char-image-wrapper {
+  animation: body-build 0.4s ease-in-out infinite;
+}
+
+/* SCANNING — slow rotate scan */
+.char-motion-scanning .char-image-wrapper {
+  animation: body-scan 2.5s ease-in-out infinite;
+}
+
+/* GUARDING — defensive sway */
+.char-motion-guarding .char-image-wrapper {
+  animation: body-guard 2s ease-in-out infinite;
+}
+
+/* CELEBRATING — big bounce */
+.char-motion-celebrating .char-image-wrapper {
+  animation: body-celebrate 0.5s ease-in-out infinite;
+}
+
+/* POINTING — lean forward */
+.char-motion-pointing .char-image-wrapper {
+  animation: body-point 1.5s ease-in-out infinite;
+}
+
+/* TYPING — rapid small bob */
+.char-motion-typing .char-image-wrapper {
+  animation: body-type 0.25s ease-in-out infinite;
+}
+
+/* RESTING — slow dim sway */
+.char-motion-resting .char-image-wrapper {
+  animation: body-rest 4s ease-in-out infinite;
+}
+.char-motion-resting .char-image {
+  filter: brightness(0.65) saturate(0.5);
+}
+
+/* CHARGING — energy pulse */
+.char-motion-charging .char-image-wrapper {
+  animation: body-charge 0.8s ease-in-out infinite;
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════ */
+/* BODY KEYFRAMES — Pronounced, visible movement              */
+/* ═══════════════════════════════════════════════════════════ */
+
+@keyframes body-idle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-6px) rotate(0.5deg); }
+  50% { transform: translateY(-3px) rotate(0deg); }
+  75% { transform: translateY(-6px) rotate(-0.5deg); }
+}
+
+@keyframes body-speak {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  15% { transform: translateY(-5px) scale(1.04); }
+  30% { transform: translateY(-2px) scale(1.00); }
+  50% { transform: translateY(-6px) scale(1.06); }
+  70% { transform: translateY(-3px) scale(1.00); }
+}
+
+@keyframes body-walk {
+  0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+  25% { transform: translateY(-8px) translateX(3px) rotate(2deg); }
+  50% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+  75% { transform: translateY(-8px) translateX(-3px) rotate(-2deg); }
+}
+
+@keyframes body-gesture {
+  0%, 100% { transform: rotate(0deg) translateX(0px); }
+  15% { transform: rotate(-4deg) translateX(-8px); }
+  35% { transform: rotate(3deg) translateX(6px); }
+  55% { transform: rotate(-2deg) translateX(-4px); }
+  75% { transform: rotate(2deg) translateX(3px); }
+}
+
+@keyframes body-build {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-4px) rotate(-2deg); }
+  50% { transform: translateY(2px) rotate(1deg); }
+  75% { transform: translateY(-3px) rotate(-1deg); }
+}
+
+@keyframes body-scan {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(3deg) scale(1.02); }
+  50% { transform: rotate(0deg) scale(1); }
+  75% { transform: rotate(-3deg) scale(1.02); }
+}
+
+@keyframes body-guard {
+  0%, 100% { transform: scaleX(1.03) translateY(0px); }
+  50% { transform: scaleX(1.06) translateY(-3px); }
+}
+
+
+.bot-stage-character-wrapper {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.bot-stage-live-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff4444;
+  box-shadow: 0 0 8px #ff4444;
+  animation: live-blink 1.5s ease-in-out infinite;
+}
+
+@keyframes live-blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}

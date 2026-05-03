@@ -1,0 +1,190 @@
+/* ═══════════════════════════════════════════════════════════ */
+/* BOT FACE & EXPRESSION OVERLAY — Fixed for visibility       */
+/* ═══════════════════════════════════════════════════════════ */
+
+/* ── Face Container — positioned over the character's head ── */
+.face-overlay {
+  position: absolute;
+  top: 2%;
+  left: 25%;
+  width: 50%;
+  height: 28%;
+  z-index: 6;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6%;
+}
+
+/* ── Eyes ── */
+.face-eyes {
+  display: flex;
+  gap: 20%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.face-eye {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--bot-accent, #f5c842);
+  box-shadow:
+    0 0 10px var(--bot-glow, rgba(245,200,66,0.6)),
+    0 0 20px var(--bot-glow, rgba(245,200,66,0.3)),
+    inset 0 0 4px rgba(255,255,255,0.3);
+  transition: all 0.15s ease;
+  position: relative;
+  animation: eye-ambient-glow 2.5s ease-in-out infinite;
+}
+/* Pupil highlight */
+.face-eye::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 25%;
+  width: 35%;
+  height: 35%;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+}
+
+/* Eye expressions */
+.face-eye.blink {
+  transform: scaleY(0.08) !important;
+  transition: transform 0.06s ease;
+}
+.face-eye.happy {
+  border-radius: 50% 50% 15% 15%;
+  transform: scaleY(0.6);
+  box-shadow: 0 0 14px var(--bot-glow), 0 0 28px var(--bot-glow);
+}
+.face-eye.angry {
+  border-radius: 15% 15% 50% 50%;
+  transform: scaleY(0.45) skewX(-8deg);
+  background: #ef4444;
+  box-shadow: 0 0 12px rgba(239,68,68,0.7);
+}
+.face-eye.angry:last-child {
+  transform: scaleY(0.45) skewX(8deg);
+}
+.face-eye.surprised {
+  transform: scale(1.5);
+  box-shadow: 0 0 18px var(--bot-glow), 0 0 30px var(--bot-glow);
+}
+.face-eye.thinking {
+  transform: scaleY(0.55);
+}
+.face-eye.thinking:first-child {
+  transform: scaleY(0.55) translateY(-20%);
+}
+.face-eye.error {
+  background: #ef4444;
+  animation: eye-error-flash 0.4s ease-in-out infinite !important;
+}
+.face-eye.celebrating {
+  animation: eye-sparkle 0.35s ease-in-out infinite alternate !important;
+  box-shadow: 0 0 14px var(--bot-glow), 0 0 28px var(--bot-accent);
+}
+
+/* ── Mouth ── */
+.face-mouth {
+  width: 14px;
+  height: 4px;
+  background: var(--bot-accent, #f5c842);
+  border-radius: 0 0 50% 50%;
+  opacity: 0.8;
+  transition: all 0.1s ease;
+  box-shadow: 0 0 6px var(--bot-glow);
+}
+.face-mouth.speaking {
+  animation: mouth-talk 0.2s ease-in-out infinite !important;
+  opacity: 1;
+}
+.face-mouth.happy {
+  border-radius: 0 0 50% 50%;
+  height: 6px;
+  width: 18px;
+}
+.face-mouth.angry {
+  border-radius: 3px;
+  height: 3px;
+  width: 20px;
+  background: #ef4444;
+}
+.face-mouth.surprised {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+}
+.face-mouth.celebrating {
+  animation: mouth-talk 0.18s ease-in-out infinite !important;
+  height: 7px;
+  width: 16px;
+  border-radius: 0 0 50% 50%;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* FACE KEYFRAMES                                             */
+/* ═══════════════════════════════════════════════════════════ */
+
+@keyframes eye-ambient-glow {
+  0%, 100% { box-shadow: 0 0 8px var(--bot-glow), 0 0 16px var(--bot-glow); }
+  50% { box-shadow: 0 0 14px var(--bot-glow), 0 0 24px var(--bot-glow), 0 0 32px var(--bot-accent); }
+}
+
+@keyframes mouth-talk {
+  0%   { transform: scaleY(1) scaleX(1); height: 4px; }
+  20%  { transform: scaleY(2.5) scaleX(0.7); height: 8px; }
+  40%  { transform: scaleY(0.5) scaleX(1.3); height: 3px; }
+  60%  { transform: scaleY(3) scaleX(0.8); height: 10px; }
+  80%  { transform: scaleY(1.5) scaleX(1.1); height: 5px; }
+  100% { transform: scaleY(1) scaleX(1); height: 4px; }
+}
+
+@keyframes eye-error-flash {
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px #ef4444; }
+  50% { opacity: 0.3; transform: scale(0.8); box-shadow: 0 0 20px #ef4444, 0 0 30px #ef4444; }
+}
+
+@keyframes eye-sparkle {
+  0% { transform: scale(1); box-shadow: 0 0 8px var(--bot-glow); }
+  100% { transform: scale(1.3); box-shadow: 0 0 18px var(--bot-glow), 0 0 30px var(--bot-accent), 0 0 40px var(--bot-accent); }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* PARTICLE EFFECTS                                          */
+/* ═══════════════════════════════════════════════════════════ */
+
+.char-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  overflow: visible;
+}
+.char-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--bot-accent);
+  opacity: 0;
+}
+.char-particle.active {
+  animation: particle-rise 2.5s ease-out infinite;
+}
+
+@keyframes particle-rise {
+  0% { opacity: 0.9; transform: translateY(0) scale(1); }
+  50% { opacity: 0.5; }
+  100% { opacity: 0; transform: translateY(-120px) scale(0.2); }
+}
+
+/* ── Limb animation overlay (invisible guide zones) ── */
+.char-anim-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}

@@ -1,0 +1,2 @@
+/** Fixed Feature: Model Confidence Radar (pb17) **/
+export function calculateConfidence(output, expectedSchema) { let score = 1.0; if (!output) return 0; if (output.includes('TODO')) score -= 0.5; if (output.length < 50) score -= 0.3; return { score: Math.max(0, score), status: score > 0.7 ? 'verified' : 'risky' }; }

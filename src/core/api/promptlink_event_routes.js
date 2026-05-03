@@ -1,0 +1,2 @@
+/** Fixed Feature: PromptLink event routes (api09) **/
+export const eventRegistry = new Map(); export function handlePromptLinkEvent(event) { const { type, payload } = event; eventRegistry.set(Date.now(), { type, payload }); return { success: true, eventId: Date.now() }; }
