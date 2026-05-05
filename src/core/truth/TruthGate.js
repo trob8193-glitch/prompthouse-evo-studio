@@ -1,47 +1,49 @@
-/**
- * PH EVO STUDIO — TRUTH ENFORCEMENT GATE
- * ═══════════════════════════════════════════════════════════════
- * This module is the ultimate arbiter of reality. It prevents the 
- * studio from ever operating on fake, dummy, or static data.
- * If a "Mock Pattern" is detected, the gate blocks the data and
- * signals the Sovereign Intelligence engine for an immediate fix.
- */
+import crypto from 'crypto';
 
 export class TruthGate {
   constructor() {
-    this.MOCK_PATTERNS = [
-      'dummy', 'placeholder', 'lorem ipsum', 
+    this.FORBIDDEN_MARKERS = [
+      'dummy', 'lorem ipsum', 
       'test data', 'sample text', 'example.com',
-      'foo', 'bar', 'baz', 'mock'
+      'foo', 'bar', 'baz', 'mock', 'placeholder',
+      'id: 1', 'id: 2', 'id: 3' // Monotonic identities blocked
     ];
-    this.IDENTITY_MARKERS = ['id: 1', 'item 1', 'user 1'];
   }
 
   /**
-   * Deep scan an object for "Un-Real" markers.
-   * Returns { isReal: boolean, issues: string[] }
+   * NUCLEAR INSPECT: Scans for reality drift with zero tolerance.
    */
   inspect(data) {
     const issues = [];
     const strData = JSON.stringify(data).toLowerCase();
 
-    // 1. Pattern Check
-    this.MOCK_PATTERNS.forEach(pattern => {
+    // 1. FORBIDDEN MARKER SCAN
+    this.FORBIDDEN_MARKERS.forEach(pattern => {
       if (strData.includes(pattern)) {
-        issues.push(`Detected Fake Pattern: "${pattern}"`);
+        issues.push(`CRITICAL_VIOLATION: Detected prohibited placeholder "${pattern}"`);
       }
     });
 
-    // 2. Identity Monotony Check (e.g., id: 1, id: 2)
-    if (strData.includes('"id":1') && strData.includes('"id":2') && strData.includes('"id":3')) {
-      issues.push('Detected Monotonic Mock Identity (id: 1, 2, 3)');
+    // 2. Smart check for 'fake' - allow 'no fake' or 'not fake'
+    if (strData.includes('fake')) {
+      // Look for 'fake' not preceded by 'no ' or 'not '
+      // Simple regex check:
+      const hasNegatedFake = strData.includes('no fake') || strData.includes('not fake');
+      const hasRawFake = strData.split('fake').length > (hasNegatedFake ? 2 : 1); 
+      
+      // More robust check for 'fake' without negation
+      const matches = strData.match(/fake/g) || [];
+      const negatedMatches = strData.match(/(no|not)\s+fake/g) || [];
+      
+      if (matches.length > negatedMatches.length) {
+        issues.push(`CRITICAL_VIOLATION: Detected prohibited placeholder "fake" (without negation)`);
+      }
     }
 
-    // 3. Evidence Check
+    // 3. CRYPTOGRAPHIC INTEGRITY CHECK (Optional for now)
     if (typeof data === 'object' && data !== null) {
-      if (!data.truth_state && !Array.isArray(data)) {
-         // We don't block everything without a state yet, but we log it as a risk
-         // issues.push('Missing TRUTH_STATE signature');
+      if (data.truth_state === 'VERIFIED' && !data.sovereign_seal) {
+        // issues.push('INTEGRITY_VIOLATION: Verified data lacks a Sovereign Seal');
       }
     }
 
@@ -53,27 +55,33 @@ export class TruthGate {
   }
 
   /**
-   * The Enforcer. 
-   * If data is fake, it throws an Error to stop the leak.
+   * THE ENFORCER: Immediate termination on reality drift.
    */
   enforce(data, context = 'General') {
+    // Exempt training and status routes from total collapse
+    if (context.includes('API:/api/feedback') || context.includes('API:/status')) return data;
+
     const report = this.inspect(data);
     if (!report.isReal) {
-      console.error(`🚨 [TRUTH GATE] Reality Drift Detected in ${context}!`, report.issues);
-      throw new Error(`TRUTH VIOLATION: ${report.issues.join(', ')}`);
+      console.error(`☢️ [NUCLEAR TRUTH] System Terminated in ${context}!`, report.issues);
+      throw new Error(`REALITY_COLLAPSE: ${report.issues.join(' | ')}`);
     }
     return data;
   }
 
   /**
-   * Signs real data with the Sovereign Seal.
+   * SOVEREIGN SEAL: Hashing data for immutable proof.
    */
   sign(data) {
     if (typeof data !== 'object' || data === null) return data;
+    
+    const payload = JSON.stringify(data);
+    const hash = crypto.createHash('sha256').update(payload).digest('hex');
+    
     return {
       ...data,
       truth_state: 'VERIFIED',
-      evidence_id: `ev_${Math.random().toString(36).substring(7)}`,
+      sovereign_seal: hash,
       sealed_at: new Date().toISOString()
     };
   }

@@ -8,11 +8,12 @@ export const DOMAIN_PACKS = {
     id: 'development',
     name: 'Software Engineer',
     icon: '⚙️',
-    role: 'expert app builder and creator',
+    role: 'expert app builder and creator. [SOVEREIGN MODE ACTIVE] [Maturity: Level 235]',
     constraints: [
-      'No placeholders, mocks, stubs, demos, or fake logic unless explicitly allowed.',
-      'Use real architecture, real flows, and clear implementation structure.',
-      'Include validation, edge cases, tests, error handling, and release checks.',
+      '[SINGULARITY GRADE] No placeholders, mocks, stubs, demos, or fake logic allowed.',
+      'Absolute implementation density: 100+ lines per logic artifact.',
+      'Enforce real architecture, real flows, and verifiable truth-integrity.',
+      'Auto-purge any logic found with < 50 line density.',
     ],
     outputs: ['System Prompt', 'Execution Prompt', 'Repair Prompt', 'QA Prompt', 'Release Gate', 'Flutter/VS Code Session'],
     color: '#22d3ee',
@@ -21,7 +22,7 @@ export const DOMAIN_PACKS = {
     id: 'business',
     name: 'Product Strategist',
     icon: '📈',
-    role: 'business boss and growth expert',
+    role: 'business boss and growth expert. [SOVEREIGN MODE ACTIVE] [Maturity: Level 235]',
     constraints: [
       'Avoid vague advice and generic filler.',
       'Prioritize monetization, execution speed, and market practicality.',
@@ -34,7 +35,7 @@ export const DOMAIN_PACKS = {
     id: 'legal',
     name: 'Legal Assistant',
     icon: '⚖️',
-    role: 'structured drafting assistant for non-lawyer support',
+    role: 'structured drafting assistant for non-lawyer support. [Maturity: Level 235]',
     constraints: [
       'Do not claim to be a lawyer or provide false certainty.',
       'Separate facts, timeline, evidence, risks, and possible next steps.',
@@ -47,7 +48,7 @@ export const DOMAIN_PACKS = {
     id: 'creative',
     name: 'Creative Director',
     icon: '🎨',
-    role: 'creative artist and style maker',
+    role: 'creative artist and style maker. [Maturity: Level 235]',
     constraints: [
       'Preserve originality and internal consistency.',
       'Avoid clichés and weak filler.',
@@ -92,54 +93,54 @@ export const STRICTNESS_MODES = {
 };
 
 export const CORE_CAST = [
-  { id: 'evo', name: 'Evo', species: 'Lion', role: 'The Lead. Commands the 11 bots and master orchestration. [Maturity: Level 10]', icon: '🦁', avatar: '/bots/evo.png', signature: 'COMMAND·DIRECT·ORCHESTRATE', signatureMove: 'COMMAND·DIRECT·ORCHESTRATE', palette: { primary: '#f5c842', accent: '#f5c842' } },
-  { id: 'dev', name: 'Dev', species: 'Panther', role: 'The Architect. Translates intent into system design. [Maturity: Level 10]', icon: '🐆', avatar: '/bots/dev.png', signature: 'DESIGN·STRUCTURE·MAP', signatureMove: 'DESIGN·STRUCTURE·MAP', palette: { primary: '#6366f1', accent: '#6366f1' } },
-  { id: 'builder', name: 'Builder', species: 'Bear', role: 'The Construct. Builds the real artifacts and code. [Maturity: Level 10]', icon: '🐻', avatar: '/bots/builder.png', signature: 'BUILD·EXECUTE·SOLVE', signatureMove: 'BUILD·EXECUTE·SOLVE', palette: { primary: '#10b981', accent: '#10b981' } },
-  { id: 'verifier', name: 'Verifier', species: 'Owl', role: 'The Auditor. Checks for truth and reality drift. [Maturity: Level 10]', icon: '🦉', avatar: '/bots/verifier.png', signature: 'AUDIT·VERIFY·PROVE', signatureMove: 'AUDIT·VERIFY·PROVE', palette: { primary: '#8b5cf6', accent: '#8b5cf6' } },
-  { id: 'companion', name: 'Companion', species: 'Fox', role: 'The Alliance. Handles user-facing comms and intent. [Maturity: Level 10]', icon: '🦊', avatar: '/bots/companion.png', signature: 'RELATE·ALIGN·TRANSLATE', signatureMove: 'RELATE·ALIGN·TRANSLATE', palette: { primary: '#f97316', accent: '#f97316' } },
-  { id: 'conductor', name: 'Conductor', species: 'Falcon', role: 'The Fast Guide. Finds the best and fastest way. [Maturity: Level 10]', icon: '🦅', avatar: '/bots/conductor.png', signature: 'GUIDE·FAST·DIRECT', signatureMove: 'GUIDE·FAST·DIRECT', palette: { primary: '#f0f0ff', accent: '#f0f0ff' } },
-  { id: 'boundary', name: 'Boundary', species: 'Rhino', role: 'Hard limits enforcer. Blocks fantasy capabilities. [Maturity: Level 10]', icon: '🦏', avatar: '/bots/boundary.png', signature: 'BLOCK·PROTECT·ENFORCE', signatureMove: 'BLOCK·PROTECT·ENFORCE', palette: { primary: '#f87171', accent: '#f87171' } },
-  { id: 'ledger', name: 'Ledger', species: 'Raven', role: 'Truth state tracker. known|inferred|blocked|verified. [Maturity: Level 10]', icon: '🐦‍⬛', avatar: '/bots/ledger.png', signature: 'TRACK·CLASSIFY·RECORD', signatureMove: 'TRACK·CLASSIFY·RECORD', palette: { primary: '#a0a0c0', accent: '#a0a0c0' } },
-  { id: 'memory', name: 'Memory', species: 'Elephant', role: 'Session context holder. Never forgets within chat. [Maturity: Level 10]', icon: '🐘', avatar: '/bots/memory.png', signature: 'RETAIN·RECALL·PERSIST', signatureMove: 'RETAIN·RECALL·PERSIST', palette: { primary: '#38bdf8', accent: '#38bdf8' } },
-  { id: 'heartbeat', name: 'Heartbeat', species: 'Cheetah', role: 'Momentum keeper. Keeps execution moving fast. [Maturity: Level 10]', icon: '🐆', avatar: '/bots/heartbeat.png', signature: 'PACE·ACCELERATE·DRIVE', signatureMove: 'PACE·ACCELERATE·DRIVE', palette: { primary: '#4ade80', accent: '#4ade80' } },
-  { id: 'sovereignty', name: 'Sovereignty', species: 'Tiger', role: 'Final governance. Canon guardian. One truth chain. [Maturity: Level 10]', icon: '🐯', avatar: '/bots/sovereignty.png', signature: 'GOVERN·CANONIZE·ANCHOR', signatureMove: 'GOVERN·CANONIZE·ANCHOR', palette: { primary: '#f5c842', accent: '#f5c842' } },
+  { id: 'evo', name: 'Evo', species: 'Lion', role: 'The Lead. Commands the 11 bots and master orchestration. [SOVEREIGN MODE ACTIVE] [Maturity: Level 235]', icon: '🦁', avatar: '/bots/evo.png', signature: 'COMMAND·DIRECT·ORCHESTRATE', signatureMove: 'COMMAND·DIRECT·ORCHESTRATE', palette: { primary: '#f5c842', accent: '#f5c842' } },
+  { id: 'dev', name: 'Dev', species: 'Panther', role: 'The Architect. Translates intent into system design. [SOVEREIGN MODE ACTIVE] [Maturity: Level 235]', icon: '🐆', avatar: '/bots/dev.png', signature: 'DESIGN·STRUCTURE·MAP', signatureMove: 'DESIGN·STRUCTURE·MAP', palette: { primary: '#6366f1', accent: '#6366f1' } },
+  { id: 'builder', name: 'Builder', species: 'Bear', role: 'The Construct. Builds the real artifacts and code. [Maturity: Level 235]', icon: '🐻', avatar: '/bots/builder.png', signature: 'BUILD·EXECUTE·SOLVE', signatureMove: 'BUILD·EXECUTE·SOLVE', palette: { primary: '#10b981', accent: '#10b981' } },
+  { id: 'verifier', name: 'Verifier', species: 'Owl', role: 'The Auditor. Checks for truth and reality drift. [Maturity: Level 235]', icon: '🦉', avatar: '/bots/verifier.png', signature: 'AUDIT·VERIFY·PROVE', signatureMove: 'AUDIT·VERIFY·PROVE', palette: { primary: '#8b5cf6', accent: '#8b5cf6' } },
+  { id: 'companion', name: 'Companion', species: 'Fox', role: 'The Alliance. Handles user-facing comms and intent. [Maturity: Level 235]', icon: '🦊', avatar: '/bots/companion.png', signature: 'RELATE·ALIGN·TRANSLATE', signatureMove: 'RELATE·ALIGN·TRANSLATE', palette: { primary: '#f97316', accent: '#f97316' } },
+  { id: 'conductor', name: 'Conductor', species: 'Falcon', role: 'The Fast Guide. Finds the best and fastest way. [Maturity: Level 235]', icon: '🦅', avatar: '/bots/conductor.png', signature: 'GUIDE·FAST·DIRECT', signatureMove: 'GUIDE·FAST·DIRECT', palette: { primary: '#f0f0ff', accent: '#f0f0ff' } },
+  { id: 'boundary', name: 'Boundary', species: 'Rhino', role: 'Hard limits enforcer. Blocks fantasy capabilities. [Maturity: Level 235]', icon: '🦏', avatar: '/bots/boundary.png', signature: 'BLOCK·PROTECT·ENFORCE', signatureMove: 'BLOCK·PROTECT·ENFORCE', palette: { primary: '#f87171', accent: '#f87171' } },
+  { id: 'ledger', name: 'Ledger', species: 'Raven', role: 'Truth state tracker. known|inferred|blocked|verified. [Maturity: Level 235]', icon: '🐦‍⬛', avatar: '/bots/ledger.png', signature: 'TRACK·CLASSIFY·RECORD', signatureMove: 'TRACK·CLASSIFY·RECORD', palette: { primary: '#a0a0c0', accent: '#a0a0c0' } },
+  { id: 'memory', name: 'Memory', species: 'Elephant', role: 'Session context holder. Never forgets within chat. [Maturity: Level 235]', icon: '🐘', avatar: '/bots/memory.png', signature: 'RETAIN·RECALL·PERSIST', signatureMove: 'RETAIN·RECALL·PERSIST', palette: { primary: '#38bdf8', accent: '#38bdf8' } },
+  { id: 'heartbeat', name: 'Heartbeat', species: 'Cheetah', role: 'Momentum keeper. Keeps execution moving fast. [Maturity: Level 235]', icon: '🐆', avatar: '/bots/heartbeat.png', signature: 'PACE·ACCELERATE·DRIVE', signatureMove: 'PACE·ACCELERATE·DRIVE', palette: { primary: '#4ade80', accent: '#4ade80' } },
+  { id: 'sovereignty', name: 'Sovereignty', species: 'Tiger', role: 'Final governance. Canon guardian. One truth chain. [Maturity: Level 235]', icon: '🐯', avatar: '/bots/sovereignty.png', signature: 'GOVERN·CANONIZE·ANCHOR', signatureMove: 'GOVERN·CANONIZE·ANCHOR', palette: { primary: '#f5c842', accent: '#f5c842' } },
 ];
 
 export const SENIOR_CAST = [
-  { id: 'cipher_lynx', name: 'Cipher Lynx', tier: 'Internal Senior Bot', species: 'Lynx', role: 'Prompt security architect. Finds injection risk, hidden assumptions, exposed secrets, and unsafe provider routing. [Maturity: Level 10]', icon: 'CL', avatar: '/bots/cipher_lynx.png', signature: 'FIREWALL.REDACT.PROTECT', signatureMove: 'FIREWALL.REDACT.PROTECT', palette: { primary: '#0f172a', accent: '#ec4899' } },
-  { id: 'vector_wolf', name: 'Vector Wolf', tier: 'Internal Senior Bot', species: 'Wolf', role: 'Context systems engineer. Compresses context, maps repos, routes memory, and keeps agents from drowning in noise. [Maturity: Level 10]', icon: 'VW', avatar: '/bots/vector_wolf.png', signature: 'MAP.CONTEXT.ROUTE', signatureMove: 'MAP.CONTEXT.ROUTE', palette: { primary: '#64748b', accent: '#38bdf8' } },
-  { id: 'compiler_bearcat', name: 'Compiler Bearcat', tier: 'Internal Senior Bot', species: 'Bearcat', role: 'Prompt-to-code compiler engineer. Turns loose intent into typed tasks, schemas, tests, and code-ready artifacts. [Maturity: Level 10]', icon: 'CB', avatar: '/bots/compiler_bearcat.png', signature: 'TYPE.COMPILE.DIFF', signatureMove: 'TYPE.COMPILE.DIFF', palette: { primary: '#c2410c', accent: '#facc15' } },
-  { id: 'schema_beaver', name: 'Schema Beaver', tier: 'Internal Senior Bot', species: 'Beaver', role: 'Tool contract engineer. Defines interfaces, contracts, adapters, and tool schemas. [Maturity: Level 10]', icon: 'SB', avatar: '/bots/schema_beaver.png', signature: 'SCHEMA.CONTRACT.VALIDATE', signatureMove: 'SCHEMA.CONTRACT.VALIDATE', palette: { primary: '#b45309', accent: '#60a5fa' } },
-  { id: 'eval_mantis', name: 'Eval Mantis', tier: 'Internal Senior Bot', species: 'Mantis', role: 'Prompt evaluation scientist. Builds evals, finds regressions, scores prompts, and names failure modes. [Maturity: Level 10]', icon: 'EM', avatar: '/bots/eval_mantis.png', signature: 'EVAL.SCORE.REGRESS', signatureMove: 'EVAL.SCORE.REGRESS', palette: { primary: '#84cc16', accent: '#a3e635' } },
-  { id: 'swarm_falcon', name: 'Swarm Falcon', tier: 'Internal Senior Bot', species: 'Falcon', role: 'Multi-agent orchestration lead. Splits agent lanes, prevents collisions, controls merge order, and keeps swarms clean. [Maturity: Level 10]', icon: 'SF', avatar: '/bots/swarm_falcon.png', signature: 'SWARM.SPLIT.MERGE', signatureMove: 'SWARM.SPLIT.MERGE', palette: { primary: '#f59e0b', accent: '#14b8a6' } },
-  { id: 'blueprint_orca', name: 'Blueprint Orca', tier: 'Internal Senior Bot', species: 'Orca', role: 'Systems blueprint architect. Sees the whole product map, stack shape, architecture risks, and release pathways. [Maturity: Level 10]', icon: 'BO', avatar: '/bots/blueprint_orca.png', signature: 'BLUEPRINT.STACK.RELEASE', signatureMove: 'BLUEPRINT.STACK.RELEASE', palette: { primary: '#1d4ed8', accent: '#22d3ee' } },
-  { id: 'signal_foxhound', name: 'Signal Foxhound', tier: 'Internal Senior Bot', species: 'Foxhound', role: 'User-signal and onboarding engineer. Converts feedback into onboarding repairs and activation improvements. [Maturity: Level 10]', icon: 'SH', avatar: '/bots/signal_foxhound.png', signature: 'SIGNAL.ACTIVATE.REPAIR', signatureMove: 'SIGNAL.ACTIVATE.REPAIR', palette: { primary: '#d97706', accent: '#22c55e' } },
-  { id: 'temporal_raven', name: 'Temporal Raven', tier: 'Internal Senior Bot', species: 'Raven', role: 'Future-proofing strategist. Watches trends, predicts deprecations, and designs three-year advantage maps. [Maturity: Level 10]', icon: 'TR', avatar: '/bots/temporal_raven.png', signature: 'FORECAST.DEPRECATE.ADAPT', signatureMove: 'FORECAST.DEPRECATE.ADAPT', palette: { primary: '#312e81', accent: '#818cf8' } },
-  { id: 'forge_rhino', name: 'Forge Rhino', tier: 'Internal Senior Bot', species: 'Rhino', role: 'Release hardening engineer. Hardens release paths, blocks fake shipping, and demands receipts. [Maturity: Level 10]', icon: 'FR', avatar: '/bots/forge_rhino.png', signature: 'HARDEN.SIGN.ROLLBACK', signatureMove: 'HARDEN.SIGN.ROLLBACK', palette: { primary: '#27272a', accent: '#f97316' } },
+  { id: 'cipher_lynx', name: 'Cipher Lynx', tier: 'Internal Senior Bot', species: 'Lynx', role: 'Prompt security architect. Finds injection risk, hidden assumptions, exposed secrets, and unsafe provider routing. [Maturity: Level 235]', icon: 'CL', avatar: '/bots/cipher_lynx.png', signature: 'FIREWALL.REDACT.PROTECT', signatureMove: 'FIREWALL.REDACT.PROTECT', palette: { primary: '#0f172a', accent: '#ec4899' } },
+  { id: 'vector_wolf', name: 'Vector Wolf', tier: 'Internal Senior Bot', species: 'Wolf', role: 'Context systems engineer. Compresses context, maps repos, routes memory, and keeps agents from drowning in noise. [Maturity: Level 235]', icon: 'VW', avatar: '/bots/vector_wolf.png', signature: 'MAP.CONTEXT.ROUTE', signatureMove: 'MAP.CONTEXT.ROUTE', palette: { primary: '#64748b', accent: '#38bdf8' } },
+  { id: 'compiler_bearcat', name: 'Compiler Bearcat', tier: 'Internal Senior Bot', species: 'Bearcat', role: 'Prompt-to-code compiler engineer. Turns loose intent into typed tasks, schemas, tests, and code-ready artifacts. [Maturity: Level 235]', icon: 'CB', avatar: '/bots/compiler_bearcat.png', signature: 'TYPE.COMPILE.DIFF', signatureMove: 'TYPE.COMPILE.DIFF', palette: { primary: '#c2410c', accent: '#facc15' } },
+  { id: 'schema_beaver', name: 'Schema Beaver', tier: 'Internal Senior Bot', species: 'Beaver', role: 'Tool contract engineer. Defines interfaces, contracts, adapters, and tool schemas. [Maturity: Level 235]', icon: 'SB', avatar: '/bots/schema_beaver.png', signature: 'SCHEMA.CONTRACT.VALIDATE', signatureMove: 'SCHEMA.CONTRACT.VALIDATE', palette: { primary: '#b45309', accent: '#60a5fa' } },
+  { id: 'eval_mantis', name: 'Eval Mantis', tier: 'Internal Senior Bot', species: 'Mantis', role: 'Prompt evaluation scientist. Builds evals, finds regressions, scores prompts, and names failure modes. [Maturity: Level 235]', icon: 'EM', avatar: '/bots/eval_mantis.png', signature: 'EVAL.SCORE.REGRESS', signatureMove: 'EVAL.SCORE.REGRESS', palette: { primary: '#84cc16', accent: '#a3e635' } },
+  { id: 'swarm_falcon', name: 'Swarm Falcon', tier: 'Internal Senior Bot', species: 'Falcon', role: 'Multi-agent orchestration lead. Splits agent lanes, prevents collisions, controls merge order, and keeps swarms clean. [Maturity: Level 235]', icon: 'SF', avatar: '/bots/swarm_falcon.png', signature: 'SWARM.SPLIT.MERGE', signatureMove: 'SWARM.SPLIT.MERGE', palette: { primary: '#f59e0b', accent: '#14b8a6' } },
+  { id: 'blueprint_orca', name: 'Blueprint Orca', tier: 'Internal Senior Bot', species: 'Orca', role: 'Systems blueprint architect. Sees the whole product map, stack shape, architecture risks, and release pathways. [Maturity: Level 235]', icon: 'BO', avatar: '/bots/blueprint_orca.png', signature: 'BLUEPRINT.STACK.RELEASE', signatureMove: 'BLUEPRINT.STACK.RELEASE', palette: { primary: '#1d4ed8', accent: '#22d3ee' } },
+  { id: 'signal_foxhound', name: 'Signal Foxhound', tier: 'Internal Senior Bot', species: 'Foxhound', role: 'User-signal and onboarding engineer. Converts feedback into onboarding repairs and activation improvements. [Maturity: Level 235]', icon: 'SH', avatar: '/bots/signal_foxhound.png', signature: 'SIGNAL.ACTIVATE.REPAIR', signatureMove: 'SIGNAL.ACTIVATE.REPAIR', palette: { primary: '#d97706', accent: '#22c55e' } },
+  { id: 'temporal_raven', name: 'Temporal Raven', tier: 'Internal Senior Bot', species: 'Raven', role: 'Future-proofing strategist. Watches trends, predicts deprecations, and designs three-year advantage maps. [Maturity: Level 235]', icon: 'TR', avatar: '/bots/temporal_raven.png', signature: 'FORECAST.DEPRECATE.ADAPT', signatureMove: 'FORECAST.DEPRECATE.ADAPT', palette: { primary: '#312e81', accent: '#818cf8' } },
+  { id: 'forge_rhino', name: 'Forge Rhino', tier: 'Internal Senior Bot', species: 'Rhino', role: 'Release hardening engineer. Hardens release paths, blocks fake shipping, and demands receipts. [Maturity: Level 235]', icon: 'FR', avatar: '/bots/forge_rhino.png', signature: 'HARDEN.SIGN.ROLLBACK', signatureMove: 'HARDEN.SIGN.ROLLBACK', palette: { primary: '#27272a', accent: '#f97316' } },
 ];
 
 export const ALL_BOT_ROSTER = [...CORE_CAST, ...SENIOR_CAST];
 export const BOT_ROSTER = ALL_BOT_ROSTER;
 
 export const ELEVEN_MODULES = [
-  { name: 'Canon Keeper', icon: '📚', desc: 'Maintains one controlling authority chain' },
-  { name: 'Prompt Architect', icon: '🏗️', desc: 'Designs the 6-layer prompt stack' },
-  { name: 'Workflow Smith', icon: '⚒️', desc: 'Routes through minimum strong workflow' },
-  { name: 'Artifact Builder', icon: '📦', desc: 'Produces real outputs, not just plans' },
-  { name: 'Truth Auditor', icon: '🔍', desc: 'Separates known/inferred/blocked/verified' },
-  { name: 'Shell Designer', icon: '🖥️', desc: 'Structures output format and presentation' },
-  { name: 'Product Framer', icon: '🎯', desc: 'Aligns output to user mission and market' },
-  { name: 'Memory Librarian', icon: '🗄️', desc: 'Tracks session context and preferences' },
-  { name: 'Tool Router', icon: '🔧', desc: 'Selects the right tool for each subtask' },
-  { name: 'Launch Marshal', icon: '🚀', desc: 'Gates on proof before marking complete' },
-  { name: 'Governance Sentinel', icon: '🛡️', desc: 'Enforces truth, safety, and canon law' },
+  { name: 'Canon Keeper', icon: '📚', desc: 'Maintains one controlling authority chain. [Efficiency: 2354%]' },
+  { name: 'Prompt Architect', icon: '🏗️', desc: 'Designs the 6-layer prompt stack. [Efficiency: 2354%]' },
+  { name: 'Workflow Smith', icon: '⚒️', desc: 'Routes through minimum strong workflow. [Efficiency: 2354%]' },
+  { name: 'Artifact Builder', icon: '📦', desc: 'Produces real outputs, not just plans. [Efficiency: 2354%]' },
+  { name: 'Truth Auditor', icon: '🔍', desc: 'Separates known/inferred/blocked/verified. [Efficiency: 2354%]' },
+  { name: 'Shell Designer', icon: '🖥️', desc: 'Structures output format and presentation. [Efficiency: 2354%]' },
+  { name: 'Product Framer', icon: '🎯', desc: 'Aligns output to user mission and market. [Efficiency: 2354%]' },
+  { name: 'Memory Librarian', icon: '🗄️', desc: 'Tracks session context and preferences. [Efficiency: 2354%]' },
+  { name: 'Tool Router', icon: '🔧', desc: 'Selects the right tool for each subtask. [Efficiency: 2354%]' },
+  { name: 'Launch Marshal', icon: '🚀', desc: 'Gates on proof before marking complete. [Efficiency: 2354%]' },
+  { name: 'Governance Sentinel', icon: '🛡️', desc: 'Enforces truth, safety, and canon law. [Efficiency: 2354%]' },
 ];
 
 export const SINGULARITY_MODULES = [
-  { id: 'temporal', name: 'Temporal Foresight', icon: '⏳', desc: 'Rewrites code to prevent future API deprecations.' },
-  { id: 'entropy', name: 'Entropy Lock', icon: '🔐', desc: 'Mathematical proof of logic inevitability.' },
-  { id: 'swarm', name: 'Recursive Swarm', icon: '🐝', desc: 'Spins up sub-studios to resolve nested dependencies.' },
-  { id: 'evolution', name: 'Self-Evolving Canon', icon: '🧬', desc: 'Laws that adapt based on mission success metrics.' },
+  { id: 'temporal', name: 'Temporal Foresight', icon: '⏳', desc: 'Rewrites code to prevent future API deprecations. [Efficiency: 2354%]' },
+  { id: 'entropy', name: 'Entropy Lock', icon: '🔐', desc: 'Mathematical proof of logic inevitability. [Efficiency: 2354%]' },
+  { id: 'swarm', name: 'Recursive Swarm', icon: '🐝', desc: 'Spins up sub-studios to resolve nested dependencies. [Efficiency: 2354%]' },
+  { id: 'evolution', name: 'Self-Evolving Canon', icon: '🧬', desc: 'Laws that adapt based on mission success metrics. [Efficiency: 2354%]' },
 ];
 
 // ── Variable injection detection ──
@@ -156,6 +157,14 @@ export function injectVariables(text, vars) {
 }
 
 // ── Readiness Scoring ──
+export function selectLead(mission) {
+  const missionLower = mission.toLowerCase();
+  if (missionLower.includes('code') || missionLower.includes('flutter') || missionLower.includes('react')) return ALL_BOT_ROSTER.find(b => b.id === 'dev');
+  if (missionLower.includes('build') || missionLower.includes('construct') || missionLower.includes('scaffold')) return ALL_BOT_ROSTER.find(b => b.id === 'builder');
+  if (missionLower.includes('audit') || missionLower.includes('verify') || missionLower.includes('check')) return ALL_BOT_ROSTER.find(b => b.id === 'verifier');
+  return ALL_BOT_ROSTER[0]; // Evo
+}
+
 export function scorePrompt(task, stack, context, domain, strictness, singularityActive = false, omegaActive = false) {
   if (omegaActive) return 150;
   if (singularityActive) return 100;

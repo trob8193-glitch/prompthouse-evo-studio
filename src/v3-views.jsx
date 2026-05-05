@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEvoStore } from './store.js';
-import { CORE_CAST, BOT_ROSTER, ALL_BOT_ROSTER, SENIOR_CAST } from './engine.js';
+import { CORE_CAST, BOT_ROSTER, ALL_BOT_ROSTER, SENIOR_CAST, selectLead } from './engine.js';
 import { BotCharacter, BotRosterCard, BotStageCharacter, EXPRESSIONS, MOTIONS, useBotExpression } from './bot-characters.jsx';
 import { writeToLocalDisk } from './autonomous-builder.js';
 import masterPromptsData from './prompthouse_50_master_build_prompts.json';
 
 // ── Lead Selection Logic ──
-export function selectLead(mission) {
-  const m = mission.toLowerCase();
-  if (m.includes('code') || m.includes('build') || m.includes('flutter')) return BOT_ROSTER.find(b => b.id === 'dev');
-  if (m.includes('truth') || m.includes('audit') || m.includes('verify')) return BOT_ROSTER.find(b => b.id === 'verifier');
-  if (m.includes('route') || m.includes('map') || m.includes('workflow')) return BOT_ROSTER.find(b => b.id === 'conductor');
-  return BOT_ROSTER.find(b => b.id === 'evo');
-}
+// ── SELECT LEAD LOGIC moved to engine.js ──
 
 // ── 1. BOT ROSTER VIEW ────────────────────────────────────────
 export function BotRosterView() {

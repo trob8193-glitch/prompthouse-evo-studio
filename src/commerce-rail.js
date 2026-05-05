@@ -110,19 +110,22 @@ function generateCheckoutCode(productName, url, price, currency) {
 
 /**
  * Get a pricing table spec for multiple tiers
+ * Doctrine: No static tiers. Must be inferred from market parity or real config.
  */
 export function createPricingTable(missionId, tiers = []) {
-  const defaultTiers = [
-    { name: 'Starter', price: 999, features: ['5 missions/mo', 'Core bots'] },
-    { name: 'Pro', price: 2999, features: ['50 missions/mo', 'All 21 bots'] },
-    { name: 'Enterprise', price: 9999, features: ['Unlimited', 'DeployRail'] },
-  ];
-
-  const finalTiers = tiers.length ? tiers : defaultTiers;
+  if (tiers.length === 0) {
+    // We do not simulate. We mark as inferred to signal to the Agent to find real data.
+    return { 
+      missionId, 
+      tiers: [], 
+      status: 'inferred', 
+      reason: 'No pricing tiers provided. Awaiting market parity analysis.' 
+    };
+  }
 
   addProofReceipt(missionId, 'commerce_rail:pricing_table', 'verified', {
     evidenceType: 'pricing_table',
   });
 
-  return { missionId, tiers: finalTiers, mode: 'live', status: 'verified' };
+  return { missionId, tiers, mode: 'live', status: 'verified' };
 }

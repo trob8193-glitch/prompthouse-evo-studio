@@ -1,8 +1,7 @@
 // autonomous-builder.js — Fully Autonomous End-to-End App Builder Engine
 // Bots collaboratively build real apps: Evo leads, Dev codes, Builder scaffolds, Verifier audits
 
-import { BOT_ROSTER } from './engine.js';
-import { selectLead } from './v3-views.jsx';
+import { BOT_ROSTER, selectLead } from './engine.js';
 
 // ═══════════════════════════════════════════════════════════
 // APP TEMPLATES — Real executable scaffolds

@@ -45,9 +45,10 @@ function build6LayerStack(feature) {
 3. No fake return values — every function must produce real, usable output
 4. Handle errors with try/catch — never let exceptions crash silently
 5. Include JSDoc comments for every exported function
-6. Minimum 50 lines of real logic (not counting imports/comments)
-7. If the feature needs persistence, use fetch() to the bridge API at http://localhost:3001
-8. If the feature needs AI, use fetch() to http://localhost:3001/chat`,
+6. MINIMUM 100 LINES of real logic. This is an OMEGA-LEVEL BUILD.
+7. Implement deep, complex logic. Use state machines, caching, and multi-step verification.
+8. If the feature needs persistence, use fetch() to the bridge API at http://localhost:3001
+9. If the feature needs AI, use fetch() to http://localhost:3001/chat`,
 
     variables: `Feature ID: ${feature.id}. Feature Name: ${feature.name}. Module: ${feature.module}. Description: ${feature.description}.`,
 

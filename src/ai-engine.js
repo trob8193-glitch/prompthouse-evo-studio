@@ -176,19 +176,54 @@ export function searchTemplates(query, domain) {
 }
 
 // ─── LIVE AI CHAT ────────────────────────────────────────────
-export async function chatWithEvo({ messages, systemPrompt }) {
+export async function chatWithEvo({ messages, systemPrompt, onChunk }) {
   const response = await fetch('http://localhost:3001/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       messages,
-      systemPrompt
+      systemPrompt,
+      stream: !!onChunk
     }),
   });
 
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
     throw new Error(err.error?.message || `OpenAI error ${response.status}`);
+  }
+
+  if (onChunk) {
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+    let fullText = '';
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      const lines = chunkValue.split('\n');
+      
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const dataStr = line.replace('data: ', '').trim();
+          if (dataStr === '[DONE]') {
+            done = true;
+            break;
+          }
+          try {
+            const data = JSON.parse(dataStr);
+            if (data.content) {
+              fullText += data.content;
+              onChunk(data.content, fullText);
+            }
+          } catch (e) {
+            // Partial JSON or heartbeat
+          }
+        }
+      }
+    }
+    return fullText;
   }
 
   const data = await response.json();

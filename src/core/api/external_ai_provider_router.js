@@ -13,11 +13,11 @@ const MODEL_PROVIDERS = {
 
 const PROVIDER_CONFIG = {
     [MODEL_PROVIDERS.OPENAI]: {
-        url: 'https://api.openai.com/v1/engines/davinci/completions',
+        url: 'https://api.openai.com/v1/chat/completions',
         apiKey: process.env.OPENAI_API_KEY
     },
     [MODEL_PROVIDERS.ANTHROPIC]: {
-        url: 'https://api.anthropic.com/v1/complete',
+        url: 'https://api.anthropic.com/v1/messages',
         apiKey: process.env.ANTHROPIC_API_KEY
     },
     [MODEL_PROVIDERS.LOCAL]: {
@@ -32,9 +32,14 @@ async function callOpenAI(prompt) {
             'Authorization': `Bearer ${PROVIDER_CONFIG[MODEL_PROVIDERS.OPENAI].apiKey}`,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ prompt, max_tokens: 150 })
+        body: JSON.stringify({ 
+            model: 'gpt-4o',
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: 500 
+        })
     });
-    return await response.json();
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content || data;
 }
 
 async function callAnthropic(prompt) {

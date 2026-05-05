@@ -9,9 +9,10 @@ export const Navigation = () => {
   };
 
   const groups = [
-    { id: "core", name: "Core Studio", icon: <Home size={18} />, items: ["Dashboard", "Project Manager"] },
-    { id: "foundry", name: "Model Foundry", icon: <Activity size={18} />, items: ["Dataset Forge", "Eval Bench", "Registry"] },
-    { id: "security", name: "Sovereignty", icon: <Shield size={18} />, items: ["Memory Box", "Proof Console", "Bot Automation"] }
+    { id: "core", name: "Development", icon: <Home size={18} />, items: ["Dashboard", "Project Manager", "Workspace Shell", "Execution Queue"] },
+    { id: "intel", name: "Intelligence", icon: <Bot size={18} />, items: ["Sovereign Control", "Evo Cast Router", "Prompt Registry", "Reality Twin"] },
+    { id: "foundry", name: "Model Foundry", icon: <Activity size={18} />, items: ["Evo Model Foundry", "Forge Labs", "Evo Duel Arena", "AI Generator Hub"] },
+    { id: "biz", name: "Business & Legal", icon: <Shield size={18} />, items: ["Proof Console", "Commerce Core", "Grading & Release", "Studio Settings"] }
   ];
 
   return (

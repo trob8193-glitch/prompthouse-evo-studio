@@ -1,5 +1,5 @@
-import React from 'react';
 import { StateView } from '../components/primitives.jsx';
+import { SovereignTabs } from '../components/SovereignTabs.jsx';
 
 import { CodeForgeView, MobileArchView, MissionControlView, ChainBuilderView, ExportLabView } from '../views.jsx';
 import { IntentAnalyzerView, PromptDNAView, TemplateLibraryView, AutoRepairView, LiveChatView } from '../ai-views.jsx';
@@ -137,14 +137,28 @@ export function ExecutionQueue() {
 
 export function ProofConsole() {
   return (
-    <ScreenTemplate title="Proof Console" subtitle="Make proof visible. Route proof, contract proof, auth proof.">
-      <ProofLedgerView />
-      <div className="mt-6"><CanonMemoryView /></div>
-      <div className="mt-6"><WitnessConsoleView /></div>
-      <div className="mt-6"><TruthAuditorView /></div>
-      <div className="mt-6"><MaturityScoreView /></div>
-      <div className="mt-6"><ProofToValueView /></div>
-      <div className="mt-6"><ProofVaultView /></div>
+    <ScreenTemplate title="Proof Console" subtitle="Multi-layer truth verification and immutable memory auditing.">
+      <SovereignTabs tabs={[
+        { id: 'ledger', label: 'Ledger & Memory', component: (
+          <div className="space-y-6">
+            <ProofLedgerView />
+            <CanonMemoryView />
+          </div>
+        )},
+        { id: 'auditor', label: 'Truth Auditor', component: (
+          <div className="space-y-6">
+            <TruthAuditorView />
+            <WitnessConsoleView />
+          </div>
+        )},
+        { id: 'vault', label: 'Proof Vault', component: (
+          <div className="space-y-6">
+            <MaturityScoreView />
+            <ProofVaultView />
+            <ProofToValueView />
+          </div>
+        )}
+      ]} />
     </ScreenTemplate>
   );
 }
@@ -232,14 +246,28 @@ export function EvoModelFoundry() {
 
 export function ForgeLabs() {
   return (
-    <ScreenTemplate title="Forge Labs" subtitle="Live editors, built apps screens, and autonomous tool generation.">
-      <ForgeRenderConsoleView />
-      <div className="mt-6"><NightForgeView /></div>
-      <div className="mt-6"><ForgeLabView /></div>
-      <div className="mt-6"><ForgeTermView /></div>
-      <div className="mt-6"><ToolAutogenView /></div>
-      <div className="mt-6"><MobileArchView /></div>
-      <div className="mt-6"><ExportLabView /></div>
+    <ScreenTemplate title="Forge Labs" subtitle="Live synthesis, autonomous repair, and tool generation.">
+      <SovereignTabs tabs={[
+        { id: 'forge', label: 'Live Forge', component: (
+          <div className="space-y-6">
+            <EvoLiveForgePreview />
+            <ForgeRenderConsoleView />
+          </div>
+        )},
+        { id: 'autonomy', label: 'NightForge & Repair', component: (
+          <div className="space-y-6">
+            <NightForgeView />
+            <AutoRepairView />
+          </div>
+        )},
+        { id: 'tools', label: 'Tool Foundry', component: (
+          <div className="space-y-6">
+            <ToolAutogenView />
+            <ForgeLabView />
+            <ForgeTermView />
+          </div>
+        )}
+      ]} />
     </ScreenTemplate>
   );
 }
@@ -285,13 +313,28 @@ export function EvoModelConfig() {
 
 export function SovereignControl() {
   return (
-    <ScreenTemplate title="Sovereign Control" subtitle="Maximum Executed Recursive Autonomy + Sovereign Intelligence (Internalized State).">
-      <SovereignIntelligenceDashboard />
-      <div className="mt-6"><CommandDeckView /></div>
-      <div className="mt-6"><RecursiveSwarmView /></div>
-      <div className="mt-6"><MergeCourtView /></div>
-      <div className="mt-6"><WorkTwinVaultView /></div>
-      <div className="mt-6"><PastMVPConsole /></div>
+    <ScreenTemplate title="Sovereign Control" subtitle="Maximum Executed Recursive Autonomy + Sovereign Intelligence.">
+      <SovereignTabs tabs={[
+        { id: 'intel', label: 'Intelligence Deck', component: (
+          <div className="space-y-6">
+            <SovereignIntelligenceDashboard />
+            <CommandDeckView />
+          </div>
+        )},
+        { id: 'swarm', label: 'Recursive Swarm', component: (
+          <div className="space-y-6">
+            <RecursiveSwarmView />
+            <MergeCourtView />
+          </div>
+        )},
+        { id: 'governance', label: 'Governance & Finality', component: (
+          <div className="space-y-6">
+            <SovereignFinalityView />
+            <WorkTwinVaultView />
+            <PastMVPConsole />
+          </div>
+        )}
+      ]} />
     </ScreenTemplate>
   );
 }

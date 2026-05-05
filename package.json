@@ -8,9 +8,15 @@
     "build": "vite build",
     "preview": "vite preview",
     "bridge": "node promptbridge-server.js",
-    "dev:all": "concurrently \"npm run dev\" \"npm run bridge\""
+    "dev:all": "concurrently \"npm run dev\" \"npm run bridge\"",
+    "verify:agent": "node verify-agent-setup.js",
+    "create:agent": "node openai-agent-modern.js",
+    "test:agent": "node agent-runtime.js 'Explain your core mission in 2-3 sentences'",
+    "agent:repl": "node agent-runtime.js --repl",
+    "integrate:agent": "node integrate-agent.js"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@openai/agents": "^0.8.5",
     "@rive-app/react-canvas": "^4.28.3",
     "adm-zip": "^0.5.17",
@@ -23,7 +29,8 @@
     "framer-motion": "^11.0.0",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.344.0",
-    "openai": "^6.35.0",
+    "node-fetch": "^3.3.2",
+    "openai": "^6.36.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.14.2",
