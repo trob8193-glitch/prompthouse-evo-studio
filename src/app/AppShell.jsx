@@ -73,6 +73,7 @@ function SidebarGroup({ title, children }) {
 
 export function AppShell({ children }) {
   const [score, setScore] = React.useState(98);
+  const [metrics, setMetrics] = React.useState({ cpu: 0, latency: 0, uptime: 0 });
 
   React.useEffect(() => {
     const syncSovereign = async () => {
@@ -80,11 +81,15 @@ export function AppShell({ children }) {
         const res = await fetch('http://localhost:3001/status');
         const data = await res.json();
         if (data.sovereign_brain) {
-          // IQ translates to Readiness % (capped at 100 for the bar)
           setScore(Math.min(100, data.sovereign_brain.studio_iq));
         }
+        setMetrics({
+          cpu: data.cpu || 0,
+          latency: data.latency || 0,
+          uptime: data.uptime || 0
+        });
       } catch (e) {
-        console.warn('[Sovereign] Sync failed. Using last known state.');
+        console.warn('[Sovereign] Sync failed.');
       }
     };
 
@@ -94,7 +99,6 @@ export function AppShell({ children }) {
   }, []);
 
   return (
-    <BrowserRouter>
       <div className="app bg-[var(--bg-void)]">
         
         {/* SIDEBAR NAVIGATION (Restoring legacy styling mixed with new routing) */}
@@ -161,10 +165,20 @@ export function AppShell({ children }) {
             <div className="flex items-center gap-2 text-sm font-mono text-[var(--text-secondary)]">
               <span>PH EVO</span> / <span className="text-[var(--text-primary)]">OS ROUTER</span>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-xs font-mono px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                BRIDGE SYNCED
+            <div className="flex items-center gap-6">
+              <div className="flex gap-4 font-mono text-[10px] uppercase tracking-tighter text-slate-500">
+                <div className="flex items-center gap-2">
+                  <span className="text-slate-700">CPU</span>
+                  <span className="text-indigo-400">{(metrics.cpu * 100).toFixed(1)}%</span>
+                </div>
+                <div className="flex items-center gap-2 border-l border-slate-800 pl-4">
+                  <span className="text-slate-700">LATENCY</span>
+                  <span className="text-cyan-400">{metrics.latency.toFixed(0)}MS</span>
+                </div>
+              </div>
+              <span className="text-xs font-mono px-3 py-1 bg-emerald-500/5 text-emerald-500/80 rounded-full border border-emerald-500/10 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+                SYNC_OK
               </span>
             </div>
           </header>
@@ -177,7 +191,6 @@ export function AppShell({ children }) {
         </main>
         
       </div>
-    </BrowserRouter>
   );
 }
 

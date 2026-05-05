@@ -1,83 +1,58 @@
+console.log('── APP.JSX LOADED ──');
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppShell } from './app/AppShell.jsx';
-
-// Import the consolidated OS Feature Modules
-import { 
-  StudioDashboard, 
-  WorkspaceShell, 
-  EvoCastRouter, 
-  PromptRegistry, 
-  RealityTwinLedger, 
-  ExecutionQueue,
-  ProofConsole,
-  LiveInspector,
-  ConnectorBridge,
-  CrashGauntlet,
-  LanePacks,
-  Sequencer,
-  CommerceCore,
-  SettingsView,
-  EvoModelFoundry,
-  ForgeLabs,
-  SovereignControl,
-  EvoDuelArena,
-  AIGeneratorHub,
-  GradingAndRelease,
-  EvoModelConfig,
-} from './features/index.jsx';
-
-// ─── OS ROUTER ENTRY POINT ───────────────────────────────────────────────────
+import { useEvoStore } from './store.js';
 
 export default function App() {
+  const { initializeStore, bridgeConnected, lastSync } = useEvoStore();
+
+  React.useEffect(() => {
+    console.log('── INITIALIZING SOVEREIGN PROTOCOL ──');
+    initializeStore();
+  }, [initializeStore]);
+
+  // ── SOVEREIGN WATCHDOG ──
+  // If bridge is lost for more than 10 seconds (2 pulse cycles), 
+  // or if truth state is compromised, force lockdown.
+  const isLockdown = !bridgeConnected;
+
   return (
-    <AppShell>
-      <Routes>
-        {/* PUBLIC / ENTRY */}
-        <Route path="/" element={<Navigate to="/studio/dashboard" replace />} />
-        
-        {/* MAIN APP (STUDIO) */}
-        <Route path="/studio/dashboard" element={<StudioDashboard />} />
-        <Route path="/studio/workspace" element={<WorkspaceShell />} />
-        <Route path="/studio/execution" element={<ExecutionQueue />} />
-
-        {/* PROMPT SYSTEM */}
-        <Route path="/registry" element={<PromptRegistry />} />
-        
-        {/* CAST SYSTEM */}
-        <Route path="/cast" element={<EvoCastRouter />} />
-
-        {/* STUDIO OS */}
-        <Route path="/os/reality-twin" element={<RealityTwinLedger />} />
-        <Route path="/os/proof-console" element={<ProofConsole />} />
-        <Route path="/os/inspector" element={<LiveInspector />} />
-        <Route path="/os/connectors" element={<ConnectorBridge />} />
-        <Route path="/os/gauntlet" element={<CrashGauntlet />} />
-        <Route path="/os/lane-packs" element={<LanePacks />} />
-        <Route path="/os/sequencer" element={<Sequencer />} />
-        <Route path="/os/commerce" element={<CommerceCore />} />
-        <Route path="/os/evo-foundry" element={<EvoModelFoundry />} />
-        <Route path="/os/forge-labs" element={<ForgeLabs />} />
-        <Route path="/os/sovereign-control" element={<SovereignControl />} />
-        <Route path="/os/duel-arena" element={<EvoDuelArena />} />
-        <Route path="/os/ai-generator" element={<AIGeneratorHub />} />
-        <Route path="/os/grading" element={<GradingAndRelease />} />
-        <Route path="/os/evo-model-config" element={<EvoModelConfig />} />
-
-
-        {/* ACCOUNT */}
-        <Route path="/settings" element={<SettingsView />} />
-        
-        {/* FALLBACK */}
-        <Route path="*" element={
-          <div className="flex items-center justify-center h-full">
-             <div className="text-center">
-               <h2 className="text-[var(--error-color)] text-2xl font-bold mb-4">404 - Unknown Route</h2>
-               <p className="text-[var(--text-secondary)] font-mono text-sm">Path not defined in OS Registry.</p>
-             </div>
+    <BrowserRouter>
+      {isLockdown && (
+        <div className="fixed inset-0 z-[9999] bg-[#09090b]/90 backdrop-blur-2xl flex items-center justify-center p-8 text-center">
+          <div className="max-w-md w-full p-12 bg-[#09090b] border border-red-500/20 rounded-[40px] shadow-[0_0_100px_rgba(239,68,68,0.1)] relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500/40 to-transparent animate-pulse" />
+            
+            <div className="w-24 h-24 mx-auto mb-10 relative">
+              <div className="absolute inset-0 bg-red-500/10 blur-3xl rounded-full" />
+              <div className="relative w-full h-full border-2 border-red-500/20 border-t-red-500 rounded-full animate-spin" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                 <div className="w-2 h-2 bg-red-500 rounded-full animate-ping" />
+              </div>
+            </div>
+            
+            <h2 className="text-3xl font-black text-white mb-4 tracking-tighter uppercase">Truth State Compromised</h2>
+            <p className="text-slate-500 font-mono text-[11px] uppercase tracking-[0.3em] mb-10 leading-relaxed">
+              Bridge connection lost. <br/> 
+              Re-establishing permanent handshake...
+            </p>
+            
+            <div className="space-y-4">
+              <div className="h-[2px] bg-slate-900 rounded-full overflow-hidden">
+                <div className="h-full bg-red-500 animate-[loading_3s_ease-in-out_infinite]" style={{ width: '40%' }} />
+              </div>
+              <div className="flex justify-between text-[10px] font-bold font-mono text-slate-700 uppercase">
+                <span>Last Sync: {lastSync ? new Date(lastSync).toLocaleTimeString() : 'NEVER'}</span>
+                <span>Code: TRUTH_RECOVERY</span>
+              </div>
+            </div>
           </div>
-        } />
+        </div>
+      )}
+      <Routes>
+        <Route path="/*" element={<AppShell />} />
       </Routes>
-    </AppShell>
+    </BrowserRouter>
   );
 }
