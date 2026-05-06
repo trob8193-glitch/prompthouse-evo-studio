@@ -1,0 +1,9 @@
+/* EVO BRIDGE — CONTENT SCRIPT CSS v3.0 */
+/* Injected into every page — lightweight, zero conflicts */
+
+#evo-sentient-chat * { box-sizing: border-box; font-family: 'JetBrains Mono', monospace !important; }
+#evo-sentient-chat::-webkit-scrollbar { width: 4px; }
+#evo-sentient-chat::-webkit-scrollbar-track { background: transparent; }
+#evo-sentient-chat::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.3); border-radius: 4px; }
+#evo-chat-messages::-webkit-scrollbar { width: 3px; }
+#evo-chat-messages::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.2); }

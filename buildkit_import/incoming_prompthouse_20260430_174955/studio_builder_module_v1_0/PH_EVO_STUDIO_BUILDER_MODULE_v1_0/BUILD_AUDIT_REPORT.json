@@ -1,0 +1,28 @@
+{
+  "created": "2026-04-30",
+  "module": "Evo Studio Builder",
+  "files": [
+    "README.md",
+    "docs/AGENT_BUILDER_COMPATIBILITY.md",
+    "docs/BLOCK_LIBRARY.md",
+    "docs/EVO_STUDIO_BUILDER_SPEC.md",
+    "docs/KID_SIMPLE_GUIDE.md",
+    "examples/custom_agent_recipe.yaml",
+    "examples/custom_evo_lm_recipe.yaml",
+    "flutter_patch/INSTALL_PATCH_GUIDE.md",
+    "flutter_patch/assets/evo_studio_builder_templates.json",
+    "flutter_patch/lib/models/evo_agent_builder_models.dart",
+    "flutter_patch/lib/screens/evo_studio_builder_screen.dart",
+    "flutter_patch/lib/services/evo_studio_builder_service.dart",
+    "schemas/evo_agent_recipe.schema.json"
+  ],
+  "checks": {
+    "has_schema": true,
+    "has_examples": true,
+    "has_flutter_screen": true,
+    "has_service": true,
+    "has_kid_simple_guide": true,
+    "has_block_library": true
+  },
+  "integrated_zip_created": true
+}

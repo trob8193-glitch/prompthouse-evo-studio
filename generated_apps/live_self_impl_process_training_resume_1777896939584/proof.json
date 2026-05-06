@@ -1,0 +1,68 @@
+{
+    "routerRun":  {
+                      "id":  "train_1777896939841",
+                      "modelId":  "local-evo-router",
+                      "datasetSize":  1,
+                      "mode":  "whole_self_implementation_process_training",
+                      "status":  "trained_local",
+                      "createdAt":  "2026-05-04T12:15:39.841Z"
+                  },
+    "trainingReceipt":  "receipt_training_capture_1777896939620",
+    "selfCycle":  {
+                      "id":  "self_cycle_1777896880959",
+                      "status":  "broken",
+                      "applyFixes":  true,
+                      "runTests":  true,
+                      "runBuild":  true,
+                      "durationMs":  20188,
+                      "maintenance":  {
+                                          "success":  true,
+                                          "issuesFixed":  0,
+                                          "issuesDetected":  48,
+                                          "gapCount":  161,
+                                          "applied":  true,
+                                          "recorded":  true,
+                                          "newIQ":  393821,
+                                          "cycle":  64,
+                                          "mutated":  true,
+                                          "writes":  [
+                                                         "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.sovereign-brain.json",
+                                                         "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\src\\engine.js",
+                                                         "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\src\\index.css"
+                                                     ]
+                                      },
+                      "commands":  [
+                                       {
+                                           "success":  true,
+                                           "command":  "node --check promptbridge-server.js",
+                                           "durationMs":  311
+                                       },
+                                       {
+                                           "success":  false,
+                                           "command":  "npm test",
+                                           "durationMs":  15817
+                                       },
+                                       {
+                                           "success":  true,
+                                           "command":  "npm run build",
+                                           "durationMs":  3828
+                                       }
+                                   ],
+                      "completedAt":  "2026-05-04T12:14:40.959Z",
+                      "mutated":  true,
+                      "writes":  [
+                                     "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.sovereign-brain.json",
+                                     "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\src\\engine.js",
+                                     "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\src\\index.css"
+                                 ]
+                  },
+    "lmRun":  {
+                  "id":  "train_1777896939833",
+                  "modelId":  "local-evo-lm-latest",
+                  "datasetSize":  1,
+                  "mode":  "whole_self_implementation_process_training",
+                  "status":  "trained_local",
+                  "createdAt":  "2026-05-04T12:15:39.833Z"
+              },
+    "runId":  "live_self_impl_process_training_resume_1777896939584"
+}

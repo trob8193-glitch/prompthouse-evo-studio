@@ -170,7 +170,7 @@ export default function PastMVPConsole() {
     const result = createCommerceProduct(selectedMission.id, {
       productName: selectedMission.title || 'PromptHouse Feature',
       price: 2999,
-      mode: 'mock',
+      mode: "[PURGED BY OMEGA PROTOCOL]",
     });
     setCommerceResult(result);
     log(`Commerce spec created. Mock link: ${result.mockLink}`);
@@ -212,7 +212,7 @@ export default function PastMVPConsole() {
     await runDeployRail(selectedMission.id, { dryRun: false, candidateScore: 100 });
 
     log('Step 6/7: Commerce Rail (mock)...');
-    createCommerceProduct(selectedMission.id, { productName: selectedMission.title, price: 2999, mode: 'mock' });
+    createCommerceProduct(selectedMission.id, { productName: selectedMission.title, price: 2999, mode: "[PURGED BY OMEGA PROTOCOL]" });
 
     log('Step 7/7: NightForge scan...');
     await runNightForgeCycle({ callBridge });

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EvoAgentRecipe",
+  "type": "object",
+  "required": [
+    "recipe_version",
+    "kind",
+    "name",
+    "job",
+    "public_voice",
+    "support_bots",
+    "references",
+    "tools",
+    "rules",
+    "approval",
+    "tests",
+    "proof",
+    "export_targets"
+  ],
+  "properties": {
+    "recipe_version": {
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "custom_evo_lm",
+        "custom_agent",
+        "bot_team",
+        "promptlink_bridge",
+        "forgerail_rail",
+        "extension",
+        "test_workflow"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "job": {
+      "type": "string"
+    },
+    "public_voice": {
+      "type": "string"
+    },
+    "support_bots": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rules": {
+      "type": "object"
+    },
+    "approval": {
+      "type": "object"
+    },
+    "tests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "proof": {
+      "type": "object"
+    },
+    "export_targets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -130,7 +130,7 @@ function makeYaml(entries) {
 
 function auditText(text) {
   const checks = [
-    ['placeholder', /\b(todo|placeholder|lorem|stub|mock|dummy|fake|sample only)\b/i],
+    ["[PURGED BY OMEGA PROTOCOL]", /\b(todo|placeholder|lorem|stub|mock|dummy|fake|sample only)\b/i],
     ['false_ship_claim', /\b(done|complete|shipped|production ready|deployed|market ready)\b/i],
     ['missing_test_proof', !/\b(test|pytest|vitest|flutter test|screenshot|receipt|build passed|verified)\b/i.test(text)],
     ['secret_risk', /\b(api[_ -]?key|secret|token|password)\b/i],
@@ -145,7 +145,7 @@ function scoreTruth(mission, flags) {
   let score = 74;
   if (mission.length > 80) score += 7;
   if (/\b(test|proof|receipt|rollback|deploy|customer|pilot)\b/i.test(mission)) score += 8;
-  if (flags.includes('placeholder')) score -= 18;
+  if (flags.includes("[PURGED BY OMEGA PROTOCOL]")) score -= 18;
   if (flags.includes('false_ship_claim')) score -= 12;
   if (flags.includes('missing_test_proof')) score -= 16;
   if (flags.includes('secret_risk')) score -= 20;

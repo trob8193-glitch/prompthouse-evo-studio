@@ -1,0 +1,75 @@
+{
+  "version": "1.0.0",
+  "archetype_seeds": [
+    {
+      "id": "layout_cockpit",
+      "name": "Sovereign Cockpit",
+      "description": "High-density, multi-panel mission control with real-time logs.",
+      "complexity": 0.85,
+      "resonance": 0.98
+    },
+    {
+      "id": "layout_minimalist",
+      "name": "Minimalist Zen",
+      "description": "Zero-distraction, focused code environment with hidden toolbars.",
+      "complexity": 0.45,
+      "resonance": 0.92
+    },
+    {
+      "id": "layout_war_room",
+      "name": "War Room",
+      "description": "Aggressive data visualization with prioritized system alerts.",
+      "complexity": 0.95,
+      "resonance": 0.99
+    },
+    {
+      "id": "layout_mirror",
+      "name": "Pattern Mirror",
+      "description": "Split-view layout for A/B logic comparison and synthesis.",
+      "complexity": 0.75,
+      "resonance": 0.96
+    },
+    {
+      "id": "layout_trace",
+      "name": "Neural Trace",
+      "description": "Infinite horizontal timeline for auditing intelligence history.",
+      "complexity": 0.8,
+      "resonance": 0.97
+    },
+    {
+      "id": "layout_commerce",
+      "name": "Commerce Rail",
+      "description": "Optimized for licensing, exports, and financial metadata.",
+      "complexity": 0.65,
+      "resonance": 0.94
+    },
+    {
+      "id": "layout_sprout",
+      "name": "Mobile Sprout",
+      "description": "High-density vertical stack for sub-studio mobile views.",
+      "complexity": 0.55,
+      "resonance": 0.91
+    },
+    {
+      "id": "layout_glass",
+      "name": "Glassmorphic Forge",
+      "description": "Frosted-glass UI with dynamic gradient backgrounds and micro-animations.",
+      "complexity": 0.9,
+      "resonance": 0.98
+    },
+    {
+      "id": "layout_terminal",
+      "name": "Terminal Prime",
+      "description": "Monochrome, high-speed terminal interface for master hackers.",
+      "complexity": 0.7,
+      "resonance": 0.93
+    },
+    {
+      "id": "layout_dashboard_v4",
+      "name": "Sovereign Dashboard V4",
+      "description": "The current master orchestration shell with tool-bridge monitoring.",
+      "complexity": 0.9,
+      "resonance": 0.99
+    }
+  ]
+}

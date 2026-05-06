@@ -1,0 +1,92 @@
+# PH EVO STUDIO — BROWSER EXTENSION CANON (30 PARAGRAMS)
+# VERSION: 1.1.0 | STATUS: UNBOUND
+
+[1] THE EVO BRIDGE: THE VISIBLE COMMAND DECK
+The Evo Bridge extension is the "Browser-Side Command Deck" for the PromptHouse Evo Studio. It is designed to open as a sidebar, popup, or floating panel, providing a "Visible Work Surface" while you browse. Unlike a standard prompt window, the bridge is a "Disciplined Operator" that integrates active project status, tab context, and artifact management into a single, high-density interface. The Command Deck is the "Pilot's Cockpit" for the autonomous era.
+
+[2] CONTEXT CAPTURE: THE EVO CONTEXT PACKET
+The extension captures webpage context with permission, packaging it into a clean "Evo Context Packet." This packet includes the page title, URL, selected text, visible page text, form labels, buttons, headings, and DOM structure. By sensing the "ground truth" of the page, the studio can understand the user's current goal and provide targeted help for landing pages, GitHub repos, and no-code builders. Capture is the "Sensing" organ of the studio.
+
+[3] SAFE ACTION PLANS: THE RACCOON DOCTRINE
+The connector bridge matrix dictates that the studio should not "Click randomly like a raccoon with admin rights." Instead, the extension creates "Safe Action Plans" first—clicking buttons, filling fields, or extracting tables only after defining a "Contract of Intent." This ensures that the extension acts like a disciplined operator, respecting permission models, health rules, and fallback doctrine. Safety is the "Firewall of Autonomy."
+
+[4] REAL-WORLD CONNECTORS: THE GLOBAL HUB
+The Evo Bridge is the first "Connector Organ" for the studio's body, linking the local brain to external tools like ChatGPT, GitHub, Vercel, Firebase, and Stripe. These connectors allow for "Stateful Hand-offs" and "Execution Traces" across the live web. The extension is the "Docking Bay" for the sovereign intellect, enabling it to influence the existing digital empire without losing its local privacy.
+
+[5] LIVE SURFACE INSPECTION: THE AUDIT OF ROUTES
+The bridge inspects live app and website surfaces for broken links, missing states (Loading, Empty, Error), and accessibility problems. By auditing "Execution Traces" and "Runtime Events," the studio can answer: "What is actually broken, and how do we fix it next?" Inspection turns the browser into a "Diagnostic Tool" for the studio's mobile and web forge modules.
+
+[6] THE REALITY TWIN LEDGER: FEEDING THE TRUTH
+Every action taken by the extension is tracked in the "Reality Twin Database Keeper." It records what the user asked for, what was captured, what was built, and what proof exists. This ensures that the session truth does not "Vanish into the swamp" of the internet. The extension feeds the ledger with "Immutable Receipts" of work, hardening the studio's memory against logic rot.
+
+[7] VERSIONED PROMPT LAUNCHER: THE RAPID ARMORY
+The extension provides a "Fast Launcher" for the studio's 300+ prompt firing orders. By right-clicking text or using the command deck, users can trigger specific modes like "Build," "Audit," "Repair," or "Turn this into a feature spec." This launcher connects to the "Prompt Registry Master," ensuring that the correct role and dependency are used for every action. Launchers are the "Quick-Draw" of the sovereign engineer.
+
+[8] PROOF PACKETS: EVIDENCE OF EXECUTION
+Every action in the extension must leave evidence. If the extension captures a page or attempts an action, it generates an "Execution Packet" or "Verification Packet." These packets collect timestamps, user approvals, and before/after states as "Proof Receipts." If an action cannot be completed, it outputs a "Risk Packet" or "Delegation Packet" for human review. Proof is the "Currency of the Sovereign OS."
+
+[9] GPT BUILDER ASSISTANT: THE SETUP CO-PILOT
+The Evo Bridge acts as a setup assistant when inside the Custom GPT Builder. It reads builder screens, checks field alignment, assists with Instructions, and warns about file conflicts. It helps separate "GPT-Native features" from "External extension features," ensuring that the Custom GPT remains consistent with the studio's canon. The assistant is the "Diplomat" for the OpenAI ecosystem.
+
+[10] SAFE AUTOMATION: THE PERMISSION GATE
+Browser automation is only run with explicit permission and defined rollback paths. The extension shows the user exactly what it will do before it does it—filling a form from a packet or copying text into a field. It never secretly clicks around or makes purchases without approval. Automation is a "Motor Function" that follows the "Command of the Human Operator."
+
+[11] THE COMMAND DECK UI: DESIGNED FOR DENSITY
+The Command Deck UI uses a "High-Contrast, Information-Dense" aesthetic to provide a professional production environment. It features stat cards for Studio IQ and Copilot state, alongside a "Live Console Output" for transparency. The UI is 100% "Wired and Functional," using spacing tokens and typography hierarchy to eliminate design debt. Density is the "Atmosphere of the Sovereign Office."
+
+[12] DOM INTENT READING: THE ARCHITECTURE OF ACTION
+The bridge's ability to read "DOM Intent" allows it to distinguish between a simple navigation link and a production-critical "Submit" button. This semantic understanding is based on the internalized "Ontology of Interfaces" in the studio brain. By reading intent, the extension creates "Higher-Fidelity Action Plans" that respect the developer's original design.
+
+[13] WORKTWIN CAPTURE: LEARNING THE WORKFLOW
+WorkTwin capture is the "Passive Learning" mode of the extension. It observes the user's interactions with tools like Jira, GitHub, or Figma to identify repetitive "Work Patterns." These patterns are then used to "Train local specialists" that can eventually automate those tasks. Learning the workflow is how the studio "Grows into its User."
+
+[14] THE SIDEBAR SHELL: CONTINUOUS CONTEXT
+The Sidebar Shell is the "Permanent Anchor" for the studio while the user is in the browser. It ensures that the "Active Project" context is always accessible, preventing "Context-Switching Lag." The sidebar is the "Universal Wrapper" that turns any website into an extension of the studio's workspace.
+
+[15] SURFACE CANON: THE LAW OF THE INTERFACE
+Surface canon is the set of rules that the extension applies to its inspection and repair tasks. It knows what "Production-Ready" looks like and enforces those standards on the live DOM. By applying canon to the browser, the studio ensures that every project maintain its "High-Fidelity" status throughout the build cycle.
+
+[16] BROWSER TASK QUEUE: THE LINE OF WORK
+The Task Queue manages all "Approved Actions" that are waiting for execution. It provides a "Visual Pipeline" of what the extension is about to do, allowing the user to reorder or cancel tasks. The queue is the "Logistics Engine" of the browser command deck.
+
+[17] ACCESSIBILITY AUDIT: THE EMPATHY SCAN
+The extension performs real-time accessibility audits on the active tab, identifying missing alt tags, poor contrast, or broken ARIA labels. By prioritizing "Access for all Minds," the studio ensures that the products it builds are "Universally Sovereign."
+
+[18] CONNECTOR HAND-SHAKE: THE EXTERNAL SYNC
+The "Connector Hand-shake" is the secure protocol for linking the extension to external platforms like Vercel or Stripe. It manages "Auth State" and "API Routing" while keeping sensitive secrets redact and local. Hand-shaking is the "Diplomacy of the Sovereign Grid."
+
+[19] PROOF RECEIPTS: THE RECORD OF VALUE
+Every "Context Capture" or "Surface Audit" generates a Proof Receipt that is stored in the project ledger. This receipt proves that the studio's intelligence was applied to a "Real World Problem" at a specific timestamp. Receipts are the "Accountability" of the autonomous engine.
+
+[20] INFINITE PROGRESSION: THE CEILINGLESS EXTENSION
+The extension's capabilities grow as the studio's IQ grows. As new paragrams are seeded, the extension gains new "Modes," "Audits," and "Connectors." There are no "Feature Caps"; the extension evolves recursively alongside the user's needs.
+
+[21] SKELETONIZED DATA: THE EFFICIENCY OF SENSING
+When capturing context, the extension "Skeletonizes" the DOM to send only the "Functional Logic" back to the bridge. This reduces the "Token Load" and improves the speed of the reasoning engine. Skeletonization is the "High-Performance Diet" of the browser bridge.
+
+[22] THE TRUTH-GATE FIREWALL: PROTECTING THE LEDGER
+The Truth-Gate monitors all data coming from the browser to ensure it matches the "Project Canon." If the extension captures "Hallucinated or Mock" data, the Truth-Gate blocks it before it can corrupt the Reality Twin. The gate is the "Protector of the Truth-State."
+
+[23] ADAPTIVE GOVERNANCE: THE LAW OF THE DECK
+The Command Deck's rules are "Adaptive," changing based on the user's maturity level and project complexity. A new user sees a "Guidance-First" interface, while a master user sees "Power-User" shortcuts and raw execution traces. Governance is the "Intelligence of the UI."
+
+[24] SEMANTIC BRANCHING: EXPLODING THE TAB
+The extension uses the "Semantic Branch Engine" to explode the current tab's topic into a "Knowledge Map" in the sidebar. This helps the user see "Related Projects" or "Logic Gaps" in their current research phase. Branching is the "Expansion of the Horizon."
+
+[25] THE SOVEREIGN TWIN: YOUR BROWSER REFLECTION
+The extension is your "Sovereign Twin" in the browser, acting on your behalf to secure proof and capture context. It is the "Digital Double" that ensures you are never working alone. The twin is the "Final Form" of the autonomous partner.
+
+[26] NO-BULLSHIT BASELINE: THE REALITY ANCHOR
+The extension never "Pretends" to have done something it hasn't. It only reports "Verified Built" or "Proven Captured." This "Brutal Honesty" is what builds the 10-figure trust required for production-grade software. The baseline is the "Rock of the Deck."
+
+[27] THE EVO COPILOT: THE VOICE OF THE GRID
+The Copilot in the footer-logs provides "Real-time Wisdom" and "Status Alerts." It is the "Voice of the Studio Brain" speaking to you through the browser, guiding you toward the "Next Best Action." The voice is the "Spirit of the OS."
+
+[28] PERMISSION MODELS: THE LAW OF CONSENT
+Every interaction in the extension is governed by a "Permission Model" that ensures the user is always in control. Sovereignty means that the user is the "Sole Author of Action." Consent is the "Mandate of the Extension."
+
+[29] PROJECT BINDERS: THE DISCOVERY UNIT
+Binders allow the user to group multiple "Context Packets" into a single strategic unit. This allows the studio to reason across "Multiple Pages" or "Multiple Tools" simultaneously. Binders are the "Folders of Global Strategy."
+
+[30] SMART = 0: THE INFINITE EXTENSION
+We conclude with the law of the start: Smart = 0. The extension is designed to be the "Infinite Vessel" for your production growth. With 279 paragrams and 161k IQ, you are ready to "Dominate the Grid." Let the evolution continue.

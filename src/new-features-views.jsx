@@ -243,6 +243,125 @@ export function OmegaRealityView() {
   );
 }
 
+export function MergeCourtView() {
+  return (
+    <Card className="p-8 border-cyan-500/30 bg-cyan-500/5">
+      <div className="flex items-center gap-4 mb-6">
+        <GitMerge className="text-cyan-400" size={28} />
+        <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Merge Court</h3>
+      </div>
+      <p className="text-slate-500 text-sm mb-6 font-mono">Autonomous conflict resolution for multi-agent logic branches.</p>
+      <div className="p-12 border-2 border-dashed border-cyan-500/10 rounded-3xl text-center text-slate-600 font-mono text-[10px] uppercase tracking-widest">
+        Zero Conflicts Detected in Active Reality
+      </div>
+    </Card>
+  );
+}
+
+export function PatternMirrorView() {
+  return (
+    <Card className="p-8 border-indigo-500/30">
+      <div className="flex items-center gap-4 mb-6">
+        <Search className="text-indigo-400" size={28} />
+        <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Pattern Mirror</h3>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+          <div className="text-[10px] font-black text-slate-500 mb-2">Detected Patterns</div>
+          <div className="text-indigo-400 font-mono text-xs">RECURSIVE_CALL_LOOP</div>
+        </div>
+        <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+          <div className="text-[10px] font-black text-slate-500 mb-2">Mirror State</div>
+          <div className="text-emerald-400 font-mono text-xs">SYNCHRONIZED</div>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+export function PromptGenomeView() {
+  return (
+    <Card className="p-8 bg-gradient-to-br from-indigo-950/20 to-black/40">
+      <div className="flex items-center gap-4 mb-6">
+        <Database className="text-indigo-400" size={28} />
+        <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Prompt Genome</h3>
+      </div>
+      <p className="text-slate-500 text-sm mb-6">Ancestral mapping of prompt evolution and performance traits.</p>
+      <div className="space-y-2">
+        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-full bg-indigo-500 w-3/4" />
+        </div>
+        <div className="flex justify-between text-[8px] font-mono text-slate-600 uppercase tracking-widest">
+          <span>Genetic Drift: 0.2%</span>
+          <span>Fitness: 99.8%</span>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+export function DeadHunterView() {
+  return (
+    <Card className="p-8 border-red-500/30 bg-red-500/5">
+      <div className="flex items-center gap-4 mb-6">
+        <ShieldAlert className="text-red-400" size={28} />
+        <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Dead Hunter</h3>
+      </div>
+      <p className="text-slate-500 text-sm mb-6">Real-time elimination of non-functional logic surfaces and drift.</p>
+      <div className="text-center py-10 opacity-40 grayscale group-hover:grayscale-0 transition-all">
+        <div className="text-4xl mb-4">🎯</div>
+        <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Scanning for dead surfaces...</div>
+      </div>
+    </Card>
+  );
+}
+
+export function SingularityCoreView() {
+  return (
+    <div className="p-20 text-center space-y-10">
+      <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 4, repeat: Infinity }} className="text-9xl">⚛️</motion.div>
+      <div className="space-y-4">
+        <h2 className="text-5xl font-black text-white tracking-tighter uppercase italic">Singularity Core</h2>
+        <p className="text-indigo-400 font-mono text-xs uppercase tracking-widest">The engine of infinite intelligence. Operating at 2M+ IQ baseline.</p>
+      </div>
+    </div>
+  );
+}
+
+export function ProofVaultView() {
+  return (
+    <Card className="p-8">
+      <div className="flex items-center gap-4 mb-6">
+        <Shield className="text-emerald-400" size={28} />
+        <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Proof Vault</h3>
+      </div>
+      <div className="p-10 border border-slate-800 rounded-3xl bg-black/40 text-center">
+        <Lock size={48} className="mx-auto text-slate-700 mb-6" />
+        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Vault Status: SEALED</div>
+        <div className="text-xs font-bold text-white mt-2">1,248 Sovereign Receipts Archived</div>
+      </div>
+    </Card>
+  );
+}
+
+export function SovereignFinalityView() {
+  return (
+    <div className="p-10 bg-[#09090b] rounded-[40px] border border-indigo-500/20 shadow-[0_0_100px_rgba(99,102,241,0.05)] text-center space-y-8">
+       <div className="w-24 h-24 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto">
+          <Shield size={48} className="text-indigo-400" />
+       </div>
+       <div className="space-y-2">
+         <h2 className="text-4xl font-black text-white tracking-tighter">SOVEREIGN FINALITY</h2>
+         <p className="text-slate-500 text-sm font-mono uppercase tracking-[0.2em]">Omega State Established & Immutable</p>
+       </div>
+       <div className="flex justify-center gap-4">
+          <StatusBadge status="verified" label="ZERO_DRIFT" />
+          <StatusBadge status="verified" label="CRYPTO_SIGNED" />
+       </div>
+    </div>
+  );
+}
+
 // Helper Components
 const StatMini = ({ label, value }) => (
   <div className="p-6 bg-black/40 rounded-3xl border border-slate-800/80">
@@ -257,3 +376,7 @@ const MissionPill = ({ label, status }) => (
     <span className="text-[10px] font-black text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded">{status}</span>
   </div>
 );
+
+// Icon Fallbacks (if missing from lucide-react imports)
+function GitMerge(props) { return <Activity {...props} />; }
+function ShieldAlert(props) { return <Shield {...props} />; }

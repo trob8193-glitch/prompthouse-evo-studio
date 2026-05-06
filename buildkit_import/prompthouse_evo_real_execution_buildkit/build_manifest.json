@@ -1,0 +1,27 @@
+{
+  "zip": "/mnt/data/prompthouse_evo_real_execution_buildkit.zip",
+  "file_count": 33,
+  "backend_python_compile_ok": true,
+  "mock_data": false,
+  "dummy_data": false,
+  "real_logic_included": [
+    "SQLite persistence",
+    "Connector registry",
+    "Connector handshake",
+    "OpenAI Responses API invoke path",
+    "GitHub REST invoke path",
+    "Generic REST invoke path",
+    "Audit logs",
+    "Proof cards",
+    "Artifacts",
+    "Manifest-to-Proof endpoint",
+    "Flutter API client"
+  ],
+  "blocked_until_user_environment": [
+    "Flutter runtime verification",
+    "FastAPI dependency install",
+    "Live OpenAI call with user key",
+    "Live GitHub call with user token",
+    "Deployment and production hardening"
+  ]
+}

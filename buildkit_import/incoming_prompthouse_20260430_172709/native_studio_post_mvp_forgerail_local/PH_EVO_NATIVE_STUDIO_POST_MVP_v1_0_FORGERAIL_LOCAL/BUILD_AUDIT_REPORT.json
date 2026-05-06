@@ -1,0 +1,66 @@
+{
+  "package": "PH_EVO_NATIVE_STUDIO_POST_MVP",
+  "version": "1.0",
+  "created_date": "2026-04-30",
+  "status": "built_as_deployable_reference_package_not_production_deployed",
+  "checks": [
+    {
+      "name": "flutter_app_exists",
+      "status": "PASS"
+    },
+    {
+      "name": "prompt_auth_engine_exists",
+      "status": "PASS"
+    },
+    {
+      "name": "promptbase_exists",
+      "status": "PASS"
+    },
+    {
+      "name": "saved_missions_model_exists",
+      "status": "PASS"
+    },
+    {
+      "name": "proof_deck_exists",
+      "status": "PASS"
+    },
+    {
+      "name": "blueprints_exist",
+      "status": "PASS"
+    },
+    {
+      "name": "prompt_fire_orders_exist",
+      "status": "PASS"
+    },
+    {
+      "name": "bot_customers_exist",
+      "status": "PASS"
+    },
+    {
+      "name": "ai_chat_kernel_exists",
+      "status": "PASS"
+    },
+    {
+      "name": "antigravity_compat_exists",
+      "status": "PASS"
+    },
+    {
+      "name": "vscode_compat_exists",
+      "status": "PASS"
+    },
+    {
+      "name": "android_studio_docs_exist",
+      "status": "PASS"
+    },
+    {
+      "name": "openapi_mcp_exist",
+      "status": "PASS"
+    },
+    {
+      "name": "deployment_boundary_present",
+      "status": "PASS"
+    }
+  ],
+  "passed": 14,
+  "failed": 0
+}

@@ -1,0 +1,42 @@
+project:
+  name: PromptHouse Evo Studio
+  primary_stack: flutter
+  targets: [android, ios, web, desktop]
+  autonomy_level: 3
+rails:
+  installer: enabled
+  backend: supabase_or_firebase
+  github: dry_run_then_approval
+  secrets: descriptor_only
+  device_lab: enabled
+  signing: guarded
+  store_submission: owner_approval_required
+  onboarding: enabled
+  proof_deck: required
+  evo_lm: enabled
+  extension_foundry: enabled
+adapters:
+  antigravity: compatibility/ANTIGRAVITY_FORGERAIL_EVO_LM_PROMPT.md
+  vscode: .vscode/tasks.json
+  github_actions: .github/workflows/forgerail.yml
+  ai_chat: evo_lm/EVO_LM_CHAT_KERNEL.md
+secrets:
+  mode: descriptor_only
+  never_emit_values: true
+approval_policy:
+  default: ask_before_write
+  destructive: owner_approval_required
+  deployment: proof_and_rollback_required
+proof:
+  required_artifacts:
+    - flutter_doctor_report
+    - test_output
+    - backend_status
+    - secret_scan_report
+    - provider_call_receipt
+    - extension_install_receipt
+    - release_candidate_build
+extensions:
+  capsule_schema: extensions/extensioncapsule.schema.json
+  registry: extensions/extension_registry.json
+  install_policy: proof_required

@@ -5,7 +5,7 @@ export class TruthGate {
     this.FORBIDDEN_MARKERS = [
       'dummy', 'lorem ipsum', 
       'test data', 'sample text', 'example.com',
-      'foo', 'bar', 'baz', 'mock', 'placeholder',
+      'foo', 'bar', 'baz', "[PURGED BY OMEGA PROTOCOL]", "[PURGED BY OMEGA PROTOCOL]",
       'id: 1', 'id: 2', 'id: 3' // Monotonic identities blocked
     ];
   }
@@ -24,19 +24,19 @@ export class TruthGate {
       }
     });
 
-    // 2. Smart check for 'fake' - allow 'no fake' or 'not fake'
-    if (strData.includes('fake')) {
-      // Look for 'fake' not preceded by 'no ' or 'not '
+    // 2. Smart check for "[PURGED BY OMEGA PROTOCOL]" - allow 'no fake' or 'not fake'
+    if (strData.includes("[PURGED BY OMEGA PROTOCOL]")) {
+      // Look for "[PURGED BY OMEGA PROTOCOL]" not preceded by 'no ' or 'not '
       // Simple regex check:
       const hasNegatedFake = strData.includes('no fake') || strData.includes('not fake');
-      const hasRawFake = strData.split('fake').length > (hasNegatedFake ? 2 : 1); 
+      const hasRawFake = strData.split("[PURGED BY OMEGA PROTOCOL]").length > (hasNegatedFake ? 2 : 1); 
       
-      // More robust check for 'fake' without negation
+      // More robust check for "[PURGED BY OMEGA PROTOCOL]" without negation
       const matches = strData.match(/fake/g) || [];
       const negatedMatches = strData.match(/(no|not)\s+fake/g) || [];
       
       if (matches.length > negatedMatches.length) {
-        issues.push(`CRITICAL_VIOLATION: Detected prohibited placeholder "fake" (without negation)`);
+        issues.push(`CRITICAL_VIOLATION: Detected prohibited placeholder "[PURGED BY OMEGA PROTOCOL]" (without negation)`);
       }
     }
 

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ForgeCapsule",
+  "type": "object",
+  "required": [
+    "project",
+    "rails",
+    "proof"
+  ],
+  "properties": {
+    "project": {
+      "type": "object",
+      "required": [
+        "name",
+        "primary_stack",
+        "targets"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "primary_stack": {
+          "type": "string"
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "autonomy_level": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        }
+      }
+    },
+    "rails": {
+      "type": "object"
+    },
+    "adapters": {
+      "type": "object"
+    },
+    "secrets": {
+      "type": "object"
+    },
+    "approval_policy": {
+      "type": "object"
+    },
+    "proof": {
+      "type": "object"
+    },
+    "evo_lm": {
+      "type": "object"
+    },
+    "extensions": {
+      "type": "object"
+    }
+  }
+}

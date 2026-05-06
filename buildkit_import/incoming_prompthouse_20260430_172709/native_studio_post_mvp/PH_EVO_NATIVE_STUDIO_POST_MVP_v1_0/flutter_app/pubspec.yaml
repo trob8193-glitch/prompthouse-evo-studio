@@ -1,0 +1,23 @@
+name: prompthouse_evo_native_studio
+description: PromptHouse Evo Native Studio — mobile prompt-to-app dev studio.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  collection: ^1.18.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/promptbase_seed.json
+    - assets/bot_customers_seed.json

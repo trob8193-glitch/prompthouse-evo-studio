@@ -1,14 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
   /* ── SOVEREIGN DESIGN TOKENS (OMEGA) ── */
-  --primary: hsl(235, 70%, 55%); /* EVOLVED */
+  --primary: hsl(250, 70%, 55%); /* EVOLVED */
   --primary-dim: rgba(245, 200, 66, 0.12);
   --primary-glow: rgba(245, 200, 66, 0.25);
   
@@ -1459,7 +1457,8 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
 .omega-active .card,
 .omega-active .nav-item.active {
   background: rgba(18,18,32,0.86);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-color: rgba(34,211,238,0.18);
   box-shadow: 0 8px 32px rgba(0,0,0,0.34), 0 0 24px rgba(34,211,238,0.06);
 }

@@ -1,0 +1,22 @@
+{
+  "name": "prompthouse-evo-lm-mcp",
+  "tools": [
+    "create_mission",
+    "generate_forgecapsule",
+    "generate_extensioncapsule",
+    "route_provider",
+    "create_proof_receipt",
+    "build_extension_scaffold"
+  ],
+  "resources": [
+    "promptbase://records",
+    "forgerail://capsules",
+    "extensions://registry",
+    "proofdeck://receipts"
+  ],
+  "safety": {
+    "default": "read_only",
+    "writes": "owner_approval_required",
+    "secrets": "never_return_values"
+  }
+}

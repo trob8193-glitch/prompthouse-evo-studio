@@ -1,0 +1,8 @@
+profile: supabase
+tables: [studio_missions, promptbase_records, fire_orders, blueprints, proof_artifacts, promptlink_calls, extension_registry, extension_installs]
+commands:
+  init: supabase init
+  start_local: supabase start
+  migration_new: supabase migration new init_prompthouse
+boundary:
+  - remote deploy requires credentials and owner approval

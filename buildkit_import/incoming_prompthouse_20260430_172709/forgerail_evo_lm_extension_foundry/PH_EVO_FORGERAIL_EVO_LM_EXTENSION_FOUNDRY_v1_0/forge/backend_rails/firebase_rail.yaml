@@ -1,0 +1,8 @@
+profile: firebase
+collections: [studio_missions, promptbase_records, proof_artifacts, extension_registry, onboarding_events]
+commands:
+  login: firebase login
+  init: firebase init
+  emulators: firebase emulators:start
+boundary:
+  - production deploy requires project credentials and owner approval

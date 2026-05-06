@@ -1,0 +1,11 @@
+{
+  "manifestId": "PH-EVO-6MTE2FW",
+  "timestamp": "2026-04-30T11:05:52.451Z",
+  "governance": {
+    "canon": "Sovereign V3",
+    "lead": "Evo (Lion)",
+    "auditor": "Verifier (Owl)",
+    "truthState": "verified"
+  },
+  "signature": "APPROVED_BY_PROMPTHOUSE_EVO"
+}

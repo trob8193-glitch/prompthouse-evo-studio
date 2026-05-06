@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@xterm/xterm": "latest",
+    "@xterm/addon-fit": "latest",
+    "ws": "latest",
+    "node-pty": "latest"
+  },
+  "devDependencies": {
+    "tsx": "latest",
+    "@types/node": "latest"
+  }
+}

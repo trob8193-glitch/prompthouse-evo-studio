@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evo Bridge — Sovereign Command v3</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --indigo: #6366f1; --emerald: #10b981; --amber: #f59e0b;
+      --pink: #ec4899; --violet: #8b5cf6; --cyan: #22d3ee;
+      --rose: #f43f5e; --bg: #000; --panel: #080810;
+      --border: rgba(255,255,255,0.06);
+    }
+    body {
+      width: 460px; min-height: 680px; background: var(--bg);
+      color: #e2e8f0; font-family: 'Outfit', sans-serif; overflow-x: hidden;
+    }
+
+    /* ── UPGRADE GLOW ── */
+    body.upgrade-ready { animation: bodyGlow 2s ease-in-out infinite; }
+    @keyframes bodyGlow {
+      0%   { box-shadow: inset 0 0 20px rgba(99,102,241,0.1); }
+      50%  { box-shadow: inset 0 0 60px rgba(99,102,241,0.5), 0 0 60px rgba(99,102,241,0.3); }
+      100% { box-shadow: inset 0 0 20px rgba(99,102,241,0.1); }
+    }
+    @keyframes pulseBorder {
+      0%,100% { border-color: rgba(99,102,241,0.2); box-shadow: 0 0 8px rgba(99,102,241,0.1); }
+      50%      { border-color: rgba(99,102,241,0.8); box-shadow: 0 0 30px rgba(99,102,241,0.5); }
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #050510, #0a0a1a);
+      border-bottom: 1px solid var(--border); padding: 16px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { display: flex; flex-direction: column; gap: 2px; }
+    .logo-name { font-size: 16px; font-weight: 900; letter-spacing: 2px; color: var(--indigo); }
+    .logo-sub { font-size: 7px; color: #334155; letter-spacing: 3px; font-family: 'JetBrains Mono'; }
+    .status-pill {
+      font-size: 8px; font-weight: 900; padding: 5px 12px; border-radius: 20px;
+      letter-spacing: 1px; border: 1px solid transparent; transition: all 0.5s;
+    }
+    .status-pill.live { color: var(--emerald); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.1); box-shadow: 0 0 12px rgba(16,185,129,0.2); }
+    .status-pill.offline { color: var(--rose); border-color: rgba(244,63,94,0.3); background: rgba(244,63,94,0.1); }
+
+    /* ── UPGRADE BANNER ── */
+    #upgrade-banner {
+      display: none; background: linear-gradient(90deg, rgba(99,102,241,0.15), rgba(168,85,247,0.15));
+      border-bottom: 1px solid rgba(99,102,241,0.4); padding: 10px 20px;
+      justify-content: space-between; align-items: center;
+      animation: pulseBorder 2s ease-in-out infinite;
+    }
+    #upgrade-banner.visible { display: flex; }
+    .upgrade-text { font-size: 9px; font-weight: 900; color: var(--indigo); letter-spacing: 1px; }
+    .upgrade-btn {
+      background: var(--indigo); color: #fff; border: none; padding: 6px 14px;
+      border-radius: 8px; font-size: 9px; font-weight: 900; cursor: pointer; letter-spacing: 1px;
+      box-shadow: 0 0 12px rgba(99,102,241,0.5); animation: pulseShadow 1.5s ease-in-out infinite;
+    }
+    @keyframes pulseShadow {
+      0%,100% { box-shadow: 0 0 12px rgba(99,102,241,0.4); }
+      50%      { box-shadow: 0 0 30px rgba(99,102,241,0.8); }
+    }
+
+    /* ── IQ STATS ── */
+    .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 14px 20px; }
+    .stat-card {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px;
+    }
+    .stat-label { font-size: 7px; font-weight: 900; color: #334155; letter-spacing: 2px; margin-bottom: 4px; }
+    .stat-value { font-size: 13px; font-weight: 900; font-family: 'JetBrains Mono'; }
+    .val-green { color: var(--emerald); } .val-indigo { color: var(--indigo); } .val-amber { color: var(--amber); }
+
+    /* ── MODE SELECTOR ── */
+    .modes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 0 20px 14px; }
+    .mode-btn {
+      background: var(--panel); border: 1px solid var(--border); padding: 10px 4px; border-radius: 10px;
+      font-size: 7px; font-weight: 900; text-align: center; cursor: pointer; color: #475569;
+      transition: all 0.2s; letter-spacing: 1px;
+    }
+    .mode-btn:hover { color: #fff; border-color: rgba(255,255,255,0.1); }
+    .mode-btn.active {
+      background: linear-gradient(135deg, var(--indigo), var(--violet));
+      border: none; color: #fff; box-shadow: 0 6px 20px rgba(99,102,241,0.3);
+    }
+    .mode-icon { font-size: 14px; margin-bottom: 4px; }
+
+    /* ── CAPABILITY GRID ── */
+    .cap-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 0 20px 14px; }
+    .cap-tile {
+      aspect-ratio: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 4px; background: var(--panel); border: 1px solid var(--border);
+      border-radius: 10px; cursor: pointer; transition: all 0.3s; padding: 4px;
+    }
+    .cap-tile:hover { border-color: var(--indigo); transform: translateY(-2px); }
+    .cap-tile.active { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.08); }
+    .cap-tile.active .cap-dot { background: var(--indigo); box-shadow: 0 0 8px rgba(99,102,241,0.6); }
+    .cap-dot { width: 6px; height: 6px; border-radius: 50%; background: #1e293b; }
+    .cap-label { font-size: 6px; font-weight: 900; color: #475569; text-align: center; letter-spacing: 0.5px; }
+    .cap-icon { font-size: 16px; }
+
+    /* ── CONSOLE ── */
+    .console {
+      margin: 0 20px 14px; background: #000; border: 1px solid #0f172a; border-radius: 14px;
+      padding: 14px; height: 130px; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 9px;
+      line-height: 1.7; color: var(--emerald); position: relative;
+    }
+    .console::before { content: '// EVO CONSOLE'; position: absolute; top: 8px; right: 12px; font-size: 7px; color: #1e293b; }
+    .log-line { margin-bottom: 2px; }
+    .log-line.err { color: var(--rose); }
+    .log-line.warn { color: var(--amber); }
+    .log-line.info { color: var(--cyan); }
+    .log-line.ok { color: var(--emerald); }
+
+    /* ── PROMPT AREA ── */
+    .prompt-area { padding: 0 20px 14px; display: flex; flex-direction: column; gap: 8px; }
+    textarea {
+      width: 100%; height: 70px; background: var(--panel); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 14px; color: #fff; font-family: 'JetBrains Mono'; font-size: 10px;
+      resize: none; outline: none; transition: border-color 0.2s;
+    }
+    textarea:focus { border-color: rgba(99,102,241,0.4); }
+
+    /* ── ACTION BUTTONS ── */
+    .actions { padding: 0 20px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .btn-primary {
+      width: 100%; padding: 14px; background: var(--indigo); color: #fff; border: none;
+      border-radius: 14px; font-size: 12px; font-weight: 900; cursor: pointer; letter-spacing: 2px;
+      transition: all 0.2s; box-shadow: 0 8px 20px rgba(99,102,241,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(99,102,241,0.5); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .btn-secondary {
+      padding: 10px 8px; background: var(--panel); border: 1px solid var(--border); color: #94a3b8;
+      border-radius: 10px; font-size: 8px; font-weight: 900; cursor: pointer; text-align: center;
+      letter-spacing: 1px; transition: all 0.2s;
+    }
+    .btn-secondary:hover { color: #fff; border-color: rgba(255,255,255,0.1); background: #0f172a; }
+
+    /* ── FOOTER ── */
+    .footer { padding: 10px 20px 14px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-log { font-size: 7px; color: #1e293b; font-family: 'JetBrains Mono'; }
+    .shortcuts { font-size: 7px; color: #1e293b; font-family: 'JetBrains Mono'; text-align: right; }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-name">EVO BRIDGE</div>
+      <div class="logo-sub">SOVEREIGN_COMMAND_V3.0</div>
+    </div>
+    <div id="status" class="status-pill offline">OFFLINE</div>
+  </div>
+
+  <!-- UPGRADE BANNER -->
+  <div id="upgrade-banner">
+    <div class="upgrade-text">🔺 STUDIO UPGRADE READY — NIGHTFORGE STAGED CHANGES</div>
+    <button class="upgrade-btn" id="btn-apply-upgrade">APPLY NOW</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">STUDIO IQ</div>
+      <div id="val-iq" class="stat-value val-indigo">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">EVO CYCLE</div>
+      <div id="val-cycle" class="stat-value val-amber">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">BRIDGE</div>
+      <div id="val-bridge" class="stat-value val-green">—</div>
+    </div>
+  </div>
+
+  <!-- MODES -->
+  <div class="modes">
+    <div class="mode-btn active" data-mode="capture"><div class="mode-icon">📡</div>CAPTURE</div>
+    <div class="mode-btn" data-mode="inject"><div class="mode-icon">⚡</div>INJECT</div>
+    <div class="mode-btn" data-mode="audit"><div class="mode-icon">🔍</div>AUDIT</div>
+    <div class="mode-btn" data-mode="repair"><div class="mode-icon">🔧</div>REPAIR</div>
+    <div class="mode-btn" data-mode="train"><div class="mode-icon">🌱</div>TRAIN</div>
+    <div class="mode-btn" data-mode="proof"><div class="mode-icon">✅</div>PROOF</div>
+    <div class="mode-btn" data-mode="twin"><div class="mode-icon">👁️</div>TWIN</div>
+    <div class="mode-btn" data-mode="chat"><div class="mode-icon">🧠</div>CHAT</div>
+    <div class="mode-btn" data-mode="deploy"><div class="mode-icon">🚀</div>DEPLOY</div>
+    <div class="mode-btn" data-mode="evolve"><div class="mode-icon">🔺</div>EVOLVE</div>
+  </div>
+
+  <!-- CAPABILITY TILES -->
+  <div class="cap-grid">
+    <div class="cap-tile active" data-cap="dom" title="DOM Stealer"><div class="cap-icon">🕷️</div><div class="cap-dot"></div><div class="cap-label">DOM STEALER</div></div>
+    <div class="cap-tile active" data-cap="bug" title="Bug Sniper"><div class="cap-icon">🎯</div><div class="cap-dot"></div><div class="cap-label">BUG SNIPER</div></div>
+    <div class="cap-tile" data-cap="twin" title="Work Twin"><div class="cap-icon">👁️</div><div class="cap-dot"></div><div class="cap-label">WORK TWIN</div></div>
+    <div class="cap-tile active" data-cap="inject" title="Prompt Injector"><div class="cap-icon">⚡</div><div class="cap-dot"></div><div class="cap-label">INJECTOR</div></div>
+    <div class="cap-tile" data-cap="xray" title="Cognitive X-Ray"><div class="cap-icon">🧠</div><div class="cap-dot"></div><div class="cap-label">COG X-RAY</div></div>
+    <div class="cap-tile active" data-cap="chat" title="Sentient Chat"><div class="cap-icon">💬</div><div class="cap-dot"></div><div class="cap-label">SENTIENT CHAT</div></div>
+    <div class="cap-tile" data-cap="forge" title="Forge Capsule"><div class="cap-icon">⚗️</div><div class="cap-dot"></div><div class="cap-label">FORGE CAP</div></div>
+    <div class="cap-tile active" data-cap="gate" title="Truth Gate"><div class="cap-icon">🛡️</div><div class="cap-dot"></div><div class="cap-label">TRUTH GATE</div></div>
+    <div class="cap-tile" data-cap="tree" title="Evo Tree Seed"><div class="cap-icon">🌱</div><div class="cap-dot"></div><div class="cap-label">EVO TREE</div></div>
+    <div class="cap-tile" data-cap="link" title="Bridge Link"><div class="cap-icon">🔗</div><div class="cap-dot"></div><div class="cap-label">BRIDGE LINK</div></div>
+    <div class="cap-tile" data-cap="ledger" title="Proof Ledger"><div class="cap-icon">📒</div><div class="cap-dot"></div><div class="cap-label">LEDGER</div></div>
+    <div class="cap-tile" data-cap="evolve" title="Self-Evolve"><div class="cap-icon">♾️</div><div class="cap-dot"></div><div class="cap-label">SELF-EVOLVE</div></div>
+  </div>
+
+  <!-- CONSOLE -->
+  <div class="console" id="console">
+    <div class="log-line">&gt; SOVEREIGN_BOOT_v3.0...</div>
+    <div class="log-line">&gt; AWAITING_BRIDGE_CONNECTION...</div>
+  </div>
+
+  <!-- PROMPT INPUT -->
+  <div class="prompt-area">
+    <textarea id="prompt-input" placeholder="Enter prompt, context, or command..."></textarea>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn-primary" id="btn-primary-action">📡 CAPTURE CONTEXT TO STUDIO</button>
+    <div class="btn-row">
+      <button class="btn-secondary" id="btn-inject">⚡ INJECT PROMPT</button>
+      <button class="btn-secondary" id="btn-bug">🎯 BUG SNIPER</button>
+      <button class="btn-secondary" id="btn-chat">🧠 SENTIENT CHAT</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" id="btn-train">🌱 SEED TO EVO</button>
+      <button class="btn-secondary" id="btn-proof">✅ SEND TO PROOF</button>
+      <button class="btn-secondary" id="btn-twin">👁️ OPEN TWIN</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" id="btn-summarize">📋 SUMMARIZE</button>
+      <button class="btn-secondary" id="btn-open-studio">🏠 OPEN STUDIO</button>
+      <button class="btn-secondary" id="btn-self-evolve">🔺 SELF-EVOLVE</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-log" id="footer-log">[BOOT] Sovereign Extension Ready.</div>
+    <div class="shortcuts">Ctrl+Shift+C=Capture | K=Chat | B=Bug</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

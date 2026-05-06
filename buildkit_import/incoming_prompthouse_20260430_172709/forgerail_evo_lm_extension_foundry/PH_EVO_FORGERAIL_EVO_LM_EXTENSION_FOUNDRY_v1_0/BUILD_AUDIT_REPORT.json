@@ -1,0 +1,65 @@
+{
+  "package": "PH_EVO_FORGERAIL_EVO_LM_EXTENSION_FOUNDRY",
+  "version": "1.0",
+  "created_date": "2026-04-30",
+  "checks": [
+    {
+      "name": "forgecapsule_schema",
+      "status": "PASS"
+    },
+    {
+      "name": "forgecapsule_example",
+      "status": "PASS"
+    },
+    {
+      "name": "backend_rails",
+      "status": "PASS"
+    },
+    {
+      "name": "evo_lm_spec",
+      "status": "PASS"
+    },
+    {
+      "name": "promptlink",
+      "status": "PASS"
+    },
+    {
+      "name": "provider_adapters",
+      "status": "PASS"
+    },
+    {
+      "name": "autonomy_policy",
+      "status": "PASS"
+    },
+    {
+      "name": "senior_bots_10",
+      "status": "PASS"
+    },
+    {
+      "name": "extension_foundry",
+      "status": "PASS"
+    },
+    {
+      "name": "extensioncapsule_schema",
+      "status": "PASS"
+    },
+    {
+      "name": "extension_templates",
+      "status": "PASS"
+    },
+    {
+      "name": "11_public_bots_rule",
+      "status": "PASS"
+    },
+    {
+      "name": "no_fake_boundary",
+      "status": "PASS"
+    },
+    {
+      "name": "github_vscode_adapters",
+      "status": "PASS"
+    }
+  ],
+  "passed": 14,
+  "failed": 0
+}

@@ -1,0 +1,21 @@
+[
+  { "id": "ui01", "name": "Global Design System", "domain": "ui", "path": "src/styles/design_system.css" },
+  { "id": "ui02", "name": "Categorized Navigation", "domain": "ui", "path": "src/components/Navigation.jsx" },
+  { "id": "ui03", "name": "Modular Dashboard", "domain": "ui", "path": "src/components/Dashboard.jsx" },
+  { "id": "ui04", "name": "Multi-Step Onboarding", "domain": "ui", "path": "src/components/Onboarding.jsx" },
+  { "id": "meta01", "name": "Live Command Graph", "domain": "meta", "path": "src/components/CommandGraph.jsx" },
+  { "id": "meta02", "name": "Prompt DNA Compiler", "domain": "meta", "path": "src/core/foundry/DNACompiler.js" },
+  { "id": "meta03", "name": "Autonomy Flight Recorder", "domain": "meta", "path": "src/core/audit/FlightRecorder.js" },
+  { "id": "meta04", "name": "Model Confidence Radar", "domain": "meta", "path": "src/core/foundry/ConfidenceRadar.js" },
+  { "id": "meta05", "name": "Training Gold Miner", "domain": "meta", "path": "src/core/foundry/GoldMiner.js" },
+  { "id": "meta06", "name": "Shadow Run Simulator", "domain": "meta", "path": "src/core/automation/ShadowRunner.js" },
+  { "id": "meta07", "name": "Self-Healing Workflow Repair", "domain": "meta", "path": "src/core/automation/SelfHealer.js" },
+  { "id": "meta08", "name": "Global Pattern Library", "domain": "meta", "path": "src/core/memory/PatternLibrary.js" },
+  { "id": "meta09", "name": "Agent Arena / Role Duel", "domain": "meta", "path": "src/core/agent/Arena.js" },
+  { "id": "meta10", "name": "Revenue Autopilot With Proof Gates", "domain": "meta", "path": "src/core/commerce/RevenueAutopilot.js" },
+  { "id": "ext01", "name": "Extension SidePanel Shell", "domain": "extension", "path": "src/extension/SidePanel.jsx" },
+  { "id": "ext02", "name": "Chat Capture Panel", "domain": "extension", "path": "src/extension/panels/ChatCapture.jsx" },
+  { "id": "ext03", "name": "Prompt Library Panel", "domain": "extension", "path": "src/extension/panels/PromptLibrary.jsx" },
+  { "id": "ext04", "name": "Reality Twin Panel", "domain": "extension", "path": "src/extension/panels/RealityTwin.jsx" },
+  { "id": "ext05", "name": "Proof Console Panel", "domain": "extension", "path": "src/extension/panels/ProofConsole.jsx" }
+]

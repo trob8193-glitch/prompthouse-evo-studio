@@ -1,0 +1,92 @@
+{
+  "api_gateway": {
+    "status": "canon",
+    "file": "promptbridge-server.js",
+    "health": "verified"
+  },
+  "memory_box": {
+    "status": "canon",
+    "file": "src/core/memory/local_memory_box.js",
+    "health": "verified"
+  },
+  "model_foundry": {
+    "status": "canon",
+    "files": [
+      "src/core/foundry/dataset_forge.js",
+      "src/core/foundry/eval_bench.js"
+    ],
+    "health": "verified"
+  },
+  "browser_cockpit": {
+    "status": "canon",
+    "files": [
+      "src/extension/"
+    ],
+    "health": "verified"
+  },
+  "promptlink": {
+    "status": "canon",
+    "file": "src/promptlink-registry.js",
+    "health": "verified"
+  },
+  "nightforge": {
+    "status": "canon",
+    "file": "src/nightforge.js",
+    "health": "verified"
+  },
+  "autonomous_builder": {
+    "status": "canon",
+    "file": "src/autonomous-builder.js",
+    "health": "verified"
+  },
+  "performance_monitor": {
+    "status": "canon",
+    "file": "src/components/PerformanceMonitor.jsx",
+    "health": "verified"
+  },
+  "bot_automation": {
+    "status": "canon",
+    "file": "src/components/BotAutomationDeck.jsx",
+    "health": "verified"
+  },
+  "evo_tree": {
+    "status": "canon",
+    "branches": [
+      {
+        "id": "branch_sovereign_core_1777952016238",
+        "name": "Sovereign Architecture Branch",
+        "family": "NativeInternalization",
+        "trigger": "sovereign_intelligence_boot",
+        "purpose": "Train Evo LM to reason natively about this studio's architecture — API routes, memory scopes, proof contracts",
+        "data_requirements": [
+          "build logs",
+          "fix receipts",
+          "proof_receipts/*.json"
+        ],
+        "eval_required": "architecture_reasoning_score > 0.95",
+        "status": "proposed",
+        "proposed_at": "2026-05-05T03:33:36.238Z"
+      },
+      {
+        "id": "branch_sovereign_core_1777952293802",
+        "name": "Sovereign Architecture Branch",
+        "family": "NativeInternalization",
+        "trigger": "sovereign_intelligence_boot",
+        "purpose": "Train Evo LM to reason natively about this studio's architecture — API routes, memory scopes, proof contracts",
+        "data_requirements": [
+          "build logs",
+          "fix receipts",
+          "proof_receipts/*.json"
+        ],
+        "eval_required": "architecture_reasoning_score > 0.95",
+        "status": "proposed",
+        "proposed_at": "2026-05-05T03:38:13.802Z"
+      }
+    ],
+    "health": "verified"
+  },
+  "sovereign_intelligence": {
+    "status": "canon",
+    "health": "verified"
+  }
+}

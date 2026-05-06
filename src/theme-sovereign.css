@@ -1,0 +1,10 @@
+/** Sovereign Aesthetics — Real Production CSS Theme */
+:root {
+  --ph-bg-deep: #050505;
+  --ph-accent-sovereign: #00ffaa;
+  --ph-text-master: #e0e0e0;
+  --ph-border-omega: 1px solid rgba(0, 255, 170, 0.2);
+  --ph-glow-master: 0 0 15px rgba(0, 255, 170, 0.4);
+}
+body { background: var(--ph-bg-deep); color: var(--ph-text-master); font-family: 'Inter', sans-serif; }
+.master-grade-card { border: var(--ph-border-omega); box-shadow: var(--ph-glow-master); padding: 2rem; border-radius: 8px; }

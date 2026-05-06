@@ -1,0 +1,2 @@
+/** Fixed Feature: Autonomy Flight Recorder (pb16) **/
+export class FlightRecorder { constructor() { this.logs = []; } record(agent, action, meta) { const entry = { timestamp: new Date().toISOString(), agent, action, meta }; this.logs.push(entry); localStorage.setItem('ph_evo_flight_log', JSON.stringify(this.logs.slice(-1000))); } getRecent() { return this.logs.slice(-50); } } export const flightRecorder = new FlightRecorder();

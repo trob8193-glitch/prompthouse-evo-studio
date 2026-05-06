@@ -1,0 +1,11 @@
+doctor: { command: "flutter doctor -v", proof: "flutter_doctor_report.md" }
+pub_get: { command: "flutter pub get", proof: "dependency_install_log.md" }
+test: { command: "flutter test", proof: "flutter_test_output.md" }
+run: { command: "flutter run", proof: "local_run_log.md" }
+build_apk: { command: "flutter build apk --release", approval: "owner_required", proof: "apk_build_output.md" }
+build_appbundle: { command: "flutter build appbundle --release", approval: "owner_required", proof: "aab_build_output.md" }
+build_ios: { command: "flutter build ipa --release", approval: "owner_required", proof: "ios_build_output.md" }
+rules:
+  - no shipped claim without proof
+  - no secrets in logs
+  - signing blockers stop release

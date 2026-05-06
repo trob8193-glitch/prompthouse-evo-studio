@@ -1,0 +1,24 @@
+[
+  {
+    "id": "local-evo-router",
+    "status": "trained_local",
+    "provider": "local-foundry",
+    "trainingRuns": 7,
+    "lastTrainedAt": "2026-05-04T12:38:10.109Z",
+    "datasetSize": 8
+  },
+  {
+    "id": "local-evo-lm-latest",
+    "status": "trained_local",
+    "provider": "local-foundry",
+    "trainingRuns": 15,
+    "lastTrainedAt": "2026-05-04T12:38:10.101Z",
+    "datasetSize": 8
+  },
+  {
+    "id": "openai-configured",
+    "status": "available",
+    "provider": "openai",
+    "trainingRuns": 0
+  }
+]

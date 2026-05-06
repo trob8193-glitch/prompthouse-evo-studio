@@ -3,7 +3,7 @@ import { SovereignTabs } from '../components/SovereignTabs.jsx';
 
 import { CodeForgeView, MobileArchView, MissionControlView, ChainBuilderView, ExportLabView } from '../views.jsx';
 import { IntentAnalyzerView, PromptDNAView, TemplateLibraryView, AutoRepairView, LiveChatView } from '../ai-views.jsx';
-import { BotStageView, AgentCtlView, selectLead, MasterPromptVaultView } from '../v3-views.jsx';
+import { BotStageView, AgentCtlView, MasterPromptVaultView } from '../v3-views.jsx';
 import { ProofLedgerView, CanonMemoryView, WitnessConsoleView, DeadSurfaceHunterView, MaturityScoreView, ForgePipelineView } from '../proof-os-views.jsx';
 import { AutonomousBuilderView } from '../autonomous-views.jsx';
 import { AutonomousSelfBuildCommandCenter } from '../autonomous-command-center.jsx';
@@ -38,6 +38,7 @@ import { BotRosterView } from '../v3-views.jsx';
 import { SovereignIntelligenceDashboard } from './SovereignIntelligenceDashboard.jsx';
 import { ExtensionCockpitView } from './ExtensionCockpitView.jsx';
 import { GlobalAPISettingsView } from './GlobalAPISettingsView.jsx';
+import { EvoEyesView } from './EvoEyesView.jsx';
 
 
 // ─── SCREEN TEMPLATES ────────────────────────────────────────────────────────
@@ -166,7 +167,8 @@ export function ProofConsole() {
 export function LiveInspector() {
   return (
     <ScreenTemplate title="Live Surface Inspector" subtitle="Live routes, state, requests, runtime events, and traces.">
-      <AgentCtlView />
+      <EvoEyesView />
+      <div className="mt-6"><AgentCtlView /></div>
       <div className="mt-6"><PatternMirrorView /></div>
       <div className="mt-6"><IntentAnalyzerView /></div>
     </ScreenTemplate>
@@ -338,3 +340,4 @@ export function SovereignControl() {
     </ScreenTemplate>
   );
 }
+export { EvoEyesView, SovereignIntelligenceDashboard, ExtensionCockpitView, GlobalAPISettingsView };

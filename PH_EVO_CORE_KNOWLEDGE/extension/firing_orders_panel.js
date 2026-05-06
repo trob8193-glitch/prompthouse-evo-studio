@@ -1,0 +1,2 @@
+/** Fixed Feature: Firing Orders panel (pb07) **/
+export function executeFiringOrder(orderId, instructions) { console.log(`[FiringOrders] Executing sequence ${orderId}`); const steps = instructions.split('\n'); return steps.map((step, i) => ({ step: i + 1, instruction: step, status: 'dispatched' })); } export const DEFAULT_ORDERS = ['REASON', 'CODE', 'TEST', 'VERIFY'];

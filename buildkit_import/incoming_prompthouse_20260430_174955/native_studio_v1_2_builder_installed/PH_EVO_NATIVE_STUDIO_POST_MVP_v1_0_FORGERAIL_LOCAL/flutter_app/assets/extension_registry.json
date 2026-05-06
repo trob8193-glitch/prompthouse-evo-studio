@@ -1,0 +1,34 @@
+{
+  "extensions": [
+    {
+      "id": "flutter_panel_mission_control",
+      "type": "flutter_ui_panel",
+      "status": "recommended"
+    },
+    {
+      "id": "vscode_proof_deck_panel",
+      "type": "vscode_extension",
+      "status": "scaffold_ready"
+    },
+    {
+      "id": "promptlink_openai_adapter",
+      "type": "promptlink_provider_adapter",
+      "status": "requires_credentials"
+    },
+    {
+      "id": "forgerail_device_lab",
+      "type": "forgerail_rail",
+      "status": "recommended"
+    },
+    {
+      "id": "promptbase_pack_mobile_dev",
+      "type": "promptbase_pack",
+      "status": "built_as_seed"
+    },
+    {
+      "id": "github_actions_proof_upload",
+      "type": "github_action",
+      "status": "built_as_template"
+    }
+  ]
+}

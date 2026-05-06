@@ -1,0 +1,16 @@
+{
+  "receipt_id": "proof_001",
+  "mission_id": "mission_001",
+  "rail": "installer|backend|github|secrets|device_lab|signing|store|onboarding|evo_lm|promptlink|extension_foundry",
+  "action": "string",
+  "status": "built|verified|blocked|broken|recommended",
+  "evidence_type": "command_output|screenshot|api_receipt|test_report|manual_approval|provider_call_summary|extension_install_log",
+  "evidence_uri": "string",
+  "redactions": [
+    "secret_values",
+    "tokens",
+    "private_user_data"
+  ],
+  "rollback": "string",
+  "timestamp": "iso8601"
+}

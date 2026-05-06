@@ -1,0 +1,97 @@
+{
+    "evoTree":  {
+                    "active":  true,
+                    "branchCount":  55,
+                    "latestBranchId":  "branch_ui_completion_1777754434048"
+                },
+    "fineTune":  {
+                     "ready":  true,
+                     "examples":  143,
+                     "minimum":  100
+                 },
+    "nightforge":  {
+                       "active":  true,
+                       "intervalMs":  21600000,
+                       "startedAt":  "2026-05-04T12:03:22.612Z",
+                       "lastCycleStartedAt":  "2026-05-04T12:03:22.614Z",
+                       "lastCycleCompletedAt":  "2026-05-04T12:03:22.733Z",
+                       "lastCycleStatus":  "recommended",
+                       "consecutiveFailures":  0,
+                       "cannot":  [
+                                      "silent_production_deploy",
+                                      "delete_data",
+                                      "expose_secrets"
+                                  ]
+                   },
+    "runId":  "final_verified_bots_evo_training_1777897254416",
+    "runtimeStatus":  "verified",
+    "self":  {
+                 "id":  "self_cycle_1777897224581",
+                 "status":  "verified",
+                 "applyFixes":  false,
+                 "runTests":  true,
+                 "runBuild":  true,
+                 "durationMs":  19366,
+                 "maintenance":  {
+                                     "success":  true,
+                                     "issuesFixed":  0,
+                                     "issuesDetected":  48,
+                                     "gapCount":  161,
+                                     "applied":  false,
+                                     "recorded":  false,
+                                     "newIQ":  394219,
+                                     "actualIQ":  1556936,
+                                     "cycle":  66,
+                                     "mutated":  false,
+                                     "writes":  [
+
+                                                ]
+                                 },
+                 "commands":  [
+                                  {
+                                      "success":  true,
+                                      "command":  "node --check promptbridge-server.js",
+                                      "durationMs":  171
+                                  },
+                                  {
+                                      "success":  true,
+                                      "command":  "npm test",
+                                      "durationMs":  13609
+                                  },
+                                  {
+                                      "success":  true,
+                                      "command":  "npm run build",
+                                      "durationMs":  5302
+                                  }
+                              ],
+                 "completedAt":  "2026-05-04T12:20:24.581Z",
+                 "mutated":  false,
+                 "writes":  [
+
+                            ]
+             },
+    "models":  [
+                   {
+                       "id":  "local-evo-router",
+                       "status":  "trained_local",
+                       "provider":  "local-foundry",
+                       "trainingRuns":  4,
+                       "lastTrainedAt":  "2026-05-04T12:19:40.289Z",
+                       "datasetSize":  25
+                   },
+                   {
+                       "id":  "local-evo-lm-latest",
+                       "status":  "trained_local",
+                       "provider":  "local-foundry",
+                       "trainingRuns":  10,
+                       "lastTrainedAt":  "2026-05-04T12:19:40.279Z",
+                       "datasetSize":  25
+                   },
+                   {
+                       "id":  "openai-configured",
+                       "status":  "available",
+                       "provider":  "openai",
+                       "trainingRuns":  0
+                   }
+               ]
+}

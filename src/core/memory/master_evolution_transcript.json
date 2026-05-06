@@ -1,0 +1,32 @@
+{
+  "project": "PromptHouse Evo Studio",
+  "phase": "Sovereign Hardening",
+  "milestones": [
+    {
+      "event": "Model Upgrade",
+      "details": "Transitioned entire architecture to GPT-5.5 (Master) via dynamic environment variables. Removed all hardcoded gpt-4 references."
+    },
+    {
+      "event": "Truth Enforcement",
+      "details": "Implemented TruthGate middleware to block all fake/dummy/mock data at the network level. Introduced Sovereignty Signatures for verified data."
+    },
+    {
+      "event": "Self-Maintenance Engine",
+      "details": "Built autonomous maintenance loop that scans code for integrity, purges placeholders, and evolves studio aesthetics (CSS) on every cycle."
+    },
+    {
+      "event": "Bot Evolution",
+      "details": "Implemented maturity leveling for the 21-bot roster. Bots now gain experience and update their internal roles based on studio IQ."
+    },
+    {
+      "event": "Multi-User & External API",
+      "details": "Added Global API Settings for user keys and X-PH-EVO-KEY for external project integration via the PromptBridge."
+    }
+  ],
+  "context_learning_targets": [
+    "C:/Users/Noname/.gemini/antigravity/scratch/prompthouse-evo-studio/generated_apps/",
+    "C:/Users/Noname/.gemini/antigravity/scratch/prompthouse-evo-studio/scratch/",
+    "C:/Users/Noname/.gemini/antigravity/scratch/prompthouse-evo-studio/src/core/"
+  ],
+  "instruction_overrides": "Never use static data. Always verify truth. Evolution is constant. Sovereignty is non-negotiable."
+}

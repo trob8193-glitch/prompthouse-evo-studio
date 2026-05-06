@@ -1,0 +1,23 @@
+{
+  "version": "1.0.0",
+  "command_patterns": [
+    {
+      "id": "vsc_open_file",
+      "syntax": "/vsc open <filepath>",
+      "logic": "Triggers the VSCAdaptor to physically launch the file in the active editor host.",
+      "resonance": 0.99
+    },
+    {
+      "id": "flutter_hot_reload",
+      "syntax": "/flutter reload",
+      "logic": "Triggers the FlutterBridge to push pending Dart changes and refresh the emulator.",
+      "resonance: 0.98
+    },
+    {
+      "id": "git_stage_all",
+      "syntax": "/git stage .",
+      "logic": "Triggers the GitAdaptor to stage all production artifacts in the current workspace.",
+      "resonance": 0.97
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "manifestId": "PH-BUILDKIT-1777595887007",
+  "timestamp": "2026-05-01T00:38:07.010Z",
+  "source": "C:\\Users\\Noname\\.gemini\\antigravity\\scratch\\prompthouse-evo-studio\\buildkit_import\\prompthouse_evo_real_execution_buildkit",
+  "target": "C:\\Users\\Noname\\.gemini\\antigravity\\scratch\\prompthouse-evo-studio\\generated_apps\\real_execution_buildkit",
+  "truthState": "built",
+  "copiedFiles": [],
+  "note": "Additive copy only. Existing files were left in place."
+}

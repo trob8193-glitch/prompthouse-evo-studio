@@ -1,0 +1,13 @@
+{
+  "defaultMode": "local_only",
+  "trainingCaptureDefault": false,
+  "globalContributionDefault": false,
+  "desktopIndexingDefault": false,
+  "blockedDataClasses": [
+    "passwords",
+    "api_keys",
+    "tokens",
+    "payment_data",
+    "private_messages_without_consent"
+  ]
+}

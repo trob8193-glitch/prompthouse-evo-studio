@@ -1,0 +1,71 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Search, Zap, Shield, Cpu, Layers } from 'lucide-react';
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
+/**
+ * PH EVO STUDIO — RARE CAPABILITIES (V4 RESTORED)
+ * ═══════════════════════════════════════════════════════════════
+ * This module orchestrates the studio's advanced intelligence
+ * features: Cognitive X-Ray, DOM Stealing, and Quantum Seeding.
+ */
+
+const CapabilityCard = ({ title, description, icon: Icon, color, status }) => (
+  <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl hover:border-indigo-500/30 transition-all">
+    <div className="flex justify-between items-start mb-4">
+      <div className={`p-3 rounded-xl bg-slate-800 ${color}`}><Icon size={20} /></div>
+      <div className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">{status}</div>
+    </div>
+    <div className="text-sm font-black text-white uppercase mb-2 tracking-tighter">{title}</div>
+    <div className="text-[10px] text-slate-500 font-bold leading-relaxed">{description}</div>
+  </div>
+);
+
+export default function RareCapabilities() {
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Rare Capabilities</h2>
+        <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest italic">S+++++ Grade Active</div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <CapabilityCard 
+          title="Cognitive X-Ray" 
+          description="Performs multi-layered semantic analysis of your codebase to identify architecture drift." 
+          icon={Search} 
+          color="text-cyan-400" 
+          status="READY"
+        />
+        <CapabilityCard 
+          title="Quantum Seeding" 
+          description="Autonomously identifies recursive studio sprouts from high-density production logic." 
+          icon={Zap} 
+          color="text-yellow-400" 
+          status="ACTIVE"
+        />
+        <CapabilityCard 
+          title="DOM Stealer Pro" 
+          description="Invisibly captures and audits external web structures for direct foundry integration." 
+          icon={Cpu} 
+          color="text-purple-400" 
+          status="READY"
+        />
+        <CapabilityCard 
+          title="Sovereign Ledger" 
+          description="Immutable Merkle-Tree history tracking for every logic transition in the forest." 
+          icon={Shield} 
+          color="text-rose-400" 
+          status="SYNCED"
+        />
+        <CapabilityCard 
+          title="Forest Connectome" 
+          description="Real-time visualization and management of cross-studio knowledge webbing." 
+          icon={Layers} 
+          color="text-emerald-400" 
+          status="ACTIVE"
+        />
+      </div>
+    </div>
+  );
+}

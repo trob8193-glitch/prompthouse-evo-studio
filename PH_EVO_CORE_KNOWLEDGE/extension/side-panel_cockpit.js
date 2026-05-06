@@ -1,0 +1,2 @@
+/** Fixed Feature: Side-panel cockpit (pb01) **/
+export class CockpitManager { constructor() { this.state = { open: false, lastEvent: null }; } toggle() { this.state.open = !this.state.open; console.log('[Cockpit] Toggled:', this.state.open); } update(data) { this.state.lastEvent = data; this.broadcast(data); } broadcast(data) { window.postMessage({ type: 'PH_EVO_COCKPIT_UPDATE', data }, '*'); } } export const cockpit = new CockpitManager();

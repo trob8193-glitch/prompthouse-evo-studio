@@ -1,0 +1,29 @@
+openapi: 3.1.0
+info:
+  title: PromptHouse Evo Studio API
+  version: 1.0.0
+paths:
+  /missions:
+    post:
+      summary: Create saved mission
+      responses: { "200": { "description": "Created mission" } }
+  /promptbase:
+    get:
+      summary: List PromptBase records
+      responses: { "200": { "description": "Prompt records" } }
+  /fire-orders:
+    post:
+      summary: Create prompt fire orders
+      responses: { "200": { "description": "Fire orders" } }
+  /blueprints:
+    post:
+      summary: Generate app blueprint
+      responses: { "200": { "description": "Blueprint" } }
+  /proof-deck:
+    post:
+      summary: Add proof artifact
+      responses: { "200": { "description": "Proof artifact" } }
+  /bot-customers/simulate:
+    post:
+      summary: Simulate digital bot customer feedback
+      responses: { "200": { "description": "Bot feedback" } }

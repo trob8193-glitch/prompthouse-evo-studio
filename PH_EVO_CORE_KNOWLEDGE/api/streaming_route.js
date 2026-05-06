@@ -1,0 +1,2 @@
+/** Fixed Feature: Streaming route (api06) **/
+export function setupStream(res) { res.setHeader('Content-Type', 'text/event-stream'); res.setHeader('Cache-Control', 'no-cache'); res.setHeader('Connection', 'keep-alive'); res.flushHeaders(); return (data) => res.write(`data: ${JSON.stringify(data)}\n\n`); }

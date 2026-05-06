@@ -1,0 +1,2 @@
+/** Fixed Feature: Model inference (api05) **/
+export async function routeInference(payload) { const { model, messages } = payload; console.log(`[API] Routing inference to ${model}`); const res = await fetch('http://localhost:3001/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages }) }); return await res.json(); }

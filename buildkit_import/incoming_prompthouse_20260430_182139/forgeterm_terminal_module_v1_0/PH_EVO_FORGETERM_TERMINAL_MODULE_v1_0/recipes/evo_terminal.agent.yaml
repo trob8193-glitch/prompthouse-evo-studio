@@ -1,0 +1,45 @@
+recipe_version: "1.0"
+kind: studio_terminal_widget
+name: ForgeTerm Pane
+job: Provide a PromptHouse-native embedded terminal pane inside the React studio UI.
+public_voice: Dev
+support_bots:
+  - Boundary
+  - Ledger
+  - Verifier
+  - Sovereignty
+modules:
+  - ForgeTTY
+  - ShellBridge
+  - VirtualShell
+  - SovereignGate
+  - BoundaryFilter
+  - LedgerTrace
+  - HeartbeatPTY
+tools:
+  - xterm_frontend
+  - websocket
+  - node_pty_backend
+rules:
+  never:
+    - claim browser-only real shell execution
+    - expose secrets in terminal receipts
+    - run destructive commands without sandbox and approval
+approval:
+  required_for:
+    - git_push
+    - deploy
+    - package_publish
+    - release_build
+    - destructive_shell
+proof:
+  required:
+    - terminal_output
+    - command_status
+    - redaction_report
+    - approval_receipt_if_risky
+export_targets:
+  - react_app
+  - evo_studio_builder
+  - forgerail
+  - extension_foundry

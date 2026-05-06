@@ -1,5 +1,6 @@
 node_modules/
 .env
+# local OpenAI and bridge secrets, do not commit
 .DS_Store
 dist/
 proof_receipts/
@@ -11,3 +12,28 @@ build_queues/
 zip_temp*/
 *.log
 data/
+
+# AI Bridge
+.env.*
+*.key
+*.pem
+*.p12
+*.jks
+*.keystore
+serviceAccount*.json
+firebase-adminsdk*.json
+google-services-private.json
+google-services.json
+GoogleService-Info.plist
+android/key.properties
+android/app/*.jks
+android/app/*.keystore
+ios/Runner/*.mobileprovision
+.ai/secrets/
+.ai/snapshots/context-pack.json
+coverage/
+.dart_tool/
+android/.gradle/
+ios/Pods/
+ios/.symlinks/
+macos/Pods/

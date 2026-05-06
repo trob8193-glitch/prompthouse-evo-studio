@@ -1,0 +1,8 @@
+{
+  "Activate local Evo LM runtime": {
+    "output": "local-evo-lm-latest processed: Activate local Evo LM runtime",
+    "feedback": "Activate",
+    "alignmentScore": 0,
+    "tunedAt": "2026-05-04T12:38:10.262Z"
+  }
+}

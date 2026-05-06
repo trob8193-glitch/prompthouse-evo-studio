@@ -6,7 +6,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { createCommerceProduct, createPricingTable } from './commerce-rail.js';
 
 export function CommerceRailView() {
-  const [mode, setMode] = useState('mock'); // mock | test | live
+  const [mode, setMode] = useState("[PURGED BY OMEGA PROTOCOL]"); // mock | test | live
   const [form, setForm] = useState({ productName: 'PH Studio Pro', price: 2999, currency: 'usd', description: 'Access to all bots and sovereign modules.' });
   const [result, setResult] = useState(null);
   const [pricingTable, setPricingTable] = useState(null);
@@ -28,7 +28,7 @@ export function CommerceRailView() {
           <div className="page-subtitle">Product specs, checkout links, and pricing table generation. Live Stripe requires owner approval.</div>
         </div>
         <div className="flex-row gap-8">
-          {['mock', 'test', 'live'].map(m => (
+          {["[PURGED BY OMEGA PROTOCOL]", 'test', 'live'].map(m => (
             <button 
               key={m} 
               className={`btn btn-sm ${mode === m ? 'btn-primary' : 'btn-secondary'}`}

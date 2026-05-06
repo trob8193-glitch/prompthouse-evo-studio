@@ -1,0 +1,28 @@
+{
+  "package": "PH_EVO_FORGETERM_TERMINAL_MODULE",
+  "version": "1.0",
+  "created": "2026-04-30",
+  "files": [
+    "README.md",
+    "docs/TERMINAL_NAMES_AND_CANON.md",
+    "package.snippet.json",
+    "recipes/evo_terminal.agent.yaml",
+    "server/README_BACKEND_PTY.md",
+    "server/evo-pty-server.ts",
+    "src/components/forgerail/EvoTermPane.tsx",
+    "src/lib/forgerail/evoTerminalPolicy.ts",
+    "src/lib/forgerail/evoTerminalTypes.ts",
+    "src/lib/forgerail/proofReceipts.ts"
+  ],
+  "checks": {
+    "has_react_component": true,
+    "has_policy": true,
+    "has_proof_receipts": true,
+    "has_pty_server": true,
+    "has_canon_names": true,
+    "has_agent_recipe": true
+  },
+  "passed": 6,
+  "failed": 0,
+  "boundary": "Browser UI captures commands; real shell execution requires backend PTY/sandbox."
+}

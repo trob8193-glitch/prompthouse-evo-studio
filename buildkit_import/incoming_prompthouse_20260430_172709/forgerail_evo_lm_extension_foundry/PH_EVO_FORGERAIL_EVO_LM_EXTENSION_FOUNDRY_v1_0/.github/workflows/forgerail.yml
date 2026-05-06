@@ -1,0 +1,14 @@
+name: ForgeRail CI
+on: [workflow_dispatch, push]
+jobs:
+  validate-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate package presence
+        run: |
+          test -f forge/forgecapsule.schema.json
+          test -f extensions/extensioncapsule.schema.json
+          test -f evo_lm/EVO_LM_SYSTEM_SPEC.md
+      - name: Boundary check
+        run: echo "No production deployment is claimed by this workflow."

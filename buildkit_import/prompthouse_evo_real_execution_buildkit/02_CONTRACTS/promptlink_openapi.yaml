@@ -1,0 +1,64 @@
+openapi: 3.1.0
+info:
+  title: PromptLink Internal API
+  version: 1.0.0
+paths:
+  /link/health:
+    get:
+      responses:
+        "200": { description: OK }
+  /link/connectors/register:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ConnectorManifest" }
+      responses:
+        "200": { description: Registered }
+  /link/connectors/{connector_id}/handshake:
+    post:
+      parameters:
+        - in: path
+          name: connector_id
+          required: true
+          schema: { type: string }
+      responses:
+        "200": { description: Handshake result }
+  /link/connectors/{connector_id}/invoke:
+    post:
+      parameters:
+        - in: path
+          name: connector_id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/InvokeRequest" }
+      responses:
+        "200": { description: Invoke result }
+components:
+  schemas:
+    ConnectorManifest:
+      type: object
+      required: [connectorId, name, baseUrl, auth, capabilities, allowedActions, riskLevel]
+      properties:
+        connectorId: { type: string }
+        name: { type: string }
+        baseUrl: { type: string }
+        auth: { type: object }
+        capabilities: { type: array, items: { type: string } }
+        allowedActions: { type: array, items: { type: string } }
+        riskLevel: { type: string }
+    InvokeRequest:
+      type: object
+      required: [workspaceId, projectId, action, input]
+      properties:
+        workspaceId: { type: string }
+        projectId: { type: string }
+        action: { type: string }
+        input: { type: object }
+        proofRequired: { type: boolean }
+        dryRun: { type: boolean }

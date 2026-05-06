@@ -1,0 +1,116 @@
+{
+    "runId":  "missing_file_build_training_1777898289587",
+    "captureReceipt":  "receipt_training_capture_1777898289858",
+    "feedbackAdded":  8,
+    "dataset":  {
+                    "id":  "missing_file_build_training_1777898289587_dataset",
+                    "source":  "codex_missing_file_build",
+                    "count":  8,
+                    "examples":  [
+                                     {
+                                         "output":  "Normalize names against real source locations first. background.js, content.js, popup.js, and manifest are covered by extension_build and public/chrome-extension, while manifest.js maps to manifest.json.",
+                                         "domain":  "missing_file_audit",
+                                         "prompt":  "How should PromptHouse handle archive-referenced files that look missing?"
+                                     },
+                                     {
+                                         "output":  "Built safe compatibility modules: src/components/ModularDashboard.jsx, src/extension/SidePanel.js, src/core/automation/RecursiveSwarm.js, src/core/physics/SovereignPhysics.js, src/core/logging/sovereign_intelligence_log.js, scripts/run_intensive_evolution.js, and tests/archive-missing-modules.test.js.",
+                                         "domain":  "missing_file_audit",
+                                         "prompt":  "What was actually built from the missing-file audit?"
+                                     },
+                                     {
+                                         "output":  "RecursiveSwarm is a proof-gated local coordinator. If fetch is unavailable it records recommendations; when live bridge fetch works it calls /chat for tasks. It does not pretend autonomous agents completed work without receipts.",
+                                         "domain":  "bots_and_swarm",
+                                         "prompt":  "How should RecursiveSwarm be treated?"
+                                     },
+                                     {
+                                         "output":  "Evo Eyes should audit for proof boundaries: tests, build, audit, route status, and false-positive normalization before declaring files missing or complete.",
+                                         "domain":  "evo_eyes",
+                                         "prompt":  "How should Evo Eyes learn from this pass?"
+                                     },
+                                     {
+                                         "output":  "Evo Tree should record this as a branch-growth process: archive mention inventory, normalized coverage, compatibility shims, verification gates, and training receipts.",
+                                         "domain":  "evo_tree",
+                                         "prompt":  "How should Evo Tree learn from this pass?"
+                                     },
+                                     {
+                                         "output":  "Evo LM should answer from verified local receipts: syntax checks passed, npm test passed 13 files and 64 tests, npm run build passed, npm audit moderate returned 0 vulnerabilities.",
+                                         "domain":  "evo_lm",
+                                         "prompt":  "How should Evo LM learn from this pass?"
+                                     },
+                                     {
+                                         "output":  "Production deploy and live commerce remain external gated surfaces requiring credentials and owner approval. Local proof does not equal silent deployment or live payment readiness.",
+                                         "domain":  "truth_boundary",
+                                         "prompt":  "What remains gated after the build pass?"
+                                     },
+                                     {
+                                         "output":  "The provided overview.txt path existed and was used as archive context. The provided Sovereign_Studio_Thread_Archive.md path did not exist, so it cannot be treated as verified input.",
+                                         "domain":  "archive_truth",
+                                         "prompt":  "What Antigravity files were usable in this process?"
+                                     }
+                                 ],
+                    "createdAt":  "2026-05-04T12:38:10.088Z"
+                },
+    "trainLm":  {
+                    "id":  "train_1777898290291",
+                    "modelId":  "local-evo-lm-latest",
+                    "datasetSize":  8,
+                    "mode":  "post_runtime_missing_file_training",
+                    "status":  "trained_local",
+                    "createdAt":  "2026-05-04T12:38:10.291Z"
+                },
+    "trainRouter":  {
+                        "id":  "train_1777898290298",
+                        "modelId":  "local-evo-router",
+                        "datasetSize":  8,
+                        "mode":  "post_runtime_missing_file_training",
+                        "status":  "trained_local",
+                        "createdAt":  "2026-05-04T12:38:10.298Z"
+                    },
+    "foundry":  {
+                    "success":  true,
+                    "iqGain":  37350,
+                    "totalIq":  504071,
+                    "paragramsProcessed":  249,
+                    "filesAnalyzed":  31
+                },
+    "runtimeStatus":  "verified",
+    "evoTreeBranches":  55,
+    "nightforge":  "recommended",
+    "finetune":  {
+                     "success":  true,
+                     "path":  "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.prompthouse-data\\finetune_dataset.jsonl",
+                     "examples":  163
+                 },
+    "finetuneStatus":  {
+                           "ready":  true,
+                           "examples":  163,
+                           "minimum":  100
+                       },
+    "models":  [
+                   {
+                       "id":  "local-evo-router",
+                       "status":  "trained_local",
+                       "trainingRuns":  8,
+                       "datasetSize":  8,
+                       "lastTrainedAt":  "2026-05-04T12:38:10.298Z"
+                   },
+                   {
+                       "id":  "local-evo-lm-latest",
+                       "status":  "trained_local",
+                       "trainingRuns":  17,
+                       "datasetSize":  8,
+                       "lastTrainedAt":  "2026-05-04T12:38:10.291Z"
+                   },
+                   {
+                       "id":  "openai-configured",
+                       "status":  "available",
+                       "trainingRuns":  0,
+                       "datasetSize":  null,
+                       "lastTrainedAt":  null
+                   }
+               ],
+    "chatConnected":  true,
+    "chatProvider":  "openai",
+    "chatModel":  "gpt-5.5",
+    "chatMessage":  "Connection check received. API assistant is reachable."
+}

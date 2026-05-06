@@ -1,0 +1,94 @@
+{
+  "providers": [
+    {
+      "provider_id": "openai",
+      "type": "llm_and_tools",
+      "capabilities": [
+        "chat",
+        "reasoning",
+        "coding",
+        "tool_use"
+      ],
+      "secret_refs": [
+        "OPENAI_API_KEY"
+      ],
+      "approval_policy": "budget_limited"
+    },
+    {
+      "provider_id": "anthropic",
+      "type": "llm_and_tools",
+      "capabilities": [
+        "chat",
+        "reasoning",
+        "coding",
+        "mcp"
+      ],
+      "secret_refs": [
+        "ANTHROPIC_API_KEY"
+      ],
+      "approval_policy": "budget_limited"
+    },
+    {
+      "provider_id": "google_gemini",
+      "type": "llm_and_tools",
+      "capabilities": [
+        "chat",
+        "multimodal",
+        "function_calling"
+      ],
+      "secret_refs": [
+        "GEMINI_API_KEY"
+      ],
+      "approval_policy": "budget_limited"
+    },
+    {
+      "provider_id": "codex_like_agent",
+      "type": "coding_agent",
+      "capabilities": [
+        "repo_context",
+        "code_changes",
+        "pr_packet"
+      ],
+      "secret_refs": [
+        "OPENAI_API_KEY",
+        "GITHUB_TOKEN"
+      ],
+      "approval_policy": "always_ask_before_repo_write"
+    },
+    {
+      "provider_id": "image_generator",
+      "type": "image",
+      "capabilities": [
+        "concept_art",
+        "ui_mockups",
+        "brand_visuals"
+      ],
+      "secret_refs": [
+        "IMAGE_PROVIDER_KEY"
+      ],
+      "approval_policy": "budget_limited"
+    },
+    {
+      "provider_id": "video_generator",
+      "type": "video",
+      "capabilities": [
+        "demo_video",
+        "motion_mockups"
+      ],
+      "secret_refs": [
+        "VIDEO_PROVIDER_KEY"
+      ],
+      "approval_policy": "owner_approval_required"
+    },
+    {
+      "provider_id": "local_agent",
+      "type": "local_agent",
+      "capabilities": [
+        "offline_context",
+        "local_commands"
+      ],
+      "secret_refs": [],
+      "approval_policy": "ask_before_shell_write"
+    }
+  ]
+}

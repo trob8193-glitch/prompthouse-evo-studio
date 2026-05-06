@@ -1,0 +1,6 @@
+openapi: 3.1.0
+info: { title: PromptHouse PromptLink API, version: 1.0.0 }
+paths:
+  /provider/route: { post: { summary: Route Evo LM task to provider adapter, responses: { "200": { description: Route plan } } } }
+  /extension/build: { post: { summary: Build extension scaffold from ExtensionCapsule, responses: { "200": { description: Extension package } } } }
+  /proof/receipt: { post: { summary: Create proof receipt, responses: { "200": { description: Proof receipt } } } }

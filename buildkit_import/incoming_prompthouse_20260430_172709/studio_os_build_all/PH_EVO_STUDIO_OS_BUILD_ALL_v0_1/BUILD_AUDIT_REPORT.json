@@ -1,0 +1,47 @@
+{
+  "created_date": "2026-04-30",
+  "checks": [
+    {
+      "name": "has_nextjs_package",
+      "status": "PASS"
+    },
+    {
+      "name": "has_typescript_types",
+      "status": "PASS"
+    },
+    {
+      "name": "has_11_modules",
+      "status": "PASS"
+    },
+    {
+      "name": "has_vibe_lane",
+      "status": "PASS"
+    },
+    {
+      "name": "has_ai_coder_console",
+      "status": "PASS"
+    },
+    {
+      "name": "has_connector_security",
+      "status": "PASS"
+    },
+    {
+      "name": "has_tests",
+      "status": "PASS"
+    },
+    {
+      "name": "has_antigravity_prompt",
+      "status": "PASS"
+    },
+    {
+      "name": "has_valuation_memo",
+      "status": "PASS"
+    },
+    {
+      "name": "ship_gate_blocks_without_proof",
+      "status": "PASS"
+    }
+  ],
+  "passed": 10,
+  "failed": 0
+}

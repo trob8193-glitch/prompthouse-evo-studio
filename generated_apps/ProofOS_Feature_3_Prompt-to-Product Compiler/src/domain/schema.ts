@@ -1,0 +1,1 @@
+// Schema for Prompt-to-Product Compiler\n// Auto-generated from Master Prompt\n\nexport interface Prompt-to-Product CompilerModel {\n  id: string;\n  proofState: 'Known' | 'Inferred' | 'Blocked' | 'Built' | 'Verified';\n  ownerId: string;\n  evidenceArtifactUrl?: string;\n}
