@@ -13,7 +13,11 @@
     "create:agent": "node openai-agent-modern.js",
     "test:agent": "node agent-runtime.js 'Explain your core mission in 2-3 sentences'",
     "agent:repl": "node agent-runtime.js --repl",
-    "integrate:agent": "node integrate-agent.js"
+    "integrate:agent": "node integrate-agent.js",
+    "ai:pack": "node scripts/ai_context_pack.mjs",
+    "ai:review": "node scripts/ai_review_openai.mjs",
+    "ai:train": "node scripts/ai_self_train.mjs",
+    "ai:loop": "node scripts/ai_loop.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
