@@ -11,3 +11,6 @@ build_queues/
 zip_temp*/
 *.log
 data/
+.env.agent
+.env.*
+!.env.example
