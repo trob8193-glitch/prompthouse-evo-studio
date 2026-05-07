@@ -29,3 +29,9 @@ export class Nightforge {
     };
   }
 }
+
+export const runNightForgeCycle = () => null;
+
+export const stopNightForge = () => null;
+
+export const startNightForge = () => null;

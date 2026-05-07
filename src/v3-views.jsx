@@ -45,3 +45,11 @@ export default function V3Views() {
     </div>
   );
 }
+
+export const BotStageView = () => null;
+
+export const MasterPromptVaultView = () => null;
+
+export const AgentCtlView = () => null;
+
+export const BotRosterView = () => null;

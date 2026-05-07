@@ -39,6 +39,7 @@ import { SovereignIntelligenceDashboard } from './SovereignIntelligenceDashboard
 import { ExtensionCockpitView } from './ExtensionCockpitView.jsx';
 import { GlobalAPISettingsView } from './GlobalAPISettingsView.jsx';
 import { EvoEyesView } from './EvoEyesView.jsx';
+import { AutonomousSelfView } from './AutonomousSelfView.jsx';
 
 
 // ─── SCREEN TEMPLATES ────────────────────────────────────────────────────────
@@ -319,6 +320,7 @@ export function SovereignControl() {
       <SovereignTabs tabs={[
         { id: 'intel', label: 'Intelligence Deck', component: (
           <div className="space-y-6">
+            <AutonomousSelfView />
             <SovereignIntelligenceDashboard />
             <CommandDeckView />
           </div>

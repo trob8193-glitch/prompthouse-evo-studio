@@ -1,94 +1,255 @@
-import React, { useState } from 'react';
-import { Eye, Clock, Shield, Terminal, Settings, Zap } from 'lucide-react';
-import EvoEyesView from './EvoEyesView';
-import TemporalTraceView from './TemporalTraceView';
+import React, { useState, useEffect } from 'react';
+import { Activity, Cpu, HardDrive, Clock, Zap, MessageSquare, ArrowRight, RefreshCw, Wifi, WifiOff } from 'lucide-react';
+import { useSovereignStore } from '../store.js';
 
 /**
- * PH EVO STUDIO — SOVEREIGN INTELLIGENCE DASHBOARD (V4 RESTORED)
+ * PH EVO STUDIO — DASHBOARD (ENTERPRISE GRADE)
  * ═══════════════════════════════════════════════════════════════
- * The primary UI hub of the foundry. Integrates all autonomous 
- * vision and history processors into a single, high-density 
- * command interface.
+ * Live metrics from backend, bridge health, quick actions.
  */
 
-const SovereignIntelligenceDashboard = () => {
-  const [activeTab, setActiveTab] = useState('eyes');
-
+function MetricCard({ icon: Icon, label, value, sub, color = '#6366f1', pulse = false }) {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 flex flex-col font-mono">
-      {/* Sovereign Navigation */}
-      <nav className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center text-slate-950">
-            <Shield size={24} />
-          </div>
-          <div>
-            <h1 className="text-xl font-black tracking-tighter">PH_EVO_STUDIO</h1>
-            <p className="text-[10px] text-amber-500/80 font-bold tracking-widest uppercase">Omnipotent Baseline Active</p>
-          </div>
+    <div style={{
+      background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: '20px 24px',
+      display: 'flex', alignItems: 'flex-start', gap: 14,
+    }}>
+      <div style={{
+        width: 40, height: 40, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: `${color}14`, flexShrink: 0,
+      }}>
+        <Icon size={18} color={color} />
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+          {label}
         </div>
-
-        <div className="flex gap-2">
-          {[
-            { id: 'eyes', icon: Eye, label: 'EVO_EYES' },
-            { id: 'trace', icon: Clock, label: 'TEMPORAL_TRACE' },
-            { id: 'deck', icon: Terminal, label: 'COMMAND_DECK' },
-            { id: 'omega', icon: Zap, label: 'OMEGA_FOUNDRY' }
-          ].map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all duration-300 border ${
-                activeTab === tab.id 
-                  ? 'bg-amber-500/10 border-amber-500 text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.2)]' 
-                  : 'bg-transparent border-transparent hover:bg-slate-800 text-slate-400'
-              }`}
-            >
-              <tab.icon size={16} />
-              <span className="text-[11px] font-bold tracking-tight">{tab.label}</span>
-            </button>
-          ))}
+        <div style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.03em', lineHeight: 1 }}>
+          {value}
         </div>
-
-        <div className="flex items-center gap-4">
-          <Settings size={18} className="text-slate-500 hover:text-white cursor-pointer transition-colors" />
-        </div>
-      </nav>
-
-      {/* Main Vision Portal */}
-      <main className="flex-1 p-6 overflow-auto">
-        {activeTab === 'eyes' && <EvoEyesView />}
-        {activeTab === 'trace' && <TemporalTraceView />}
-        {activeTab === 'deck' && (
-          <div className="p-20 text-center opacity-50 border-2 border-dashed border-slate-800 rounded-xl">
-             <Terminal size={48} className="mx-auto mb-4" />
-             <p className="text-sm font-bold tracking-widest">COMMAND_DECK_INITIALIZING...</p>
-          </div>
-        )}
-        {activeTab === 'omega' && (
-          <div className="grid grid-cols-4 gap-4">
-            <div className="col-span-4 bg-amber-500/5 p-6 rounded-xl border border-amber-500/20 text-center">
-              <Zap size={32} className="text-amber-500 mx-auto mb-2" />
-              <h2 className="text-xl font-black mb-1">SINGULARITY_CORE_ONLINE</h2>
-              <p className="text-xs text-slate-400 max-w-md mx-auto">The foundry is now operating at maximum logic density. All WebWevo background threads are synchronized.</p>
-            </div>
-          </div>
-        )}
-      </main>
-
-      {/* Status Bar */}
-      <footer className="p-2 px-4 border-t border-slate-800 bg-slate-900/80 text-[10px] flex justify-between items-center text-slate-500">
-        <div className="flex gap-4">
-          <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"/> SYSTEM_OK</span>
-          <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 bg-blue-500 rounded-full"/> SHADOW_PROTOCOL_ACTIVE</span>
-        </div>
-        <div className="flex gap-4 font-bold">
-          <span className="text-slate-600">RESONANCE: 0.9997</span>
-          <span className="text-amber-500/50">IQ: 2,450,000</span>
-        </div>
-      </footer>
+        {sub && <div style={{ fontSize: 11, color: '#475569', marginTop: 4 }}>{sub}</div>}
+      </div>
+      {pulse && <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, boxShadow: `0 0 8px ${color}60`, animation: 'pulse 2s infinite', marginTop: 4 }} />}
     </div>
   );
-};
+}
+
+function QuickAction({ icon: Icon, label, sub, onClick, color = '#6366f1' }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: '16px 20px',
+        display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', width: '100%',
+        transition: 'all 0.2s ease', textAlign: 'left',
+      }}
+      onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${color}44`; e.currentTarget.style.background = `${color}08`; }}
+      onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#1e293b'; e.currentTarget.style.background = '#111827'; }}
+    >
+      <div style={{
+        width: 36, height: 36, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: `${color}14`, flexShrink: 0,
+      }}>
+        <Icon size={16} color={color} />
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: '#e2e8f0' }}>{label}</div>
+        <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>{sub}</div>
+      </div>
+      <ArrowRight size={14} color="#334155" />
+    </button>
+  );
+}
+
+export function SovereignIntelligenceDashboard() {
+  const metrics = useSovereignStore((s) => s.metrics);
+  const fetchMetrics = useSovereignStore((s) => s.fetchMetrics);
+  const bridgeStatus = useSovereignStore((s) => s.bridgeStatus);
+  const bridgeData = useSovereignStore((s) => s.bridgeData);
+  const setActivePage = useSovereignStore((s) => s.setActivePage);
+  const runMaintenance = useSovereignStore((s) => s.runMaintenance);
+  const chatMessages = useSovereignStore((s) => s.chatMessages);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    fetchMetrics();
+    const interval = setInterval(fetchMetrics, 30000);
+    return () => clearInterval(interval);
+  }, [fetchMetrics]);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchMetrics();
+    setTimeout(() => setRefreshing(false), 600);
+  };
+
+  const formatUptime = (seconds) => {
+    if (!seconds) return '—';
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    return h > 0 ? `${h}h ${m}m` : `${m}m`;
+  };
+
+  return (
+    <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 28 }}>
+        <div>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.03em', margin: 0 }}>
+            Studio Dashboard
+          </h1>
+          <p style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>
+            System overview, live metrics, and quick actions.
+          </p>
+        </div>
+        <button
+          onClick={handleRefresh}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8,
+            background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer',
+            fontSize: 11, fontWeight: 600,
+          }}
+        >
+          <RefreshCw size={13} style={{ transition: 'transform 0.6s', transform: refreshing ? 'rotate(360deg)' : 'none' }} />
+          Refresh
+        </button>
+      </div>
+
+      {/* Metric Cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginBottom: 28 }}>
+        <MetricCard
+          icon={bridgeStatus === 'connected' ? Wifi : WifiOff}
+          label="Bridge Status"
+          value={bridgeStatus === 'connected' ? 'Online' : 'Offline'}
+          sub={bridgeData?.version || 'Not connected'}
+          color={bridgeStatus === 'connected' ? '#22c55e' : '#ef4444'}
+          pulse={bridgeStatus === 'connected'}
+        />
+        <MetricCard
+          icon={Clock}
+          label="Uptime"
+          value={formatUptime(metrics?.uptime)}
+          sub="Server process"
+          color="#f59e0b"
+        />
+        <MetricCard
+          icon={Cpu}
+          label="CPU Usage"
+          value={metrics?.cpu ? `${metrics.cpu.toFixed(1)}s` : '—'}
+          sub="User time"
+          color="#8b5cf6"
+        />
+        <MetricCard
+          icon={HardDrive}
+          label="Heap Memory"
+          value={metrics?.memory_heap ? `${metrics.memory_heap} MB` : '—'}
+          sub={metrics?.memory_rss ? `RSS: ${metrics.memory_rss} MB` : ''}
+          color="#06b6d4"
+        />
+        <MetricCard
+          icon={Activity}
+          label="Avg Latency"
+          value={metrics?.latency ? `${parseFloat(metrics.latency).toFixed(1)}ms` : '—'}
+          sub="Request average"
+          color="#f43f5e"
+        />
+        <MetricCard
+          icon={Zap}
+          label="Cache Hit Rate"
+          value={metrics?.cache?.hitRate !== undefined ? `${metrics.cache.hitRate.toFixed(0)}%` : '—'}
+          sub={metrics?.cache ? `${metrics.cache.hits} hits / ${metrics.cache.misses} misses` : ''}
+          color="#10b981"
+        />
+        <MetricCard
+          icon={RefreshCw}
+          label="Evolution Cycles"
+          value={bridgeData?.evolution_cycles || '0'}
+          sub="Self-evolution passes"
+          color="#6366f1"
+        />
+        <MetricCard
+          icon={Activity}
+          label="Sovereign IQ"
+          value={bridgeData?.iq_metrics?.baseline ? `${(bridgeData.iq_metrics.baseline / 1000000).toFixed(1)}M` : '2.0M'}
+          sub={`Gain: +${bridgeData?.iq_metrics?.sovereign_gain?.toFixed(1) || '0.0'}`}
+          color="#10b981"
+        />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+        {/* Quick Actions */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+            Quick Actions
+          </div>
+          <QuickAction
+            icon={MessageSquare}
+            label="Open AI Chat"
+            sub="Start a new production mission with your OpenAI API"
+            onClick={() => setActivePage('chat')}
+            color="#6366f1"
+          />
+          <QuickAction
+            icon={Zap}
+            label="Prompt Registry"
+            sub="Browse and manage your prompt stacks"
+            onClick={() => setActivePage('prompt-registry')}
+            color="#f59e0b"
+          />
+          <QuickAction
+            icon={RefreshCw}
+            label="Run Maintenance Cycle"
+            sub="Execute a full self-healing maintenance pass"
+            onClick={runMaintenance}
+            color="#10b981"
+          />
+          <QuickAction
+            icon={Activity}
+            label="View Metrics"
+            sub="Detailed performance monitoring dashboard"
+            onClick={() => setActivePage('metrics')}
+            color="#8b5cf6"
+          />
+        </div>
+
+        {/* Recent Chat */}
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>
+            Recent Chat Activity
+          </div>
+          <div style={{
+            background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: 16,
+            display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 300, overflow: 'auto',
+          }}>
+            {chatMessages.slice(-5).map((msg) => (
+              <div key={msg.id} style={{
+                padding: '10px 14px', borderRadius: 10,
+                background: msg.role === 'user' ? 'rgba(99,102,241,0.08)' : 'rgba(255,255,255,0.02)',
+                border: `1px solid ${msg.role === 'user' ? 'rgba(99,102,241,0.15)' : '#1e293b'}`,
+              }}>
+                <div style={{ fontSize: 9, fontWeight: 700, color: msg.role === 'user' ? '#818cf8' : '#475569', textTransform: 'uppercase', marginBottom: 4 }}>
+                  {msg.role === 'user' ? 'You' : msg.role === 'system' ? 'System' : 'AI'}
+                </div>
+                <div style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5, whiteSpace: 'pre-wrap', overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: 60 }}>
+                  {msg.content.slice(0, 200)}{msg.content.length > 200 ? '...' : ''}
+                </div>
+              </div>
+            ))}
+            <button
+              onClick={() => setActivePage('chat')}
+              style={{
+                background: 'none', border: '1px solid #1e293b', borderRadius: 8, padding: '8px 12px',
+                color: '#6366f1', fontSize: 11, fontWeight: 600, cursor: 'pointer', marginTop: 4,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              }}
+            >
+              Open Full Chat <ArrowRight size={12} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default SovereignIntelligenceDashboard;

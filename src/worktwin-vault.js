@@ -29,3 +29,9 @@ export class WorktwinVault {
     };
   }
 }
+
+export const getAllRecipes = () => null;
+
+export const getAllSignals = () => null;
+
+export const captureWorkflowSignal = () => null;

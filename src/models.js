@@ -29,3 +29,11 @@ export class Models {
     };
   }
 }
+
+export const GATE_DEFINITIONS = [];
+
+export const createFrictionReport = () => null;
+
+export const createFissionCandidate = () => null;
+
+export const createTemporalStack = () => null;

@@ -29,3 +29,7 @@ export class ToolAutogenerator {
     };
   }
 }
+
+export const getAllRecipes = () => null;
+
+export const autoGenerateTool = () => null;

@@ -1,5 +1,5 @@
 /**
- * PH EVO STUDIO — UNIVERSAL BRIDGE
+ * PH EVO STUDIO — UNIVERSAL BRIDGE (ENTERPRISE GRADE)
  * ═══════════════════════════════════════════════════════════════
  * This is the central interop layer for the studio. It provides a
  * unified interface to communicate with all developer software:
@@ -7,6 +7,8 @@
  */
 
 import { Log } from '../autonomy/SovereignLogger.js';
+
+const BRIDGE_URL = 'http://localhost:3001';
 
 export class UniversalBridge {
   constructor() {
@@ -29,7 +31,12 @@ export class UniversalBridge {
     }
 
     Log.info(`🌉 [UniversalBridge] Dispatching to ${toolId}: ${command}`);
-    return await adaptor.execute(command, params);
+    try {
+      return await adaptor.execute(command, params);
+    } catch (err) {
+      Log.error(`🌉 [UniversalBridge] Dispatch failed for ${toolId}: ${err.message}`);
+      return { success: false, error: err.message };
+    }
   }
 
   /**
@@ -50,8 +57,16 @@ class VSCAdaptor {
   async execute(cmd, p) { 
     Log.info(`💻 [VSCAdaptor] Executing: ${cmd}`);
     if (cmd === 'open') {
-      // In a real env, this would use 'code <file>'
-      return { status: 'OPENING', file: p.file };
+      const res = await fetch(`${BRIDGE_URL}/mcp/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          method: 'call_tool',
+          params: { name: 'terminal_command', arguments: { command: `code ${p.file || '.'}` } },
+          id: Date.now()
+        })
+      });
+      return await res.json();
     }
     return { tool: 'vsc', status: 'OK' }; 
   }
@@ -61,20 +76,44 @@ class VSCAdaptor {
 class FlutterAdaptor {
   async execute(cmd, p) { 
     Log.info(`🐦 [FlutterAdaptor] Executing: ${cmd}`);
-    if (cmd === 'run' || cmd === 'hot-reload') {
-      return { status: 'RELOADING', project: p.project || 'MASTER' };
-    }
-    return { tool: 'flutter', status: 'OK' }; 
+    // Future: Connect to real flutter daemon via bridge
+    return { tool: 'flutter', status: 'OK', command: cmd }; 
   }
   async sync() { return { tool: 'flutter', status: 'SYNCED' }; }
 }
 
 class GitAdaptor {
-  async execute(cmd, p) { return { tool: 'git', status: 'OK' }; }
+  async execute(cmd, p) { 
+    Log.info(`📂 [GitAdaptor] Executing: ${cmd}`);
+    if (cmd === 'commit') {
+      const res = await fetch(`${BRIDGE_URL}/api/git/commit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: p.message })
+      });
+      return await res.json();
+    }
+    return { tool: 'git', status: 'OK' }; 
+  }
   async sync() { return { tool: 'git', status: 'SYNCED' }; }
 }
 
 class AntigravityAdaptor {
-  async execute(cmd, p) { return { tool: 'antigravity', status: 'OK' }; }
+  async execute(cmd, p) { 
+    Log.info(`🧠 [AntigravityAdaptor] Executing: ${cmd}`);
+    if (cmd === 'initiate-strategy') {
+      const res = await fetch(`${BRIDGE_URL}/api/strategy/initiate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ objective: p.objective })
+      });
+      return await res.json();
+    }
+    if (cmd === 'activate-evolution') {
+      const res = await fetch(`${BRIDGE_URL}/api/evolution/activate`, { method: 'POST' });
+      return await res.json();
+    }
+    return { tool: 'antigravity', status: 'OK' }; 
+  }
   async sync() { return { tool: 'antigravity', status: 'SYNCED' }; }
 }

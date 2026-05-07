@@ -1,44 +1,176 @@
 import { create } from 'zustand';
-import { Log } from './core/autonomy/SovereignLogger.js';
 
 /**
- * PH EVO STUDIO — SOVEREIGN STORE (V4 RESTORED)
+ * PH EVO STUDIO — SOVEREIGN STORE (ENTERPRISE GRADE)
  * ═══════════════════════════════════════════════════════════════
- * The primary state engine for the studio. Manages all sentient
- * agent states, mission status, and visual resonance metrics.
+ * Central state management for the entire studio. Manages
+ * navigation, bridge connectivity, chat, metrics, and API config.
  */
 
+const BRIDGE_URL = 'http://localhost:3001';
+
 export const useSovereignStore = create((set, get) => ({
-  // Studio State
-  status: 'OMNIPOTENT',
-  iq_baseline: 165.0,
-  activeTab: 'orchard',
-  resonance: 0.99,
+  // ─── Navigation ─────────────────────────────────────────────
+  activePage: 'dashboard',
+  sidebarCollapsed: false,
 
-  // Bot Roster
-  bots: [],
-  activeBot: null,
+  setActivePage: (page) => set({ activePage: page }),
+  toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
 
-  // Mission State
-  missions: [],
-  activeMission: null,
+  // ─── Bridge Connection ──────────────────────────────────────
+  bridgeStatus: 'disconnected', // 'connected' | 'disconnected' | 'error'
+  bridgeData: null,
+  bridgeError: null,
 
-  // Actions
-  setActiveTab: (tab) => {
-    Log.info(`🧿 [Store] Switching Tab: ${tab}`);
-    set({ activeTab: tab });
-  },
-
-  addMission: (mission) => {
-    set((state) => ({ missions: [...state.missions, mission] }));
-  },
-
-  setBots: (bots) => {
-    set({ bots });
-    if (bots.length > 0 && !get().activeBot) {
-      set({ activeBot: bots[0] });
+  fetchBridgeStatus: async () => {
+    try {
+      const res = await fetch(`${BRIDGE_URL}/status`);
+      if (!res.ok) throw new Error(`Bridge returned ${res.status}`);
+      const data = await res.json();
+      set({ bridgeStatus: 'connected', bridgeData: data, bridgeError: null });
+      return data;
+    } catch (err) {
+      set({ bridgeStatus: 'error', bridgeError: err.message });
+      return null;
     }
   },
 
-  updateResonance: (val) => set({ resonance: val })
+  // ─── System Metrics ─────────────────────────────────────────
+  metrics: null,
+  metricsLoading: false,
+
+  fetchMetrics: async () => {
+    set({ metricsLoading: true });
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/metrics`);
+      if (!res.ok) throw new Error(`Metrics returned ${res.status}`);
+      const data = await res.json();
+      set({ metrics: data, metricsLoading: false });
+      return data;
+    } catch (err) {
+      set({ metricsLoading: false });
+      console.warn('[Store] Metrics fetch failed:', err.message);
+      return null;
+    }
+  },
+
+  // ─── AI Chat ────────────────────────────────────────────────
+  chatMessages: [
+    { id: 'sys-1', role: 'system', content: 'Sovereign Command Deck Online. Ask me anything or give me a production mission.', timestamp: Date.now() }
+  ],
+  chatLoading: false,
+  chatError: null,
+
+  sendChatMessage: async (userText) => {
+    const state = get();
+    const userMsg = { id: `user-${Date.now()}`, role: 'user', content: userText, timestamp: Date.now() };
+    set({ chatMessages: [...state.chatMessages, userMsg], chatLoading: true, chatError: null });
+
+    try {
+      const apiMessages = state.chatMessages
+        .filter((m) => m.role !== 'system' || m.id === 'sys-1')
+        .concat(userMsg)
+        .map((m) => ({ role: m.role === 'system' ? 'system' : m.role, content: m.content }));
+
+      const res = await fetch(`${BRIDGE_URL}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: apiMessages.filter((m) => m.role !== 'system'),
+          systemPrompt: 'You are PH Evo Studio — a sovereign-grade AI development platform. Help the user with prompt engineering, code generation, architecture planning, and studio operations. Be precise, technical, and production-focused.'
+        }),
+      });
+
+      if (!res.ok) throw new Error(`Chat returned ${res.status}`);
+      const data = await res.json();
+
+      const botMsg = {
+        id: `bot-${Date.now()}`,
+        role: 'assistant',
+        content: data.message || 'No response received.',
+        truthState: data.truth_state || 'UNKNOWN',
+        timestamp: Date.now(),
+      };
+
+      set((s) => ({ chatMessages: [...s.chatMessages, botMsg], chatLoading: false }));
+      return botMsg;
+    } catch (err) {
+      const errMsg = {
+        id: `err-${Date.now()}`,
+        role: 'assistant',
+        content: `⚠️ Connection error: ${err.message}. Make sure the bridge server is running (npm run bridge).`,
+        truthState: 'ERROR',
+        timestamp: Date.now(),
+      };
+      set((s) => ({ chatMessages: [...s.chatMessages, errMsg], chatLoading: false, chatError: err.message }));
+      return errMsg;
+    }
+  },
+
+  clearChat: () => set({
+    chatMessages: [
+      { id: 'sys-1', role: 'system', content: 'Chat cleared. Ready for new mission.', timestamp: Date.now() }
+    ],
+    chatError: null,
+  }),
+
+  // ─── API Configuration ─────────────────────────────────────
+  apiConfig: {
+    openaiKey: '',
+    model: 'gpt-3.5-turbo',
+    bridgeUrl: BRIDGE_URL,
+  },
+  apiConfigSaving: false,
+  apiConfigError: null,
+
+  updateApiConfig: (partial) => set((s) => ({
+    apiConfig: { ...s.apiConfig, ...partial },
+  })),
+
+  saveApiKeys: async () => {
+    const state = get();
+    set({ apiConfigSaving: true, apiConfigError: null });
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/config/keys`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ keys: { openai: state.apiConfig.openaiKey } }),
+      });
+      if (!res.ok) throw new Error(`Config save returned ${res.status}`);
+      set({ apiConfigSaving: false });
+      return true;
+    } catch (err) {
+      set({ apiConfigSaving: false, apiConfigError: err.message });
+      return false;
+    }
+  },
+
+  // ─── Notifications ──────────────────────────────────────────
+  notifications: [],
+
+  addNotification: (msg, type = 'info') => {
+    const id = `notif-${Date.now()}`;
+    set((s) => ({ notifications: [...s.notifications, { id, msg, type, timestamp: Date.now() }].slice(-20) }));
+    // Auto-dismiss after 5s
+    setTimeout(() => {
+      set((s) => ({ notifications: s.notifications.filter((n) => n.id !== id) }));
+    }, 5000);
+  },
+
+  // ─── Maintenance ────────────────────────────────────────────
+  runMaintenance: async () => {
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/maintenance/run`, { method: 'POST' });
+      if (!res.ok) throw new Error(`Maintenance returned ${res.status}`);
+      const data = await res.json();
+      get().addNotification('Maintenance cycle completed.', 'success');
+      return data;
+    } catch (err) {
+      get().addNotification(`Maintenance failed: ${err.message}`, 'error');
+      return null;
+    }
+  },
 }));
+
+// Legacy compatibility alias
+export const useEvoStore = useSovereignStore;

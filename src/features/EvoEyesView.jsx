@@ -10,7 +10,7 @@ import { Log } from '../core/autonomy/SovereignLogger.js';
  * the studio's internal connectome and logic structures.
  */
 
-export default function EvoEyesView() {
+export function EvoEyesView() {
   const [scanStatus, setScanStatus] = useState('IDLE');
   const [nodes, setNodes] = useState([]);
 
@@ -102,3 +102,5 @@ export default function EvoEyesView() {
     </div>
   );
 }
+
+export default EvoEyesView;

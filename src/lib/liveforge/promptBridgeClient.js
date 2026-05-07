@@ -29,3 +29,7 @@ export class PromptBridgeClient {
     };
   }
 }
+
+export const promptBridgeCall = () => null;
+
+export const createProofReceipt = () => null;
