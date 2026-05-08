@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
-const INTERVAL_MINUTES = 30;
+const INTERVAL_MINUTES = 3;
 const INTERVAL_MS = INTERVAL_MINUTES * 60 * 1000;
 
 console.log(`🌌 [AI_Daemon] Starting continuous evolution loop...`);
