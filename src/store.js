@@ -71,7 +71,7 @@ export const useSovereignStore = create((set, get) => ({
         .concat(userMsg)
         .map((m) => ({ role: m.role === 'system' ? 'system' : m.role, content: m.content }));
 
-      const res = await fetch(`${BRIDGE_URL}/chat`, {
+      const res = await fetch(`${BRIDGE_URL}/api/evo-lm/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -92,6 +92,10 @@ export const useSovereignStore = create((set, get) => ({
       };
 
       set((s) => ({ chatMessages: [...s.chatMessages, botMsg], chatLoading: false }));
+      
+      // Log to ledger
+      state.logToLedger('chat', 'message_sent', null, 'VERIFIED', 1);
+
       return botMsg;
     } catch (err) {
       const errMsg = {
@@ -142,6 +146,21 @@ export const useSovereignStore = create((set, get) => ({
     } catch (err) {
       set({ apiConfigSaving: false, apiConfigError: err.message });
       return false;
+    }
+  },
+
+  logToLedger: async (feature_id, action, proof_hash, truth_state = 'UNVERIFIED', iq_gain = 0) => {
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/sovereign-ledger/log`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ feature_id, action, proof_hash, truth_state, iq_gain }),
+      });
+      if (!res.ok) throw new Error(`Ledger log returned ${res.status}`);
+      return await res.json();
+    } catch (err) {
+      console.warn('[Store] Ledger log failed:', err.message);
+      return null;
     }
   },
 

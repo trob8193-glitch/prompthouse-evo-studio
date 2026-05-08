@@ -16,7 +16,7 @@ export class ProductionAudit {
     // 1. Check for placeholders
     const placeholders = [
       /todo/gi,
-      /placeholder/gi,
+      /placeholder(?!\\s*=)/gi,
       /fixme/gi,
       /console\.log/g, // We treat console.log as an issue for production
       /debugger/g

@@ -242,6 +242,16 @@ CREATE TABLE IF NOT EXISTS system_settings (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS sovereign_ledger (
+  id TEXT PRIMARY KEY,
+  feature_id TEXT NOT NULL,
+  action TEXT NOT NULL,
+  proof_hash TEXT UNIQUE,
+  truth_state TEXT DEFAULT 'UNVERIFIED',
+  iq_gain INTEGER DEFAULT 0,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 `;
 
 export function initDatabase() {

@@ -33,8 +33,13 @@ import { SaasOrchestrator } from './src/core/engines/saasOrchestrator.js';
 import { ExecutionSandbox } from './lib/terminal/ExecutionSandbox.js';
 import { VercelAdapter } from './lib/deployment/VercelAdapter.js';
 import { IntelligenceCore } from './src/core/engines/IntelligenceCore.js';
+import { PromptCompressor } from './lib/ai/PromptCompressor.js';
+import db, { initDatabase } from './src/core/db/quad_schema.js';
 
 dotenv.config({ override: true });
+
+// Initialize database
+initDatabase();
 
 const app = express();
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
@@ -66,6 +71,7 @@ const SANDBOX_DIR = join(DATA_DIR, 'sandbox');
 const saasOrchestrator = new SaasOrchestrator(ai, SANDBOX_DIR);
 const terminalSandbox = new ExecutionSandbox(SANDBOX_DIR);
 const intelligenceCore = new IntelligenceCore(ai);
+const promptCompressor = new PromptCompressor();
 
 // Global Savings Ledger
 let globalFirewallSavings = {
@@ -140,6 +146,23 @@ app.post('/chat', async (req, res) => {
   try {
     const response = await ai.generateResponse(messages, systemPrompt);
     res.json(response);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/evo-lm/compressed-chat', async (req, res) => {
+  const { messages, systemPrompt } = req.body;
+  try {
+    // Compress the last message (usually the prompt)
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage && lastMessage.role === 'user') {
+      const compressed = await promptCompressor.compress(lastMessage.content);
+      lastMessage.content = compressed;
+    }
+    
+    const response = await ai.generateResponse(messages, systemPrompt);
+    res.json({ ...response, compressed: true });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -520,10 +543,35 @@ app.post('/v1/prompts/compile', validateApiKey, async (req, res) => {
     
     let result;
     if (provider === 'local') {
-      result = PromptCompiler.compile(prompt);
+      const cleaned = PromptCompiler.compile(prompt);
+      try {
+        const response = await fetch(`http://localhost:11434/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'llama3',
+            messages: [
+              { role: 'system', content: 'You are a prompt compiler. Rewrite the following prompt to be extremely dense, imperative, and production-ready. Remove all fluff.' },
+              { role: 'user', content: cleaned }
+            ],
+            stream: false
+          }),
+          signal: AbortSignal.timeout(10000)
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          result = data.message?.content || data.response || cleaned;
+        } else {
+          result = cleaned;
+        }
+      } catch (e) {
+        result = cleaned;
+      }
     } else {
       // Call Gemini or OpenAI via UniversalAIAdaptor
-      result = await ai.generateResponse([{ role: 'user', content: prompt }], 'Compile this prompt.');
+      const resp = await ai.generateResponse([{ role: 'user', content: prompt }], 'Compile this prompt.');
+      result = resp.message || resp;
     }
     
     await CostFirewall.deduct(req.orgId, '/v1/prompts/compile', 1);
@@ -618,8 +666,38 @@ Description: ${description || 'No description'}
 Functionality: ${prompt}`;
 
   try {
-    const response = await ai.generateResponse([{ role: 'user', content: userPrompt }], systemPrompt);
-    let code = response.content || response; // Handle different response formats
+    let responseText;
+    try {
+      console.log(`[GENERATE] Attempting local generation with Ollama...`);
+      const evoResponse = await fetch(`http://localhost:11434/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'llama3',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+          ],
+          stream: false
+        }),
+        signal: AbortSignal.timeout(30000)
+      });
+      
+      if (evoResponse.ok) {
+        const data = await evoResponse.json();
+        responseText = data.message?.content || data.response || '';
+        console.log(`[GENERATE] Local generation successful.`);
+      }
+    } catch (e) {
+      console.log(`[GENERATE] Local fallback failed (${e.message}), using remote AI...`);
+    }
+
+    if (!responseText) {
+      const aiResponse = await ai.generateResponse([{ role: 'user', content: userPrompt }], systemPrompt);
+      responseText = aiResponse.content || aiResponse;
+    }
+    
+    let code = responseText;
     
     // Clean up code if it contains backticks (just in case)
     code = code.replace(/```javascript/g, '').replace(/```/g, '').trim();
@@ -647,12 +725,19 @@ const OLLAMA_BASE = 'http://localhost:11434';
 
 app.post('/api/evo-lm/chat', async (req, res) => {
   const { messages = [], systemPrompt = '' } = req.body;
+  
+  let processedSystemPrompt = systemPrompt;
+  if (systemPrompt.length > 200) {
+    const compressor = new PromptCompressor();
+    processedSystemPrompt = await compressor.compress(systemPrompt);
+  }
+
   const ollamaModels = ['evo-lm', 'llama3', 'mistral', 'phi3', 'gemma'];
 
   for (const model of ollamaModels) {
     try {
-      const ollamaMessages = systemPrompt
-        ? [{ role: 'system', content: systemPrompt }, ...messages]
+      const ollamaMessages = processedSystemPrompt
+        ? [{ role: 'system', content: processedSystemPrompt }, ...messages]
         : messages;
       const response = await fetch(`${OLLAMA_BASE}/api/chat`, {
         method: 'POST',
@@ -663,18 +748,32 @@ app.post('/api/evo-lm/chat', async (req, res) => {
       if (!response.ok) continue;
       const data = await response.json();
       const content = data.message?.content || data.response || '';
+      
+      // Activate Guardrails
+      const truthGate = new TruthGate();
+      truthGate.enforce(content, 'Evo LM Chat');
+
       if (content) return res.json({ message: content, model, transport: 'evo_lm_ollama' });
-    } catch { continue; }
+    } catch (err) { 
+      console.warn(`⚠️ [Ollama] Failed for model ${model}:`, err.message);
+      continue; 
+    }
   }
 
   // Fallback to primary AI provider
   try {
     const ai = new UniversalAIAdaptor(userConfig.keys);
-    const msgs = systemPrompt
-      ? [{ role: 'system', content: systemPrompt }, ...messages]
+    const msgs = processedSystemPrompt
+      ? [{ role: 'system', content: processedSystemPrompt }, ...messages]
       : messages;
     const response = await ai.generateResponse(msgs);
-    return res.json({ message: response.content || response, transport: 'evo_lm_bridge_fallback' });
+    const content = response.content || response;
+
+    // Activate Guardrails
+    const truthGate = new TruthGate();
+    truthGate.enforce(content, 'Evo LM Fallback');
+
+    return res.json({ message: content, transport: 'evo_lm_bridge_fallback' });
   } catch (err) {
     return res.status(503).json({ error: `Evo LM unavailable: ${err.message}` });
   }
@@ -706,6 +805,22 @@ app.post('/api/training/ingest', (req, res) => {
   try {
     writeFileSync(TRAINING_FILE, lines, { flag: 'a', encoding: 'utf8' });
     res.json({ ingested: examples.length, file: TRAINING_FILE });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/sovereign-ledger/log', (req, res) => {
+  const { feature_id, action, proof_hash, truth_state = 'UNVERIFIED', iq_gain = 0 } = req.body;
+  if (!feature_id || !action) {
+    return res.status(400).json({ error: 'Missing feature_id or action' });
+  }
+
+  const id = crypto.randomUUID();
+  try {
+    const stmt = db.prepare('INSERT INTO sovereign_ledger (id, feature_id, action, proof_hash, truth_state, iq_gain) VALUES (?, ?, ?, ?, ?, ?)');
+    stmt.run(id, feature_id, action, proof_hash, truth_state, iq_gain);
+    res.json({ success: true, id });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
