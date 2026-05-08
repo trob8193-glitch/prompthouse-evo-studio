@@ -35,6 +35,7 @@
     "docs/knowledge/autonomous_code_generation.md",
     "docs/knowledge/advanced_tools_and_self_invention.md",
     "docs/knowledge/advanced_pipelines_and_infrastructure.md",
+    "docs/knowledge/future_possibilities.md",
     "firestore.rules",
     "storage.rules",
     "functions/package.json",
