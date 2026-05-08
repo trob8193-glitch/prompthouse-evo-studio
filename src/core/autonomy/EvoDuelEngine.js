@@ -21,12 +21,29 @@ export class EvoDuelEngine {
     Log.info(`⚔️ [Duel] Initiating logic duel: ${botA.name} vs ${botB.name}`);
     Log.info(`📍 Target: ${logicTarget}`);
 
-    // Simulate competitive logic analysis
-    const scoreA = Math.random() * botA.id; // Weighted by experience/ID for now
-    const scoreB = Math.random() * botB.id;
+    // Real evaluation based on keyword matching
+    const evaluate = (bot, target) => {
+      const keywords = target.toLowerCase().split(' ');
+      const botNameWords = bot.name.toLowerCase().split(' ');
+      const botRoleWords = (bot.role || '').toLowerCase().split(' ');
+      
+      let score = 0;
+      keywords.forEach(word => {
+        if (botNameWords.includes(word)) score += 10;
+        if (botRoleWords.includes(word)) score += 5;
+      });
+      
+      // Bonus for experience (id)
+      score += (bot.id || 0) * 0.1;
+      
+      return score || Math.random(); // Fallback if no match
+    };
 
-    const winner = scoreA > scoreB ? botA : botB;
-    const resonance = Math.max(scoreA, scoreB) / (scoreA + scoreB);
+    const scoreA = evaluate(botA, logicTarget);
+    const scoreB = evaluate(botB, logicTarget);
+
+    const winner = scoreA >= scoreB ? botA : botB;
+    const resonance = Math.max(scoreA, scoreB) / (scoreA + scoreB || 1);
 
     const duelResult = {
       timestamp: Date.now(),

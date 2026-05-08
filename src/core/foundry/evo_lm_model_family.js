@@ -1,8 +1,8 @@
-/** Evo LM model family - mod01 **/
-
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MODEL_DEFINITIONS_PATH = path.join(__dirname, 'model_definitions.json');
 const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001/models';
 
@@ -27,8 +27,8 @@ class EvoLMModelFamily {
         try {
             const response = await fetch(LOCAL_BRIDGE_URL);
             if (!response.ok) throw new Error('Network response was not ok');
-            const models = await response.json();
-            this.models = models;
+            const data = await response.json();
+            this.models = Array.isArray(data) ? data : data.models || [];
             this.saveModels();
         } catch (error) {
             console.error('Failed to fetch models from server:', error);

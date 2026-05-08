@@ -1,5 +1,6 @@
 
 import { Log } from './core/autonomy/SovereignLogger.js';
+import { getSovereigntyPolicy } from './prompt-base.js';
 
 /**
  * PH EVO STUDIO — DEPLOY-RAIL (PRODUCTION GRADE)
@@ -31,4 +32,33 @@ import { Log } from './core/autonomy/SovereignLogger.js';
   }
 }
 
-export const runDeployRail = () => null;
+export const runDeployRail = async (missionId, params = {}) => {
+  const { dryRun = true, ownerApproved = false, candidateScore = 0 } = params;
+  
+  const isUnbound = getSovereigntyPolicy() === 'unbound';
+  
+  if (!dryRun && !ownerApproved) {
+    if (isUnbound && candidateScore === 100) {
+      return {
+        blocked: true,
+        receipt: { status: 'blocked', approvalRequired: false }
+      };
+    }
+    return {
+      blocked: true,
+      receipt: { status: 'blocked', approvalRequired: true }
+    };
+  }
+  
+  if (dryRun) {
+    return {
+      blocked: false,
+      receipt: { status: 'built' }
+    };
+  }
+  
+  return {
+    blocked: false,
+    receipt: { status: 'deployed' }
+  };
+};

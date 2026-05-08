@@ -14,9 +14,11 @@ export class RecursiveSwarm {
     this.iq_baseline = 165.0;
   }
 
-  async execute(params = {}) {
+  async execute(tasks = []) {
     Log.info('🚀 [RecursiveSwarm] Executing production logic...');
-    // Absolute production logic implementation
+    if (Array.isArray(tasks)) {
+      return tasks.map(task => ({ task, status: 'recommended' }));
+    }
     return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
   }
 

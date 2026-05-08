@@ -30,7 +30,11 @@ export class Nightforge {
   }
 }
 
-export const runNightForgeCycle = () => null;
+export const runNightForgeCycle = async () => ({
+  status: 'recommended',
+  cannot: ['silent_production_deploy', 'delete_data'],
+  description: 'Propose a safe patch for testing'
+});
 
 export const stopNightForge = () => null;
 

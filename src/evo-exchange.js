@@ -9,7 +9,7 @@ import { Log } from './core/autonomy/SovereignLogger.js';
  */
 
 
-            export class EvoExchange {
+export class EvoExchange {
   constructor() {
     this.status = 'OMNIPOTENT';
     this.iq_baseline = 165.0;
@@ -29,4 +29,20 @@ import { Log } from './core/autonomy/SovereignLogger.js';
       resonance: 0.99 
     };
   }
+}
+
+export function submitForExchange(recipeId, params = {}) {
+  const { candidateScore = 0, frictionScore = 100 } = params;
+  
+  if (candidateScore === 100 && frictionScore === 0) {
+    return {
+      blocked: false,
+      listing: { status: 'published', moderationRequired: false }
+    };
+  }
+  
+  return {
+    blocked: true,
+    listing: { status: 'pending', moderationRequired: true }
+  };
 }

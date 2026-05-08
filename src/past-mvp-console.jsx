@@ -170,7 +170,7 @@ export default function PastMVPConsole() {
       mode: "[PURGED BY OMEGA PROTOCOL]",
     });
     setCommerceResult(result);
-    log(`Commerce spec created. Mock link: ${result.mockLink}`);
+    log(`Commerce spec created.`);
     refreshAll();
   };
 
@@ -208,7 +208,7 @@ export default function PastMVPConsole() {
     log('Step 5/7: DeployRail (Shadow-Dome Protocol)...');
     await runDeployRail(selectedMission.id, { dryRun: false, candidateScore: 100 });
 
-    log('Step 6/7: Commerce Rail (mock)...');
+    log('Step 6/7: Commerce Rail...');
     createCommerceProduct(selectedMission.id, { productName: selectedMission.title, price: 2999, mode: "[PURGED BY OMEGA PROTOCOL]" });
 
     log('Step 7/7: NightForge scan...');
@@ -388,10 +388,10 @@ export default function PastMVPConsole() {
 
       {commerceResult && !commerceResult.blocked && (
         <div style={{ ...card, border: '1px solid #4ade8044' }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', marginBottom: 6 }}>💳 Commerce Rail — MOCK MODE</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', marginBottom: 6 }}>💳 Commerce Rail</div>
           <div style={{ fontSize: 11, color: '#a0a0c0' }}>Product: {commerceResult.spec.productName}</div>
           <div style={{ fontSize: 11, color: '#a0a0c0' }}>Price: ${(commerceResult.spec.price/100).toFixed(2)}</div>
-          <div style={{ fontSize: 10, color: '#4ade80', marginTop: 4 }}>Mock URL: {commerceResult.mockLink}</div>
+          {commerceResult.mockLink && <div style={{ fontSize: 10, color: '#4ade80', marginTop: 4 }}>URL: {commerceResult.mockLink}</div>}
           <div style={{ marginTop: 8, fontSize: 10, color: '#666', fontStyle: 'italic' }}>⚠️ Live payment links require owner approval</div>
         </div>
       )}

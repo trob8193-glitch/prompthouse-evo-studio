@@ -29,3 +29,18 @@ export class SovereignPhysics {
     };
   }
 }
+
+export function calculateCapabilityGravity(capability = {}) {
+  const { proofCount = 0, testsPassed = false, buildPassed = false, gated = false, id = '' } = capability;
+  let score = proofCount;
+  if (testsPassed) score += 3;
+  if (buildPassed) score += 3;
+  if (gated || id === 'blocked') score -= 10;
+  return score;
+}
+
+export function rankCapabilityField(capabilities = []) {
+  return [...capabilities].sort((a, b) => {
+    return calculateCapabilityGravity(b) - calculateCapabilityGravity(a);
+  });
+}

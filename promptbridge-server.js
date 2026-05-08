@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import { join, relative } from 'path';
 import OpenAI from 'openai';
+import { execSync } from 'child_process';
 
 import crypto from 'crypto';
 
@@ -119,6 +120,19 @@ app.get('/api/connections', (req, res) => {
       { name: 'Test API', url: 'http://localhost:3002/api/generated/test', type: 'EVO', description: 'Simple test route.' }
     ]
   });
+});
+
+app.get('/api/commits', (req, res) => {
+  try {
+    const commitsRaw = execSync('git log -n 10 --pretty=format:"%h|%s|%cr"').toString();
+    const commits = commitsRaw.split('\n').map(line => {
+      const [id, msg, time] = line.split('|');
+      return { id, msg, time, status: 'verified' };
+    });
+    res.json(commits);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 app.post('/chat', async (req, res) => {

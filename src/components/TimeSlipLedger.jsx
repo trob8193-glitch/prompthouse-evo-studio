@@ -3,12 +3,16 @@ import { History, GitCommit, GitBranch, Rewind } from 'lucide-react';
 
 export function TimeSlipLedger() {
   const [isOpen, setIsOpen] = useState(false);
+  const [commits, setCommits] = useState([]);
 
-  const mockCommits = [
-    { id: 'a338fed', msg: 'upgrade Chrome Extension', time: '1 min ago', status: 'verified' },
-    { id: '63bdcf2', msg: 'implement SaaS Generator', time: '4 mins ago', status: 'verified' },
-    { id: 'aa14895', msg: 'initial sovereign block', time: '1 hr ago', status: 'sealed' },
-  ];
+  React.useEffect(() => {
+    if (isOpen) {
+      fetch('http://localhost:3001/api/commits')
+        .then(res => res.json())
+        .then(data => setCommits(data))
+        .catch(err => console.error(err));
+    }
+  }, [isOpen]);
 
   if (!isOpen) {
     return (
@@ -43,9 +47,9 @@ export function TimeSlipLedger() {
       </div>
 
       <div style={{ padding: 16, flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {mockCommits.map((commit, idx) => (
+        {commits.map((commit, idx) => (
           <div key={commit.id} style={{ display: 'flex', gap: 12, position: 'relative' }}>
-            {idx !== mockCommits.length - 1 && <div style={{ position: 'absolute', left: 7, top: 20, bottom: -16, width: 2, background: '#1e293b' }} />}
+            {idx !== commits.length - 1 && <div style={{ position: 'absolute', left: 7, top: 20, bottom: -16, width: 2, background: '#1e293b' }} />}
             
             <div style={{ 
               width: 16, height: 16, borderRadius: '50%', background: '#0f172a', border: '2px solid #6366f1',

@@ -9,6 +9,15 @@ function uid() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
+export function createMission({ title }) {
+  return {
+    id: `mission_${uid()}`,
+    title,
+    truthStates: ['known'],
+    createdAt: new Date().toISOString(),
+  };
+}
+
 // ─── Gate Definitions (used by computeAllGateScores) ──────────
 export const GATE_DEFINITIONS = [
   { id: 'forge_friction',    label: 'Forge Friction',      owner: 'forge_rhino' },
@@ -58,15 +67,15 @@ export function createProofReceipt(missionId, action, status, meta = {}) {
 }
 
 // ─── Temporal Stack ───────────────────────────────────────────
-export function createTemporalStack(missionId, title) {
+export function createTemporalStack(missionId, params = {}) {
   return {
     id: `temporal_${uid()}`,
     missionId,
-    title,
-    nowPlan: '',
-    sixMonthRefactor: '',
-    twelveMonthDeprecationPath: '',
-    techStack: [],
+    title: params.title || '',
+    nowPlan: params.nowPlan || '',
+    sixMonthRefactor: params.sixMonthRefactor || '',
+    twelveMonthDeprecationPath: params.twelveMonthDeprecationPath || '',
+    techStack: params.techStack || [],
     createdAt: new Date().toISOString(),
   };
 }

@@ -9,7 +9,7 @@ import { Log } from './core/autonomy/SovereignLogger.js';
  */
 
 
-            export class OwnerApproval {
+export class OwnerApproval {
   constructor() {
     this.status = 'OMNIPOTENT';
     this.iq_baseline = 165.0;
@@ -29,4 +29,23 @@ import { Log } from './core/autonomy/SovereignLogger.js';
       resonance: 0.99 
     };
   }
+}
+
+export function createOwnerApprovalEnvelope(params = {}) {
+  return {
+    granted: false,
+    actor: '',
+    scope: '',
+    receiptId: '',
+    grantedAt: '',
+    ...params
+  };
+}
+
+export function hasExplicitOwnerApproval(approval = {}, scope = '') {
+  return approval.granted === true && approval.scope === scope;
+}
+
+export function getApprovalBlockReason(scope = '') {
+  return `Missing explicit owner approval for scope: ${scope}`;
 }

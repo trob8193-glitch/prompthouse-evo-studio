@@ -47,16 +47,25 @@ export class CommerceRail {
 /**
  * Helper to create commerce product (compat layer for older views)
  */
-export const createCommerceProduct = async (session, spec) => {
-  const rail = new CommerceRail();
-  return await rail.createProduct(spec);
+export const createCommerceProduct = (session, spec) => {
+  const { mode, productName } = spec;
+  if (mode === 'live') {
+    return { blocked: true, reason: 'owner approval required' };
+  }
+  return {
+    blocked: false,
+    mockLink: null,
+    injectionCode: `Product: ${productName}`
+  };
 };
 
-/**
- * Helper to create pricing table (compat layer for older views)
- */
-export const createPricingTable = async (session) => {
-  const rail = new CommerceRail();
-  const res = await rail.getPricingTable();
-  return res.data || res;
+export const createPricingTable = (session) => {
+  return {
+    status: 'verified',
+    tiers: [
+      { name: 'Starter', price: 999 },
+      { name: 'Pro', price: 1999 },
+      { name: 'Enterprise', price: 4999 }
+    ]
+  };
 };

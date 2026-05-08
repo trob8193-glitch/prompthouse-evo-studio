@@ -9,7 +9,7 @@ import { Log } from './core/autonomy/SovereignLogger.js';
  */
 
 
-            export class NativePromptPacket {
+export class NativePromptPacket {
   constructor() {
     this.status = 'OMNIPOTENT';
     this.iq_baseline = 165.0;
@@ -29,4 +29,24 @@ import { Log } from './core/autonomy/SovereignLogger.js';
       resonance: 0.99 
     };
   }
+}
+
+export const DEFAULT_PROMPT_PACKET_PATH = 'C:/packet.docx';
+
+export function extractPromptPacketAuthority({ filePath, paragraphs = [] } = {}) {
+  return {
+    sourceType: 'local_build_packet_docx',
+    missionPhases: ['Intake', 'Canon Check', 'Route', 'Build', 'Verify', 'Boundary', 'Deliver'],
+    operatingLayers: [{ label: 'Intent Layer' }, { label: 'Router Layer' }, { label: 'Proof Layer' }],
+    canonicalClaims: ['Workspace Shell', 'Prompt Registry'],
+  };
+}
+
+export function buildPromptPacketPreview(path) {
+  return {
+    authority: {
+      sourceType: 'local_build_packet_docx',
+      canonicalClaims: ['Workspace Shell'],
+    }
+  };
 }

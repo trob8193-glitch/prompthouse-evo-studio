@@ -88,3 +88,9 @@ export class SelfMaintenance {
     };
   }
 }
+
+export function normalizeEvolutionMarkers(text = '') {
+  return text
+    .replace(/\s*\.\s*\[Maturity: Level \d+\]/g, '')
+    .replace(/\s*\.\s*\[Efficiency: \d+%\]/g, '');
+}

@@ -1,9 +1,8 @@
-/** Dataset Forge - mod03 **/
-
-import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const BASE_URL = 'http://127.0.0.1:3001';
 const DATASET_FILE = path.join(__dirname, 'datasets.json');
 
