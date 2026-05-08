@@ -31,6 +31,7 @@
     "docs/knowledge/creative_autonomy.md",
     "docs/knowledge/tree_and_web_architecture.md",
     "docs/knowledge/advanced_evolution_and_automation.md",
+    "docs/knowledge/advanced_patterns_and_awareness.md",
     "firestore.rules",
     "storage.rules",
     "functions/package.json",
