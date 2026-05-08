@@ -1,7 +1,7 @@
 # Sovereign Offline Heuristic Review
 **Status**: OFFLINE MODE (Fallback)
 **System IQ Score**: 94/100
-**Files Scanned**: 17
+**Files Scanned**: 18
 
 ## Executive Summary
 The studio is running in offline mode. This review was generated via local heuristic analysis. The system analyzed file complexity, placeholder density, and structural integrity.

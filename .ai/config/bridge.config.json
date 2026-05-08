@@ -27,6 +27,7 @@
     "docs/knowledge/visuals_and_evolution.md",
     "docs/knowledge/session_evolution.md",
     "docs/knowledge/llm_model_training.md",
+    "docs/knowledge/precise_cutting.md",
     "firestore.rules",
     "storage.rules",
     "functions/package.json",

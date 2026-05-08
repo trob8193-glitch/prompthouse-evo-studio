@@ -15,9 +15,9 @@ try {
   run('node scripts/ai_context_pack.mjs');
   
   try {
-    run('node scripts/ai_review_gemini.mjs');
+    run('node scripts/ai_review_openai.mjs');
   } catch (apiErr) {
-    console.log('\n⚠️ [AI_Loop] Gemini API failed or exhausted. Falling back to Local Core...');
+    console.log('\n⚠️ [AI_Loop] OpenAI API failed or exhausted. Falling back to Local Core...');
     run('node scripts/ai_review_local.mjs');
   }
   
