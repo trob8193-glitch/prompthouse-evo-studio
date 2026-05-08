@@ -1,7 +1,7 @@
 async function test() {
   console.log('--- PH EVO LIVE API TRUTH TEST ---');
   try {
-    const res = await fetch('http://localhost:3001/chat', {
+    const res = await fetch('http://127.0.0.1:3001/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

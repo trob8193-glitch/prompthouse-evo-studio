@@ -40,9 +40,8 @@ export class SelfMaintenance {
   }
 
   calculateIQGain() {
-    // Real calculation based on file count and average lines of code
-    const stats = this.brain.iq_metrics;
-    return stats.sovereign_gain;
+    const metrics = this.brain?.iq_metrics;
+    return metrics?.sovereign_gain || 0;
   }
 
   async execute(params = {}) {
@@ -53,6 +52,7 @@ export class SelfMaintenance {
     
     // 2. Increment evolution cycles
     this.brain.evolution_cycles += 1;
+    if (!this.brain.iq_metrics) this.brain.iq_metrics = { baseline: 2000000, sovereign_gain: 0 };
     this.brain.iq_metrics.sovereign_gain += (auditResults.density * 10);
     
     // 3. Save state

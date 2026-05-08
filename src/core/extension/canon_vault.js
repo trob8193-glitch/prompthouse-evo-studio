@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 const VAULT_FILE = path.join(__dirname, 'canon_vault.json');
-const LOCAL_BRIDGE_URL = 'http://localhost:3001';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 
 class CanonVault {
     constructor() {

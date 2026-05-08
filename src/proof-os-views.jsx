@@ -151,7 +151,7 @@ export function MergeCourtView() {
 
 // ── 5. RUNTIME WITNESS CONSOLE ───────────────────────────────────
 export function WitnessConsoleView() {
-  const [traces, setTraces] = useState(['[SYS] Booting bridge', '[NET] Handshake established: localhost:3001', '[BOT] Evo requested architectural overview', '[SEC] Verifier intercept: payload safe']);
+  const [traces, setTraces] = useState(['[SYS] Booting bridge', '[NET] Handshake established: 127.0.0.1:3001', '[BOT] Evo requested architectural overview', '[SEC] Verifier intercept: payload safe']);
   
   useEffect(() => {
     const interval = setInterval(() => {

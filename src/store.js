@@ -7,7 +7,7 @@ import { create } from 'zustand';
  * navigation, bridge connectivity, chat, metrics, and API config.
  */
 
-const BRIDGE_URL = 'http://localhost:3001';
+const BRIDGE_URL = 'http://127.0.0.1:3001';
 
 export const useSovereignStore = create((set, get) => ({
   // ─── Navigation ─────────────────────────────────────────────
@@ -168,6 +168,44 @@ export const useSovereignStore = create((set, get) => ({
     } catch (err) {
       get().addNotification(`Maintenance failed: ${err.message}`, 'error');
       return null;
+    }
+  },
+
+  // ─── Global Sync ──────────────────────────────────────────
+  syncInterval: null,
+  runTruthProbe: async () => {
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/truth/probe`);
+      if (!res.ok) throw new Error('Probe failed');
+      const data = await res.json();
+      set({ bridgeData: { ...get().bridgeData, probes: data.results } });
+      return data.results;
+    } catch (err) {
+      console.warn('[Store] Truth probe failed:', err.message);
+      return null;
+    }
+  },
+
+  startGlobalSync: () => {
+
+    const state = get();
+    if (state.syncInterval) return;
+    
+    console.log('🚀 [Store] Starting High-Frequency Global Sync (1000ms)');
+    const interval = setInterval(async () => {
+      await Promise.all([
+        get().fetchBridgeStatus(),
+        get().fetchMetrics()
+      ]);
+    }, 1000);
+    
+    set({ syncInterval: interval });
+  },
+  stopGlobalSync: () => {
+    const state = get();
+    if (state.syncInterval) {
+      clearInterval(state.syncInterval);
+      set({ syncInterval: null });
     }
   },
 }));

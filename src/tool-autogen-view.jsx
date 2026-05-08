@@ -17,7 +17,7 @@ const TOOL_TYPES = [
 
 async function callBridge(prompt) {
   try {
-    const res = await fetch('http://localhost:3001/chat', {
+    const res = await fetch('http://127.0.0.1:3001/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
@@ -40,7 +40,7 @@ export function ToolAutogenView() {
 
   useEffect(() => {
     setRecipes(getAllRecipes());
-    fetch('http://localhost:3001/status', { signal: AbortSignal.timeout(2000) })
+    fetch('http://127.0.0.1:3001/status', { signal: AbortSignal.timeout(2000) })
       .then(r => setBridgeLive(r.ok)).catch(() => setBridgeLive(false));
   }, []);
 
@@ -118,7 +118,7 @@ export function ToolAutogenView() {
                 ⚠️ All generated tools are marked <strong>draft/template</strong>. Owner approval required before publishing or deploying.
               </div>
               <button className="btn btn-primary" onClick={generate} disabled={generating || !intent.trim()}>
-                {generating ? '⏳ Generating...' : `🪄 Generate ${TOOL_TYPES.find(t => t.id === selectedType)?.label}`}
+                {generating ? '⏳ Generating...' : `🪄 Generate ${TOOL_TYPES.find(t => t.id === selectedType)?.label || 'Tool'}`}
               </button>
 
               {result && (

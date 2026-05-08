@@ -4,7 +4,7 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import { EventEmitter } from 'events';
 
-const LOCAL_BRIDGE_URL = 'http://localhost:3001';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 const PROMPT_LOG_FILE = './prompt_log.json';
 
 class PromptCapture extends EventEmitter {

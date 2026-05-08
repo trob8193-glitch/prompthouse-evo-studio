@@ -16,7 +16,7 @@ import { runNightForgeCycle } from './nightforge.js';
 // ─── Bridge Caller ─────────────────────────────────────────────────────────────
 async function callBridge(prompt, systemPrompt = '') {
   try {
-    const res = await fetch('http://localhost:3001/chat', {
+    const res = await fetch('http://127.0.0.1:3001/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: [{ role: 'user', content: prompt }], systemPrompt }),

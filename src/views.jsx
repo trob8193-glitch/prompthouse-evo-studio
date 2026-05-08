@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { MOBILE_ARCHITECTURES, CODE_TEMPLATES, CHAIN_STEP_TYPES, MISSION_PHASES, TRUTH_STATES, buildChainPrompt, buildMissionPacket, exportAsMarkdown, exportAsText, exportAsJson } from './mobile-engine.js';
 import { useEvoStore } from './store.js';
+import { Card, Button, Panel, StateView } from './components/primitives.jsx';
 
 function copyText(t) { navigator.clipboard.writeText(t); }
 
@@ -86,7 +87,12 @@ export function CodeForgeView() {
                 <Button className="flex-1" onClick={() => { copyText(code); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>
                   {copied ? '✅ COPIED TO CLIPBOARD' : '📋 CLONE SOURCE CODE'}
                 </Button>
-                <Button variant="secondary" onClick={() => exportAsText(`${lang}_${feature || appName}`, code)}>⬇️ EXPORT</Button>
+                <Button variant="secondary" onClick={async () => {
+                  const bridge = new (await import('./core/interop/UniversalBridge.js')).UniversalBridge();
+                  const res = await bridge.dispatch('codeforge', 'save', { filename: `${feature || 'Feature'}.dart`, content: code });
+                  if (res.success) alert(`Saved to: ${res.path}`);
+                  else alert(`Save failed: ${res.error}`);
+                }}>💾 SAVE TO PROJECT</Button>
               </div>
             </div>
           </Card>

@@ -3,5 +3,6 @@
         "*.copilotmd": "vscode.markdown.preview.editor",
         "*.svg": "default",
         "*.sprite": "d2rmodding.spriteViewer"
-    }
+    },
+    "python.terminal.useEnvFile": true
 }

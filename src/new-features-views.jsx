@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { Card, Button, StatusBadge, IconButton } from './components/primitives.jsx';
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 
 export function VectorMemoryView() {
   return (

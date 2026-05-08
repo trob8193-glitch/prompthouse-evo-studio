@@ -5,7 +5,7 @@
  * Handles: context menu capture, tab tracking, message routing to PromptBridge
  */
 
-const BRIDGE_URL = 'http://localhost:3001';
+const BRIDGE_URL = 'http://127.0.0.1:3001';
 const STUDIO_URL = 'http://localhost:5173';
 
 // ─── Context Menu Setup ──────────────────────────────────────────────────────────

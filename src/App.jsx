@@ -15,7 +15,7 @@ import EvoEyesView from './features/EvoEyesView.jsx';
 import {
   WorkspaceShell, PromptRegistry, ExecutionQueue,
   ProofConsole, ForgeLabs, EvoDuelArena, AIGeneratorHub,
-  GradingAndRelease, CommerceCore,
+  GradingAndRelease, CommerceCore, FeatureFoundry,
 } from './features/index.jsx';
 
 /**
@@ -40,6 +40,7 @@ const PAGE_MAP = {
   'settings': GlobalAPISettingsView,
   'grading': GradingAndRelease,
   'commerce': CommerceCore,
+  'foundry': FeatureFoundry,
 };
 
 function PageRenderer() {
@@ -78,6 +79,14 @@ function NotificationToasts() {
 }
 
 export default function App() {
+  const startGlobalSync = useSovereignStore((s) => s.startGlobalSync);
+  const stopGlobalSync = useSovereignStore((s) => s.stopGlobalSync);
+
+  React.useEffect(() => {
+    startGlobalSync();
+    return () => stopGlobalSync();
+  }, [startGlobalSync, stopGlobalSync]);
+
   return (
     <ErrorBoundary fallbackMessage="The studio encountered a critical error.">
       <div style={{

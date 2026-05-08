@@ -6,7 +6,7 @@ export function AgentBridgeView() {
 
   const fetchReceipts = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/browser-bridge/list');
+      const res = await fetch('http://127.0.0.1:3001/api/browser-bridge/list');
       const data = await res.json();
       setReceipts(data.sort((a, b) => b.id.localeCompare(a.id)));
     } catch (e) {
@@ -42,7 +42,7 @@ export function AgentBridgeView() {
             <div className="flex-col gap-12">
               <div className="flex-between">
                 <span>Local Endpoint</span>
-                <code style={{ color: 'var(--accent-cyan)' }}>http://localhost:3001/api/browser-bridge</code>
+                <code style={{ color: 'var(--accent-cyan)' }}>http://127.0.0.1:3001/api/browser-bridge</code>
               </div>
               <div className="flex-between">
                 <span>Active Handshakes</span>

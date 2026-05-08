@@ -5,7 +5,7 @@ const DEFAULT_EXTENSION = {
   name: 'prompthouse_evo_chrome_extension',
   title: 'PromptHouse Evo',
   description: 'Dark autonomous Chrome extension for capturing page context and routing it into PromptHouse Evo Studio.',
-  bridgeUrl: 'http://localhost:3001',
+  bridgeUrl: 'http://127.0.0.1:3001',
 };
 
 function cleanName(value) {

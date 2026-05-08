@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ALL_BOT_ROSTER, CORE_CAST, SENIOR_CAST, DOMAIN_PACKS, scorePrompt, getGrade, getBarColor } from './engine.js';
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 
 // ── Map every bot to its domain specialty (prompt assignment system) ──
 const BOT_DOMAIN_MAP = {

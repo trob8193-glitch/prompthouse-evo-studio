@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DOMAIN_PACKS, STRICTNESS_MODES, scorePrompt, getGrade, getBarColor, buildPromptStack } from './engine.js';
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 
 async function callBridge(messages, systemPrompt = '') {
   try {

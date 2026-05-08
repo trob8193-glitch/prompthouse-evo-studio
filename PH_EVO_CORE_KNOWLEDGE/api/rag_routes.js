@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 
 const MEMORY_FILE = path.resolve(process.cwd(), 'memory.json');
-const LOCAL_BRIDGE_URL = 'http://localhost:3001';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 
 class MemoryModule {
     constructor() {

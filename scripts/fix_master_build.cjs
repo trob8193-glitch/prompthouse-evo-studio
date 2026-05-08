@@ -41,13 +41,13 @@ const FIXES = [
     domain: 'extension',
     name: 'Agent Arena / Role Duel',
     id: 'pb22',
-    code: "export async function runDuel(agentA, agentB, prompt) { const responses = await Promise.all([ fetch('http://localhost:3001/chat', { method: 'POST', body: JSON.stringify({ messages: [{role:'user', content: prompt}], systemPrompt: agentA }) }).then(r => r.json()), fetch('http://localhost:3001/chat', { method: 'POST', body: JSON.stringify({ messages: [{role:'user', content: prompt}], systemPrompt: agentB }) }).then(r => r.json()) ]); return { a: responses[0].message, b: responses[1].message, timestamp: Date.now() }; }"
+    code: "export async function runDuel(agentA, agentB, prompt) { const responses = await Promise.all([ fetch('http://127.0.0.1:3001/chat', { method: 'POST', body: JSON.stringify({ messages: [{role:'user', content: prompt}], systemPrompt: agentA }) }).then(r => r.json()), fetch('http://127.0.0.1:3001/chat', { method: 'POST', body: JSON.stringify({ messages: [{role:'user', content: prompt}], systemPrompt: agentB }) }).then(r => r.json()) ]); return { a: responses[0].message, b: responses[1].message, timestamp: Date.now() }; }"
   },
   {
     domain: 'api',
     name: 'Model inference',
     id: 'api05',
-    code: "export async function routeInference(payload) { const { model, messages } = payload; console.log(`[API] Routing inference to ${model}`); const res = await fetch('http://localhost:3001/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages }) }); return await res.json(); }"
+    code: "export async function routeInference(payload) { const { model, messages } = payload; console.log(`[API] Routing inference to ${model}`); const res = await fetch('http://127.0.0.1:3001/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages }) }); return await res.json(); }"
   },
   {
     domain: 'api',

@@ -2,11 +2,11 @@
  * EVO BRIDGE — POPUP.JS v3.0
  * ═══════════════════════════════════════════════════════════════
  * Full wiring: every button, mode, and capability tile is live.
- * Connects to PromptBridge (localhost:3001) and OpenAI API.
+ * Connects to PromptBridge (127.0.0.1:3001) and OpenAI API.
  * Self-evolution loop: reads NightForge state, shows upgrade banner.
  */
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 let currentMode = 'capture';
 let activeTab = null;
 let bridgeOnline = false;
@@ -55,7 +55,7 @@ async function checkBridge() {
   } catch (e) {
     setStatus(false);
     document.getElementById('val-bridge').textContent = 'DOWN';
-    log('[BRIDGE] Offline — check localhost:3001', 'err');
+    log('[BRIDGE] Offline — check 127.0.0.1:3001', 'err');
     return null;
   }
 }

@@ -134,7 +134,7 @@ export function AutonomousSelfBuildCommandCenter() {
     ]);
 
     try {
-      const res = await fetch('http://localhost:3001/api/test/run', { method: 'POST' });
+      const res = await fetch('http://127.0.0.1:3001/api/test/run', { method: 'POST' });
       const data = await res.json();
       if (data.success) {
         setLog((items) => [

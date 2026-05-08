@@ -56,7 +56,7 @@ export const ${storeName} = create((set, get) => ({
  */
 export class ${className} {
   constructor(config = {}) {
-    this.bridgeUrl = config.bridgeUrl || 'http://localhost:3001';
+    this.bridgeUrl = config.bridgeUrl || 'http://127.0.0.1:3001';
     this.featureId = '${feature.id}';
     this.initialized = false;
     this.operationalMode = 'SOVEREIGN';

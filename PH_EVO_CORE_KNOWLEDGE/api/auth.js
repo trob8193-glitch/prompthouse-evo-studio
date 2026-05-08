@@ -65,7 +65,7 @@ export const logout = async (token) => {
 };
 
 // Example usage with local bridge
-const localBridgeUrl = 'http://localhost:3001';
+const localBridgeUrl = 'http://127.0.0.1:3001';
 
 export const bridgeRegister = async (username, password) => {
     const response = await fetch(`${localBridgeUrl}/register`, {

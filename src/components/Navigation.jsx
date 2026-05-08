@@ -49,6 +49,7 @@ const NAV_GROUPS = [
       { id: 'settings', label: 'Settings & API', icon: Settings },
       { id: 'grading', label: 'Grading & Release', icon: Gauge },
       { id: 'commerce', label: 'Commerce', icon: Activity },
+      { id: 'foundry', label: 'Foundry Labs', icon: Cpu },
     ],
   },
 ];

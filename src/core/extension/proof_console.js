@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 const LOCAL_STORAGE_PATH = path.resolve('proof_console_data.json');
-const LOCAL_BRIDGE_URL = 'http://localhost:3001';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 
 class ProofConsole {
     constructor() {

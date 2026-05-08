@@ -8,7 +8,7 @@ async function runLoadTest() {
     console.log(`\n--- [Mission ${i}/10] Executing CI/CD Build Pipeline ---`);
     const startTime = Date.now();
     try {
-      const res = await fetch('http://localhost:3001/api/test/run', {
+      const res = await fetch('http://127.0.0.1:3001/api/test/run', {
         method: 'POST',
       });
       

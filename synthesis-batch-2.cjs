@@ -15,7 +15,7 @@ const BATCH_2 = {
     "code": `import create from 'zustand';
 export const useHunterStore = create((set) => ({ dead: [], hunting: false, add: (s) => set((state) => ({ dead: [...state.dead, s] })) }));
 export class DeadHunter {
-  constructor() { this.bridge = 'http://localhost:3001'; }
+  constructor() { this.bridge = 'http://127.0.0.1:3001'; }
   async hunt() {
     console.log('[DeadHunter] Scanning for logic rot...');
     const res = await fetch(\`\${this.bridge}/metrics\`);
@@ -66,7 +66,7 @@ export class SovereignLedger {
   async record(artifact) {
     const entry = { ...artifact, timestamp: Date.now(), signature: 'sha256_verified' };
     useLedgerStore.getState().add(entry);
-    await fetch('http://localhost:3001/api/browser-bridge/proof', { method: 'POST', body: JSON.stringify(entry) });
+    await fetch('http://127.0.0.1:3001/api/browser-bridge/proof', { method: 'POST', body: JSON.stringify(entry) });
     return entry;
   }
 }`

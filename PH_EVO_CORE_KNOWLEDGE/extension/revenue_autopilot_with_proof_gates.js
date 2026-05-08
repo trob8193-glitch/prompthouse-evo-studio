@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = 'http://127.0.0.1:3001';
 const DATA_FILE = path.join(process.cwd(), 'subscriptions.json');
 
 class RevenueAutopilot {

@@ -8,7 +8,7 @@
 
 import { Log } from '../autonomy/SovereignLogger.js';
 
-const BRIDGE_URL = 'http://localhost:3001';
+const BRIDGE_URL = 'http://127.0.0.1:3001';
 
 export class UniversalBridge {
   constructor() {
@@ -16,7 +16,9 @@ export class UniversalBridge {
       vsc: new VSCAdaptor(),
       flutter: new FlutterAdaptor(),
       git: new GitAdaptor(),
-      antigravity: new AntigravityAdaptor()
+      antigravity: new AntigravityAdaptor(),
+      foundry: new FoundryAdaptor(),
+      codeforge: new ForgeAdaptor()
     };
   }
 
@@ -116,4 +118,30 @@ class AntigravityAdaptor {
     return { tool: 'antigravity', status: 'OK' }; 
   }
   async sync() { return { tool: 'antigravity', status: 'SYNCED' }; }
+}
+
+class FoundryAdaptor {
+  async execute(cmd, p) {
+    Log.info(`🏗️ [FoundryAdaptor] Executing: ${cmd}`);
+    const res = await fetch(`${BRIDGE_URL}/api/foundry/${cmd}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(p)
+    });
+    return await res.json();
+  }
+  async sync() { return { tool: 'foundry', status: 'SYNCED' }; }
+}
+
+class ForgeAdaptor {
+  async execute(cmd, p) {
+    Log.info(`🔨 [ForgeAdaptor] Executing: ${cmd}`);
+    const res = await fetch(`${BRIDGE_URL}/api/forge/${cmd}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(p)
+    });
+    return await res.json();
+  }
+  async sync() { return { tool: 'codeforge', status: 'SYNCED' }; }
 }

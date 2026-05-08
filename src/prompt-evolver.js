@@ -5,7 +5,7 @@
  * No fake logic. Real experiments with real statistical evaluation.
  */
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 
 /**
  * Given a weak pattern and its AI analysis, generate an improved 6-layer prompt stack.

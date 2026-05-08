@@ -35,7 +35,7 @@ export class WebWeaver {
     const agentInput = `Analyze these ${patterns.length} patterns and identify the 10 strongest cross-links. Return JSON {links: [{sourceId, targetId, reason, strength}]}.\nPatterns: ${JSON.stringify(patterns.slice(0, 20))}`;
     
     try {
-      const response = await fetch('http://localhost:3001/api/agents/invoke', {
+      const response = await fetch('http://127.0.0.1:3001/api/agents/invoke', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ agentId: 'Evo Knowledge Weaver', input: agentInput })

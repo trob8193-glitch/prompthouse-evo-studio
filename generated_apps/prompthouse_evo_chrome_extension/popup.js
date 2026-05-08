@@ -1,4 +1,4 @@
-const bridgeUrl = 'http://localhost:3001';
+const bridgeUrl = 'http://127.0.0.1:3001';
 const output = document.querySelector('#output');
 const mission = document.querySelector('#mission');
 const bridgeStatus = document.querySelector('#bridge-status');

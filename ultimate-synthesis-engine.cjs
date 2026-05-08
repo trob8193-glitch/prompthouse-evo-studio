@@ -29,7 +29,7 @@ const useHunterStore = create((set) => ({
 
 export class DeadHunter {
   constructor(config = {}) {
-    this.bridgeUrl = config.bridgeUrl || 'http://localhost:3001';
+    this.bridgeUrl = config.bridgeUrl || 'http://127.0.0.1:3001';
   }
 
   async scan() {
@@ -82,7 +82,7 @@ const useMaturityStore = create((set) => ({
 
 export class MaturityScore {
   constructor(config = {}) {
-    this.bridgeUrl = config.bridgeUrl || 'http://localhost:3001';
+    this.bridgeUrl = config.bridgeUrl || 'http://127.0.0.1:3001';
   }
 
   calculateProjectMaturity(projectData) {

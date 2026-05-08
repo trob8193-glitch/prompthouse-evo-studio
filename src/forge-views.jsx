@@ -111,7 +111,7 @@ function BridgeInventionLab() {
              <input className="field-input" value={endpoint} onChange={e => setEndpoint(e.target.value)} />
           </div>
           <div className="prompt-block">
-             {`// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\nexport async function ${bridgeName.replace(/\s+/g, '')}Bridge(payload) {\n  const response = await fetch('http://localhost:3001${endpoint}', {\n    method: 'POST',\n    body: JSON.stringify(payload)\n  });\n  return response.json();\n}`}
+             {`// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\nexport async function ${bridgeName.replace(/\s+/g, '')}Bridge(payload) {\n  const response = await fetch('http://127.0.0.1:3001${endpoint}', {\n    method: 'POST',\n    body: JSON.stringify(payload)\n  });\n  return response.json();\n}`}
           </div>
           <button className="btn btn-secondary">🚀 Forge Bridge</button>
         </div>

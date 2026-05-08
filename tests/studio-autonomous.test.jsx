@@ -49,7 +49,7 @@ describe('PromptHouse Evo Studio - Autonomous Integrity Suite', () => {
       // Simulate successful heartbeat
       fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ status: 'ok', bridge: 'active' }) });
       
-      const res = await fetch('http://localhost:3001/status');
+      const res = await fetch('http://127.0.0.1:3001/status');
       const data = await res.json();
       
       expect(res.ok).toBe(true);

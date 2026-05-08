@@ -17,7 +17,7 @@
   if (window.__EVO_BRIDGE_LOADED__) return;
   window.__EVO_BRIDGE_LOADED__ = true;
 
-  const BRIDGE = 'http://localhost:3001';
+  const BRIDGE = 'http://127.0.0.1:3001';
   let bridgeOnline = false;
   let sentientChatOpen = false;
   window.__evoErrors = [];
@@ -164,7 +164,7 @@
         thinking.textContent = data.reply || data.message || 'No response.';
       } catch (e) {
         thinking.style.color = '#ef4444';
-        thinking.textContent = 'Bridge offline. Check localhost:3001.';
+        thinking.textContent = 'Bridge offline. Check 127.0.0.1:3001.';
       }
       messages.scrollTop = messages.scrollHeight;
     }

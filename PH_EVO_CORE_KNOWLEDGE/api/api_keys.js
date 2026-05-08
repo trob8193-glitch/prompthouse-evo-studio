@@ -56,7 +56,7 @@ class ApiKeyManager {
     }
 
     async fetchFromLocalBridge(endpoint, options = {}) {
-        const response = await fetch(`http://localhost:3001/${endpoint}`, options);
+        const response = await fetch(`http://127.0.0.1:3001/${endpoint}`, options);
         if (!response.ok) {
             throw new Error(`Fetch error: ${response.statusText}`);
         }

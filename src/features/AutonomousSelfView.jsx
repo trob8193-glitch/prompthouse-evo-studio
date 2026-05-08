@@ -34,7 +34,7 @@ export function AutonomousSelfView() {
   const startEvolution = async () => {
     setEvolving(true);
     try {
-      const res = await fetch('http://localhost:3001/api/evolution/activate', { method: 'POST' });
+      const res = await fetch('http://127.0.0.1:3001/api/evolution/activate', { method: 'POST' });
       if (res.ok) setEvolving(true);
     } catch (e) {
       console.error('Failed to start evolution:', e);

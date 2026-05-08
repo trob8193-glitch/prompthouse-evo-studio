@@ -6,7 +6,7 @@
  * context menu wiring, badge state, and cross-tab messaging.
  */
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 let upgradeReady = false;
 let studioIQ = 0;
 let evolutionCycle = 0;

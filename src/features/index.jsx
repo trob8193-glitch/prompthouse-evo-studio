@@ -40,6 +40,7 @@ import { ExtensionCockpitView } from './ExtensionCockpitView.jsx';
 import { GlobalAPISettingsView } from './GlobalAPISettingsView.jsx';
 import { EvoEyesView } from './EvoEyesView.jsx';
 import { AutonomousSelfView } from './AutonomousSelfView.jsx';
+import { FeatureFoundryView } from './FeatureFoundryView.jsx';
 
 
 // ─── SCREEN TEMPLATES ────────────────────────────────────────────────────────
@@ -102,6 +103,14 @@ export function EvoCastRouter() {
           <BotStageView />
         </div>
       </div>
+    </ScreenTemplate>
+  );
+}
+
+export function FeatureFoundry() {
+  return (
+    <ScreenTemplate title="Feature Foundry" subtitle="Autonomous SaaS Genesis Loop.">
+      <FeatureFoundryView />
     </ScreenTemplate>
   );
 }

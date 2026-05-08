@@ -4,7 +4,7 @@ import fs from 'fs';
 import { fetch } from 'node-fetch';
 import path from 'path';
 
-const BASE_URL = 'http://localhost:3001/models';
+const BASE_URL = 'http://127.0.0.1:3001/models';
 const DATA_FILE = path.resolve('models.json');
 
 class ModelRegistry {

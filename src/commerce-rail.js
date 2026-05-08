@@ -1,36 +1,62 @@
-
 import { Log } from './core/autonomy/SovereignLogger.js';
+import { UniversalBridge } from './core/interop/UniversalBridge.js';
 
 /**
- * PH EVO STUDIO — COMMERCE-RAIL (PRODUCTION GRADE)
+ * PH EVO STUDIO — COMMERCE-RAIL (V5 PRODUCTION)
  * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
+ * Handles product generation, pricing tables, and Stripe integration dispatches.
  */
 
-
-            export class CommerceRail {
+export class CommerceRail {
   constructor() {
-    this.status = 'OMNIPOTENT';
-    this.iq_baseline = 165.0;
+    this.status = 'ACTIVE';
+    this.bridge = new UniversalBridge();
+  }
+
+  /**
+   * Create a production commerce product spec.
+   */
+  async createProduct(spec) {
+    Log.info(`💎 [Commerce] Creating Product: ${spec.productName}`);
+    return await this.bridge.dispatch('commerce', 'create_product', spec);
+  }
+
+  /**
+   * Get the canonical pricing table.
+   */
+  async getPricingTable() {
+    Log.info('💎 [Commerce] Fetching Pricing Table...');
+    return await this.bridge.dispatch('commerce', 'get_pricing_table', {});
   }
 
   async execute(params = {}) {
-    Log.info('🚀 [Commerce-rail] Executing production logic...');
-    // Absolute production logic implementation
-    return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
+    Log.info('🚀 [CommerceRail] Executing commerce logic...');
+    return await this.bridge.dispatch('commerce', 'execute', params);
   }
 
   getStatus() {
     return { 
       id: 'commerce-rail', 
-      grade: 'S+++++', 
-      state: 'VERIFIED',
-      resonance: 0.99 
+      grade: 'PRODUCTION', 
+      state: 'ACTIVE',
+      resonance: 1.0 
     };
   }
 }
 
-export const createCommerceProduct = () => null;
+/**
+ * Helper to create commerce product (compat layer for older views)
+ */
+export const createCommerceProduct = async (session, spec) => {
+  const rail = new CommerceRail();
+  return await rail.createProduct(spec);
+};
 
-export const createPricingTable = () => null;
+/**
+ * Helper to create pricing table (compat layer for older views)
+ */
+export const createPricingTable = async (session) => {
+  const rail = new CommerceRail();
+  const res = await rail.getPricingTable();
+  return res.data || res;
+};

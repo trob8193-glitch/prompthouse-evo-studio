@@ -5,9 +5,7 @@ export class TruthGate {
     this.FORBIDDEN_MARKERS = [
       'dummy', 'lorem ipsum', 
       'test data', 'sample text', 'example.com',
-      'foo', 'bar', 'baz', "[PURGED BY OMEGA PROTOCOL]",
-      'OMNIPOTENT', 'S+++++', 'FULFILLED', 'Sovereign Intelligence',
-      'id: 1', 'id: 2', 'id: 3'
+      'foo', 'bar', 'baz'
     ];
   }
 

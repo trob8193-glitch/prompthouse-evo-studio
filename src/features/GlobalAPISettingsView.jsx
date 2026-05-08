@@ -27,12 +27,20 @@ export function GlobalAPISettingsView() {
     else { addNotification('Failed to save API keys.', 'error'); }
   };
 
+  const runTruthProbe = useSovereignStore((s) => s.runTruthProbe);
+
   const handleTest = async () => {
     setTesting(true); setTestResult(null);
-    const data = await fetchBridgeStatus();
+    const probeResults = await runTruthProbe();
+    const statusData = await fetchBridgeStatus();
     setTesting(false);
-    setTestResult(data ? { ok: true, version: data.version, uptime: data.uptime } : { ok: false });
+    setTestResult({
+      ok: !!statusData,
+      version: statusData?.version,
+      probes: probeResults
+    });
   };
+
 
   const fieldStyle = { width: '100%', background: '#0f172a', border: '1px solid #1e293b', borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 13, fontFamily: 'Inter, system-ui, sans-serif', outline: 'none' };
   const labelStyle = { fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6, display: 'block' };
@@ -97,11 +105,29 @@ export function GlobalAPISettingsView() {
           </button>
 
           {testResult && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600, color: testResult.ok ? '#22c55e' : '#ef4444' }}>
-              {testResult.ok ? <CheckCircle2 size={14} /> : <AlertCircle size={14} />}
-              {testResult.ok ? `Connected — ${testResult.version}` : 'Connection failed'}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 16, width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600, color: testResult.ok ? '#22c55e' : '#ef4444' }}>
+                {testResult.ok ? <CheckCircle2 size={14} /> : <AlertCircle size={14} />}
+                {testResult.ok ? `Bridge Online — ${testResult.version}` : 'Bridge Offline'}
+              </div>
+              
+              {testResult.probes && (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 8 }}>
+                  {Object.entries(testResult.probes).map(([api, info]) => (
+                    <div key={api} style={{ padding: '8px 12px', background: '#0f172a', border: '1px solid #1e293b', borderRadius: 8 }}>
+                      <div style={{ fontSize: 9, fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: 2 }}>{api}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <div style={{ width: 6, height: 6, borderRadius: '50%', background: info.status === 'VERIFIED' ? '#22c55e' : info.status === 'MISSING' ? '#64748b' : '#ef4444' }} />
+                        <span style={{ fontSize: 11, fontWeight: 800, color: info.status === 'VERIFIED' ? '#22c55e' : '#94a3b8' }}>{info.status}</span>
+                      </div>
+                      {info.error && <div style={{ fontSize: 8, color: '#ef4444', marginTop: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{info.error}</div>}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
+
         </div>
       </div>
 

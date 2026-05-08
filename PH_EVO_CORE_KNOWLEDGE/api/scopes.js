@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 import path from 'path';
 
 const SCOPES_FILE = path.resolve('scopes.json');
-const LOCAL_BRIDGE_URL = 'http://localhost:3001';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 
 class ScopeManager {
     constructor() {

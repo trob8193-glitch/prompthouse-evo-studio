@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 const MODEL_DEFINITIONS_PATH = path.join(__dirname, 'model_definitions.json');
-const LOCAL_BRIDGE_URL = 'http://localhost:3001/models';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001/models';
 
 class EvoLMModelFamily {
     constructor() {

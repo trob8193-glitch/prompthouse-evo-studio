@@ -1,34 +1,24 @@
-import React, { useState, useEffect } from 'react';
 import { Activity, Cpu, HardDrive, Clock, Zap, RefreshCw, TrendingUp } from 'lucide-react';
+import { useSovereignStore } from '../store.js';
+
 
 /**
  * PH EVO STUDIO — METRICS VIEW (ENTERPRISE GRADE)
  * Full-page live performance dashboard.
  */
 
-const BRIDGE_URL = 'http://localhost:3001';
-
 export default function MetricsView() {
-  const [metrics, setMetrics] = useState(null);
+  const BRIDGE_URL = 'http://127.0.0.1:3001';
+
+  const metrics = useSovereignStore((s) => s.metrics);
+  const loading = useSovereignStore((s) => s.metricsLoading);
+  const fetchAll = useSovereignStore((s) => s.fetchMetrics);
   const [omega, setOmega] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [history, setHistory] = useState([]);
 
-  const fetchAll = async () => {
-    try {
-      const [mRes, oRes] = await Promise.all([
-        fetch(`${BRIDGE_URL}/api/metrics`).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${BRIDGE_URL}/api/omega/metrics`).then(r => r.ok ? r.json() : null).catch(() => null),
-      ]);
-      if (mRes) {
-        setMetrics(mRes);
-        setHistory(h => [...h, { ...mRes, ts: Date.now() }].slice(-30));
-      }
-      if (oRes) setOmega(oRes);
-    } finally { setLoading(false); }
-  };
-
-  useEffect(() => { fetchAll(); const iv = setInterval(fetchAll, 15000); return () => clearInterval(iv); }, []);
+  useEffect(() => {
+    fetchAll();
+  }, [fetchAll]);
 
   const fmt = (v, suffix = '') => v != null ? `${typeof v === 'number' ? v.toFixed(1) : v}${suffix}` : '—';
 
@@ -76,15 +66,15 @@ export default function MetricsView() {
           <Stat label="Process Uptime" value={formatUptime(metrics?.uptime)} color="#f59e0b" />
         </Card>
         <Card icon={Cpu} title="CPU" color="#8b5cf6">
-          <Stat label="User CPU Time" value={fmt(metrics?.cpu, 's')} color="#8b5cf6" />
+          <Stat label="User CPU" value={fmt(cpu.user / 1000000, 's')} color="#8b5cf6" />
         </Card>
         <Card icon={HardDrive} title="Memory" color="#06b6d4">
-          <Stat label="Heap Used" value={fmt(metrics?.memory_heap, ' MB')} color="#06b6d4" />
-          <div style={{ fontSize: 11, color: '#475569' }}>RSS: {fmt(metrics?.memory_rss, ' MB')}</div>
-          <Bar value={metrics?.memory_heap || 0} max={512} color="#06b6d4" />
+          <Stat label="Heap Used" value={fmt(mem.heapUsed / 1024 / 1024, ' MB')} color="#06b6d4" />
+          <div style={{ fontSize: 11, color: '#475569' }}>Total: {fmt(mem.heapTotal / 1024 / 1024, ' MB')}</div>
+          <Bar value={mem.heapUsed} max={mem.heapTotal || 512 * 1024 * 1024} color="#06b6d4" />
         </Card>
         <Card icon={Activity} title="Latency" color="#f43f5e">
-          <Stat label="Avg Request" value={fmt(parseFloat(metrics?.latency || 0), 'ms')} color="#f43f5e" />
+          <Stat label="Sync Latency" value={metrics?.latency ? `${metrics.latency}ms` : '—'} color="#f43f5e" />
         </Card>
       </div>
 

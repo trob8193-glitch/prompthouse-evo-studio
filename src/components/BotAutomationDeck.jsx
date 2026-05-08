@@ -8,7 +8,7 @@ export const BotAutomationDeck = () => {
   const [kpis, setKpis] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/reports/kpi')
+    fetch('http://127.0.0.1:3001/api/reports/kpi')
       .then(r => r.json())
       .then(setKpis);
   }, []);
