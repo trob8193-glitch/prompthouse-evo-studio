@@ -184,6 +184,39 @@ app.post('/api/maintenance/run', async (req, res) => {
   }
 });
 
+// ─── IDE BONDING (Sovereign Integration) ───────────────────────────────────
+
+app.post('/api/ide/bond', (req, res) => {
+  const { ide_name, version } = req.body;
+  console.log(`[BOND] Handshake requested by ${ide_name} (${version})`);
+  
+  const token = crypto.randomBytes(16).toString('hex');
+  
+  res.json({
+    success: true,
+    token: token,
+    message: `Bond established with ${ide_name}! Ready for sync.`,
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.post('/api/ide/sync', (req, res) => {
+  const { token, active_file, cursor_line } = req.body;
+  console.log(`[SYNC] Received state from bonded IDE. File: ${active_file}`);
+  
+  const ledgerPath = join(DATA_DIR, 'bonding_ledger.json');
+  let ledger = [];
+  if (existsSync(ledgerPath)) ledger = JSON.parse(readFileSync(ledgerPath, 'utf8'));
+  ledger.push({ token, active_file, cursor_line, timestamp: new Date().toISOString() });
+  writeFileSync(ledgerPath, JSON.stringify(ledger.slice(-100), null, 2));
+  
+  res.json({
+    success: true,
+    message: "State synced successfully.",
+    ledger_count: ledger.length
+  });
+});
+
 // ─── TRAINING & EVOLUTION (PHASE 14) ─────────────────────────────────────────
 
 app.post('/api/training-capture', (req, res) => {
@@ -377,6 +410,75 @@ app.post('/v1/code/audit', validateApiKey, async (req, res) => {
     const result = ProductionAudit.audit(code);
     await CostFirewall.deduct(req.orgId, '/v1/code/audit', 1);
     res.json(result);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── DYNAMIC API LOADER (Sovereign Genesis) ──────────────────────────────────
+
+const API_DIR = join(process.cwd(), 'generated_apis');
+if (!existsSync(API_DIR)) mkdirSync(API_DIR, { recursive: true });
+
+async function loadGeneratedApis() {
+  const files = readdirSync(API_DIR);
+  for (const file of files) {
+    if (file.endsWith('.js')) {
+      try {
+        // Use file:// protocol for dynamic import on Windows
+        const modulePath = `file://${join(API_DIR, file)}`;
+        const { default: registerRoutes } = await import(modulePath);
+        registerRoutes(app);
+        console.log(`[API] Loaded generated API: ${file}`);
+      } catch (e) {
+        console.error(`[API] Failed to load ${file}:`, e.message);
+      }
+    }
+  }
+}
+
+await loadGeneratedApis();
+
+// ─── API GENERATOR (Sovereign Genesis) ──────────────────────────────────────
+
+app.post('/api/foundry/generate-api', async (req, res) => {
+  const { name, description, prompt, type } = req.body;
+  
+  if (!name || !prompt || !type) {
+    return res.status(400).json({ error: 'Name, prompt, and type (mock/real) are required.' });
+  }
+  
+  console.log(`[GENERATE] Request for ${type} API: ${name}`);
+  
+  const systemPrompt = `You are a backend API generator for the PromptHouse Evo Studio. 
+Generate a Node.js Express route module based on the user's request.
+The module must export a default function that takes \`app\` (the express instance) and registers the route.
+If the type is 'mock', return hardcoded data.
+If the type is 'real', implement real logic (e.g., using \`fs\` or other available modules).
+Return ONLY the JavaScript code, no markdown formatting, no backticks, no explanation.`;
+
+  const userPrompt = `Generate a ${type} API named '${name}'.
+Description: ${description || 'No description'}
+Functionality: ${prompt}`;
+
+  try {
+    const response = await ai.generateResponse([{ role: 'user', content: userPrompt }], systemPrompt);
+    let code = response.content || response; // Handle different response formats
+    
+    // Clean up code if it contains backticks (just in case)
+    code = code.replace(/```javascript/g, '').replace(/```/g, '').trim();
+    
+    const filename = `${name.replace(/[^a-zA-Z0-9_]/g, '_')}.js`;
+    const filePath = join(API_DIR, filename);
+    
+    writeFileSync(filePath, code, 'utf8');
+    
+    res.json({ 
+      success: true, 
+      message: `API '${name}' generated and saved to ${filename}`,
+      path: filePath
+    });
+    
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
