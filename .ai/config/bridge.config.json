@@ -33,6 +33,7 @@
     "docs/knowledge/advanced_evolution_and_automation.md",
     "docs/knowledge/advanced_patterns_and_awareness.md",
     "docs/knowledge/autonomous_code_generation.md",
+    "docs/knowledge/advanced_tools_and_self_invention.md",
     "firestore.rules",
     "storage.rules",
     "functions/package.json",
