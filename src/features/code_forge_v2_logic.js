@@ -1,12 +1,5 @@
-
 import { Log } from '../core/autonomy/SovereignLogger.js';
-
-/**
- * PH EVO STUDIO — CODEFORGEV2LOGIC (PRODUCTION GRADE)
- * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
- */
+import { IntelligenceClient } from '../lib/IntelligenceClient.js';
 
 export class CodeForgeV2Logic {
   constructor() {
@@ -15,17 +8,18 @@ export class CodeForgeV2Logic {
   }
 
   async execute(params = {}) {
-    const bridge = new UniversalBridge();
-    const toolId = this.constructor.name.toLowerCase().replace('logic', '');
-    return await bridge.dispatch(toolId, 'execute', params);
+    Log.info('🔨 [CodeForge] Initiating code generation...');
+    try {
+      const result = await IntelligenceClient.execute('CodeForge', 'GenerateCode', params);
+      Log.info('🔨 [CodeForge] Generation Complete.', result);
+      return result;
+    } catch (e) {
+      Log.error('🔨 [CodeForge] Generation Failed.', e);
+      return { success: false, error: e.message };
+    }
   }
 
   getStatus() {
-    return { 
-      id: 'code_forge_v2_logic', 
-      grade: 'PRODUCTION', 
-      state: 'VERIFIED',
-      resonance: 0.99 
-    };
+    return { id: 'code_forge_v2_logic', grade: 'PRODUCTION', state: 'VERIFIED', resonance: 0.99 };
   }
 }

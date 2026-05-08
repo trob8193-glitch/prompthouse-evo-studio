@@ -1,12 +1,5 @@
-
 import { Log } from '../core/autonomy/SovereignLogger.js';
-
-/**
- * PH EVO STUDIO — FLUTTERGENPROLOGIC (PRODUCTION GRADE)
- * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
- */
+import { IntelligenceClient } from '../lib/IntelligenceClient.js';
 
 export class FlutterGenProLogic {
   constructor() {
@@ -15,17 +8,18 @@ export class FlutterGenProLogic {
   }
 
   async execute(params = {}) {
-    const bridge = new UniversalBridge();
-    const toolId = this.constructor.name.toLowerCase().replace('logic', '');
-    return await bridge.dispatch(toolId, 'execute', params);
+    Log.info('📱 [FlutterGen] Orchestrating Flutter UI generation...');
+    try {
+      const result = await IntelligenceClient.execute('FlutterGen', 'GenerateApp', params);
+      Log.info('📱 [FlutterGen] Generation Complete.', result);
+      return result;
+    } catch (e) {
+      Log.error('📱 [FlutterGen] Generation Failed.', e);
+      return { success: false, error: e.message };
+    }
   }
 
   getStatus() {
-    return { 
-      id: 'flutter_gen_pro_logic', 
-      grade: 'PRODUCTION', 
-      state: 'VERIFIED',
-      resonance: 0.99 
-    };
+    return { id: 'flutter_gen_pro_logic', grade: 'PRODUCTION', state: 'VERIFIED', resonance: 0.99 };
   }
 }

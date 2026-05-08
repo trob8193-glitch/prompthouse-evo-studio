@@ -19,8 +19,10 @@ const NAV_GROUPS = [
     label: 'Studio',
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+      { id: 'saas-builder', label: 'SaaS Builder', icon: Rocket },
       { id: 'chat', label: 'AI Chat', icon: MessageSquare },
       { id: 'workspace', label: 'Workspace', icon: FolderOpen },
+      { id: 'ghost-editor', label: 'Ghost Editor', icon: Sparkles },
     ],
   },
   {

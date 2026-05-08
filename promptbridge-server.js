@@ -31,6 +31,7 @@ import { ProductionAudit } from './src/core/engines/productionAudit.js';
 import { SaasOrchestrator } from './src/core/engines/saasOrchestrator.js';
 import { ExecutionSandbox } from './lib/terminal/ExecutionSandbox.js';
 import { VercelAdapter } from './lib/deployment/VercelAdapter.js';
+import { IntelligenceCore } from './src/core/engines/IntelligenceCore.js';
 
 dotenv.config({ override: true });
 
@@ -63,6 +64,13 @@ const foundry = new FoundryOrchestrator(ai, stripe);
 const SANDBOX_DIR = join(DATA_DIR, 'sandbox');
 const saasOrchestrator = new SaasOrchestrator(ai, SANDBOX_DIR);
 const terminalSandbox = new ExecutionSandbox(SANDBOX_DIR);
+const intelligenceCore = new IntelligenceCore(ai);
+
+// Global Savings Ledger
+let globalFirewallSavings = {
+  tokens: 0,
+  dollars: 0.00
+};
 
 // ─── MIDDLEWARE ──────────────────────────────────────────────────────────────
 
@@ -154,6 +162,28 @@ app.post('/api/foundry/orchestrate', async (req, res) => {
   }
 });
 
+// ─── INTELLIGENCE CORE ROUTING ───────────────────────────────────────────────
+
+app.post('/api/intelligence/execute', async (req, res) => {
+  try {
+    const { module, action, payload } = req.body;
+    if (!module || !action) {
+      return res.status(400).json({ error: 'Module and action are required.' });
+    }
+    const result = await intelligenceCore.executeAction(module, action, payload);
+    
+    // Track cumulative savings
+    if (result.metrics) {
+      globalFirewallSavings.tokens += result.metrics.tokensSaved || 0;
+      globalFirewallSavings.dollars += result.metrics.moneySaved || 0;
+    }
+    
+    res.json(result);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ─── TERMINAL & DEPLOYMENT ───────────────────────────────────────────────────
 
 app.post('/api/terminal/execute', async (req, res) => {
@@ -192,7 +222,11 @@ app.get('/api/metrics', (req, res) => {
       hits: 120 + Math.floor(Math.random() * 10), 
       misses: 20 + Math.floor(Math.random() * 5) 
     },
-    latency: (Math.random() * 20 + 10).toFixed(2)
+    latency: (Math.random() * 20 + 10).toFixed(2),
+    firewall: {
+      savedTokens: globalFirewallSavings.tokens,
+      savedDollars: globalFirewallSavings.dollars.toFixed(4)
+    }
   });
 });
 

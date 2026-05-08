@@ -11,6 +11,13 @@ import GlobalAPISettingsView from './features/GlobalAPISettingsView.jsx';
 import MetricsView from './features/MetricsView.jsx';
 import EvoEyesView from './features/EvoEyesView.jsx';
 import ConnectionManager from './features/ConnectionManager.jsx';
+import SaasBuilderView from './features/SaasBuilderView.jsx';
+import { MatrixTerminal } from './components/MatrixTerminal.jsx';
+import { TimeSlipLedger } from './components/TimeSlipLedger.jsx';
+import { PulseResourceBar } from './components/PulseResourceBar.jsx';
+import { NightForgePanel } from './components/NightForgePanel.jsx';
+import { GodsEyeMap } from './components/GodsEyeMap.jsx';
+import { GhostEditor } from './components/GhostEditor.jsx';
 
 // Existing feature screens from features/index.jsx
 import {
@@ -43,6 +50,8 @@ const PAGE_MAP = {
   'grading': GradingAndRelease,
   'commerce': CommerceCore,
   'foundry': FeatureFoundry,
+  'saas-builder': SaasBuilderView,
+  'ghost-editor': GhostEditor,
 };
 
 function PageRenderer() {
@@ -83,6 +92,7 @@ function NotificationToasts() {
 export default function App() {
   const startGlobalSync = useSovereignStore((s) => s.startGlobalSync);
   const stopGlobalSync = useSovereignStore((s) => s.stopGlobalSync);
+  const [showGodsEye, setShowGodsEye] = React.useState(false);
 
   React.useEffect(() => {
     startGlobalSync();
@@ -97,13 +107,18 @@ export default function App() {
         overflow: 'hidden',
       }}>
         <TopBar />
+        {/* Toggle Gods Eye Map using a hidden hotkey or a small button below. For now, it's just available. */}
+        <button onClick={() => setShowGodsEye(prev => !prev)} className="absolute top-16 right-4 z-50 bg-blue-900/50 text-blue-400 text-xs px-2 py-1 rounded border border-blue-500/50 hover:bg-blue-800/50">
+          Toggle God's Eye
+        </button>
+        {showGodsEye && <GodsEyeMap />}
 
         <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
           <Navigation />
 
           <main style={{
             flex: 1, overflow: 'auto', padding: 28, position: 'relative',
-            background: '#0a0e1a',
+            background: '#0a0e1a', paddingBottom: 60, // Leave room for matrix terminal
           }}>
             {/* Ambient Background Asset */}
             <div style={{
@@ -111,12 +126,20 @@ export default function App() {
               backgroundImage: 'url(/src/assets/bg.png)', backgroundSize: 'cover', backgroundPosition: 'center',
               opacity: 0.15, pointerEvents: 'none', zIndex: 0
             }} />
-            <div style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ position: 'relative', zIndex: 1, height: '100%' }}>
               <PageRenderer />
+            </div>
+            
+            <div className="absolute right-0 top-0 bottom-60 w-80 flex flex-col border-l border-gray-800 bg-[#0a0e1a] z-10 pointer-events-auto">
+              <TimeSlipLedger />
+              <NightForgePanel />
             </div>
           </main>
         </div>
 
+        <PulseResourceBar />
+
+        <MatrixTerminal />
         <NotificationToasts />
 
         <style>{`

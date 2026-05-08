@@ -1,5 +1,5 @@
-
 import { Log } from '../core/autonomy/SovereignLogger.js';
+import { IntelligenceClient } from '../lib/IntelligenceClient.js';
 
 /**
  * PH EVO STUDIO — CANONMEMORYLOGIC (PRODUCTION GRADE)
@@ -15,9 +15,15 @@ export class CanonMemoryLogic {
   }
 
   async execute(params = {}) {
-    const bridge = new UniversalBridge();
-    const toolId = this.constructor.name.toLowerCase().replace('logic', '');
-    return await bridge.dispatch(toolId, 'execute', params);
+    Log.info('🧠 [CanonMemory] Accessing deep project memory...');
+    try {
+      const result = await IntelligenceClient.execute('CanonMemory', 'RetrieveMemory', params);
+      Log.info('🧠 [CanonMemory] Memory Extracted.', result);
+      return result;
+    } catch (e) {
+      Log.error('🧠 [CanonMemory] Access Failed.', e);
+      return { success: false, error: e.message };
+    }
   }
 
   getStatus() {

@@ -1,5 +1,5 @@
-
 import { Log } from '../core/autonomy/SovereignLogger.js';
+import { IntelligenceClient } from '../lib/IntelligenceClient.js';
 
 /**
  * PH EVO STUDIO — MATURITYSCORELOGIC (PRODUCTION GRADE)
@@ -15,9 +15,15 @@ export class MaturityScoreLogic {
   }
 
   async execute(params = {}) {
-    const bridge = new UniversalBridge();
-    const toolId = this.constructor.name.toLowerCase().replace('logic', '');
-    return await bridge.dispatch(toolId, 'execute', params);
+    Log.info('📈 [MaturityScore] Calculating Logic Density and IQ...');
+    try {
+      const result = await IntelligenceClient.execute('MaturityScore', 'CalculateScore', params);
+      Log.info('📈 [MaturityScore] Score Computed.', result);
+      return result;
+    } catch (e) {
+      Log.error('📈 [MaturityScore] Calculation Failed.', e);
+      return { success: false, error: e.message };
+    }
   }
 
   getStatus() {

@@ -1,12 +1,5 @@
-
 import { Log } from '../core/autonomy/SovereignLogger.js';
-
-/**
- * PH EVO STUDIO — CLISTUDIOPROLOGIC (PRODUCTION GRADE)
- * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
- */
+import { IntelligenceClient } from '../lib/IntelligenceClient.js';
 
 export class CliStudioProLogic {
   constructor() {
@@ -15,17 +8,18 @@ export class CliStudioProLogic {
   }
 
   async execute(params = {}) {
-    const bridge = new UniversalBridge();
-    const toolId = this.constructor.name.toLowerCase().replace('logic', '');
-    return await bridge.dispatch(toolId, 'execute', params);
+    Log.info('💻 [CLIStudioPro] Analyzing shell execution context...');
+    try {
+      const result = await IntelligenceClient.execute('CliStudio', 'AnalyzeCommand', params);
+      Log.info('💻 [CLIStudioPro] Context Analyzed.', result);
+      return result;
+    } catch (e) {
+      Log.error('💻 [CLIStudioPro] Analysis Failed.', e);
+      return { success: false, error: e.message };
+    }
   }
 
   getStatus() {
-    return { 
-      id: 'cli_studio_pro_logic', 
-      grade: 'PRODUCTION', 
-      state: 'VERIFIED',
-      resonance: 0.99 
-    };
+    return { id: 'cli_studio_pro_logic', grade: 'PRODUCTION', state: 'VERIFIED', resonance: 0.99 };
   }
 }

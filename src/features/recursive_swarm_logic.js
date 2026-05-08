@@ -1,31 +1,53 @@
+import fs from 'fs';
+import path from 'path';
 
-import { Log } from '../core/autonomy/SovereignLogger.js';
-
-/**
- * PH EVO STUDIO — RECURSIVESWARMLOGIC (PRODUCTION GRADE)
- * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
- */
-
-export class RecursiveSwarmLogic {
+class RecursiveSwarmLogic {
   constructor() {
-    this.status = 'ACTIVE';
-    this.iq_baseline = 2000000;
+    this.bots = ['Bot-Alpha', 'Bot-Beta', 'Bot-Gamma', 'Bot-Delta'];
+    this.trainingDataPath = path.join('.prompthouse-data', 'evo_training.jsonl');
   }
 
-  async execute(params = {}) {
-    const bridge = new UniversalBridge();
-    const toolId = this.constructor.name.toLowerCase().replace('logic', '');
-    return await bridge.dispatch(toolId, 'execute', params);
+  breakDownTask(task) {
+    // A simple heuristic to break down a task into smaller sub-tasks
+    return task.split('.').filter(subtask => subtask.trim().length > 0);
   }
 
-  getStatus() {
-    return { 
-      id: 'recursive_swarm_logic', 
-      grade: 'PRODUCTION', 
-      state: 'VERIFIED',
-      resonance: 0.99 
+  assignTasks(subtasks) {
+    const assignments = subtasks.map((subtask, index) => {
+      const assignedBot = this.bots[index % this.bots.length];
+      return { bot: assignedBot, subtask };
+    });
+    return assignments;
+  }
+
+  logTrainingData(task, assignments) {
+    const logEntry = {
+      messages: [
+        { role: 'system', content: 'Processed task assignment for better efficiency' },
+        { role: 'user', content: `Task received: ${task}` },
+        { role: 'assistant', content: `Assignments: ${JSON.stringify(assignments)}` }
+      ]
     };
+
+    fs.appendFileSync(
+      this.trainingDataPath, 
+      JSON.stringify(logEntry) + '\n', 
+      'utf8'
+    );
+  }
+
+  execute(params = {}) {
+    const { task } = params;
+    if(!task) {
+      throw new Error('Task parameter is required.');
+    }
+
+    const subtasks = this.breakDownTask(task);
+    const assignments = this.assignTasks(subtasks);
+    this.logTrainingData(task, assignments);
+
+    return assignments;
   }
 }
+
+export { RecursiveSwarmLogic };

@@ -1,12 +1,5 @@
-
 import { Log } from '../core/autonomy/SovereignLogger.js';
-
-/**
- * PH EVO STUDIO — MERGECOURTLOGIC (PRODUCTION GRADE)
- * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
- */
+import { IntelligenceClient } from '../lib/IntelligenceClient.js';
 
 export class MergeCourtLogic {
   constructor() {
@@ -15,17 +8,18 @@ export class MergeCourtLogic {
   }
 
   async execute(params = {}) {
-    const bridge = new UniversalBridge();
-    const toolId = this.constructor.name.toLowerCase().replace('logic', '');
-    return await bridge.dispatch(toolId, 'execute', params);
+    Log.info('⚖️ [MergeCourt] Deliberating code merge...');
+    try {
+      const result = await IntelligenceClient.execute('MergeCourt', 'JudgeMerge', params);
+      Log.info('⚖️ [MergeCourt] Judgment Rendered.', result);
+      return result;
+    } catch (e) {
+      Log.error('⚖️ [MergeCourt] Judgment Failed.', e);
+      return { success: false, error: e.message };
+    }
   }
 
   getStatus() {
-    return { 
-      id: 'merge_court_logic', 
-      grade: 'PRODUCTION', 
-      state: 'VERIFIED',
-      resonance: 0.99 
-    };
+    return { id: 'merge_court_logic', grade: 'PRODUCTION', state: 'VERIFIED', resonance: 0.99 };
   }
 }
