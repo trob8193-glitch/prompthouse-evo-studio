@@ -34,6 +34,7 @@
     "docs/knowledge/advanced_patterns_and_awareness.md",
     "docs/knowledge/autonomous_code_generation.md",
     "docs/knowledge/advanced_tools_and_self_invention.md",
+    "docs/knowledge/advanced_pipelines_and_infrastructure.md",
     "firestore.rules",
     "storage.rules",
     "functions/package.json",
