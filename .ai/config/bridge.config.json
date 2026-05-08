@@ -36,6 +36,7 @@
     "docs/knowledge/advanced_tools_and_self_invention.md",
     "docs/knowledge/advanced_pipelines_and_infrastructure.md",
     "docs/knowledge/future_possibilities.md",
+    "docs/knowledge/phase_15_blueprint.md",
     "firestore.rules",
     "storage.rules",
     "functions/package.json",
