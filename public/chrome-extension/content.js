@@ -66,4 +66,69 @@ function showToast(message) {
   setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
 }
 
+// ─── AUTONOMOUS META MAP ENGINE ────────────────────────────────────────────────
+// Scans the DOM and creates a serialized packet of interactive elements for the AI
+
+function generateMetaMap() {
+  const elements = Array.from(document.querySelectorAll('a, button, input, textarea, select, [role="button"]'))
+    .filter(el => {
+      const rect = el.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0 && window.getComputedStyle(el).visibility !== 'hidden';
+    });
+
+  return elements.map((el, index) => {
+    // Inject a unique meta ID for the AI to target
+    const metaId = `evo-node-${index}`;
+    el.setAttribute('data-evo-id', metaId);
+
+    return {
+      id: metaId,
+      tag: el.tagName.toLowerCase(),
+      type: el.type || undefined,
+      text: el.innerText?.trim()?.slice(0, 50) || el.placeholder || el.value || '',
+      href: el.href || undefined,
+      ariaLabel: el.getAttribute('aria-label') || undefined,
+    };
+  });
+}
+
+// ─── BRIDGE COMMAND LISTENER ─────────────────────────────────────────────────
+// Allows the Studio or Background script to remotely control the browser
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.type === 'PING') {
+    sendResponse({ status: 'ALIVE', url: window.location.href, title: document.title });
+  } 
+  
+  if (msg.type === 'SCAN_DOM') {
+    const map = generateMetaMap();
+    sendResponse({ success: true, url: window.location.href, elements: map });
+  }
+
+  if (msg.type === 'EXECUTE_ACTION') {
+    try {
+      const { action, targetId, value } = msg.payload;
+      const el = document.querySelector(`[data-evo-id="${targetId}"]`);
+      
+      if (!el) {
+        sendResponse({ success: false, error: 'Target element not found.' });
+        return;
+      }
+
+      if (action === 'click') {
+        el.click();
+        showToast(`🤖 Evo Clicked: ${el.innerText?.slice(0,20) || targetId}`);
+      } else if (action === 'type' && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) {
+        el.value = value;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+        showToast(`🤖 Evo Typed in: ${targetId}`);
+      }
+      sendResponse({ success: true });
+    } catch (err) {
+      sendResponse({ success: false, error: err.message });
+    }
+  }
+});
+
 console.log('[PH Evo Bridge] Content script loaded. Ctrl+Shift+P to capture selection.');
