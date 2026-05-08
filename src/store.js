@@ -24,7 +24,7 @@ export const useSovereignStore = create((set, get) => ({
 
   fetchBridgeStatus: async () => {
     try {
-      const res = await fetch(`${BRIDGE_URL}/status`);
+      const res = await fetch(`${BRIDGE_URL}/status`, { signal: AbortSignal.timeout(1500) });
       if (!res.ok) throw new Error(`Bridge returned ${res.status}`);
       const data = await res.json();
       set({ bridgeStatus: 'connected', bridgeData: data, bridgeError: null });
@@ -42,14 +42,13 @@ export const useSovereignStore = create((set, get) => ({
   fetchMetrics: async () => {
     set({ metricsLoading: true });
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/metrics`);
+      const res = await fetch(`${BRIDGE_URL}/api/metrics`, { signal: AbortSignal.timeout(1500) });
       if (!res.ok) throw new Error(`Metrics returned ${res.status}`);
       const data = await res.json();
       set({ metrics: data, metricsLoading: false });
       return data;
     } catch (err) {
       set({ metricsLoading: false });
-      console.warn('[Store] Metrics fetch failed:', err.message);
       return null;
     }
   },
@@ -117,6 +116,7 @@ export const useSovereignStore = create((set, get) => ({
   // ─── API Configuration ─────────────────────────────────────
   apiConfig: {
     openaiKey: '',
+    vercelToken: '',
     model: 'gpt-3.5-turbo',
     bridgeUrl: BRIDGE_URL,
   },
@@ -134,7 +134,7 @@ export const useSovereignStore = create((set, get) => ({
       const res = await fetch(`${BRIDGE_URL}/api/config/keys`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ keys: { openai: state.apiConfig.openaiKey } }),
+        body: JSON.stringify({ keys: { openai: state.apiConfig.openaiKey, vercel: state.apiConfig.vercelToken } }),
       });
       if (!res.ok) throw new Error(`Config save returned ${res.status}`);
       set({ apiConfigSaving: false });
@@ -187,18 +187,17 @@ export const useSovereignStore = create((set, get) => ({
   },
 
   startGlobalSync: () => {
-
     const state = get();
     if (state.syncInterval) return;
-    
-    console.log('🚀 [Store] Starting High-Frequency Global Sync (1000ms)');
-    const interval = setInterval(async () => {
-      await Promise.all([
-        get().fetchBridgeStatus(),
-        get().fetchMetrics()
-      ]);
-    }, 1000);
-    
+
+    // Run immediately (non-blocking) then every 8 seconds
+    // No await — never blocks the UI thread
+    const poll = () => {
+      get().fetchBridgeStatus().catch(() => {});
+      get().fetchMetrics().catch(() => {});
+    };
+    poll(); // initial probe
+    const interval = setInterval(poll, 8000);
     set({ syncInterval: interval });
   },
   stopGlobalSync: () => {

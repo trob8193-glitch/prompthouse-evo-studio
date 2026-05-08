@@ -28,17 +28,14 @@ const BOT_DOMAIN_MAP = {
   forge_rhino:      { domain: 'development',specialty: 'Release Hardener',        icon: 'FR' },
 };
 
+import { universalSend } from './lib/universal-transport.js';
+
 async function callBridge(prompt, systemPrompt = '') {
   try {
-    const res = await fetch(`${BRIDGE}/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: prompt }], systemPrompt }),
-    });
-    const data = await res.json();
-    return data.message || '[No response]';
-  } catch {
-    return '[BRIDGE OFFLINE] Connect PromptBridge on :3001 to run live duels.';
+    const res = await universalSend([{ role: 'user', content: prompt }], systemPrompt);
+    return res.message;
+  } catch (err) {
+    return `[TRANSPORT OFFLINE] ${err.message}`;
   }
 }
 

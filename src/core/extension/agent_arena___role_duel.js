@@ -1,2 +1,9 @@
 /** Fixed Feature: Agent Arena / Role Duel (pb22) **/
-export async function runDuel(agentA, agentB, prompt) { const responses = await Promise.all([ fetch('http://127.0.0.1:3001/chat', { method: 'POST', body: JSON.stringify({ messages: [{role:'user', content: prompt}], systemPrompt: agentA }) }).then(r => r.json()), fetch('http://127.0.0.1:3001/chat', { method: 'POST', body: JSON.stringify({ messages: [{role:'user', content: prompt}], systemPrompt: agentB }) }).then(r => r.json()) ]); return { a: responses[0].message, b: responses[1].message, timestamp: Date.now() }; }
+import { universalSend } from '../../lib/universal-transport.js';
+export async function runDuel(agentA, agentB, prompt) {
+  const responses = await Promise.all([
+    universalSend([{role:'user', content: prompt}], agentA),
+    universalSend([{role:'user', content: prompt}], agentB)
+  ]);
+  return { a: responses[0].message, b: responses[1].message, timestamp: Date.now() };
+}

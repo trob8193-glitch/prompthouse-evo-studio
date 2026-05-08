@@ -9,7 +9,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  PROMPTLINK_PROVIDERS,
   getRegistry,
   updateProvider,
   validatePromptLinkCall,

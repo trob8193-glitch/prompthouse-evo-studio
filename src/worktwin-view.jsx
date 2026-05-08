@@ -3,7 +3,7 @@
  * Owner: Evo | Truth State: built
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { getAllSignals, saveSignal, getAllRecipes, captureWorkflowSignal, createWorkTwinSignal } from './worktwin-vault.js';
+import { getAllSignals, saveSignal, getAllRecipes, captureWorkflowSignal } from './worktwin-vault.js';
 import { runPatternMiner, getAllPatterns, generateRecipeFromPattern } from './pattern-miner.js';
 import { addProofReceipt } from './prompt-base.js';
 

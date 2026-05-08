@@ -66,6 +66,13 @@ export function GlobalAPISettingsView() {
           <div style={{ fontSize: 10, color: '#475569', marginTop: 4 }}>Your key is sent to the local bridge server only — never to external services directly.</div>
         </div>
 
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Vercel API Token (For Deployments)</label>
+          <input type="password" value={apiConfig.vercelToken || ''} onChange={(e) => updateApiConfig({ vercelToken: e.target.value })} placeholder="vA123..." style={fieldStyle}
+            onFocus={(e) => e.target.style.borderColor = '#4f46e580'} onBlur={(e) => e.target.style.borderColor = '#1e293b'} />
+          <div style={{ fontSize: 10, color: '#475569', marginTop: 4 }}>Used by the SaaS Orchestrator to autonomously deploy your generated apps.</div>
+        </div>
+
         <div style={{ marginBottom: 20 }}>
           <label style={labelStyle}>Model</label>
           <select value={apiConfig.model} onChange={(e) => updateApiConfig({ model: e.target.value })} style={{ ...fieldStyle, cursor: 'pointer' }}>
@@ -128,6 +135,40 @@ export function GlobalAPISettingsView() {
             </div>
           )}
 
+        </div>
+      </div>
+
+      {/* Ollama Offline Engine Card */}
+      <div style={{ background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: 24, marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+          <div style={{ width: 16, height: 16, background: '#e2e8f0', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+             <span style={{ fontSize: 10, color: '#000', fontWeight: 900 }}>🦙</span>
+          </div>
+          <span style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0' }}>Ollama (Offline AI Engine)</span>
+        </div>
+        
+        <p style={{ fontSize: 11, color: '#94a3b8', marginBottom: 20, lineHeight: 1.5 }}>
+          Ollama allows you to run powerful AI models completely offline. If your Bridge or external APIs fail, the Universal Transport will automatically fallback to your local Ollama engine to keep your studio running.
+        </p>
+
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <button onClick={async () => {
+            try {
+              const res = await fetch('http://localhost:11434/api/tags');
+              if (res.ok) {
+                const data = await res.json();
+                const models = data.models.map(m => m.name).join(', ');
+                alert(`✅ Ollama is Online!\n\nInstalled Models:\n${models || 'None yet. Run "ollama run llama3" in your terminal!'}`);
+              } else {
+                alert('⚠️ Ollama responded with an error.');
+              }
+            } catch (err) {
+              alert('❌ Ollama is Offline or not installed.\n\nTo install, download from ollama.com or run:\ncurl -fsSL https://ollama.com/install.sh | sh');
+            }
+          }}
+            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', borderRadius: 8, border: '1px solid #334155', background: '#1e293b', color: '#e2e8f0', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>
+            Test Ollama Connection
+          </button>
         </div>
       </div>
 

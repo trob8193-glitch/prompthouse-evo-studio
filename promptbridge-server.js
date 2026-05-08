@@ -27,10 +27,15 @@ import { AppBlueprint } from './src/core/engines/appBlueprint.js';
 import { ThemeEvolution } from './src/core/engines/themeEvolution.js';
 import { ProductionAudit } from './src/core/engines/productionAudit.js';
 
+// SaaS Generator Imports
+import { SaasOrchestrator } from './src/core/engines/saasOrchestrator.js';
+import { ExecutionSandbox } from './lib/terminal/ExecutionSandbox.js';
+import { VercelAdapter } from './lib/deployment/VercelAdapter.js';
+
 dotenv.config({ override: true });
 
 const app = express();
-const port = 3001;
+const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
 
 // ─── INITIALIZATION ──────────────────────────────────────────────────────────
 
@@ -55,6 +60,10 @@ const truthGate = new TruthGate();
 const stripe = new StripeAdaptor(userConfig.keys.stripe);
 const foundry = new FoundryOrchestrator(ai, stripe);
 
+const SANDBOX_DIR = join(DATA_DIR, 'sandbox');
+const saasOrchestrator = new SaasOrchestrator(ai, SANDBOX_DIR);
+const terminalSandbox = new ExecutionSandbox(SANDBOX_DIR);
+
 // ─── MIDDLEWARE ──────────────────────────────────────────────────────────────
 
 app.use(cors());
@@ -78,6 +87,29 @@ app.get('/status', (req, res) => {
       sovereign_gain: maintenance.calculateIQGain(),
     },
     brain: maintenance.brain
+  });
+});
+
+app.get('/api/connections', (req, res) => {
+  res.json({
+    local: [
+      { name: 'Direct (This Machine)', url: 'http://localhost:3002', type: 'IP', description: 'Fastest, zero latency.' },
+      { name: 'Local Network', url: 'http://192.168.1.245:3002', type: 'IP', description: 'Use from other devices on the same Wi-Fi.' },
+      { name: 'Wi-Fi Direct / Mesh', url: 'auto-discover', type: 'WIFI', description: 'Auto-discover other studios on Wi-Fi.' },
+      { name: 'Bluetooth P2P', url: 'bluetooth-pair', type: 'BLUETOOTH', description: 'Offline pairing for nearby devices.' }
+    ],
+    online: [
+      { name: 'Localtunnel', url: 'https://itchy-seas-fry.loca.lt', type: 'TUNNEL', description: 'Share with external users (may be flakey).' },
+      { name: 'Vercel / Cloud', url: '', type: 'CLOUD', description: 'Production grade hosting.' }
+    ],
+    external_apis: [
+      { name: 'OpenAI Direct', url: 'https://api.openai.com', type: 'EXTERNAL', description: 'Connect directly to OpenAI.' },
+      { name: 'Anthropic Direct', url: 'https://api.anthropic.com', type: 'EXTERNAL', description: 'Connect directly to Anthropic.' }
+    ],
+    evo_apis: [
+      { name: 'Emoji Library', url: 'http://localhost:3002/api/generated/emojis', type: 'EVO', description: 'Custom generated asset API.' },
+      { name: 'Test API', url: 'http://localhost:3002/api/generated/test', type: 'EVO', description: 'Simple test route.' }
+    ]
   });
 });
 
@@ -106,6 +138,39 @@ app.post('/api/foundry/initiate', async (req, res) => {
   try {
     const mission = req.body;
     const result = await foundry.initiateBuild(mission);
+    res.json(result);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/foundry/orchestrate', async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    const result = await saasOrchestrator.buildSaaS(prompt);
+    res.json(result);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── TERMINAL & DEPLOYMENT ───────────────────────────────────────────────────
+
+app.post('/api/terminal/execute', async (req, res) => {
+  try {
+    const { command } = req.body;
+    const result = await terminalSandbox.runCommand(command);
+    res.json(result);
+  } catch (e) {
+    res.status(403).json({ error: e.message }); // 403 for security rejection
+  }
+});
+
+app.post('/api/deploy/vercel', async (req, res) => {
+  try {
+    const { token } = req.body;
+    const adapter = new VercelAdapter(SANDBOX_DIR, token || userConfig.keys.vercel);
+    const result = await adapter.deploy();
     res.json(result);
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -334,6 +399,41 @@ app.get('/api/truth/probe', async (req, res) => {
 
 // ─── HYBRID QUAD SYSTEM API (V1) ─────────────────────────────────────────────
 
+const KEYS_FILE = join(process.cwd(), '.prompthouse-data', 'valid_keys.json');
+
+// Helper to load valid keys
+function loadValidKeys() {
+  if (!existsSync(KEYS_FILE)) return {};
+  try {
+    return JSON.parse(readFileSync(KEYS_FILE, 'utf8'));
+  } catch (e) {
+    return {};
+  }
+}
+
+// Route to create a new API Key
+app.post('/api/keys/create', (req, res) => {
+  const { name } = req.body;
+  if (!name) return res.status(400).json({ error: 'Name is required for the key.' });
+  
+  const keys = loadValidKeys();
+  const newKey = `ph_evo_${crypto.randomBytes(16).toString('hex')}`;
+  
+  keys[newKey] = {
+    name: name,
+    created_at: new Date().toISOString(),
+    orgId: 'org_test' // Use org_test to bypass organization check for now
+  };
+  
+  writeFileSync(KEYS_FILE, JSON.stringify(keys, null, 2), 'utf8');
+  
+  res.json({
+    success: true,
+    key: newKey,
+    message: `API Key '${name}' created successfully!`
+  });
+});
+
 // Simple middleware to check API Key
 const validateApiKey = async (req, res, next) => {
   const apiKey = req.headers['x-api-key'];
@@ -348,8 +448,14 @@ const validateApiKey = async (req, res, next) => {
     return next();
   }
 
-  // Here we would check the database for hashed keys
-  // For now, only the master key or a hardcoded test key works
+  // Check generated keys
+  const validKeys = loadValidKeys();
+  if (validKeys[apiKey]) {
+    req.orgId = validKeys[apiKey].orgId;
+    return next();
+  }
+
+  // Fallback for test key
   if (apiKey === 'test_key_123') {
     req.orgId = 'org_test';
     return next();
@@ -428,7 +534,8 @@ async function loadGeneratedApis() {
         // Use file:// protocol for dynamic import on Windows
         const modulePath = `file://${join(API_DIR, file)}`;
         const { default: registerRoutes } = await import(modulePath);
-        registerRoutes(app);
+        // Pass ai and maintenance instances to the API!
+        registerRoutes(app, ai, maintenance);
         console.log(`[API] Loaded generated API: ${file}`);
       } catch (e) {
         console.error(`[API] Failed to load ${file}:`, e.message);
@@ -452,9 +559,10 @@ app.post('/api/foundry/generate-api', async (req, res) => {
   
   const systemPrompt = `You are a backend API generator for the PromptHouse Evo Studio. 
 Generate a Node.js Express route module based on the user's request.
-The module must export a default function that takes \`app\` (the express instance) and registers the route.
+The module must export a default function that takes \`app\` (the express instance), \`ai\` (UniversalAIAdaptor), and \`maintenance\` (SelfMaintenance) and registers the route.
+This allows the generated API to use the studio's brain and other AI models!
 If the type is 'mock', return hardcoded data.
-If the type is 'real', implement real logic (e.g., using \`fs\` or other available modules).
+If the type is 'real', implement real logic (e.g., using \`fs\`, \`ai.generateResponse\`, or reading \`maintenance.brain\`).
 Return ONLY the JavaScript code, no markdown formatting, no backticks, no explanation.`;
 
   const userPrompt = `Generate a ${type} API named '${name}'.
@@ -482,6 +590,118 @@ Functionality: ${prompt}`;
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
+});
+
+
+// ─── EVO LM — LOCAL MODEL PROXY ───────────────────────────────────────────────
+// Routes chat to Ollama if available, else falls back to configured AI provider
+const OLLAMA_BASE = 'http://localhost:11434';
+
+app.post('/api/evo-lm/chat', async (req, res) => {
+  const { messages = [], systemPrompt = '' } = req.body;
+  const ollamaModels = ['evo-lm', 'llama3', 'mistral', 'phi3', 'gemma'];
+
+  for (const model of ollamaModels) {
+    try {
+      const ollamaMessages = systemPrompt
+        ? [{ role: 'system', content: systemPrompt }, ...messages]
+        : messages;
+      const response = await fetch(`${OLLAMA_BASE}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model, messages: ollamaMessages, stream: false }),
+        signal: AbortSignal.timeout(30000),
+      });
+      if (!response.ok) continue;
+      const data = await response.json();
+      const content = data.message?.content || data.response || '';
+      if (content) return res.json({ message: content, model, transport: 'evo_lm_ollama' });
+    } catch { continue; }
+  }
+
+  // Fallback to primary AI provider
+  try {
+    const ai = new UniversalAIAdaptor(userConfig.keys);
+    const msgs = systemPrompt
+      ? [{ role: 'system', content: systemPrompt }, ...messages]
+      : messages;
+    const response = await ai.generateResponse(msgs);
+    return res.json({ message: response.content || response, transport: 'evo_lm_bridge_fallback' });
+  } catch (err) {
+    return res.status(503).json({ error: `Evo LM unavailable: ${err.message}` });
+  }
+});
+
+// ─── TRAINING INGEST ───────────────────────────────────────────────────────────
+const TRAINING_FILE = join(DATA_DIR, 'evo_training.jsonl');
+
+app.post('/api/training/ingest', (req, res) => {
+  const { examples = [], source = 'unknown' } = req.body;
+  if (!Array.isArray(examples) || examples.length === 0) {
+    return res.status(400).json({ error: 'No examples provided' });
+  }
+
+  const redact = t => String(t || '')
+    .replace(/sk-[A-Za-z0-9_-]{20,}/g, '[REDACTED]')
+    .replace(/ph_evo_[A-Za-z0-9]+/g, '[REDACTED]')
+    .replace(/Bearer\s+\S{20,}/g, '[REDACTED]');
+
+  const lines = examples.map(ex => JSON.stringify({
+    messages: [
+      { role: 'system', content: redact(ex.systemPrompt) || 'You are PH Evo Studio — a sovereign-grade AI assistant.' },
+      { role: 'user', content: redact(ex.input) },
+      { role: 'assistant', content: redact(ex.output) },
+    ],
+    metadata: { source: source || ex.source || 'unknown', transport: ex.transport, timestamp: ex.timestamp || Date.now() }
+  })).join('\n') + '\n';
+
+  try {
+    writeFileSync(TRAINING_FILE, lines, { flag: 'a', encoding: 'utf8' });
+    res.json({ ingested: examples.length, file: TRAINING_FILE });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/training/stats', (req, res) => {
+  try {
+    if (!existsSync(TRAINING_FILE)) return res.json({ total: 0, sizeBytes: 0 });
+    const content = readFileSync(TRAINING_FILE, 'utf8');
+    const lines = content.trim().split('\n').filter(Boolean);
+    const stat = statSync(TRAINING_FILE);
+    res.json({ total: lines.length, sizeBytes: stat.size, file: TRAINING_FILE });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/training/export', (req, res) => {
+  if (!existsSync(TRAINING_FILE)) return res.status(404).json({ error: 'No training data yet' });
+  res.setHeader('Content-Type', 'application/x-ndjson');
+  res.setHeader('Content-Disposition', `attachment; filename="evo_training_${Date.now()}.jsonl"`);
+  res.sendFile(TRAINING_FILE);
+});
+
+// ─── PAGE CAPTURE (from browser extension) ────────────────────────────────────
+const CAPTURES_FILE = join(DATA_DIR, 'captures.jsonl');
+
+app.post('/api/capture', (req, res) => {
+  const { text, url, tabTitle, source = 'browser_extension' } = req.body;
+  if (!text) return res.status(400).json({ error: 'No text provided' });
+
+  const record = JSON.stringify({ text, url, tabTitle, source, capturedAt: new Date().toISOString() }) + '\n';
+  try {
+    writeFileSync(CAPTURES_FILE, record, { flag: 'a', encoding: 'utf8' });
+    res.json({ captured: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── PROMPTLINK SYNC ──────────────────────────────────────────────────────────
+app.post('/api/promptlink/sync', (req, res) => {
+  // Accept sync payloads from the studio — non-critical, always succeed
+  res.json({ synced: true, timestamp: new Date().toISOString() });
 });
 
 // ─── STARTUP ─────────────────────────────────────────────────────────────────

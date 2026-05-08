@@ -3,17 +3,14 @@ import { DOMAIN_PACKS, STRICTNESS_MODES, scorePrompt, getGrade, getBarColor, bui
 
 const BRIDGE = 'http://127.0.0.1:3001';
 
+import { universalSend } from './lib/universal-transport.js';
+
 async function callBridge(messages, systemPrompt = '') {
   try {
-    const res = await fetch(`${BRIDGE}/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages, systemPrompt }),
-    });
-    const data = await res.json();
-    return data.message || '[No response]';
-  } catch {
-    return '[BRIDGE OFFLINE] Start PromptBridge on :3001 to use AI generation.';
+    const res = await universalSend(messages, systemPrompt);
+    return res.message;
+  } catch (err) {
+    return `[TRANSPORT OFFLINE] ${err.message}`;
   }
 }
 

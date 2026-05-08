@@ -10,6 +10,7 @@ import SovereignChat from './features/SovereignChat.jsx';
 import GlobalAPISettingsView from './features/GlobalAPISettingsView.jsx';
 import MetricsView from './features/MetricsView.jsx';
 import EvoEyesView from './features/EvoEyesView.jsx';
+import ConnectionManager from './features/ConnectionManager.jsx';
 
 // Existing feature screens from features/index.jsx
 import {
@@ -38,6 +39,7 @@ const PAGE_MAP = {
   'evo-eyes': EvoEyesView,
   'metrics': MetricsView,
   'settings': GlobalAPISettingsView,
+  'connections': ConnectionManager,
   'grading': GradingAndRelease,
   'commerce': CommerceCore,
   'foundry': FeatureFoundry,

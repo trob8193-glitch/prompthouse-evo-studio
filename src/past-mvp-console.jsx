@@ -13,18 +13,15 @@ import { runDeployRail } from './deploy-rail.js';
 import { createCommerceProduct, createPricingTable } from './commerce-rail.js';
 import { runNightForgeCycle } from './nightforge.js';
 
+import { universalSend } from './lib/universal-transport.js';
+
 // ─── Bridge Caller ─────────────────────────────────────────────────────────────
 async function callBridge(prompt, systemPrompt = '') {
   try {
-    const res = await fetch('http://127.0.0.1:3001/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: prompt }], systemPrompt }),
-    });
-    const data = await res.json();
-    return data.message || data.error?.message || 'Bridge response empty.';
-  } catch {
-    return '[BRIDGE OFFLINE] Dry-run mode active.';
+    const res = await universalSend([{ role: 'user', content: prompt }], systemPrompt);
+    return res.message;
+  } catch (err) {
+    return `[TRANSPORT OFFLINE] ${err.message}`;
   }
 }
 

@@ -15,16 +15,13 @@ const TOOL_TYPES = [
   { id: 'app', label: '📱 App Scaffold', desc: 'React/Flutter app scaffold' },
 ];
 
+import { universalSend } from './lib/universal-transport.js';
+
 async function callBridge(prompt) {
   try {
-    const res = await fetch('http://127.0.0.1:3001/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
-    });
-    const data = await res.json();
-    return data.message || '[Bridge returned empty]';
-  } catch {
+    const res = await universalSend([{ role: 'user', content: prompt }]);
+    return res.message;
+  } catch (err) {
     return null;
   }
 }

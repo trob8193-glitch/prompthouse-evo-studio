@@ -1,7 +1,8 @@
 import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
-  Activity, Eye, Swords, Sparkles, BarChart3, FolderOpen, Gauge, Zap, ChevronRight
+  Activity, Eye, Swords, Sparkles, BarChart3, FolderOpen, Gauge, Zap, ChevronRight,
+  ExternalLink
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -47,6 +48,7 @@ const NAV_GROUPS = [
     label: 'System',
     items: [
       { id: 'settings', label: 'Settings & API', icon: Settings },
+      { id: 'connections', label: 'Connections', icon: ExternalLink },
       { id: 'grading', label: 'Grading & Release', icon: Gauge },
       { id: 'commerce', label: 'Commerce', icon: Activity },
       { id: 'foundry', label: 'Foundry Labs', icon: Cpu },
