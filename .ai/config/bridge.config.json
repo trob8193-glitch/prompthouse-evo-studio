@@ -29,6 +29,8 @@
     "docs/knowledge/llm_model_training.md",
     "docs/knowledge/precise_cutting.md",
     "docs/knowledge/creative_autonomy.md",
+    "docs/knowledge/tree_and_web_architecture.md",
+    "docs/knowledge/advanced_evolution_and_automation.md",
     "firestore.rules",
     "storage.rules",
     "functions/package.json",
