@@ -13,9 +13,16 @@ const run = (command) => {
 
 try {
   run('node scripts/ai_context_pack.mjs');
-  run('node scripts/ai_review_openai.mjs');
+  
+  try {
+    run('node scripts/ai_review_gemini.mjs');
+  } catch (apiErr) {
+    console.log('\n⚠️ [AI_Loop] Gemini API failed or exhausted. Falling back to Local Core...');
+    run('node scripts/ai_review_local.mjs');
+  }
+  
   run('node scripts/ai_self_train.mjs');
-  console.log('\n✅ ai:loop completed: review output posted, training capture sent, evo runtime activated, self-implementation requested.');
+  console.log('\n✅ ai:loop completed: review output posted, training capture sent, evo runtime activated.');
 } catch (err) {
   console.error('\n❌ ai:loop failed:', err.message || err);
   process.exit(1);

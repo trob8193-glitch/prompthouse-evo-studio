@@ -430,5 +430,41 @@
     "featureA": 10,
     "featureB": 7,
     "label": "accept"
+  },
+  {
+    "id": "id_1778208227835_758",
+    "featureA": 2,
+    "featureB": 3,
+    "label": "accept"
+  },
+  {
+    "id": "id_1778208227835_914",
+    "featureA": 2,
+    "featureB": 3,
+    "label": "accept"
+  },
+  {
+    "id": "id_1778208531505_735",
+    "featureA": 2,
+    "featureB": 4,
+    "label": "accept"
+  },
+  {
+    "id": "id_1778208531505_834",
+    "featureA": 2,
+    "featureB": 3,
+    "label": "accept"
+  },
+  {
+    "id": "id_1778209007017_844",
+    "featureA": 2,
+    "featureB": 4,
+    "label": "accept"
+  },
+  {
+    "id": "id_1778209007017_991",
+    "featureA": 2,
+    "featureB": 3,
+    "label": "accept"
   }
 ]

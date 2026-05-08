@@ -17,7 +17,8 @@
     "ai:pack": "node scripts/ai_context_pack.mjs",
     "ai:review": "node scripts/ai_review_openai.mjs",
     "ai:train": "node scripts/ai_self_train.mjs",
-    "ai:loop": "node scripts/ai_loop.mjs"
+    "ai:loop": "node scripts/ai_loop.mjs",
+    "ai:daemon": "node scripts/ai_daemon.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",

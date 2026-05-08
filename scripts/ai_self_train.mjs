@@ -4,6 +4,9 @@ import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import fetch from 'node-fetch';
 
+import dotenv from 'dotenv';
+dotenv.config({ override: true });
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const configPath = path.join(root, '.ai', 'config', 'bridge.config.json');

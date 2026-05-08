@@ -176,6 +176,43 @@ app.post('/api/maintenance/run', async (req, res) => {
   }
 });
 
+// ─── TRAINING & EVOLUTION (PHASE 14) ─────────────────────────────────────────
+
+app.post('/api/training-capture', (req, res) => {
+  const capture = req.body;
+  console.log(`[TRAIN] Received capture: ${capture.id}`);
+  const ledgerPath = join(DATA_DIR, 'training_ledger.json');
+  let ledger = [];
+  if (existsSync(ledgerPath)) ledger = JSON.parse(readFileSync(ledgerPath, 'utf8'));
+  ledger.push({ ...capture, timestamp: new Date().toISOString() });
+  writeFileSync(ledgerPath, JSON.stringify(ledger.slice(-100), null, 2));
+  res.json({ success: true, count: ledger.length });
+});
+
+app.post('/api/evo-runtime/activate', (req, res) => {
+  const { runId } = req.body;
+  console.log(`[EVO] Activating runtime for: ${runId}`);
+  maintenance.brain.last_activation = new Date().toISOString();
+  maintenance.brain.active_run = runId;
+  maintenance.saveBrain();
+  res.json({ success: true, state: 'EVOLVING' });
+});
+
+app.post('/api/self-implementation/cycle', async (req, res) => {
+  console.log(`[IMPL] Starting implementation cycle...`);
+  try {
+    const result = await maintenance.execute({ depth: 'deep' });
+    res.json({
+      success: true,
+      implementation_id: `impl_${Date.now()}`,
+      status: 'REALIZED',
+      maintenance: result
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ─── CODE FORGE (PHYSICAL REALIZATION) ───────────────────────────────────────
 
 app.post('/api/forge/save', (req, res) => {
