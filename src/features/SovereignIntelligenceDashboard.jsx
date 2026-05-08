@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Activity, Cpu, HardDrive, Clock, Zap, MessageSquare, ArrowRight, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
+import { motion } from 'framer-motion';
 
 /**
  * PH EVO STUDIO — DASHBOARD (ENTERPRISE GRADE)
@@ -177,10 +178,10 @@ export function SovereignIntelligenceDashboard() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { label: 'Sovereign IQ', value: (bridgeData?.iq_metrics?.baseline / 1000000 + (Math.random() * 0.01)).toFixed(3) + 'M', trend: '+0.1%', icon: Zap, color: 'text-indigo-400' },
+            { label: 'Sovereign IQ', value: (((bridgeData?.iq_metrics?.baseline || 2000000) + (bridgeData?.iq_metrics?.sovereign_gain || 0)) / 1000000).toFixed(3) + 'M', trend: '+0.1%', icon: Zap, color: 'text-indigo-400' },
             { label: 'Logic Density', value: ((metrics?.cpu_usage?.user / 1000000) || 4.2).toFixed(2) + 'x', trend: '+12%', icon: Cpu, color: 'text-emerald-400' },
-            { label: 'Sync Latency', value: metrics?.latency ? `${metrics.latency}ms` : '12.4ms', trend: '-2ms', icon: Clock, color: 'text-amber-400' },
-            { label: 'Foundry Load', value: metrics?.memory?.heapUsed ? (metrics.memory.heapUsed / 1024 / 1024).toFixed(1) + 'MB' : '84.2MB', trend: 'STABLE', icon: Activity, color: 'text-rose-400' },
+            { label: 'Sync Latency', value: metrics?.latency ? `${metrics.latency}ms` : 'N/A', trend: '-2ms', icon: Clock, color: 'text-amber-400' },
+            { label: 'Foundry Load', value: metrics?.memory?.heapUsed ? (metrics.memory.heapUsed / 1024 / 1024).toFixed(1) + 'MB' : 'N/A', trend: 'STABLE', icon: Activity, color: 'text-rose-400' },
           ].map((stat, i) => (
             <motion.div
               key={i}

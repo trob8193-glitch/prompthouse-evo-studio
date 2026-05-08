@@ -19,6 +19,14 @@ import { StripeAdaptor } from './lib/commerce/StripeAdaptor.js';
 import { FoundryOrchestrator } from './lib/foundry/FoundryOrchestrator.js';
 import { TruthGate } from './src/core/truth/TruthGate.js';
 
+// Hybrid Quad System Imports
+import { ModelRouter } from './src/core/gateway/modelRouter.js';
+import { CostFirewall } from './src/core/gateway/costFirewall.js';
+import { PromptCompiler } from './src/core/engines/promptCompiler.js';
+import { AppBlueprint } from './src/core/engines/appBlueprint.js';
+import { ThemeEvolution } from './src/core/engines/themeEvolution.js';
+import { ProductionAudit } from './src/core/engines/productionAudit.js';
+
 dotenv.config({ override: true });
 
 const app = express();
@@ -286,6 +294,89 @@ app.get('/api/truth/probe', async (req, res) => {
     }
 
     res.json({ success: true, timestamp: Date.now(), results });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── HYBRID QUAD SYSTEM API (V1) ─────────────────────────────────────────────
+
+// Simple middleware to check API Key
+const validateApiKey = async (req, res, next) => {
+  const apiKey = req.headers['x-api-key'];
+  const masterKey = process.env.PH_EVO_MASTER_KEY || 'ph_evo_master_default_2077';
+
+  if (!apiKey) {
+    return res.status(401).json({ error: 'API Key required in x-api-key header.' });
+  }
+
+  if (apiKey === masterKey) {
+    req.orgId = 'org_master'; // Assign a master org ID
+    return next();
+  }
+
+  // Here we would check the database for hashed keys
+  // For now, only the master key or a hardcoded test key works
+  if (apiKey === 'test_key_123') {
+    req.orgId = 'org_test';
+    return next();
+  }
+
+  return res.status(403).json({ error: 'Invalid API Key.' });
+};
+
+app.post('/v1/prompts/compile', validateApiKey, async (req, res) => {
+  const { prompt } = req.body;
+  try {
+    await CostFirewall.authorize(req.orgId, '/v1/prompts/compile');
+    const provider = await ModelRouter.route(req.orgId, '/v1/prompts/compile');
+    
+    let result;
+    if (provider === 'local') {
+      result = PromptCompiler.compile(prompt);
+    } else {
+      // Call Gemini or OpenAI via UniversalAIAdaptor
+      result = await ai.generateResponse([{ role: 'user', content: prompt }], 'Compile this prompt.');
+    }
+    
+    await CostFirewall.deduct(req.orgId, '/v1/prompts/compile', 1);
+    res.json({ success: true, provider, result });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/v1/apps/blueprint', validateApiKey, async (req, res) => {
+  const { name, features } = req.body;
+  try {
+    await CostFirewall.authorize(req.orgId, '/v1/apps/blueprint');
+    const result = AppBlueprint.generate({ name, features });
+    await CostFirewall.deduct(req.orgId, '/v1/apps/blueprint', 2);
+    res.json(result);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/v1/themes/evolve', validateApiKey, async (req, res) => {
+  const { baseColor } = req.body;
+  try {
+    await CostFirewall.authorize(req.orgId, '/v1/themes/evolve');
+    const result = ThemeEvolution.generate(baseColor);
+    await CostFirewall.deduct(req.orgId, '/v1/themes/evolve', 1);
+    res.json(result);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/v1/code/audit', validateApiKey, async (req, res) => {
+  const { code } = req.body;
+  try {
+    await CostFirewall.authorize(req.orgId, '/v1/code/audit');
+    const result = ProductionAudit.audit(code);
+    await CostFirewall.deduct(req.orgId, '/v1/code/audit', 1);
+    res.json(result);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

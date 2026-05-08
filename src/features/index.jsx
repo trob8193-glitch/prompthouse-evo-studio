@@ -41,6 +41,7 @@ import { GlobalAPISettingsView } from './GlobalAPISettingsView.jsx';
 import { EvoEyesView } from './EvoEyesView.jsx';
 import { AutonomousSelfView } from './AutonomousSelfView.jsx';
 import { FeatureFoundryView } from './FeatureFoundryView.jsx';
+import EmojiGallery from './EmojiGallery.jsx';
 
 
 // ─── SCREEN TEMPLATES ────────────────────────────────────────────────────────
@@ -330,6 +331,7 @@ export function SovereignControl() {
         { id: 'intel', label: 'Intelligence Deck', component: (
           <div className="space-y-6">
             <AutonomousSelfView />
+            <EmojiGallery />
             <SovereignIntelligenceDashboard />
             <CommandDeckView />
           </div>

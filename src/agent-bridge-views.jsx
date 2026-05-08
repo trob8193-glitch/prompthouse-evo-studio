@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useSovereignStore } from './store.js';
 
 export function AgentBridgeView() {
   const [receipts, setReceipts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const bridgeStatus = useSovereignStore((s) => s.bridgeStatus);
 
   const fetchReceipts = async () => {
     try {
@@ -29,7 +31,9 @@ export function AgentBridgeView() {
           <div className="page-title">🌉 Agent Bridge Control</div>
           <div className="page-subtitle">Monitoring browser context receipts and local studio handshakes.</div>
         </div>
-        <div className="badge badge-green">BRIDGE_ONLINE</div>
+        <div className={`badge ${bridgeStatus === 'connected' ? 'badge-green' : 'badge-red'}`}>
+          {bridgeStatus === 'connected' ? 'BRIDGE_ONLINE' : 'BRIDGE_OFFLINE'}
+        </div>
       </div>
 
       <div className="grid-2" style={{ marginTop: 20 }}>

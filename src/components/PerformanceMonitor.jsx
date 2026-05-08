@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Zap, Activity, Database, Cpu } from 'lucide-react';
+import { useSovereignStore } from '../store.js';
 
 export const PerformanceMonitor = () => {
-  const [metrics, setMetrics] = useState({
-    latency: 12,
-    cacheHit: 85,
-    dbSpeed: 4,
-    cpuLoad: 12
-  });
+  const storeMetrics = useSovereignStore((s) => s.metrics);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Simulate real-time metric updates
-      setMetrics(prev => ({
-        latency: Math.max(8, prev.latency + (Math.random() * 4 - 2)),
-        cacheHit: Math.min(100, Math.max(70, prev.cacheHit + (Math.random() * 2 - 1))),
-        dbSpeed: Math.max(2, prev.dbSpeed + (Math.random() * 1 - 0.5)),
-        cpuLoad: Math.max(5, prev.cpuLoad + (Math.random() * 6 - 3))
-      }));
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
+  const metrics = {
+    latency: storeMetrics?.latency || 12,
+    cacheHit: storeMetrics?.cache?.hitRate || 85,
+    dbSpeed: 4, 
+    cpuLoad: storeMetrics?.cpu_usage?.user ? (storeMetrics.cpu_usage.user / 1000000) : 12
+  };
 
   const MetricCard = ({ title, value, unit, icon: Icon, color }) => (
     <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-xl">
