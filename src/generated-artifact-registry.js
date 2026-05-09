@@ -1,4 +1,3 @@
-
 import { Log } from './core/autonomy/SovereignLogger.js';
 
 /**
@@ -17,8 +16,8 @@ export class GeneratedArtifactRegistry {
 
   async execute(params = {}) {
     Log.info('🚀 [Generated-artifact-registry] Executing production logic...');
-    // Absolute production logic implementation
-    return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
+    const registry = buildGeneratedArtifactRegistry(params);
+    return { success: true, timestamp: new Date().toISOString(), registry };
   }
 
   getStatus() {
@@ -32,29 +31,38 @@ export class GeneratedArtifactRegistry {
 }
 
 export function classifyWorkspacePath(path = '') {
+  if (!path || typeof path !== 'string') return 'unknown';
   if (path.startsWith('generated_apps/')) return 'generated';
   if (path.startsWith('buildkit_import/')) return 'imported';
   return 'source';
 }
 
 export function parseGitStatusLine(line = '') {
-  const match = line.match(/^..\s+"?([^"]+)"?/);
+  const match = line.match(/^..\s+"?(.+?)"?$/);
   return { path: match ? match[1] : line };
 }
 
 export function buildGeneratedArtifactRegistry({ gitStatusLines = [] } = {}) {
-  const counts = { byType: { generated: 0, imported: 0, unknown: 0 } };
-  
+  const counts = { total: 0, byType: { generated: 0, imported: 0, source: 0, unknown: 0 } };
+  const unknownEntries = [];
+
   gitStatusLines.forEach(line => {
     const { path } = parseGitStatusLine(line);
     const type = classifyWorkspacePath(path);
-    if (type === 'generated') counts.byType.generated++;
-    else if (type === 'imported') counts.byType.imported++;
-    else if (path === 'mystery.file') counts.byType.unknown++; // Mock for test
+    counts.total += 1;
+
+    if (type === 'generated' || type === 'imported' || type === 'source') {
+      counts.byType[type] += 1;
+      return;
+    }
+
+    counts.byType.unknown += 1;
+    unknownEntries.push(path);
   });
-  
+
   return {
     counts,
-    releaseClaimAllowed: counts.byType.unknown === 0
+    unknownEntries,
+    releaseClaimAllowed: unknownEntries.length === 0
   };
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Key, Save, TestTube, CheckCircle2, AlertCircle, Loader2, Shield } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
+import { getNightForgeSettings, updateNightForgeSettings } from '../nightforge.js';
 
 /**
  * PH EVO STUDIO — GLOBAL API SETTINGS (ENTERPRISE GRADE)
@@ -20,6 +21,9 @@ export function GlobalAPISettingsView() {
   const [testResult, setTestResult] = useState(null);
   const [testing, setTesting] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [nfLoading, setNfLoading] = useState(false);
+  const [nfSaving, setNfSaving] = useState(false);
+  const [nfForce3, setNfForce3] = useState(false);
 
   const handleSave = async () => {
     const ok = await saveApiKeys();
@@ -28,6 +32,22 @@ export function GlobalAPISettingsView() {
   };
 
   const runTruthProbe = useSovereignStore((s) => s.runTruthProbe);
+
+  useEffect(() => {
+    let mounted = true;
+    setNfLoading(true);
+    getNightForgeSettings()
+      .then((payload) => {
+        if (mounted) setNfForce3(Boolean(payload?.settings?.forceThreeProviderTeam));
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (mounted) setNfLoading(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const handleTest = async () => {
     setTesting(true); setTestResult(null);
@@ -44,6 +64,24 @@ export function GlobalAPISettingsView() {
 
   const fieldStyle = { width: '100%', background: '#0f172a', border: '1px solid #1e293b', borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 13, fontFamily: 'Inter, system-ui, sans-serif', outline: 'none' };
   const labelStyle = { fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6, display: 'block' };
+
+  const handleNightforgeToggle = async () => {
+    const nextValue = !nfForce3;
+    setNfSaving(true);
+    try {
+      await updateNightForgeSettings({ forceThreeProviderTeam: nextValue });
+      setNfForce3(nextValue);
+      addNotification(
+        nextValue
+          ? 'NightForge strict 3-provider team mode enabled.'
+          : 'NightForge strict 3-provider team mode disabled.',
+        'success',
+      );
+    } catch (e) {
+      addNotification(`Failed to update NightForge settings: ${e.message}`, 'error');
+    }
+    setNfSaving(false);
+  };
 
   return (
     <div style={{ maxWidth: 720, margin: '0 auto' }}>
@@ -136,6 +174,37 @@ export function GlobalAPISettingsView() {
           )}
 
         </div>
+      </div>
+
+      {/* NightForge Team Mode */}
+      <div style={{ background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: 24, marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+          <Settings size={16} color="#22c55e" />
+          <span style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0' }}>NightForge Team Mode</span>
+        </div>
+        <p style={{ fontSize: 11, color: '#94a3b8', marginBottom: 12 }}>
+          Strict mode forces NightForge to run all 3 providers together (`evo_lm`, `openai`, `gemini`) and blocks cycles unless keys and plan budget are valid.
+        </p>
+        <button
+          onClick={handleNightforgeToggle}
+          disabled={nfLoading || nfSaving}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '10px 16px',
+            borderRadius: 8,
+            border: '1px solid #334155',
+            background: nfForce3 ? '#14532d' : '#1e293b',
+            color: nfForce3 ? '#86efac' : '#94a3b8',
+            cursor: 'pointer',
+            fontSize: 12,
+            fontWeight: 700,
+          }}
+        >
+          {nfLoading || nfSaving ? <Loader2 size={14} className="animate-spin" /> : null}
+          {nfForce3 ? 'Strict 3-Team Mode ON' : 'Strict 3-Team Mode OFF'}
+        </button>
       </div>
 
       {/* Ollama Offline Engine Card */}

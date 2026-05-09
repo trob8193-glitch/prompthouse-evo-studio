@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test": "vitest run",
+    "start": "node promptbridge-server.js",
     "preview": "vite preview",
     "bridge": "node promptbridge-server.js",
     "dev:all": "concurrently \"npm run dev\" \"npm run bridge\"",

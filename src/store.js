@@ -17,6 +17,17 @@ export const useSovereignStore = create((set, get) => ({
   setActivePage: (page) => set({ activePage: page }),
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
 
+  // ─── Evolution Runtime ─────────────────────────────────────
+  evolutionProfile: null,
+  evolutionRuntime: null,
+  setEvolutionProfile: (profile) => set({ evolutionProfile: profile || null }),
+  applyEvolutionRuntime: (runtime) => set((state) => ({
+    evolutionRuntime: runtime || null,
+    sidebarCollapsed: typeof runtime?.layoutHints?.sidebarCollapsed === 'boolean'
+      ? runtime.layoutHints.sidebarCollapsed
+      : state.sidebarCollapsed
+  })),
+
   // ─── Bridge Connection ──────────────────────────────────────
   bridgeStatus: 'disconnected', // 'connected' | 'disconnected' | 'error'
   bridgeData: null,

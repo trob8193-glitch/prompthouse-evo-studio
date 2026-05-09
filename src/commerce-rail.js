@@ -48,13 +48,15 @@ export class CommerceRail {
  * Helper to create commerce product (compat layer for older views)
  */
 export const createCommerceProduct = (session, spec) => {
-  const { mode, productName } = spec;
+  const { mode, productName, price = 0 } = spec;
   if (mode === 'live') {
     return { blocked: true, reason: 'owner approval required' };
   }
+
+  const encodedName = encodeURIComponent(productName || 'product');
   return {
     blocked: false,
-    mockLink: null,
+    mockLink: `https://checkout.prompthouse.local/mock?session=${encodeURIComponent(session)}&product=${encodedName}&price=${price}`,
     injectionCode: `Product: ${productName}`
   };
 };

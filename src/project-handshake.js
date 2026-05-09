@@ -1,4 +1,3 @@
-
 import { Log } from './core/autonomy/SovereignLogger.js';
 
 /**
@@ -17,8 +16,8 @@ export class ProjectHandshake {
 
   async execute(params = {}) {
     Log.info('🚀 [Project-handshake] Executing production logic...');
-    // Absolute production logic implementation
-    return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
+    const record = createProjectHandshakeRecord(params);
+    return { success: true, timestamp: new Date().toISOString(), record };
   }
 
   getStatus() {
@@ -50,34 +49,97 @@ export function detectSourceAccess({ url, httpStatus, contentType, text } = {}) 
   if (text && text.includes('Log in to ChatGPT')) {
     return { canVerifyParity: false, state: 'blocked_login_required' };
   }
+  if (httpStatus && httpStatus >= 400) {
+    return { canVerifyParity: false, state: 'blocked_http_error' };
+  }
+  if (contentType && !String(contentType).includes('text') && !String(contentType).includes('json')) {
+    return { canVerifyParity: false, state: 'blocked_unreadable_content' };
+  }
   return { canVerifyParity: true, state: 'accessible' };
 }
 
 export function createProjectHandshakeRecord(params = {}) {
+  const normalizedUrl = normalizeProjectUrl(params.url || '');
+  const featureClaims = Array.isArray(params.featureClaims) ? params.featureClaims : [];
+  const localCapabilities = Array.isArray(params.localCapabilities) ? params.localCapabilities : featureClaims;
+  const access = detectSourceAccess(params.fetchProbe || {});
+  const coverage = calculateProjectCoverage(featureClaims, localCapabilities, access);
+
   return {
-    url: params.url,
-    sourceType: params.sourcePath ? 'local_build_packet_docx' : 'unknown',
-    coverage: { coveragePercent: 100 },
-    ...params
+    ...params,
+    url: normalizedUrl,
+    sourceType: detectSourceType(params),
+    coverage,
+    claimCount: featureClaims.length,
+    readabilityState: access.state,
+    timestamp: params.timestamp || new Date().toISOString()
   };
 }
 
 export function mergeProjectHandshakeRecord(records = [], record = {}) {
+  const normalizedUrl = normalizeProjectUrl(record.url || '');
+  const existingIndex = records.findIndex(item => normalizeProjectUrl(item.url || '') === normalizedUrl);
+  if (existingIndex >= 0) {
+    const existing = records[existingIndex];
+    const mergedRecord = {
+      ...existing,
+      ...record,
+      url: normalizedUrl,
+      dedupeStatus: 'duplicate_reused'
+    };
+    const nextRecords = [...records];
+    nextRecords[existingIndex] = mergedRecord;
+    return {
+      added: false,
+      dedupeStatus: 'duplicate_reused',
+      records: nextRecords
+    };
+  }
+
   return {
-    added: false,
-    dedupeStatus: 'duplicate_reused',
-    records: records
+    added: true,
+    dedupeStatus: 'new_source_added',
+    records: [...records, { ...record, url: normalizedUrl }]
   };
 }
 
 export function buildProjectDuplicateReport(records = []) {
-  return { duplicateFree: true };
+  const seen = new Set();
+  let duplicates = 0;
+  for (const record of records) {
+    const normalized = normalizeProjectUrl(record?.url || '');
+    if (seen.has(normalized)) duplicates += 1;
+    seen.add(normalized);
+  }
+  return { duplicateFree: duplicates === 0, duplicates };
 }
 
 export function calculateProjectCoverage(a, b, c) {
-  return { status: 'complete', coveragePercent: 100 };
+  const sourceClaims = Array.isArray(a) ? a.filter(Boolean) : [];
+  const localCapabilities = new Set(Array.isArray(b) ? b.filter(Boolean) : []);
+  const access = c || { canVerifyParity: true, state: 'accessible' };
+
+  if (!access.canVerifyParity) {
+    return { status: 'blocked', coveragePercent: 0 };
+  }
+  if (sourceClaims.length === 0) {
+    return { status: 'unknown', coveragePercent: 0 };
+  }
+
+  const matched = sourceClaims.filter(item => localCapabilities.has(item)).length;
+  const coveragePercent = Math.round((matched / sourceClaims.length) * 100);
+  return {
+    status: coveragePercent === 100 ? 'complete' : 'partial',
+    coveragePercent
+  };
 }
 
 export function detectSourceType(params = {}) {
-  return 'local_build_packet_docx';
+  const sourcePath = String(params.sourcePath || '').toLowerCase();
+  const url = String(params.url || '').toLowerCase();
+
+  if (sourcePath.endsWith('.docx') || url.endsWith('.docx')) return 'local_build_packet_docx';
+  if (url.startsWith('https://chatgpt.com/')) return 'chatgpt_project_link';
+  if (url.startsWith('http://') || url.startsWith('https://')) return 'remote_url';
+  return 'unknown';
 }

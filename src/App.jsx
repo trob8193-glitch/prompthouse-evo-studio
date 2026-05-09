@@ -3,6 +3,12 @@ import { ErrorBoundary } from './components/ErrorBoundary.jsx';
 import TopBar from './components/TopBar.jsx';
 import { Navigation } from './components/Navigation.jsx';
 import { useSovereignStore } from './store.js';
+import {
+  getEvolutionClientId,
+  fetchEvolutionProfile,
+  sendEvolutionSignal,
+  applyEvolutionVariables
+} from './evolution-runtime.js';
 
 // ─── Page Components (lazy-safe imports) ─────────────────────
 import SovereignIntelligenceDashboard from './features/SovereignIntelligenceDashboard.jsx';
@@ -92,12 +98,71 @@ function NotificationToasts() {
 export default function App() {
   const startGlobalSync = useSovereignStore((s) => s.startGlobalSync);
   const stopGlobalSync = useSovereignStore((s) => s.stopGlobalSync);
+  const activePage = useSovereignStore((s) => s.activePage);
+  const setEvolutionProfile = useSovereignStore((s) => s.setEvolutionProfile);
+  const applyEvolutionRuntime = useSovereignStore((s) => s.applyEvolutionRuntime);
   const [showGodsEye, setShowGodsEye] = React.useState(false);
+  const evolutionClientIdRef = React.useRef(null);
 
   React.useEffect(() => {
     startGlobalSync();
     return () => stopGlobalSync();
   }, [startGlobalSync, stopGlobalSync]);
+
+  React.useEffect(() => {
+    const clientId = getEvolutionClientId();
+    evolutionClientIdRef.current = clientId;
+    let active = true;
+
+    const bootstrap = async () => {
+      try {
+        const payload = await fetchEvolutionProfile(clientId);
+        if (!active) return;
+        if (payload?.profile) setEvolutionProfile(payload.profile);
+        if (payload?.runtime) {
+          applyEvolutionRuntime(payload.runtime);
+          applyEvolutionVariables(payload.runtime.cssVariables, payload.runtime.layoutHints);
+        }
+      } catch {
+        // Evolution runtime is optional; studio stays functional without it.
+      }
+    };
+
+    bootstrap();
+    return () => { active = false; };
+  }, [setEvolutionProfile, applyEvolutionRuntime]);
+
+  React.useEffect(() => {
+    const clientId = evolutionClientIdRef.current || getEvolutionClientId();
+    let active = true;
+
+    const tick = async () => {
+      try {
+        const payload = await sendEvolutionSignal({
+          clientId,
+          page: activePage || 'dashboard',
+          action: 'navigation_sync',
+          intensity: 0.6,
+          complexity: activePage === 'forge-labs' || activePage === 'workspace' ? 0.95 : 0.55
+        });
+        if (!active) return;
+        if (payload?.profile) setEvolutionProfile(payload.profile);
+        if (payload?.runtime) {
+          applyEvolutionRuntime(payload.runtime);
+          applyEvolutionVariables(payload.runtime.cssVariables, payload.runtime.layoutHints);
+        }
+      } catch {
+        // Keep UI responsive even if runtime evolution signal fails.
+      }
+    };
+
+    tick();
+    const timer = setInterval(tick, 25000);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
+  }, [activePage, setEvolutionProfile, applyEvolutionRuntime]);
 
   return (
     <ErrorBoundary fallbackMessage="The studio encountered a critical error.">

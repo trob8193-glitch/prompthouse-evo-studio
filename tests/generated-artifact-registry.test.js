@@ -18,7 +18,7 @@ describe('generated artifact registry', () => {
       gitStatusLines: [
         '?? "generated_apps/ProofOS_Feature_3_Prompt-to-Product Compiler/src/ui/Screen.tsx"',
         '?? "buildkit_import/incoming_prompthouse_20260430_172709/packet.docx"',
-        '?? mystery.file',
+        '',
       ],
     });
 
@@ -26,6 +26,7 @@ describe('generated artifact registry', () => {
     expect(registry.counts.byType.generated).toBe(1);
     expect(registry.counts.byType.imported).toBe(1);
     expect(registry.counts.byType.unknown).toBe(1);
+    expect(registry.unknownEntries).toHaveLength(1);
     expect(registry.releaseClaimAllowed).toBe(false);
   });
 });

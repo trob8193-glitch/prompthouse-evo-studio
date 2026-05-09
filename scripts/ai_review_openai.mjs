@@ -38,7 +38,7 @@ async function review() {
 
   const snapshot = JSON.parse(fs.readFileSync(snapshotPath, 'utf8'));
   const systemPrompt = fs.readFileSync(systemPromptPath, 'utf8');
-  const model = process.env.OPENAI_MODEL || config.fallbackModel;
+  const model = process.env.OPENAI_MODEL || config.fallbackModel || 'gpt-4o-mini';
 
   console.log(`📡 [AI_Review] Dispatching context to OpenAI (${model})...`);
 
