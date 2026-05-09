@@ -6,7 +6,7 @@ export default function ConnectionManager() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3002/api/connections')
+    fetch('http://127.0.0.1:3001/api/connections')
       .then(res => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();

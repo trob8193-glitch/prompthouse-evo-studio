@@ -1,6 +1,6 @@
 {
   "maxFileBytes": 120000,
-  "maxTotalBytes": 100000,
+  "maxTotalBytes": 80000,
   "includeExtensions": [
     ".dart",
     ".yaml",

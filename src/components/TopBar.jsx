@@ -48,7 +48,7 @@ export default function TopBar() {
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src="/src/assets/logo.png" alt="PH Evo Logo" style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }} />
+          <img src="/assets/generated_logo.png" alt="PH Evo Logo" style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }} />
           <div>
             <div style={{ fontSize: 13, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.02em', lineHeight: 1 }}>
               PromptHouse Evo

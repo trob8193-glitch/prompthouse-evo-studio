@@ -268,7 +268,13 @@ export default function SovereignChat() {
           {BOT_ROSTER.slice(0, 12).map(bot => (
             <button key={bot.id}
               onClick={() => setActiveBot(activeBot?.id === bot.id ? null : bot)}
-              style={{ flexShrink: 0, fontSize: 10, padding: '4px 10px', borderRadius: 20, border: `1px solid ${activeBot?.id === bot.id ? bot.palette.primary : '#1e293b'}`, background: activeBot?.id === bot.id ? `${bot.palette.primary}20` : 'transparent', color: activeBot?.id === bot.id ? bot.palette.primary : '#64748b', cursor: 'pointer', fontWeight: activeBot?.id === bot.id ? 800 : 400 }}>
+              style={{ flexShrink: 0, fontSize: 10, padding: '4px 10px', borderRadius: 20, border: `1px solid ${activeBot?.id === bot.id ? bot.palette.primary : '#1e293b'}`, background: activeBot?.id === bot.id ? `${bot.palette.primary}20` : 'transparent', color: activeBot?.id === bot.id ? bot.palette.primary : '#64748b', cursor: 'pointer', fontWeight: activeBot?.id === bot.id ? 800 : 400, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <img 
+                src={`/bots/${bot.id}.png`} 
+                alt={bot.name} 
+                style={{ width: 14, height: 14, borderRadius: '50%' }}
+                onError={(e) => { e.target.style.display = 'none'; }}
+              />
               {bot.icon} {bot.name}
             </button>
           ))}
@@ -361,6 +367,14 @@ export default function SovereignChat() {
         {messages.map((msg) => (
           <div key={msg.id} style={{ display: 'flex', flexDirection: 'column', alignItems: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%', alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, flexWrap: 'wrap' }}>
+              {msg.role === 'assistant' && msg.bot && (
+                <img 
+                  src={`/bots/${msg.bot}.png`} 
+                  alt={msg.bot} 
+                  style={{ width: 14, height: 14, borderRadius: '50%' }}
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+              )}
               <span style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: msg.role === 'user' ? '#818cf8' : '#64748b' }}>
                 {msg.role === 'user' ? 'You' : msg.role === 'system' ? 'System' : (msg.bot ? BOT_ROSTER.find(b => b.id === msg.bot)?.name || 'Evo AI' : 'Evo AI')}
               </span>

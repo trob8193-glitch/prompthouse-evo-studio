@@ -123,8 +123,8 @@ export default function App() {
             {/* Ambient Background Asset */}
             <div style={{
               position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-              backgroundImage: 'url(/src/assets/bg.png)', backgroundSize: 'cover', backgroundPosition: 'center',
-              opacity: 0.15, pointerEvents: 'none', zIndex: 0
+              backgroundImage: 'url(/assets/generated_bg.png)', backgroundSize: 'cover', backgroundPosition: 'center',
+              opacity: 0.25, pointerEvents: 'none', zIndex: 0
             }} />
             <div style={{ position: 'relative', zIndex: 1, height: '100%' }}>
               <PageRenderer />
