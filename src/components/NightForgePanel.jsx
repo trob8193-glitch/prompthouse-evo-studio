@@ -7,6 +7,14 @@ export function NightForgePanel() {
     { id: 'NF-03', title: 'Generating missing tests', status: 'PAUSED', progress: 12 },
   ]);
 
+  const handleUpdateStatus = (id, status) => {
+    setJobs(prev => prev.map(job => job.id === id ? { ...job, status } : job));
+  };
+
+  const handleDeleteJob = (id) => {
+    setJobs(prev => prev.filter(job => job.id !== id));
+  };
+
   return (
     <div className="flex-1 bg-gray-900 border-t border-gray-800 p-4 overflow-y-auto">
       <div className="flex items-center justify-between mb-4">
@@ -42,16 +50,25 @@ export function NightForgePanel() {
 
             <div className="flex justify-end space-x-2 mt-2">
               {job.status === 'RUNNING' && (
-                <button className="text-[10px] text-gray-400 hover:text-white px-2 py-1 bg-gray-700 rounded transition-colors">
+                <button 
+                  onClick={() => handleUpdateStatus(job.id, 'PAUSED')}
+                  className="text-[10px] text-gray-400 hover:text-white px-2 py-1 bg-gray-700 rounded transition-colors"
+                >
                   PAUSE
                 </button>
               )}
               {job.status === 'PAUSED' && (
-                <button className="text-[10px] text-blue-400 hover:text-blue-300 px-2 py-1 bg-blue-900/30 border border-blue-500/30 rounded transition-colors">
+                <button 
+                  onClick={() => handleUpdateStatus(job.id, 'RUNNING')}
+                  className="text-[10px] text-blue-400 hover:text-blue-300 px-2 py-1 bg-blue-900/30 border border-blue-500/30 rounded transition-colors"
+                >
                   RESUME
                 </button>
               )}
-              <button className="text-[10px] text-red-400 hover:text-red-300 px-2 py-1 bg-red-900/30 border border-red-500/30 rounded transition-colors">
+              <button 
+                onClick={() => handleDeleteJob(job.id)}
+                className="text-[10px] text-red-400 hover:text-red-300 px-2 py-1 bg-red-900/30 border border-red-500/30 rounded transition-colors"
+              >
                 ABORT
               </button>
             </div>

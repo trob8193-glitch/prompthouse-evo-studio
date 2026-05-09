@@ -129,12 +129,12 @@ export default function App() {
             <div style={{ position: 'relative', zIndex: 1, height: '100%' }}>
               <PageRenderer />
             </div>
-            
-            <div className="absolute right-0 top-0 bottom-60 w-80 flex flex-col border-l border-gray-800 bg-[#0a0e1a] z-10 pointer-events-auto">
-              <TimeSlipLedger />
-              <NightForgePanel />
-            </div>
           </main>
+          
+          <div className="w-80 flex flex-col border-l border-gray-800 bg-[#0a0e1a] z-10 pointer-events-auto">
+            <TimeSlipLedger />
+            <NightForgePanel />
+          </div>
         </div>
 
         <PulseResourceBar />
