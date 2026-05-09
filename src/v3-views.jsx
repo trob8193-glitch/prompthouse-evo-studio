@@ -74,12 +74,27 @@ export const BotStageView = () => {
 
 export const MasterPromptVaultView = () => {
   const [isSyncing, setIsSyncing] = React.useState(true);
+  const [prompts, setPrompts] = React.useState([]);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
       setIsSyncing(prev => !prev);
     }, 5000);
     return () => clearInterval(interval);
+  }, []);
+
+  React.useEffect(() => {
+    async function fetchPrompts() {
+      try {
+        const res = await fetch('/src/prompthouse_50_master_build_prompts.json');
+        const data = await res.json();
+        setPrompts(data.features.slice(0, 5).map(f => f.name));
+      } catch (e) {
+        console.error('Failed to fetch prompts:', e);
+        setPrompts(['System Archetype', 'Nuclear Truth Gate', 'Evo Core Manifest', 'Logic Density Auditor']);
+      }
+    }
+    fetchPrompts();
   }, []);
 
   return (
@@ -91,7 +106,7 @@ export const MasterPromptVaultView = () => {
         </div>
       </div>
       <div className="space-y-4">
-        {['System Archetype', 'Nuclear Truth Gate', 'Evo Core Manifest', 'Logic Density Auditor'].map((item, idx) => (
+        {(prompts.length > 0 ? prompts : ['System Archetype', 'Nuclear Truth Gate', 'Evo Core Manifest', 'Logic Density Auditor']).map((item, idx) => (
           <div key={item} className="flex items-center justify-between p-4 bg-black/20 border border-slate-800/50 rounded-xl hover:border-indigo-500/30 transition-colors cursor-pointer group">
             <span className="text-slate-400 font-bold text-sm group-hover:text-white transition-colors">{item}</span>
             <span className={`text-[9px] font-black uppercase px-2 py-1 rounded ${isSyncing && idx === 0 ? 'bg-indigo-900/50 text-indigo-400 animate-pulse' : 'bg-emerald-900/50 text-emerald-400'}`}>

@@ -7,7 +7,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
-import { join, relative } from 'path';
+import { join, relative, dirname } from 'path';
 import OpenAI from 'openai';
 import { execSync } from 'child_process';
 
@@ -141,11 +141,48 @@ app.get('/api/commits', (req, res) => {
   }
 });
 
+app.get('/api/queue/master', (req, res) => {
+  try {
+    const data = readFileSync(join(process.cwd(), 'master_build_queue.json'), 'utf8');
+    res.json(JSON.parse(data));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/proof/count', (req, res) => {
+  try {
+    const dir = join(process.cwd(), 'proof_receipts');
+    if (!existsSync(dir)) {
+      return res.json({ count: 0 });
+    }
+    const files = readdirSync(dir);
+    res.json({ count: files.length });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.post('/chat', async (req, res) => {
   const { messages, systemPrompt } = req.body;
   try {
     const response = await ai.generateResponse(messages, systemPrompt);
     res.json(response);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/files/write', async (req, res) => {
+  const { path, content } = req.body;
+  try {
+    const safePath = join(process.cwd(), path);
+    if (!safePath.startsWith(process.cwd())) {
+      return res.status(403).json({ error: 'Directory traversal forbidden' });
+    }
+    mkdirSync(dirname(safePath), { recursive: true });
+    writeFileSync(safePath, content);
+    res.json({ success: true });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

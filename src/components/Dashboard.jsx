@@ -12,10 +12,23 @@ export const StudioDashboard = () => {
   ]);
 
   React.useEffect(() => {
+    async function fetchStatus() {
+      try {
+        const res = await fetch('http://127.0.0.1:3001/status');
+        const data = await res.json();
+        if (data.iq_metrics) {
+          setIq(data.iq_metrics.baseline + data.iq_metrics.sovereign_gain);
+        }
+      } catch (e) {
+        console.error('Failed to fetch status:', e);
+      }
+    }
+    
+    fetchStatus();
     const interval = setInterval(() => {
-      setIq(prev => prev + Math.floor(Math.random() * 50));
+      fetchStatus();
       
-      // Randomly change status or desc of an op
+      // Keep ops dynamic as requested by user
       setOps(prev => prev.map(op => {
         if (Math.random() > 0.7) {
           const descriptions = [

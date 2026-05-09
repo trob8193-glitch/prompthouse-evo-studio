@@ -8,7 +8,27 @@
 
 import { Log } from '../autonomy/SovereignLogger.js';
 
-const BRIDGE_URL = 'http://127.0.0.1:3001';
+let BRIDGE_URL = 'http://127.0.0.1:3001';
+
+async function discoverBridge() {
+  const ports = [3001, 3002, 3003, 3004];
+  for (const port of ports) {
+    try {
+      const res = await fetch(`http://127.0.0.1:${port}/status`, { signal: AbortSignal.timeout(500) });
+      const data = await res.json();
+      if (data.status === 'ONLINE') {
+        BRIDGE_URL = `http://127.0.0.1:${port}`;
+        Log.info(`🌉 [UniversalBridge] Discovered active bridge at ${BRIDGE_URL}`);
+        return;
+      }
+    } catch (e) {
+      // Ignore
+    }
+  }
+  Log.warn(`🌉 [UniversalBridge] No active bridge found on ports ${ports.join(', ')}. Falling back to default.`);
+}
+
+discoverBridge();
 
 export class UniversalBridge {
   constructor() {
@@ -123,12 +143,30 @@ class AntigravityAdaptor {
 class FoundryAdaptor {
   async execute(cmd, p) {
     Log.info(`🏗️ [FoundryAdaptor] Executing: ${cmd}`);
-    const res = await fetch(`${BRIDGE_URL}/api/foundry/${cmd}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(p)
-    });
-    return await res.json();
+    if (cmd === 'harvest') {
+      try {
+        const res = await fetch('/src/generated/missions.json');
+        const data = await res.json();
+        return { success: true, missions: data };
+      } catch (e) {
+        return { success: false, error: 'FAILED_TO_LOAD_MISSIONS' };
+      }
+    }
+    if (cmd === 'initiate') {
+      const res = await fetch(`${BRIDGE_URL}/api/files/write`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          path: 'src/generated/active_mission.json',
+          content: JSON.stringify(p, null, 2)
+        })
+      });
+      if (res.ok) {
+        return { success: true, manifest: { id: p.id, status: 'BUILDING' } };
+      }
+      return { success: false, error: 'FAILED_TO_WRITE_MISSION' };
+    }
+    return { success: false, error: 'UNKNOWN_COMMAND' };
   }
   async sync() { return { tool: 'foundry', status: 'SYNCED' }; }
 }
@@ -136,12 +174,21 @@ class FoundryAdaptor {
 class ForgeAdaptor {
   async execute(cmd, p) {
     Log.info(`🔨 [ForgeAdaptor] Executing: ${cmd}`);
-    const res = await fetch(`${BRIDGE_URL}/api/forge/${cmd}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(p)
-    });
-    return await res.json();
+    if (cmd === 'save') {
+      const res = await fetch(`${BRIDGE_URL}/api/files/write`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          path: `src/generated/${p.filename}`,
+          content: p.content
+        })
+      });
+      if (res.ok) {
+        return { success: true, path: `src/generated/${p.filename}` };
+      }
+      return { success: false, error: 'FAILED_TO_SAVE_FILE' };
+    }
+    return { success: false, error: 'UNKNOWN_COMMAND' };
   }
   async sync() { return { tool: 'codeforge', status: 'SYNCED' }; }
 }

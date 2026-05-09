@@ -1,0 +1,13 @@
+{
+  "id": "MSN-001",
+  "name": "Sovereign Auth Wrapper",
+  "description": "A highly secure, zero-config auth wrapper for Flutter apps using Riverpod and Hive. Implements auto-logout and encrypted storage.",
+  "estimatedPrice": 150000,
+  "complexity": "HIGH",
+  "techStack": [
+    "Flutter",
+    "Riverpod",
+    "Hive",
+    "Biometrics"
+  ]
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "MSN-001",
+    "name": "Sovereign Auth Wrapper",
+    "description": "A highly secure, zero-config auth wrapper for Flutter apps using Riverpod and Hive. Implements auto-logout and encrypted storage.",
+    "estimatedPrice": 150000,
+    "complexity": "HIGH",
+    "techStack": ["Flutter", "Riverpod", "Hive", "Biometrics"]
+  },
+  {
+    "id": "MSN-002",
+    "name": "Autonomous Billing Bridge",
+    "description": "A Stripe integration bridge that auto-generates products and checkouts from prompt commands. Zero manual setup.",
+    "estimatedPrice": 250000,
+    "complexity": "MEDIUM",
+    "techStack": ["Node.js", "Stripe", "Express"]
+  },
+  {
+    "id": "MSN-003",
+    "name": "Proof-of-Truth Logger",
+    "description": "A high-density logger that signs every log line with a SHA-256 hash for auditability. Essential for Sovereign compliance.",
+    "estimatedPrice": 80000,
+    "complexity": "LOW",
+    "techStack": ["Dart", "Crypto", "SovereignLog"]
+  }
+]

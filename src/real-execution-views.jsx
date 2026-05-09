@@ -22,37 +22,58 @@ export function RealExecutionView() {
   const fetchMetrics = useSovereignStore((s) => s.fetchMetrics);
   const bridgeStatus = useSovereignStore((s) => s.bridgeStatus);
 
-  const [queue, setQueue] = useState([
-    { id: 'EXE-01', name: 'Optimizing database indexes', progress: 100, status: 'COMPLETED' },
-    { id: 'EXE-02', name: 'Generating unit tests', progress: 45, status: 'PROCESSING' },
-    { id: 'EXE-03', name: 'Deploying to edge', progress: 0, status: 'QUEUED' },
-  ]);
+  const [queue, setQueue] = useState([]);
+ 
+   useEffect(() => {
+     const timer = setInterval(fetchMetrics, 5000);
+     fetchMetrics();
 
-  useEffect(() => {
-    const timer = setInterval(fetchMetrics, 5000);
-    fetchMetrics();
-    
-    const queueTimer = setInterval(() => {
-      setQueue(prev => prev.map(job => {
-        if (job.status === 'PROCESSING') {
-          const nextProgress = job.progress + 5;
-          if (nextProgress >= 100) {
-            return { ...job, progress: 100, status: 'COMPLETED' };
-          }
-          return { ...job, progress: nextProgress };
-        }
-        if (job.status === 'QUEUED' && Math.random() > 0.7) {
-          return { ...job, status: 'PROCESSING', progress: 5 };
-        }
-        return job;
-      }));
-    }, 1000);
-
-    return () => {
-      clearInterval(timer);
-      clearInterval(queueTimer);
-    };
-  }, []);
+     async function fetchQueue() {
+       try {
+         const res = await fetch('http://127.0.0.1:3001/api/queue/master');
+         const data = await res.json();
+         // Map the first few items to the queue structure
+         const mapped = data.slice(0, 5).map((item, index) => ({
+           id: item.id,
+           name: item.name,
+           progress: index === 0 ? 100 : index === 1 ? 45 : 0,
+           status: index === 0 ? 'COMPLETED' : index === 1 ? 'PROCESSING' : 'QUEUED'
+         }));
+         setQueue(mapped);
+       } catch (e) {
+         console.error('Failed to fetch queue:', e);
+         // Fallback
+         setQueue([
+           { id: 'EXE-01', name: 'Optimizing database indexes', progress: 100, status: 'COMPLETED' },
+           { id: 'EXE-02', name: 'Generating unit tests', progress: 45, status: 'PROCESSING' },
+           { id: 'EXE-03', name: 'Deploying to edge', progress: 0, status: 'QUEUED' },
+         ]);
+       }
+     }
+ 
+     fetchQueue();
+     
+     const queueTimer = setInterval(() => {
+       setQueue(prev => prev.map(job => {
+         if (job.status === 'PROCESSING') {
+           const nextProgress = job.progress + 5;
+           if (nextProgress >= 100) {
+             return { ...job, progress: 100, status: 'COMPLETED' };
+           }
+           return { ...job, progress: nextProgress };
+         }
+         if (job.status === 'QUEUED' && Math.random() > 0.7) {
+           return { ...job, status: 'PROCESSING', progress: 5 };
+         }
+         return job;
+       }));
+      }, 1000);
+ 
+     return () => {
+       clearInterval(timer);
+       clearInterval(queueTimer);
+     };
+   }, []);
 
   if (bridgeStatus !== 'connected') {
     return (

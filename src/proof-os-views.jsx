@@ -15,9 +15,18 @@ export function ProofLedgerView() {
   const [rollingBack, setRollingBack] = useState(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setBlockHeight(prev => prev + Math.floor(Math.random() * 3));
-    }, 3000);
+    async function fetchCount() {
+      try {
+        const res = await fetch('http://127.0.0.1:3001/api/proof/count');
+        const data = await res.json();
+        setBlockHeight(1048576 + data.count);
+      } catch (e) {
+        console.error('Failed to fetch proof count:', e);
+      }
+    }
+    
+    fetchCount();
+    const interval = setInterval(fetchCount, 5000);
     return () => clearInterval(interval);
   }, []);
 

@@ -14,8 +14,25 @@ export class SovereignSharder {
 
   async shard(data, shardKey) {
     Log.info(`💎 [Sharder] Fragmenting logic into shard: ${shardKey}`);
-    // Real logic to partition data and write to .sovereign-shards/
-    return { status: 'SHARDED', bytes: JSON.stringify(data).length };
+    const path = `${this.shard_directory}/${shardKey}.json`;
+    const content = JSON.stringify(data, null, 2);
+    
+    try {
+      const res = await fetch('http://127.0.0.1:3001/api/files/write', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path, content })
+      });
+      const result = await res.json();
+      if (result.success) {
+        return { status: 'SHARDED', bytes: content.length, path };
+      } else {
+        throw new Error(result.error);
+      }
+    } catch (e) {
+      Log.error(`💎 [Sharder] Failed to write shard: ${e.message}`);
+      return { status: 'FAILED', error: e.message };
+    }
   }
 
   async reconstruct(shardKeys) {
