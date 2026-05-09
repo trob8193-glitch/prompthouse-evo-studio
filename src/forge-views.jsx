@@ -33,7 +33,27 @@ function AgentArchitect() {
   const [name, setName] = useState('');
   const [role, setRole] = useState('Architect');
   const [dna, setDna] = useState('');
+  const [logs, setLogs] = useState([
+    '[SYS] Neural lattice initialized.',
+    '[SYS] Awaiting DNA input...'
+  ]);
   const { addToVault } = useEvoStore();
+
+  useEffect(() => {
+    if (dna) {
+      const interval = setInterval(() => {
+        const newLogs = [
+          '[DNA] Analyzing constraints...',
+          '[DNA] Mapping truth-logic gates...',
+          '[NEURAL] Anchoring synapses...',
+          '[NEURAL] Calibrating weights...',
+          '[SYS] Ready for spawning.'
+        ];
+        setLogs(prev => [...prev, newLogs[Math.floor(Math.random() * newLogs.length)]].slice(-10));
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [dna]);
 
   const spawnAgent = () => {
     if (!name || !dna) return;
@@ -49,6 +69,7 @@ function AgentArchitect() {
     addToVault(newAgent);
     alert(`🦁 Intelligence Spawned: ${name} is now in your Vault.`);
     setName(''); setDna('');
+    setLogs(['[SYS] Neural lattice initialized.', '[SYS] Awaiting DNA input...']);
   };
 
   return (
@@ -81,11 +102,14 @@ function AgentArchitect() {
         <div className="card" style={{ background: 'var(--bg-void)', border: '1px solid var(--accent-gold)' }}>
           <div className="card-header"><div className="card-title">Neural Lattice Preview</div></div>
           <div className="card-body">
-             <div className="empty-state">
-                <div className="pulse" style={{ fontSize: 40, marginBottom: 20 }}>🧠</div>
-                <div style={{ color: 'var(--accent-gold)', fontWeight: 800 }}>{name || 'New Intelligence'}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 10 }}>Ready for neural anchoring.</div>
+             <div className="font-mono text-xs text-emerald-400 bg-black p-4 rounded-lg h-48 overflow-y-auto space-y-1">
+                {logs.map((log, i) => (
+                  <div key={i}>\u003E {log}</div>
+                ))}
+                <div className="pulse inline-block w-2 h-4 bg-emerald-400" />
              </div>
+             <div style={{ color: 'var(--accent-gold)', fontWeight: 800, marginTop: 12 }}>{name || 'New Intelligence'}</div>
+             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 4 }}>Role: {role}</div>
           </div>
         </div>
       </div>

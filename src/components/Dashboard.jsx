@@ -6,6 +6,33 @@ import { motion } from 'framer-motion';
 export const StudioDashboard = () => {
   const [iq, setIq] = React.useState(2354500); // Sovereign IQ baseline
 
+  const [ops, setOps] = React.useState([
+    { id: 1, type: 'Intelligence Vein', desc: 'Ingesting truth-verified PromptLink data streams...', status: 'ACTIVE' },
+    { id: 2, type: 'Foundry Engine', desc: 'DatasetForge: SYNTHESIZING', status: 'ACTIVE' }
+  ]);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setIq(prev => prev + Math.floor(Math.random() * 50));
+      
+      // Randomly change status or desc of an op
+      setOps(prev => prev.map(op => {
+        if (Math.random() > 0.7) {
+          const descriptions = [
+            'Ingesting truth-verified PromptLink data streams...',
+            'Synthesizing DatasetForge corpuses...',
+            'Auditing execution queue for anomalies...',
+            'Compacting logic structures via Singularity Core...',
+            'Running Truth Probe on external APIs...'
+          ];
+          return { ...op, desc: descriptions[Math.floor(Math.random() * descriptions.length)] };
+        }
+        return op;
+      }));
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 30 }}
@@ -62,20 +89,15 @@ export const StudioDashboard = () => {
               <Activity size={24} className="text-indigo-500" /> ACTIVE SOVEREIGN OPS
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="p-8 bg-black/40 rounded-3xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-500 group">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-xs text-slate-500 uppercase font-black tracking-widest group-hover:text-indigo-400">Intelligence Vein</span>
-                  <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
+              {ops.map(op => (
+                <div key={op.id} className="p-8 bg-black/40 rounded-3xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-500 group">
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="text-xs text-slate-500 uppercase font-black tracking-widest group-hover:text-indigo-400">{op.type}</span>
+                    <div className={`w-3 h-3 rounded-full ${op.id === 1 ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]'} animate-pulse`} />
+                  </div>
+                  <p className="text-base text-slate-300 leading-relaxed">{op.desc}</p>
                 </div>
-                <p className="text-base text-slate-300 leading-relaxed">Ingesting truth-verified PromptLink data streams into WebWeaver core...</p>
-              </div>
-              <div className="p-8 bg-black/40 rounded-3xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-500 group">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-xs text-slate-500 uppercase font-black tracking-widest group-hover:text-indigo-400">Foundry Engine</span>
-                  <div className="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
-                </div>
-                <p className="text-base text-slate-300 leading-relaxed">DatasetForge: <span className="text-indigo-400 font-black">SYNTHESIZING</span></p>
-              </div>
+              ))}
             </div>
           </section>
           

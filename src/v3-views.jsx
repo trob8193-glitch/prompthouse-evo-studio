@@ -73,14 +73,30 @@ export const BotStageView = () => {
 };
 
 export const MasterPromptVaultView = () => {
+  const [isSyncing, setIsSyncing] = React.useState(true);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setIsSyncing(prev => !prev);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="p-8 bg-slate-900/50 border border-slate-800 rounded-3xl backdrop-blur-xl">
-      <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-6">Master Prompt Vault</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Master Prompt Vault</h2>
+        <div className={`text-[10px] font-black uppercase px-2 py-1 rounded border ${isSyncing ? 'bg-indigo-900/50 text-indigo-400 border-indigo-500/30 animate-pulse' : 'bg-emerald-900/50 text-emerald-400 border-emerald-500/30'}`}>
+          {isSyncing ? 'SYNCING...' : 'VERIFIED'}
+        </div>
+      </div>
       <div className="space-y-4">
-        {['System Archetype', 'Nuclear Truth Gate', 'Evo Core Manifest', 'Logic Density Auditor'].map((item) => (
+        {['System Archetype', 'Nuclear Truth Gate', 'Evo Core Manifest', 'Logic Density Auditor'].map((item, idx) => (
           <div key={item} className="flex items-center justify-between p-4 bg-black/20 border border-slate-800/50 rounded-xl hover:border-indigo-500/30 transition-colors cursor-pointer group">
             <span className="text-slate-400 font-bold text-sm group-hover:text-white transition-colors">{item}</span>
-            <span className="text-[9px] text-slate-600 font-black uppercase bg-slate-800/50 px-2 py-1 rounded">Locked</span>
+            <span className={`text-[9px] font-black uppercase px-2 py-1 rounded ${isSyncing && idx === 0 ? 'bg-indigo-900/50 text-indigo-400 animate-pulse' : 'bg-emerald-900/50 text-emerald-400'}`}>
+              {isSyncing && idx === 0 ? 'LOADING' : 'LOCKED'}
+            </span>
           </div>
         ))}
       </div>

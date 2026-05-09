@@ -11,7 +11,15 @@ export function ProofLedgerView() {
     { id: 'PRF-003', claim: 'Database Schema Generated', state: 'Known', owner: 'Dev', time: '12:00 PM', failCondition: 'Migration failure', rollback: 'v0.9.3' },
   ]);
 
+  const [blockHeight, setBlockHeight] = useState(1048576);
   const [rollingBack, setRollingBack] = useState(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBlockHeight(prev => prev + Math.floor(Math.random() * 3));
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const triggerRollback = (id) => {
     setRollingBack(id);
@@ -23,7 +31,12 @@ export function ProofLedgerView() {
 
   return (
     <div className="flex-col animate-in">
-      <div className="page-title">🛡️ Proof-Native Ledger</div>
+      <div className="flex justify-between items-center mb-2">
+        <div className="page-title">🛡️ Proof-Native Ledger</div>
+        <div className="font-mono text-xs text-indigo-400 bg-indigo-900/30 px-3 py-1 rounded border border-indigo-500/30">
+          BLOCK HEIGHT: {blockHeight.toLocaleString()}
+        </div>
+      </div>
       <div className="page-subtitle">Immutable timeline of claims, evidence, and truth states.</div>
       <div className="card">
         <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
