@@ -670,5 +670,29 @@
     "featureA": 2,
     "featureB": 3,
     "label": "accept"
+  },
+  {
+    "id": "id_1778339247742_929",
+    "featureA": 2,
+    "featureB": 3,
+    "label": "accept"
+  },
+  {
+    "id": "id_1778339247742_441",
+    "featureA": 2,
+    "featureB": 3,
+    "label": "accept"
+  },
+  {
+    "id": "id_1778339666258_977",
+    "featureA": 1,
+    "featureB": 4,
+    "label": "accept"
+  },
+  {
+    "id": "id_1778339666258_149",
+    "featureA": 1,
+    "featureB": 4,
+    "label": "accept"
   }
 ]

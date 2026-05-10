@@ -7,7 +7,7 @@ import { Log } from './SovereignLogger.js';
  * It is the "Dream State" of the Evo Brain.
  */
 
-import { TruthChain } from './truth/TruthChain.js';
+import { TruthChain } from '../truth/TruthChain.js';
 
 export class StressTester {
   constructor() {

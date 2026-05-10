@@ -32,7 +32,7 @@ files.forEach(file => {
   const original = content;
 
   // Find any import line that targets SovereignLogger.js
-  const importRegex = /import { Log } from '.*SovereignLogger\.js';/g;
+  const importRegex = new RegExp("import { Log } from '" + ".*SovereignLogger\\.js';");
   
   if (content.match(importRegex)) {
     let relPath = path.relative(path.dirname(file), loggerPath).replace(/\\/g, '/');

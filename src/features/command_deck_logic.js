@@ -1,5 +1,5 @@
-import { Log } from '../autonomy/SovereignLogger.js';
-import { UniversalBridge } from '../interop/UniversalBridge.js';
+import { Log } from '../core/autonomy/SovereignLogger.js';
+import { UniversalBridge } from '../core/interop/UniversalBridge.js';
 
 /**
  * PH EVO STUDIO — COMMAND DECK LOGIC (V4 RESTORED)

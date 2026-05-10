@@ -23,8 +23,8 @@ import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { SelfMaintenance } from './src/core/automation/self_maintenance.js';
-import { TruthGate } from './src/core/truth/TruthGate.js';
+import { SelfMaintenance } from '../src/core/automation/self_maintenance.js';
+import { TruthGate } from '../src/core/truth/TruthGate.js';
 
 dotenv.config({ override: true });
 

@@ -9,21 +9,18 @@ import { AutonomousBuilderView } from '../autonomous-views.jsx';
 import { AutonomousSelfBuildCommandCenter } from '../autonomous-command-center.jsx';
 import { EvoCopilotSidebar } from "../evo-copilot-sidebar.jsx";
 import { RealExecutionView } from '../real-execution-views.jsx';
-import { SelfBuildForgeView } from '../self-build-forge-view.jsx';
 import { VectorMemoryView, TemporalForesightView, RecursiveSwarmView, EntropyLockView, RealitySynthesisView, TruthAuditorView, CommandDeckView, MergeCourtView, PatternMirrorView, PromptGenomeView, DeadHunterView, SingularityCoreView, ProofVaultView, OmegaRealityView, SovereignFinalityView } from '../new-features-views.jsx';
 import { AgentBridgeView } from '../agent-bridge-views.jsx';
 import { PerformanceMonitor } from '../components/PerformanceMonitor.jsx';
 import { BotAutomationDeck } from '../components/BotAutomationDeck.jsx';
 import { EvoExchangeView } from '../evo-exchange-view.jsx';
 import { EvoLiveForgePreview } from '../components/liveforge/EvoLiveForgePreview.jsx';
-import { ForgeRenderConsoleView } from '../forge-render-views.jsx';
 import { ForgeLabView } from '../forge-views.jsx';
 import { ForgeTermView } from '../forge-term-view.jsx';
 import { NightForgeView } from '../nightforge-view.jsx';
 import { ToolAutogenView } from '../tool-autogen-view.jsx';
 import { PatternMinerView } from '../pattern-miner-view.jsx';
 import { PromptLinkView } from '../promptlink-views.jsx';
-import { ProofToValueView } from '../proof-to-value-view.jsx';
 import { RareCapabilitiesView } from '../rare-capabilities-view.jsx';
 import { WorkTwinVaultView } from '../worktwin-view.jsx';
 import PastMVPConsole from '../past-mvp-console.jsx';
@@ -354,3 +351,8 @@ export function SovereignControl() {
   );
 }
 export { EvoEyesView, SovereignIntelligenceDashboard, ExtensionCockpitView, GlobalAPISettingsView };
+
+// Dummy components to replace missing files
+export function SelfBuildForgeView() { return <div className="p-4 bg-slate-800 text-slate-400 rounded-lg">SelfBuildForgeView is missing</div>; }
+export function ForgeRenderConsoleView() { return <div className="p-4 bg-slate-800 text-slate-400 rounded-lg">ForgeRenderConsoleView is missing</div>; }
+export function ProofToValueView() { return <div className="p-4 bg-slate-800 text-slate-400 rounded-lg">ProofToValueView is missing</div>; }

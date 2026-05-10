@@ -2,7 +2,7 @@ const BRIDGE_URL = 'http://127.0.0.1:3001';
 const CLIENT_ID_KEY = 'ph_evo_client_id';
 
 function fallbackId() {
-  return `client_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+  return `client_${Date.now().toString(36)}_${(Date.now() % 1000000).toString(36)}`;
 }
 
 export function getEvolutionClientId() {

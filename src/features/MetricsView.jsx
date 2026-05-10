@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { Activity, Cpu, HardDrive, Clock, Zap, RefreshCw, TrendingUp } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -10,7 +11,8 @@ import { useSovereignStore } from '../store.js';
 export default function MetricsView() {
   const BRIDGE_URL = 'http://127.0.0.1:3001';
 
-  const metrics = useSovereignStore((s) => s.metrics);
+  const metrics = useSovereignStore((s) => s.metrics) || {};
+  const { cpu = {}, mem = {} } = metrics;
   const loading = useSovereignStore((s) => s.metricsLoading);
   const fetchAll = useSovereignStore((s) => s.fetchMetrics);
   const [omega, setOmega] = useState(null);

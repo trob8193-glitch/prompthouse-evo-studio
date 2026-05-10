@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { RARE_CAPABILITIES, buildRareArtifact } from './rare-capabilities-engine.js';
 
+const BRIDGE = 'http://127.0.0.1:3001';
 const DEFAULT_MISSION = 'Build a trusted PromptHouse agent that turns a founder idea into proof-backed app, Chrome extension, workflow, test, and receipt artifacts.';
 
 function badgeForRisk(risk) {
@@ -25,15 +26,41 @@ export function RareCapabilitiesView() {
   const [selectedId, setSelectedId] = useState(RARE_CAPABILITIES[0].id);
   const [mission, setMission] = useState(DEFAULT_MISSION);
   const [copied, setCopied] = useState('');
+  const [artifactsData, setArtifactsData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'RareCapabilities',
+            action: 'get',
+            payload: { mission }
+          })
+        });
+        const responseData = await response.json();
+        if (responseData.success) {
+          setArtifactsData(responseData.result);
+        }
+      } catch (e) {
+        console.error('Failed to load rare capabilities data:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, [mission]);
 
   const selected = RARE_CAPABILITIES.find((capability) => capability.id === selectedId) || RARE_CAPABILITIES[0];
-  const artifact = useMemo(() => buildRareArtifact(selectedId, mission), [selectedId, mission]);
-  const moduleArtifacts = useMemo(
-    () => RARE_CAPABILITIES.map((capability) => buildRareArtifact(capability.id, mission)),
-    [mission],
-  );
-  const averageScore = Math.round(moduleArtifacts.reduce((sum, item) => sum + item.score, 0) / moduleArtifacts.length);
-  const readyCount = moduleArtifacts.filter((item) => item.truthState === 'verified-ready').length;
+  
+  const moduleArtifacts = artifactsData?.artifacts ? Object.values(artifactsData.artifacts) : RARE_CAPABILITIES.map(c => buildRareArtifact(c.id, mission));
+  const artifact = artifactsData?.artifacts?.[selectedId] || buildRareArtifact(selectedId, mission);
+  const averageScore = artifactsData?.averageScore || Math.round(moduleArtifacts.reduce((sum, item) => sum + item.score, 0) / moduleArtifacts.length);
+  const readyCount = artifactsData?.readyCount || moduleArtifacts.filter((item) => item.truthState === 'verified-ready').length;
 
   return (
     <div className="rare-os-view flex-col animate-in">

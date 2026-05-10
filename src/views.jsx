@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { MOBILE_ARCHITECTURES, CODE_TEMPLATES, CHAIN_STEP_TYPES, MISSION_PHASES, TRUTH_STATES, buildChainPrompt, buildMissionPacket, exportAsMarkdown, exportAsText, exportAsJson } from './mobile-engine.js';
 import { useEvoStore } from './store.js';
-import { Card, Button, Panel, StateView } from './components/primitives.jsx';
+import { Card, Button, Panel, StateView, StatusBadge } from './components/primitives.jsx';
 
 function copyText(t) { navigator.clipboard.writeText(t); }
 

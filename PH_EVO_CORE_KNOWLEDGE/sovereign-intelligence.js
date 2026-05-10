@@ -24,7 +24,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { SelfMaintenance } from './src/core/automation/self_maintenance.js';
+import { SelfMaintenance } from '../src/core/automation/self_maintenance.js';
 
 const BRIDGE = 'http://127.0.0.1:3001';
 const SOVEREIGN_BRAIN_FILE = '.sovereign-brain.json';

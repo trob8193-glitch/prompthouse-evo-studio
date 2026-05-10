@@ -1,4 +1,4 @@
-import { Log } from '../autonomy/SovereignLogger.js';
+import { Log } from '../core/autonomy/SovereignLogger.js';
 
 /**
  * PH EVO STUDIO — SINGULARITY CORE (V4 RESTORED)

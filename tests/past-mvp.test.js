@@ -228,6 +228,20 @@ describe('Commerce Rail', () => {
 
 // ─── NightForge ────────────────────────────────────────────────────────────────
 describe('NightForge Daemon', () => {
+  beforeEach(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(async () => {
+      return {
+        ok: true,
+        json: async () => ({
+          result: {
+            cannot: ['silent_production_deploy', 'delete_data'],
+            status: 'recommended',
+          },
+        }),
+      };
+    });
+  });
+
   it('creates a patch proposal without silent deploying', async () => {
     const proposal = await runNightForgeCycle({ callBridge: null });
     expect(proposal.cannot).toContain('silent_production_deploy');

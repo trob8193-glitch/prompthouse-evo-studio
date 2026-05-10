@@ -15,6 +15,7 @@ export default function TopBar() {
   const toggleSidebar = useSovereignStore((s) => s.toggleSidebar);
   const setActivePage = useSovereignStore((s) => s.setActivePage);
   const notifications = useSovereignStore((s) => s.notifications);
+  const metrics = useSovereignStore((s) => s.metrics);
 
   useEffect(() => {
     fetchBridgeStatus();
@@ -63,11 +64,11 @@ export default function TopBar() {
       {/* Center: Pulse Telemetry */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, background: '#020617', padding: '4px 16px', borderRadius: 20, border: '1px solid #1e293b' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 11, fontWeight: 600 }}>
-          <Shield size={12} color="#6366f1" /> LOGIC DENSITY: <span style={{ color: '#f1f5f9' }}>1.4M IQ</span>
+          <Shield size={12} color="#6366f1" /> LOGIC DENSITY: <span style={{ color: '#f1f5f9' }}>{metrics?.logic?.density || '0.00M'} IQ</span>
         </div>
         <div style={{ width: 1, height: 12, background: '#334155' }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 11, fontWeight: 600 }}>
-          <span style={{ display: 'inline-block', width: 6, height: 6, background: '#22c55e', borderRadius: '50%' }} /> EVO BRAIN: <span style={{ color: '#f1f5f9' }}>OLLAMA (LOCAL)</span>
+          <span style={{ display: 'inline-block', width: 6, height: 6, background: '#22c55e', borderRadius: '50%' }} /> STUDIO IQ: <span style={{ color: '#f1f5f9' }}>{metrics?.logic?.iq?.toLocaleString() || '0'}</span>
         </div>
       </div>
 

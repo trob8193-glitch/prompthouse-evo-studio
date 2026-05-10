@@ -170,17 +170,17 @@ export function SovereignIntelligenceDashboard() {
         <MetricCard
           icon={Activity}
           label="Sovereign IQ"
-          value={bridgeData?.iq_metrics?.baseline ? `${(bridgeData.iq_metrics.baseline / 1000000).toFixed(1)}M` : '2.0M'}
-          sub={`Gain: +${bridgeData?.iq_metrics?.sovereign_gain?.toFixed(1) || '0.0'}`}
+          value={metrics?.logic?.iq ? metrics.logic.iq.toLocaleString() : '—'}
+          sub={`Baseline: ${metrics?.logic?.total_lines || 0} LOC`}
           color="#10b981"
         />
       </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { label: 'Sovereign IQ', value: (((bridgeData?.iq_metrics?.baseline || 2000000) + (bridgeData?.iq_metrics?.sovereign_gain || 0)) / 1000000).toFixed(3) + 'M', trend: '+0.1%', icon: Zap, color: 'text-indigo-400' },
-            { label: 'Logic Density', value: ((metrics?.cpu_usage?.user / 1000000) || 4.2).toFixed(2) + 'x', trend: '+12%', icon: Cpu, color: 'text-emerald-400' },
-            { label: 'Sync Latency', value: metrics?.latency ? `${metrics.latency}ms` : 'N/A', trend: '-2ms', icon: Clock, color: 'text-amber-400' },
+            { label: 'Sovereign IQ', value: metrics?.logic?.iq ? metrics.logic.iq.toLocaleString() : 'N/A', trend: 'LIVE', icon: Zap, color: 'text-indigo-400' },
+            { label: 'Logic Density', value: metrics?.logic?.density || 'N/A', trend: 'PHYSICAL', icon: Cpu, color: 'text-emerald-400' },
+            { label: 'Sync Latency', value: metrics?.latency ? `${metrics.latency}ms` : '0ms', trend: 'ZERO-D', icon: Clock, color: 'text-amber-400' },
             { label: 'Foundry Load', value: metrics?.memory?.heapUsed ? (metrics.memory.heapUsed / 1024 / 1024).toFixed(1) + 'MB' : 'N/A', trend: 'STABLE', icon: Activity, color: 'text-rose-400' },
           ].map((stat, i) => (
             <motion.div

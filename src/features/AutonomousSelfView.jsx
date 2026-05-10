@@ -32,23 +32,29 @@ export function AutonomousSelfView() {
   const [trainingProgress, setTrainingProgress] = useState(0);
 
   const startEvolution = async () => {
-    setEvolving(true);
     try {
-      const res = await fetch('http://127.0.0.1:3001/api/evolution/activate', { method: 'POST' });
-      if (res.ok) setEvolving(true);
+      await fetch('http://127.0.0.1:3001/api/evolution/activate', { method: 'POST' });
     } catch (e) {
       console.error('Failed to start evolution:', e);
     }
   };
 
   useEffect(() => {
-    if (evolving && trainingProgress < 100) {
-      const timer = setInterval(() => {
-        setTrainingProgress(p => Math.min(100, p + 0.5));
-      }, 1000);
-      return () => clearInterval(timer);
+    let interval;
+    if (bridgeStatus === 'connected') {
+      interval = setInterval(async () => {
+        try {
+          const res = await fetch('http://127.0.0.1:3001/api/evolution/status');
+          const data = await res.json();
+          setEvolving(data.active);
+          setTrainingProgress(data.progress);
+        } catch (e) {
+          console.error('Evolution status poll failed:', e);
+        }
+      }, 2000);
     }
-  }, [evolving, trainingProgress]);
+    return () => clearInterval(interval);
+  }, [bridgeStatus]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -81,11 +87,13 @@ export function AutonomousSelfView() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}>
               <div style={{ padding: '12px 16px', background: '#0f172a', borderRadius: 10, border: '1px solid #1e293b' }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: 4 }}>Logic Density</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: '#f1f5f9' }}>{evolving ? '99.8%' : '14.2%'}</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: '#f1f5f9' }}>{metrics?.logic?.density || '14.2%'}</div>
               </div>
               <div style={{ padding: '12px 16px', background: '#0f172a', borderRadius: 10, border: '1px solid #1e293b' }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: 4 }}>Truth Gaps</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: evolving ? '#22c55e' : '#ef4444' }}>{evolving ? '0 Found' : '241 Open'}</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: (metrics?.logic?.total_modules || 0) < 100 ? '#ef4444' : '#22c55e' }}>
+                  {metrics?.logic?.total_modules || 0} Modules
+                </div>
               </div>
             </div>
 

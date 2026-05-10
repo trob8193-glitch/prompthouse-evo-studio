@@ -39,3 +39,11 @@ android/.gradle/
 ios/Pods/
 ios/.symlinks/
 macos/Pods/
+
+# Sovereign Scratch & Temp
+scratch/
+temp_mobile_engine.js
+.sovereign-cache/
+.prompt-garden/
+.prompthouse-data/
+.sovereign-shards/

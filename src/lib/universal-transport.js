@@ -80,7 +80,10 @@ async function markMessageSent(id) {
 
 // Strategy 1: Local HTTP Bridge
 async function tryLocalBridge(messages, systemPrompt, customUrl) {
-  const url = customUrl || localStorage.getItem('ph_evo_bridge_url') || 'http://127.0.0.1:3001';
+  let url = customUrl || localStorage.getItem('ph_evo_bridge_url') || 'http://127.0.0.1:3001';
+  if (!url.startsWith('http')) {
+    url = 'http://127.0.0.1:3001';
+  }
   const res = await fetch(`${url}/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

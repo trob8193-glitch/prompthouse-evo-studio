@@ -28,7 +28,8 @@ files.forEach(file => {
   if (content.includes('import { Log } from')) {
     let relPath = path.relative(path.dirname(file), loggerPath).replace(/\\/g, '/');
     if (!relPath.startsWith('.')) relPath = './' + relPath;
-    content = content.replace(/import { Log } from '.*';/, `import { Log } from '${relPath}';`);
+    const searchStr = 'import { Log } from ' + "'.*';";
+    content = content.replace(new RegExp(searchStr), `import { Log } from '${relPath}';`);
   }
 
   // 2. Fix PerfectionGate regex

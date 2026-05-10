@@ -12,7 +12,7 @@ const KEYS = {
 };
 
 function uid() {
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+  return `${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 8)}`;
 }
 
 function load(key, fallback = []) {

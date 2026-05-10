@@ -19,6 +19,62 @@ export class IntelligenceCore {
     console.log(`[IntelligenceCore] Executing: ${moduleName} -> ${action}`);
     
     try {
+      // Check for real logic files first!
+      if (moduleName === 'TruthAuditor') {
+        const { TruthAuditorLogic } = await import('../../features/truth_auditor_logic.js');
+        const auditor = new TruthAuditorLogic();
+        const result = await auditor.execute(payload);
+        return { success: true, module: moduleName, action, result };
+      }
+      
+      if (moduleName === 'DeadHunter') {
+        const { DeadHunterPro } = await import('../../features/dead_hunter_pro_logic.js');
+        const hunter = new DeadHunterPro();
+        const result = hunter.runGlobalStrike(payload.projectPath || process.cwd());
+        return { success: true, module: moduleName, action, result };
+      }
+      
+      if (moduleName === 'StudioDiagnostics') {
+        const { StudioDiagnostics } = await import('../../features/studio_diagnostics_logic.js');
+        const diagnostics = new StudioDiagnostics();
+        const result = diagnostics.getDiagnostics(payload.projectPath || process.cwd());
+        return { success: true, module: moduleName, action, result };
+      }
+      
+      if (moduleName === 'Terminal') {
+        const { TerminalLogic } = await import('../../features/terminal_logic.js');
+        const terminal = new TerminalLogic();
+        const result = await terminal.execute(payload);
+        return { success: true, module: moduleName, action, result };
+      }
+
+      if (moduleName === 'GhostEditor') {
+        const { GhostEditorLogic } = await import('../../features/ghost_editor_logic.js');
+        const editor = new GhostEditorLogic(this.ai);
+        const result = await editor.execute(payload);
+        return { success: true, module: moduleName, action, result };
+      }
+
+      if (['VectorMemory', 'TemporalForesight', 'RecursiveSwarm', 'RealitySynthesis', 'EntropyLock', 'CommandDeck', 'MergeCourt', 'PatternMirror', 'PromptGenome', 'ProofVault', 'RareCapabilities'].includes(moduleName)) {
+        const { VectorMemoryLogic, TemporalForesightLogic, RecursiveSwarmLogic, RealitySynthesisLogic, EntropyLockLogic, CommandDeckLogic, MergeCourtLogic, PatternMirrorLogic, PromptGenomeLogic, ProofVaultLogic, RareCapabilitiesLogic } = await import('../../features/advanced_features_logic.js');
+        
+        let result;
+        if (moduleName === 'VectorMemory') result = new VectorMemoryLogic().execute(payload);
+        else if (moduleName === 'TemporalForesight') result = new TemporalForesightLogic().execute(payload);
+        else if (moduleName === 'RecursiveSwarm') result = new RecursiveSwarmLogic().execute(payload);
+        else if (moduleName === 'RealitySynthesis') result = new RealitySynthesisLogic().execute(payload);
+        else if (moduleName === 'EntropyLock') result = new EntropyLockLogic().execute(payload);
+        else if (moduleName === 'CommandDeck') result = new CommandDeckLogic().execute(payload);
+        else if (moduleName === 'MergeCourt') result = new MergeCourtLogic().execute(payload);
+        else if (moduleName === 'PatternMirror') result = new PatternMirrorLogic().execute(payload);
+        else if (moduleName === 'PromptGenome') result = new PromptGenomeLogic().execute(payload);
+        else if (moduleName === 'ProofVault') result = new ProofVaultLogic().execute(payload);
+        else if (moduleName === 'RareCapabilities') result = new RareCapabilitiesLogic().execute(payload);
+        
+        return { success: true, module: moduleName, action, result };
+      }
+
+      // Fallback to AI prompts if no real logic file exists
       const { systemPrompt, userPrompt } = this.buildPrompt(moduleName, action, payload);
       
       const fwResult = await SovereignFirewall.intercept(userPrompt, JSON.stringify(payload), {
