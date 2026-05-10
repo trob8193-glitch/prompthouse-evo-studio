@@ -5,7 +5,7 @@ import { existsSync, readFileSync } from 'fs';
  * PH EVO STUDIO — NATIVE-PROMPT-PACKET (PRODUCTION GRADE)
  * ═══════════════════════════════════════════════════════════════
  * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
+ * Operational status is determined by live audits and proof receipts.
  */
 
 

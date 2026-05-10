@@ -64,6 +64,8 @@ export function AutonomousSelfBuildCommandCenter() {
   const [isUnbound, setIsUnbound] = useState(false);
   const [activeTab, setActiveTab] = useState("modules");
   const [receipts, setReceipts] = useState([]);
+  const [nuclearAudit, setNuclearAudit] = useState(null);
+  const [selfImplementationState, setSelfImplementationState] = useState(null);
 
   const gateScores = useMemo(() => computeAllGateScores(GATE_DEFINITIONS), [receipts]);
 
@@ -103,11 +105,29 @@ export function AutonomousSelfBuildCommandCenter() {
     const init = async () => {
       await syncTruthFromBridge();
       setReceipts(getAllReceipts());
+      try {
+        const [auditRes, implRes] = await Promise.all([
+          fetch('http://127.0.0.1:3001/api/audit/nuclear-truth'),
+          fetch('http://127.0.0.1:3001/api/self-implementation/status')
+        ]);
+        if (auditRes.ok) setNuclearAudit(await auditRes.json());
+        if (implRes.ok) setSelfImplementationState(await implRes.json());
+      } catch {
+        // Keep working with receipt-only view.
+      }
     };
     init();
 
     const interval = setInterval(() => {
-      syncTruthFromBridge().then(() => setReceipts(getAllReceipts()));
+      syncTruthFromBridge().then(async () => {
+        setReceipts(getAllReceipts());
+        try {
+          const auditRes = await fetch('http://127.0.0.1:3001/api/audit/nuclear-truth');
+          if (auditRes.ok) setNuclearAudit(await auditRes.json());
+        } catch {
+          // Keep rendering previous report.
+        }
+      });
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -134,21 +154,36 @@ export function AutonomousSelfBuildCommandCenter() {
     ]);
 
     try {
-      const res = await fetch('http://127.0.0.1:3001/api/test/run', { method: 'POST' });
+      const res = await fetch('http://127.0.0.1:3001/api/self-implementation/cycle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ applyFixes: false })
+      });
       const data = await res.json();
-      if (data.success) {
+      if (res.ok && data.success) {
+        let auditSnapshot = null;
+        try {
+          const auditRes = await fetch('http://127.0.0.1:3001/api/audit/nuclear-truth');
+          if (auditRes.ok) {
+            auditSnapshot = await auditRes.json();
+            setNuclearAudit(auditSnapshot);
+          }
+        } catch {
+          // Keep cycle usable even when audit endpoint is unavailable.
+        }
+
         setLog((items) => [
-          `Cycle ${cycle + 1}: Test suite passed. Proof receipts generated.`,
-          `Cycle ${cycle + 1}: Truth state updated for all 13 gates.`,
+          `Cycle ${cycle + 1}: Self-implementation cycle completed in ${data.status}.`,
+          auditSnapshot ? `Cycle ${cycle + 1}: Nuclear Truth score ${auditSnapshot.score}% (${String(auditSnapshot.truthState).toUpperCase()}).` : `Cycle ${cycle + 1}: Nuclear Truth snapshot unavailable.`,
           `Cycle ${cycle + 1}: Weakest gate: ${weakest.gate} (${weakest.score}%).`,
           ...items,
         ]);
         setReceipts(getAllReceipts());
       } else {
-        setLog((items) => [`Cycle ${cycle + 1}: Build failed. Error: ${data.error}`, ...items]);
+        setLog((items) => [`Cycle ${cycle + 1}: Cycle failed. Error: ${data.error || 'Unknown failure'}`, ...items]);
       }
     } catch (e) {
-      setLog((items) => [`Cycle ${cycle + 1}: Bridge offline. Virtual audit only.`, ...items]);
+      setLog((items) => [`Cycle ${cycle + 1}: Bridge offline. No new proof receipts.`, ...items]);
     }
   }
 
@@ -231,7 +266,7 @@ export function AutonomousSelfBuildCommandCenter() {
                 boxShadow: isUnbound ? '0 0 15px rgba(239, 68, 68, 0.5)' : 'none'
               }}
             >
-              {isUnbound ? '⚠️ CI/CD AUTODEPLOY ACTIVE' : 'Enable Automated Deployment'}
+              {isUnbound ? '⚠️ UNBOUND DEPLOYMENT MODE' : 'Enable Automated Deployment'}
             </button>
           </div>
         </div>
@@ -262,29 +297,29 @@ export function AutonomousSelfBuildCommandCenter() {
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 24 }}>
             <div style={{ background: 'rgba(0,0,0,0.5)', padding: 16, borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Live Agents Deployed</div>
-              <div style={{ color: '#6ee7b7', fontSize: 32, fontWeight: 900 }}>14,203</div>
-              <div style={{ color: '#6ee7b7', fontSize: 10, marginTop: 4 }}>↑ 342 this hour</div>
+              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Modules Scanned</div>
+              <div style={{ color: '#6ee7b7', fontSize: 32, fontWeight: 900 }}>{nuclearAudit?.summary?.modulesScanned ?? '-'}</div>
+              <div style={{ color: '#6ee7b7', fontSize: 10, marginTop: 4 }}>Nuclear Truth inventory</div>
             </div>
             <div style={{ background: 'rgba(0,0,0,0.5)', padding: 16, borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Autonomous Daily Revenue</div>
-              <div style={{ color: '#fde047', fontSize: 32, fontWeight: 900 }}>$14,042</div>
-              <div style={{ color: '#fde047', fontSize: 10, marginTop: 4 }}>via Evo Exchange</div>
+              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Nuclear Truth Score</div>
+              <div style={{ color: '#fde047', fontSize: 32, fontWeight: 900 }}>{nuclearAudit?.score ?? '-'}%</div>
+              <div style={{ color: '#fde047', fontSize: 10, marginTop: 4 }}>Audit-backed</div>
             </div>
             <div style={{ background: 'rgba(0,0,0,0.5)', padding: 16, borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Darwinian Generations</div>
-              <div style={{ color: '#67e8f9', fontSize: 32, fontWeight: 900 }}>1,842,910</div>
-              <div style={{ color: '#67e8f9', fontSize: 10, marginTop: 4 }}>Mutations simulated</div>
+              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Broken API Wires</div>
+              <div style={{ color: '#67e8f9', fontSize: 32, fontWeight: 900 }}>{nuclearAudit?.summary?.brokenWires ?? '-'}</div>
+              <div style={{ color: '#67e8f9', fontSize: 10, marginTop: 4 }}>Route integrity</div>
             </div>
             <div style={{ background: 'rgba(0,0,0,0.5)', padding: 16, borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Auto-Merge Confidence</div>
-              <div style={{ color: 'white', fontSize: 32, fontWeight: 900 }}>100%</div>
-              <div style={{ color: '#cbd5e1', fontSize: 10, marginTop: 4 }}>0 friction • 100% test pass</div>
+              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Self-Implementation Active</div>
+              <div style={{ color: 'white', fontSize: 32, fontWeight: 900 }}>{selfImplementationState?.active ? 'YES' : 'NO'}</div>
+              <div style={{ color: '#cbd5e1', fontSize: 10, marginTop: 4 }}>Policy-backed runtime state</div>
             </div>
           </div>
           
           <div style={{ background: 'rgba(239, 68, 68, 0.1)', padding: 16, borderRadius: 8, border: '1px solid rgba(239, 68, 68, 0.3)', color: '#fca5a5', fontSize: 13, lineHeight: 1.5 }}>
-            <strong>WARNING: CI/CD AUTODEPLOY IS ACTIVE.</strong> The studio is now operating with Admin Root access. Deploy pipeline candidates that achieve a 100% test score will automatically bypass manual approval and deploy to production, publish to the repository, and merge into the codebase via the background daemon. You are governing a fully automated infrastructure.
+            <strong>WARNING:</strong> Unbound mode removes manual guardrails. Production deploy and live commerce remain policy-gated until explicit owner approval and proof receipts exist.
           </div>
         </div>
       )}

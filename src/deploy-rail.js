@@ -6,7 +6,7 @@ import { getSovereigntyPolicy } from './prompt-base.js';
  * PH EVO STUDIO — DEPLOY-RAIL (PRODUCTION GRADE)
  * ═══════════════════════════════════════════════════════════════
  * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
+ * Operational status is determined by live audits and proof receipts.
  */
 
 

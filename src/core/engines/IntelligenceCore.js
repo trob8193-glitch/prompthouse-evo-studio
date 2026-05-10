@@ -44,14 +44,14 @@ export class IntelligenceCore {
       if (moduleName === 'Terminal') {
         const { TerminalLogic } = await import('../../features/terminal_logic.js');
         const terminal = new TerminalLogic();
-        const result = await terminal.execute(payload);
+        const result = await terminal.execute({ ...(payload || {}), action });
         return { success: true, module: moduleName, action, result };
       }
 
       if (moduleName === 'GhostEditor') {
         const { GhostEditorLogic } = await import('../../features/ghost_editor_logic.js');
         const editor = new GhostEditorLogic(this.ai);
-        const result = await editor.execute(payload);
+        const result = await editor.execute({ ...(payload || {}), action });
         return { success: true, module: moduleName, action, result };
       }
 

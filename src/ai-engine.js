@@ -4,7 +4,7 @@ import { Log } from './core/autonomy/SovereignLogger.js';
 /**
  * PH EVO STUDIO — AI-ENGINE (PRODUCTION GRADE)
  * ═══════════════════════════════════════════════════════════════
- * This module is now 100% functional and production-ready.
+ * Operational status is determined by live audits and proof receipts.
  * It wraps the universal transport to provide a class-based interface.
  */
 

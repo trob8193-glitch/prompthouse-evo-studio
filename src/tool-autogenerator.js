@@ -5,7 +5,7 @@ import { Log } from './core/autonomy/SovereignLogger.js';
  * PH EVO STUDIO — TOOL-AUTOGENERATOR (PRODUCTION GRADE)
  * ═══════════════════════════════════════════════════════════════
  * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
+ * Operational status is determined by live audits and proof receipts.
  */
 
 export class ToolAutogenerator {

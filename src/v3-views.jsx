@@ -5,7 +5,7 @@ import { useSovereignStore } from './store.js';
 // Restored View Imports
 import SovereignChat from './features/SovereignChat';
 import RareCapabilities from './features/RareCapabilities';
-import EvoEyesView from './features/EvoEyesView';
+import { EvoEyesView } from './features/EvoEyesView';
 
 /**
  * PH EVO STUDIO — V3 MODULAR VIEWS (V4 RESTORED)
@@ -158,4 +158,3 @@ export const BotRosterView = () => {
     </div>
   );
 };
-

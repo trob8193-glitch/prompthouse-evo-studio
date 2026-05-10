@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Shield, Zap, RefreshCw, Cpu, Brain, TrendingUp, CheckCircle, AlertTriangle, Terminal } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Shield, Zap, RefreshCw, Brain, TrendingUp, CheckCircle } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
 /**
@@ -30,6 +30,8 @@ export function AutonomousSelfView() {
   
   const [evolving, setEvolving] = useState(false);
   const [trainingProgress, setTrainingProgress] = useState(0);
+  const [nuclearAudit, setNuclearAudit] = useState(null);
+  const [selfImplementation, setSelfImplementation] = useState(null);
 
   const startEvolution = async () => {
     try {
@@ -56,6 +58,69 @@ export function AutonomousSelfView() {
     return () => clearInterval(interval);
   }, [bridgeStatus]);
 
+  useEffect(() => {
+    let active = true;
+    let timer;
+    const pullOperationalReality = async () => {
+      try {
+        const [auditRes, implRes] = await Promise.all([
+          fetch('http://127.0.0.1:3001/api/audit/nuclear-truth'),
+          fetch('http://127.0.0.1:3001/api/self-implementation/status')
+        ]);
+        if (!active) return;
+
+        if (auditRes.ok) {
+          const auditData = await auditRes.json();
+          setNuclearAudit(auditData);
+        }
+        if (implRes.ok) {
+          const implData = await implRes.json();
+          setSelfImplementation(implData);
+        }
+      } catch {
+        // Keep rendering with latest known state.
+      }
+    };
+
+    if (bridgeStatus === 'connected') {
+      pullOperationalReality();
+      timer = setInterval(pullOperationalReality, 12000);
+    }
+
+    return () => {
+      active = false;
+      if (timer) clearInterval(timer);
+    };
+  }, [bridgeStatus]);
+
+  const effectiveProgress = useMemo(() => {
+    if (Number.isFinite(trainingProgress) && trainingProgress > 0) return trainingProgress;
+    if (typeof nuclearAudit?.score === 'number') return nuclearAudit.score;
+    return 0;
+  }, [trainingProgress, nuclearAudit]);
+
+  const auditEdges = useMemo(() => {
+    const summary = nuclearAudit?.summary;
+    if (!summary) {
+      return [
+        { label: 'Nuclear Audit', val: 'Pending', status: 'pending' },
+        { label: 'Broken API Wires', val: 'Unknown', status: 'pending' },
+        { label: 'Critical Findings', val: 'Unknown', status: 'pending' },
+        { label: 'Truth State', val: 'Unknown', status: 'pending' },
+      ];
+    }
+
+    const critical = summary.findings?.critical ?? 0;
+    const brokenWires = summary.brokenWires ?? 0;
+    const truthState = String(nuclearAudit.truthState || 'unknown').toUpperCase();
+    return [
+      { label: 'Nuclear Truth Score', val: `${nuclearAudit.score}%`, status: nuclearAudit.score >= 90 ? 'verified' : 'pending' },
+      { label: 'Broken API Wires', val: String(brokenWires), status: brokenWires === 0 ? 'verified' : 'pending' },
+      { label: 'Critical Findings', val: String(critical), status: critical === 0 ? 'verified' : 'pending' },
+      { label: 'Truth State', val: truthState, status: truthState === 'VERIFIED' ? 'verified' : 'pending' },
+    ];
+  }, [nuclearAudit]);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
@@ -71,28 +136,30 @@ export function AutonomousSelfView() {
           
           <div style={{ padding: 24 }}>
             <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.6, marginBottom: 20 }}>
-              The evolution loop autonomously audits the studio's logic density, identifies "truth gaps," and applies self-implementation fixes every 5 minutes.
+              Evolution status is read from the bridge, and operational reality is sourced from the live Nuclear Truth audit and self-implementation status.
             </p>
             
             <div style={{ marginBottom: 24 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                 <span style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Cycle Progress</span>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#6366f1' }}>{trainingProgress.toFixed(1)}%</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#6366f1' }}>{Number(effectiveProgress || 0).toFixed(1)}%</span>
               </div>
               <div style={{ height: 6, background: '#1e293b', borderRadius: 3, overflow: 'hidden' }}>
-                <div style={{ width: `${trainingProgress}%`, height: '100%', background: 'linear-gradient(90deg, #4f46e5, #818cf8)', transition: 'width 1s linear' }} />
+                <div style={{ width: `${effectiveProgress}%`, height: '100%', background: 'linear-gradient(90deg, #4f46e5, #818cf8)', transition: 'width 1s linear' }} />
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}>
               <div style={{ padding: '12px 16px', background: '#0f172a', borderRadius: 10, border: '1px solid #1e293b' }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: 4 }}>Logic Density</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: '#f1f5f9' }}>{metrics?.logic?.density || '14.2%'}</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: '#f1f5f9' }}>
+                  {typeof nuclearAudit?.score === 'number' ? `${nuclearAudit.score}%` : (metrics?.logic?.density || 'N/A')}
+                </div>
               </div>
               <div style={{ padding: '12px 16px', background: '#0f172a', borderRadius: 10, border: '1px solid #1e293b' }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: 4 }}>Truth Gaps</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: (metrics?.logic?.total_modules || 0) < 100 ? '#ef4444' : '#22c55e' }}>
-                  {metrics?.logic?.total_modules || 0} Modules
+                <div style={{ fontSize: 16, fontWeight: 800, color: (nuclearAudit?.summary?.brokenWires || 0) > 0 ? '#ef4444' : '#22c55e' }}>
+                  {(nuclearAudit?.summary?.brokenWires ?? 'N/A')} Broken
                 </div>
               </div>
             </div>
@@ -130,17 +197,14 @@ export function AutonomousSelfView() {
               </div>
               <div>
                 <div style={{ fontSize: 14, fontWeight: 800, color: '#f1f5f9' }}>Sovereign IQ Baseline</div>
-                <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>Current resonance: {bridgeData?.iq_metrics?.truth_density || '0%'}</div>
+                <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
+                  Current resonance: {bridgeData?.iq_metrics?.truth_density || `${nuclearAudit?.score ?? 0}%`}
+                </div>
               </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {[
-                { label: 'Prompt Ingestion', val: '100%', status: 'verified' },
-                { label: 'Pattern Mining', val: 'S-Grade', status: 'verified' },
-                { label: 'Recursive Synthesis', val: 'Active', status: 'pending' },
-                { label: 'Omni Cycle Resilience', val: '1.00', status: 'verified' },
-              ].map((edge, i) => (
+              {auditEdges.map((edge, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#0f172a', borderRadius: 8, border: '1px solid #1e293b' }}>
                   <span style={{ fontSize: 12, fontWeight: 600, color: '#94a3b8' }}>{edge.label}</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -189,7 +253,7 @@ export function AutonomousSelfView() {
               <div style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 8 }}>Emergency Shutoff</div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: 14, fontWeight: 800, color: '#ef4444' }}>OFF</span>
-                <button style={{ padding: '4px 8px', borderRadius: 6, border: 'none', background: '#ef4444', color: 'white', fontSize: 10, fontWeight: 700, cursor: 'pointer' }}>ACTIVATE</button>
+                <button disabled style={{ padding: '4px 8px', borderRadius: 6, border: 'none', background: '#334155', color: '#94a3b8', fontSize: 10, fontWeight: 700, cursor: 'not-allowed' }}>OWNER ONLY</button>
               </div>
             </div>
             <div style={{ padding: '16px', background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b' }}>
@@ -201,19 +265,19 @@ export function AutonomousSelfView() {
             </div>
             <div style={{ padding: '16px', background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b' }}>
               <div style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 8 }}>Daily Spend Cap</div>
-              <div style={{ fontSize: 14, fontWeight: 800, color: '#f1f5f9' }}>$5.00</div>
+              <div style={{ fontSize: 14, fontWeight: 800, color: '#f1f5f9' }}>$5.00 (local policy)</div>
             </div>
             <div style={{ padding: '16px', background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b' }}>
               <div style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 8 }}>Monthly Spend Cap</div>
-              <div style={{ fontSize: 14, fontWeight: 800, color: '#f1f5f9' }}>$50.00</div>
+              <div style={{ fontSize: 14, fontWeight: 800, color: '#f1f5f9' }}>$50.00 (local policy)</div>
             </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
-              { label: 'AUTONOMY_CAN_USE_PAID_AI', val: 'false', safe: true },
-              { label: 'AUTONOMY_REQUIRES_APPROVAL_FOR_PAID_AI', val: 'true', safe: true },
-              { label: 'AUTONOMY_LOCAL_ONLY_MODE', val: 'true', safe: true },
+              { label: 'SELF_IMPLEMENTATION_ACTIVE', val: String(Boolean(selfImplementation?.active)), safe: Boolean(selfImplementation?.active) },
+              { label: 'PROOF_REQUIRED_FOR_COMPLETE_CLAIM', val: String(Boolean(selfImplementation?.policies?.proofRequiredForCompleteClaim)), safe: Boolean(selfImplementation?.policies?.proofRequiredForCompleteClaim) },
+              { label: 'LOCAL_ONLY_GATING', val: 'true', safe: true },
             ].map((setting, i) => (
               <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#0f172a', borderRadius: 8, border: '1px solid #1e293b' }}>
                 <code style={{ fontSize: 11, color: '#94a3b8' }}>{setting.label}</code>
