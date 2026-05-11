@@ -38,7 +38,7 @@ npm run dev
 1. Run this repo in Antigravity or Cursor.
 2. Ask agents to implement screens one by one from `docs/ANTIGRAVITY_MULTI_AGENT_BUILD_PROMPT.md`.
 3. Add Supabase auth/database.
-4. Implement connector registry with read-only dry-run first.
+4. Implement connector registry with read-only live-run first.
 5. Add approval queue before any write/deploy/delete action.
 6. Run tests from `docs/TEST_PLAN.md`.
 

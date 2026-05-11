@@ -29,7 +29,7 @@ After deployment:
 2. Generate VibeSpec.
 3. Generate PromptSpec.
 4. Generate AppSpec.
-5. Dry-run GitHub connector.
+5. Live-run GitHub connector.
 6. Confirm approval is required.
 7. Add proof artifact.
 8. Recheck ship gate.

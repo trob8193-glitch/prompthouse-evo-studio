@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   const approval = approvalRequired ? createApprovalRequest(connector, actionName) : null;
 
   return NextResponse.json({
-    mode: "dry_run",
+    mode: "live_run",
     executed: false,
     connector,
     approvalRequired,

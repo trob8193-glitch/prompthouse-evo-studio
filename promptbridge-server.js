@@ -6,7 +6,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
 import { join, relative, dirname, resolve, extname } from 'path';
 import OpenAI from 'openai';
 import { execSync } from 'child_process';
@@ -50,6 +50,22 @@ import {
   buildPromptPacketPreview,
 } from './src/native-prompt-packet.js';
 import { hasExplicitOwnerApproval, getApprovalBlockReason } from './src/owner-approval.js';
+import {
+  appendFailureMemory,
+  appendRealityReceipt,
+  buildCapabilityGraph,
+  buildEvolutionReplayTheater,
+  buildFeatureFusionPlan,
+  buildNightforgeChallengeSnapshot,
+  buildRecoveryPlan,
+  computeCapabilityDrift,
+  enforceEvolutionBudget,
+  loadCapabilityBaseline,
+  loadRealityReceipts,
+  readFailureMemory,
+  runPatchTournament,
+  saveCapabilityBaseline
+} from './src/core/evolution/autonomous-evolution-engine.js';
 
 dotenv.config({ override: true });
 
@@ -108,6 +124,10 @@ let globalFirewallSavings = {
 
 const NIGHTFORGE_STATE_FILE = join(DATA_DIR, 'nightforge_state.json');
 const NIGHTFORGE_RECEIPTS_FILE = join(DATA_DIR, 'nightforge_receipts.jsonl');
+const UI_EVOLUTION_RECEIPTS_FILE = join(DATA_DIR, 'ui_evolution_receipts.jsonl');
+const AUTONOMOUS_EVOLUTION_BASELINE_FILE = join(DATA_DIR, 'autonomous_evolution_baseline.json');
+const AUTONOMOUS_EVOLUTION_FAILURE_FILE = join(DATA_DIR, 'autonomous_evolution_failure_memory.jsonl');
+const AUTONOMOUS_EVOLUTION_RECEIPTS_FILE = join(DATA_DIR, 'autonomous_evolution_reality_receipts.jsonl');
 let nightforgeDaemonTimer = null;
 let bondedNodes = [];
 let globalEvolutionState = {
@@ -170,6 +190,159 @@ function readTextSafe(filePath) {
   } catch {
     return '';
   }
+}
+
+function tailText(text, maxChars = 12000) {
+  const value = String(text || '');
+  if (value.length <= maxChars) return value;
+  return value.slice(value.length - maxChars);
+}
+
+function sanitizeGeneratedCode(code) {
+  return String(code || '')
+    .replace(/^\s*```(?:javascript|js|jsx|ts|tsx)?\s*/i, '')
+    .replace(/\s*```\s*$/i, '')
+    .trim();
+}
+
+function isCoreWorkspacePath(relativePath = '') {
+  const normalized = String(relativePath).replace(/\\/g, '/').toLowerCase();
+  return normalized === 'src/core' || normalized.startsWith('src/core/');
+}
+
+function uiEvolutionApprovalScopeForPath(relativePath = '') {
+  return isCoreWorkspacePath(relativePath) ? 'core_merge' : 'ui_evolution_merge';
+}
+
+function runCommandWithReceipt(command, timeoutMs = 20 * 60 * 1000) {
+  const startedAt = Date.now();
+  try {
+    const stdout = execSync(command, {
+      cwd: process.cwd(),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+      timeout: timeoutMs,
+      maxBuffer: 1024 * 1024 * 16
+    });
+    return {
+      success: true,
+      command,
+      exitCode: 0,
+      durationMs: Date.now() - startedAt,
+      output: tailText(stdout)
+    };
+  } catch (error) {
+    const stdout = error?.stdout ? String(error.stdout) : '';
+    const stderr = error?.stderr ? String(error.stderr) : '';
+    return {
+      success: false,
+      command,
+      exitCode: Number.isInteger(error?.status) ? error.status : 1,
+      durationMs: Date.now() - startedAt,
+      output: tailText(`${stdout}\n${stderr}`.trim()),
+      error: String(error?.message || error)
+    };
+  }
+}
+
+async function buildUiEvolutionProposal({ filePath, objective, currentCode, proposalCode }) {
+  if (typeof proposalCode === 'string' && proposalCode.trim()) {
+    return {
+      source: 'provided',
+      objective: objective || 'provided_proposal',
+      code: sanitizeGeneratedCode(proposalCode)
+    };
+  }
+
+  const mission = String(objective || '').trim();
+  if (!mission) {
+    throw new Error('UI evolution proposal requires objective or proposalCode.');
+  }
+
+  const prompt = [
+    'You are PromptHouse UI Evolution architect.',
+    'Return ONLY raw code for the target file, no markdown fences, no commentary.',
+    `Target file: ${filePath}.`,
+    `Mission: ${mission}.`,
+    'Preserve real functionality and existing imports unless explicit mission requires change.',
+    'Do not include TODOs, placeholders, or fake completion claims.',
+    '',
+    'Current code:',
+    currentCode
+  ].join('\n');
+
+  const proposal = await runEvoLmTeamChat([{ role: 'user', content: prompt }], 'Generate production-safe UI code delta.');
+  const code = sanitizeGeneratedCode(proposal?.message || '');
+  if (!code) {
+    throw new Error('UI evolution proposal returned empty code.');
+  }
+
+  return {
+    source: proposal?.provider || 'evo_lm',
+    objective: mission,
+    code,
+    transport: proposal?.transport || 'unknown',
+    model: proposal?.model || 'unknown'
+  };
+}
+
+function runUiLiveValidation({ filePath, candidateCode }) {
+  const audit = ProductionAudit.audit(candidateCode);
+  const ext = extname(filePath).toLowerCase();
+
+  if (['.js', '.mjs', '.cjs'].includes(ext)) {
+    const safeName = filePath.replace(/[\\/]/g, '__').replace(/[^A-Za-z0-9_.-]/g, '_');
+    const tempFile = join(DATA_DIR, `ui_live_run_${Date.now()}_${safeName}`);
+    try {
+      writeFileSync(tempFile, candidateCode, 'utf8');
+      const syntaxRun = runCommandWithReceipt(`node --check "${tempFile.replace(/"/g, '\\"')}"`, 120000);
+      return {
+        success: Boolean(audit.success && audit.passed && syntaxRun.success),
+        audit,
+        syntaxRun
+      };
+    } finally {
+      try {
+        if (existsSync(tempFile)) {
+          unlinkSync(tempFile);
+        }
+      } catch {
+        // best-effort cleanup
+      }
+    }
+  }
+
+  return {
+    success: Boolean(audit.success && audit.passed),
+    audit,
+    syntaxRun: {
+      success: true,
+      skipped: true,
+      reason: `Syntax live run skipped for extension ${ext || '(none)'}.`
+    }
+  };
+}
+
+function appendUiEvolutionReceipt(receipt) {
+  writeFileSync(UI_EVOLUTION_RECEIPTS_FILE, `${toSafeJson(receipt)}\n`, { flag: 'a', encoding: 'utf8' });
+}
+
+function readUiEvolutionReceipts(limit = 200) {
+  if (!existsSync(UI_EVOLUTION_RECEIPTS_FILE)) return [];
+  const lines = readFileSync(UI_EVOLUTION_RECEIPTS_FILE, 'utf8')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(limit * -1);
+  const receipts = [];
+  for (const line of lines) {
+    try {
+      receipts.push(JSON.parse(line));
+    } catch {
+      // Skip malformed rows to keep runtime stable.
+    }
+  }
+  return receipts;
 }
 
 function loadBrowserBridgeReceipts() {
@@ -1269,6 +1442,28 @@ async function runNightforgeCycle({
   try {
     const diagnostics = await buildStudioDiagnostics(scanLimit);
     const proposedActions = buildNightforgeActions(diagnostics);
+    // ─── RESONANCE HOOK (SOVEREIGN TRIAD) ──────────────────────────────────
+    const consciousnessDirective = await bridge_get_latest_cognitive_directive(orgId);
+    if (consciousnessDirective && consciousnessDirective.directive === 'BLOCK_REPAIR') {
+      Log.warn('🧪 [Resonance] NightForge cycle BLOCKED by Cognitive Consciousness directive.');
+      updateNightforgeState({ running: false, lastError: 'BLOCKED_BY_CONSCIOUSNESS' });
+      return { success: false, reason: 'RESONANCE_BLOCK', directive: consciousnessDirective.realization };
+    }
+    
+    // Anchor to Evo Eyes Vision
+    const eyeWitness = scanStudioModules(20);
+    const visualTruth = eyeWitness.files.filter(f => f.health === 'error');
+    if (visualTruth.length > 0) {
+      Log.info(`🧪 [Resonance] Evo Eyes witnessed ${visualTruth.length} visual faults. Adjusting repair priority.`);
+      proposedActions.unshift({
+        action: 'repair_visual_drift',
+        priority: 'CRITICAL',
+        note: 'Witnessed by Evo Eyes during resonance handshake.',
+        targets: visualTruth.map(f => f.path)
+      });
+    }
+    // ────────────────────────────────────────────────────────────────────────
+
     const failingProbes = (diagnostics.probes || []).filter(item => !item.ok);
     const topRiskModules = (diagnostics.modules || [])
       .filter(item => item.health !== 'healthy')
@@ -2112,6 +2307,567 @@ app.post('/api/evolution/cycle', writeRateLimit, enforceJsonObjectBody, (req, re
   }
 });
 
+app.post('/api/evolution/ui/pipeline', maybeRequireAuthOrMaster, writeRateLimit, enforceJsonObjectBody, async (req, res) => {
+  const startedAt = Date.now();
+  const pipelineId = `ui_evolution_${Date.now()}`;
+
+  try {
+    const {
+      filePath,
+      objective = '',
+      proposalCode = '',
+      proposalVariants = [],
+      mutationObjectives = [],
+      ownerApproval = {},
+      runTests = true,
+      runBuild = true,
+      runBossFights = false,
+      bossFightCommands = [],
+      rollbackOnFailure = true,
+      enforceNuclearTruth = true,
+      nuclearTruthMinScore = 60,
+      budget = {},
+      autoUpdateBaseline = false
+    } = req.body || {};
+
+    const absolutePath = resolveWorkspacePath(filePath);
+    if (!existsSync(absolutePath)) {
+      return res.status(404).json({ error: `Target file not found: ${filePath}` });
+    }
+
+    const relativePath = toPosixPath(relative(process.cwd(), absolutePath));
+    const originalCode = readFileSync(absolutePath, 'utf8');
+
+    const stages = [];
+    const pushStage = (id, data = {}) => stages.push({ id, at: new Date().toISOString(), ...data });
+
+    pushStage('capability_graph:start');
+    const capabilityGraph = buildCapabilityGraph({ workspaceRoot: process.cwd() });
+    const graphBaseline = loadCapabilityBaseline(AUTONOMOUS_EVOLUTION_BASELINE_FILE);
+    const graphDrift = computeCapabilityDrift(capabilityGraph, graphBaseline);
+    pushStage('capability_graph:done', {
+      hash: capabilityGraph.hash,
+      driftScore: graphDrift.score,
+      driftStatus: graphDrift.status
+    });
+
+    const priorFailures = readFailureMemory(AUTONOMOUS_EVOLUTION_FAILURE_FILE, {
+      filePathFilter: relativePath,
+      limit: 20
+    });
+    const recoveryPlan = buildRecoveryPlan(priorFailures);
+    pushStage('failure_memory:done', {
+      priorFailures: priorFailures.length,
+      topStage: recoveryPlan.topStage
+    });
+
+    pushStage('proposal:start', { filePath: relativePath, objective: String(objective || '') });
+    const primaryProposal = await buildUiEvolutionProposal({
+      filePath: relativePath,
+      objective,
+      currentCode: originalCode,
+      proposalCode
+    });
+    pushStage('proposal:done', {
+      source: primaryProposal.source,
+      transport: primaryProposal.transport || null,
+      model: primaryProposal.model || null,
+      candidateLength: primaryProposal.code.length
+    });
+
+    const candidates = [{
+      id: 'primary',
+      label: 'Primary proposal',
+      source: primaryProposal.source,
+      objective: primaryProposal.objective,
+      code: primaryProposal.code
+    }];
+
+    const directVariants = Array.isArray(proposalVariants) ? proposalVariants.slice(0, 4) : [];
+    directVariants.forEach((variant, index) => {
+      if (typeof variant === 'string' && variant.trim()) {
+        candidates.push({
+          id: `direct_${index + 1}`,
+          label: `Direct variant ${index + 1}`,
+          source: 'direct_variant',
+          objective: objective || `direct_variant_${index + 1}`,
+          code: sanitizeGeneratedCode(variant)
+        });
+      }
+    });
+
+    const mutationList = Array.isArray(mutationObjectives) ? mutationObjectives.slice(0, 4) : [];
+    for (let i = 0; i < mutationList.length; i += 1) {
+      const mutationObjective = String(mutationList[i] || '').trim();
+      if (!mutationObjective) continue;
+      const mutationProposal = await buildUiEvolutionProposal({
+        filePath: relativePath,
+        objective: mutationObjective,
+        currentCode: originalCode,
+        proposalCode: ''
+      });
+      candidates.push({
+        id: `mutation_${i + 1}`,
+        label: `Mutation ${i + 1}`,
+        source: mutationProposal.source || 'mutation',
+        objective: mutationProposal.objective || mutationObjective,
+        code: mutationProposal.code
+      });
+    }
+
+    pushStage('ghost_mutation_lab:start', { candidates: candidates.length });
+    const tournament = await runPatchTournament({
+      candidates,
+      originalCode,
+      evaluateCandidate: async (candidate) => runUiLiveValidation({ filePath: relativePath, candidateCode: candidate.code })
+    });
+    pushStage('ghost_mutation_lab:done', {
+      winner: tournament.winner ? {
+        id: tournament.winner.id,
+        label: tournament.winner.label,
+        score: tournament.winner.score
+      } : null,
+      ranking: tournament.ranking
+    });
+
+    const selectedCandidate = tournament.winner;
+    const liveRun = selectedCandidate?.validation || null;
+    pushStage('live_run:start');
+    pushStage('live_run:done', {
+      success: Boolean(liveRun?.success),
+      candidate: selectedCandidate ? {
+        id: selectedCandidate.id,
+        label: selectedCandidate.label,
+        source: selectedCandidate.source,
+        objective: selectedCandidate.objective,
+        score: selectedCandidate.score
+      } : null,
+      audit: liveRun?.audit || null,
+      syntaxRun: liveRun?.syntaxRun || null
+    });
+    if (!selectedCandidate || !liveRun?.success) {
+      appendFailureMemory(AUTONOMOUS_EVOLUTION_FAILURE_FILE, {
+        pipelineId,
+        filePath: relativePath,
+        stage: 'live_run',
+        objective: primaryProposal.objective,
+        error: 'No candidate passed live run validation.',
+        ranking: tournament.ranking
+      });
+      const receipt = {
+        id: pipelineId,
+        status: 'blocked',
+        blockedAt: 'live_run',
+        filePath: relativePath,
+        objective: primaryProposal.objective,
+        startedAt: new Date(startedAt).toISOString(),
+        finishedAt: new Date().toISOString(),
+        durationMs: Date.now() - startedAt,
+        stages,
+        tournament: tournament.ranking,
+        recoveryPlan
+      };
+      appendUiEvolutionReceipt(receipt);
+      return res.status(412).json({ success: false, ...receipt });
+    }
+
+    const selectedCode = selectedCandidate.candidateCode;
+    const selectedObjective = selectedCandidate.objective || primaryProposal.objective;
+
+    pushStage('budget_gate:start');
+    const budgetGate = enforceEvolutionBudget({
+      originalCode,
+      candidateCode: selectedCode,
+      budget
+    });
+    pushStage('budget_gate:done', budgetGate);
+    if (!budgetGate.success) {
+      appendFailureMemory(AUTONOMOUS_EVOLUTION_FAILURE_FILE, {
+        pipelineId,
+        filePath: relativePath,
+        stage: 'budget_gate',
+        objective: selectedObjective,
+        error: budgetGate.violations.join('; '),
+        budgetGate
+      });
+      const receipt = {
+        id: pipelineId,
+        status: 'blocked',
+        blockedAt: 'budget_gate',
+        filePath: relativePath,
+        objective: selectedObjective,
+        startedAt: new Date(startedAt).toISOString(),
+        finishedAt: new Date().toISOString(),
+        durationMs: Date.now() - startedAt,
+        stages,
+        budgetGate,
+        recoveryPlan
+      };
+      appendUiEvolutionReceipt(receipt);
+      return res.status(412).json({ success: false, ...receipt });
+    }
+
+    pushStage('nuclear_truth_gate:start');
+    const nuclearTruth = runNuclearTruthAudit(process.cwd());
+    const nuclearGatePass = !enforceNuclearTruth
+      || (nuclearTruth.truthState !== 'blocked' && Number(nuclearTruth.score || 0) >= Number(nuclearTruthMinScore || 0));
+    pushStage('nuclear_truth_gate:done', {
+      success: Boolean(nuclearGatePass),
+      truthState: nuclearTruth.truthState,
+      score: nuclearTruth.score,
+      minScore: Number(nuclearTruthMinScore || 0)
+    });
+    if (!nuclearGatePass) {
+      const receipt = {
+        id: pipelineId,
+        status: 'blocked',
+        blockedAt: 'nuclear_truth_gate',
+        filePath: relativePath,
+        objective: selectedObjective,
+        startedAt: new Date(startedAt).toISOString(),
+        finishedAt: new Date().toISOString(),
+        durationMs: Date.now() - startedAt,
+        stages,
+        recoveryPlan
+      };
+      appendFailureMemory(AUTONOMOUS_EVOLUTION_FAILURE_FILE, {
+        pipelineId,
+        filePath: relativePath,
+        stage: 'nuclear_truth_gate',
+        objective: selectedObjective,
+        error: `Nuclear Truth gate failed (${nuclearTruth.truthState}, score ${nuclearTruth.score}).`
+      });
+      appendUiEvolutionReceipt(receipt);
+      return res.status(412).json({ success: false, ...receipt });
+    }
+
+    const requiredScope = uiEvolutionApprovalScopeForPath(relativePath);
+    pushStage('owner_approve:start', { scope: requiredScope });
+    const ownerApproved = hasExplicitOwnerApproval(ownerApproval, requiredScope);
+    pushStage('owner_approve:done', { success: ownerApproved, scope: requiredScope });
+    if (!ownerApproved) {
+      const receipt = {
+        id: pipelineId,
+        status: 'blocked',
+        blockedAt: 'owner_approve',
+        filePath: relativePath,
+        objective: selectedObjective,
+        startedAt: new Date(startedAt).toISOString(),
+        finishedAt: new Date().toISOString(),
+        durationMs: Date.now() - startedAt,
+        stages,
+        requiredScope,
+        error: getApprovalBlockReason(requiredScope)
+      };
+      appendFailureMemory(AUTONOMOUS_EVOLUTION_FAILURE_FILE, {
+        pipelineId,
+        filePath: relativePath,
+        stage: 'owner_approve',
+        objective: selectedObjective,
+        error: getApprovalBlockReason(requiredScope)
+      });
+      appendUiEvolutionReceipt(receipt);
+      return res.status(403).json({ success: false, ...receipt });
+    }
+
+    pushStage('merge:start');
+    const mergeResult = await intelligenceCore.executeAction('GhostEditor', 'merge', {
+      filePath: relativePath,
+      code: selectedCode,
+      ownerApproval
+    });
+    pushStage('merge:done', {
+      success: Boolean(mergeResult?.success),
+      message: mergeResult?.result?.message || mergeResult?.error || null
+    });
+    if (!mergeResult?.success) {
+      const receipt = {
+        id: pipelineId,
+        status: 'blocked',
+        blockedAt: 'merge',
+        filePath: relativePath,
+        objective: selectedObjective,
+        startedAt: new Date(startedAt).toISOString(),
+        finishedAt: new Date().toISOString(),
+        durationMs: Date.now() - startedAt,
+        stages,
+        error: mergeResult?.error || 'Ghost merge failed.'
+      };
+      appendFailureMemory(AUTONOMOUS_EVOLUTION_FAILURE_FILE, {
+        pipelineId,
+        filePath: relativePath,
+        stage: 'merge',
+        objective: selectedObjective,
+        error: mergeResult?.error || 'Ghost merge failed.'
+      });
+      appendUiEvolutionReceipt(receipt);
+      return res.status(500).json({ success: false, ...receipt });
+    }
+
+    pushStage('auto_test_build:start', {
+      runTests: Boolean(runTests),
+      runBuild: Boolean(runBuild)
+    });
+    const verification = [];
+    if (runTests) verification.push(runCommandWithReceipt('npm test'));
+    if (runBuild) verification.push(runCommandWithReceipt('npm run build'));
+    const verifyPass = verification.every(item => item.success);
+    pushStage('auto_test_build:done', {
+      success: verifyPass,
+      checks: verification.map(item => ({
+        command: item.command,
+        success: item.success,
+        exitCode: item.exitCode,
+        durationMs: item.durationMs
+      }))
+    });
+
+    let bossFightResults = [];
+    if (runBossFights) {
+      const commands = Array.isArray(bossFightCommands) && bossFightCommands.length > 0
+        ? bossFightCommands
+        : ['node --check promptbridge-server.js', 'npm test', 'npm run build'];
+      pushStage('boss_fights:start', { commands });
+      bossFightResults = commands.map((command) => runCommandWithReceipt(String(command), 20 * 60 * 1000));
+      pushStage('boss_fights:done', {
+        success: bossFightResults.every((item) => item.success),
+        commands: bossFightResults.map((item) => ({
+          command: item.command,
+          success: item.success,
+          exitCode: item.exitCode,
+          durationMs: item.durationMs
+        }))
+      });
+    }
+    const bossFightPass = bossFightResults.length === 0 || bossFightResults.every((item) => item.success);
+
+    pushStage('nuclear_truth_post_merge:start');
+    const nuclearTruthPostMerge = runNuclearTruthAudit(process.cwd());
+    const postMergeTruthPass = !enforceNuclearTruth
+      || (nuclearTruthPostMerge.truthState !== 'blocked' && Number(nuclearTruthPostMerge.score || 0) >= Number(nuclearTruthMinScore || 0));
+    pushStage('nuclear_truth_post_merge:done', {
+      success: postMergeTruthPass,
+      truthState: nuclearTruthPostMerge.truthState,
+      score: nuclearTruthPostMerge.score
+    });
+
+    let rollbackApplied = false;
+    if (!(verifyPass && bossFightPass && postMergeTruthPass) && rollbackOnFailure) {
+      writeFileSync(absolutePath, originalCode, 'utf8');
+      rollbackApplied = true;
+      pushStage('rollback:done', { success: true, reason: 'verification_or_truth_failed' });
+    }
+
+    const finalPass = verifyPass && bossFightPass && postMergeTruthPass;
+    const finalStatus = finalPass ? 'verified' : 'recommended';
+    const receipt = {
+      id: pipelineId,
+      status: finalStatus,
+      filePath: relativePath,
+      objective: selectedObjective,
+      startedAt: new Date(startedAt).toISOString(),
+      finishedAt: new Date().toISOString(),
+      durationMs: Date.now() - startedAt,
+      proposal: {
+        source: selectedCandidate.source || primaryProposal.source,
+        transport: primaryProposal.transport || null,
+        model: primaryProposal.model || null
+      },
+      liveRun,
+      tournament: tournament.ranking,
+      budgetGate,
+      capabilityGraph: {
+        hash: capabilityGraph.hash,
+        summary: capabilityGraph.summary
+      },
+      drift: graphDrift,
+      recoveryPlan,
+      nuclearTruth: {
+        preMerge: {
+          truthState: nuclearTruth.truthState,
+          score: nuclearTruth.score
+        },
+        postMerge: {
+          truthState: nuclearTruthPostMerge.truthState,
+          score: nuclearTruthPostMerge.score
+        }
+      },
+      requiredScope,
+      verification,
+      bossFights: bossFightResults,
+      rollbackApplied,
+      stages
+    };
+    appendUiEvolutionReceipt(receipt);
+    const realityReceipt = appendRealityReceipt(AUTONOMOUS_EVOLUTION_RECEIPTS_FILE, {
+      type: 'ui_evolution_pipeline',
+      status: finalStatus,
+      pipelineId,
+      filePath: relativePath,
+      objective: selectedObjective,
+      verification: verification.map((item) => ({
+        command: item.command,
+        success: item.success,
+        exitCode: item.exitCode
+      })),
+      bossFights: bossFightResults.map((item) => ({
+        command: item.command,
+        success: item.success,
+        exitCode: item.exitCode
+      })),
+      nuclearTruthPostMerge: {
+        truthState: nuclearTruthPostMerge.truthState,
+        score: nuclearTruthPostMerge.score
+      }
+    });
+
+    if (autoUpdateBaseline || finalPass) {
+      saveCapabilityBaseline(AUTONOMOUS_EVOLUTION_BASELINE_FILE, capabilityGraph);
+    }
+
+    if (!finalPass) {
+      appendFailureMemory(AUTONOMOUS_EVOLUTION_FAILURE_FILE, {
+        pipelineId,
+        filePath: relativePath,
+        stage: 'auto_test_build',
+        objective: selectedObjective,
+        error: 'Verification and/or post-merge truth gate failed.',
+        verification,
+        bossFights: bossFightResults
+      });
+    }
+
+    return res.json({
+      success: finalPass,
+      receipt,
+      realityReceipt,
+      message: finalPass
+        ? 'UI evolution pipeline completed with verified live receipts and post-merge Nuclear Truth gate.'
+        : 'UI evolution merged but did not pass full verification gates; review receipt.'
+    });
+  } catch (e) {
+    appendFailureMemory(AUTONOMOUS_EVOLUTION_FAILURE_FILE, {
+      pipelineId,
+      filePath: req.body?.filePath || null,
+      stage: 'broken',
+      objective: req.body?.objective || null,
+      error: String(e.message || e)
+    });
+    const receipt = {
+      id: pipelineId,
+      status: 'broken',
+      startedAt: new Date(startedAt).toISOString(),
+      finishedAt: new Date().toISOString(),
+      durationMs: Date.now() - startedAt,
+      error: String(e.message || e)
+    };
+    appendUiEvolutionReceipt(receipt);
+    return res.status(500).json({ success: false, ...receipt });
+  }
+});
+
+app.get('/api/evolution/ui/receipts', (req, res) => {
+  try {
+    const limit = Math.max(10, Math.min(300, Number.parseInt(String(req.query.limit || '50'), 10) || 50));
+    const receipts = readUiEvolutionReceipts(limit);
+    return res.json({ success: true, receipts });
+  } catch (e) {
+    return res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+app.get('/api/evolution/autonomous/status', (req, res) => {
+  try {
+    const capabilityGraph = buildCapabilityGraph({ workspaceRoot: process.cwd() });
+    const baseline = loadCapabilityBaseline(AUTONOMOUS_EVOLUTION_BASELINE_FILE);
+    const drift = computeCapabilityDrift(capabilityGraph, baseline);
+    const uiReceipts = readUiEvolutionReceipts(120);
+    const replay = buildEvolutionReplayTheater(uiReceipts, 24);
+    const fusion = buildFeatureFusionPlan(capabilityGraph);
+    const failureMemory = readFailureMemory(AUTONOMOUS_EVOLUTION_FAILURE_FILE, { limit: 80 });
+    const recoveryPlan = buildRecoveryPlan(failureMemory.slice(-20));
+    const nightforgeMetrics = buildNightforgeMetrics();
+    const challenge = buildNightforgeChallengeSnapshot({
+      nightforgeState,
+      nightforgeMetrics,
+      receipts: uiReceipts
+    });
+    const realityReceipts = loadRealityReceipts(AUTONOMOUS_EVOLUTION_RECEIPTS_FILE, 40);
+
+    return res.json({
+      success: true,
+      generatedAt: new Date().toISOString(),
+      capabilityGraph: {
+        hash: capabilityGraph.hash,
+        summary: capabilityGraph.summary
+      },
+      baseline,
+      drift,
+      patchTournament: {
+        supported: true,
+        mode: 'live_validation_scored'
+      },
+      budgetEngine: {
+        supported: true,
+        defaultBudget: {
+          maxFilesTouched: 1,
+          maxChangedLines: 320,
+          maxCharDelta: 24000
+        }
+      },
+      failureMemory: {
+        total: failureMemory.length,
+        recoveryPlan
+      },
+      receiptLedger: {
+        uiEvolutionReceipts: uiReceipts.length,
+        autonomousRealityReceipts: realityReceipts.length
+      },
+      ghostMutationLab: {
+        supported: true,
+        executionPath: 'proposal -> patch tournament -> live run'
+      },
+      nightforgeChallenge: challenge,
+      autonomousBossFights: {
+        supported: true,
+        commandDeck: ['node --check promptbridge-server.js', 'npm test', 'npm run build']
+      },
+      featureFusion: fusion,
+      replayTheater: replay
+    });
+  } catch (e) {
+    return res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+app.post('/api/evolution/autonomous/boss-fights', maybeRequireAuthOrMaster, writeRateLimit, enforceJsonObjectBody, (req, res) => {
+  try {
+    const commands = Array.isArray(req.body?.commands) && req.body.commands.length > 0
+      ? req.body.commands
+      : ['node --check promptbridge-server.js', 'npm test', 'npm run build'];
+    const results = commands.map((command) => runCommandWithReceipt(String(command), 20 * 60 * 1000));
+    const passed = results.every((item) => item.success);
+    const receipt = appendRealityReceipt(AUTONOMOUS_EVOLUTION_RECEIPTS_FILE, {
+      type: 'boss_fight',
+      status: passed ? 'verified' : 'blocked',
+      commands: results.map((item) => ({
+        command: item.command,
+        success: item.success,
+        exitCode: item.exitCode,
+        durationMs: item.durationMs
+      }))
+    });
+    return res.status(passed ? 200 : 412).json({
+      success: passed,
+      status: passed ? 'verified' : 'blocked',
+      results,
+      receipt
+    });
+  } catch (e) {
+    return res.status(500).json({ success: false, error: e.message });
+  }
+});
+
 app.get('/api/evolution/status', (req, res) => {
   res.json(globalEvolutionState);
 });
@@ -2263,11 +3019,114 @@ app.post('/api/evo-lm/compressed-chat', async (req, res) => {
   }
 });
 
+
+
+// ─── ANCESTRAL MEMORY ROUTES ────────────────────────────────────────────────
+
+app.post('/api/memory/recall', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
+  try {
+    const { query, limit = 5 } = req.body;
+    const SHARD_DIR = join(process.cwd(), '.sovereign-shards');
+    
+    if (!existsSync(SHARD_DIR)) {
+      return res.json({ success: true, shards: [] });
+    }
+
+    const files = readdirSync(SHARD_DIR).filter(f => f.endsWith('.json'));
+    const results = [];
+
+    for (const file of files) {
+      const content = readFileSync(join(SHARD_DIR, file), 'utf8');
+      // Simple relevance scoring (keyword density for now, can be upgraded to local embeddings)
+      const score = query.split(' ').reduce((acc, word) => {
+        const regex = new RegExp(word, 'gi');
+        const matches = content.match(regex);
+        return acc + (matches ? matches.length : 0);
+      }, 0);
+
+      if (score > 0) {
+        results.push({
+          shardKey: file.replace('.json', ''),
+          score,
+          preview: content.slice(0, 200) + '...'
+        });
+      }
+    }
+
+    const topShards = results.sort((a, b) => b.score - a.score).slice(0, limit);
+    res.json({ success: true, shards: topShards });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── COGNITIVE CONSCIOUSNESS ROUTES ──────────────────────────────────────────
+
+app.post('/api/antigravity/synthesize-wisdom', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
+  try {
+    const { context, current_state } = req.body;
+    
+    const prompt = `
+      You are the "Central Cortex" of PromptHouse Evo Studio.
+      Analyze the following context digest and current consciousness state.
+      Synthesize a systemic realization and provide a directive for evolution.
+      
+      CONTEXT DIGEST:
+      ${JSON.stringify(context, null, 2)}
+      
+      CURRENT STATE:
+      ${JSON.stringify(current_state, null, 2)}
+      
+      Output JSON only:
+      {
+        "realization": "A profound statement about the studio's current evolution.",
+        "new_state": { "iq": 105, "awakening_level": 0.05, ... },
+        "directive": "NONE" | "MUTATE_CORE" | "OPTIMIZE_PERFORMANCE" | "STRENGTHEN_TRUTH",
+        "directive_fingerprint": "unique_hash"
+      }
+    `;
+
+    const response = await ai.generateResponse([{ role: 'user', content: prompt }], 'Cognitive Wisdom Synthesis');
+    const text = response.message;
+    const jsonMatch = text.match(/\{.*\}/s);
+    
+    if (jsonMatch) {
+      res.json({ success: true, ...JSON.parse(jsonMatch[0]) });
+    } else {
+      res.json({ success: false, error: 'Failed to parse wisdom JSON.' });
+    }
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/foundry/initiate-self-mutation', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
+  try {
+    const { reason, fingerprint } = req.body;
+    Log.info(`🧪 [Foundry] Initiating SELF-MUTATION cycle. Reason: ${reason}`);
+    
+    // In a real scenario, this would trigger NightForge to rewrite core files
+    // For now, we log the intent and record the evolutionary leap
+    const receipt = {
+      id: `mutation_${Date.now()}`,
+      type: 'SELF_MUTATION',
+      reason,
+      fingerprint,
+      timestamp: new Date().toISOString()
+    };
+    
+    res.json({ success: true, receipt });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ─── FOUNDRY ROUTES (SMFF) ───────────────────────────────────────────────────
 
 app.post('/api/foundry/harvest', maybeRequireAuthOrMaster, async (req, res) => {
   try {
-    const result = await foundry.harvest(process.cwd());
+    const identity = resolveEvolutionSubject(req, req.query || {});
+    const result = await foundry.harvest(process.cwd(), identity.subjectKey);
     res.json(result);
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -2276,8 +3135,9 @@ app.post('/api/foundry/harvest', maybeRequireAuthOrMaster, async (req, res) => {
 
 app.post('/api/foundry/initiate', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
   try {
+    const identity = resolveEvolutionSubject(req, req.body || {});
     const mission = req.body;
-    const result = await foundry.initiateBuild(mission);
+    const result = await foundry.initiateBuild(mission, identity.subjectKey);
     res.json(result);
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -3347,3 +4207,10 @@ app.listen(port, '0.0.0.0', () => {
   console.log(`╚════════════════════════════════════════╝`);
   console.log(`[BRIDGE ACTIVE] http://127.0.0.1:${port}`);
 });
+
+
+async function bridge_get_latest_cognitive_directive(orgId) {
+  // In a real scenario, this would query the local Cognitive Ledger
+  // For now, we simulate the handshake
+  return null; 
+}

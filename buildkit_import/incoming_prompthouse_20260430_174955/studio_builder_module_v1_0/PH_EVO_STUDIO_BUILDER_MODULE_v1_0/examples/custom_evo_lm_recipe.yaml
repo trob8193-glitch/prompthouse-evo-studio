@@ -17,7 +17,7 @@ references:
 tools:
   - flutter_command_rail
   - file_search
-  - promptlink.github_dry_run
+  - promptlink.github_live_run
   - proof_deck
 rules:
   never:

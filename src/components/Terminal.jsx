@@ -15,10 +15,34 @@ import {
   Shield,
   Zap,
   Activity,
-  Layers
+  Layers,
+  Command,
+  Search
 } from 'lucide-react';
 
 const BRIDGE_URL = 'http://127.0.0.1:3001';
+
+const COMMAND_CATALOG = [
+  { id: 'audit', label: 'Nuclear Truth Audit', command: 'evo audit', session: 'security', description: 'Full studio wiring and truth-state audit.', tags: ['audit', 'truth', 'security'] },
+  { id: 'info', label: 'System Info Snapshot', command: 'evo info', session: 'main', description: 'Reports OS, node version, and local IP.', tags: ['info', 'diagnostics'] },
+  { id: 'connect-bridge', label: 'Bond Bridge Node', command: 'evo connect 127.0.0.1:3001', session: 'security', description: 'Attempts a direct TCP handshake to PromptBridge.', tags: ['connect', 'bridge'] },
+  { id: 'connect-vite', label: 'Bond Studio Node', command: 'evo connect 127.0.0.1:5173', session: 'security', description: 'Verifies local studio runtime reachability.', tags: ['connect', 'studio'] },
+  { id: 'install', label: 'Install Dependencies', command: 'npm install', session: 'build', description: 'Installs package dependencies for the workspace.', tags: ['npm', 'deps'] },
+  { id: 'dev', label: 'Launch Dev Server', command: 'npm run dev', session: 'watch', description: 'Starts Vite dev runtime for frontend iteration.', tags: ['dev', 'vite'] },
+  { id: 'bridge', label: 'Launch PromptBridge', command: 'npm run bridge', session: 'watch', description: 'Starts local PromptBridge API/runtime server.', tags: ['bridge', 'server'] },
+  { id: 'dev-all', label: 'Launch Full Stack', command: 'npm run dev:all', session: 'watch', description: 'Starts studio UI and bridge in one process.', tags: ['dev', 'fullstack'] },
+  { id: 'test', label: 'Run Test Suite', command: 'npm test', session: 'build', description: 'Executes Vitest suite for studio validation.', tags: ['test', 'vitest'] },
+  { id: 'build', label: 'Build Production Bundle', command: 'npm run build', session: 'build', description: 'Compiles production artifacts with Vite.', tags: ['build', 'release'] },
+  { id: 'preview', label: 'Preview Production Build', command: 'npm run preview', session: 'watch', description: 'Serves built assets for local release check.', tags: ['preview', 'vite'] },
+  { id: 'audit-npm', label: 'Dependency Security Audit', command: 'npm audit --audit-level=moderate', session: 'security', description: 'Checks package vulnerabilities at moderate+.', tags: ['security', 'audit'] },
+  { id: 'git-status', label: 'Git Status', command: 'git status --short', session: 'main', description: 'Shows current modified and untracked files.', tags: ['git', 'status'] },
+  { id: 'git-branch', label: 'Git Branch Overview', command: 'git branch --show-current', session: 'main', description: 'Shows the active working branch.', tags: ['git', 'branch'] },
+  { id: 'git-diff', label: 'Git Diff Summary', command: 'git diff --stat', session: 'main', description: 'Displays changed-file summary with line deltas.', tags: ['git', 'diff'] },
+  { id: 'node-version', label: 'Node Version', command: 'node -v', session: 'main', description: 'Prints active Node.js version.', tags: ['node', 'runtime'] },
+  { id: 'npm-version', label: 'NPM Version', command: 'npm -v', session: 'main', description: 'Prints active npm version.', tags: ['npm', 'runtime'] },
+  { id: 'pwd', label: 'Working Directory', command: 'pwd', session: 'main', description: 'Shows current workspace path.', tags: ['path', 'workspace'] },
+  { id: 'files', label: 'List Workspace Files', command: 'Get-ChildItem', session: 'main', description: 'Lists files and folders in current directory.', tags: ['files', 'inspect'] }
+];
 
 export function Terminal() {
   const { 
@@ -33,6 +57,7 @@ export function Terminal() {
     setTerminalTheme,
     terminalHistory,
     addTerminalHistory,
+    addBondedNode,
     bondedNodes
   } = useSovereignStore();
 
@@ -40,9 +65,17 @@ export function Terminal() {
   const [executing, setExecuting] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [catalogOpen, setCatalogOpen] = useState(true);
+  const [catalogFilter, setCatalogFilter] = useState('');
   const scrollRef = useRef(null);
 
   const logs = terminalSessions[activeTerminalSession] || [];
+  const normalizedFilter = catalogFilter.trim().toLowerCase();
+  const filteredCommands = COMMAND_CATALOG.filter((item) => {
+    if (!normalizedFilter) return true;
+    const searchText = `${item.label} ${item.command} ${item.description} ${item.tags.join(' ')}`.toLowerCase();
+    return searchText.includes(normalizedFilter);
+  });
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -50,16 +83,10 @@ export function Terminal() {
     }
   }, [logs, terminalOpen]);
 
-  const handleRunCommand = async (e) => {
-    e?.preventDefault();
-    if (!command.trim() || executing) return;
-
-    const cmdText = command.trim();
-    setCommand('');
-    setHistoryIndex(-1);
+  const runCommandText = async (cmdText, session = activeTerminalSession) => {
+    if (!cmdText || executing) return;
     setExecuting(true);
-    
-    addTerminalLog(`$ ${cmdText}`, 'command', activeTerminalSession);
+    addTerminalLog(`$ ${cmdText}`, 'command', session);
     addTerminalHistory(cmdText);
 
     try {
@@ -69,23 +96,42 @@ export function Terminal() {
         body: JSON.stringify({
           module: 'Terminal',
           action: 'run',
-          payload: { command: cmdText, session: activeTerminalSession }
+          payload: { command: cmdText, session }
         }),
       });
       const data = await res.json();
       if (data.success) {
-        addTerminalLog(data.result.output || 'EvoShell: Completed.', 'success', activeTerminalSession);
+        addTerminalLog(data.result.output || 'EvoShell: Completed.', 'success', session);
         if (data.result.node) {
           addBondedNode(data.result.node);
         }
       } else {
-        addTerminalLog(data.error || 'EvoShell: Failed.', 'error', activeTerminalSession);
+        addTerminalLog(data.error || 'EvoShell: Failed.', 'error', session);
       }
     } catch (err) {
-      addTerminalLog(`System Error: ${err.message}`, 'error', activeTerminalSession);
+      addTerminalLog(`System Error: ${err.message}`, 'error', session);
     } finally {
       setExecuting(false);
     }
+  };
+
+  const handleRunCommand = async (e) => {
+    e?.preventDefault();
+    if (!command.trim() || executing) return;
+    const cmdText = command.trim();
+    setCommand('');
+    setHistoryIndex(-1);
+    await runCommandText(cmdText, activeTerminalSession);
+  };
+
+  const runCatalogCommand = async (item) => {
+    if (executing) return;
+    if (item.session && item.session !== activeTerminalSession) {
+      setActiveTerminalSession(item.session);
+    }
+    setCommand(item.command);
+    setHistoryIndex(-1);
+    await runCommandText(item.command, item.session || activeTerminalSession);
   };
 
   const handleKeyDown = (e) => {
@@ -227,6 +273,54 @@ export function Terminal() {
         <span className="flex items-center gap-2 text-slate-500"><Shield size={10} className="text-emerald-500" /> Bonding: {bondedNodes.length > 0 ? `${bondedNodes.length} Nodes` : 'Standalone'}</span>
         <span className="flex items-center gap-2 text-slate-500"><Zap size={10} className="text-amber-500" /> Power: Optimal</span>
         <span className="flex items-center gap-2 text-slate-500"><Layers size={10} className="text-indigo-400" /> Session: {activeTerminalSession.toUpperCase()}</span>
+      </div>
+
+      {/* Clickable Command Catalog */}
+      <div className={`border-b ${s.border} bg-black/30`}>
+        <div className="px-6 py-2 flex items-center gap-3">
+          <button
+            onClick={() => setCatalogOpen((value) => !value)}
+            className="shrink-0 flex items-center gap-2 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] rounded border border-indigo-500/30 text-indigo-300 hover:text-white hover:border-indigo-400 transition-colors"
+            title="Toggle command catalog"
+          >
+            <Command size={12} />
+            Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}
+          </button>
+          <div className="flex-1 min-w-0 flex items-center gap-2 px-3 py-1 rounded border border-slate-800 bg-black/40">
+            <Search size={12} className="text-slate-500 shrink-0" />
+            <input
+              type="text"
+              value={catalogFilter}
+              onChange={(e) => setCatalogFilter(e.target.value)}
+              placeholder="Filter commands: audit, build, bridge, git..."
+              className="w-full bg-transparent border-none outline-none text-[11px] text-slate-200 placeholder:text-slate-600"
+            />
+          </div>
+        </div>
+
+        {catalogOpen && (
+          <div className="px-6 pb-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 max-h-[168px] overflow-auto">
+            {filteredCommands.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => runCatalogCommand(item)}
+                disabled={executing}
+                className="text-left p-2 rounded border border-slate-800 bg-black/35 hover:border-indigo-500/40 hover:bg-indigo-500/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                title={`Run: ${item.command}`}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-[10px] text-indigo-300 font-black uppercase tracking-widest">{item.label}</span>
+                  <span className="text-[8px] text-slate-500 uppercase tracking-widest">{item.session}</span>
+                </div>
+                <div className="mt-1 text-[10px] text-slate-400">{item.description}</div>
+                <div className="mt-1 font-mono text-[10px] text-emerald-300 truncate">{item.command}</div>
+              </button>
+            ))}
+            {filteredCommands.length === 0 && (
+              <div className="col-span-full text-[11px] text-slate-500 py-3">No commands match this filter.</div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Terminal Output */}

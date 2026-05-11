@@ -39,4 +39,23 @@ export class SovereignSharder {
     Log.info(`💎 [Sharder] Reconstructing logic connectome from ${shardKeys.length} shards...`);
     // Reassembles fragmented logic for runtime use
   }
+
+  /**
+   * Recalls historical shards based on a semantic query.
+   */
+  async recall(query) {
+    Log.info(`💎 [Sharder] Recalling ancestral memory for: "${query}"`);
+    try {
+      const res = await fetch('http://127.0.0.1:3001/api/memory/recall', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query })
+      });
+      const result = await res.json();
+      return result.shards || [];
+    } catch (e) {
+      Log.error(`💎 [Sharder] Recall failed: ${e.message}`);
+      return [];
+    }
+  }
 }

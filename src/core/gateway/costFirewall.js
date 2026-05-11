@@ -76,6 +76,14 @@ export class CostFirewall {
     
     console.log(`[FIREWALL] Deducted ${creditsUsed} credits from Org ${orgId}`);
   }
+
+  /**
+   * Retrieves the remaining credits for an organization.
+   */
+  static async getRemainingCredits(orgId) {
+    const row = db.prepare('SELECT credits_remaining FROM api_credits WHERE organization_id = ?').get(orgId);
+    return row ? row.credits_remaining : 0;
+  }
 }
 
 export default CostFirewall;

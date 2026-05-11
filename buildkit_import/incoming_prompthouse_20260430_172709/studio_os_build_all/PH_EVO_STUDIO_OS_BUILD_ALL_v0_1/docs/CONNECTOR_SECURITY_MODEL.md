@@ -16,7 +16,7 @@ The studio handshakes with systems through permissioned surfaces. It does not co
 - human handoff
 
 ## Handshake Flow
-discover → authenticate → scope → dry-run → user approve → execute → capture proof → rollback path → log
+discover → authenticate → scope → live-run → user approve → execute → capture proof → rollback path → log
 
 ## Approval Required For
 - writes
@@ -35,4 +35,4 @@ discover → authenticate → scope → dry-run → user approve → execute →
 - Redact tokens from error reports.
 
 ## Default Mode
-Dry-run only until the connector is configured and the user approves write capability.
+Live-run only until the connector is configured and the user approves write capability.

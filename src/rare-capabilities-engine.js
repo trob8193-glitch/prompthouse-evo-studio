@@ -32,7 +32,7 @@ export const RARE_CAPABILITIES = [
     short: 'Permission Gate',
     icon: '🛡️',
     accent: '#8b5cf6',
-    promise: 'Classifies external actions by scope, risk, approval, dry-run needs, rollback, and audit artifacts.',
+    promise: 'Classifies external actions by scope, risk, approval, live-run needs, rollback, and audit artifacts.',
     rare: 'It makes tool power understandable before an agent touches GitHub, Stripe, DBs, email, MCP, CLI, or deploys.',
   },
   {
@@ -222,11 +222,11 @@ export function buildRareArtifact(capabilityId, missionInput) {
       primary: makeJson({
         connector_id: `${slug}_connector`,
         risk_level: risk,
-        default_mode: 'read_only_dry_run',
+        default_mode: 'read_only_live_run',
         approval_policy: risk === 'low' ? 'ask_before_write' : 'always_ask',
         blocked_actions: ['delete', 'payment', 'production_deploy', 'external_message_without_approval'],
         rollback_strategy: risk === 'destructive' ? 'manual_recovery_required' : 'version_restore_or_revert',
-        audit_artifacts: ['scope_summary', 'dry_run_output', 'approval_receipt', 'execution_log'],
+        audit_artifacts: ['scope_summary', 'live_run_output', 'approval_receipt', 'execution_log'],
       }),
       receipts: ['scope_summary', 'approval_policy', 'rollback_strategy'],
     },

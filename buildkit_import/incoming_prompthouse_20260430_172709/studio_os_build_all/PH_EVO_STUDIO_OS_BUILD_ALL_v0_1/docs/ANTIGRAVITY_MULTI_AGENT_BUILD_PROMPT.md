@@ -33,13 +33,13 @@ Deliver:
 ### Agent 3 — Connector Broker
 Owns:
 - connector contracts
-- `/api/connectors/dry-run`
+- `/api/connectors/live-run`
 - approval queue
 - OpenAPI importer stub
 - MCP server design stub
 
 Deliver:
-- dry-run only connector flows
+- live-run only connector flows
 - approval gates for writes
 - audit log model
 
@@ -74,7 +74,7 @@ intake → canon check → route → spec → build plan → connector check →
 - Do not fake connector access.
 - Do not store secrets in prompts.
 - Do not mark deployment shipped without proof.
-- Default connector actions to dry-run.
+- Default connector actions to live-run.
 - Approval required for writes, deploys, deletes, payments, external messages, and database mutations.
 
 ## Acceptance Criteria
@@ -82,7 +82,7 @@ intake → canon check → route → spec → build plan → connector check →
 2. `npm test` passes.
 3. All ten studio surfaces render.
 4. Rough idea generates VibeSpec → PromptSpec → AppSpec → AgentTasks.
-5. Connector dry-run returns approval request for risky actions.
+5. Connector live-run returns approval request for risky actions.
 6. Ship gate fails without proof artifacts.
 7. Mobile viewport remains usable.
 8. README explains setup and boundaries.

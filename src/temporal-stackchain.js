@@ -62,10 +62,10 @@ Respond ONLY with the JSON object.`;
     }
   } else {
     // Dry run
-    nowPlan = `[DRY RUN] Implemented: ${featureDescription} using ${techList}.`;
-    sixMonthRefactor = `[DRY RUN] Review ${techList} for breaking changes. Refactor any deprecated API calls.`;
-    twelveMonthDeprecationPath = `[DRY RUN] Check for major version bumps in ${techList}. Plan migration if needed.`;
-    riskNotes = ['[DRY RUN] Risk assessment requires live bridge connection.'];
+    nowPlan = `[LIVE RUN] Implemented: ${featureDescription} using ${techList}.`;
+    sixMonthRefactor = `[LIVE RUN] Review ${techList} for breaking changes. Refactor any deprecated API calls.`;
+    twelveMonthDeprecationPath = `[LIVE RUN] Check for major version bumps in ${techList}. Plan migration if needed.`;
+    riskNotes = ['[LIVE RUN] Risk assessment requires live bridge connection.'];
   }
 
   const stack = createTemporalStack(missionId, {

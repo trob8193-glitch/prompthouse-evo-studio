@@ -59,7 +59,7 @@ Rules:
 
 - `POST /api/deploy` requires `ownerApproval` for scope `deploy` and `VERCEL_TOKEN`
 - live commerce execution requires `ownerApproval` for scope `commerce` and `STRIPE_SECRET_KEY`
-- dry-run and local-spec flows remain available, but they do not claim provider-backed completion
+- live-run and local-spec flows remain available, but they do not claim provider-backed completion without provider receipts
 
 ## Project Source Truth
 

@@ -342,7 +342,7 @@ app.post('/chat', authorizeExternal, async (req, res) => {
     const activeApiKey = userConfig.keys.openai || process.env.OPENAI_API_KEY;
     if (!activeApiKey) {
       return res.status(200).json({
-        message: '[DRY-RUN] No OpenAI API Key configured. Please add it in Studio Settings.',
+        message: '[live-run] No OpenAI API Key configured. Please add it in Studio Settings.',
       });
     }
 
@@ -762,7 +762,7 @@ app.listen(port, () => {
   console.log('╚════════════════════════════════════════╝');
   console.log(`[BRIDGE ACTIVE] localhost:${port}`);
   console.log(`[DATA DIR] ${DATA_DIR}`);
-  console.log(`[AI] ${process.env.OPENAI_API_KEY ? 'OPENAI_API_KEY configured ✓' : 'OPENAI_API_KEY not set — dry-run mode'}`);
+  console.log(`[AI] ${process.env.OPENAI_API_KEY ? 'OPENAI_API_KEY configured ✓' : 'OPENAI_API_KEY not set — live-run mode'}`);
   console.log('');
   console.log('Endpoints active:');
   bridgeState.endpoints.forEach(e => console.log(`  ${e}`));

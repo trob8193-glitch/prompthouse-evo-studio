@@ -6,7 +6,7 @@ project:
 rails:
   installer: enabled
   backend: supabase_or_firebase
-  github: dry_run_then_approval
+  github: live_run_then_approval
   secrets: descriptor_only
   device_lab: enabled
   signing: guarded

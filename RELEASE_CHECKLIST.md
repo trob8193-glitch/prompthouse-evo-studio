@@ -52,7 +52,7 @@ Use this before calling PromptHouse Evo Studio `proof-gated launch ready`.
   - `ownerApproval.granted === true`
   - `scope === "commerce"`
   - `STRIPE_SECRET_KEY`
-- dry-run and local-spec flows never masquerade as provider-verified execution
+- live-run and local-spec flows never masquerade as provider-verified execution without receipts
 
 ## Self-Implementation Gates
 

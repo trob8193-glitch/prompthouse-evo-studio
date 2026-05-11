@@ -135,6 +135,14 @@ class AntigravityAdaptor {
       const res = await fetch(`${BRIDGE_URL}/api/evolution/activate`, { method: 'POST' });
       return await res.json();
     }
+    if (cmd === 'synthesize-wisdom') {
+      const res = await fetch(`${BRIDGE_URL}/api/antigravity/synthesize-wisdom`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(p)
+      });
+      return await res.json();
+    }
     return { tool: 'antigravity', status: 'OK' }; 
   }
   async sync() { return { tool: 'antigravity', status: 'SYNCED' }; }
@@ -143,28 +151,44 @@ class AntigravityAdaptor {
 class FoundryAdaptor {
   async execute(cmd, p) {
     Log.info(`🏗️ [FoundryAdaptor] Executing: ${cmd}`);
+    const clientId = localStorage.getItem('ph_evo_client_id') || 'anon_foundry';
+    
     if (cmd === 'harvest') {
       try {
-        const res = await fetch('/src/generated/missions.json');
+        const res = await fetch(`${BRIDGE_URL}/api/foundry/harvest?clientId=${clientId}`, {
+          method: 'POST'
+        });
         const data = await res.json();
-        return { success: true, missions: data };
+        return data;
       } catch (e) {
-        return { success: false, error: 'FAILED_TO_LOAD_MISSIONS' };
+        return { success: false, error: 'FAILED_TO_HARVEST_BRIDGE' };
       }
     }
     if (cmd === 'initiate') {
-      const res = await fetch(`${BRIDGE_URL}/api/files/write`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          path: 'src/generated/active_mission.json',
-          content: JSON.stringify(p, null, 2)
-        })
-      });
-      if (res.ok) {
-        return { success: true, manifest: { id: p.id, status: 'BUILDING' } };
+      try {
+        const res = await fetch(`${BRIDGE_URL}/api/foundry/initiate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...p, clientId })
+        });
+        const data = await res.json();
+        return data;
+      } catch (e) {
+        return { success: false, error: 'FAILED_TO_INITIATE_BUILD' };
       }
-      return { success: false, error: 'FAILED_TO_WRITE_MISSION' };
+    }
+        if (cmd === 'initiate-self-mutation') {
+      try {
+        const res = await fetch(`${BRIDGE_URL}/api/foundry/initiate-self-mutation`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(p)
+        });
+        const data = await res.json();
+        return data;
+      } catch (e) {
+        return { success: false, error: 'FAILED_TO_INITIATE_SELF_MUTATION' };
+      }
     }
     return { success: false, error: 'UNKNOWN_COMMAND' };
   }

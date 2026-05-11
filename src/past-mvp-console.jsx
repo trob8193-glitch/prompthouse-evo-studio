@@ -153,7 +153,7 @@ export default function PastMVPConsole() {
     if (!selectedMission) { log('Select a mission first.', '#f87171'); return; }
     setLoading(true);
     log('[UNBOUND] Blueprint Orca initializing DeployRail (Shadow-Dome Protocol)...');
-    const result = await runDeployRail(selectedMission.id, { dryRun: false, candidateScore: 100, provider: 'vercel' });
+    const result = await runDeployRail(selectedMission.id, { liveRun: true, candidateScore: 100, provider: 'vercel' });
     setDeployResult(result);
     result.log.forEach(l => log(l));
     log('[UNBOUND] DeployRail complete. Sovereign auto-approved.', '#4ade80');
@@ -206,7 +206,7 @@ export default function PastMVPConsole() {
     await generateTemporalStack(selectedMission.id, selectedMission.title, ['React','Node.js','OpenAI'], callBridge);
 
     log('Step 5/7: DeployRail (Shadow-Dome Protocol)...');
-    await runDeployRail(selectedMission.id, { dryRun: false, candidateScore: 100 });
+    await runDeployRail(selectedMission.id, { liveRun: true, candidateScore: 100 });
 
     log('Step 6/7: Commerce Rail...');
     createCommerceProduct(selectedMission.id, { productName: selectedMission.title, price: 2999, mode: "[PURGED BY OMEGA PROTOCOL]" });
@@ -317,7 +317,7 @@ export default function PastMVPConsole() {
         <button onClick={handleFission} disabled={loading} style={btn('#818cf8')}>⚡ Run Fission</button>
         <button onClick={handleVectorPack} disabled={loading} style={btn('#22d3ee')}>📦 VectorPack</button>
         <button onClick={handleTemporal} disabled={loading} style={btn('#a78bfa')}>⏳ Temporal Stack</button>
-        <button onClick={handleDeploy} disabled={loading} style={btn('#f5c842')}>🚀 DeployRail (dry)</button>
+        <button onClick={handleDeploy} disabled={loading} style={btn('#f5c842')}>🚀 DeployRail (live)</button>
         <button onClick={handleCommerce} disabled={loading} style={btn('#4ade80')}>💳 Commerce Mock</button>
         <button onClick={handleNightForge} disabled={loading} style={btn('#fb923c')}>🌙 NightForge</button>
         <button onClick={handleFullAudit} disabled={loading} style={{ ...btn('#ec4899'), fontWeight: 900, fontSize: 13 }}>
@@ -380,7 +380,7 @@ export default function PastMVPConsole() {
       {deployResult && (
         <div style={{ ...card, border: '1px solid #f5c84244' }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: '#f5c842', marginBottom: 6 }}>
-            🚀 DeployRail — {deployResult.dryRun ? 'DRY RUN' : deployResult.blocked ? 'BLOCKED' : 'DEPLOYED'}
+            🚀 DeployRail — {deployResult.liveRun ? (deployResult.blocked ? 'BLOCKED' : 'DEPLOYED') : 'LIVE RUN'}
           </div>
           {deployResult.log.slice(0, 5).map((l, i) => <div key={i} style={{ fontSize: 11, color: '#a0a0c0' }}>{l}</div>)}
         </div>

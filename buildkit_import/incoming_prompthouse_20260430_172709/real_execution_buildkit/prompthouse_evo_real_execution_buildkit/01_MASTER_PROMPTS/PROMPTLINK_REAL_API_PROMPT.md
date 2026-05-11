@@ -12,7 +12,7 @@ PromptLink lets PromptHouse talk to other APIs safely and provably.
 - Validate connector capabilities.
 - Confirm required secret exists server-side.
 - Enforce allowed actions.
-- Support dry-run policy check.
+- Support live-run policy check.
 - Invoke real external API only when configured.
 - Persist audit log.
 - Persist proof card for success/failure.

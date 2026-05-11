@@ -51,7 +51,7 @@ Until the studio has real users, retention, and revenue, do not tell people it i
 ## What creates real value fastest
 1. Working deployed demo.
 2. Auth + database + saved missions.
-3. GitHub connector dry-run and PR packet generation.
+3. GitHub connector live-run and PR packet generation.
 4. Prompt-to-app pipeline that produces useful code tasks.
 5. Proof Deck that blocks fake shipping.
 6. 10–20 beta users using it weekly.

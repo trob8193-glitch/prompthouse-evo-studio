@@ -25,7 +25,7 @@ class EvoStudioBuilderService {
       publicVoice: 'Evo',
       supportBots: ['Dev', 'Builder', 'Verifier', 'Boundary', 'Blueprint Orca', 'Forge Rhino'],
       references: ['PromptBase mobile app builder', 'Flutter blueprint file', '21-bot roster canon'],
-      tools: ['Flutter command rail', 'File search', 'GitHub dry-run', 'Proof Deck'],
+      tools: ['Flutter command rail', 'File search', 'GitHub live-run', 'Proof Deck'],
       rules: ['Never expose secrets', 'Never claim deployment without proof', 'Never write GitHub without approval'],
       approvals: ['repo write', 'production deploy', 'app store submission'],
       tests: ['creates Flutter screen map', 'asks approval before repo write', 'outputs proof checklist'],

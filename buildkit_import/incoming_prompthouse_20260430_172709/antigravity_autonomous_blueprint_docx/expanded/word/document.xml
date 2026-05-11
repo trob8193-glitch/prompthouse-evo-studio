@@ -218,7 +218,7 @@
     <w:bookmarkEnd w:id="41" />
     <w:bookmarkStart w:id="42" w:name="handshake-flow" />
     <w:p><w:pPr><w:pStyle w:val="Heading2" /></w:pPr><w:r><w:t xml:space="preserve">Handshake Flow</w:t></w:r></w:p>
-    <w:p><w:pPr><w:pStyle w:val="SourceCode" /></w:pPr><w:r><w:rPr><w:rStyle w:val="VerbatimChar" /></w:rPr><w:t xml:space="preserve">discover → authenticate → scope → dry-run → user approve → execute → capture proof → rollback path → log</w:t></w:r></w:p>
+    <w:p><w:pPr><w:pStyle w:val="SourceCode" /></w:pPr><w:r><w:rPr><w:rStyle w:val="VerbatimChar" /></w:rPr><w:t xml:space="preserve">discover → authenticate → scope → live-run → user approve → execute → capture proof → rollback path → log</w:t></w:r></w:p>
     <w:bookmarkEnd w:id="42" />
     <w:bookmarkStart w:id="43" w:name="connector-safety-rules" />
     <w:p><w:pPr><w:pStyle w:val="Heading2" /></w:pPr><w:r><w:t xml:space="preserve">Connector Safety Rules</w:t></w:r></w:p>
@@ -467,7 +467,7 @@
     <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="0" /><w:numId w:val="1029" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">implement connector schema</w:t></w:r></w:p>
     <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="0" /><w:numId w:val="1029" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">create mock connectors</w:t></w:r></w:p>
     <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="0" /><w:numId w:val="1029" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">add approval policies</w:t></w:r></w:p>
-    <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="0" /><w:numId w:val="1029" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">create connector dry-run flow</w:t></w:r></w:p>
+    <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="0" /><w:numId w:val="1029" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">create connector live-run flow</w:t></w:r></w:p>
     <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="0" /><w:numId w:val="1029" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">create audit log for connector actions</w:t></w:r></w:p>
     <w:bookmarkEnd w:id="78" />
     <w:bookmarkStart w:id="79" w:name="sprint-4-prompt-to-app" />
@@ -677,7 +677,7 @@
     <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="1" /><w:numId w:val="1078" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">stores keys only in real secret storage or environment variables</w:t></w:r></w:p>
     <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="1" /><w:numId w:val="1078" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">never embeds secrets in prompts, screenshots, logs, or exported docs</w:t></w:r></w:p>
     <w:p><w:pPr><w:numPr><w:ilvl w:val="0" /><w:numId w:val="1073" /></w:numPr></w:pPr><w:r><w:rPr><w:b /><w:bCs /></w:rPr><w:t xml:space="preserve">Connector Simulator</w:t></w:r></w:p>
-    <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="1" /><w:numId w:val="1079" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">dry-runs connector actions without writing data</w:t></w:r></w:p>
+    <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="1" /><w:numId w:val="1079" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">live-runs connector actions without writing data</w:t></w:r></w:p>
     <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="1" /><w:numId w:val="1079" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">generates request/response previews and risk notes</w:t></w:r></w:p>
     <w:p><w:pPr><w:numPr><w:ilvl w:val="0" /><w:numId w:val="1073" /></w:numPr></w:pPr><w:r><w:rPr><w:b /><w:bCs /></w:rPr><w:t xml:space="preserve">Action Approval Queue</w:t></w:r></w:p>
     <w:p><w:pPr><w:pStyle w:val="Compact" /><w:numPr><w:ilvl w:val="1" /><w:numId w:val="1080" /></w:numPr></w:pPr><w:r><w:t xml:space="preserve">shows pending writes, deploys, emails, database changes, payments, or destructive commands</w:t></w:r></w:p>

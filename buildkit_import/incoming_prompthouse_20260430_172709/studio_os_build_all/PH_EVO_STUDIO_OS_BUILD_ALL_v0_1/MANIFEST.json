@@ -19,7 +19,7 @@
       "sha256": "0d70f96d2365faaac584b89316d67b2d71897c36edd497d3dfedab6e99889ac6"
     },
     {
-      "path": "app/api/connectors/dry-run/route.ts",
+      "path": "app/api/connectors/live-run/route.ts",
       "bytes": 951,
       "sha256": "ef6a493d08b42c00aa3c7a1d7666ae0a2e8a7574b8ba65235b2dd11b46bbeaac"
     },

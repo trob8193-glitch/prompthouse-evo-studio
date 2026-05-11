@@ -72,7 +72,7 @@ export function ToolAutogenView() {
           background: bridgeLive ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)',
           border: `1px solid ${bridgeLive ? '#4ade80' : '#f87171'}`,
           color: bridgeLive ? '#4ade80' : '#f87171' }}>
-          {bridgeLive ? '🟢 AI Bridge Live' : '🔴 Dry-Run Mode'}
+          {bridgeLive ? '🟢 AI Bridge Live' : '🔴 Live-Run Blocked (Bridge Offline)'}
         </div>
       </div>
 

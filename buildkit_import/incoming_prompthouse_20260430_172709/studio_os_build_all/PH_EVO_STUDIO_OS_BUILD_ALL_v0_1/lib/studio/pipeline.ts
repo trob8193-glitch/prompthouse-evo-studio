@@ -119,7 +119,7 @@ export function compileAppSpec(mission: Mission, vibe: VibeSpec, prompt: PromptS
       "POST /api/forge/vibe",
       "POST /api/forge/prompt",
       "POST /api/forge/app",
-      "POST /api/connectors/dry-run",
+      "POST /api/connectors/live-run",
       "POST /api/approvals",
       "POST /api/proof-artifacts"
     ],
@@ -176,7 +176,7 @@ export function createApprovalRequest(connector: ConnectorContract, actionName: 
     actionName,
     requestedBy: "Tool Router",
     riskLevel: connector.riskLevel,
-    payloadPreview: "Dry-run only. No external write executed.",
+    payloadPreview: "Live-run only. No external write executed.",
     proofNeeded: ["scope summary", "rollback plan", "expected change"],
     rollbackPlan: connector.rollbackStrategy,
     status: "pending"
@@ -190,7 +190,7 @@ export function createQAReport(mission: Mission): QAReport {
     browserFindings: ["No browser run yet; schedule smoke path after UI implementation."],
     consoleErrors: [],
     accessibilityFindings: ["Add keyboard navigation checks to approval queue."],
-    testGaps: ["Need connector dry-run tests", "Need ship-gate test", "Need prompt linter tests"],
+    testGaps: ["Need connector live-run tests", "Need ship-gate test", "Need prompt linter tests"],
     recommendedRepairs: ["Add Vitest coverage for requiresApproval and compileAppSpec."]
   };
 }

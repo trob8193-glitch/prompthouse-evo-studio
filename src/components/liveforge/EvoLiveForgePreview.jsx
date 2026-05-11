@@ -63,7 +63,7 @@ export function EvoLiveForgePreview({ promptBridgeBaseUrl = "http://127.0.0.1:30
     setOutput(`PromptBridge request: ${action}...`);
     try {
       const result = await promptBridgeCall(
-        { action, draft, userInstruction: instruction || selectedTemplate.promptHint, dryRun: true },
+        { action, draft, userInstruction: instruction || selectedTemplate.promptHint, liveRun: true },
         { baseUrl: promptBridgeBaseUrl }
       );
       if (result.draft) setDraft(result.draft);

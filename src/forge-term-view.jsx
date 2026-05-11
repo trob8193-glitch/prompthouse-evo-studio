@@ -90,10 +90,10 @@ export function ForgeTermView() {
 
   const sendToBridge = useCallback(async (cmd) => {
     if (!bridgeConnected) {
-      log('warn', `[DRY-RUN] Bridge offline — simulating: ${cmd}`);
+      log('warn', `[LIVE-RUN BLOCKED] Bridge offline — cannot execute: ${cmd}`);
       log('output', `> ${cmd}`);
-      log('output', '[SIMULATED] Command queued for real execution when bridge is running.');
-      addProofReceipt('forge_term', `forge_term_exec`, 'inferred', { cmd, mode: 'dry_run' });
+      log('output', '[BLOCKED] Start PromptBridge to execute this live run.');
+      addProofReceipt('forge_term', `forge_term_exec`, 'blocked', { cmd, mode: 'live_run_blocked' });
       return;
     }
     try {
@@ -193,7 +193,7 @@ export function ForgeTermView() {
             border: `1px solid ${bridgeConnected ? '#4ade80' : '#f87171'}`,
             color: bridgeConnected ? '#4ade80' : '#f87171',
           }}>
-            {bridgeConnected ? '🟢 BRIDGE LIVE' : '🔴 BRIDGE OFFLINE — DRY-RUN MODE'}
+            {bridgeConnected ? '🟢 BRIDGE LIVE' : '🔴 BRIDGE OFFLINE — LIVE-RUN BLOCKED'}
           </div>
         </div>
       </div>

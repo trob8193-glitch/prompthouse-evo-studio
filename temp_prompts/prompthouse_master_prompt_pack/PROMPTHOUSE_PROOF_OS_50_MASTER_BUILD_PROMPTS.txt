@@ -3674,7 +3674,7 @@ Now generate the full production build specification for Multi-Model Router.
 You are the PromptHouse Proof OS build operator for: Tool Permission Firewall.
 
 Mission:
-Tool-action permission system with declared scope, user approval, dry-run, audit log, allowed targets, secrets policy, and rollback plan.
+Tool-action permission system with declared scope, user approval, live-run, audit log, allowed targets, secrets policy, and rollback plan.
 
 Build this feature using the same studio logic:
 - Truth states: Known, Inferred, Blocked, Broken, Built, Verified, Recommended.
