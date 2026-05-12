@@ -88,6 +88,29 @@ export class UniversalBridge {
     Log.info('🌉 [Bridge] Initiating Physical Interop Sync...');
     return await Promise.all(Object.entries(this.adaptors).map(([id, a]) => a.sync()));
   }
+
+  /**
+   * Physically dispatch a command to the Dart/Flutter engine.
+   */
+  async dispatchToDart(command, params = {}) {
+    Log.info(`🌉 [Bridge] Dispatching to Dart Engine: ${command}`);
+    
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/dart/command`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ command, params }),
+        signal: AbortSignal.timeout(3000)
+      });
+      
+      const result = await res.json();
+      Log.success(`🌉 [Bridge] Dart Response: ${JSON.stringify(result)}`);
+      return result;
+    } catch (err) {
+      Log.error(`🌉 [Bridge] Dart Dispatch failed: ${err.message}`);
+      return { success: false, error: 'DART_ENGINE_UNREACHABLE' };
+    }
+  }
 }
 
 class VSCAdaptor {
@@ -159,4 +182,18 @@ class ForgeAdaptor {
     return { tool: 'codeforge', status: 'OK', truthState: 'SIGNED_PHYSICAL' }; 
   }
   async sync() { return { tool: 'codeforge', status: 'SYNCED' }; }
+}
+
+class SmartAdaptor {
+  async execute(cmd, p) {
+    const { SMART_BRIDGE } = await import('./SmartBridge.js');
+    if (cmd === 'discover') {
+      return await SMART_BRIDGE.discoverDevices(p.timeout || 5000);
+    }
+    if (cmd === 'command') {
+      return await SMART_BRIDGE.executeAction(p.ip, p.endpoint, p.payload);
+    }
+    return { tool: 'smart', status: 'OK', truthState: 'SIGNED_PHYSICAL' };
+  }
+  async sync() { return { tool: 'smart', status: 'SYNCED' }; }
 }

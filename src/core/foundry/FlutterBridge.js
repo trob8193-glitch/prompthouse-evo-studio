@@ -51,6 +51,8 @@ class ${seed.id.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join
   }
 }
 `;
+  }
+
   /**
    * Physically sync the Singularity Status to the Dart Engine.
    */
@@ -58,4 +60,14 @@ class ${seed.id.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join
     Log.info(`🌉 [FlutterBridge] Syncing Singularity Status: ${status}`);
     return await this.bridge.dispatchToDart('SET_SINGULARITY_STATUS', { status });
   }
+
+  /**
+   * Dispatch a direct command to the mobile node.
+   */
+  async dispatch(command, params) {
+    Log.info(`📱 [FlutterBridge] Dispatching Command: ${command} to Grid...`);
+    return await this.bridge.dispatchToDart(command, params);
+  }
 }
+
+export const FLUTTER_BRIDGE = new FlutterBridge();

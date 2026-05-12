@@ -13,7 +13,7 @@ export const useWitnessStore = create((set, get) => ({
   active_state: {}, 
   is_hud_open: false,
   active_mode: 'PATH_OF_REALITY',
-  subjectKey: localStorage.getItem('ph_evo_client_id') || 'unidentified_subject',
+  subjectKey: (typeof localStorage !== 'undefined') ? (localStorage.getItem('ph_evo_client_id') || 'unidentified_subject') : 'terminal_subject',
 
   logPrompt: (p) => {
     const subjectKey = get().subjectKey;

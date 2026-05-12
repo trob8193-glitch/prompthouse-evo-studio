@@ -3,6 +3,15 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 
+import { DISCOVERY_SERVER } from './core/interop/DiscoveryServer.js';
+import { LIVE_WATCHER } from './core/interop/LiveWatcher.js';
+
+// INITIALIZE SOVEREIGN CONNECTIVITY
+if (typeof window !== 'undefined') {
+  DISCOVERY_SERVER.start();
+  LIVE_WATCHER.start();
+}
+
 /**
  * PH EVO STUDIO — MAIN ENTRY POINT
  * ═══════════════════════════════════════════════════════════════
