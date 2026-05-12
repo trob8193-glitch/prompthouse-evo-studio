@@ -5,11 +5,10 @@ import { PerfectionGate } from './PerfectionGate.js';
 import { Engine } from '../../engine.js';
 
 /**
- * PH EVO STUDIO — SELF-FORGE DAEMON
+ * PH EVO STUDIO — SELF-FORGE DAEMON (Absolute Operational Reality)
  * ═══════════════════════════════════════════════════════════════
- * This is the ultimate autonomous builder. It identifies its own
- * structural weaknesses and physically re-builds the studio
- * to achieve 100% logic density and production-readiness.
+ * ABSOLUTE REALITY: Physically rebuilds the studio to eliminate drift.
+ * Performs physical disk-writes of synthesized logic after truth-audits.
  */
 
 export class SelfForge {
@@ -19,34 +18,33 @@ export class SelfForge {
   }
 
   /**
-   * Run a full self-build cycle.
+   * Run a physical self-build cycle.
    */
   async build() {
-    Log.info('⚒️ [SelfForge] Initiating Studio Self-Build Cycle...');
+    Log.info('⚒️ [SelfForge] Initiating Physical Studio Self-Build Cycle...');
     
-    // 1. Scan for Gaps
+    // 1. Scan for Gaps via Physical Perfection Gate
     const report = await this.gate.runPerfectionAudit('src');
     const criticalGaps = report.filter(r => r.severity === 'CRITICAL');
 
     if (criticalGaps.length === 0) {
-      Log.success('⚒️ [SelfForge] Studio is already at 100% Perfection.');
+      Log.success('⚒️ [SelfForge] Studio is already physically Perfect.');
       return;
     }
 
-    Log.info(`⚒️ [SelfForge] Identified ${criticalGaps.length} Critical Gaps. Building...`);
+    Log.info(`⚒️ [SelfForge] Identified ${criticalGaps.length} Physical Gaps. Forging...`);
 
-    // 2. Forge Loop
+    // 2. Physical Forge Loop
     for (const gap of criticalGaps) {
       await this.forge(gap);
     }
 
-    Log.success('⚒️ [SelfForge] Self-Build Cycle Complete.');
+    Log.success('⚒️ [SelfForge] Physical Self-Build Cycle Complete.');
   }
 
   async forge(gap) {
-    Log.info(`⚒️ [SelfForge] Forging fix for: ${gap.file} (${gap.violation})`);
+    Log.info(`⚒️ [SelfForge] Physically Forging fix for: ${gap.file}`);
     
-    // Trigger the engine to generate high-density fulfillment logic
     const mission = {
       id: `forge_${Date.now()}`,
       prompt: `Fulfill the logic for ${gap.file}. The violation is ${gap.violation}. 
@@ -55,8 +53,17 @@ export class SelfForge {
 
     try {
       const fulfillment = await this.engine.execute(mission);
-      // In a real autonomous cycle, this would write the file.
-      Log.success(`⚒️ [SelfForge] Logic synthesized for ${gap.file}.`);
+      
+      if (fulfillment.content) {
+        // PHYSICAL MANIFESTATION: Perform actual disk-write
+        const filePath = path.join(process.cwd(), gap.file);
+        fs.writeFileSync(filePath, fulfillment.content, 'utf8');
+        
+        Log.success(`⚒️ [SelfForge] Logic physically manifested in ${gap.file}.`);
+        
+        // Final Truth Audit of the Manifested Logic
+        await this.gate.auditFileIntegrity(gap.file);
+      }
     } catch (e) {
       Log.error(`⚒️ [SelfForge] Forge failed for ${gap.file}: ${e.message}`);
     }

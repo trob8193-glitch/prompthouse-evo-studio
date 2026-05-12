@@ -20,7 +20,10 @@
     "ai:review": "node scripts/ai_review_openai.mjs",
     "ai:train": "node scripts/ai_self_train.mjs",
     "ai:loop": "node scripts/ai_loop.mjs",
-    "ai:daemon": "node scripts/ai_daemon.mjs"
+    "ai:daemon": "node scripts/ai_daemon.mjs",
+    "evo:dev": "tsx tools/evoforge/cli/evo.ts dev",
+    "evo:build": "tsx tools/evoforge/cli/evo.ts build",
+    "evo:audit": "tsx tools/evoforge/cli/evo.ts audit"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -58,6 +61,7 @@
     "postcss": "^8.5.13",
     "tailwindcss": "^4.2.4",
     "vite": "^5.1.0",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.5",
+    "tsx": "^4.7.1"
   }
 }

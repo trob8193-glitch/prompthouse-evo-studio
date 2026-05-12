@@ -33,7 +33,7 @@ export function FeatureFoundryView() {
     try {
       const res = await bridge.dispatch('foundry', 'initiate', mission);
       if (res.success) {
-        console.log('Build initiated:', res.manifest);
+        
         // In Phase D, this would trigger the actual code generation
       }
     } catch (e) {

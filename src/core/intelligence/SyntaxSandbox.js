@@ -44,7 +44,7 @@ export class SyntaxSandbox {
       
       // Heuristic Fix 1: Missing closing brace (very common LLM truncation)
       if (error.message.includes('Unexpected end of input')) {
-        console.log('[SANDBOX] Attempting auto-fix: Adding missing brace...');
+        
         const paddedCode = code + '\n}';
         
         fs.writeFileSync(tmpFile, paddedCode, 'utf8');
@@ -55,7 +55,7 @@ export class SyntaxSandbox {
           return { fixedCode: fixedResponse, wasFixed: true };
         } catch (e2) {
           // Still broken, give up and return original (let the dev or another agent handle it)
-          console.log('[SANDBOX] Auto-fix failed.');
+          
         }
       }
       

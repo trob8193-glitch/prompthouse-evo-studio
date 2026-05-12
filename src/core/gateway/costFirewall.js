@@ -74,7 +74,7 @@ export class CostFirewall {
       `).run(`ledger_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, orgId, creditsUsed);
     })();
     
-    console.log(`[FIREWALL] Deducted ${creditsUsed} credits from Org ${orgId}`);
+    
   }
 
   /**

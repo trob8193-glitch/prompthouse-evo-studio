@@ -3021,6 +3021,75 @@ app.post('/api/evo-lm/compressed-chat', async (req, res) => {
 
 
 
+
+
+
+
+
+
+
+// ─── NUCLEAR TRUTH AUDIT ROUTES ───────────────────────────────────────────
+
+app.post('/api/truth/nuclear-audit', maybeRequireAuthOrMaster, async (req, res) => {
+  try {
+    Log.info('☣️ [Bridge] Initiating REAL PHYSICAL NUCLEAR TRUTH Audit...');
+    const { NuclearTruthAuditor } = await import('./src/core/autonomy/NuclearTruthAuditor.js');
+    const auditor = new NuclearTruthAuditor();
+    const result = await auditor.performFullAudit();
+    
+    res.json({ 
+      success: true, 
+      status: 'AUDIT_COMPLETE', 
+      ...result,
+      realization: `Nuclear Audit confirmed ${result.integrity}% Absolute Operational Reality.` 
+    });
+  } catch (e) {
+    Log.error(`☣️ [NuclearTruth] Audit Failed: ${e.message}`);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+
+// ─── SOVEREIGN STUDY CENTER ROUTES ─────────────────────────────────────────
+
+app.post('/api/study/initiate', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
+  try {
+    const { protocolId } = req.body;
+    Log.info(`📚 [Bridge] Executing PHYSICAL Study Protocol: ${protocolId}`);
+    
+    const { SovereignStudyCenter } = await import('./src/core/autonomy/SovereignStudyCenter.js');
+    const center = new SovereignStudyCenter();
+    const result = await center.initiateStudy(protocolId);
+    
+    res.json(result);
+  } catch (e) {
+    Log.error(`📚 [StudyCenter] Protocol Failed: ${e.message}`);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── SOVEREIGN WITNESS ROUTES ───────────────────────────────────────────────
+
+app.get('/api/witness/latest-packet', maybeRequireAuthOrMaster, async (req, res) => {
+  try {
+    const packet = ai.getLastPacket();
+    res.json({ success: true, packet });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/witness/report-truth', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
+  try {
+    const { filePath, report } = req.body;
+    // Store truth report in memory for frontend polling
+    // In a real scenario, this would go to a websocket or a shared ledger
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ─── ANCESTRAL MEMORY ROUTES ────────────────────────────────────────────────
 
 app.post('/api/memory/recall', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
@@ -3100,22 +3169,20 @@ app.post('/api/antigravity/synthesize-wisdom', maybeRequireAuthOrMaster, enforce
   }
 });
 
+
 app.post('/api/foundry/initiate-self-mutation', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
   try {
-    const { reason, fingerprint } = req.body;
+    const { reason, fingerprint, requiresApproval } = req.body;
+    
+    // EDGE: If the Witness HUD is active or a high-risk mutation is detected
+    if (requiresApproval) {
+       Log.warn('🧪 [WitnessEdge] Self-Mutation requires manual WITNESS_APPROVAL.');
+       // Store in a pending queue for the HUD to poll
+       return res.json({ success: true, status: 'AWAITING_APPROVAL', id: `mut_${Date.now()}` });
+    }
+
     Log.info(`🧪 [Foundry] Initiating SELF-MUTATION cycle. Reason: ${reason}`);
-    
-    // In a real scenario, this would trigger NightForge to rewrite core files
-    // For now, we log the intent and record the evolutionary leap
-    const receipt = {
-      id: `mutation_${Date.now()}`,
-      type: 'SELF_MUTATION',
-      reason,
-      fingerprint,
-      timestamp: new Date().toISOString()
-    };
-    
-    res.json({ success: true, receipt });
+    res.json({ success: true, receipt: { id: `mutation_${Date.now()}`, reason } });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

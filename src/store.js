@@ -37,11 +37,23 @@ export const useSovereignStore = create((set, get) => ({
   setSingularityActive: (active) => set({ singularityActive: active }),
   
   addBondedNode: (node) => set((s) => ({ 
-    bondedNodes: [...s.bondedNodes.filter(n => n.ip !== node.ip), node] 
+    bondedNodes: [...s.bondedNodes.filter(n => n.ip !== node.ip || n.port !== node.port), { ...node, status: 'VERIFIED', timestamp: Date.now() }] 
   })),
-  removeBondedNode: (ip) => set((s) => ({ 
-    bondedNodes: s.bondedNodes.filter(n => n.ip !== ip) 
+  removeBondedNode: (ip, port) => set((s) => ({ 
+    bondedNodes: s.bondedNodes.filter(n => n.ip !== ip || n.port !== port) 
   })),
+  
+  refreshNodeMesh: async () => {
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/intelligence/nodes/probe`);
+      const data = await res.json();
+      if (data.success) {
+        set({ bondedNodes: data.nodes });
+      }
+    } catch (err) {
+      console.warn('[Store] Node mesh refresh failed:', err.message);
+    }
+  },
   
   addTerminalLog: (content, type = 'info', session = 'main') => set((s) => ({
     terminalSessions: {
@@ -80,7 +92,7 @@ export const useSovereignStore = create((set, get) => ({
 
   fetchBridgeStatus: async () => {
     try {
-      const res = await fetch(`${BRIDGE_URL}/status`, { signal: AbortSignal.timeout(1500) });
+      const res = await fetch(`${BRIDGE_URL}/status`, { signal: AbortSignal.timeout(5000) });
       if (!res.ok) throw new Error(`Bridge returned ${res.status}`);
       const data = await res.json();
       set({ bridgeStatus: 'connected', bridgeData: data, bridgeError: null });
@@ -98,7 +110,7 @@ export const useSovereignStore = create((set, get) => ({
   fetchMetrics: async () => {
     set({ metricsLoading: true });
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/metrics`, { signal: AbortSignal.timeout(1500) });
+      const res = await fetch(`${BRIDGE_URL}/api/metrics`, { signal: AbortSignal.timeout(5000) });
       if (!res.ok) throw new Error(`Metrics returned ${res.status}`);
       const data = await res.json();
       set({ metrics: data, metricsLoading: false });

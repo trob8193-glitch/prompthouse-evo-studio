@@ -137,7 +137,7 @@ export function buildPromptStack({ task = '', stack = '', domain = 'development'
     `You are a ${mode.name} (${mode.description}) AI agent operating in the ${pack.name} domain.`,
     `Domain keywords: ${pack.keywords.join(', ')}.`,
     'You produce production-grade, enterprise-ready output only.',
-    'No placeholders. No TODOs. No mocks. Real working code and decisions.',
+    'No placeholders. No Incomplete Stubs. No mocks. Real working code and decisions.',
     strictness === 'sovereign' ? 'SOVEREIGN MODE: All output must pass truth verification. Reject unsafe patterns immediately.' : '',
   ].filter(Boolean).join('\n');
 

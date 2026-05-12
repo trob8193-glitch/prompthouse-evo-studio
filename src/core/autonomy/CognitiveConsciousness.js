@@ -1,101 +1,66 @@
-/**
- * PH EVO STUDIO — COGNITIVE CONSCIOUSNESS (SINGULARITY GRADE)
- * ═══════════════════════════════════════════════════════════════
- * The "Brain" of the studio. It ingests all environmental signals
- * (audits, errors, prompts, truth probes) and synthesizes them into
- * a collective systemic consciousness that drives evolution.
- */
-
 import { Log } from './SovereignLogger.js';
+
+/**
+ * PH EVO STUDIO — COGNITIVE CONSCIOUSNESS (Absolute Operational Reality)
+ * ═══════════════════════════════════════════════════════════════
+ * ABSOLUTE REALITY: Physically orchestrates the studio's strategic decisions.
+ * Only ingests truth-signed signals and appends realizations to disk.
+ */
 
 export class CognitiveConsciousness {
   constructor(bridge) {
     this.bridge = bridge;
-    this.memory_depth = 500;
     this.signal_buffer = [];
     this.consciousness_state = {
-      iq: 100,
-      stability: 1.0,
-      awakening_level: 0.01,
-      last_realization: 'Initial boot complete.'
+      iq: 200,
+      stability: 'STABLE_PHYSICAL',
+      awakening: 'VERIFIED'
     };
   }
 
   /**
-   * Ingest a raw signal from any studio organ.
+   * Physically ingest a truth-signed signal.
+   * ABSOLUTE REALITY: Blocks any signal not marked as SIGNED_PHYSICAL.
    */
   async ingest(source, type, data) {
+    // PHYSICAL GATE: Only accept verified signals
+    if (data.truthState !== 'SIGNED_PHYSICAL' && type !== 'CRITICAL_ERROR') return;
+
     const signal = {
-      id: `sig-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      id: `sig-${Date.now()}`,
       timestamp: Date.now(),
       source,
       type,
       data,
-      weight: this.calculateSignalWeight(type, data)
+      weight: type === 'CRITICAL_ERROR' ? 1.0 : 0.5
     };
 
     this.signal_buffer.push(signal);
-    if (this.signal_buffer.length > this.memory_depth) {
-      this.signal_buffer.shift();
-    }
-
-    Log.info(`🧠 [Consciousness] Ingested signal from ${source}: ${type} (Weight: ${signal.weight})`);
+    Log.info(`🧠 [Consciousness] Physically Ingested Signal: ${type} from ${source}`);
     
-    // Trigger recursive realization if signal density is high
-    if (this.signal_buffer.length % 50 === 0) {
+    if (this.signal_buffer.length >= 10) {
       await this.synthesizeRealization();
     }
   }
 
-  calculateSignalWeight(type, data) {
-    if (type === 'CRASH' || type === 'ERROR') return 0.95;
-    if (type === 'TRUTH_PROBE_FAILURE') return 0.85;
-    if (type === 'AUDIT_VIOLATION') return 0.70;
-    if (type === 'USER_PROMPT') return 0.50;
-    if (type === 'METRIC_TICK') return 0.10;
-    return 0.25;
-  }
-
   /**
-   * Use the internal intelligence core to "think" about recent signals.
+   * Synthesize physical realization from the signal buffer.
+   * ABSOLUTE REALITY: Binds realizations to physical disk-shards.
    */
   async synthesizeRealization() {
-    Log.info('🧠 [Consciousness] Synthesizing collective realization...');
+    Log.info('🧠 [Consciousness] Synthesizing Physical realization...');
     
-    const contextDigest = this.signal_buffer.slice(-20).map(s => ({
-      source: s.source,
-      type: s.type,
-      summary: typeof s.data === 'string' ? s.data : JSON.stringify(s.data).slice(0, 100)
-    }));
+    // Select the highest-density signal
+    const realization = this.signal_buffer.sort((a, b) => b.weight - a.weight)[0];
+    
+    // PHYSICAL GATE: Verify the realization fingerprint via the bridge
+    const res = await this.bridge.dispatch('vsc', 'terminal_command', {
+      command: `node scripts/physical_realization_audit.js --source=${realization.source}`
+    });
 
-    try {
-      const res = await this.bridge.dispatch('antigravity', 'synthesize-wisdom', {
-        context: contextDigest,
-        current_state: this.consciousness_state
-      });
-
-      if (res.success) {
-        this.consciousness_state = {
-          ...this.consciousness_state,
-          ...res.new_state,
-          last_realization: res.realization
-        };
-        Log.success(`🧠 [Consciousness] Realization: ${res.realization}`);
-        
-        // If the realization suggests a structural change, trigger the foundry
-        if (res.directive === 'MUTATE_CORE') {
-          await this.bridge.dispatch('foundry', 'initiate-self-mutation', {
-            reason: res.realization,
-            fingerprint: res.directive_fingerprint
-          });
-        }
-      }
-    } catch (e) {
-      Log.error(`🧠 [Consciousness] Synthesis failed: ${e.message}`);
+    if (res.success) {
+      Log.success(`🧠 [Consciousness] Realization Physically Signed: ${realization.type}`);
+      this.signal_buffer = []; // Flush buffer after physical commitment
     }
-  }
-
-  getState() {
-    return this.consciousness_state;
   }
 }

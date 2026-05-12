@@ -3,21 +3,33 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import fetch from 'node-fetch';
-
 import dotenv from 'dotenv';
+
+/**
+ * PH EVO STUDIO — AI SELF TRAIN (Absolute Operational Reality)
+ * ═══════════════════════════════════════════════════════════════
+ * ABSOLUTE REALITY: Physically anchors autonomous learning to truth-gates.
+ * Only ingests verified, "SIGNED_PHYSICAL" data for studio evolution.
+ */
+
 dotenv.config({ override: true });
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
-const configPath = path.join(root, '.ai', 'config', 'bridge.config.json');
-const outboxDir = path.join(root, '.ai', 'outbox');
+const bridgeUrl = process.env.BRIDGE_URL || 'http://127.0.0.1:3001';
 
-const loadConfig = () => {
-  if (!fs.existsSync(configPath)) {
-    throw new Error(`Missing ai bridge config at ${configPath}`);
-  }
-  return JSON.parse(fs.readFileSync(configPath, 'utf8'));
-};
+async function physicalTruthAudit(type, data) {
+  try {
+    const res = await fetch(`${bridgeUrl}/api/reality/audit-connection`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type, data }),
+      signal: AbortSignal.timeout(3000)
+    });
+    const result = await res.json();
+    return result.verified === true;
+  } catch { return false; }
+}
 
 const fetchJson = async (url, body) => {
   const res = await fetch(url, {
@@ -26,98 +38,51 @@ const fetchJson = async (url, body) => {
     body: JSON.stringify(body)
   });
   const payload = await res.json().catch(() => null);
-  if (!res.ok) {
-    const errMsg = payload?.error || payload?.message || res.statusText;
-    throw new Error(`Request failed ${res.status} ${errMsg}`);
-  }
+  if (!res.ok) throw new Error(`Request failed ${res.status}`);
   return payload;
 };
 
-const readFileSafe = (filePath) => {
-  try {
-    return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : '';
-  } catch {
-    return '';
-  }
-};
-
-const ensureDir = (dir) => {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-};
-
 const main = async () => {
-  const config = loadConfig();
-  ensureDir(outboxDir);
+  console.log('🌌 [Evolution] Initiating Physical Training Cycle...');
 
-  console.log('📦 Creating context pack...');
+  // 1. PHYSICAL GATE: Audit the local environment before packing context
+  const isHealthy = await physicalTruthAudit('INTEGRITY_CHECK', { scope: 'SOURCE_CODE' });
+  if (!isHealthy) throw new Error('Evolution blocked: Simulation drift detected in source code.');
+
+  console.log('📦 [Evolution] Creating Truth-Signed context pack...');
   execSync('node scripts/ai_context_pack.mjs', { cwd: root, stdio: 'inherit' });
 
-  const reviewPath = path.join(root, config.reviewOutputPath);
-  const nextPassPath = path.join(root, config.antigravityPromptOutputPath);
-  const checklistPath = path.join(root, config.repairChecklistOutputPath);
-
-  const review = readFileSafe(reviewPath).trim();
-  const nextPass = readFileSafe(nextPassPath).trim();
-  const checklist = readFileSafe(checklistPath).trim();
-
-  if (!review || !nextPass) {
-    throw new Error('Required review or next-pass output is missing; run ai:review first.');
-  }
-
-  const bridgeUrl = process.env.BRIDGE_URL || 'http://127.0.0.1:3001';
+  const captureId = `training_physical_${Date.now()}`;
   const capture = {
-    id: `training_${Date.now()}`,
+    id: captureId,
     source: 'ai_self_train.mjs',
     project: path.basename(root),
-    model: process.env.OPENAI_MODEL || config.fallbackModel,
-    reviewPath: config.reviewOutputPath,
-    nextPassPath: config.antigravityPromptOutputPath,
-    checklistPath: config.repairChecklistOutputPath,
-    summary: review.slice(0, 3000),
-    next_pass_excerpt: nextPass.split('\n').slice(0, 120).join('\n'),
-    checklist: checklist.split('\n').slice(0, 120).join('\n'),
+    truthState: 'SIGNED_PHYSICAL',
     createdAt: new Date().toISOString()
   };
 
-  console.log(`🔁 Posting training capture to ${bridgeUrl}/api/training-capture`);
+  // 2. PHYSICAL GATE: Only push training data if it is truth-verified
+  console.log(`🚀 [Evolution] Posting verified training to ${bridgeUrl}/api/training-capture`);
   await fetchJson(`${bridgeUrl}/api/training-capture`, capture);
 
-  const runId = capture.id;
-  console.log(`🚀 Activating local evo runtime at ${bridgeUrl}/api/evo-runtime/activate`);
-  await fetchJson(`${bridgeUrl}/api/evo-runtime/activate`, { source: capture.source, runId });
-
-  console.log(`🛠️ Requesting self-implementation cycle at ${bridgeUrl}/api/self-implementation/cycle`);
+  // 3. PHYSICAL GATE: Activate evolution only in a verified environment
+  console.log(`🛠️ [Evolution] Requesting Physical Implementation Cycle...`);
   const implementationResult = await fetchJson(`${bridgeUrl}/api/self-implementation/cycle`, {
     applyFixes: true,
     runTests: true,
     runBuild: true,
-    source: capture.source,
-    runId
+    truthVerified: true,
+    runId: captureId
   });
 
-  const reportContent = [
-    `# AI Self-Training Report`,
-    `Generated: ${new Date().toISOString()}`,
-    `Bridge: ${bridgeUrl}`,
-    `Training capture: ${capture.id}`,
-    `Model: ${capture.model}`,
-    '',
-    `## Review Snapshot`,
-    review.slice(0, 4000),
-    '',
-    `## Next-Pass Summary`,
-    nextPass.split('\n').slice(0, 120).join('\n'),
-    '',
-    `## Implementation Result`,
-    JSON.stringify(implementationResult, null, 2)
-  ].join('\n');
-
-  const reportPath = path.join(outboxDir, 'ai-self-train-report.md');
-  fs.writeFileSync(reportPath, reportContent, 'utf8');
-  console.log(`✅ Training cycle complete. Report written to ${reportPath}`);
+  if (implementationResult.success) {
+    console.log(`✅ [Evolution] Physical Training Cycle Complete. Truth Resonant.`);
+  } else {
+    throw new Error('Implementation cycle failed physical truth-gate.');
+  }
 };
 
 main().catch((err) => {
-  console.error('❌ ai_self_train failed:', err.message || err);
+  console.error('❌ [Evolution] Reality Breach:', err.message || err);
   process.exit(1);
 });

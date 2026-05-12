@@ -22,6 +22,7 @@ import { Terminal } from './components/Terminal.jsx';
 import { Toolbar } from './components/Toolbar.jsx';
 import { EvoEyes } from './components/EvoEyes.jsx';
 import { GhostEditor } from './components/GhostEditor.jsx';
+import { WitnessConsole } from './features/WitnessConsole.jsx';
 import { Zap } from 'lucide-react';
 
 // Existing feature screens from features/index.jsx
@@ -166,7 +167,10 @@ export default function App() {
         background: '#0a0e1a', color: '#e2e8f0', fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
         overflow: 'hidden',
       }}>
+        
+        {singularityActive && <WitnessConsole />}
         <TopBar />
+
         
         {/* Toggle Singularity Engine - The Unified HUD */}
         <button 

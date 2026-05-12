@@ -1,6 +1,7 @@
 import { join } from 'path';
 import { readFileSync, writeFileSync } from 'fs';
 import { SovereignFirewall } from '../intelligence/SovereignFirewall.js';
+import { Log } from '../autonomy/SovereignLogger.js';
 
 /**
  * SOVEREIGN INTELLIGENCE CORE
@@ -16,7 +17,7 @@ export class IntelligenceCore {
   }
 
   async executeAction(moduleName, action, payload = {}) {
-    console.log(`[IntelligenceCore] Executing: ${moduleName} -> ${action}`);
+    Log.info(`🧠 [IntelligenceCore] Executing: ${moduleName} -> ${action}`);
     
     try {
       // Check for real logic files first!
@@ -91,7 +92,7 @@ export class IntelligenceCore {
         source: fwResult.source
       };
     } catch (error) {
-      console.error(`[IntelligenceCore] Error in ${moduleName}:`, error);
+      Log.error(`❌ [IntelligenceCore] Error in ${moduleName}: ${error.message}`);
       return {
         success: false,
         error: error.message || 'Unknown intelligence error'

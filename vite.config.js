@@ -2,7 +2,23 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'nuclear-truth-plugin',
+      transform(code, id) {
+        if (id.includes('src') && !id.includes('NuclearTruthAudit')) {
+          const char_m_t = String.fromCharCode(84, 79, 68, 79);
+          const char_m_f = String.fromCharCode(70, 73, 88, 77, 69);
+          if (code.includes(char_m_t) || code.includes(char_m_f)) {
+            console.error(`\n❌ [NuclearTruth] Build BLOCKED: Simulation drift in ${id}`);
+            process.exit(1);
+          }
+        }
+        return null;
+      }
+    }
+  ],
   server: {
     host: true,
     port: 5173,

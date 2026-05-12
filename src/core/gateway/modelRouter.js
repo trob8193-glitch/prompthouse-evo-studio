@@ -30,7 +30,7 @@ export class ModelRouter {
     
     // Default fallback if endpoint is not registered
     if (!epConfig) {
-      console.log(`[ROUTER] Endpoint ${endpoint} not registered. Defaulting to local.`);
+      
       return 'local';
     }
 
@@ -45,7 +45,7 @@ export class ModelRouter {
         // Only allow cloud for critical Truth/Maintenance operations
         const isCritical = endpoint.includes('/api/truth/') || endpoint.includes('/api/maintenance/');
         if (!isCritical) {
-          console.log(`[ROUTER] ECONOMIC SURVIVAL ACTIVE (Credits: ${remainingCredits}). Downshifting ${endpoint} to local.`);
+          
           return 'local';
         }
       }

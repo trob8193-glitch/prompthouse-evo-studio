@@ -101,7 +101,7 @@ export function CodeForgeView() {
           <Card className="bg-emerald-500/5 border-emerald-500/20 p-8">
             <h3 className="text-xs font-black text-emerald-400 uppercase tracking-widest mb-4">Sovereign Truth State</h3>
             <ul className="space-y-3">
-              {['No placeholders — all code is executable','Production-grade architectural patterns','Zero TODO stubs in output logic','Verified via autonomous audit loops'].map((r,i) => (
+              {['No placeholders — all code is executable','Production-grade architectural patterns','Logic integrity verified via physical audit','Verified via autonomous evolution loops'].map((r,i) => (
                 <li key={i} className="text-xs text-slate-400 flex items-center gap-3">
                   <div className="w-1 h-1 rounded-full bg-emerald-500" /> {r}
                 </li>

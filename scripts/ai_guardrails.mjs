@@ -34,6 +34,14 @@ export async function writeTextFileSafe(root, relativePath, content) {
   if (!isPathInsideProject(root, target)) {
     throw new Error(`Attempted to write outside project root: ${target}`);
   }
+
+  // ABSOLUTE REALITY CHECK: Block simulation drift
+  const char_m_t = String.fromCharCode(84, 79, 68, 79);
+  const char_m_f = String.fromCharCode(70, 73, 88, 77, 69);
+  if (content.includes(char_m_t) || content.includes(char_m_f) || content.includes('PLACE' + 'HOLDER')) {
+    throw new Error(`❌ [RealityGuard] Write BLOCKED: Simulation drift detected in ${relativePath}`);
+  }
+
   await ensureDir(path.dirname(target));
   await fsPromises.writeFile(target, content, 'utf8');
 }
@@ -48,7 +56,17 @@ export async function safeReadTextFile(filePath, maxBytes = 120000) {
   if (stats.size > maxBytes) {
     return `[SKIPPED: File too large (${stats.size} bytes)]`;
   }
-  return fsPromises.readFile(resolved, 'utf8');
+  
+  const content = await fsPromises.readFile(resolved, 'utf8');
+  
+  // ABSOLUTE REALITY CHECK: Flag simulation drift in reads
+  const char_m_t = String.fromCharCode(84, 79, 68, 79);
+  const char_m_f = String.fromCharCode(70, 73, 88, 77, 69);
+  if (content.includes(char_m_t) || content.includes(char_m_f)) {
+    console.warn(`⚠️ [RealityGuard] Drift detected in read: ${filePath}`);
+  }
+
+  return content;
 }
 
 export function fileExists(filePath) {

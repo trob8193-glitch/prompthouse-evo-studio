@@ -23,11 +23,29 @@ import {
 const BRIDGE_URL = 'http://127.0.0.1:3001';
 
 const COMMAND_CATALOG = [
-  { id: 'audit', label: 'Nuclear Truth Audit', command: 'evo audit', session: 'security', description: 'Full studio wiring and truth-state audit.', tags: ['audit', 'truth', 'security'] },
+  { id: 'audit', label: 'Nuclear Truth Audit', command: 'evo:audit', session: 'security', description: 'Full studio wiring and truth-state audit.', tags: ['audit', 'truth', 'security'] },
+  { id: 'compact', label: 'Logic Compaction', command: 'evo:compact', session: 'main', description: 'Compresses file logic density by purging entropy.', tags: ['compact', 'logic', 'density'] },
+  { id: 'shard-purge', label: 'Purge Shard Cache', command: 'evo:shard:purge', session: 'main', description: 'Deletes temporary .sovereign-shards metadata.', tags: ['shard', 'purge', 'memory'] },
+  { id: 'iq-status', label: 'System IQ Status', command: 'evo:iq:status', session: 'main', description: 'Reports current studio intelligence growth.', tags: ['iq', 'status', 'evolution'] },
+  { id: 'truth-sign', label: 'Sign Truth Artifact', command: 'evo:truth:sign', session: 'security', description: 'Physically signs an artifact as reality-anchored.', tags: ['sign', 'truth', 'security'] },
+  { id: 'drift-hunt', label: 'Simulation Drift Hunt', command: 'evo:drift:hunt', session: 'security', description: 'Searches for mock/todo logic in src/features.', tags: ['hunt', 'drift', 'mock'] },
+  { id: 'bridge-pulse', label: 'Bridge Integrity Pulse', command: 'evo:bridge:pulse', session: 'main', description: 'Verifies bridge latency and handshake stability.', tags: ['pulse', 'bridge', 'integrity'] },
+  { id: 'ledger-sync', label: 'Sovereign Ledger Sync', session: 'main', command: 'evo:ledger:sync', description: 'Synchronizes local state with the cryptoledger.', tags: ['sync', 'ledger', 'signed'] },
+  { id: 'ghost-manifest', label: 'Ghost Editor Manifest', session: 'watch', command: 'evo:ghost:manifest', description: 'Generates session manifest for ghost iteration.', tags: ['ghost', 'manifest', 'iter'] },
+  { id: 'foundry-reforge', label: 'Reforge Foundry Core', session: 'build', command: 'evo:foundry:reforge', description: 'Re-compiles core foundry logic engines.', tags: ['reforge', 'foundry', 'build'] },
+  { id: 'install', label: 'Install Dependencies', command: 'npm install', session: 'build', description: 'Installs package dependencies for the workspace.', tags: ['npm', 'deps'] },
+  { id: 'npm-outdated', label: 'Check Outdated Deps', command: 'npm outdated', session: 'build', description: 'Lists installed packages that have newer versions.', tags: ['npm', 'update', 'deps'] },
+  { id: 'npm-doctor', label: 'NPM Health Check', command: 'npm doctor', session: 'build', description: 'Runs a set of checks to verify npm environment.', tags: ['npm', 'health', 'fix'] },
+  { id: 'npm-prune', label: 'Prune Unused Deps', command: 'npm prune', session: 'build', description: 'Removes extraneous packages from node_modules.', tags: ['npm', 'cleanup'] },
+  { id: 'ai-pack', label: 'Context Pack Manifest', command: 'npm run ai:pack', session: 'main', description: 'Generates a condensed context pack for AI consumption.', tags: ['ai', 'context', 'pack'] },
+  { id: 'ai-train', label: 'Autonomous Self-Train', command: 'npm run ai:train', session: 'watch', description: 'Starts the background self-evolution training loop.', tags: ['ai', 'train', 'evolve'] },
+  { id: 'ai-review', label: 'AI Code Review', command: 'npm run ai:review', session: 'main', description: 'Performs a deep logic review of the current workspace.', tags: ['ai', 'review', 'audit'] },
+  { id: 'ai-daemon', label: 'Sovereign AI Daemon', command: 'npm run ai:daemon', session: 'watch', description: 'Launches the persistent background evolution engine.', tags: ['ai', 'daemon', 'system'] },
+  { id: 'agent-repl', role: 'Agent REPL Session', command: 'npm run agent:repl', session: 'main', description: 'Opens an interactive shell with the Evo Agent.', tags: ['agent', 'repl', 'chat'] },
+  { id: 'verify-setup', label: 'Verify Studio Setup', command: 'npm run verify:agent', session: 'main', description: 'Verifies API and filesystem integrity for the studio.', tags: ['verify', 'setup', 'health'] },
   { id: 'info', label: 'System Info Snapshot', command: 'evo info', session: 'main', description: 'Reports OS, node version, and local IP.', tags: ['info', 'diagnostics'] },
   { id: 'connect-bridge', label: 'Bond Bridge Node', command: 'evo connect 127.0.0.1:3001', session: 'security', description: 'Attempts a direct TCP handshake to PromptBridge.', tags: ['connect', 'bridge'] },
   { id: 'connect-vite', label: 'Bond Studio Node', command: 'evo connect 127.0.0.1:5173', session: 'security', description: 'Verifies local studio runtime reachability.', tags: ['connect', 'studio'] },
-  { id: 'install', label: 'Install Dependencies', command: 'npm install', session: 'build', description: 'Installs package dependencies for the workspace.', tags: ['npm', 'deps'] },
   { id: 'dev', label: 'Launch Dev Server', command: 'npm run dev', session: 'watch', description: 'Starts Vite dev runtime for frontend iteration.', tags: ['dev', 'vite'] },
   { id: 'bridge', label: 'Launch PromptBridge', command: 'npm run bridge', session: 'watch', description: 'Starts local PromptBridge API/runtime server.', tags: ['bridge', 'server'] },
   { id: 'dev-all', label: 'Launch Full Stack', command: 'npm run dev:all', session: 'watch', description: 'Starts studio UI and bridge in one process.', tags: ['dev', 'fullstack'] },
@@ -101,9 +119,17 @@ export function Terminal() {
       });
       const data = await res.json();
       if (data.success) {
-        addTerminalLog(data.result.output || 'EvoShell: Completed.', 'success', session);
-        if (data.result.node) {
-          addBondedNode(data.result.node);
+        const result = data.result || {};
+        const logEntry = {
+          content: result.output || 'EvoShell: Completed.',
+          type: 'success',
+          signature: result.signature,
+          duration: result.duration,
+          timestamp: Date.now()
+        };
+        addTerminalLog(logEntry.content, logEntry.type, session, result.signature, result.duration);
+        if (result.node) {
+          addBondedNode(result.node);
         }
       } else {
         addTerminalLog(data.error || 'EvoShell: Failed.', 'error', session);
@@ -158,7 +184,6 @@ export function Terminal() {
   const copyToClipboard = () => {
     const text = logs.map(l => l.content).join('\n');
     navigator.clipboard.writeText(text);
-    // Simple notification would be nice, but we'll stick to the log
     addTerminalLog('System: Terminal output copied to clipboard.', 'system', activeTerminalSession);
   };
 
@@ -329,23 +354,35 @@ export function Terminal() {
         className={`flex-1 overflow-auto p-6 font-mono text-[11px] space-y-1.5 selection:bg-indigo-500/40 ${s.logBg} scrollbar-hide`}
       >
         {logs.map((log) => (
-          <div key={log.id} className="flex gap-4 leading-relaxed animate-in fade-in slide-in-from-left-1 duration-200">
-            <span className="text-slate-700 shrink-0 select-none text-[9px] mt-0.5">[{new Date(log.timestamp).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
-            <span className={`break-all whitespace-pre-wrap flex-1 ${
-              log.type === 'command' ? 'text-white font-bold' :
-              log.type === 'error' ? 'text-rose-400 drop-shadow-[0_0_5px_rgba(251,113,133,0.3)]' :
-              log.type === 'success' ? 'text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.3)]' :
-              log.type === 'system' ? 'text-indigo-400 font-black' : 
-              s.text
-            }`}>
-              {log.content}
-            </span>
+          <div key={log.id} className="flex flex-col gap-1 mb-2 animate-in fade-in slide-in-from-left-1 duration-200">
+            <div className="flex gap-4 leading-relaxed">
+              <span className="text-slate-700 shrink-0 select-none text-[9px] mt-0.5">[{new Date(log.timestamp).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
+              <span className={`break-all whitespace-pre-wrap flex-1 ${
+                log.type === 'command' ? 'text-white font-bold' :
+                log.type === 'error' ? 'text-rose-400 drop-shadow-[0_0_5px_rgba(251,113,133,0.3)]' :
+                log.type === 'success' ? 'text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.3)]' :
+                log.type === 'system' ? 'text-indigo-400 font-black' : 
+                s.text
+              }`}>
+                {log.content}
+              </span>
+            </div>
+            {log.signature && (
+              <div className="flex items-center gap-3 ml-12 text-[8px] font-black uppercase tracking-widest text-indigo-500/60">
+                <span className="flex items-center gap-1"><Shield size={8} /> TRUTH_SIG: {log.signature}</span>
+                <span className="flex items-center gap-1"><Zap size={8} /> LATENCY: {log.duration}ms</span>
+                <span className="text-emerald-500/50"> [REALITY_SIGNED]</span>
+              </div>
+            )}
           </div>
         ))}
         {executing && (
           <div className="flex gap-4 animate-pulse">
             <span className="text-slate-700 text-[9px] mt-0.5">[......]</span>
-            <span className="text-indigo-400 italic">Processing high-density directive...</span>
+            <span className="text-indigo-400 italic flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-cyan-500 animate-ping" />
+              ANCHORING_REALITY...
+            </span>
           </div>
         )}
       </div>

@@ -31,7 +31,7 @@ async function main() {
     runId,
   });
 
-  console.log(JSON.stringify({ runId, capture, runtime, selfCycle }, null, 2));
+  
 }
 
 main().catch((error) => {

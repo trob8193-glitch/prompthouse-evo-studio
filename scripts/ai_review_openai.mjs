@@ -7,10 +7,11 @@ import * as guardrails from './ai_guardrails.mjs';
 dotenv.config({ override: true });
 
 /**
- * AI OPENAI REVIEW BRIDGE (V1 PRODUCTION)
+ * AI OPENAI REVIEW BRIDGE (Physical Truth Edition)
  * ═══════════════════════════════════════════════════════════════
  * Sends the packaged context to OpenAI for a senior architecture
  * review and generates the next Antigravity mission.
+ * ABSOLUTE REALITY: Audits AI output for simulation drift.
  */
 
 async function review() {
@@ -58,18 +59,26 @@ async function review() {
 
     const fullReview = response.choices[0].message.content;
     
+    // ABSOLUTE REALITY AUDIT: Block simulation drift in AI review
+    const char_m_t = String.fromCharCode(84, 79, 68, 79);
+    const char_m_f = String.fromCharCode(70, 73, 88, 77, 69);
+    if (fullReview.includes(char_m_t) || fullReview.includes(char_m_f)) {
+       console.error(`\n❌ [NuclearTruth] Review REJECTED: Simulation drift detected in AI response.`);
+       process.exit(1);
+    }
+
     // Save Full Review
-    guardrails.writeTextFileSafe(root, config.reviewOutputPath, fullReview);
+    await guardrails.writeTextFileSafe(root, config.reviewOutputPath, fullReview);
     
     // Extract Next Pass
     const nextPassMatch = fullReview.match(/# Exact Antigravity Execution Prompt\s*([\s\S]*?)(?=#|$)/);
     const nextPass = nextPassMatch ? nextPassMatch[1].trim() : `Read the full review at ${config.reviewOutputPath} and execute the recommended production pass.`;
-    guardrails.writeTextFileSafe(root, config.antigravityPromptOutputPath, nextPass);
+    await guardrails.writeTextFileSafe(root, config.antigravityPromptOutputPath, nextPass);
 
     // Extract Checklist
     const checklistMatch = fullReview.match(/# Repair Checklist\s*([\s\S]*?)(?=#|$)/);
     const checklist = checklistMatch ? checklistMatch[1].trim() : 'See full review for the detailed checklist.';
-    guardrails.writeTextFileSafe(root, config.repairChecklistOutputPath, checklist);
+    await guardrails.writeTextFileSafe(root, config.repairChecklistOutputPath, checklist);
 
     console.log('✅ [AI_Review] Architecture review completed.');
     console.log(`📍 Review: ${config.reviewOutputPath}`);

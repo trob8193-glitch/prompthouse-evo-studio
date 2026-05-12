@@ -60,7 +60,7 @@ export default function BotOrb({ mode = 'IDLE', resonance = 0.99 }) {
 }
 
 export const BotBus = {
-  emit: (event) => console.log('[BotBus]', event)
+  emit: (event) => 
 };
 
 export const BOT_EMOJI = {};
