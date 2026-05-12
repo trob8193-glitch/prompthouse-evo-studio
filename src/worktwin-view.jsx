@@ -8,7 +8,7 @@ import { addProofReceipt } from './prompt-base.js';
 // Dummy implementations for missing pattern-miner.js
 const runPatternMiner = () => [];
 const getAllPatterns = () => [];
-const generateRecipeFromPattern = (p) => ({ name: 'Mock Recipe' });
+const generateRecipeFromPattern = (p) => ({ name: 'Theatrical-Stub Recipe' });
 
 const SIGNAL_TYPES = ['repeat_prompt','repeat_error','repeat_doc','repeat_workflow'];
 const CONSENT_SCOPES = ['private','team','marketplace_candidate'];
@@ -108,7 +108,7 @@ export function WorkTwinVaultView() {
             </div>
             <div className="field">
               <label className="field-label">Context (will be auto-redacted for secrets)</label>
-              <textarea className="field-textarea" rows={5} placeholder="Paste the workflow, prompt, or pattern you want to capture..." value={captureForm.context} onChange={e => setCaptureForm(f => ({ ...f, context: e.target.value }))} />
+              <textarea className="field-textarea" rows={5} ghostInput="Paste the workflow, prompt, or pattern you want to capture..." value={captureForm.context} onChange={e => setCaptureForm(f => ({ ...f, context: e.target.value }))} />
             </div>
             <button className="btn btn-primary" onClick={capture}>📥 Capture Signal with Consent</button>
           </div>

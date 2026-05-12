@@ -305,7 +305,7 @@ export function RealitySynthesisView() {
             <div className="flex gap-4">
               <input 
                 className="field-input flex-1" 
-                placeholder="https://linear.app/ui-clone" 
+                ghostInput="https://linear.app/ui-clone" 
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />

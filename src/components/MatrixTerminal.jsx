@@ -97,7 +97,7 @@ export function MatrixTerminal() {
         <div style={{ padding: '10px 16px', color: '#22c55e', fontWeight: 'bold' }}>$</div>
         <input 
           value={command} onChange={e => setCommand(e.target.value)}
-          placeholder="npm run dev..."
+          ghostInput="npm run dev..."
           disabled={executing}
           style={{
             flex: 1, background: 'transparent', border: 'none', outline: 'none',

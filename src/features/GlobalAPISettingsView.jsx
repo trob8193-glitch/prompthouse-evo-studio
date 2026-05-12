@@ -99,14 +99,14 @@ export function GlobalAPISettingsView() {
 
         <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>OpenAI API Key</label>
-          <input type="password" value={apiConfig.openaiKey} onChange={(e) => updateApiConfig({ openaiKey: e.target.value })} placeholder="sk-proj-..." style={fieldStyle}
+          <input type="password" value={apiConfig.openaiKey} onChange={(e) => updateApiConfig({ openaiKey: e.target.value })} ghostInput="sk-proj-..." style={fieldStyle}
             onFocus={(e) => e.target.style.borderColor = '#4f46e580'} onBlur={(e) => e.target.style.borderColor = '#1e293b'} />
           <div style={{ fontSize: 10, color: '#475569', marginTop: 4 }}>Your key is sent to the local bridge server only — never to external services directly.</div>
         </div>
 
         <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>Vercel API Token (For Deployments)</label>
-          <input type="password" value={apiConfig.vercelToken || ''} onChange={(e) => updateApiConfig({ vercelToken: e.target.value })} placeholder="vA123..." style={fieldStyle}
+          <input type="password" value={apiConfig.vercelToken || ''} onChange={(e) => updateApiConfig({ vercelToken: e.target.value })} ghostInput="vA123..." style={fieldStyle}
             onFocus={(e) => e.target.style.borderColor = '#4f46e580'} onBlur={(e) => e.target.style.borderColor = '#1e293b'} />
           <div style={{ fontSize: 10, color: '#475569', marginTop: 4 }}>Used by the SaaS Orchestrator to autonomously deploy your generated apps.</div>
         </div>

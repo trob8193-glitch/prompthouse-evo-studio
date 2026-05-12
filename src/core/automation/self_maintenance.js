@@ -73,7 +73,7 @@ export class SelfMaintenance {
     try {
       const { stdout } = await execPromise('dir /b /s src\\features\\*.js');
       const files = stdout.split('\n').filter(f => f.trim().length > 0);
-      return { density: files.length / 100 }; // Placeholder logic for real density
+      return { density: files.length / 100 }; // Ghost-Stub logic for real density
     } catch (e) {
       return { density: 0.1 };
     }

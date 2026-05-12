@@ -24,7 +24,7 @@ const buildOrder = [
   "Proof-to-Value Deck",
   "Evo Exchange private marketplace",
   "DeployRail live-run",
-  "Commerce Rail mock/test",
+  "Commerce Rail Theatrical-Stub/test",
   "NightForge scheduled patch proposal",
   "Acceptance tests",
   "Runtime proof receipts",

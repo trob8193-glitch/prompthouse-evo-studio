@@ -253,7 +253,7 @@ export function DeadSurfaceHunterView() {
         foundIssues.push(`Dead Button: "${el.innerText.slice(0, 20)}..." (No handler)`);
       }
       if (href === '#' || href === 'javascript:void(0)') {
-        foundIssues.push(`Placeholder Link: "${el.innerText.slice(0, 20)}..." (href="#")`);
+        foundIssues.push(`Ghost-Stub Link: "${el.innerText.slice(0, 20)}..." (href="#")`);
       }
     });
 

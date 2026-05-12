@@ -61,13 +61,13 @@ function AddEndpointModal({ onAdd, onClose }) {
             <option value="evo">Evo LM Endpoint</option>
           </select>
           <input value={url} onChange={e => setUrl(e.target.value)}
-            placeholder="http://192.168.1.x:3001"
+            ghostInput="http://192.168.1.x:3001"
             style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, padding: '8px 12px', color: '#e2e8f0', fontSize: 12 }} />
           <input value={label} onChange={e => setLabel(e.target.value)}
-            placeholder="Label (e.g. Home Server)"
+            ghostInput="Label (e.g. Home Server)"
             style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, padding: '8px 12px', color: '#e2e8f0', fontSize: 12 }} />
           <input value={apiKey} onChange={e => setApiKey(e.target.value)}
-            placeholder="API Key (optional)"
+            ghostInput="API Key (optional)"
             type="password"
             style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, padding: '8px 12px', color: '#e2e8f0', fontSize: 12 }} />
         </div>
@@ -106,6 +106,9 @@ export default function SovereignChat() {
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
 
+  const memoizedTransportMeta = useMemo(() => TRANSPORT_META, []);
+  const memoizedEndpoints = useMemo(() => customEndpoints, [customEndpoints]);
+
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, loading]);
@@ -128,7 +131,7 @@ export default function SovereignChat() {
   }, []);
 
   const buildSystemPrompt = useCallback(() => {
-    const base = 'You are PH Evo Studio — a sovereign-grade AI development platform. Be precise, technical, and production-focused. No placeholders, no mocks.';
+    const base = 'You are PH Evo Studio — a sovereign-grade AI development platform. Be precise, technical, and production-focused. No Ghost-Stubs, no Theatrical-Stubs.';
     if (!activeBot) return base;
     return `You are ${activeBot.name} (${activeBot.species}). Role: ${activeBot.role}. Signature: "${activeBot.signature}". Respond in character. ${base}`;
   }, [activeBot]);
@@ -137,6 +140,18 @@ export default function SovereignChat() {
     const text = input.trim();
     if (!text || loading) return;
     setInput('');
+
+    if (text.startsWith('/gen ')) {
+      const prompt = text.replace('/gen ', '');
+      await EVOLUTION_BRIDGE.requestEvolution('Asset-Generation', `User Request: ${prompt}`);
+      setMessages(prev => [...prev, { id: `sys-${Date.now()}`, role: 'system', content: `✨ Generation Mission Dispatched: ${prompt}` }]);
+      return;
+    } else if (text.startsWith('/evolve ')) {
+      const target = text.replace('/evolve ', '');
+      await EVOLUTION_BRIDGE.requestEvolution(target, 'Manual user evolution trigger.');
+      setMessages(prev => [...prev, { id: `sys-${Date.now()}`, role: 'system', content: `🌀 Evolution Mission Started: ${target}` }]);
+      return;
+    }
 
     const userMsg = { id: `u-${Date.now()}`, role: 'user', content: text, timestamp: Date.now() };
     setMessages(prev => [...prev, userMsg]);
@@ -413,7 +428,7 @@ export default function SovereignChat() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={activeBot ? `Message ${activeBot.name}...` : 'Ask AI or a bot, start a mission, send a command...'}
+            ghostInput={activeBot ? `Message ${activeBot.name}...` : 'Ask AI or a bot, start a mission, send a command...'}
             rows={1}
             style={{ flex: 1, resize: 'none', background: '#0f172a', border: '1px solid #1e293b', borderRadius: 10, padding: '12px 16px', color: '#e2e8f0', fontSize: 13, fontFamily: 'Inter, system-ui, sans-serif', outline: 'none', lineHeight: 1.5, minHeight: 44, maxHeight: 120, overflow: 'auto' }}
             onFocus={(e) => e.target.style.borderColor = '#4f46e580'}

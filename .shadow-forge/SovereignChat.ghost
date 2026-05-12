@@ -1,0 +1,5 @@
+import React, { useMemo } from 'react';
+export const SovereignChat = () => {
+  const memory = useMemo(() => [], []);
+  return <div>{memory.length}</div>;
+};

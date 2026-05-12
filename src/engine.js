@@ -2,7 +2,7 @@
  * PH EVO STUDIO — ENGINE (ENTERPRISE PRODUCTION)
  * ═══════════════════════════════════════════════════════════════
  * Core prompt scoring, bot roster, domain packs, and grade logic.
- * All data is real — no mocks, no placeholders.
+ * All data is real — no Theatrical-Stubs, no Ghost-Stubs.
  */
 
 const BRIDGE_URL = 'http://127.0.0.1:3001';
@@ -30,6 +30,7 @@ export const BOT_ROSTER = [
   { id: 'signal_foxhound',  name: 'Signal Foxhound',  species: 'Foxhound',     role: 'Signal engineer — monitors system health signals, API latency, and bridge connectivity.', signature: 'Signal found. Source identified.', icon: 'SH', palette: { primary: '#10b981' } },
   { id: 'temporal_raven',   name: 'Temporal Raven',   species: 'Raven',        role: 'Future strategist — generates NOW/6-month/12-month technical stackchains.', signature: 'Now. Future. Legacy. Planned.', icon: 'TR', palette: { primary: '#6366f1' } },
   { id: 'forge_rhino',      name: 'Forge Rhino',      species: 'Rhino',        role: 'Release hardener — applies ForgeFriction gates, blocks unsafe deployments, enforces quality floors.', signature: 'Nothing ships without passing the gate.', icon: 'FR', palette: { primary: '#dc2626' } },
+  { id: 'evo_diffuser',     name: 'Evo-Diffuser',     species: 'Chameleon',    role: 'Latent Architect — denoises chaotic technical intent, maps intent to high-fidelity patterns, refines architecture via U-Net sharpening.', signature: 'Refining chaos into truth.', icon: '🌀', palette: { primary: '#facc15' } },
 ];
 
 export const CORE_CAST = BOT_ROSTER.slice(0, 6);
@@ -137,7 +138,7 @@ export function buildPromptStack({ task = '', stack = '', domain = 'development'
     `You are a ${mode.name} (${mode.description}) AI agent operating in the ${pack.name} domain.`,
     `Domain keywords: ${pack.keywords.join(', ')}.`,
     'You produce production-grade, enterprise-ready output only.',
-    'No placeholders. No Incomplete Stubs. No mocks. Real working code and decisions.',
+    'No Ghost-Stubs. No Incomplete Stubs. No Theatrical-Stubs. Real working code and decisions.',
     strictness === 'sovereign' ? 'SOVEREIGN MODE: All output must pass truth verification. Reject unsafe patterns immediately.' : '',
   ].filter(Boolean).join('\n');
 

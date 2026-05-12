@@ -224,7 +224,7 @@ export function EvoDuelEngineView() {
           <textarea
             value={prompt}
             onChange={e => setPrompt(e.target.value)}
-            placeholder="Enter a duel prompt... Both bots respond in their unique voice and specialty. The highest scorer wins."
+            ghostInput="Enter a duel prompt... Both bots respond in their unique voice and specialty. The highest scorer wins."
             style={{ width: '100%', minHeight: 80, background: '#0a0a18', border: '1px solid #2a2a4a', borderRadius: 8, padding: '10px 14px', color: '#e0e0ff', fontSize: 13, resize: 'vertical', boxSizing: 'border-box', marginBottom: 12 }}
           />
 

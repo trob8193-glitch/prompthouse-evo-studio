@@ -51,5 +51,11 @@ class ${seed.id.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join
   }
 }
 `;
+  /**
+   * Physically sync the Singularity Status to the Dart Engine.
+   */
+  async syncSingularityStatus(status = 'ACTIVE') {
+    Log.info(`🌉 [FlutterBridge] Syncing Singularity Status: ${status}`);
+    return await this.bridge.dispatchToDart('SET_SINGULARITY_STATUS', { status });
   }
 }

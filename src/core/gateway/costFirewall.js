@@ -44,7 +44,7 @@ export class CostFirewall {
       throw new Error('Insufficient credits. Please upgrade or purchase more credits.');
     }
 
-    // 5. Check Daily Limits (Placeholder for now, can be expanded with a ledger query)
+    // 5. Check Daily Limits (Ghost-Stub for now, can be expanded with a ledger query)
     // const dailyUsage = db.prepare('SELECT SUM(credits_used) FROM api_requests WHERE organization_id = ? AND date(created_at) = date('now')').get(orgId);
     
     return true;

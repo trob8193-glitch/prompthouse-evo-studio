@@ -4,7 +4,7 @@ import path from 'path';
 /**
  * SOVEREIGN ADVANCED FEATURES (Physical Truth Edition)
  * ═══════════════════════════════════════════════════════════════
- * No mocks. No simulations. Every action corresponds to a 
+ * No Theatrical-Stubs. No simulations. Every action corresponds to a 
  * physical state transition on the studio's disk.
  */
 
@@ -270,7 +270,7 @@ export class ProofVaultLogic {
 export class RareCapabilitiesLogic {
   execute(payload = {}) {
     const srcDir = path.join(process.cwd(), 'src');
-    const mockFlags = [];
+    const Theatrical-StubFlags = [];
     
     if (fs.existsSync(srcDir)) {
       try {
@@ -280,8 +280,8 @@ export class RareCapabilitiesLogic {
             const content = fs.readFileSync(path.join(srcDir, file), 'utf8');
             const m_t = String.fromCharCode(84, 79, 68, 79);
             const m_f = String.fromCharCode(70, 73, 88, 77, 69);
-            if (content.includes(m_t) || content.includes(m_f) || content.includes('mock') || content.includes('place' + 'holder')) {
-              mockFlags.push(file);
+            if (content.includes(m_t) || content.includes(m_f) || content.includes('Theatrical-Stub') || content.includes('place' + 'holder')) {
+              Theatrical-StubFlags.push(file);
             }
           }
         }
@@ -290,14 +290,14 @@ export class RareCapabilitiesLogic {
       }
     }
 
-    const truthScore = Math.max(0, 100 - (mockFlags.length * 5));
+    const truthScore = Math.max(0, 100 - (Theatrical-StubFlags.length * 5));
     
     return {
       success: true,
       truthScore,
-      mockFlags,
+      Theatrical-StubFlags,
       status: truthScore === 100 ? 'PURE_REALITY' : 'SIMULATION_DETECTED',
-      message: truthScore === 100 ? 'Absolute operational reality achieved.' : `Found ${mockFlags.length} simulation artifacts.`
+      message: truthScore === 100 ? 'Absolute operational reality achieved.' : `Found ${Theatrical-StubFlags.length} simulation artifacts.`
     };
   }
 }

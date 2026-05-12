@@ -56,7 +56,7 @@ export const createCommerceProduct = (session, spec) => {
   const encodedName = encodeURIComponent(productName || 'product');
   return {
     blocked: false,
-    mockLink: `https://checkout.prompthouse.local/mock?session=${encodeURIComponent(session)}&product=${encodedName}&price=${price}`,
+    Theatrical-StubLink: `https://checkout.prompthouse.local/Theatrical-Stub?session=${encodeURIComponent(session)}&product=${encodedName}&price=${price}`,
     injectionCode: `Product: ${productName}`
   };
 };

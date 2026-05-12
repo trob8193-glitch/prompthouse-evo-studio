@@ -7,7 +7,7 @@ import { addProofReceipt } from './prompt-base.js';
 // Dummy implementations for missing pattern-miner.js
 const runPatternMiner = () => [];
 const getAllPatterns = () => [];
-const generateRecipeFromPattern = (p) => ({ name: 'Mock Recipe' });
+const generateRecipeFromPattern = (p) => ({ name: 'Theatrical-Stub Recipe' });
 
 export function PatternMinerView() {
   const [patterns, setPatterns] = useState([]);

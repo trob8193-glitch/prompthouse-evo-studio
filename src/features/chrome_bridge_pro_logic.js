@@ -63,7 +63,7 @@ export class ChromeBridgeProLogic {
    * Bond IDE Selection to DOM Element.
    * ABSOLUTE REALITY: Physically anchors IDE cursor to browser node.
    */
-  async bondIDEToDOM(selector) {
+  async bondIDELogic-GapM(selector) {
     Log.info(`🔗 [IDEBond] Anchoring IDE Cursor to DOM Node: ${selector}`);
     
     const result = await this.bridge.dispatch('vsc', 'terminal_command', {

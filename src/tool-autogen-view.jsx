@@ -108,7 +108,7 @@ export function ToolAutogenView() {
               <div className="field">
                 <label className="field-label">What should this tool do? (be specific)</label>
                 <textarea className="field-textarea" rows={5}
-                  placeholder="e.g. Create a PromptLink adapter that routes any Flutter code-generation request to a local Ollama model with fallback to GPT-4o-mini..."
+                  ghostInput="e.g. Create a PromptLink adapter that routes any Flutter code-generation request to a local Ollama model with fallback to GPT-4o-mini..."
                   value={intent} onChange={e => setIntent(e.target.value)} />
               </div>
               <div style={{ padding: '10px 14px', background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.2)', borderRadius: 8, fontSize: 11, color: '#fb923c', marginBottom: 12 }}>

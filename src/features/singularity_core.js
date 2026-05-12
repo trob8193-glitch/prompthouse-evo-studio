@@ -8,7 +8,7 @@ import net from 'net';
  * PH EVO STUDIO — SINGULARITY CORE (ABSOLUTE REALITY)
  * ═══════════════════════════════════════════════════════════════
  * Central heart of the studio connectome.
- * ABSOLUTE OPERATIONAL REALITY: No mock scores. No filler lines.
+ * ABSOLUTE OPERATIONAL REALITY: No Theatrical-Stub scores. No filler lines.
  * Physically audits the TruthChain and probes Bonded Nodes.
  */
 export class SingularityCore {

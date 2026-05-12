@@ -94,7 +94,7 @@ function AgentArchitect() {
         <div className="card-body flex-col">
           <div className="field">
             <label className="field-label">Agent Name</label>
-            <input className="field-input" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Sovereign Auditor" />
+            <input className="field-input" value={name} onChange={e => setName(e.target.value)} ghostInput="e.g. Sovereign Auditor" />
           </div>
           <div className="field">
             <label className="field-label">Primary Role</label>
@@ -108,7 +108,7 @@ function AgentArchitect() {
           </div>
           <div className="field">
             <label className="field-label">Intelligence DNA (System Instructions)</label>
-            <textarea className="field-textarea" value={dna} onChange={e => setDna(e.target.value)} placeholder="Define the constraints, truth-logic, and goals of this intelligence..." style={{ minHeight: 200 }} />
+            <textarea className="field-textarea" value={dna} onChange={e => setDna(e.target.value)} ghostInput="Define the constraints, truth-logic, and goals of this intelligence..." style={{ minHeight: 200 }} />
           </div>
           <button className="btn btn-primary" onClick={spawnAgent}>🧬 Spawn Intelligence</button>
         </div>
@@ -143,7 +143,7 @@ function BridgeInventionLab() {
         <div className="card-body flex-col">
           <div className="field">
              <label className="field-label">Integration Name</label>
-             <input className="field-input" value={bridgeName} onChange={e => setBridgeName(e.target.value)} placeholder="e.g. Midjourney Sync" />
+             <input className="field-input" value={bridgeName} onChange={e => setBridgeName(e.target.value)} ghostInput="e.g. Midjourney Sync" />
           </div>
           <div className="field">
              <label className="field-label">Bridge Endpoint</label>

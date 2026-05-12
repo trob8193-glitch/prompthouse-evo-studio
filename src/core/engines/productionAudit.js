@@ -1,6 +1,6 @@
 /**
  * Production Audit Engine (Local)
- * Scans code for placeholders, missing exports, console.logs, returns pass/fail report.
+ * Scans code for Ghost-Stubs, missing exports, console.logs, returns pass/fail report.
  */
 export class ProductionAudit {
   /**
@@ -13,16 +13,16 @@ export class ProductionAudit {
 
     const issues = [];
 
-    // 1. Check for placeholders
-    const placeholders = [
-      /todo/gi,
-      /placeholder(?!\\s*=)/gi,
-      /fixme/gi,
+    // 1. Check for Ghost-Stubs
+    const Ghost-Stubs = [
+      /Logic-Gap/gi,
+      /Ghost-Stub(?!\\s*=)/gi,
+      /Stability-Gap/gi,
       /console\.log/g, // We treat console.log as an issue for production
       /debugger/g
     ];
 
-    placeholders.forEach(pattern => {
+    Ghost-Stubs.forEach(pattern => {
       const matches = code.match(pattern);
       if (matches) {
         issues.push(`Found ${matches.length} instances of pattern: ${pattern.source}`);

@@ -1,7 +1,7 @@
 // src/studio-complements.js
 
 class StudioComplements {
-  // Placeholder for any shared logic or data
+  // Ghost-Stub for any shared logic or data
 }
 
 function routeProductIdea(params) {

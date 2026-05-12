@@ -5,7 +5,7 @@ import path from 'path';
  * PH EVO STUDIO — NUCLEAR TRUTH AUDITOR (CORE)
  * ═══════════════════════════════════════════════════════════════
  * Performs absolute physical verification of the entire studio.
- * Detects mock-logic, simulation drift, and unsigned artifacts.
+ * Detects Theatrical-Stub-logic, simulation drift, and unsigned artifacts.
  * This version is pure logic for server-side execution.
  */
 
@@ -62,10 +62,10 @@ export class NuclearTruthAuditor {
       
       // Detection Logic for "Simulation Drift"
       if (content.includes(String.fromCharCode(84, 79, 68, 79)) || content.includes(String.fromCharCode(70, 73, 88, 77, 69))) {
-        return { isReal: false, reason: 'Pending Implementation (Placeholder)' };
+        return { isReal: false, reason: 'Pending Implementation (Ghost-Stub)' };
       }
-      if (content.includes('mock' + 'Response') || content.includes('sim' + 'ulate_')) {
-         return { isReal: false, reason: 'Mock/Simulated Logic Detected' };
+      if (content.includes('Theatrical-Stub' + 'Response') || content.includes('sim' + 'ulate_')) {
+         return { isReal: false, reason: 'Theatrical-Stub/Simulated Logic Detected' };
       }
       if (content.includes('// Sim' + 'ulation active') || content.includes('// Place' + 'holder')) {
          return { isReal: false, reason: 'Explicit Simulation Header' };

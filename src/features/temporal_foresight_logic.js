@@ -17,6 +17,22 @@ export class TemporalForesight {
     this.root = rootDir;
   }
 
+  /**
+   * Executes the temporal foresight pass.
+   */
+  async execute(params = {}) {
+    const prediction = await this.predictDesignDrift();
+    
+    if (prediction.probability > 0.85) {
+      console.log(`🔮 [Foresight] High-Probability Prediction: ${prediction.type}. Triggering Predictive Synthesis.`);
+      
+      await EVOLUTION_BRIDGE.requestEvolution(
+        prediction.targetArea,
+        `Predictive repair for anticipated design drift: ${prediction.reason}`
+      );
+    }
+  }
+
   async predictBottlenecks() {
     Log.info('🦅 [TemporalForesight] Scanning physical production timelines...');
     

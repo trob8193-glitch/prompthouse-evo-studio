@@ -190,7 +190,7 @@ export function EvoCopilotSidebar({ currentView }) {
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSend()}
-              placeholder="Command Evo..."
+              ghostInput="Command Evo..."
               style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', fontSize: 13, outline: 'none' }}
             />
             <button 

@@ -83,7 +83,7 @@ export default function SaasBuilderView() {
               <textarea 
                 value={prompt} onChange={e => setPrompt(e.target.value)}
                 className="w-full bg-black/40 border border-slate-800 rounded-xl p-4 text-sm text-white focus:ring-2 focus:ring-indigo-500/40 outline-none transition-all resize-none min-h-[100px]"
-                placeholder="Describe your sovereign SaaS architecture..."
+                ghostInput="Describe your sovereign SaaS architecture..."
               />
             </div>
             

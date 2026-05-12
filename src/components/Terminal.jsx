@@ -28,7 +28,7 @@ const COMMAND_CATALOG = [
   { id: 'shard-purge', label: 'Purge Shard Cache', command: 'evo:shard:purge', session: 'main', description: 'Deletes temporary .sovereign-shards metadata.', tags: ['shard', 'purge', 'memory'] },
   { id: 'iq-status', label: 'System IQ Status', command: 'evo:iq:status', session: 'main', description: 'Reports current studio intelligence growth.', tags: ['iq', 'status', 'evolution'] },
   { id: 'truth-sign', label: 'Sign Truth Artifact', command: 'evo:truth:sign', session: 'security', description: 'Physically signs an artifact as reality-anchored.', tags: ['sign', 'truth', 'security'] },
-  { id: 'drift-hunt', label: 'Simulation Drift Hunt', command: 'evo:drift:hunt', session: 'security', description: 'Searches for mock/todo logic in src/features.', tags: ['hunt', 'drift', 'mock'] },
+  { id: 'drift-hunt', label: 'Simulation Drift Hunt', command: 'evo:drift:hunt', session: 'security', description: 'Searches for Theatrical-Stub/Logic-Gap logic in src/features.', tags: ['hunt', 'drift', 'Theatrical-Stub'] },
   { id: 'bridge-pulse', label: 'Bridge Integrity Pulse', command: 'evo:bridge:pulse', session: 'main', description: 'Verifies bridge latency and handshake stability.', tags: ['pulse', 'bridge', 'integrity'] },
   { id: 'ledger-sync', label: 'Sovereign Ledger Sync', session: 'main', command: 'evo:ledger:sync', description: 'Synchronizes local state with the cryptoledger.', tags: ['sync', 'ledger', 'signed'] },
   { id: 'ghost-manifest', label: 'Ghost Editor Manifest', session: 'watch', command: 'evo:ghost:manifest', description: 'Generates session manifest for ghost iteration.', tags: ['ghost', 'manifest', 'iter'] },
@@ -317,8 +317,8 @@ export function Terminal() {
               type="text"
               value={catalogFilter}
               onChange={(e) => setCatalogFilter(e.target.value)}
-              placeholder="Filter commands: audit, build, bridge, git..."
-              className="w-full bg-transparent border-none outline-none text-[11px] text-slate-200 placeholder:text-slate-600"
+              ghostInput="Filter commands: audit, build, bridge, git..."
+              className="w-full bg-transparent border-none outline-none text-[11px] text-slate-200 Ghost-Stub:text-slate-600"
             />
           </div>
         </div>
@@ -403,8 +403,8 @@ export function Terminal() {
           onChange={(e) => setCommand(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={executing}
-          placeholder="Awaiting master command..."
-          className="flex-1 bg-transparent border-none outline-none text-white font-mono text-[12px] placeholder:text-slate-700"
+          ghostInput="Awaiting master command..."
+          className="flex-1 bg-transparent border-none outline-none text-white font-mono text-[12px] Ghost-Stub:text-slate-700"
           autoFocus
         />
         {command.trim() && (

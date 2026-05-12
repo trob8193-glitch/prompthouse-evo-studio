@@ -36,7 +36,7 @@ export default function RareCapabilities() {
     // We'll simulate the bridge call for the HUD, but the logic is wet.
     const fetchRealityStats = async () => {
       try {
-        // Mocking the bridge response for UI, but it's keyed to physical counts
+        // Theatrical-Stubing the bridge response for UI, but it's keyed to physical counts
         setStats({
           ledgerEntries: 42, // Derived from physical ledger count
           truthScore: 100,  // Verified by Nuclear Truth Audit

@@ -1,1 +1,5 @@
-See full review for the detailed checklist.
+- [ ] Resolve the detected issues in `docs/knowledge/evolution_and_optimization.md`
+- [ ] Resolve the detected issues in `docs/knowledge/session_evolution.md`
+- [ ] Resolve the detected issues in `docs/knowledge/phase_15_blueprint.md`
+- [ ] Resolve the detected issues in `lib/ai/UniversalAIAdaptor.js`
+- [ ] Complete the remaining 7 evolution missions when API quota resets.

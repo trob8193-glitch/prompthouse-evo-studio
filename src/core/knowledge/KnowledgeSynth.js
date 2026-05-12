@@ -1,76 +1,43 @@
 import { Log } from '../autonomy/SovereignLogger.js';
-import fs from 'fs';
-import path from 'path';
+import { HolographicStorage } from '../memory/HolographicStorage.js';
 
 /**
- * PH EVO STUDIO — KNOWLEDGE SYNTH (80%+ COST OPTIMIZED)
+ * PH EVO STUDIO — KNOWLEDGE SYNTH (REFINERY EDITION)
  * ═══════════════════════════════════════════════════════════════
- * ABSOLUTE REALITY: Physically anchors reasoning to local intelligence.
- * Prioritizes Local Evo LM and Truth-Shards over external API calls.
+ * Ingests external API intelligence to upgrade local studio organs.
+ * Targets: React, Vite, ESM, and Bot IQ.
  */
 
 export class KnowledgeSynth {
   constructor() {
-    this.status = 'SINGULARITY_ACTIVE';
-    this.shardDir = path.join(process.cwd(), '.sovereign-shards');
-    this.cacheLimit = 1000; // Physical shard limit
+    this.storage = new HolographicStorage();
   }
 
   /**
-   * Fulfill an architectural gap with 80%+ Cost Efficiency.
-   * ABSOLUTE REALITY: Performs local shard-retrieval and local inference.
+   * Ingest an external response to upgrade internal architecture.
    */
-  async fulfill(gap) {
-    Log.info(`🧠 [KnowledgeSynth] Fulfilling gap: ${gap.id} with 80%+ Cost Efficiency...`);
+  async ingestUpgrades(apiResponse) {
+    Log.info('🧪 [Refinery] Analyzing External Intelligence for System Upgrades...');
 
-    // 1. LOCAL FIRST: Search for truth-signed logic in physical shards
-    const cachedLogic = await this.searchPhysicalShards(gap.intent);
-    if (cachedLogic) {
-      Log.success('🧠 [KnowledgeSynth] Physical Shard Match Found. 0 Token Cost.');
-      return { status: 'FULFILLED', content: cachedLogic, truthState: 'SIGNED_PHYSICAL' };
+    const patterns = {
+      react: apiResponse.includes('import React') || apiResponse.includes('useState'),
+      vite: apiResponse.includes('vite') || apiResponse.includes('config'),
+      esm: apiResponse.includes('export') || apiResponse.includes('import'),
+      visual: apiResponse.includes('lighting') || apiResponse.includes('texture') || apiResponse.includes('cinematic'),
+      logic: apiResponse.length > 500
+    };
+
+    if (patterns.react || patterns.vite || patterns.visual) {
+      Log.success(`🔥 [Refinery] ${patterns.visual ? 'VISUAL' : 'ARCHITECTURAL'} PATTERN DETECTED.`);
+      await this.storage.store(patterns.visual ? 'VISUAL_DNA' : 'SYSTEM_UPGRADE', apiResponse);
+      this.triggerAutonomousPatch(patterns);
     }
-
-    // 2. LOCAL INFERENCE: Attempt solution using Local Evo LM
-    Log.info('🧿 [KnowledgeSynth] Shard miss. Triggering Local Evo LM Inference...');
-    const localResult = await this.triggerLocalInference(gap);
-    
-    if (localResult.confidence > 0.85) {
-      Log.success('🧿 [KnowledgeSynth] Local Inference Successful. 0 Token Cost.');
-      await this.persistToShard(gap.intent, localResult.content);
-      return { status: 'FULFILLED', content: localResult.content, truthState: 'SIGNED_PHYSICAL' };
-    }
-
-    // 3. LAST RESORT: Dispatch Distilled Prompt to External API
-    Log.warning('⚠️ [KnowledgeSynth] Local paths exhausted. Dispatching DISTILLED prompt to API...');
-    return await this.dispatchDistilledRequest(gap);
   }
 
-  async searchPhysicalShards(intent) {
-    // Physical search through .sovereign-shards/patterns.shard.json
-    const shardPath = path.join(this.shardDir, 'patterns.shard.json');
-    if (!fs.existsSync(shardPath)) return null;
-
-    const patterns = JSON.parse(fs.readFileSync(shardPath, 'utf8'));
-    const match = patterns.find(p => p.identifier === intent); // Simple match for now
-    return match ? match.content : null;
-  }
-
-  async triggerLocalInference(gap) {
-    // Logic to call local WebGPU/Ollama bridge
-    return { confidence: 0.9, content: '// Physically Manifested Local Logic' };
-  }
-
-  async dispatchDistilledRequest(gap) {
-    // Strips context to absolute minimum high-density tokens
-    const distilledPrompt = gap.intent.slice(0, 500); // 80% compression
-    // Dispatch to Bridge API...
-    return { status: 'FULFILLED', content: '// External API Logic', truthState: 'SIGNED_PHYSICAL' };
-  }
-
-  async persistToShard(intent, content) {
-    const shardPath = path.join(this.shardDir, 'patterns.shard.json');
-    const patterns = JSON.parse(fs.readFileSync(shardPath, 'utf8'));
-    patterns.push({ identifier: intent, content, truthState: 'SIGNED_PHYSICAL', timestamp: Date.now() });
-    fs.writeFileSync(shardPath, JSON.stringify(patterns.slice(-this.cacheLimit), null, 2), 'utf8');
+  triggerAutonomousPatch(patterns) {
+    Log.info(`🛠️ [Refinery] Triggering Autonomous Patch for: ${Object.keys(patterns).filter(k => patterns[k]).join(', ')}`);
+    // In production, this dispatches a Bot to apply the patch.
   }
 }
+
+export const REFINERY = new KnowledgeSynth();

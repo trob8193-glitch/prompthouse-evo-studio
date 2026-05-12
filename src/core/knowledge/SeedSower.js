@@ -1,4 +1,3 @@
-
 import { Log } from '../autonomy/SovereignLogger.js';
 
 /**

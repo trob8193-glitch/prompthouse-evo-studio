@@ -1,0 +1,190 @@
+// EVOGENAGE — SOVEREIGN SCHEMA (PRODUCTION V1)
+// ═══════════════════════════════════════════════════════════════
+// Enforces the physical truth of users, credits, and generation.
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  USER
+  CREATOR
+  DEVELOPER
+  BUSINESS
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum JobStatus {
+  CREATED
+  COMPILING
+  SAFETY_CHECKING
+  BLOCKED
+  AWAITING_CREDIT_RESERVATION
+  CREDIT_RESERVED
+  QUEUED
+  GENERATING
+  POST_PROCESSING
+  UPLOADING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model User {
+  id                      String    @id @default(uuid())
+  email                   String    @unique
+  displayName             String?
+  passwordHash            String
+  role                    UserRole  @default(USER)
+  status                  String    @default("ACTIVE")
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  
+  organizationId          String?
+  organization            Organization? @relation(fields: [organizationId], references: [id])
+  
+  creditWallet            CreditWallet?
+  visualDnaProfile        VisualDnaProfile?
+  
+  generationJobs          GenerationJob[]
+  assets                  GeneratedAsset[]
+  apiKeys                 ApiKey[]
+  auditLogs               AuditLog[]
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  ownerId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  members   User[]
+}
+
+model CreditWallet {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  balance         Int      @default(0)
+  reservedBalance Int      @default(0)
+  updatedAt       DateTime @updatedAt
+  
+  ledgerEntries   CreditLedger[]
+}
+
+model CreditLedger {
+  id          String   @id @default(uuid())
+  walletId    String
+  wallet      CreditWallet @relation(fields: [walletId], references: [id])
+  amount      Int
+  type        String   // credit_granted, credit_reserved, credit_charged, etc.
+  description String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+}
+
+model GenerationJob {
+  id                String    @id @default(uuid())
+  userId            String
+  user              User      @relation(fields: [userId], references: [id])
+  status            JobStatus @default(CREATED)
+  promptRaw         String
+  promptCompiled    String?
+  assetType         String
+  stylePresetId     String?
+  canonProfileId    String?
+  creditCost        Int       @default(0)
+  error             String?
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  assets            GeneratedAsset[]
+}
+
+model GeneratedAsset {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  jobId           String
+  job             GenerationJob @relation(fields: [jobId], references: [id])
+  url             String
+  thumbnailUrl    String?
+  metadata        Json
+  dimensions      String?
+  mimeType        String?
+  sizeBytes       Int?
+  approvalStatus  String   @default("PENDING")
+  
+  createdAt       DateTime @default(now())
+}
+
+model VisualDnaProfile {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id])
+  preferredMood     String?
+  density           String?
+  primaryShape      String?
+  colorBias         String?
+  version           Int      @default(1)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model ApiKey {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  keyHash   String   @unique
+  name      String
+  lastUsed  DateTime?
+  createdAt DateTime @default(now())
+}
+
+model GeneratedAssetCollection {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  name            String
+  status          String   @default("INITIALIZING")
+  error           String?
+  metadata        Json?
+  
+  assets          GeneratedAsset[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model UiEvolutionJob {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  targetArea      String   // e.g. "Dashboard", "Sidebar", "ChatInput"
+  status          String   @default("CREATED")
+  codeGenerated   String?  @db.Text
+  score           Float?   // Accessibility/Complexity Score
+  metadata        Json?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  entity    String
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+}

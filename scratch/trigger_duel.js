@@ -1,21 +1,33 @@
-import { EvoDuelEngine } from '../src/core/autonomy/EvoDuelEngine.js';
-import { EVO_DEV_TEAM } from '../src/bot-characters.js';
-import { Log } from '../src/core/autonomy/SovereignLogger.js';
+import { universalSend } from '../src/lib/universal-transport.js';
+import { StressTester } from '../src/core/autonomy/StressTester.js';
 
-async function runLiveDuel() {
-  const engine = new EvoDuelEngine(EVO_DEV_TEAM);
-  
-  Log.info('🔥 [Arena] PREPARING FOR LOGIC DUEL...');
-  Log.info('🤺 [Participants]: LION-1 (Architect) vs TIGER-5 (Striker)');
-  Log.info('🧬 [Target]: QUANTUM_SEEDING_OPTIMIZATION');
-  
-  const result = await engine.initiateDuel(1, 5, 'QUANTUM_SEEDING_OPTIMIZATION');
-  
-  console.log('\n=======================================');
-  console.log(`🏆 WINNER: ${result.winner}`);
-  console.log(`📊 RESONANCE: ${result.resonance}`);
-  console.log(`🕒 TIMESTAMP: ${new Date(result.timestamp).toLocaleTimeString()}`);
-  console.log('=======================================\n');
+const tester = new StressTester();
+
+/**
+ * THE SOVEREIGN DUEL: GEMINI VS OPENAI
+ * ═══════════════════════════════════════════════════════════════
+ * Two models enter. One truth emerges.
+ */
+async function runDuel() {
+  const intent = "Synthesize a high-density Sovereign Dashboard Component in React with Glassmorphism and Nuclear Rate Limiting hooks.";
+
+  console.log(`⚔️ [Duel] Dispatching Intent to Gemini Pro 1.5...`);
+  const geminiResult = await universalSend([{ role: 'user', content: intent }], "You are Antigravity.", { provider: 'gemini' });
+
+  console.log(`⚔️ [Duel] Dispatching Intent to GPT-4o...`);
+  const openaiResult = await universalSend([{ role: 'user', content: intent }], "You are Antigravity.", { provider: 'openai' });
+
+  // 1. Audit Gemini
+  console.log(`📊 [Duel] Auditing Gemini Synthesis...`);
+  const geminiScore = await tester.auditEvolutionVariant(geminiResult, 'Dashboard');
+
+  // 2. Audit OpenAI
+  console.log(`📊 [Duel] Auditing OpenAI Synthesis...`);
+  const openaiScore = await tester.auditEvolutionVariant(openaiResult, 'Dashboard');
+
+  console.log(`\n🏆 [Duel] WINNER: ${geminiScore.score > openaiScore.score ? 'GEMINI' : 'OPENAI'}`);
+  console.log(`   - Gemini Score: ${geminiScore.score}`);
+  console.log(`   - OpenAI Score: ${openaiScore.score}`);
 }
 
-runLiveDuel().catch(console.error);
+runDuel();

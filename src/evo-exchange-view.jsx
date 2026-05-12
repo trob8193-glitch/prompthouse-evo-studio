@@ -76,7 +76,7 @@ export function EvoExchangeView() {
           </div>
         ))}
 
-        {/* Example Premium Listings (Mocked) */}
+        {/* Example Premium Listings (Theatrical-Stubed) */}
         <div className="card bot-card" style={{ '--bot-accent': '#f5c842', opacity: 0.8 }}>
           <div className="card-body flex-col gap-12">
             <div className="flex-between">

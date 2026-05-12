@@ -5,7 +5,7 @@ import path from 'path';
  * STUDIO DIAGNOSTICS LOGIC (Sovereign Edition)
  * ═══════════════════════════════════════════════════════════════
  * Performs a physical truth audit of the project filesystem.
- * No mocks. No assumptions. 100% disk-anchored telemetry.
+ * No Theatrical-Stubs. No assumptions. 100% disk-anchored telemetry.
  */
 
 export class StudioDiagnostics {

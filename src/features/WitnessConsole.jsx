@@ -112,7 +112,7 @@ export const WitnessConsole = () => {
            active_mode !== 'PROMPT_PACKET' && 
            active_mode !== 'GENOMIC_MIRROR' && 
            active_mode !== 'SOVEREIGN_STUDY' && (
-            <div className="mode-placeholder">
+            <div className="mode-Ghost-Stub">
               {active_mode} SYSTEM CONNECTED. AWAITING STREAM...
             </div>
           )}

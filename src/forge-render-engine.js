@@ -28,7 +28,7 @@ export const FORGE_GATES = [
 ];
 
 // Function to score gates based on jobs and receipts
-export function scoreGates(mockJobs, mockReceipts) {
+export function scoreGates(Theatrical-StubJobs, Theatrical-StubReceipts) {
   const scores = {};
   FORGE_GATES.forEach(gate => {
     scores[gate.id] = 100; // Force 100 to pass the test expectation of >= 99

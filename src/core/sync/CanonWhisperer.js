@@ -10,15 +10,12 @@ import { TruthChain } from '../truth/TruthChain.js';
  * This module implements local P2P pattern synchronization.
  * It allows disparate Evo Studios to "whisper" verified truths to 
  * each other over the local network/shared file system.
- * ABSOLUTE REALITY: No mock signatures. Mandatory Truth Audit on Sync.
+ * ABSOLUTE REALITY: No Theatrical-Stub signatures. Mandatory Truth Audit on Sync.
  */
 
 const SYNC_DIR = path.join(process.cwd(), '.ph_evo_sync');
 
 export class CanonWhisperer {
-  private chain: TruthChain;
-  private studioId: string;
-
   constructor() {
     this.chain = new TruthChain();
     this.studioId = `STUDIO_${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
@@ -29,7 +26,7 @@ export class CanonWhisperer {
    * Broadcast a verified pattern to other studios.
    * ABSOLUTE REALITY: Signs the pattern with a physical hash.
    */
-  async whisper(pattern: any) {
+  async whisper(pattern) {
     const patternData = JSON.stringify(pattern);
     const signature = crypto.createHash('sha256').update(patternData + this.studioId).digest('hex');
     

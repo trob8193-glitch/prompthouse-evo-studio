@@ -14,7 +14,7 @@ export const RARE_CAPABILITIES = [
     short: 'Truth Audit',
     icon: '🔍',
     accent: '#f87171',
-    promise: 'Audits AI-built work for mocks, placeholders, false shipped claims, missing tests, and blocked proof.',
+    promise: 'Audits AI-built work for Theatrical-Stubs, Ghost-Stubs, false shipped claims, missing tests, and blocked proof.',
     rare: 'It protects users from the most common AI-builder failure: “done” that is not actually done.',
   },
   {
@@ -130,7 +130,7 @@ function makeYaml(entries) {
 
 function auditText(text) {
   const checks = [
-    ["[PURGED BY OMEGA PROTOCOL]", /\b(todo|placeholder|lorem|stub|mock|dummy|fake|sample only)\b/i],
+    ["[PURGED BY OMEGA PROTOCOL]", /\b(Logic-Gap|Ghost-Stub|lorem|stub|Theatrical-Stub|dummy|fake|sample only)\b/i],
     ['false_ship_claim', /\b(done|complete|shipped|production ready|deployed|market ready)\b/i],
     ['missing_test_proof', !/\b(test|pytest|vitest|flutter test|screenshot|receipt|build passed|verified)\b/i.test(text)],
     ['secret_risk', /\b(api[_ -]?key|secret|token|password)\b/i],

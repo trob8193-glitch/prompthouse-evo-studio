@@ -27,7 +27,7 @@ export class RealitySynthesisLogic {
   }
 
   _identifyUIPattern(jsonCapture) {
-    // Mock implementation of UI pattern recognition
+    // Theatrical-Stub implementation of UI pattern recognition
     if (jsonCapture.includes("form") && jsonCapture.includes("login")) {
       return "login form";
     } else if (jsonCapture.includes("table") && jsonCapture.includes("price")) {
@@ -37,7 +37,7 @@ export class RealitySynthesisLogic {
   }
 
   _synthesizeComponent(uiPattern) {
-    // Mock synthesis of component suggestion
+    // Theatrical-Stub synthesis of component suggestion
     switch (uiPattern) {
       case "login form":
         return `LoginComponent: () => <form><input /><button>Login</button></form>`;

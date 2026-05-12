@@ -287,7 +287,7 @@ export function ForgeTermView() {
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Enter command... (↑↓ for history)"
+              ghostInput="Enter command... (↑↓ for history)"
               style={{
                 flex: 1, background: 'transparent', border: 'none', outline: 'none',
                 fontFamily: 'var(--font-mono)', fontSize: 13, color: '#f5c842',
