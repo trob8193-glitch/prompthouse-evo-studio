@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useWitnessStore } from './witnessStore';
+import { RefreshCw, ShieldAlert, Activity, Heart, AlertTriangle, Zap, Cpu, Code } from 'lucide-react';
 import './WitnessConsole.css';
 
 /**
@@ -9,8 +10,34 @@ import './WitnessConsole.css';
  */
 
 export const WitnessConsole = () => {
-  const { is_hud_open, active_mode, setMode, prompts, traces, truth_scores, active_state, toggleHud } = useWitnessStore();
+  const { 
+    is_hud_open, active_mode, setMode, prompts, traces, truth_scores, 
+    active_state, toggleHud, snapshotState, health_status, is_healing,
+    runDoctorScan, triggerEvoDoctor, triggerEvoEngineer, triggerEvoUIEngineer
+  } = useWitnessStore();
   const [glitchText, setGlitchText] = useState('SOVEREIGN_WITNESS_ACTIVE');
+  const [studyRunning, setStudyRunning] = useState(false);
+  const BRIDGE_URL = 'http://127.0.0.1:3001';
+
+  const runStudyProtocol = async (protocol) => {
+    if (studyRunning) return;
+    setStudyRunning(true);
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/study/initiate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ protocol }),
+      });
+      const data = await res.json();
+      snapshotState({ ...active_state, protocol, lastStudy: data });
+      setGlitchText(`STUDY_${protocol}_DONE`);
+    } catch (e) {
+      snapshotState({ ...active_state, protocol, lastStudy: { success: false, error: e.message } });
+      setGlitchText(`STUDY_${protocol}_ERROR`);
+    } finally {
+      setStudyRunning(false);
+    }
+  };
 
   if (!is_hud_open) return (
     <button className="witness-toggle-btn" onClick={toggleHud}>
@@ -32,7 +59,7 @@ export const WitnessConsole = () => {
 
         <div className="hud-nav">
           {[
-            'PATH_OF_REALITY', 'PROMPT_PACKET', 'GENOMIC_MIRROR', 'GHOST_EDITOR',
+            'PATH_OF_REALITY', 'PROMPT_PACKET', 'HEALTH_MATRIX', 'GENOMIC_MIRROR', 'GHOST_EDITOR',
             'STATE_MORPH', 'GENETIC_DIFF', 'TRUTH_HIGH', 'SOVEREIGN_STUDY', 'LOGIC_SCULPT'
           ].map(m => (
             <button 
@@ -70,6 +97,60 @@ export const WitnessConsole = () => {
             </div>
           )}
 
+          {active_mode === 'HEALTH_MATRIX' && (
+            <div className="health-matrix-view scroll-area">
+              <div className="matrix-header">
+                <div className="status-hero">
+                  <div className="sentient-avatar dolphin">🐬</div>
+                  <div className="hero-text">
+                    <h2>SYSTEM_HEALTH: {Math.round(health_status.score * 100)}%</h2>
+                    <p>{health_status.driftCount} DISCOVERED_FAULTS</p>
+                  </div>
+                  <button 
+                    className={`doctor-btn ${is_healing ? 'healing' : ''}`}
+                    onClick={() => triggerEvoDoctor()}
+                    disabled={is_healing}
+                  >
+                    {is_healing ? <RefreshCw className="spin" /> : <ShieldAlert />}
+                    {is_healing ? 'HEALING_IN_PROGRESS...' : 'INITIATE_EVO_DOCTOR'}
+                  </button>
+                </div>
+                
+                <div className="engineer-actions">
+                  <button className="action-pill engineer" onClick={() => triggerEvoEngineer()}>
+                    <div className="sentient-avatar monkey">🐒</div> EVOLVE_ARCHITECTURE
+                  </button>
+                  <button className="action-pill ui-engineer" onClick={() => triggerEvoUIEngineer()}>
+                    <div className="sentient-avatar octopus">🐙</div> REFINE_UI_ORGANS
+                  </button>
+                </div>
+              </div>
+
+              <div className="node-grid">
+                {Object.keys(truth_scores).length === 0 ? (
+                  <div className="no-nodes">NO_ACTIVE_NODES_IN_MEMORY. RUN_SCAN_TO_POPULATE.</div>
+                ) : (
+                  Object.entries(truth_scores).map(([path, report]) => (
+                    <div key={path} className={`node-card ${report.severity === 'CRITICAL' ? 'unhealthy' : 'healthy'}`}>
+                      <div className="node-icon">
+                        {report.severity === 'CRITICAL' ? <AlertTriangle className="warning-symbol" /> : <Heart />}
+                      </div>
+                      <div className="node-info">
+                        <div className="node-path">{path.split('/').pop()}</div>
+                        <div className="node-status">{report.severity || 'ALIGNED'}</div>
+                      </div>
+                      {report.severity === 'CRITICAL' && <div className="red-warning-badge">! WARNING</div>}
+                    </div>
+                  ))
+                )}
+              </div>
+              
+              <button className="full-scan-btn" onClick={() => runDoctorScan()}>
+                RUN_FULL_DIAGNOSTIC_SCAN
+              </button>
+            </div>
+          )}
+
           {active_mode === 'GENOMIC_MIRROR' && (
             <div className="genomic-feed scroll-area">
               <div className="dna-stream-animation">
@@ -94,7 +175,8 @@ export const WitnessConsole = () => {
                   <button 
                     key={p} 
                     className={`protocol-btn ${p === 'NUCLEAR_AUDIT' ? 'truth-primary' : p === 'SCORCH_EARTH' ? 'danger-zone' : ''}`}
-                    onClick={() => }
+                    onClick={() => runStudyProtocol(p)}
+                    disabled={studyRunning}
                   >
                     {p.replace(/_/g, ' ')}
                   </button>
@@ -102,8 +184,13 @@ export const WitnessConsole = () => {
               </div>
               <div className="realization-feed">
                 <h4>LATEST_REALIZATIONS:</h4>
-                <div className="realization-item">SYSTEM: Identified redundant logic in VercelAdapter. Compaction recommended.</div>
-                <div className="realization-item">DREAM: Simulated hybrid database architecture. IQ gain +0.02.</div>
+                {active_state?.lastStudy?.success === false ? (
+                  <div className="realization-item">ERROR: {active_state.lastStudy.error || 'Study protocol failed.'}</div>
+                ) : active_state?.lastStudy ? (
+                  <div className="realization-item">LAST: {JSON.stringify(active_state.lastStudy).slice(0, 280)}</div>
+                ) : (
+                  <div className="realization-item">No study runs yet.</div>
+                )}
               </div>
             </div>
           )}
@@ -112,15 +199,17 @@ export const WitnessConsole = () => {
            active_mode !== 'PROMPT_PACKET' && 
            active_mode !== 'GENOMIC_MIRROR' && 
            active_mode !== 'SOVEREIGN_STUDY' && (
-            <div className="mode-Ghost-Stub">
+            <div className="mode-ghost">
               {active_mode} SYSTEM CONNECTED. AWAITING STREAM...
             </div>
           )}
         </div>
 
         <div className="hud-footer">
-          <div className="metric">IQ: 105.4</div>
-          <div className="metric">TRUTH_STABILITY: 98.2%</div>
+          <div className="metric">IQ: {active_state.iq || '105.4'}</div>
+          <div className={`metric ${health_status.score < 0.8 ? 'danger-text' : ''}`}>
+            TRUTH_STABILITY: {Math.round(health_status.score * 1000) / 10}%
+          </div>
           <div className={`metric credits ${active_state.credits < 500 ? 'low-reserves' : ''}`}>
              CREDITS: {active_state.credits || '...'} 
              {active_state.credits < 500 && <span className="survival-warning"> [ECONOMIC_SURVIVAL_ACTIVE]</span>}

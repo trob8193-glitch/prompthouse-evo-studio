@@ -2,7 +2,7 @@
 // Bots build apps in real-time with animated collaboration pipeline
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { BotCharacter, BotStageCharacter, EXPRESSIONS, MOTIONS } from './bot-characters.js';
+import { BotCharacter, BotStageCharacter, EXPRESSIONS, MOTIONS } from './bot-characters.jsx';
 import { BOT_ROSTER } from './engine.js';
 import { APP_TYPES, generateApp, runBotPipeline, downloadAsZip, downloadFile, writeToLocalDisk } from './autonomous-builder.js';
 import { BotBus } from './bot-orb.jsx';

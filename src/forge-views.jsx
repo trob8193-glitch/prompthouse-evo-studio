@@ -40,19 +40,8 @@ function AgentArchitect() {
   const { addToVault } = useEvoStore();
 
   useEffect(() => {
-    if (dna) {
-      const interval = setInterval(() => {
-        const newLogs = [
-          '[DNA] Analyzing constraints...',
-          '[DNA] Mapping truth-logic gates...',
-          '[NEURAL] Anchoring synapses...',
-          '[NEURAL] Calibrating weights...',
-          '[SYS] Ready for spawning.'
-        ];
-        setLogs(prev => [...prev, newLogs[Math.floor(Math.random() * newLogs.length)]].slice(-10));
-      }, 2000);
-      return () => clearInterval(interval);
-    }
+    if (!dna) return;
+    setLogs(prev => [...prev, `[DNA] Updated (${dna.length} chars).`].slice(-10));
   }, [dna]);
 
   const spawnAgent = () => {

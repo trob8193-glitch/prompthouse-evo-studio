@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Send, Trash2, Terminal, Loader2, Wifi, Bluetooth, Globe, Cpu, Signal, ChevronDown, Settings } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 import { universalSend, probeAllTransports, syncOfflineQueue, getCustomEndpoints, addCustomEndpoint, removeCustomEndpoint } from '../lib/universal-transport.js';

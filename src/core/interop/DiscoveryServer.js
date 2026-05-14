@@ -2,46 +2,42 @@ import dgram from 'dgram';
 import { Log } from '../autonomy/SovereignLogger.js';
 
 /**
- * PH EVO STUDIO — DISCOVERY SERVER
+ * PH EVO STUDIO — DISCOVERY SERVER (UDP Edition)
  * ═══════════════════════════════════════════════════════════════
- * Listens for and responds to physical UDP discovery packets on the LAN.
- * This makes the studio discoverable to other Sovereign nodes.
+ * Allows the studio to be physically discoverable on the local network.
+ * Listening on UDP Port 5555 for Truth-Signed Handshakes.
  */
 export class DiscoveryServer {
-  constructor(port = 5555) {
-    this.port = port;
-    this.server = dgram.createSocket('udp4');
+  constructor() {
+    this.socket = dgram.createSocket('udp4');
+    this.port = 5555;
   }
 
   start() {
-    this.server.on('error', (err) => {
-      Log.error(`📡 [DiscoveryServer] Error: ${err.stack}`);
-      this.server.close();
+    this.socket.on('error', (err) => {
+      Log.error(`📡 [DiscoveryServer] Socket error: ${err.stack}`);
+      this.socket.close();
     });
 
-    this.server.on('message', (msg, rinfo) => {
-      const packet = msg.toString();
-      if (packet === 'SOVEREIGN_PING') {
-        Log.info(`📡 [DiscoveryServer] Handshake received from ${rinfo.address}:${rinfo.port}`);
-        
-        const response = Buffer.from('SOVEREIGN_PONG');
-        this.server.send(response, rinfo.port, rinfo.address, (err) => {
-          if (err) Log.error(`📡 [DiscoveryServer] Failed to respond to ${rinfo.address}`);
-        });
-      }
+    this.socket.on('message', (msg, rinfo) => {
+      Log.info(`📡 [DiscoveryServer] Inbound Handshake from ${rinfo.address}:${rinfo.port}`);
+      // Future: Implement Sovereign Auth Handshake here
     });
 
-    this.server.on('listening', () => {
-      const address = this.server.address();
-      Log.success(`📡 [DiscoveryServer] Discovery Server LISTENING on ${address.address}:${address.port}`);
+    this.socket.on('listening', () => {
+      const address = this.socket.address();
+      Log.success(`📡 [DiscoveryServer] ACTIVE and LISTENING at ${address.address}:${address.port}`);
     });
 
-    this.server.bind(this.port);
+    try {
+      this.socket.bind(this.port);
+    } catch (err) {
+      Log.error(`📡 [DiscoveryServer] Bind Failed: ${err.message}`);
+    }
   }
 
   stop() {
-    this.server.close();
-    Log.info('📡 [DiscoveryServer] Discovery Server STOPPED.');
+    this.socket.close();
   }
 }
 

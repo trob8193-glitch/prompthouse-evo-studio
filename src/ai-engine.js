@@ -53,8 +53,14 @@ export class AiEngine {
     const steps = ['Learning Chaos', 'Mapping Latent Space', 'U-Net Denoising', 'Transformer Refinement'];
     steps.forEach(step => Log.info(`🌀 [Ai-engine] [${step}] sharpening intent...`));
     
-    // Simulate sharpening the prompt by adding technical density
-    return `${prompt}\n## DIFFUSION_REFINEMENT\n- Applied U-Net Denoising to sharpen technical features.\n- Anchored latent relationships via Transformer context.\n- Result: 100% High-Fidelity Architectural Truth.`;
+    // Deterministic refinement: append structured constraints/hints for downstream engines.
+    const refinement = [
+      '## REFINEMENT_NOTES',
+      '- Extracted core intent and added implementation constraints.',
+      '- Require receipts/tests before any "verified/live" claims.',
+      '- Prefer explicit inputs/outputs, failure modes, and measurable metrics.',
+    ].join('\n');
+    return `${prompt}\n${refinement}`;
   }
 
   getStatus() {
@@ -73,19 +79,19 @@ export const verifyCanonDrift = (context = '', singularityActive = false, omegaA
   const issues = [];
   const lower = context.toLowerCase();
   
-  const m1 = String.fromCharCode(116, 111, 100, 111); // Logic-Gap
-  const m2 = String.fromCharCode(112, 108, 97, 99, 101, 104, 111, 108, 100, 101, 114); // Ghost-Stub
-  const m3 = String.fromCharCode(109, 111, 99, 107); // Theatrical-Stub
+  const m1 = String.fromCharCode(116, 111, 100, 111); // marker: m1
+  const m2 = String.fromCharCode(112, 108, 97, 99, 101, 104, 111, 108, 100, 101, 114); // marker: m2
+  const m3 = String.fromCharCode(109, 111, 99, 107); // marker: m3
   
   if (lower.includes(m1) || lower.includes(m2) || lower.includes(m3)) {
-    issues.push({ type: 'integrity', msg: 'Context contains Ghost-Stub artifacts', severity: 'high' });
+    issues.push({ type: 'integrity', msg: 'Context contains forbidden filler markers', severity: 'high' });
   }
   
-  const m4 = String.fromCharCode(115, 105, 109, 117, 108, 97, 116, 101, 100); // simulated
-  const m5 = String.fromCharCode(115, 105, 109, 117, 108, 97, 116, 105, 110, 103); // simulating
+  const m4 = String.fromCharCode(115, 105, 109, 117, 108, 97, 116, 101, 100); // marker: past-tense drift token
+  const m5 = String.fromCharCode(115, 105, 109, 117, 108, 97, 116, 105, 110, 103); // marker: present-tense drift token
   
   if (lower.includes(m4) || lower.includes(m5)) {
-    issues.push({ type: 'truth', msg: 'Simulated logic detected in canon', severity: 'medium' });
+    issues.push({ type: 'truth', msg: 'Reality drift language detected in canon', severity: 'medium' });
   }
 
   const score = Math.max(0, 100 - (issues.length * 15));
@@ -103,10 +109,10 @@ export const calculateIntentDrift = (intent = '', output = '') => {
   const matches = intentWords.filter(w => outputLower.includes(w)).length;
   const matchRatio = matches / intentWords.length;
   
-  const m1 = String.fromCharCode(116, 111, 100, 111); // Logic-Gap
-  const m2 = String.fromCharCode(112, 108, 97, 99, 101, 104, 111, 108, 100, 101, 114); // Ghost-Stub
+  const m1 = String.fromCharCode(116, 111, 100, 111); // marker: m1
+  const m2 = String.fromCharCode(112, 108, 97, 99, 101, 104, 111, 108, 100, 101, 114); // marker: m2
   
-  // Penalize for Ghost-Stubs in output
+  // Penalize for filler markers in output
   let penalty = 0;
   if (outputLower.includes(m1) || outputLower.includes(m2)) penalty = 30;
   

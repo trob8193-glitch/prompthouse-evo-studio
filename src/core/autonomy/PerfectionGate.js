@@ -10,7 +10,7 @@ import path from 'path';
  */
 
 const SUB_OPTIMAL_PATTERNS = [
-  { id: 'sim_drift', regex: new RegExp(String.fromCharCode(84, 79, 68, 79) + '|' + String.fromCharCode(70, 73, 88, 77, 69) + '|' + 'PLACE' + 'HOLDER', 'gi'), msg: 'Detected simulation drift (Ghost-Stub logic).' },
+  { id: 'drift_markers', regex: new RegExp(String.fromCharCode(84, 79, 68, 79) + '|' + String.fromCharCode(70, 73, 88, 77, 69) + '|' + 'PLACE' + 'HOLDER', 'gi'), msg: 'Detected drift markers (forbidden filler language).' },
   { id: 'telemetry_leak', regex: new RegExp('console\\.' + '(log|dir|warn)', 'g'), msg: 'Detected telemetry leak (raw console usage).' },
   { id: 'weak_types', regex: /:\s*any/g, msg: 'Detected weak type reasoning (any type usage).' },
   { id: 'empty_handlers', regex: /\{\s*\}|\{\s*return\s*null\s*\}/g, msg: 'Detected empty or null return handlers.' },

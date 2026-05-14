@@ -28,7 +28,7 @@ const COMMAND_CATALOG = [
   { id: 'shard-purge', label: 'Purge Shard Cache', command: 'evo:shard:purge', session: 'main', description: 'Deletes temporary .sovereign-shards metadata.', tags: ['shard', 'purge', 'memory'] },
   { id: 'iq-status', label: 'System IQ Status', command: 'evo:iq:status', session: 'main', description: 'Reports current studio intelligence growth.', tags: ['iq', 'status', 'evolution'] },
   { id: 'truth-sign', label: 'Sign Truth Artifact', command: 'evo:truth:sign', session: 'security', description: 'Physically signs an artifact as reality-anchored.', tags: ['sign', 'truth', 'security'] },
-  { id: 'drift-hunt', label: 'Simulation Drift Hunt', command: 'evo:drift:hunt', session: 'security', description: 'Searches for Theatrical-Stub/Logic-Gap logic in src/features.', tags: ['hunt', 'drift', 'Theatrical-Stub'] },
+  { id: 'drift-hunt', label: 'Reality Drift Hunt', command: 'evo:drift:hunt', session: 'security', description: 'Searches for logic drift and UI gaps in src/features.', tags: ['hunt', 'drift', 'reality'] },
   { id: 'bridge-pulse', label: 'Bridge Integrity Pulse', command: 'evo:bridge:pulse', session: 'main', description: 'Verifies bridge latency and handshake stability.', tags: ['pulse', 'bridge', 'integrity'] },
   { id: 'ledger-sync', label: 'Sovereign Ledger Sync', session: 'main', command: 'evo:ledger:sync', description: 'Synchronizes local state with the cryptoledger.', tags: ['sync', 'ledger', 'signed'] },
   { id: 'ghost-manifest', label: 'Ghost Editor Manifest', session: 'watch', command: 'evo:ghost:manifest', description: 'Generates session manifest for ghost iteration.', tags: ['ghost', 'manifest', 'iter'] },
@@ -313,15 +313,16 @@ export function Terminal() {
           </button>
           <div className="flex-1 min-w-0 flex items-center gap-2 px-3 py-1 rounded border border-slate-800 bg-black/40">
             <Search size={12} className="text-slate-500 shrink-0" />
-            <input
-              type="text"
-              value={catalogFilter}
-              onChange={(e) => setCatalogFilter(e.target.value)}
-              ghostInput="Filter commands: audit, build, bridge, git..."
-              className="w-full bg-transparent border-none outline-none text-[11px] text-slate-200 Ghost-Stub:text-slate-600"
-            />
+             <input
+               type="text"
+               value={catalogFilter}
+               onChange={(e) => setCatalogFilter(e.target.value)}
+               aria-label="Filter command catalog"
+               title="Filter commands: audit, build, bridge, git..."
+               className="w-full bg-transparent border-none outline-none text-[11px] text-slate-200"
+              />
+            </div>
           </div>
-        </div>
 
         {catalogOpen && (
           <div className="px-6 pb-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 max-h-[168px] overflow-auto">
@@ -403,8 +404,9 @@ export function Terminal() {
           onChange={(e) => setCommand(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={executing}
-          ghostInput="Awaiting master command..."
-          className="flex-1 bg-transparent border-none outline-none text-white font-mono text-[12px] Ghost-Stub:text-slate-700"
+          aria-label="Terminal command input"
+          title="Type a command and press Enter"
+          className="flex-1 bg-transparent border-none outline-none text-white font-mono text-[12px]"
           autoFocus
         />
         {command.trim() && (

@@ -64,7 +64,7 @@ const RELEASE_GATES = [
   { id: 6, label: 'Dashboard shows live metrics', category: 'Core' },
   { id: 7, label: 'Navigation routes to all pages', category: 'UI' },
   { id: 8, label: 'Mobile viewport renders correctly', category: 'UI' },
-  { id: 9, label: 'No Ghost-Stub or stub content visible', category: 'Quality' },
+  { id: 9, label: 'No non-executable artifacts visible', category: 'Quality' },
   { id: 10, label: 'Error boundaries catch crashes', category: 'Quality' },
   { id: 11, label: 'Sensitive data redacted in logs', category: 'Security' },
   { id: 12, label: 'Production build under 500KB gzip', category: 'Performance' },

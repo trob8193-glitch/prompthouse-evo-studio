@@ -27,20 +27,27 @@ const CapabilityCard = ({ title, description, icon: Icon, color, status, metric 
 export default function RareCapabilities() {
   const [stats, setStats] = useState({
     ledgerEntries: 0,
-    truthScore: 100,
-    activeSwarms: 0
+    truthScore: null,
+    dependencyEdges: 0
   });
 
   useEffect(() => {
-    // PHYSICAL BINDING: In a real app, this would be a fetch to the Bridge
-    // We'll simulate the bridge call for the HUD, but the logic is wet.
     const fetchRealityStats = async () => {
       try {
-        // Theatrical-Stubing the bridge response for UI, but it's keyed to physical counts
+        const [auditRes, proofRes, diagRes] = await Promise.all([
+          fetch('http://127.0.0.1:3001/api/audit/nuclear-truth'),
+          fetch('http://127.0.0.1:3001/api/proof/count'),
+          fetch('http://127.0.0.1:3001/api/studio/diagnostics?limit=25'),
+        ]);
+
+        const audit = await auditRes.json().catch(() => null);
+        const proof = await proofRes.json().catch(() => null);
+        const diag = await diagRes.json().catch(() => null);
+
         setStats({
-          ledgerEntries: 42, // Derived from physical ledger count
-          truthScore: 100,  // Verified by Nuclear Truth Audit
-          activeSwarms: 12   // Active on disk
+          ledgerEntries: Number(proof?.count || 0),
+          truthScore: typeof audit?.score === 'number' ? audit.score : null,
+          dependencyEdges: Number(diag?.summary?.dependency_edges || 0)
         });
       } catch (err) {
         Log.error('❌ [RareCapabilities] Failed to bind to reality.');
@@ -63,7 +70,7 @@ export default function RareCapabilities() {
           icon={Search} 
           color="text-cyan-400" 
           status="VERIFIED"
-          metric={`${stats.truthScore}% TRUTH`}
+          metric={stats.truthScore == null ? '—' : `${stats.truthScore}% SCORE`}
         />
         <CapabilityCard 
           title="Quantum Seeding" 
@@ -71,7 +78,7 @@ export default function RareCapabilities() {
           icon={Zap} 
           color="text-yellow-400" 
           status="ACTIVE"
-          metric={`${stats.activeSwarms} NODES`}
+          metric={`${stats.dependencyEdges} EDGES`}
         />
         <CapabilityCard 
           title="Sovereign Ledger" 

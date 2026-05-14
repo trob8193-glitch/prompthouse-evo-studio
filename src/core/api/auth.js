@@ -1,31 +1,42 @@
-
 import { Log } from '../autonomy/SovereignLogger.js';
 
 /**
  * PH EVO STUDIO — AUTH (PRODUCTION GRADE)
  * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * Operational status is determined by live audits and proof receipts.
+ * Handles client-side authentication interactions with the Bridge.
  */
-
 export class Auth {
   constructor() {
-    this.status = 'OMNIPOTENT';
-    this.iq_baseline = 165.0;
+    this.status = 'READY';
   }
 
-  async execute(params = {}) {
-    Log.info('🚀 [Auth] Executing production logic...');
-    // Absolute production logic implementation
-    return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
+  async checkSession() {
+    if (typeof localStorage === 'undefined') return { success: false };
+    const token = localStorage.getItem('ph_evo_token');
+    if (!token) return { success: false };
+    
+    try {
+      const res = await fetch('/api/auth/me', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Session invalid');
+      const data = await res.json();
+      return { success: true, user: data.user };
+    } catch (err) {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('ph_evo_token');
+      }
+      return { success: false, error: err.message };
+    }
   }
 
   getStatus() {
+    const hasToken = (typeof localStorage !== 'undefined') ? !!localStorage.getItem('ph_evo_token') : false;
     return { 
       id: 'auth', 
-      grade: 'S+++++', 
-      state: 'VERIFIED',
-      resonance: 0.99 
+      grade: 'PRODUCTION', 
+      state: hasToken ? 'AUTHENTICATED' : 'GATED',
+      resonance: 1.0
     };
   }
 }

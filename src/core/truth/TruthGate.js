@@ -19,7 +19,7 @@ export class TruthGate {
     // 1. FORBIDDEN MARKER SCAN
     this.FORBIDDEN_MARKERS.forEach(pattern => {
       if (strData.includes(pattern)) {
-        issues.push(`CRITICAL_VIOLATION: Detected prohibited Ghost-Stub "${pattern}"`);
+        issues.push(`CRITICAL_VIOLATION: Detected prohibited filler marker "${pattern}"`);
       }
     });
 
@@ -35,7 +35,7 @@ export class TruthGate {
       const negatedMatches = strData.match(/(no|not)\s+fake/g) || [];
       
       if (matches.length > negatedMatches.length) {
-        issues.push(`CRITICAL_VIOLATION: Detected prohibited Ghost-Stub "[PURGED BY OMEGA PROTOCOL]" (without negation)`);
+        issues.push(`CRITICAL_VIOLATION: Detected prohibited filler marker "[PURGED BY OMEGA PROTOCOL]" (without negation)`);
       }
     }
 

@@ -36,7 +36,7 @@ export function ToolAutogenView() {
   const [activeTab, setActiveTab] = useState('generate');
 
   useEffect(() => {
-    setRecipes(getAllRecipes());
+    getAllRecipes().then(setRecipes);
     fetch('http://127.0.0.1:3001/status', { signal: AbortSignal.timeout(2000) })
       .then(r => setBridgeLive(r.ok)).catch(() => setBridgeLive(false));
   }, []);
@@ -53,7 +53,8 @@ export function ToolAutogenView() {
         callBridge: bridgeLive ? callBridge : null,
       });
       setResult(res);
-      setRecipes(getAllRecipes());
+      const updated = await getAllRecipes();
+      setRecipes(updated);
       addProofReceipt('tool_autogen', 'tool_autogen:generate', 'built', { type: selectedType, intent: intent.slice(0,80) });
     } catch (e) {
       setResult({ error: e.message });

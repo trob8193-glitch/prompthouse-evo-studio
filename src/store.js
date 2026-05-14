@@ -9,7 +9,99 @@ import { create } from 'zustand';
 
 const BRIDGE_URL = 'http://127.0.0.1:3001';
 
+// Helper for fetch with auth
+const sovereignFetch = async (url, options = {}) => {
+  const token = typeof localStorage !== 'undefined' ? localStorage.getItem('ph_evo_token') : null;
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+    ...(options.headers || {})
+  };
+  return fetch(url, { ...options, headers });
+};
+
+const getInitialToken = () => {
+  if (typeof localStorage !== 'undefined') {
+    return localStorage.getItem('ph_evo_token') || null;
+  }
+  return null;
+};
+
 export const useSovereignStore = create((set, get) => ({
+  // ─── Authentication ─────────────────────────────────────────
+  user: null,
+  token: getInitialToken(),
+  isAuthenticated: !!getInitialToken(),
+  authLoading: false,
+  authError: null,
+
+  login: async (email, password) => {
+    set({ authLoading: true, authError: null });
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Login failed');
+      
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('ph_evo_token', data.token);
+      }
+      set({ user: data.user, token: data.token, isAuthenticated: true, authLoading: false });
+      return true;
+    } catch (err) {
+      set({ authError: err.message, authLoading: false });
+      return false;
+    }
+  },
+
+  register: async (email, password, displayName) => {
+    set({ authLoading: true, authError: null });
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, displayName })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Registration failed');
+      
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('ph_evo_token', data.token);
+      }
+      set({ user: data.user, token: data.token, isAuthenticated: true, authLoading: false });
+      return true;
+    } catch (err) {
+      set({ authError: err.message, authLoading: false });
+      return false;
+    }
+  },
+
+  logout: () => {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('ph_evo_token');
+    }
+    set({ user: null, token: null, isAuthenticated: false });
+  },
+
+  checkAuth: async () => {
+    const token = get().token;
+    if (!token) return;
+    try {
+      const res = await sovereignFetch(`${BRIDGE_URL}/api/auth/me`);
+      if (res.ok) {
+        const data = await res.json();
+        set({ user: data.user, isAuthenticated: true });
+      } else {
+        get().logout();
+      }
+    } catch {
+      get().logout();
+    }
+  },
+
   // ─── Navigation ─────────────────────────────────────────────
   activePage: 'dashboard',
   sidebarCollapsed: false,
@@ -92,7 +184,7 @@ export const useSovereignStore = create((set, get) => ({
 
   fetchBridgeStatus: async () => {
     try {
-      const res = await fetch(`${BRIDGE_URL}/status`, { signal: AbortSignal.timeout(5000) });
+      const res = await sovereignFetch(`${BRIDGE_URL}/status`, { signal: AbortSignal.timeout(5000) });
       if (!res.ok) throw new Error(`Bridge returned ${res.status}`);
       const data = await res.json();
       set({ bridgeStatus: 'connected', bridgeData: data, bridgeError: null });
@@ -110,7 +202,7 @@ export const useSovereignStore = create((set, get) => ({
   fetchMetrics: async () => {
     set({ metricsLoading: true });
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/metrics`, { signal: AbortSignal.timeout(5000) });
+      const res = await sovereignFetch(`${BRIDGE_URL}/api/metrics`, { signal: AbortSignal.timeout(5000) });
       if (!res.ok) throw new Error(`Metrics returned ${res.status}`);
       const data = await res.json();
       set({ metrics: data, metricsLoading: false });
@@ -139,7 +231,7 @@ export const useSovereignStore = create((set, get) => ({
         .concat(userMsg)
         .map((m) => ({ role: m.role === 'system' ? 'system' : m.role, content: m.content }));
 
-      const res = await fetch(`${BRIDGE_URL}/api/evo-lm/chat`, {
+      const res = await sovereignFetch(`${BRIDGE_URL}/api/evo-lm/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -202,7 +294,7 @@ export const useSovereignStore = create((set, get) => ({
     const state = get();
     set({ apiConfigSaving: true, apiConfigError: null });
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/config/keys`, {
+      const res = await sovereignFetch(`${BRIDGE_URL}/api/config/keys`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ keys: { openai: state.apiConfig.openaiKey, vercel: state.apiConfig.vercelToken } }),
@@ -218,7 +310,7 @@ export const useSovereignStore = create((set, get) => ({
 
   logToLedger: async (feature_id, action, proof_hash, truth_state = 'UNVERIFIED', iq_gain = 0) => {
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/sovereign-ledger/log`, {
+      const res = await sovereignFetch(`${BRIDGE_URL}/api/sovereign-ledger/log`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ feature_id, action, proof_hash, truth_state, iq_gain }),
@@ -246,7 +338,7 @@ export const useSovereignStore = create((set, get) => ({
   // ─── Maintenance ────────────────────────────────────────────
   runMaintenance: async () => {
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/maintenance/run`, { method: 'POST' });
+      const res = await sovereignFetch(`${BRIDGE_URL}/api/maintenance/run`, { method: 'POST' });
       if (!res.ok) throw new Error(`Maintenance returned ${res.status}`);
       const data = await res.json();
       get().addNotification('Maintenance cycle completed.', 'success');
@@ -257,11 +349,44 @@ export const useSovereignStore = create((set, get) => ({
     }
   },
 
+  // ─── Rift Grid & EvoPulse ──────────────────────────────────
+  riftStatus: 'disconnected',
+  riftData: null,
+  gridNodes: [],
+  gridRoutes: [],
+
+  fetchRiftStatus: async () => {
+    try {
+      const res = await fetch('http://127.0.0.1:3002/status', { signal: AbortSignal.timeout(3000) });
+      if (!res.ok) throw new Error(`Rift returned ${res.status}`);
+      const data = await res.json();
+      set({ riftStatus: 'connected', riftData: data });
+      return data;
+    } catch {
+      set({ riftStatus: 'disconnected', riftData: null });
+      return null;
+    }
+  },
+
+  fetchGridMesh: async () => {
+    try {
+      const [nodesRes, routesRes] = await Promise.all([
+        fetch('http://127.0.0.1:3002/api/evopulse/nodes'),
+        fetch('http://127.0.0.1:3002/api/evopulse/routes')
+      ]);
+      const nodes = await nodesRes.json();
+      const routes = await routesRes.json();
+      set({ gridNodes: nodes.data?.nodes || [], gridRoutes: routes.data?.routes || [] });
+    } catch {
+      // Stay silent on mesh failure
+    }
+  },
+
   // ─── Global Sync ──────────────────────────────────────────
   syncInterval: null,
   runTruthProbe: async () => {
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/truth/probe`);
+      const res = await sovereignFetch(`${BRIDGE_URL}/api/truth/probe`);
       if (!res.ok) throw new Error('Probe failed');
       const data = await res.json();
       set({ bridgeData: { ...get().bridgeData, probes: data.results } });
@@ -276,13 +401,13 @@ export const useSovereignStore = create((set, get) => ({
     const state = get();
     if (state.syncInterval) return;
 
-    // Run immediately (non-blocking) then every 8 seconds
-    // No await — never blocks the UI thread
     const poll = () => {
       get().fetchBridgeStatus().catch(() => {});
       get().fetchMetrics().catch(() => {});
+      get().fetchRiftStatus().catch(() => {});
+      get().fetchGridMesh().catch(() => {});
     };
-    poll(); // initial probe
+    poll(); 
     const interval = setInterval(poll, 8000);
     set({ syncInterval: interval });
   },

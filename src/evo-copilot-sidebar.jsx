@@ -36,30 +36,27 @@ export function EvoCopilotSidebar({ currentView }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:11434/api/generate', {
+      const response = await fetch('http://127.0.0.1:3001/api/evo-lm/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'llama3', // PromptBridge routing point
-          prompt: `You are ${activeBot.name} of PromptHouse Evo Studio. The user is currently looking at the "${currentView}" view. Help them automate or build. User says: ${input}`,
-          stream: false
+          messages: [
+            { role: 'user', content: `Current view: "${currentView}".\n\nUser: ${input}` }
+          ],
+          systemPrompt: `You are ${activeBot.name} of PromptHouse Evo Studio. You operate in real mode only: no simulations, no fake outputs. If the bridge lacks a capability, say so and propose the next concrete step.`
         })
-      }).catch(() => null); // Catch if bridge is down
+      });
 
-      if (response && response.ok) {
-        const data = await response.json();
-        setHistory(prev => [...prev, { role: 'assistant', text: data.response }]);
-      } else {
-        // Fallback simulation if bridge is not running
-        setTimeout(() => {
-          setHistory(prev => [...prev, { 
-            role: 'assistant', 
-            text: `[Bridge Offline] Simulated response for: "${input}". To execute this, please ensure the PromptBridge server is running.` 
-          }]);
-        }, 800);
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        const errText = data?.error || data?.message || `Bridge request failed (${response.status})`;
+        setHistory(prev => [...prev, { role: 'assistant', text: `Bridge error: ${errText}` }]);
+        return;
       }
+
+      setHistory(prev => [...prev, { role: 'assistant', text: data?.message || 'No response received.' }]);
     } catch (err) {
-      setHistory(prev => [...prev, { role: 'assistant', text: 'Error connecting to PromptBridge.' }]);
+      setHistory(prev => [...prev, { role: 'assistant', text: `Error connecting to bridge: ${err.message || err}` }]);
     } finally {
       setIsLoading(false);
     }

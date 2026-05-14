@@ -9,7 +9,7 @@
     body { width: 380px; min-height: 520px; background: #0a0e1a; color: #e2e8f0; font-family: 'Inter', system-ui, sans-serif; font-size: 13px; }
     .header { background: linear-gradient(135deg, #1a1040, #0a1628); border-bottom: 1px solid #1e293b; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
     .logo { display: flex; align-items: center; gap: 8px; }
-    .logo-text { font-size: 13px; font-weight: 900; background: linear-gradient(90deg, #f5c842, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .logo-text { font-size: 13px; font-weight: 900; background: linear-gradient(90deg, #f5c842, #818cf8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .badge { font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; }
     .online { background: #22c55e14; color: #22c55e; border: 1px solid #22c55e30; }
     .offline { background: #ef444414; color: #ef4444; border: 1px solid #ef444430; }
@@ -45,13 +45,19 @@
     .input-field { width: 100%; background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 8px 12px; color: #e2e8f0; font-size: 12px; outline: none; }
     label { font-size: 11px; color: #64748b; display: flex; align-items: center; gap: 6px; cursor: pointer; }
     .section-title { font-size: 10px; font-weight: 800; color: #818cf8; text-transform: uppercase; letter-spacing: 0.06em; }
+    .logo-emoji { font-size: 20px; }
+    .sync-btn-special { background: #fb923c20; border: 1px solid #fb923c; color: #fb923c; }
+    .training-info { font-size:10px; color:#475569; line-height:1.6; }
+    .connection-list { display:flex; flex-direction:column; gap:6px; }
+    .section-spacing-top { margin-top:6px; }
+    .custom-ep-list { display:flex; flex-direction:column; gap:4px; }
   </style>
 </head>
 <body>
 
 <div class="header">
   <div class="logo">
-    <span style="font-size:20px;">🦁</span>
+    <span class="logo-emoji">🦁</span>
     <span class="logo-text">PH Evo Bridge</span>
   </div>
   <span class="badge offline" id="status-badge">⏳ Probing...</span>
@@ -100,9 +106,9 @@
   <div class="btn-row">
     <button class="btn btn-gold" id="export-btn">⬇️ Export JSONL</button>
     <button class="btn btn-green" id="push-btn">🚀 Push to Bridge</button>
-    <button class="btn" id="sync-btn" style="background:#fb923c20;border:1px solid #fb923c;color:#fb923c;">📤 Sync Offline</button>
+    <button class="btn sync-btn-special" id="sync-btn">📤 Sync Offline</button>
   </div>
-  <div style="font-size:10px;color:#475569;line-height:1.6;">
+  <div class="training-info">
     Training data is stored locally in your browser. Export as JSONL for OpenAI fine-tuning, or push directly to the Evo Bridge for global training.
   </div>
 </div>
@@ -110,14 +116,14 @@
 <!-- CONNECTIONS TAB -->
 <div class="panel" id="tab-connections">
   <div class="section-title">Bridge Status</div>
-  <div id="connection-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+  <div id="connection-list" class="connection-list"></div>
 
-  <div class="section-title" style="margin-top:6px;">Add Custom Endpoint</div>
+  <div class="section-title section-spacing-top">Add Custom Endpoint</div>
   <input class="input-field" id="ep-url" placeholder="http://192.168.1.x:3001" />
   <input class="input-field" id="ep-label" placeholder="Label (e.g. Home Server)" />
   <input class="input-field" id="ep-apikey" placeholder="API Key (optional)" type="password" />
   <button class="btn btn-primary" id="add-ep-btn">+ Add Endpoint</button>
-  <div id="custom-ep-list" style="display:flex;flex-direction:column;gap:4px;"></div>
+  <div id="custom-ep-list" class="custom-ep-list"></div>
 </div>
 
 <script src="popup.js"></script>

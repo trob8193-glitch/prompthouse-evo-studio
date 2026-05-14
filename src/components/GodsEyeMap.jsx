@@ -8,18 +8,63 @@ import React, { useEffect, useState } from 'react';
 
 export function GodsEyeMap() {
   const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
+
+  const layoutNodes = (rawNodes) => {
+    const sorted = [...rawNodes].sort((a, b) => {
+      const weight = (h) => (h === 'error' ? 2 : h === 'warning' ? 1 : 0);
+      return (weight(b.health) - weight(a.health)) || String(a.label || a.id).localeCompare(String(b.label || b.id));
+    });
+
+    const count = Math.max(1, sorted.length);
+    const center = 50;
+    const radius = 34;
+    return sorted.map((node, index) => {
+      const angle = (index / count) * Math.PI * 2;
+      return {
+        id: node.id,
+        label: node.label || node.id,
+        type: node.health || 'healthy',
+        x: center + Math.cos(angle) * radius,
+        y: center + Math.sin(angle) * radius
+      };
+    });
+  };
 
   useEffect(() => {
-    // Simulate fetching the connectome
-    setNodes([
-      { id: 'IntelligenceCore', type: 'Core', x: 50, y: 50 },
-      { id: 'DeadHunterPro', type: 'Agent', x: 20, y: 30 },
-      { id: 'TruthAuditor', type: 'Agent', x: 80, y: 30 },
-      { id: 'SaaSBuilder', type: 'UI', x: 50, y: 80 },
-      { id: 'OmniRouter', type: 'System', x: 20, y: 70 },
-      { id: 'CanonMemory', type: 'Memory', x: 80, y: 70 },
-    ]);
+    let mounted = true;
+
+    const poll = async () => {
+      try {
+        const res = await fetch('http://127.0.0.1:3001/api/studio/diagnostics?limit=70');
+        if (!res.ok) throw new Error('Diagnostics unavailable');
+        const data = await res.json();
+        if (!mounted) return;
+
+        const graphNodes = data?.graph?.nodes || [];
+        const graphEdges = data?.graph?.edges || [];
+        const laidOut = layoutNodes(graphNodes);
+        const visibleIds = new Set(laidOut.map((n) => n.id));
+        const limitedEdges = graphEdges
+          .filter((e) => visibleIds.has(e.source) && visibleIds.has(e.target))
+          .slice(0, 220);
+
+        setNodes(laidOut);
+        setEdges(limitedEdges);
+      } catch {
+        if (!mounted) return;
+        setNodes([]);
+        setEdges([]);
+      }
+    };
+
+    poll();
+    const interval = setInterval(poll, 30000);
+    return () => { mounted = false; clearInterval(interval); };
   }, []);
+
+  const nodeIndex = new Map(nodes.map((n) => [n.id, n]));
+  const strokeFor = (type) => (type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6');
 
   return (
     <div className="absolute inset-0 bg-gray-900 bg-opacity-95 z-50 flex items-center justify-center p-8 backdrop-blur-md">
@@ -35,7 +80,7 @@ export function GodsEyeMap() {
               {nodes.length} Active Nodes
             </span>
             <span className="px-3 py-1 bg-green-500/20 text-green-300 text-xs rounded-full border border-green-500/30 animate-pulse">
-              SYNCED
+              {nodes.length > 0 ? 'SYNCED' : 'OFFLINE'}
             </span>
           </div>
         </div>
@@ -47,6 +92,27 @@ export function GodsEyeMap() {
           ))}
         </div>
 
+        {/* Connection Lines (from dependency graph) */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-35">
+          {edges.map((edge, idx) => {
+            const a = nodeIndex.get(edge.source);
+            const b = nodeIndex.get(edge.target);
+            if (!a || !b) return null;
+            return (
+              <line
+                key={`${edge.source}->${edge.target}:${idx}`}
+                x1={`${a.x}%`}
+                y1={`${a.y}%`}
+                x2={`${b.x}%`}
+                y2={`${b.y}%`}
+                stroke="#3b82f6"
+                strokeWidth="1"
+                strokeOpacity="0.6"
+              />
+            );
+          })}
+        </svg>
+
         {/* Nodes */}
         {nodes.map((node, index) => (
           <div 
@@ -54,22 +120,19 @@ export function GodsEyeMap() {
             className="absolute flex flex-col items-center justify-center transition-all duration-1000"
             style={{ left: `${node.x}%`, top: `${node.y}%`, transform: 'translate(-50%, -50%)' }}
           >
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 shadow-lg shadow-${node.type === 'Core' ? 'blue' : 'purple'}-500/50
-              ${node.type === 'Core' ? 'bg-blue-600 border-blue-300 animate-pulse' : 'bg-gray-800 border-purple-400'}`}>
-              <span className="text-white text-xs font-bold">{node.type[0]}</span>
+            <div
+              className="w-12 h-12 rounded-full flex items-center justify-center border-2 shadow-lg"
+              style={{
+                background: node.type === 'error' ? '#7f1d1d' : node.type === 'warning' ? '#78350f' : '#1f2937',
+                borderColor: strokeFor(node.type),
+                boxShadow: `0 0 18px ${strokeFor(node.type)}33`
+              }}
+            >
+              <span className="text-white text-xs font-bold">{String(node.type || 'h')[0].toUpperCase()}</span>
             </div>
-            <span className="mt-2 text-blue-200 text-xs font-mono tracking-wide">{node.id}</span>
+            <span className="mt-2 text-blue-200 text-xs font-mono tracking-wide">{node.label}</span>
           </div>
         ))}
-        
-        {/* Fake Connection Lines */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30">
-          <line x1="50%" y1="50%" x2="20%" y2="30%" stroke="#3b82f6" strokeWidth="2" strokeDasharray="5,5" />
-          <line x1="50%" y1="50%" x2="80%" y2="30%" stroke="#3b82f6" strokeWidth="2" strokeDasharray="5,5" />
-          <line x1="50%" y1="50%" x2="50%" y2="80%" stroke="#3b82f6" strokeWidth="2" strokeDasharray="5,5" />
-          <line x1="20%" y1="30%" x2="20%" y2="70%" stroke="#8b5cf6" strokeWidth="1" />
-          <line x1="80%" y1="30%" x2="80%" y2="70%" stroke="#8b5cf6" strokeWidth="1" />
-        </svg>
 
       </div>
     </div>

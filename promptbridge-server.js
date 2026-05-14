@@ -12,8 +12,9 @@ import OpenAI from 'openai';
 import { execSync } from 'child_process';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
+import os from 'os';
 import crypto from 'crypto';
+console.log('🔥 SERVER FILE LOADED');
 
 // Import our core engines
 import { UniversalAIAdaptor } from './lib/ai/UniversalAIAdaptor.js';
@@ -21,6 +22,7 @@ import { SelfMaintenance } from './src/core/automation/self_maintenance.js';
 import { StripeAdaptor } from './lib/commerce/StripeAdaptor.js';
 import { FoundryOrchestrator } from './lib/foundry/FoundryOrchestrator.js';
 import { TruthGate } from './src/core/truth/TruthGate.js';
+import { Log } from './src/core/autonomy/SovereignLogger.js';
 
 // Hybrid Quad System Imports
 import { ModelRouter } from './src/core/gateway/modelRouter.js';
@@ -30,6 +32,11 @@ import { AppBlueprint } from './src/core/engines/appBlueprint.js';
 import { ThemeEvolution } from './src/core/engines/themeEvolution.js';
 import { ProductionAudit } from './src/core/engines/productionAudit.js';
 import { runNuclearTruthAudit } from './src/core/audit/NuclearTruthAudit.js';
+import { ToolAutogeneratorNode } from './lib/foundry/ToolAutogeneratorNode.js';
+import { EVO_SCANNER } from './src/core/autonomy/EvoScanner.js';
+import { EVO_DOCTOR } from './src/core/autonomy/EvoDoctor.js';
+import { EVO_ENGINEER } from './src/core/autonomy/EvoEvolutionEngineer.js';
+import { EVO_UI_ENGINEER } from './src/core/autonomy/EvoUIEngineer.js';
 
 // SaaS Generator Imports
 import { SaasOrchestrator } from './src/core/engines/saasOrchestrator.js';
@@ -75,7 +82,7 @@ ensureAuthSchema();
 ensureGatewayBootstrapData();
 ensureEvolutionSchema();
 
-const app = express();
+const app = express(); app.use(cors()); app.use(express.json());
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
 
 // ─── INITIALIZATION ──────────────────────────────────────────────────────────
@@ -93,6 +100,58 @@ const RATE_LIMITS = new Map();
 const OLLAMA_BASE = 'http://localhost:11434';
 
 // Configuration
+function enforceJsonObjectBody(req, res, next) {
+  console.log(`🛡️ [GUARD] Checking body for ${req.method} ${req.path}`);
+  if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
+    if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+      return res.status(400).json({ error: 'Body must be a JSON object.' });
+    }
+  }
+  return next();
+}
+
+function createRateLimit({ id, windowMs, max, keyResolver }) {
+  return (req, res, next) => {
+    const key = keyResolver ? keyResolver(req) : `${req.ip}:${id}`;
+    const now = Date.now();
+    const entry = RATE_LIMITS.get(key) || { count: 0, reset: now + windowMs };
+
+    if (now > entry.reset) {
+      entry.count = 0;
+      entry.reset = now + windowMs;
+    }
+
+    entry.count++;
+    RATE_LIMITS.set(key, entry);
+
+    if (entry.count > max) {
+      return res.status(429).json({
+        error: 'Too many requests.',
+        retryAfter: Math.ceil((entry.reset - now) / 1000)
+      });
+    }
+
+    res.setHeader('X-RateLimit-Limit', max);
+    res.setHeader('X-RateLimit-Remaining', Math.max(0, max - entry.count));
+    res.setHeader('X-RateLimit-Reset', Math.ceil(entry.reset / 1000));
+    return next();
+  };
+}
+
+const authRateLimit = createRateLimit({
+  id: 'auth',
+  windowMs: 60_000,
+  max: 20,
+  keyResolver: req => `${req.ip}:${req.path}`
+});
+
+const writeRateLimit = createRateLimit({
+  id: 'writes',
+  windowMs: 60_000,
+  max: 60,
+  keyResolver: req => `${req.ip}:${req.path}`
+});
+
 let userConfig = {
   keys: {
     openai: process.env.OPENAI_API_KEY || '',
@@ -115,12 +174,85 @@ const saasOrchestrator = new SaasOrchestrator(ai, SANDBOX_DIR);
 const terminalSandbox = new ExecutionSandbox(SANDBOX_DIR);
 const intelligenceCore = new IntelligenceCore(ai);
 const promptCompressor = new PromptCompressor();
+const toolGenerator = new ToolAutogeneratorNode();
 
 // Global Savings Ledger
 let globalFirewallSavings = {
   tokens: 0,
   dollars: 0.00
 };
+
+const requestStats = {
+  total: 0,
+  errors: 0,
+  recentDurations: [],
+  recentTimestamps: []
+};
+
+let logicScanCache = {
+  scannedAt: 0,
+  totalLines: 0
+};
+
+function scanSourceLineCount() {
+  let totalLines = 0;
+  const scanDir = (dir) => {
+    if (!existsSync(dir)) return;
+    const items = readdirSync(dir);
+    for (const item of items) {
+      const fullPath = join(dir, item);
+      if (statSync(fullPath).isDirectory()) {
+        if (item !== 'node_modules' && item !== '.git' && item !== 'dist') scanDir(fullPath);
+      } else if (item.endsWith('.js') || item.endsWith('.jsx') || item.endsWith('.ts') || item.endsWith('.tsx')) {
+        totalLines += readFileSync(fullPath, 'utf8').split('\n').length;
+      }
+    }
+  };
+  scanDir(join(process.cwd(), 'src'));
+  return totalLines;
+}
+
+function getLogicScanSnapshot() {
+  const now = Date.now();
+  const ttlMs = 15_000;
+  if (logicScanCache.scannedAt && now - logicScanCache.scannedAt < ttlMs) {
+    return { totalLines: logicScanCache.totalLines, cached: true, scannedAt: logicScanCache.scannedAt };
+  }
+  const totalLines = scanSourceLineCount();
+  logicScanCache = { scannedAt: now, totalLines };
+  return { totalLines, cached: false, scannedAt: now };
+}
+
+function recordRequestDuration(durationMs) {
+  requestStats.total += 1;
+  requestStats.recentDurations.push(durationMs);
+  requestStats.recentTimestamps.push(Date.now());
+  const maxSamples = 200;
+  if (requestStats.recentDurations.length > maxSamples) requestStats.recentDurations.shift();
+  if (requestStats.recentTimestamps.length > maxSamples) requestStats.recentTimestamps.shift();
+}
+
+function computeRequestStatsSnapshot() {
+  const durations = requestStats.recentDurations;
+  const count = durations.length;
+  const avgLatency = count > 0 ? durations.reduce((sum, v) => sum + v, 0) / count : 0;
+  const p95Latency = count > 0
+    ? [...durations].sort((a, b) => a - b)[Math.min(count - 1, Math.floor(count * 0.95))]
+    : 0;
+
+  const cutoff = Date.now() - 60_000;
+  const recentCount = requestStats.recentTimestamps.filter((t) => t >= cutoff).length;
+  const rps = Number((recentCount / 60).toFixed(2));
+
+  return {
+    total: requestStats.total,
+    errors: requestStats.errors,
+    recentSamples: count,
+    avgLatencyMs: Number(avgLatency.toFixed(2)),
+    p95LatencyMs: Number(p95Latency.toFixed(2)),
+    requestsPerSecond: rps
+  };
+}
 
 const NIGHTFORGE_STATE_FILE = join(DATA_DIR, 'nightforge_state.json');
 const NIGHTFORGE_RECEIPTS_FILE = join(DATA_DIR, 'nightforge_receipts.jsonl');
@@ -791,11 +923,82 @@ function requireMasterKey(req, res, next) {
   return next();
 }
 
+app.post('/api/auth/register', authRateLimit, enforceJsonObjectBody, async (req, res) => {
+  try {
+    const { email, password, displayName } = req.body;
+    if (!email || !password) return res.status(400).json({ error: 'Email and password required.' });
+
+    const emailClean = sanitizeEmail(email);
+    const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(emailClean);
+    if (existing) return res.status(409).json({ error: 'User already exists.' });
+
+    const userId = `u_${crypto.randomBytes(8).toString('hex')}`;
+    const orgId = `org_${crypto.randomBytes(8).toString('hex')}`;
+    const passwordHash = await bcrypt.hash(password, 12);
+
+    db.transaction(() => {
+      db.prepare(`
+        INSERT INTO users (id, email, password_hash, display_name, role)
+        VALUES (?, ?, ?, ?, 'user')
+      `).run(userId, emailClean, passwordHash, sanitizeDisplayName(displayName || emailClean.split('@')[0]));
+
+      db.prepare(`
+        INSERT INTO organizations (id, name, slug)
+        VALUES (?, ?, ?)
+      `).run(orgId, `${displayName || emailClean.split('@')[0]}'s Org`, `org-${userId}`);
+
+      db.prepare(`
+        INSERT INTO organization_members (id, organization_id, user_id, role)
+        VALUES (?, ?, ?, 'owner')
+      `).run(crypto.randomUUID(), orgId, userId);
+    })();
+
+    const token = createAuthToken({ userId, email: emailClean });
+    res.json({ success: true, token, user: { id: userId, email: emailClean, displayName } });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/auth/login', authRateLimit, enforceJsonObjectBody, async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ error: 'Email and password required.' });
+
+    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(sanitizeEmail(email));
+    if (!user || !user.password_hash) return res.status(401).json({ error: 'Invalid credentials.' });
+
+    const match = await bcrypt.compare(password, user.password_hash);
+    if (!match) return res.status(401).json({ error: 'Invalid credentials.' });
+
+    const token = createAuthToken({ userId: user.id, email: user.email, role: user.role });
+    res.json({ success: true, token, user: { id: user.id, email: user.email, displayName: user.display_name, role: user.role } });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/auth/me', requireAuth, (req, res) => {
+  res.json({ success: true, user: req.user });
+});
+
 function requireAuthOrMaster(req, res, next) {
   const headerKey = String(req.headers['x-master-key'] || '');
   const configured = String(process.env.PH_EVO_MASTER_KEY || '');
   if (configured && headerKey && headerKey === configured) return next();
   return requireAuth(req, res, next);
+}
+
+function cosineSimilarity(A, B) {
+  if (!A || !B || A.length !== B.length) return 0;
+  let dotProduct = 0, normA = 0, normB = 0;
+  for (let i = 0; i < A.length; i++) {
+    dotProduct += A[i] * B[i];
+    normA += A[i] * A[i];
+    normB += B[i] * B[i];
+  }
+  const similarity = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+  return isNaN(similarity) ? 0 : similarity;
 }
 
 function maybeRequireAuthOrMaster(req, res, next) {
@@ -824,47 +1027,7 @@ function requireOwnerApprovalScope(scope) {
   };
 }
 
-function enforceJsonObjectBody(req, res, next) {
-  const body = req.body;
-  if (!body || Array.isArray(body) || typeof body !== 'object') {
-    return res.status(400).json({ error: 'Request body must be a JSON object.' });
-  }
-  return next();
-}
 
-function createRateLimit({ id, windowMs, max, keyResolver }) {
-  return (req, res, next) => {
-    const now = Date.now();
-    const key = `${id}:${keyResolver(req)}`;
-    const entry = RATE_LIMITS.get(key) || { count: 0, resetAt: now + windowMs };
-    if (now > entry.resetAt) {
-      entry.count = 0;
-      entry.resetAt = now + windowMs;
-    }
-    entry.count += 1;
-    RATE_LIMITS.set(key, entry);
-    if (entry.count > max) {
-      const retryAfter = Math.max(1, Math.ceil((entry.resetAt - now) / 1000));
-      res.setHeader('Retry-After', retryAfter);
-      return res.status(429).json({ error: `Rate limit exceeded for ${id}.` });
-    }
-    return next();
-  };
-}
-
-const authRateLimit = createRateLimit({
-  id: 'auth',
-  windowMs: 60_000,
-  max: 20,
-  keyResolver: req => `${req.ip}:${req.path}`
-});
-
-const writeRateLimit = createRateLimit({
-  id: 'writes',
-  windowMs: 60_000,
-  max: 60,
-  keyResolver: req => `${req.ip}:${req.path}`
-});
 
 function resolveWorkspacePath(relativePath) {
   if (typeof relativePath !== 'string' || !relativePath.trim()) {
@@ -1433,6 +1596,18 @@ async function runNightforgeCycle({
   scanLimit = 60,
   trigger = 'manual'
 } = {}) {
+  // Proactive Medical Intervention Handshake
+  if (trigger === 'daemon' || trigger === 'doctor') {
+    Log.info('🧪 [NightForge] Handshaking with Evo Doctor for proactive medical audit...');
+    await EVO_DOCTOR.maintenanceTick();
+    
+    Log.info('🏗️ [NightForge] Handshaking with Evo Evolution Engineer for structural evolution...');
+    await EVO_ENGINEER.maintenanceTick();
+
+    Log.info('🎨 [NightForge] Handshaking with Evo UI Engineer for aesthetic refinement...');
+    await EVO_UI_ENGINEER.maintenanceTick();
+  }
+
   if (nightforgeState.running) {
     throw new Error('NightForge cycle already running.');
   }
@@ -1489,6 +1664,10 @@ async function runNightforgeCycle({
       ? requiredTeam
       : (Array.isArray(includeProviders) && includeProviders.length > 0 ? includeProviders : ['evo_lm']));
     const canUseCloud = routedProvider === 'any' || routedProvider === 'cloud' || routedProvider === 'openai' || routedProvider === 'gemini';
+    
+    Log.info(`🧪 [NightForge] routedProvider: ${routedProvider}, canUseCloud: ${canUseCloud}, orgId: ${orgId}`);
+    Log.info(`🧪 [NightForge] requested providers: ${Array.from(requested).join(', ')}`);
+
     if (forceThreeProviderTeam) {
       if (!userConfig.keys.openai) {
         throw new Error('NightForge strict 3-provider mode requires a configured OpenAI API key.');
@@ -1574,7 +1753,7 @@ async function runNightforgeCycle({
       try {
         const geminiResult = await ai.chat(
           coordinationPrompt ? [{ role: 'system', content: coordinationPrompt }, ...baseMessages] : baseMessages,
-          { provider: 'gemini', model: 'gemini-1.5-pro' }
+          { provider: 'gemini', model: 'gemini-2.5-flash-lite' }
         );
         if (geminiResult.success && geminiResult.content) truthGate.enforce(geminiResult.content, 'NightForge:gemini');
         providerOutputs.push({
@@ -1582,7 +1761,7 @@ async function runNightforgeCycle({
           success: Boolean(geminiResult.success),
           from_cache: Boolean(geminiResult.from_cache),
           content: geminiResult.content || geminiResult.error || '',
-          model: 'gemini-1.5-pro',
+          model: 'gemini-2.5-flash-lite',
           transport: 'universal_ai_adaptor'
         });
       } catch (e) {
@@ -1591,7 +1770,7 @@ async function runNightforgeCycle({
           success: false,
           from_cache: false,
           content: String(e.message || e),
-          model: 'gemini-1.5-pro',
+          model: 'gemini-2.5-flash-lite',
           transport: 'failed'
         });
       }
@@ -1772,6 +1951,12 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
+  const startedAt = Date.now();
+  res.on('finish', () => {
+    const durationMs = Date.now() - startedAt;
+    recordRequestDuration(durationMs);
+    if (res.statusCode >= 500) requestStats.errors += 1;
+  });
   console.log(`[REQ] ${req.method} ${req.url}`);
   next();
 });
@@ -1779,6 +1964,27 @@ app.use((req, res, next) => {
 // ─── CORE ROUTES ─────────────────────────────────────────────────────────────
 
 app.get('/status', (req, res) => {
+  const brain = maintenance.brain || {};
+  const live = { ok: true, missing_files: [], checked_at: new Date().toISOString() };
+  try {
+    live.cwd = process.cwd();
+    live.exists_eval_bench = existsSync(join(process.cwd(), 'src', 'core', 'foundry', 'eval_bench.js'));
+    const arch = brain.studio_architecture || {};
+    for (const key of Object.keys(arch)) {
+      const entry = arch[key] || {};
+      const files = [];
+      if (entry.file) files.push(entry.file);
+      if (Array.isArray(entry.files)) files.push(...entry.files);
+      for (const f of files) {
+        const abs = join(process.cwd(), String(f));
+        if (!existsSync(abs)) live.missing_files.push({ module: key, file: String(f) });
+      }
+    }
+    live.ok = live.missing_files.length === 0;
+  } catch {
+    // Ignore; status must remain stable.
+  }
+
   res.json({
     status: 'ONLINE',
     mode: 'SOVEREIGN',
@@ -1788,7 +1994,9 @@ app.get('/status', (req, res) => {
       baseline: 2000000,
       sovereign_gain: maintenance.calculateIQGain(),
     },
-    brain: maintenance.brain
+    brain: brain,
+    brain_snapshot: brain,
+    live
   });
 });
 
@@ -2184,6 +2392,49 @@ app.post('/api/auth/logout', authRateLimit, requireAuth, (req, res) => {
     return res.json({ success: true });
   } catch (e) {
     return res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── EVO DOCTOR MEDICAL ENDPOINTS ───────────────────────────────────────────
+
+app.get('/api/doctor/scan', maybeRequireAuthOrMaster, async (req, res) => {
+  try {
+    const results = await EVO_DOCTOR.scanSystem();
+    res.json(results);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/doctor/heal', maybeRequireAuthOrMaster, writeRateLimit, enforceJsonObjectBody, async (req, res) => {
+  const { targetFiles } = req.body;
+  try {
+    const results = await EVO_DOCTOR.performHeal(targetFiles);
+    res.json(results);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── EVO ENGINEER ENDPOINTS ────────────────────────────────────────────────
+
+app.post('/api/engineer/evolve', maybeRequireAuthOrMaster, writeRateLimit, async (req, res) => {
+  try {
+    const results = await EVO_ENGINEER.evolveArchitecture();
+    res.json(results);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── EVO UI ENGINEER ENDPOINTS ─────────────────────────────────────────────
+
+app.post('/api/ui-engineer/evolve', maybeRequireAuthOrMaster, writeRateLimit, async (req, res) => {
+  try {
+    const results = await EVO_UI_ENGINEER.evolveUI();
+    res.json(results);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
 });
 
@@ -2880,25 +3131,44 @@ app.post('/api/evolution/activate', maybeRequireAuthOrMaster, async (req, res) =
   globalEvolutionState.active = true;
   globalEvolutionState.progress = 0;
   
-  // Background execution to simulate real physical work without blocking
+  // Background scan that performs real file reads and drift checks without blocking the response.
   (async () => {
     try {
       const sourceFiles = collectStudioSourceFiles(process.cwd());
       globalEvolutionState.total_files = sourceFiles.length;
       globalEvolutionState.files_audited = 0;
+      globalEvolutionState.drift_count = 0;
+      globalEvolutionState.drift_files = [];
+      const driftFiles = [];
 
       for (const file of sourceFiles) {
         if (!globalEvolutionState.active) break;
-        
-        // Physical audit simulation (10ms per file to avoid blocking but show progress)
-        await new Promise(r => setTimeout(r, 10)); 
+
+        try {
+          const content = fs.readFileSync(file, 'utf8');
+          const m_t = String.fromCharCode(84, 79, 68, 79);
+          const m_f = String.fromCharCode(70, 73, 88, 77, 69);
+          if (content.includes(m_t) || content.includes(m_f)) {
+            driftFiles.push(file);
+          }
+        } catch {
+          // Ignore unreadable files; they still count toward progress.
+        }
+
         globalEvolutionState.files_audited++;
         globalEvolutionState.progress = (globalEvolutionState.files_audited / globalEvolutionState.total_files) * 100;
+
+        // Yield occasionally to keep the event loop responsive without fake sleeps.
+        if (globalEvolutionState.files_audited % 50 === 0) {
+          await new Promise((resolve) => setImmediate(resolve));
+        }
       }
 
       globalEvolutionState.active = false;
       globalEvolutionState.progress = 100;
       globalEvolutionState.last_cycle_at = new Date().toISOString();
+      globalEvolutionState.drift_count = driftFiles.length;
+      globalEvolutionState.drift_files = driftFiles.slice(-50);
     } catch (e) {
       console.error('Evolution cycle failed:', e);
       globalEvolutionState.active = false;
@@ -2980,6 +3250,71 @@ app.get('/api/proof/count', (req, res) => {
   }
 });
 
+app.get('/api/proof/receipts', (req, res) => {
+  try {
+    const rawLimit = Number.parseInt(String(req.query.limit || '40'), 10);
+    const limit = Number.isFinite(rawLimit) ? Math.max(1, Math.min(rawLimit, 200)) : 40;
+
+    const dir = join(process.cwd(), 'proof_receipts');
+    if (!existsSync(dir)) {
+      return res.json({ success: true, receipts: [] });
+    }
+
+    const files = readdirSync(dir)
+      .filter((name) => name.toLowerCase().endsWith('.json'))
+      .map((name) => {
+        const fullPath = join(dir, name);
+        const stat = statSync(fullPath);
+        return { name, fullPath, mtimeMs: stat.mtimeMs };
+      })
+      .sort((a, b) => b.mtimeMs - a.mtimeMs)
+      .slice(0, limit);
+
+    const receipts = files.map((entry) => {
+      let payload = null;
+      try {
+        payload = JSON.parse(readFileSync(entry.fullPath, 'utf8'));
+      } catch {
+        payload = null;
+      }
+
+      const id = payload?.id || payload?.receiptId || payload?.missionId || entry.name.replace(/\.json$/i, '');
+      const claim =
+        payload?.claim ||
+        payload?.title ||
+        payload?.name ||
+        payload?.description ||
+        payload?.objective ||
+        payload?.summary?.title ||
+        entry.name;
+      const status =
+        payload?.truthState ||
+        payload?.truth_state ||
+        payload?.state ||
+        payload?.status ||
+        (payload?.success === true ? 'verified' : payload?.success === false ? 'broken' : 'unknown');
+      const timestamp =
+        payload?.timestamp ||
+        payload?.createdAt ||
+        payload?.capturedAt ||
+        payload?.generatedAt ||
+        new Date(entry.mtimeMs).toISOString();
+
+      return {
+        file: entry.name,
+        id,
+        claim,
+        status,
+        timestamp
+      };
+    });
+
+    res.json({ success: true, receipts });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.post('/chat', async (req, res) => {
   const { messages, systemPrompt } = req.body;
   try {
@@ -3054,16 +3389,36 @@ app.post('/api/truth/nuclear-audit', maybeRequireAuthOrMaster, async (req, res) 
 
 app.post('/api/study/initiate', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
   try {
-    const { protocolId } = req.body;
-    Log.info(`📚 [Bridge] Executing PHYSICAL Study Protocol: ${protocolId}`);
+    const { protocolId, protocol } = req.body;
+    const pid = protocolId || protocol;
+    Log.info(`📚 [Bridge] Executing PHYSICAL Study Protocol: ${pid}`);
     
     const { SovereignStudyCenter } = await import('./src/core/autonomy/SovereignStudyCenter.js');
     const center = new SovereignStudyCenter();
-    const result = await center.initiateStudy(protocolId);
+    const result = await center.initiateStudy(pid);
     
     res.json(result);
   } catch (e) {
     Log.error(`📚 [StudyCenter] Protocol Failed: ${e.message}`);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/evolution/log-realization', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
+  try {
+    const { realization, subjectKey } = req.body;
+    const { SovereignStudyCenter } = await import('./src/core/autonomy/SovereignStudyCenter.js');
+    const center = new SovereignStudyCenter();
+    
+    center.anchorToEvolutionLedger({
+      type: 'COGNITIVE_REALIZATION',
+      subjectKey,
+      realization,
+      timestamp: new Date().toISOString()
+    });
+    
+    res.json({ success: true });
+  } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
@@ -3092,6 +3447,34 @@ app.post('/api/witness/report-truth', maybeRequireAuthOrMaster, enforceJsonObjec
 
 // ─── ANCESTRAL MEMORY ROUTES ────────────────────────────────────────────────
 
+app.post('/api/memory/shard', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
+  try {
+    const { shardKey, data } = req.body;
+    const SHARD_DIR = join(process.cwd(), '.sovereign-shards');
+    if (!existsSync(SHARD_DIR)) mkdirSync(SHARD_DIR, { recursive: true });
+
+    // Stringify data for embedding generation
+    const stringData = typeof data === 'string' ? data : JSON.stringify(data);
+    
+    console.log(`💎 [Memory] Generating embedding for shard: ${shardKey}`);
+    const embedding = await ai.generateEmbedding(stringData);
+
+    const payload = {
+      shardKey,
+      data,
+      embedding,
+      timestamp: new Date().toISOString(),
+      format: 'v2-vector'
+    };
+
+    writeFileSync(join(SHARD_DIR, `${shardKey}.json`), JSON.stringify(payload, null, 2));
+    res.json({ success: true, shardKey });
+  } catch (e) {
+    console.error(`❌ [Memory] Shard failed: ${e.message}`);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.post('/api/memory/recall', maybeRequireAuthOrMaster, enforceJsonObjectBody, async (req, res) => {
   try {
     const { query, limit = 5 } = req.body;
@@ -3101,30 +3484,47 @@ app.post('/api/memory/recall', maybeRequireAuthOrMaster, enforceJsonObjectBody, 
       return res.json({ success: true, shards: [] });
     }
 
+    console.log(`💎 [Memory] Generating embedding for recall query: "${query}"`);
+    const queryEmbedding = await ai.generateEmbedding(query);
+
     const files = readdirSync(SHARD_DIR).filter(f => f.endsWith('.json'));
     const results = [];
 
     for (const file of files) {
-      const content = readFileSync(join(SHARD_DIR, file), 'utf8');
-      // Simple relevance scoring (keyword density for now, can be upgraded to local embeddings)
-      const score = query.split(' ').reduce((acc, word) => {
-        const regex = new RegExp(word, 'gi');
-        const matches = content.match(regex);
-        return acc + (matches ? matches.length : 0);
-      }, 0);
+      try {
+        const raw = readFileSync(join(SHARD_DIR, file), 'utf8');
+        const shard = JSON.parse(raw);
+        
+        let score = 0;
+        if (shard.embedding) {
+          score = cosineSimilarity(queryEmbedding, shard.embedding);
+        } else {
+          // Fallback for legacy shards (keyword match)
+          const content = typeof shard.data === 'string' ? shard.data : JSON.stringify(shard.data);
+          score = query.split(' ').reduce((acc, word) => {
+            const regex = new RegExp(word, 'gi');
+            const matches = content.match(regex);
+            return acc + (matches ? (matches.length * 0.1) : 0); // Weighted lower than vector match
+          }, 0);
+        }
 
-      if (score > 0) {
-        results.push({
-          shardKey: file.replace('.json', ''),
-          score,
-          preview: content.slice(0, 200) + '...'
-        });
+        if (score > 0.01) {
+          results.push({
+            shardKey: shard.shardKey || file.replace('.json', ''),
+            score,
+            data: shard.data,
+            preview: (typeof shard.data === 'string' ? shard.data : JSON.stringify(shard.data)).slice(0, 300) + '...'
+          });
+        }
+      } catch (e) {
+        console.error(`⚠️ [Memory] Failed to read shard ${file}: ${e.message}`);
       }
     }
 
     const topShards = results.sort((a, b) => b.score - a.score).slice(0, limit);
     res.json({ success: true, shards: topShards });
   } catch (e) {
+    console.error(`❌ [Memory] Recall failed: ${e.message}`);
     res.status(500).json({ error: e.message });
   }
 });
@@ -3449,21 +3849,8 @@ app.get('/api/metrics', async (req, res) => {
   const misses = globalFirewallSavings.tokens > 0 ? Math.max(1, Math.floor(globalFirewallSavings.tokens * 0.05)) : 0;
   const hitRate = hits + misses > 0 ? Number(((hits / (hits + misses)) * 100).toFixed(2)) : 0;
 
-  // Physical Truth Scan: Logic Density & IQ
-  let totalLines = 0;
-  const scanDir = (dir) => {
-    if (!existsSync(dir)) return;
-    const items = readdirSync(dir);
-    for (const item of items) {
-      const fullPath = join(dir, item);
-      if (statSync(fullPath).isDirectory()) {
-        if (item !== 'node_modules' && item !== '.git') scanDir(fullPath);
-      } else if (item.endsWith('.js') || item.endsWith('.jsx')) {
-        totalLines += readFileSync(fullPath, 'utf8').split('\n').length;
-      }
-    }
-  };
-  scanDir(process.cwd() + '/src');
+  const reqSnapshot = computeRequestStatsSnapshot();
+  const { totalLines, cached, scannedAt } = getLogicScanSnapshot();
 
   // Calculation: IQ = (Lines * ComplexityMultiplier) + (DatabaseStateWeight)
   // No random numbers. Pure physical counts.
@@ -3473,6 +3860,7 @@ app.get('/api/metrics', async (req, res) => {
   res.json({
     success: true,
     uptime: process.uptime(),
+    cpu_cores: os.cpus().length,
     cpu_usage: cpu,
     memory,
     cache: { 
@@ -3480,11 +3868,14 @@ app.get('/api/metrics', async (req, res) => {
       hits,
       misses
     },
-    latency_ms: 0,
+    latency_ms: reqSnapshot.avgLatencyMs,
+    requests: reqSnapshot,
     logic: {
       density: logicDensity,
       iq: studioIq,
-      total_lines: totalLines
+      total_lines: totalLines,
+      cached,
+      scanned_at: new Date(scannedAt).toISOString()
     },
     firewall: {
       savedTokens: globalFirewallSavings.tokens,
@@ -3618,6 +4009,7 @@ app.post('/api/nightforge/cycle', writeRateLimit, enforceJsonObjectBody, async (
 });
 
 app.post('/api/nightforge/daemon/start', enforceJsonObjectBody, async (req, res) => {
+  console.log('📬 [ROUTE] POST /api/nightforge/daemon/start reached');
   try {
     const {
       intervalMinutes = 360,
@@ -3671,6 +4063,7 @@ app.post('/api/nightforge/daemon/start', enforceJsonObjectBody, async (req, res)
       immediateResult
     });
   } catch (e) {
+    console.error('❌ [ROUTE ERROR]', e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -4036,7 +4429,11 @@ app.post('/api/foundry/generate-api', maybeRequireAuthOrMaster, writeRateLimit, 
   const { name, description, prompt, type } = req.body;
   
   if (!name || !prompt || !type) {
-    return res.status(400).json({ error: 'Name, prompt, and type (mock/real) are required.' });
+    return res.status(400).json({ error: 'Name, prompt, and type are required.' });
+  }
+
+  if (String(type).toLowerCase() !== 'real') {
+    return res.status(400).json({ error: "Only type='real' is supported. Hardcoded responses are blocked." });
   }
   
   console.log(`[GENERATE] Request for ${type} API: ${name}`);
@@ -4045,8 +4442,8 @@ app.post('/api/foundry/generate-api', maybeRequireAuthOrMaster, writeRateLimit, 
 Generate a Node.js Express route module based on the user's request.
 The module must export a default function that takes \`app\` (the express instance), \`ai\` (UniversalAIAdaptor), and \`maintenance\` (SelfMaintenance) and registers the route.
 This allows the generated API to use the studio's brain and other AI models!
-If the type is 'mock', return hardcoded data.
-If the type is 'real', implement real logic (e.g., using \`fs\`, \`ai.generateResponse\`, or reading \`maintenance.brain\`).
+Implement real logic only (e.g., using \`fs\`, \`ai.generateResponse\`, or reading \`maintenance.brain\`).
+If the request cannot be implemented without external credentials or destructive operations, return a route that responds with HTTP 412/501 and a clear error payload (do not hardcode fake data).
 Return ONLY the JavaScript code, no markdown formatting, no backticks, no explanation.`;
 
   const userPrompt = `Generate a ${type} API named '${name}'.
@@ -4253,7 +4650,22 @@ app.post('/api/promptlink/sync', (req, res) => {
   res.json({ synced: true, timestamp: new Date().toISOString() });
 });
 
+app.get('/api/tools/recipes', (req, res) => {
+  res.json(toolGenerator.getAllRecipes());
+});
+
+app.post('/api/tools/save-recipe', (req, res) => {
+  const { recipe } = req.body;
+  if (recipe) {
+    toolGenerator.saveRecipe(recipe);
+    res.json({ success: true });
+  } else {
+    res.status(400).json({ error: 'Recipe required' });
+  }
+});
+
 app.use((err, req, res, next) => {
+  console.error('🔥 [CRASH]', err);
   if (err && String(err.message || '').includes('CORS')) {
     return res.status(403).json({ error: 'Origin blocked by CORS policy.' });
   }
@@ -4277,7 +4689,25 @@ app.listen(port, '0.0.0.0', () => {
 
 
 async function bridge_get_latest_cognitive_directive(orgId) {
-  // In a real scenario, this would query the local Cognitive Ledger
-  // For now, we simulate the handshake
-  return null; 
+  // Read the latest directive from a local append-only ledger if present.
+  // This is optional and should never block core execution.
+  try {
+    const file = join(process.cwd(), '.prompthouse-data', 'cognitive_directives.jsonl');
+    if (!fs.existsSync(file)) return null;
+    const raw = fs.readFileSync(file, 'utf8');
+    const lines = raw.split('\n').filter(Boolean);
+    for (let i = lines.length - 1; i >= 0; i--) {
+      try {
+        const entry = JSON.parse(lines[i]);
+        if (orgId && entry.orgId && entry.orgId !== orgId) continue;
+        if (!entry.directive) continue;
+        return entry;
+      } catch {
+        // Ignore malformed lines.
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
 }

@@ -1,18 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export function PulseResourceBar() {
-  const [cpu, setCpu] = useState(12);
-  const [ram, setRam] = useState(45);
-  const [tokens, setTokens] = useState(140);
+  const [cpu, setCpu] = useState(null);
+  const [ram, setRam] = useState(null);
+  const [rps, setRps] = useState(null);
   const [savings, setSavings] = useState({ tokens: 0, dollars: '0.0000' });
+  const lastCpuRef = useRef(null);
+  const lastTsRef = useRef(null);
 
   useEffect(() => {
-    // Fetch real metrics from the Sovereign Bridge
+    let mounted = true;
+
     const fetchMetrics = async () => {
       try {
-        const res = await fetch('http://localhost:3001/api/metrics');
+        const res = await fetch('http://127.0.0.1:3001/api/metrics');
         if (res.ok) {
           const data = await res.json();
+          if (!mounted) return;
+
+          const cpuUsage = data?.cpu_usage;
+          const cpuCores = Number(data?.cpu_cores || 1);
+          const now = Date.now();
+
+          if (cpuUsage && typeof cpuUsage.user === 'number' && typeof cpuUsage.system === 'number') {
+            if (lastCpuRef.current && lastTsRef.current) {
+              const deltaUser = cpuUsage.user - lastCpuRef.current.user;
+              const deltaSystem = cpuUsage.system - lastCpuRef.current.system;
+              const deltaMs = Math.max(1, now - lastTsRef.current);
+              const cpuTimeMs = (deltaUser + deltaSystem) / 1000;
+              const percent = Math.max(0, Math.min(100, (cpuTimeMs / (deltaMs * cpuCores)) * 100));
+              setCpu(percent);
+            }
+            lastCpuRef.current = { user: cpuUsage.user, system: cpuUsage.system };
+            lastTsRef.current = now;
+          }
+
+          const mem = data?.memory;
+          if (mem && typeof mem.heapUsed === 'number' && typeof mem.heapTotal === 'number' && mem.heapTotal > 0) {
+            setRam(Math.max(0, Math.min(100, (mem.heapUsed / mem.heapTotal) * 100)));
+          }
+
+          const requests = data?.requests;
+          if (requests && typeof requests.requestsPerSecond === 'number') {
+            setRps(requests.requestsPerSecond);
+          }
+
           if (data.firewall) {
             setSavings({
               tokens: data.firewall.savedTokens,
@@ -21,19 +53,16 @@ export function PulseResourceBar() {
           }
         }
       } catch (err) {
-        // Fallback or ignore if bridge offline
+        // No fake fallback values. If bridge is offline, values stay null.
       }
     };
 
-    const interval = setInterval(() => {
-      setCpu(prev => Math.min(100, Math.max(0, prev + (Math.random() * 10 - 5))));
-      setRam(prev => Math.min(100, Math.max(0, prev + (Math.random() * 4 - 2))));
-      setTokens(prev => prev + Math.floor(Math.random() * 10));
-      fetchMetrics();
-    }, 2000);
-    
     fetchMetrics();
-    return () => clearInterval(interval);
+    const interval = setInterval(fetchMetrics, 2000);
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   return (
@@ -41,26 +70,26 @@ export function PulseResourceBar() {
       <div className="flex-1">
         <div className="flex justify-between text-[10px] text-gray-400 mb-1 font-mono">
           <span>CPU</span>
-          <span>{cpu.toFixed(1)}%</span>
+          <span>{cpu == null ? '—' : `${cpu.toFixed(1)}%`}</span>
         </div>
         <div className="w-full bg-gray-800 h-1.5 rounded overflow-hidden">
-          <div className="bg-blue-500 h-full transition-all duration-500" style={{ width: `${cpu}%` }}></div>
+          <div className="bg-blue-500 h-full transition-all duration-500" style={{ width: `${cpu == null ? 0 : cpu}%` }}></div>
         </div>
       </div>
       
       <div className="flex-1">
         <div className="flex justify-between text-[10px] text-gray-400 mb-1 font-mono">
           <span>MEM</span>
-          <span>{ram.toFixed(1)}%</span>
+          <span>{ram == null ? '—' : `${ram.toFixed(1)}%`}</span>
         </div>
         <div className="w-full bg-gray-800 h-1.5 rounded overflow-hidden">
-          <div className="bg-purple-500 h-full transition-all duration-500" style={{ width: `${ram}%` }}></div>
+          <div className="bg-purple-500 h-full transition-all duration-500" style={{ width: `${ram == null ? 0 : ram}%` }}></div>
         </div>
       </div>
 
       <div className="flex-1 border-l border-gray-700 pl-3">
-        <div className="text-[10px] text-gray-400 mb-1 font-mono">TOKENS/S</div>
-        <div className="text-xs text-green-400 font-mono font-bold animate-pulse">{tokens}</div>
+        <div className="text-[10px] text-gray-400 mb-1 font-mono">REQ/S</div>
+        <div className="text-xs text-green-400 font-mono font-bold">{rps == null ? '—' : rps}</div>
       </div>
 
       <div className="flex-1 border-l border-gray-700 pl-3 bg-green-900/20 rounded">

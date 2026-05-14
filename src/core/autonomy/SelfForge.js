@@ -2,7 +2,7 @@ import { Log } from '../autonomy/SovereignLogger.js';
 import fs from 'fs';
 import path from 'path';
 import { PerfectionGate } from './PerfectionGate.js';
-import { Engine } from '../../engine.js';
+import { AiEngine as Engine } from '../../ai-engine.js';
 
 /**
  * PH EVO STUDIO — SELF-FORGE DAEMON (Absolute Operational Reality)

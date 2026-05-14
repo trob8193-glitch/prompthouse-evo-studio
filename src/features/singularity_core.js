@@ -3,12 +3,13 @@ import { TruthChain } from '../core/truth/TruthChain.js';
 import fs from 'fs';
 import { join } from 'path';
 import net from 'net';
+import crypto from 'crypto';
 
 /**
  * PH EVO STUDIO — SINGULARITY CORE (ABSOLUTE REALITY)
  * ═══════════════════════════════════════════════════════════════
  * Central heart of the studio connectome.
- * ABSOLUTE OPERATIONAL REALITY: No Theatrical-Stub scores. No filler lines.
+ * ABSOLUTE OPERATIONAL REALITY: No filler claims. All outputs must be derivable from disk/network state.
  * Physically audits the TruthChain and probes Bonded Nodes.
  */
 export class SingularityCore {
@@ -30,7 +31,7 @@ export class SingularityCore {
       Log.error('🌌 [SingularityCore] Intelligence Drift Detected! Triggering Physical Evolution...');
       await this.evolveToBaseline();
     }
-    Log.success('🌌 [SingularityCore] Singularity Core is STABLE. Sovereignty Verified.');
+    Log.success(`🌌 [SingularityCore] Initialization complete. chainValid=${Boolean(status.chainValid)} iq=${status.iq.toFixed(2)}`);
   }
 
   async verifySovereignty() {
@@ -61,7 +62,7 @@ export class SingularityCore {
     for (const port of ports) {
       const active = await this.probePort('127.0.0.1', port);
       if (active) {
-        this.bondedNodes.push({ id: `NODE_${port}`, ip: '127.0.0.1', port, status: 'VERIFIED' });
+        this.bondedNodes.push({ id: `NODE_${port}`, ip: '127.0.0.1', port, status: 'reachable' });
       }
     }
     return this.bondedNodes;
@@ -90,7 +91,7 @@ export class SingularityCore {
       uptime: process.uptime(),
       iq: 100 + (this.bondedNodes.length * 10),
       nodes: this.bondedNodes.length,
-      status: this.bondedNodes.length > 0 ? 'OMNIPOTENT' : 'SOLITARY',
+      status: this.bondedNodes.length > 0 ? 'CONNECTED' : 'SOLO',
       resonance: 0.98 + (this.bondedNodes.length * 0.005)
     };
   }

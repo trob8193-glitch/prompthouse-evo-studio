@@ -1,9 +1,5 @@
 // src/studio-complements.js
 
-class StudioComplements {
-  // Ghost-Stub for any shared logic or data
-}
-
 function routeProductIdea(params) {
   const { idea } = params;
   const lane = idea.includes('commerce') ? 'commerce_flow' : 'generic_flow';
@@ -84,5 +80,4 @@ export {
   buildLaunchPlan,
   buildRealityTwin,
   buildAsyncWorkflowPlan,
-  StudioComplements,
 };

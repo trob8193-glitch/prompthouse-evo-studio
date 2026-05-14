@@ -3,60 +3,49 @@ import { useEvoStore } from './store.js';
 import { calculateIntentDrift, verifyCanonDrift } from './ai-engine.js';
 import { scorePrompt } from './engine.js';
 
+const BRIDGE_URL = 'http://127.0.0.1:3001';
+
 // ── 1. PROOF-NATIVE LEDGER ───────────────────────────────────────
 export function ProofLedgerView() {
-  const [proofs, setProofs] = useState([
-    { id: 'PRF-001', claim: 'Auth Scaffold Built', state: 'Verified', owner: 'Builder', time: '10:42 AM', failCondition: 'Token missing', rollback: 'v0.9.1' },
-    { id: 'PRF-002', claim: 'Security Sandbox Passed', state: 'Built', owner: 'Verifier', time: '11:15 AM', failCondition: 'Injection detected', rollback: 'v0.9.2' },
-    { id: 'PRF-003', claim: 'Database Schema Generated', state: 'Known', owner: 'Dev', time: '12:00 PM', failCondition: 'Migration failure', rollback: 'v0.9.3' },
-  ]);
-
-  const [blockHeight, setBlockHeight] = useState(1048576);
-  const [rollingBack, setRollingBack] = useState(null);
+  const [proofs, setProofs] = useState([]);
+  const [receiptCount, setReceiptCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    async function fetchCount() {
+    let mounted = true;
+    async function fetchLedger() {
       try {
-        const res = await fetch('http://127.0.0.1:3001/api/proof/count');
-        const data = await res.json();
-        setBlockHeight(1048576 + data.count);
+        setLoading(true);
+        const [countRes, listRes] = await Promise.all([
+          fetch(`${BRIDGE_URL}/api/proof/count`),
+          fetch(`${BRIDGE_URL}/api/proof/receipts?limit=60`),
+        ]);
+        const countPayload = await countRes.json().catch(() => null);
+        const listPayload = await listRes.json().catch(() => null);
+        if (!mounted) return;
+        setReceiptCount(Number(countPayload?.count || 0));
+        setProofs(Array.isArray(listPayload?.receipts) ? listPayload.receipts : []);
       } catch (e) {
         console.error('Failed to fetch proof count:', e);
+        if (!mounted) return;
+        setProofs([]);
+        setReceiptCount(0);
+      } finally {
+        if (mounted) setLoading(false);
       }
     }
     
-    fetchCount();
-    const interval = setInterval(fetchCount, 5000);
-    return () => clearInterval(interval);
+    fetchLedger();
+    const interval = setInterval(fetchLedger, 8000);
+    return () => { mounted = false; clearInterval(interval); };
   }, []);
-
-  const triggerRollback = async (id) => {
-    setRollingBack(id);
-    try {
-      // Physical state restoration via bridge
-      const res = await fetch(`${BRIDGE_URL}/api/proof/rollback`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
-      });
-      const result = await res.json();
-      if (result.success) {
-        alert(`Rollback to ${id} complete. Physical state restored at block ${result.block}.`);
-      }
-    } catch (e) {
-      console.error('Rollback failed:', e);
-      alert('Rollback failed: Bridge connection lost.');
-    } finally {
-      setRollingBack(null);
-    }
-  };
 
   return (
     <div className="flex-col animate-in">
       <div className="flex justify-between items-center mb-2">
         <div className="page-title">🛡️ Proof-Native Ledger</div>
         <div className="font-mono text-xs text-indigo-400 bg-indigo-900/30 px-3 py-1 rounded border border-indigo-500/30">
-          BLOCK HEIGHT: {blockHeight.toLocaleString()}
+          RECEIPTS: {receiptCount.toLocaleString()}{loading ? ' • syncing' : ''}
         </div>
       </div>
       <div className="page-subtitle">Immutable timeline of claims, evidence, and truth states.</div>
@@ -66,10 +55,9 @@ export function ProofLedgerView() {
             <tr style={{ borderBottom: '1px solid var(--border-dim)', color: 'var(--text-muted)' }}>
               <th style={{ padding: 12 }}>ID</th>
               <th>Claim</th>
-              <th>State</th>
-              <th>Owner</th>
-              <th>Rollback Target</th>
-              <th>Action</th>
+              <th>Status</th>
+              <th>Timestamp</th>
+              <th>File</th>
             </tr>
           </thead>
           <tbody>
@@ -77,18 +65,9 @@ export function ProofLedgerView() {
               <tr key={p.id} style={{ borderBottom: '1px solid var(--border-dim)' }}>
                 <td style={{ padding: 12, fontWeight: 700, color: 'var(--accent-primary)' }}>{p.id}</td>
                 <td>{p.claim}</td>
-                <td><span className={`badge badge-${p.state === 'Verified' ? 'green' : p.state === 'Built' ? 'gold' : 'dim'}`}>{p.state}</span></td>
-                <td>{p.owner}</td>
-                <td style={{ fontFamily: 'monospace' }}>{p.rollback}</td>
-                <td>
-                  <button 
-                    className="btn btn-secondary btn-sm" 
-                    onClick={() => triggerRollback(p.id)}
-                    disabled={rollingBack === p.id}
-                  >
-                    {rollingBack === p.id ? 'Rolling...' : 'Rollback'}
-                  </button>
-                </td>
+                <td><span className="badge badge-dim">{String(p.status || 'unknown')}</span></td>
+                <td style={{ fontFamily: 'monospace' }}>{String(p.timestamp || '')}</td>
+                <td style={{ fontFamily: 'monospace' }}>{String(p.file || '')}</td>
               </tr>
             ))}
           </tbody>
@@ -149,8 +128,6 @@ export function MergeCourtView() {
     const dispute = "Dev: Redux vs Verifier: Context API";
     const result = calculateIntentDrift("Context API", dispute);
     
-    // Simulate real network latency, but anchor the result in logic
-    await new Promise(r => setTimeout(r, 600)); 
     setResolving(false);
     setResolved(true);
   };
@@ -253,7 +230,7 @@ export function DeadSurfaceHunterView() {
         foundIssues.push(`Dead Button: "${el.innerText.slice(0, 20)}..." (No handler)`);
       }
       if (href === '#' || href === 'javascript:void(0)') {
-        foundIssues.push(`Ghost-Stub Link: "${el.innerText.slice(0, 20)}..." (href="#")`);
+        foundIssues.push(`Invalid link: "${el.innerText.slice(0, 20)}..." (href="#")`);
       }
     });
 

@@ -8,14 +8,38 @@ export function SwarmCouncil() {
   ]);
 
   useEffect(() => {
-    // Simulate real-time voting / deliberation
-    const interval = setInterval(() => {
-      setAgents(prev => prev.map(agent => ({
-        ...agent,
-        status: Math.random() > 0.7 ? 'VOTING' : 'IDLE'
-      })));
-    }, 3000);
-    return () => clearInterval(interval);
+    let mounted = true;
+
+    const poll = async () => {
+      try {
+        const res = await fetch('http://127.0.0.1:3001/api/studio/diagnostics?limit=40');
+        if (!res.ok) throw new Error('Diagnostics unavailable');
+        const diagnostics = await res.json();
+        if (!mounted) return;
+
+        const summary = diagnostics?.summary || {};
+        const hasErrors = Number(summary.modules_error || 0) > 0;
+        const hasWarnings = Number(summary.modules_warning || 0) > 0;
+        const failingProbes = Number(summary.probes_failing || 0) > 0;
+
+        setAgents([
+          { name: 'DeadHunter', status: (hasErrors || failingProbes) ? 'HUNTING' : 'IDLE' },
+          { name: 'TruthAuditor', status: (hasWarnings || hasErrors) ? 'AUDITING' : 'IDLE' },
+          { name: 'MaturityScore', status: diagnostics?.success ? 'SYNCED' : 'IDLE' }
+        ]);
+      } catch {
+        if (!mounted) return;
+        setAgents([
+          { name: 'DeadHunter', status: 'OFFLINE' },
+          { name: 'TruthAuditor', status: 'OFFLINE' },
+          { name: 'MaturityScore', status: 'OFFLINE' }
+        ]);
+      }
+    };
+
+    poll();
+    const interval = setInterval(poll, 15000);
+    return () => { mounted = false; clearInterval(interval); };
   }, []);
 
   return (

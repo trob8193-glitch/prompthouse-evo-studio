@@ -27,6 +27,18 @@ const FAKE_CLAIM_PATTERNS = [
   /CI\/CD AUTODEPLOY ACTIVE/i
 ];
 
+const SIMULATION_MARKERS = [
+  /\b(simulation|simulate|simulated)\b/i,
+  /\b(mock|mocked)\b/i,
+  /(?<!\bplaceholder=)['"`]\bplaceholder\b['"`]/i, // Flag "placeholder" string but not placeholder= attribute
+  /\bstub\b/i,
+  /\bdemo data\b/i,
+  /\bsample data\b/i,
+];
+
+const UI_RANDOM_MARKER = /\bMath\.random\s*\(/;
+const DUMMY_IMPL_MARKER = /\bDummy implementations\b/i;
+
 function toPosix(filePath) {
   return filePath.replace(/\\/g, '/');
 }
@@ -217,6 +229,25 @@ export function runNuclearTruthAudit(rootDir = process.cwd()) {
         addFinding(findings, 'medium', relativeFile, idx + 1, `Contains ${char_m_t}/${char_m_f} marker.`);
       }
     });
+
+    if (DUMMY_IMPL_MARKER.test(content)) {
+      addFinding(findings, 'high', relativeFile, 1, 'Contains dummy implementation marker.');
+    }
+
+    if (isUi && UI_RANDOM_MARKER.test(content)) {
+      addFinding(findings, 'high', relativeFile, findLine(content, content.indexOf('Math.random')), 'UI uses Math.random (simulated behavior).');
+    }
+
+    // Nuclear means repo-wide: scan UI + backend for any simulation/mock/stub/placeholder markers.
+    // Self-exempt to avoid flagging the marker list itself.
+    if (!relativeFile.endsWith('src/core/audit/NuclearTruthAudit.js')) {
+      for (const pattern of SIMULATION_MARKERS) {
+        const match = pattern.exec(content);
+        if (match && typeof match.index === 'number') {
+          addFinding(findings, 'medium', relativeFile, findLine(content, match.index), `Simulation marker detected: "${match[0]}"`);
+        }
+      }
+    }
 
     if (!relativeFile.endsWith('src/core/audit/NuclearTruthAudit.js')) {
       for (const pattern of FAKE_CLAIM_PATTERNS) {

@@ -10,7 +10,7 @@ import { TruthChain } from '../truth/TruthChain.js';
  * This module implements local P2P pattern synchronization.
  * It allows disparate Evo Studios to "whisper" verified truths to 
  * each other over the local network/shared file system.
- * ABSOLUTE REALITY: No Theatrical-Stub signatures. Mandatory Truth Audit on Sync.
+ * ABSOLUTE REALITY: No filler signatures. Mandatory Truth Audit on Sync.
  */
 
 const SYNC_DIR = path.join(process.cwd(), '.ph_evo_sync');

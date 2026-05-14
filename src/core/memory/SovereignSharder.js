@@ -18,13 +18,23 @@ export class SovereignSharder {
     const content = JSON.stringify(data, null, 2);
     
     try {
-      const res = await fetch('http://127.0.0.1:3001/api/files/write', {
+      const res = await fetch('http://127.0.0.1:3001/api/memory/shard', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path, content })
+        body: JSON.stringify({ shardKey, data })
       });
       const result = await res.json();
       if (result.success) {
+        // [WIRING] Log event to Rift Grid (Port 3002)
+        fetch('http://127.0.0.1:3002/api/rift/sessions/main/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventType: 'EVOPULSE_ENVELOPE_BUILT',
+            payload: { shardKey, bytes: content.length, path }
+          })
+        }).catch(() => {}); // Fire and forget
+
         return { status: 'SHARDED', bytes: content.length, path };
       } else {
         throw new Error(result.error);

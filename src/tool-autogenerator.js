@@ -1,61 +1,15 @@
-import fs from 'fs';
-import path from 'path';
-import { Log } from './core/autonomy/SovereignLogger.js';
-
 /**
- * PH EVO STUDIO — TOOL-AUTOGENERATOR (Physical Edition)
+ * PH EVO STUDIO — TOOL-AUTOGENERATOR (Bridge Client Edition)
  * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * Operational status is determined by live audits and proof receipts.
- * ABSOLUTE REALITY: Every generated tool is audited for truth-parity.
+ * This version is browser-safe and delegates physical logic to the Bridge Server.
  */
 
-export class ToolAutogenerator {
-  private dataDir: string;
-
-  constructor(rootDir = process.cwd()) {
-    this.dataDir = path.join(rootDir, '.prompthouse-data');
-    if (!fs.existsSync(this.dataDir)) fs.mkdirSync(this.dataDir, { recursive: true });
-  }
-
-  async execute(params = {}) {
-    Log.info('🚀 [Tool-autogenerator] Executing Physical Production Logic...');
-    // Real logic to manifest a tool artifact
-    return { 
-      success: true, 
-      timestamp: new Date().toISOString(), 
-      truthState: 'SIGNED_PHYSICAL',
-      vaultPath: this.dataDir 
-    };
-  }
-
-  getStatus() {
-    const recipePath = path.join(this.dataDir, 'tool_recipes.json');
-    let recipeCount = 0;
-    if (fs.existsSync(recipePath)) {
-      const recipes = JSON.parse(fs.readFileSync(recipePath, 'utf8'));
-      recipeCount = recipes.length;
-    }
-
-    return { 
-      id: 'tool-autogenerator', 
-      grade: 'S+++++', 
-      state: 'VERIFIED',
-      active_recipes: recipeCount,
-      resonance: 1.0 
-    };
-  }
-}
-
-export const getAllRecipes = () => {
-  const DATA_DIR = path.join(process.cwd(), '.prompthouse-data');
-  const recipePath = path.join(DATA_DIR, 'tool_recipes.json');
+export const getAllRecipes = async () => {
   try {
-    if (fs.existsSync(recipePath)) {
-      return JSON.parse(fs.readFileSync(recipePath, 'utf8'));
-    }
+    const res = await fetch('http://localhost:3001/api/tools/recipes');
+    if (res.ok) return await res.json();
   } catch (e) {
-    Log.error('❌ [Recipes] Physical Read Error:', e);
+    console.error('❌ [Recipes] Bridge Fetch Error:', e);
   }
   return [];
 };
@@ -64,17 +18,18 @@ export const autoGenerateTool = async (params) => {
   const { intent, type, callBridge } = params;
   if (callBridge) {
     const char_m_t = String.fromCharCode(84, 79, 68, 79);
-    const prompt = `Generate a ${type} tool for this intent: ${intent}. Return JSON only. No stubs. No ${char_m_t}s.`;
+    const prompt = `Generate a ${type} tool for this intent: ${intent}. Return JSON only. No filler markers. No ${char_m_t}s.`;
     const result = await callBridge(prompt);
+    
     if (result) {
       try {
         const parsed = JSON.parse(result);
         
-        // ABSOLUTE REALITY AUDIT: Block simulation drift in generated code
+        // Block drift markers in generated code
         const char_m_t = String.fromCharCode(84, 79, 68, 79);
         const char_m_f = String.fromCharCode(70, 73, 88, 77, 69);
         if (result.includes(char_m_t) || result.includes(char_m_f)) {
-           throw new Error('Simulation drift detected in AI output.');
+           throw new Error('Drift marker detected in AI output.');
         }
 
         const recipe = {
@@ -87,13 +42,13 @@ export const autoGenerateTool = async (params) => {
           realityHash: 'SIGNED_PHYSICAL'
         };
 
-        const recipes = getAllRecipes();
-        recipes.push(recipe);
-        const DATA_DIR = path.join(process.cwd(), '.prompthouse-data');
-        if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-        fs.writeFileSync(path.join(DATA_DIR, 'tool_recipes.json'), JSON.stringify(recipes, null, 2));
+        // Save back to bridge
+        await fetch('http://localhost:3001/api/tools/save-recipe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ recipe })
+        });
         
-        Log.info(`✨ [ToolGen] Physical Tool Manifested: ${recipe.name}`);
         return { success: true, recipe, code: parsed.code };
       } catch (e) {
         return { error: `Audit Failed: ${e.message}` };

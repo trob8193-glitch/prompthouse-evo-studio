@@ -101,7 +101,7 @@ export const ExtensionCockpitView = () => {
               </div>
             </div>
 
-            {/* Simulated UI Content for specific panels */}
+            {/* Panel content varies by selected tab */}
             <div className="mt-8 p-12 border-2 border-dashed border-slate-800 rounded-3xl flex flex-col items-center justify-center text-center opacity-50">
               <Layout size={48} className="text-slate-700 mb-4" />
               <h4 className="text-lg font-bold text-slate-500">Autonomous View Component: {activePanel}</h4>

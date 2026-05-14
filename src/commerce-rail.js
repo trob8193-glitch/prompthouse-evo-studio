@@ -53,21 +53,18 @@ export const createCommerceProduct = (session, spec) => {
     return { blocked: true, reason: 'owner approval required' };
   }
 
-  const encodedName = encodeURIComponent(productName || 'product');
   return {
-    blocked: false,
-    Theatrical-StubLink: `https://checkout.prompthouse.local/Theatrical-Stub?session=${encodeURIComponent(session)}&product=${encodedName}&price=${price}`,
-    injectionCode: `Product: ${productName}`
+    blocked: true,
+    reason: 'Checkout links are not generated locally. Use the live checkout endpoint with owner approval (/api/commerce/checkout).',
+    injectionCode: `Product: ${productName}`,
+    requested: { session, productName, price }
   };
 };
 
 export const createPricingTable = (session) => {
   return {
-    status: 'verified',
-    tiers: [
-      { name: 'Starter', price: 999 },
-      { name: 'Pro', price: 1999 },
-      { name: 'Enterprise', price: 4999 }
-    ]
+    status: 'blocked',
+    reason: 'Pricing tiers are not hardcoded. Fetch pricing from a real commerce provider or configured product catalog.',
+    requested: { session }
   };
 };

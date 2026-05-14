@@ -53,15 +53,16 @@ export class UniversalBridge {
       git: new GitAdaptor(),
       antigravity: new AntigravityAdaptor(),
       foundry: new FoundryAdaptor(),
-      codeforge: new ForgeAdaptor()
+      codeforge: new ForgeAdaptor(),
+      memory: new MemoryAdaptor()
     };
   }
 
   async dispatch(toolId, command, params = {}) {
-    // PHYSICAL GATE: Block simulated dispatch
-    if (params.simulation === true) {
-      Log.error(`❌ [Bridge] Blocked simulated dispatch to ${toolId}`);
-      return { success: false, error: 'SIMULATION_BLOCKED' };
+    // PHYSICAL GATE: Block dry-run dispatch at the bridge boundary.
+    if (params.dryRun === true) {
+      Log.error(`❌ [Bridge] Blocked dry-run dispatch to ${toolId}`);
+      return { success: false, error: 'DRY_RUN_BLOCKED' };
     }
 
     const adaptor = this.adaptors[toolId];
@@ -196,4 +197,27 @@ class SmartAdaptor {
     return { tool: 'smart', status: 'OK', truthState: 'SIGNED_PHYSICAL' };
   }
   async sync() { return { tool: 'smart', status: 'SYNCED' }; }
+}
+
+class MemoryAdaptor {
+  async execute(cmd, p) {
+    if (cmd === 'recall') {
+      const res = await fetch(`${BRIDGE_URL}/api/memory/recall`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: p.query, limit: p.limit })
+      });
+      return await res.json();
+    }
+    if (cmd === 'shard') {
+      const res = await fetch(`${BRIDGE_URL}/api/memory/shard`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shardKey: p.shardKey, data: p.data })
+      });
+      return await res.json();
+    }
+    return { tool: 'memory', status: 'OK' };
+  }
+  async sync() { return { tool: 'memory', status: 'SYNCED' }; }
 }

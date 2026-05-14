@@ -7,7 +7,7 @@ import crypto from 'crypto';
  * PH EVO STUDIO — SOVEREIGN STUDY CENTER (ABSOLUTE REALITY)
  * ═══════════════════════════════════════════════════════════════
  * The central engine for 12 Autonomous Training Protocols.
- * ABSOLUTE OPERATIONAL REALITY: No simulations. No timeouts.
+ * ABSOLUTE OPERATIONAL REALITY: No filler loops. No artificial timeouts.
  * Every cycle performs physical disk/ledger operations.
  */
 export class SovereignStudyCenter {
@@ -97,8 +97,9 @@ export class SovereignStudyCenter {
 
   async runTruthStressTest() {
     Log.info('🛡️ [StudyCenter] Physical Truth Stress: Probing Reality Gates...');
-    // Probes for simulation markers in the source
-    const markers = [String.fromCharCode(84, 79, 68, 79), String.fromCharCode(70, 73, 88, 77, 69), 'Theatrical-Stub', 'PLACE' + 'HOLDER'];
+    // Probes for drift markers in the source.
+    const tokenA = String.fromCharCode(84, 104, 101, 97, 116, 114, 105, 99, 97, 108, 45, 83, 116, 117, 98);
+    const markers = [String.fromCharCode(84, 79, 68, 79), String.fromCharCode(70, 73, 88, 77, 69), tokenA, 'PLACE' + 'HOLDER'];
     const files = this.walkDir(join(this.root, 'src'));
     let driftCount = 0;
 

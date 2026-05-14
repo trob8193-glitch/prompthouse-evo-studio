@@ -4,46 +4,81 @@ import { Activity, Shield, Zap, TrendingUp, Cpu, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const StudioDashboard = () => {
-  const [iq, setIq] = React.useState(2354500); // Sovereign IQ baseline
+  const [iq, setIq] = React.useState(null);
 
   const [ops, setOps] = React.useState([
-    { id: 1, type: 'Intelligence Vein', desc: 'Ingesting truth-verified PromptLink data streams...', status: 'ACTIVE' },
-    { id: 2, type: 'Foundry Engine', desc: 'DatasetForge: SYNTHESIZING', status: 'ACTIVE' }
+    { id: 'bridge', type: 'Bridge', desc: 'Awaiting bridge telemetry...', status: 'PENDING' },
+    { id: 'queue', type: 'Execution Queue', desc: 'Awaiting queue telemetry...', status: 'PENDING' }
   ]);
 
   React.useEffect(() => {
-    async function fetchStatus() {
+    let mounted = true;
+    async function fetchLive() {
       try {
-        const res = await fetch('http://127.0.0.1:3001/status');
-        const data = await res.json();
-        if (data.iq_metrics) {
-          setIq(data.iq_metrics.baseline + data.iq_metrics.sovereign_gain);
+        const [statusRes, metricsRes, queueRes, nfRes] = await Promise.all([
+          fetch('http://127.0.0.1:3001/status'),
+          fetch('http://127.0.0.1:3001/api/metrics'),
+          fetch('http://127.0.0.1:3001/api/queue/master'),
+          fetch('http://127.0.0.1:3001/api/nightforge/status'),
+        ]);
+
+        const status = statusRes.ok ? await statusRes.json() : null;
+        const metrics = metricsRes.ok ? await metricsRes.json() : null;
+        const queue = queueRes.ok ? await queueRes.json() : null;
+        const nightforge = nfRes.ok ? await nfRes.json() : null;
+
+        if (!mounted) return;
+
+        if (status?.iq_metrics) {
+          setIq(status.iq_metrics.baseline + status.iq_metrics.sovereign_gain);
+        } else {
+          setIq(null);
         }
+
+        const queueCount = Array.isArray(queue) ? queue.length : 0;
+        const rps = metrics?.requests?.requestsPerSecond;
+        const latency = metrics?.requests?.avgLatencyMs;
+        const nfState = nightforge?.state || {};
+
+        setOps([
+          {
+            id: 'bridge',
+            type: 'Bridge',
+            desc: status ? `ONLINE v${status.version} • avg ${latency ?? '—'}ms • rps ${rps ?? '—'}` : 'OFFLINE',
+            status: status ? 'ACTIVE' : 'OFFLINE'
+          },
+          {
+            id: 'queue',
+            type: 'Execution Queue',
+            desc: `Items: ${queueCount}`,
+            status: 'ACTIVE'
+          },
+          {
+            id: 'nightforge',
+            type: 'NightForge Daemon',
+            desc: `Active: ${nfState.active ? 'YES' : 'NO'} • Running: ${nfState.running ? 'YES' : 'NO'}`,
+            status: nfState.active ? 'ACTIVE' : 'IDLE'
+          },
+          {
+            id: 'savings',
+            type: 'Cost Firewall',
+            desc: `Saved tokens: ${metrics?.firewall?.savedTokens ?? 0} • Saved $: ${metrics?.firewall?.savedDollars ?? '0.0000'}`,
+            status: 'ACTIVE'
+          }
+        ]);
       } catch (e) {
-        console.error('Failed to fetch status:', e);
+        if (!mounted) return;
+        setIq(null);
+        setOps([
+          { id: 'bridge', type: 'Bridge', desc: 'OFFLINE', status: 'OFFLINE' },
+          { id: 'queue', type: 'Execution Queue', desc: 'Unavailable', status: 'OFFLINE' }
+        ]);
       }
     }
     
-    fetchStatus();
-    const interval = setInterval(() => {
-      fetchStatus();
-      
-      // Keep ops dynamic as requested by user
-      setOps(prev => prev.map(op => {
-        if (Math.random() > 0.7) {
-          const descriptions = [
-            'Ingesting truth-verified PromptLink data streams...',
-            'Synthesizing DatasetForge corpuses...',
-            'Auditing execution queue for anomalies...',
-            'Compacting logic structures via Singularity Core...',
-            'Running Truth Probe on external APIs...'
-          ];
-          return { ...op, desc: descriptions[Math.floor(Math.random() * descriptions.length)] };
-        }
-        return op;
-      }));
-    }, 2000);
-    return () => clearInterval(interval);
+    fetchLive();
+    const interval = setInterval(fetchLive, 5000);
+    return () => { mounted = false; clearInterval(interval); };
   }, []);
 
   return (
@@ -80,7 +115,7 @@ export const StudioDashboard = () => {
               <TrendingUp size={20} className="text-indigo-400" />
               <span className="text-xs font-black uppercase tracking-[0.2em]">Sovereign IQ Baseline</span>
             </div>
-            <h2 className="text-7xl font-black mb-2 tracking-tighter tabular-nums">{(iq / 1000000).toFixed(1)}M</h2>
+            <h2 className="text-7xl font-black mb-2 tracking-tighter tabular-nums">{iq == null ? '—' : `${(iq / 1000000).toFixed(1)}M`}</h2>
             <div className="h-1.5 w-full bg-white/10 rounded-full mt-8 overflow-hidden">
               <motion.div 
                 initial={{ width: 0 }}
@@ -126,4 +161,4 @@ export const StudioDashboard = () => {
       </div>
     </motion.div>
   );
-};
+};

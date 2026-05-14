@@ -7,27 +7,27 @@ export const PerformanceMonitor = () => {
   const storeMetrics = useSovereignStore((s) => s.metrics);
 
   const metrics = {
-    latency: storeMetrics?.latency || 12,
-    cacheHit: storeMetrics?.cache?.hitRate || 85,
-    dbSpeed: 4, 
-    cpuLoad: storeMetrics?.cpu_usage?.user ? (storeMetrics.cpu_usage.user / 1000000) : 12
+    latency: typeof storeMetrics?.latency_ms === 'number' ? storeMetrics.latency_ms : null,
+    cacheHit: typeof storeMetrics?.cache?.hitRate === 'number' ? storeMetrics.cache.hitRate : null,
+    cpuUserSeconds: typeof storeMetrics?.cpu_usage?.user === 'number' ? (storeMetrics.cpu_usage.user / 1_000_000) : null,
+    rps: typeof storeMetrics?.requests?.requestsPerSecond === 'number' ? storeMetrics.requests.requestsPerSecond : null
   };
 
-  const MetricCard = ({ title, value, unit, icon: Icon, color }) => (
+  const MetricCard = ({ title, value, unit, icon: Icon, color, max = 100 }) => (
     <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-xl">
       <div className="flex items-center justify-between mb-2">
         <span className="text-slate-400 text-xs font-medium uppercase tracking-wider">{title}</span>
         <Icon size={16} className={color} />
       </div>
       <div className="flex items-baseline gap-1">
-        <span className="text-2xl font-bold font-mono">{value.toFixed(1)}</span>
+        <span className="text-2xl font-bold font-mono">{value == null ? '—' : value.toFixed(1)}</span>
         <span className="text-slate-500 text-xs">{unit}</span>
       </div>
       <div className="mt-3 h-1 bg-slate-800 rounded-full overflow-hidden">
         <motion.div 
           className={`h-full ${color.replace('text-', 'bg-')}`}
           initial={{ width: 0 }}
-          animate={{ width: `${Math.min(100, (value / (unit === 'ms' ? 100 : 100)) * 100)}%` }}
+          animate={{ width: `${value == null ? 0 : Math.min(100, (value / max) * 100)}%` }}
         />
       </div>
     </div>
@@ -43,10 +43,10 @@ export const PerformanceMonitor = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard title="Request Latency" value={metrics.latency} unit="ms" icon={Zap} color="text-yellow-500" />
-        <MetricCard title="Cache Hit Rate" value={metrics.cacheHit} unit="%" icon={Activity} color="text-emerald-500" />
-        <MetricCard title="DB Query Speed" value={metrics.dbSpeed} unit="ms" icon={Database} color="text-indigo-500" />
-        <MetricCard title="System Load" value={metrics.cpuLoad} unit="%" icon={Cpu} color="text-rose-500" />
+        <MetricCard title="Request Latency" value={metrics.latency} unit="ms" icon={Zap} color="text-yellow-500" max={500} />
+        <MetricCard title="Cache Hit Rate" value={metrics.cacheHit} unit="%" icon={Activity} color="text-emerald-500" max={100} />
+        <MetricCard title="CPU User Time" value={metrics.cpuUserSeconds} unit="s" icon={Cpu} color="text-rose-500" max={30} />
+        <MetricCard title="Requests" value={metrics.rps} unit="/s" icon={Database} color="text-indigo-500" max={5} />
       </div>
 
       <div className="mt-8 bg-slate-900/80 border border-slate-800 rounded-xl p-6">

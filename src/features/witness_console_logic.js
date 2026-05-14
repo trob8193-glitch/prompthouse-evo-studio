@@ -6,7 +6,7 @@ import { TruthChain } from '../core/truth/TruthChain.js';
  * ═══════════════════════════════════════════════════════════════
  * The 'Black Box' of the studio. Records every intent and 
  * production outcome with real cryptographic verification.
- * NO FILLER. NO SIMULATION.
+ * NO FILLER. NO FICTION.
  */
 
 export class WitnessConsole {

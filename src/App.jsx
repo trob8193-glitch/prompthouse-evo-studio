@@ -24,6 +24,8 @@ import { EvoEyes } from './components/EvoEyes.jsx';
 import { GhostEditor } from './components/GhostEditor.jsx';
 import { WitnessConsole } from './features/WitnessConsole.jsx';
 import { Zap } from 'lucide-react';
+import { AuthSentry } from './features/AuthSentry.jsx';
+import EvoPulseGridView from './features/EvoPulseGridView.jsx';
 
 // Existing feature screens from features/index.jsx
 import {
@@ -40,6 +42,7 @@ const PAGE_MAP = {
   'forge-labs': ForgeLabs,
   'duel-arena': EvoDuelArena,
   'ai-generator': AIGeneratorHub,
+  'evopulse-grid': EvoPulseGridView,
   'execution-queue': ExecutionQueue,
   'proof-console': ProofConsole,
   'evo-eyes': EvoEyesView,
@@ -97,13 +100,16 @@ export default function App() {
   const applyEvolutionRuntime = useSovereignStore((s) => s.applyEvolutionRuntime);
   const singularityActive = useSovereignStore((s) => s.singularityActive);
   const setSingularityActive = useSovereignStore((s) => s.setSingularityActive);
+  const checkAuth = useSovereignStore((s) => s.checkAuth);
+  const isAuthenticated = useSovereignStore((s) => s.isAuthenticated);
   
   const evolutionClientIdRef = React.useRef(null);
 
   React.useEffect(() => {
+    checkAuth();
     startGlobalSync();
     return () => stopGlobalSync();
-  }, [startGlobalSync, stopGlobalSync]);
+  }, [startGlobalSync, stopGlobalSync, checkAuth]);
 
   React.useEffect(() => {
     const clientId = getEvolutionClientId();
@@ -162,51 +168,53 @@ export default function App() {
 
   return (
     <ErrorBoundary fallbackMessage="The studio encountered a critical error.">
-      <div style={{
-        display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw',
-        background: '#0a0e1a', color: '#e2e8f0', fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
-        overflow: 'hidden',
-      }}>
-        
-        {singularityActive && <WitnessConsole />}
-        <TopBar />
+      <AuthSentry>
+        <div style={{
+          display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw',
+          background: '#0a0e1a', color: '#e2e8f0', fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
+          overflow: 'hidden',
+        }}>
+          
+          {singularityActive && <WitnessConsole />}
+          <TopBar />
 
-        
-        {/* Toggle Singularity Engine - The Unified HUD */}
-        <button 
-          onClick={() => setSingularityActive(true)} 
-          className="absolute top-16 right-4 z-50 bg-indigo-900/40 text-indigo-400 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg border border-indigo-500/50 hover:bg-indigo-800/50 shadow-lg shadow-indigo-500/10 flex items-center gap-2 group transition-all"
-        >
-          <Zap size={14} className="group-hover:scale-125 transition-transform" />
-          Manifest Singularity Engine
-        </button>
+          
+          {/* Toggle Singularity Engine - The Unified HUD */}
+          <button 
+            onClick={() => setSingularityActive(true)} 
+            className="absolute top-16 right-4 z-50 bg-indigo-900/40 text-indigo-400 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg border border-indigo-500/50 hover:bg-indigo-800/50 shadow-lg shadow-indigo-500/10 flex items-center gap-2 group transition-all"
+          >
+            <Zap size={14} className="group-hover:scale-125 transition-transform" />
+            Manifest Singularity Engine
+          </button>
 
-        <EvoEyes />
+          <EvoEyes />
 
-        <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-          <Navigation />
+          <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+            <Navigation />
 
-          <main style={{
-            flex: 1, overflow: 'auto', position: 'relative',
-            background: '#0a0e1a', paddingBottom: terminalOpen ? 300 : 32,
-          }}>
-            <Toolbar />
-            
-            <div style={{ padding: 28, position: 'relative', zIndex: 1, height: '100%' }}>
-              {/* Ambient Background Asset */}
-              <div style={{
-                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                backgroundImage: 'url(/assets/generated_bg.png)', backgroundSize: 'cover', backgroundPosition: 'center',
-                opacity: 0.15, pointerEvents: 'none', zIndex: 0
-              }} />
-              <PageRenderer />
-            </div>
-          </main>
+            <main style={{
+              flex: 1, overflow: 'auto', position: 'relative',
+              background: '#0a0e1a', paddingBottom: terminalOpen ? 300 : 32,
+            }}>
+              <Toolbar />
+              
+              <div style={{ padding: 28, position: 'relative', zIndex: 1, height: '100%' }}>
+                {/* Ambient Background Asset */}
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                  backgroundImage: 'url(/assets/generated_bg.png)', backgroundSize: 'cover', backgroundPosition: 'center',
+                  opacity: 0.15, pointerEvents: 'none', zIndex: 0
+                }} />
+                <PageRenderer />
+              </div>
+            </main>
+          </div>
+
+          <Terminal />
+          <NotificationToasts />
         </div>
-
-        <Terminal />
-        <NotificationToasts />
-      </div>
+      </AuthSentry>
     </ErrorBoundary>
   );
 }

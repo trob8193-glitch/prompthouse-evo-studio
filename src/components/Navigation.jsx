@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
   Activity, Eye, Swords, Sparkles, BarChart3, FolderOpen, Gauge, Zap, ChevronRight,
-  ExternalLink
+  ExternalLink, Share2
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -33,6 +33,7 @@ const NAV_GROUPS = [
       { id: 'forge-labs', label: 'Forge Labs', icon: Sparkles },
       { id: 'duel-arena', label: 'Duel Arena', icon: Swords },
       { id: 'ai-generator', label: 'AI Generator', icon: Zap },
+      { id: 'evopulse-grid', label: 'EvoPulse Grid', icon: Share2 },
     ],
   },
   {
@@ -77,6 +78,8 @@ export function Navigation() {
         overflowX: 'hidden',
         transition: 'width 0.2s ease, min-width 0.2s ease',
         flexShrink: 0,
+        position: 'relative',
+        zIndex: 1000,
       }}
     >
       <div style={{ padding: collapsed ? '12px 6px' : '12px 10px', flex: 1 }}>

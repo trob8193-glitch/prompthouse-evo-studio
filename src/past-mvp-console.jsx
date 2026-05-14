@@ -163,14 +163,14 @@ export default function PastMVPConsole() {
 
   const handleCommerce = () => {
     if (!selectedMission) { log('Select a mission first.', '#f87171'); return; }
-    log('Compiler Bearcat creating Commerce Rail spec (Theatrical-Stub mode)...');
+    log('Compiler Bearcat requesting Commerce Rail checkout (gated until live + owner-approved)...');
     const result = createCommerceProduct(selectedMission.id, {
       productName: selectedMission.title || 'PromptHouse Feature',
       price: 2999,
-      mode: "[PURGED BY OMEGA PROTOCOL]",
+      mode: 'offline',
     });
     setCommerceResult(result);
-    log(`Commerce spec created.`);
+    log(result?.blocked ? `Commerce blocked: ${result.reason || 'not available'}` : 'Commerce request accepted.');
     refreshAll();
   };
 
@@ -318,7 +318,7 @@ export default function PastMVPConsole() {
         <button onClick={handleVectorPack} disabled={loading} style={btn('#22d3ee')}>📦 VectorPack</button>
         <button onClick={handleTemporal} disabled={loading} style={btn('#a78bfa')}>⏳ Temporal Stack</button>
         <button onClick={handleDeploy} disabled={loading} style={btn('#f5c842')}>🚀 DeployRail (live)</button>
-        <button onClick={handleCommerce} disabled={loading} style={btn('#4ade80')}>💳 Commerce Theatrical-Stub</button>
+        <button onClick={handleCommerce} disabled={loading} style={btn('#4ade80')}>💳 Commerce (gated)</button>
         <button onClick={handleNightForge} disabled={loading} style={btn('#fb923c')}>🌙 NightForge</button>
         <button onClick={handleFullAudit} disabled={loading} style={{ ...btn('#ec4899'), fontWeight: 900, fontSize: 13 }}>
           {loading ? '⏳ Running...' : '🤖 FULL AUDIT (All 7 Gates)'}
@@ -386,13 +386,14 @@ export default function PastMVPConsole() {
         </div>
       )}
 
-      {commerceResult && !commerceResult.blocked && (
+      {commerceResult && (
         <div style={{ ...card, border: '1px solid #4ade8044' }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', marginBottom: 6 }}>💳 Commerce Rail</div>
-          <div style={{ fontSize: 11, color: '#a0a0c0' }}>Product: {commerceResult.spec.productName}</div>
-          <div style={{ fontSize: 11, color: '#a0a0c0' }}>Price: ${(commerceResult.spec.price/100).toFixed(2)}</div>
-          {commerceResult.Theatrical-StubLink && <div style={{ fontSize: 10, color: '#4ade80', marginTop: 4 }}>URL: {commerceResult.Theatrical-StubLink}</div>}
-          <div style={{ marginTop: 8, fontSize: 10, color: '#666', fontStyle: 'italic' }}>⚠️ Live payment links require owner approval</div>
+          <div style={{ fontSize: 11, color: '#a0a0c0' }}>Product: {commerceResult.requested?.productName || '—'}</div>
+          <div style={{ fontSize: 11, color: '#a0a0c0' }}>Price: {commerceResult.requested?.price ? `$${(commerceResult.requested.price / 100).toFixed(2)}` : '—'}</div>
+          <div style={{ marginTop: 8, fontSize: 10, color: commerceResult.blocked ? '#f87171' : '#4ade80', fontStyle: 'italic' }}>
+            {commerceResult.blocked ? `Blocked: ${commerceResult.reason || 'owner approval + Stripe required'}` : 'Checkout ready.'}
+          </div>
         </div>
       )}
 

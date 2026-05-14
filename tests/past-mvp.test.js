@@ -212,17 +212,17 @@ describe('Commerce Rail', () => {
     expect(result.reason).toContain('owner approval');
   });
 
-  it('creates mock payment link without approval', () => {
+  it('blocks non-live checkout link generation (no hardcoded links)', () => {
     const result = createCommerceProduct('m12', { mode: 'mock', productName: 'Starter Plan', price: 999 });
-    expect(result.blocked).toBeFalsy();
-    expect(result.mockLink).toBeTruthy();
+    expect(result.blocked).toBe(true);
+    expect(result.reason).toContain('not generated locally');
     expect(result.injectionCode).toContain('Starter Plan');
   });
 
-  it('generates a pricing table with tiers', () => {
+  it('does not hardcode pricing tiers', () => {
     const table = createPricingTable('m13');
-    expect(table.tiers.length).toBeGreaterThanOrEqual(3);
-    expect(table.status).toBe('verified');
+    expect(table.status).toBe('blocked');
+    expect(table.reason).toContain('not hardcoded');
   });
 });
 

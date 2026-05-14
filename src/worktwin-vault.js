@@ -9,6 +9,7 @@
 const KEYS = {
   SIGNALS: 'ph_evo_wt_signals',
   RECIPES: 'ph_evo_wt_recipes',
+  PATTERNS: 'ph_evo_wt_patterns',
 };
 
 function uid() {
@@ -80,5 +81,73 @@ export function saveRecipe(recipe) {
   if (idx >= 0) recipes[idx] = recipe;
   else recipes.unshift(recipe);
   save(KEYS.RECIPES, recipes.slice(0, 100));
+  return recipe;
+}
+
+// ─── Patterns (derived from Signals) ──────────────────────────
+export function getAllPatterns() {
+  return load(KEYS.PATTERNS, []);
+}
+
+export function savePatterns(patterns = []) {
+  save(KEYS.PATTERNS, Array.isArray(patterns) ? patterns.slice(0, 200) : []);
+  return getAllPatterns();
+}
+
+function signatureFromContext(text = '') {
+  const cleaned = String(text)
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+  if (!cleaned) return 'empty';
+  return cleaned.split(' ').slice(0, 7).join(' ');
+}
+
+export function minePatterns({ minFrequency = 2 } = {}) {
+  const signals = getAllSignals();
+  const buckets = new Map();
+
+  for (const signal of signals) {
+    const sig = signatureFromContext(signal.redactedContext || '');
+    const key = `${signal.patternType}::${sig}`;
+    const entry = buckets.get(key) || {
+      id: `pattern_${signal.patternType}_${sig.slice(0, 24).replace(/[^a-z0-9]+/g, '_')}`,
+      patternType: signal.patternType,
+      signature: sig,
+      source: signal.source,
+      consentScope: signal.consentScope,
+      count: 0,
+      lastSeenAt: signal.capturedAt,
+      example: signal.redactedContext || ''
+    };
+    entry.count += 1;
+    if (signal.capturedAt > entry.lastSeenAt) entry.lastSeenAt = signal.capturedAt;
+    buckets.set(key, entry);
+  }
+
+  const patterns = Array.from(buckets.values())
+    .filter((p) => p.count >= Number(minFrequency || 2))
+    .sort((a, b) => (b.count - a.count) || String(b.lastSeenAt).localeCompare(String(a.lastSeenAt)));
+
+  savePatterns(patterns);
+  return patterns;
+}
+
+export function generateRecipeFromPattern(pattern) {
+  if (!pattern) return null;
+  const recipe = {
+    id: `recipe_${uid()}`,
+    name: `${pattern.patternType} recipe`,
+    patternType: pattern.patternType,
+    fromPatternId: pattern.id,
+    signature: pattern.signature,
+    createdAt: new Date().toISOString(),
+    instructions: [
+      `Use this as a reusable template for: ${pattern.signature}`,
+      'Request concrete steps and runnable code only.',
+      'If required context is missing, ask for it explicitly.'
+    ].join('\n')
+  };
+  saveRecipe(recipe);
   return recipe;
 }

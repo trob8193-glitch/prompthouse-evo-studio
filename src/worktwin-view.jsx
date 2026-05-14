@@ -3,12 +3,8 @@
  * Owner: Evo | Truth State: built
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { getAllSignals, saveSignal, getAllRecipes, captureWorkflowSignal } from './worktwin-vault.js';
+import { getAllSignals, saveSignal, getAllRecipes, captureWorkflowSignal, getAllPatterns, minePatterns, generateRecipeFromPattern } from './worktwin-vault.js';
 import { addProofReceipt } from './prompt-base.js';
-// Dummy implementations for missing pattern-miner.js
-const runPatternMiner = () => [];
-const getAllPatterns = () => [];
-const generateRecipeFromPattern = (p) => ({ name: 'Theatrical-Stub Recipe' });
 
 const SIGNAL_TYPES = ['repeat_prompt','repeat_error','repeat_doc','repeat_workflow'];
 const CONSENT_SCOPES = ['private','team','marketplace_candidate'];
@@ -41,13 +37,17 @@ export function WorkTwinVaultView() {
   }, [captureForm, log, refresh]);
 
   const mine = useCallback(() => {
-    const found = runPatternMiner({ minFrequency: 1 });
+    const found = minePatterns({ minFrequency: 1 });
     log(`📡 Pattern Miner: ${found.length} pattern(s) detected.`, found.length ? 'success' : 'info');
     refresh();
   }, [log, refresh]);
 
   const genRecipe = useCallback((pattern) => {
     const recipe = generateRecipeFromPattern(pattern);
+    if (!recipe) {
+      log('⚠️ Recipe generation failed.', 'warn');
+      return;
+    }
     log(`🪄 Recipe generated: ${recipe.name}`, 'success');
     refresh();
   }, [log, refresh]);
