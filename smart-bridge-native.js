@@ -1,5 +1,5 @@
 import dgram from 'dgram';
-import { Log } from '../autonomy/SovereignLogger.js';
+import { Log } from './src/core/autonomy/SovereignLogger.js';
 
 /**
  * PH EVO STUDIO — SMART BRIDGE (SSDP/IoT Edition)

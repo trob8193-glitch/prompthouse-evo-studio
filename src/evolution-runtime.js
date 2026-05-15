@@ -1,4 +1,5 @@
-const BRIDGE_URL = 'http://127.0.0.1:3001';
+import { bridgeClient } from './services/bridge-client.js';
+
 const CLIENT_ID_KEY = 'ph_evo_client_id';
 
 function fallbackId() {
@@ -31,11 +32,9 @@ export function applyEvolutionVariables(cssVariables = {}, layoutHints = {}) {
 }
 
 export async function fetchEvolutionProfile(clientId) {
-  const response = await fetch(`${BRIDGE_URL}/api/evolution/profile?clientId=${encodeURIComponent(clientId)}`, {
-    signal: AbortSignal.timeout(4000)
-  });
-  if (!response.ok) throw new Error(`Evolution profile failed (${response.status})`);
-  return response.json();
+  const result = await bridgeClient.getEvolutionProfile(clientId);
+  if (!result.ok) throw new Error(result.error || `Evolution profile failed (${result.status})`);
+  return result.data;
 }
 
 export async function sendEvolutionSignal({
@@ -45,18 +44,13 @@ export async function sendEvolutionSignal({
   intensity = 0.55,
   complexity = 0.5
 }) {
-  const response = await fetch(`${BRIDGE_URL}/api/evolution/signal`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      clientId,
-      page,
-      action,
-      intensity,
-      complexity
-    }),
-    signal: AbortSignal.timeout(4000)
+  const result = await bridgeClient.sendEvolutionSignal({
+    clientId,
+    page,
+    action,
+    intensity,
+    complexity
   });
-  if (!response.ok) throw new Error(`Evolution signal failed (${response.status})`);
-  return response.json();
+  if (!result.ok) throw new Error(result.error || `Evolution signal failed (${result.status})`);
+  return result.data;
 }

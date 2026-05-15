@@ -158,3 +158,131 @@ Use these terms precisely:
 - `proof-gated launch ready`: local product loop is proven, while external provider actions remain gated by approval or credentials
 
 Do not call this repo `100% market ready` from UI labels alone.
+
+## Proof-Gated Architecture
+
+This studio implements a proof-gated backend layer that separates local readiness from provider-backed execution. All proof gates are read-only and can be inspected without credentials.
+
+### Proof Routes
+
+Provider, security, and diagnostics surfaces:
+
+- `GET /api/provider-gates/status` — credential presence (redacted, never raw keys)
+- `GET /api/provider-receipts` — provider interaction receipts
+- `GET /api/provider/status` — alias for provider gate status
+- `GET /api/security/audit` — static security analysis report
+- `GET /api/security/routes` — extracted route definitions
+- `GET /api/security/mutations` — ungated mutation route audit
+- `GET /api/diagnostics/routes` — route coverage classification
+- `GET /api/diagnostics/imports` — import resolution audit
+- `GET /api/diagnostics/css-vars` — CSS variable coverage audit
+- `GET /api/diagnostics/worktree` — directory structure verification
+
+### Proof Center
+
+The **Proof Center** (`Operations > Proof Center` in sidebar) is a centralized dashboard that displays:
+
+- Route diagnostics and coverage
+- Security audit results
+- Provider gate status and receipts
+- Owner approval envelopes for deploy, commerce, and self-implementation actions
+
+### Owner Approval Scopes
+
+| Scope | Action |
+|---|---|
+| `deploy` | Push builds to external hosts (requires `VERCEL_TOKEN`) |
+| `commerce` | Mutate live billing objects (requires `STRIPE_SECRET_KEY`) |
+| `mutation` | Write to protected resources |
+| `self_implementation` | Allow studio to modify its own source files |
+
+Approval envelopes are created locally via explicit UI click. An approval envelope does **not** equal provider success. Provider execution still requires real credentials and provider response.
+
+### Deployed Frontend
+
+When deployed, the frontend needs `VITE_BRIDGE_URL` set to point to the bridge server. Without it, proof panels will show bridge offline state (which is accurate, not faked).
+
+## Truth States
+
+All system components report using these canonical truth states:
+
+| State | Meaning |
+|---|---|
+| `BUILT` | Local implementation exists |
+| `VERIFIED` | Runtime proof exists (local tests pass, audits green) |
+| `BLOCKED` | Action intentionally cannot complete yet |
+| `PROVEN` | Provider-backed receipt confirms real execution |
+| `LOCAL_ONLY` | Feature works locally, not connected to external service |
+| `PROVIDER_GATED` | Feature requires external provider credentials |
+| `NEEDS_CREDENTIALS` | API keys not configured |
+| `NEEDS_OWNER_APPROVAL` | Explicit owner approval envelope required |
+| `ERROR` | Runtime error or bridge communication failure |
+| `UNKNOWN` | State cannot be determined |
+
+## Full Verification
+
+Complete verification command:
+
+```powershell
+npm run verify:studio
+```
+
+This runs in order: syntax check, import audit, CSS audit, test suite, production build.
+
+For the full proof report:
+
+```powershell
+npm run proof:report
+```
+
+This generates `.prompthouse-data/proof-report.json` and `.prompthouse-data/proof-report.md` with pass/fail status, route coverage, security audit summary, and provider gate status.
+
+## Deployment Readiness
+
+Local proof does not equal production deployment. The **Deployment Center** (`Operations > Deployment Center`) provides pre-flight readiness checks, deployment receipts, and owner-approved deploy actions.
+
+### Pre-Deploy Checklist
+
+Before any deployment attempt:
+
+```powershell
+npm run verify:studio
+npm run proof:report
+npm run deployment:readiness
+```
+
+### Requirements for Real Deployment
+
+| Requirement | Details |
+|---|---|
+| `VITE_BRIDGE_URL` | Deployed frontend must point to a reachable bridge URL |
+| `CORS_ORIGINS` | Must include the deployed frontend origin |
+| `VERCEL_TOKEN` | Required for Vercel preview/production deploys |
+| `VERCEL_PROJECT_ID` | Required for Vercel integration |
+| Owner Approval | Explicit `deploy` scope approval envelope required |
+| Proof Report | Must exist and show `VERIFIED` state |
+
+### Preview vs Production Deploy
+
+- **Preview deploy**: Requires `VERCEL_TOKEN` + owner approval with scope `deploy`. Creates a temporary deployment URL.
+- **Production deploy**: Requires all of the above **plus** `DEPLOY_ALLOW_PRODUCTION=true`. Disabled by default.
+- **Both**: Create deployment receipts. Success receipts only appear with real provider response and deployment URL.
+
+### Deployment Receipts
+
+All deployment attempts (successful, blocked, or failed) are logged to `.prompthouse-data/deployment_receipts.jsonl`. Receipts include:
+
+- Action type (readiness_check, preview_deploy, production_deploy, blocked)
+- Provider and truth state
+- Request/response hashes (never raw secrets)
+- Deployment URL (only when real)
+
+### Safety Guarantees
+
+- No auto-deploy from any GET route
+- No deploy without explicit POST + owner approval envelope
+- No secrets in deployment receipts or readiness reports
+- No `PROVEN` truth state without real provider response
+- No production deploy unless `DEPLOY_ALLOW_PRODUCTION=true`
+
+

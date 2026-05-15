@@ -7,18 +7,7 @@ import { create } from 'zustand';
  * navigation, bridge connectivity, chat, metrics, and API config.
  */
 
-const BRIDGE_URL = 'http://127.0.0.1:3001';
-
-// Helper for fetch with auth
-const sovereignFetch = async (url, options = {}) => {
-  const token = typeof localStorage !== 'undefined' ? localStorage.getItem('ph_evo_token') : null;
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-    ...(options.headers || {})
-  };
-  return fetch(url, { ...options, headers });
-};
+import { BRIDGE_URL, safeFetchBridge } from './config/bridge-config.js';
 
 const getInitialToken = () => {
   if (typeof localStorage !== 'undefined') {
@@ -38,13 +27,12 @@ export const useSovereignStore = create((set, get) => ({
   login: async (email, password) => {
     set({ authLoading: true, authError: null });
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/auth/login`, {
+      const result = await safeFetchBridge('/api/auth/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Login failed');
+      const data = result.data;
+      if (!result.ok) throw new Error(result.error || 'Login failed');
       
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem('ph_evo_token', data.token);
@@ -60,13 +48,12 @@ export const useSovereignStore = create((set, get) => ({
   register: async (email, password, displayName) => {
     set({ authLoading: true, authError: null });
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/auth/register`, {
+      const result = await safeFetchBridge('/api/auth/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, displayName })
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Registration failed');
+      const data = result.data;
+      if (!result.ok) throw new Error(result.error || 'Registration failed');
       
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem('ph_evo_token', data.token);
@@ -90,9 +77,9 @@ export const useSovereignStore = create((set, get) => ({
     const token = get().token;
     if (!token) return;
     try {
-      const res = await sovereignFetch(`${BRIDGE_URL}/api/auth/me`);
-      if (res.ok) {
-        const data = await res.json();
+      const result = await safeFetchBridge('/api/auth/me');
+      if (result.ok) {
+        const data = result.data;
         set({ user: data.user, isAuthenticated: true });
       } else {
         get().logout();
@@ -137,8 +124,8 @@ export const useSovereignStore = create((set, get) => ({
   
   refreshNodeMesh: async () => {
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/intelligence/nodes/probe`);
-      const data = await res.json();
+      const result = await safeFetchBridge('/api/intelligence/nodes/probe');
+      const data = result.data;
       if (data.success) {
         set({ bondedNodes: data.nodes });
       }
@@ -184,9 +171,9 @@ export const useSovereignStore = create((set, get) => ({
 
   fetchBridgeStatus: async () => {
     try {
-      const res = await sovereignFetch(`${BRIDGE_URL}/status`, { signal: AbortSignal.timeout(5000) });
-      if (!res.ok) throw new Error(`Bridge returned ${res.status}`);
-      const data = await res.json();
+      const result = await safeFetchBridge('/status', { timeout: 5000 });
+      if (!result.ok) throw new Error(result.error || 'Bridge disconnected');
+      const data = result.data;
       set({ bridgeStatus: 'connected', bridgeData: data, bridgeError: null });
       return data;
     } catch (err) {
@@ -202,9 +189,9 @@ export const useSovereignStore = create((set, get) => ({
   fetchMetrics: async () => {
     set({ metricsLoading: true });
     try {
-      const res = await sovereignFetch(`${BRIDGE_URL}/api/metrics`, { signal: AbortSignal.timeout(5000) });
-      if (!res.ok) throw new Error(`Metrics returned ${res.status}`);
-      const data = await res.json();
+      const result = await safeFetchBridge('/api/metrics');
+      if (!result.ok) throw new Error(result.error || 'Metrics unavailable');
+      const data = result.data;
       set({ metrics: data, metricsLoading: false });
       return data;
     } catch (err) {
@@ -231,17 +218,16 @@ export const useSovereignStore = create((set, get) => ({
         .concat(userMsg)
         .map((m) => ({ role: m.role === 'system' ? 'system' : m.role, content: m.content }));
 
-      const res = await sovereignFetch(`${BRIDGE_URL}/api/evo-lm/chat`, {
+      const result = await safeFetchBridge('/api/evo-lm/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: apiMessages.filter((m) => m.role !== 'system'),
           systemPrompt: 'You are PH Evo Studio — a sovereign-grade AI development platform. Help the user with prompt engineering, code generation, architecture planning, and studio operations. Be precise, technical, and production-focused.'
         }),
       });
 
-      if (!res.ok) throw new Error(`Chat returned ${res.status}`);
-      const data = await res.json();
+      if (!result.ok) throw new Error(result.error || 'Chat error');
+      const data = result.data;
       const botMsg = {
         id: `bot-${Date.now()}`,
         role: 'assistant',
@@ -294,12 +280,11 @@ export const useSovereignStore = create((set, get) => ({
     const state = get();
     set({ apiConfigSaving: true, apiConfigError: null });
     try {
-      const res = await sovereignFetch(`${BRIDGE_URL}/api/config/keys`, {
+      const result = await safeFetchBridge('/api/config/keys', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ keys: { openai: state.apiConfig.openaiKey, vercel: state.apiConfig.vercelToken } }),
       });
-      if (!res.ok) throw new Error(`Config save returned ${res.status}`);
+      if (!result.ok) throw new Error(result.error || 'Failed to save config');
       set({ apiConfigSaving: false });
       return true;
     } catch (err) {
@@ -310,13 +295,12 @@ export const useSovereignStore = create((set, get) => ({
 
   logToLedger: async (feature_id, action, proof_hash, truth_state = 'UNVERIFIED', iq_gain = 0) => {
     try {
-      const res = await sovereignFetch(`${BRIDGE_URL}/api/sovereign-ledger/log`, {
+      const result = await safeFetchBridge('/api/sovereign-ledger/log', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ feature_id, action, proof_hash, truth_state, iq_gain }),
       });
-      if (!res.ok) throw new Error(`Ledger log returned ${res.status}`);
-      return await res.json();
+      if (!result.ok) throw new Error(result.error || 'Ledger log failed');
+      return result.data;
     } catch (err) {
       console.warn('[Store] Ledger log failed:', err.message);
       return null;
@@ -338,9 +322,9 @@ export const useSovereignStore = create((set, get) => ({
   // ─── Maintenance ────────────────────────────────────────────
   runMaintenance: async () => {
     try {
-      const res = await sovereignFetch(`${BRIDGE_URL}/api/maintenance/run`, { method: 'POST' });
-      if (!res.ok) throw new Error(`Maintenance returned ${res.status}`);
-      const data = await res.json();
+      const result = await safeFetchBridge('/api/maintenance/run', { method: 'POST' });
+      if (!result.ok) throw new Error(result.error || 'Maintenance cycle failed');
+      const data = result.data;
       get().addNotification('Maintenance cycle completed.', 'success');
       return data;
     } catch (err) {
@@ -386,9 +370,9 @@ export const useSovereignStore = create((set, get) => ({
   syncInterval: null,
   runTruthProbe: async () => {
     try {
-      const res = await sovereignFetch(`${BRIDGE_URL}/api/truth/probe`);
-      if (!res.ok) throw new Error('Probe failed');
-      const data = await res.json();
+      const result = await safeFetchBridge('/api/truth/probe');
+      if (!result.ok) throw new Error(result.error || 'Probe failed');
+      const data = result.data;
       set({ bridgeData: { ...get().bridgeData, probes: data.results } });
       return data.results;
     } catch (err) {

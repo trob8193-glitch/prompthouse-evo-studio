@@ -7,7 +7,7 @@
     "dev": "vite",
     "singularity": "concurrently \"npm run dev\" \"cd evogenage && npm run dev -- --port 5174\"",
     "build": "vite build",
-    "test": "vitest run",
+    "test": "vitest run --pool=forks",
     "start": "node promptbridge-server.js",
     "preview": "vite preview",
     "bridge": "node promptbridge-server.js",
@@ -26,7 +26,13 @@
     "audit:nuclear": "node scripts/nuclear_audit.mjs",
     "evo:dev": "tsx tools/evoforge/cli/evo.ts dev",
     "evo:build": "tsx tools/evoforge/cli/evo.ts build",
-    "evo:audit": "tsx tools/evoforge/cli/evo.ts audit"
+    "evo:audit": "tsx tools/evoforge/cli/evo.ts audit",
+    "audit:css": "node scripts/audit-css-vars.mjs",
+    "audit:imports": "node scripts/audit-imports.mjs",
+    "verify:studio": "node scripts/verify-studio.mjs",
+    "proof:report": "node scripts/generate-proof-report.mjs",
+    "deployment:readiness": "node scripts/deployment-readiness-report.mjs",
+    "backend:routes": "node scripts/print-backend-routes.mjs"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

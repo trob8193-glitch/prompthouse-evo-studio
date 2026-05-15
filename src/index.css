@@ -28,11 +28,22 @@
   --text-muted: #3f3f46;
   
   --accent-gold: #f5c842;
+  --accent-gold-dim: rgba(245, 200, 66, 0.12);
+  --accent-gold-glow: rgba(245, 200, 66, 0.25);
   --accent-violet: #8b5cf6;
+  --accent-violet-dim: rgba(139, 92, 246, 0.12);
+  --accent-indigo: #6366f1;
+  --accent-indigo-dim: rgba(99, 102, 241, 0.12);
   --accent-cyan: #22d3ee;
+  --accent-cyan-dim: rgba(34, 211, 238, 0.12);
   --accent-green: #4ade80;
+  --accent-green-dim: rgba(74, 222, 128, 0.12);
   --accent-red: #f87171;
+  --accent-red-dim: rgba(248, 113, 113, 0.12);
   --accent-orange: #fb923c;
+  --accent-orange-dim: rgba(251, 146, 60, 0.12);
+  --accent-pink: #ec4899;
+  --accent-pink-dim: rgba(236, 72, 153, 0.12);
   
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.6);
@@ -49,6 +60,23 @@
   --font-mono: 'JetBrains Mono', monospace;
   --transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
   --evo-density-scale: 1;
+
+  /* ── COMPONENT-LEVEL TOKENS (bot, forge, chrome-ext) ── */
+  --char-size: 48px;
+  --bot-accent: var(--accent-violet);
+  --bot-glow: rgba(139, 92, 246, 0.2);
+  --bot-primary: var(--accent-violet);
+  --lane-color: var(--accent-cyan);
+  --rare-accent: var(--accent-gold);
+  --score-percent: 0%;
+  --bg: var(--bg-void);
+  --text: var(--text-primary);
+  --cyan: var(--accent-cyan);
+  --violet: var(--accent-violet);
+  --pink: var(--accent-pink);
+  --dim: var(--text-dim);
+  --panel2: var(--bg-elevated);
+  --gold: var(--accent-gold);
 }
 
 html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-primary); font-family: var(--font-sans); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }

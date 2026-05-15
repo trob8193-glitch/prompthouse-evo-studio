@@ -76,5 +76,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './tests/setup.js',
+    isolate: false,
+    pool: 'forks',
   },
 })

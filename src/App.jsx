@@ -26,6 +26,10 @@ import { WitnessConsole } from './features/WitnessConsole.jsx';
 import { Zap } from 'lucide-react';
 import { AuthSentry } from './features/AuthSentry.jsx';
 import EvoPulseGridView from './features/EvoPulseGridView.jsx';
+import SingularityEngineOverlay from './components/SingularityEngineOverlay.jsx';
+
+import ProofCenterView from './features/ProofCenterView.jsx';
+import DeploymentCenterView from './features/DeploymentCenterView.jsx';
 
 // Existing feature screens from features/index.jsx
 import {
@@ -34,7 +38,7 @@ import {
   GradingAndRelease, CommerceCore, FeatureFoundry,
 } from './features/index.jsx';
 
-const PAGE_MAP = {
+export const PAGE_MAP = {
   'dashboard': SovereignIntelligenceDashboard,
   'chat': SovereignChat,
   'workspace': WorkspaceShell,
@@ -45,6 +49,8 @@ const PAGE_MAP = {
   'evopulse-grid': EvoPulseGridView,
   'execution-queue': ExecutionQueue,
   'proof-console': ProofConsole,
+  'proof-center': ProofCenterView,
+  'deployment-center': DeploymentCenterView,
   'evo-eyes': EvoEyesView,
   'metrics': MetricsView,
   'settings': GlobalAPISettingsView,
@@ -176,6 +182,7 @@ export default function App() {
         }}>
           
           {singularityActive && <WitnessConsole />}
+          <SingularityEngineOverlay />
           <TopBar />
 
           

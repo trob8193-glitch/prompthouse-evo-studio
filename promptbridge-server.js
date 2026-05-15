@@ -73,6 +73,8 @@ import {
   runPatchTournament,
   saveCapabilityBaseline
 } from './src/core/evolution/autonomous-evolution-engine.js';
+import { createRouteRegistry } from './server/route-registry.js';
+import { registerCoreRoutes } from './server/routes/index.js';
 
 dotenv.config({ override: true });
 
@@ -98,6 +100,25 @@ const CORS_ORIGINS = (process.env.CORS_ORIGINS || '')
   .filter(Boolean);
 const RATE_LIMITS = new Map();
 const OLLAMA_BASE = 'http://localhost:11434';
+
+// ─── MODULAR ROUTE REGISTRATION ──────────────────────────────────────────────
+
+const routeRegistry = createRouteRegistry();
+const bridgeContext = {
+  dataDir: DATA_DIR,
+  sandboxDir: process.cwd(),
+  env: process.env,
+  providerGates: {}, // Will use phase 3 modules directly inside routes
+  receiptService: {}, 
+  routeRegistry
+};
+
+try {
+  const regSummary = registerCoreRoutes(app, bridgeContext);
+  console.log(`[Route Registry] Registered ${regSummary.registeredModules.length} core modules additively.`);
+} catch (e) {
+  console.error(`[Route Registry] Failed to register core routes additively`, e);
+}
 
 // Configuration
 function enforceJsonObjectBody(req, res, next) {
@@ -4663,6 +4684,32 @@ app.post('/api/tools/save-recipe', (req, res) => {
     res.status(400).json({ error: 'Recipe required' });
   }
 });
+
+// ─── PHASE 3: PROVIDER GATE & RECEIPT ROUTES ─────────────────────────────────
+try {
+  const { registerProviderGateRoutes } = await import('./server/routes/provider-gates.routes.js');
+  registerProviderGateRoutes(app);
+  console.log('✅ [Phase3] Provider gate routes registered.');
+} catch (err) {
+  console.warn('⚠️ [Phase3] Provider gate routes failed to register:', err.message);
+}
+
+try {
+  const { registerProviderReceiptRoutes } = await import('./server/routes/provider-receipts.routes.js');
+  registerProviderReceiptRoutes(app);
+  console.log('✅ [Phase3] Provider receipt routes registered.');
+} catch (err) {
+  console.warn('⚠️ [Phase3] Provider receipt routes failed to register:', err.message);
+}
+
+// ─── PHASE 4: SECURITY AUDIT ROUTE ───────────────────────────────────────────
+try {
+  const { registerSecurityAuditRoutes } = await import('./server/routes/security-audit.routes.js');
+  registerSecurityAuditRoutes(app);
+  console.log('✅ [Phase4] Security audit routes registered.');
+} catch (err) {
+  console.warn('⚠️ [Phase4] Security audit routes failed to register:', err.message);
+}
 
 app.use((err, req, res, next) => {
   console.error('🔥 [CRASH]', err);

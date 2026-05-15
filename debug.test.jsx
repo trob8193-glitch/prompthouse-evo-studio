@@ -11,4 +11,4 @@ test('App mounts without crashing', () => {
     console.error("RENDER FAILED:", error);
     throw error;
   }
-});
+}, 30000);

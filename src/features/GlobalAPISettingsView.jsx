@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Settings, Key, Save, TestTube, CheckCircle2, AlertCircle, Loader2, Shield } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 import { getNightForgeSettings, updateNightForgeSettings } from '../nightforge.js';
+import OwnerApprovalPanel from '../components/OwnerApprovalPanel.jsx';
+import { OWNER_APPROVAL_SCOPES } from '../services/owner-approval-client.js';
 
 /**
  * PH EVO STUDIO — GLOBAL API SETTINGS (ENTERPRISE GRADE)
@@ -24,6 +26,7 @@ export function GlobalAPISettingsView() {
   const [nfLoading, setNfLoading] = useState(false);
   const [nfSaving, setNfSaving] = useState(false);
   const [nfForce3, setNfForce3] = useState(false);
+  const [deployApproval, setDeployApproval] = useState(null);
 
   const handleSave = async () => {
     const ok = await saveApiKeys();
@@ -128,6 +131,24 @@ export function GlobalAPISettingsView() {
             {apiConfigSaving ? 'Saving...' : saved ? 'Saved!' : 'Save Keys'}
           </button>
         </div>
+
+        {apiConfig.vercelToken && (
+          <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid #1e293b' }}>
+            <OwnerApprovalPanel
+              scope={OWNER_APPROVAL_SCOPES.DEPLOY}
+              title="Deploy Action Gate"
+              description="Explicit owner approval is required to trigger external deployments using the Vercel token."
+              riskLevel="high"
+              onApprovalCreated={setDeployApproval}
+              compact
+            />
+            {deployApproval && (
+              <div style={{ marginTop: 12, fontSize: '11px', color: '#94a3b8', padding: '8px 12px', background: 'rgba(16, 185, 129, 0.05)', borderRadius: '6px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                Approval envelope created. Provider action still requires explicit execution and credentials.
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Bridge Connection Card */}

@@ -13,7 +13,7 @@ import { useSovereignStore } from '../store.js';
  * Drives the activePage state in the Zustand store.
  */
 
-const NAV_GROUPS = [
+export const NAV_GROUPS = [
   {
     id: 'studio',
     label: 'Studio',
@@ -42,8 +42,10 @@ const NAV_GROUPS = [
     items: [
       { id: 'execution-queue', label: 'Execution Queue', icon: Rocket },
       { id: 'proof-console', label: 'Proof Console', icon: Shield },
+      { id: 'proof-center', label: 'Proof Center', icon: Shield },
       { id: 'evo-eyes', label: 'Evo Eyes', icon: Eye },
       { id: 'metrics', label: 'Metrics', icon: BarChart3 },
+      { id: 'deployment-center', label: 'Deployment Center', icon: Rocket },
     ],
   },
   {
