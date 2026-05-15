@@ -8,6 +8,7 @@ import StripeTestCheckoutPanel from '../components/StripeTestCheckoutPanel.jsx';
 import SecurityAuditPanel from '../components/SecurityAuditPanel.jsx';
 import RouteDiagnosticsPanel from '../components/RouteDiagnosticsPanel.jsx';
 import OwnerApprovalPanel from '../components/OwnerApprovalPanel.jsx';
+import HandoverStatusPanel from '../components/HandoverStatusPanel.jsx';
 import { OWNER_APPROVAL_SCOPES } from '../services/owner-approval-client.js';
 
 /**
@@ -45,6 +46,7 @@ export function ProofCenterView() {
       }}>
         {/* Left Column: Diagnostics & Security */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <HandoverStatusPanel />
           <RouteDiagnosticsPanel />
           <SecurityAuditPanel />
         </div>

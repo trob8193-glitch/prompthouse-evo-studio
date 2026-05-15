@@ -34,6 +34,8 @@
     "deployment:readiness": "node scripts/deployment-readiness-report.mjs",
     "simulate:local-production": "node scripts/local-production-sim.mjs",
     "preview:smoke": "node scripts/preview-smoke-check.mjs",
+    "handover:report": "node scripts/generate-handover-report.mjs",
+    "docs:warnings": "node scripts/markdown-warning-report.mjs",
     "backend:routes": "node scripts/print-backend-routes.mjs"
   },
   "dependencies": {

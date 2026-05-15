@@ -45,7 +45,7 @@ describe('Stripe Test Checkout Service', () => {
 
   it('test key allows session creation', async () => {
     vi.stubEnv('STRIPE_SECRET_KEY', 'sk_test_123');
-    const result = await createStripeTestCheckoutSession({ amount: 100 });
+    const result = await createStripeTestCheckoutSession({ amount: 100, ownerApproval: { granted: true, scope: 'commerce', receiptId: 'test' } });
     expect(result.ok).toBe(true);
     expect(result.id).toBe('cs_test_123');
     expect(result.url).toContain('checkout.stripe.com');

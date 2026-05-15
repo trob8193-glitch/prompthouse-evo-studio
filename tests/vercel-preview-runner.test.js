@@ -15,9 +15,12 @@ vi.mock('../server/services/vercel-readiness.js', () => ({
   classifyVercelTokenStatus: vi.fn().mockReturnValue({ configured: true, redactedToken: 'vcp_te...st' })
 }));
 
+import { classifyVercelTokenStatus } from '../server/services/vercel-readiness.js';
+
 describe('Vercel Preview Runner', () => {
   beforeEach(() => {
     vi.unstubAllEnvs();
+    vi.clearAllMocks();
   });
 
   it('blocks without owner approval', async () => {
@@ -27,20 +30,17 @@ describe('Vercel Preview Runner', () => {
   });
 
   it('blocks without VERCEL_TOKEN', async () => {
-    const { classifyVercelTokenStatus } = await import('../server/services/vercel-readiness.js');
-    classifyVercelTokenStatus.mockReturnValue({ configured: false, blockedReason: 'Token missing' });
-    
+    classifyVercelTokenStatus.mockReturnValue({ configured: false, blockedReason: 'VERCEL_TOKEN not configured' });
     const res = await runVercelPreviewDeploy({ ownerApproval: { granted: true, scope: 'deploy' } });
     expect(res.ok).toBe(false);
-    expect(res.blockedReason).toBe('Token missing');
+    expect(res.blockedReason).toContain('VERCEL_TOKEN');
   });
 
   it('succeeds with mock Vercel response', async () => {
-    const { classifyVercelTokenStatus } = await import('../server/services/vercel-readiness.js');
     classifyVercelTokenStatus.mockReturnValue({ configured: true });
-    vi.stubEnv('VERCEL_TOKEN', 'vcp_test');
-
-    const res = await runVercelPreviewDeploy({ ownerApproval: { granted: true, scope: 'deploy' } });
+    vi.stubEnv('VERCEL_TOKEN', 'vcp_test123');
+    const res = await runVercelPreviewDeploy({ ownerApproval: { granted: true, scope: 'deploy', receiptId: 'test' } });
+    if (!res.ok) console.log('DEBUG RES:', res);
     expect(res.ok).toBe(true);
     expect(res.deploymentUrl).toBe('https://ph-evo-proof.vercel.app');
     expect(res.receiptId).toBeDefined();

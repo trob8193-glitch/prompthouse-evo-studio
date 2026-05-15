@@ -13,6 +13,7 @@ import { registerVercelStatusRoutes } from './vercel-status.routes.js';
 import { registerVercelPreviewDeployRoutes } from './vercel-preview-deploy.routes.js';
 import { registerStripeTestCheckoutRoutes } from './stripe-test-checkout.routes.js';
 import { registerDeploymentReceiptRoutes } from './deployment-receipt-verifier.routes.js';
+import { registerHandoverRoutes } from './handover.routes.js';
 
 export function registerCoreRoutes(app, context) {
   const summary = {
@@ -46,6 +47,7 @@ export function registerCoreRoutes(app, context) {
   attemptRegistration('vercel-preview-deploy', registerVercelPreviewDeployRoutes);
   attemptRegistration('stripe-test-checkout', registerStripeTestCheckoutRoutes);
   attemptRegistration('deployment-receipt-verifier', registerDeploymentReceiptRoutes);
+  attemptRegistration('handover', registerHandoverRoutes);
 
   if (context.routeRegistry) {
     summary.routes = context.routeRegistry.routes;

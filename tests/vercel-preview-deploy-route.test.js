@@ -2,15 +2,13 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { registerVercelPreviewDeployRoutes } from '../server/routes/vercel-preview-deploy.routes.js';
 import { TRUTH_STATES } from '../server/services/truth-labels.js';
 
-// Mock security gates middleware
-vi.mock('../server/middleware/security-gates.js', () => ({
-  requireDeployApproval: (req, res, next) => {
-    const approval = req.body?.ownerApproval;
-    if (approval?.granted && approval?.scope === 'deploy') {
-      next(); // Approved
-    } else {
-      res.status(403).json({ ok: false, error: 'Unauthorized', truthState: TRUTH_STATES.NEEDS_OWNER_APPROVAL });
+// Mock owner approval service instead of middleware so the real middleware passes
+vi.mock('../server/services/owner-approval-service.js', () => ({
+  validateOwnerApproval: (envelope, requiredScope) => {
+    if (envelope?.granted && envelope?.scope === requiredScope) {
+      return { valid: true };
     }
+    return { valid: false, reason: 'Invalid test envelope' };
   }
 }));
 
