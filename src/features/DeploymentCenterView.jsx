@@ -3,6 +3,7 @@ import { Rocket } from 'lucide-react';
 import DeploymentReadinessPanel from '../components/DeploymentReadinessPanel.jsx';
 import DeploymentReceiptsPanel from '../components/DeploymentReceiptsPanel.jsx';
 import DeploymentControlPanel from '../components/DeploymentControlPanel.jsx';
+import EnvironmentStatusPanel from '../components/EnvironmentStatusPanel.jsx';
 
 /**
  * PH EVO STUDIO — DEPLOYMENT CENTER VIEW
@@ -43,6 +44,7 @@ export default function DeploymentCenterView() {
           <DeploymentReceiptsPanel />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <EnvironmentStatusPanel />
           <DeploymentControlPanel />
         </div>
       </div>

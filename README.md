@@ -285,4 +285,54 @@ All deployment attempts (successful, blocked, or failed) are logged to `.prompth
 - No `PROVEN` truth state without real provider response
 - No production deploy unless `DEPLOY_ALLOW_PRODUCTION=true`
 
+## Local Production Simulation
+
+The local production simulation validates that the studio can run in a production-like
+mode using real local environment configuration without performing live deployment or
+fake provider execution.
+
+### What it does
+
+- Runs the complete verification pipeline (syntax, imports, CSS, tests, build)
+- Generates proof reports and deployment readiness reports
+- Validates environment configuration without exposing secrets
+- Confirms production deploy is correctly blocked when `DEPLOY_ALLOW_PRODUCTION=false`
+- Produces `.prompthouse-data/local-production-sim-report.json` and `.md`
+
+### What it does NOT do
+
+- Does NOT deploy to Vercel or any external provider
+- Does NOT run live Stripe billing
+- Does NOT claim production is live
+- Does NOT expose secret values in any report
+
+### Requirements
+
+- `.env` is required locally and must never be committed to git
+- `.env.example` must contain placeholder values only
+- `JWT_SECRET` must be a real random value (minimum 24 characters)
+- `PH_EVO_MASTER_KEY` must be a real random value (minimum 24 characters)
+- `DEPLOY_ALLOW_PRODUCTION=false` keeps production deploy blocked (default and recommended)
+
+### Running the simulation
+
+```bash
+npm run simulate:local-production
+```
+
+This runs all verification commands, generates reports, and outputs a truth state:
+- `LOCAL_ONLY` — All checks passed, production deploy correctly blocked
+- `BLOCKED` — One or more checks failed or production is improperly armed
+- `VERIFIED` — All checks passed (production mode requires additional provider credentials)
+
+### Environment validation
+
+```bash
+# The bridge exposes a read-only env validation endpoint:
+GET /api/environment/validation
+```
+
+This endpoint returns safe configuration status (configured/not, length valid/not)
+without ever exposing raw secret values.
+
 

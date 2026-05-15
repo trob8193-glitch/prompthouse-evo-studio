@@ -4,6 +4,7 @@ import { registerSecurityRoutes } from './security.routes.js';
 import { registerDiagnosticsRoutes } from './diagnostics.routes.js';
 import { registerDeploymentReadinessRoutes } from './deployment-readiness.routes.js';
 import { registerDeployActionRoutes } from './deploy-action.routes.js';
+import { registerEnvValidationRoutes } from './env-validation.routes.js';
 
 export function registerCoreRoutes(app, context) {
   const summary = {
@@ -28,6 +29,7 @@ export function registerCoreRoutes(app, context) {
   attemptRegistration('diagnostics', registerDiagnosticsRoutes);
   attemptRegistration('deployment-readiness', registerDeploymentReadinessRoutes);
   attemptRegistration('deploy-action', registerDeployActionRoutes);
+  attemptRegistration('env-validation', registerEnvValidationRoutes);
 
   if (context.routeRegistry) {
     summary.routes = context.routeRegistry.routes;

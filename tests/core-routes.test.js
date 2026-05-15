@@ -30,7 +30,7 @@ describe('Core Routes Registration', () => {
     const context = { routeRegistry: createRouteRegistry() };
     const summary = registerCoreRoutes(app, context);
 
-    expect(summary.failedModules.length).toBe(6);
+    expect(summary.failedModules.length).toBe(7);
     expect(summary.registeredModules).toHaveLength(0);
     expect(summary.failedModules[0].error).toBe('Intentional Failure');
   });
