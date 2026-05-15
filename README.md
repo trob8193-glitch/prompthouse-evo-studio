@@ -335,4 +335,21 @@ GET /api/environment/validation
 This endpoint returns safe configuration status (configured/not, length valid/not)
 without ever exposing raw secret values.
 
+## Provider Credential Wiring
+
+Provider keys (OpenAI, Gemini, Stripe, Vercel) are completely optional until you attempt to execute real provider actions. 
+
+If you do not have these keys configured locally, the studio will run perfectly but indicate a `PROVIDER_GATED` truth state for certain operations. This means the feature works, but the network request is deliberately blocked pending credentials.
+
+**Security Rules for Providers:**
+- **Never paste secrets into chat.** The AI will never ask for them.
+- Secrets belong strictly in your local `.env` or your hosting provider's environment variables.
+- **Never commit `.env`.**
+
+To safely check what provider keys you have configured without exposing their values, run:
+```bash
+npm run deployment:readiness
+npm run simulate:local-production
+```
+
 
