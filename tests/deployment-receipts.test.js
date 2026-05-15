@@ -1,16 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import fs from 'node:fs';
+import * as fs from 'node:fs';
 
-vi.mock('node:fs', () => ({
-  default: {
+vi.mock('node:fs', () => {
+  const m = {
     existsSync: vi.fn(),
     readFileSync: vi.fn(),
     writeFileSync: vi.fn(),
     mkdirSync: vi.fn(),
-  },
-}));
+  };
+  return {
+    ...m,
+    default: m,
+  };
+});
+
 
 const { existsSync, readFileSync, writeFileSync } = fs;
+
 
 vi.mock('crypto', () => ({
   default: {

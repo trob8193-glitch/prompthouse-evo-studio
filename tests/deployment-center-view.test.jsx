@@ -34,6 +34,10 @@ vi.mock('../src/components/BrowserPreviewVerificationPanel.jsx', () => ({
   default: () => <div data-testid="mock-browser-verification" />
 }));
 
+vi.mock('../src/components/PreviewAccessDecisionPanel.jsx', () => ({
+  PreviewAccessDecisionPanel: () => <div data-testid="mock-preview-access" />
+}));
+
 import DeploymentCenterView from '../src/features/DeploymentCenterView.jsx';
 import { requestVercelPreviewDeploy } from '../src/services/deployment-client.js';
 

@@ -11,6 +11,7 @@ import VercelPreviewDeployPanel from '../components/VercelPreviewDeployPanel.jsx
 import StripeTestCheckoutPanel from '../components/StripeTestCheckoutPanel.jsx';
 import BrowserPreviewVerificationPanel from '../components/BrowserPreviewVerificationPanel.jsx';
 import HandoverStatusPanel from '../components/HandoverStatusPanel.jsx';
+import { PreviewAccessDecisionPanel } from '../components/PreviewAccessDecisionPanel.jsx';
 
 /**
  * PH EVO STUDIO — DEPLOYMENT CENTER VIEW
@@ -48,6 +49,7 @@ export default function DeploymentCenterView() {
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <HandoverStatusPanel />
+          <PreviewAccessDecisionPanel />
           <DeploymentReadinessPanel />
           <BrowserPreviewVerificationPanel />
           <DeploymentReceiptsPanel />

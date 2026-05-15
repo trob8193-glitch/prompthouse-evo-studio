@@ -27,6 +27,10 @@ vi.mock('../src/components/StripeTestCheckoutPanel.jsx', () => ({
   default: () => <div data-testid="mock-stripe-checkout" />
 }));
 
+vi.mock('../src/components/PreviewAccessDecisionPanel.jsx', () => ({
+  PreviewAccessDecisionPanel: () => <div data-testid="mock-preview-access" />
+}));
+
 describe('ProofCenterView', () => {
   beforeEach(() => {
     vi.resetAllMocks();
