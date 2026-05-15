@@ -36,7 +36,8 @@
     "preview:smoke": "node scripts/preview-smoke-check.mjs",
     "handover:report": "node scripts/generate-handover-report.mjs",
     "docs:warnings": "node scripts/markdown-warning-report.mjs",
-    "backend:routes": "node scripts/print-backend-routes.mjs"
+    "backend:routes": "node scripts/print-backend-routes.mjs",
+    "stripe:test-checkout-report": "node scripts/stripe-test-checkout-report.mjs"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

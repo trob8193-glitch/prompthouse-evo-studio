@@ -10,7 +10,9 @@ import RouteDiagnosticsPanel from '../components/RouteDiagnosticsPanel.jsx';
 import OwnerApprovalPanel from '../components/OwnerApprovalPanel.jsx';
 import HandoverStatusPanel from '../components/HandoverStatusPanel.jsx';
 import { PreviewAccessDecisionPanel } from '../components/PreviewAccessDecisionPanel.jsx';
+import StripeCheckoutBrowserVerificationPanel from '../components/StripeCheckoutBrowserVerificationPanel.jsx';
 import { OWNER_APPROVAL_SCOPES } from '../services/owner-approval-client.js';
+
 
 /**
  * PH EVO STUDIO — PROOF CENTER VIEW
@@ -49,7 +51,9 @@ export function ProofCenterView() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <HandoverStatusPanel />
           <PreviewAccessDecisionPanel />
+          <StripeCheckoutBrowserVerificationPanel />
           <RouteDiagnosticsPanel />
+
           <SecurityAuditPanel />
         </div>
 

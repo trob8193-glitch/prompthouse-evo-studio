@@ -14,6 +14,8 @@ import { registerVercelPreviewDeployRoutes } from './vercel-preview-deploy.route
 import { registerStripeTestCheckoutRoutes } from './stripe-test-checkout.routes.js';
 import { registerDeploymentReceiptRoutes } from './deployment-receipt-verifier.routes.js';
 import { registerHandoverRoutes } from './handover.routes.js';
+import { registerStripeCheckoutBrowserRunRoutes } from './stripe-checkout-browser-run.routes.js';
+
 
 export function registerCoreRoutes(app, context) {
   const summary = {
@@ -48,6 +50,8 @@ export function registerCoreRoutes(app, context) {
   attemptRegistration('stripe-test-checkout', registerStripeTestCheckoutRoutes);
   attemptRegistration('deployment-receipt-verifier', registerDeploymentReceiptRoutes);
   attemptRegistration('handover', registerHandoverRoutes);
+  attemptRegistration('stripe-checkout-browser-run', registerStripeCheckoutBrowserRunRoutes);
+
 
   if (context.routeRegistry) {
     summary.routes = context.routeRegistry.routes;
