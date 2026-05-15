@@ -363,4 +363,15 @@ PromptHouse Evo Studio implements a safe test-mode execution rail for Stripe.
 - If the Stripe key is missing, the studio will continue to function normally with a `PROVIDER_GATED` status for commerce-dependent actions.
 - Billing is not considered production-live until the explicit explicit production phase with `DEPLOY_ALLOW_PRODUCTION=true`.
 
+## AI Provider Proof Rail
+
+PromptHouse Evo Studio implements a secure AI provider verification layer for OpenAI and Gemini.
+
+- AI providers are provider-gated (`PROVIDER_GATED`) until keys are detected in the environment.
+- Keys belong safely in `.env` locally or in the remote hosting environment.
+- Providing keys does not automatically run generative queries. 
+- Provider success is not claimed until an explicitly owner-approved network probe creates a verified receipt.
+- Probes require explicit owner approval and perform a minimally scoped transaction to confirm connectivity.
+- No autonomous token spending loop is run by default.
+
 

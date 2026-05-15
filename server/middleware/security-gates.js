@@ -81,6 +81,22 @@ export function requireCommerceApproval(req, res, next) {
 }
 
 /**
+ * Requires owner approval for provider probes.
+ */
+export function requireProviderProbeApproval(req, res, next) {
+  const approval = req.body?.ownerApproval;
+  const result = validateOwnerApproval(approval, 'provider_probe');
+  if (!result.valid) {
+    return res.status(403).json(buildSecurityBlockResponse(
+      TRUTH_STATES.NEEDS_OWNER_APPROVAL,
+      result.error,
+      { scope: 'provider_probe', ownerApproval: true }
+    ));
+  }
+  return next();
+}
+
+/**
  * Requires owner approval for self-implementation mutations
  * (applyFixes === true). Verification-only mode passes through.
  */

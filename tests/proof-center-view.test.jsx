@@ -15,6 +15,14 @@ vi.mock('../src/components/RouteDiagnosticsPanel.jsx', () => ({
   default: () => <div data-testid="mock-route-diagnostics" />
 }));
 
+vi.mock('../src/components/StripeProofPanel.jsx', () => ({
+  default: () => <div data-testid="mock-stripe-proof" />
+}));
+
+vi.mock('../src/components/ProviderCredentialChecklistPanel.jsx', () => ({
+  default: () => <div data-testid="mock-provider-credential" />
+}));
+
 describe('ProofCenterView', () => {
   beforeEach(() => {
     vi.resetAllMocks();

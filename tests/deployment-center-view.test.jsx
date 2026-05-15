@@ -13,8 +13,13 @@ vi.mock('../src/services/owner-approval-client.js', () => ({
   createOwnerApprovalEnvelope: vi.fn().mockReturnValue({ ownerApproval: { granted: true, scope: 'deploy', receiptId: 'test', grantedAt: '2026-05-14T00:00:00Z', actor: 'studio_owner' } }),
 }));
 
+beforeEach(() => {
+  vi.resetModules();
+  vi.clearAllMocks();
+});
+
 vi.mock('../src/config/bridge-config.js', () => ({
-  safeFetchBridge: vi.fn(),
+  safeFetchBridge: vi.fn().mockResolvedValue({ ok: true, data: {} }),
 }));
 
 import DeploymentCenterView from '../src/features/DeploymentCenterView.jsx';
