@@ -11,3 +11,8 @@ export * from './RollbackEngine.js';
 export * from './EvolutionReceiptLedger.js';
 export * from './EvolutionMemory.js';
 export * from './EvolutionOrchestrator.js';
+export * from './EvolutionDaemonSettings.js';
+export * from './AutonomousObjectiveSelector.js';
+export * from './EvolutionApprovalQueue.js';
+export * from './EvolutionKillSwitch.js';
+export * from './AutonomousEvolutionDaemon.js';
