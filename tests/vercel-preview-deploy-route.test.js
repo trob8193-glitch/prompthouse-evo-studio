@@ -14,9 +14,28 @@ vi.mock('../server/middleware/security-gates.js', () => ({
   }
 }));
 
+// Mock node-fetch
+vi.mock('node-fetch', () => ({
+  default: vi.fn().mockResolvedValue({
+    ok: true,
+    json: async () => ({ id: 'dpl_123', url: 'ph-evo-proof.vercel.app', inspectorUrl: 'https://vercel.com/inspect' })
+  })
+}));
+
 // Mock deployment receipts
 vi.mock('../server/services/deployment-receipts.js', () => ({
   createDeploymentReceipt: vi.fn().mockReturnValue({ id: 'mock-receipt-123' })
+}));
+
+// Mock vercel-preview-runner
+vi.mock('../server/services/vercel-preview-runner.js', () => ({
+  runVercelPreviewDeploy: vi.fn().mockResolvedValue({
+    ok: true,
+    truthState: 'VERIFIED',
+    deploymentId: 'dpl_123',
+    deploymentUrl: 'https://ph-evo-proof.vercel.app',
+    receiptId: 'mock-receipt-123'
+  })
 }));
 
 describe('Vercel Preview Deploy Route', () => {
@@ -61,22 +80,29 @@ describe('Vercel Preview Deploy Route', () => {
   });
 
   it('blocks with missing VERCEL_TOKEN', async () => {
-    vi.stubEnv('VERCEL_TOKEN', '');
+    const { runVercelPreviewDeploy } = await import('../server/services/vercel-preview-runner.js');
+    runVercelPreviewDeploy.mockResolvedValueOnce({
+      ok: false,
+      truthState: TRUTH_STATES.NEEDS_CREDENTIALS,
+      blockedReason: 'Token missing',
+      receiptId: 'rcpt_123'
+    });
+
     const req = { body: { ownerApproval: { granted: true, scope: 'deploy' } } };
     const res = await invokeRoute('POST', '/api/vercel/preview-deploy', req);
     expect(res.statusCode).toBe(400);
     expect(res.body.truthState).toBe(TRUTH_STATES.NEEDS_CREDENTIALS);
   });
 
-  it('returns PROVIDER_GATED because real API call is not yet wired in this phase', async () => {
+  it('returns VERIFIED on successful Vercel API call', async () => {
     vi.stubEnv('VERCEL_TOKEN', 'token-present');
     const req = { body: { ownerApproval: { granted: true, scope: 'deploy' } } };
     const res = await invokeRoute('POST', '/api/vercel/preview-deploy', req);
     
-    // In Phase 13A, we don't have the Vercel Adapter, so it should honestly report PROVIDER_GATED
     expect(res.statusCode).toBe(200);
-    expect(res.body.ok).toBe(false);
-    expect(res.body.truthState).toBe(TRUTH_STATES.PROVIDER_GATED);
+    expect(res.body.ok).toBe(true);
+    expect(res.body.truthState).toBe(TRUTH_STATES.VERIFIED);
+    expect(res.body.deploymentUrl).toBe('https://ph-evo-proof.vercel.app');
     expect(res.body.receiptId).toBe('mock-receipt-123');
   });
 });

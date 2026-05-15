@@ -26,6 +26,14 @@ vi.mock('../src/components/VercelPreviewDeployPanel.jsx', () => ({
   default: () => <div data-testid="mock-vercel-preview" />
 }));
 
+vi.mock('../src/components/StripeTestCheckoutPanel.jsx', () => ({
+  default: () => <div data-testid="mock-stripe-checkout" />
+}));
+
+vi.mock('../src/components/BrowserPreviewVerificationPanel.jsx', () => ({
+  default: () => <div data-testid="mock-browser-verification" />
+}));
+
 import DeploymentCenterView from '../src/features/DeploymentCenterView.jsx';
 import { requestVercelPreviewDeploy } from '../src/services/deployment-client.js';
 

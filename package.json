@@ -33,6 +33,7 @@
     "proof:report": "node scripts/generate-proof-report.mjs",
     "deployment:readiness": "node scripts/deployment-readiness-report.mjs",
     "simulate:local-production": "node scripts/local-production-sim.mjs",
+    "preview:smoke": "node scripts/preview-smoke-check.mjs",
     "backend:routes": "node scripts/print-backend-routes.mjs"
   },
   "dependencies": {

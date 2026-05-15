@@ -8,6 +8,8 @@ import ProviderCredentialChecklistPanel from '../components/ProviderCredentialCh
 import StripeProofPanel from '../components/StripeProofPanel.jsx';
 import AiProviderProofPanel from '../components/AiProviderProofPanel.jsx';
 import VercelPreviewDeployPanel from '../components/VercelPreviewDeployPanel.jsx';
+import StripeTestCheckoutPanel from '../components/StripeTestCheckoutPanel.jsx';
+import BrowserPreviewVerificationPanel from '../components/BrowserPreviewVerificationPanel.jsx';
 
 /**
  * PH EVO STUDIO — DEPLOYMENT CENTER VIEW
@@ -45,12 +47,14 @@ export default function DeploymentCenterView() {
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <DeploymentReadinessPanel />
+          <BrowserPreviewVerificationPanel />
           <DeploymentReceiptsPanel />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <EnvironmentStatusPanel />
           <ProviderCredentialChecklistPanel />
           <StripeProofPanel />
+          <StripeTestCheckoutPanel />
           <AiProviderProofPanel />
           <VercelPreviewDeployPanel />
           <DeploymentControlPanel />

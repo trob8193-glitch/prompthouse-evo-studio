@@ -1,22 +1,16 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import fs from 'node:fs';
 
-vi.mock('fs', () => {
-  const fsMock = {
+vi.mock('node:fs', () => ({
+  default: {
     existsSync: vi.fn(),
     readFileSync: vi.fn(),
     writeFileSync: vi.fn(),
     mkdirSync: vi.fn(),
-  };
-  return { ...fsMock, default: fsMock };
-});
+  },
+}));
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
-
-beforeEach(() => {
-  vi.clearAllMocks();
-  existsSync.mockReturnValue(false);
-  readFileSync.mockReturnValue('');
-});
+const { existsSync, readFileSync, writeFileSync } = fs;
 
 vi.mock('crypto', () => ({
   default: {

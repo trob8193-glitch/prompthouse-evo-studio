@@ -4,6 +4,7 @@ import ProviderStatusPanel from '../components/ProviderStatusPanel.jsx';
 import ProviderCredentialChecklistPanel from '../components/ProviderCredentialChecklistPanel.jsx';
 import StripeProofPanel from '../components/StripeProofPanel.jsx';
 import AiProviderProofPanel from '../components/AiProviderProofPanel.jsx';
+import StripeTestCheckoutPanel from '../components/StripeTestCheckoutPanel.jsx';
 import SecurityAuditPanel from '../components/SecurityAuditPanel.jsx';
 import RouteDiagnosticsPanel from '../components/RouteDiagnosticsPanel.jsx';
 import OwnerApprovalPanel from '../components/OwnerApprovalPanel.jsx';
@@ -52,6 +53,7 @@ export function ProofCenterView() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <ProviderCredentialChecklistPanel />
           <StripeProofPanel />
+          <StripeTestCheckoutPanel />
           <AiProviderProofPanel />
           <ProviderStatusPanel />
 

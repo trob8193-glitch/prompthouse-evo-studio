@@ -4,7 +4,7 @@
  * Append-only JSONL receipt log for deployment actions.
  * Never stores secrets. Blocked attempts create blocked receipts.
  */
-import fs from 'fs';
+import fs from 'node:fs';
 import { join } from 'path';
 import crypto from 'crypto';
 

@@ -1,10 +1,16 @@
 import { TRUTH_STATES } from '../services/truth-labels.js';
 import { createRegisteredRouteMiddleware } from '../route-registry.js';
 import { SECURITY_ACTION_TYPES as S } from '../services/security-classifier.js';
-import { createDeploymentReceipt } from '../services/deployment-receipts.js';
 import { requireDeployApproval } from '../middleware/security-gates.js';
-import { classifyVercelTokenStatus } from '../services/vercel-readiness.js';
+import { runVercelPreviewDeploy } from '../services/vercel-preview-runner.js';
 
+/**
+ * PH EVO STUDIO — VERCEL PREVIEW DEPLOY ROUTES
+ * ═══════════════════════════════════════════════════════════════
+ * POST /api/vercel/preview-deploy
+ * Requires ownerApproval (scope: deploy).
+ * No production deploy allowed.
+ */
 export function registerVercelPreviewDeployRoutes(app, context) {
   const { routeRegistry } = context;
 
@@ -18,34 +24,27 @@ export function registerVercelPreviewDeployRoutes(app, context) {
     }),
     requireDeployApproval, // Hard gate requiring Owner Approval
     async (req, res) => {
-      const status = classifyVercelTokenStatus();
-      const approval = req.body?.ownerApproval;
+      try {
+        const { ownerApproval } = req.body || {};
+        
+        // Execute the preview deployment
+        const result = await runVercelPreviewDeploy({ ownerApproval });
 
-      if (!status.configured) {
-        const receipt = createDeploymentReceipt({
-          action: 'preview_deploy', provider: 'vercel', status: 'blocked',
-          truthState: TRUTH_STATES.NEEDS_CREDENTIALS,
-          request: { action: 'preview_deploy', approvalReceiptId: approval?.receiptId },
-          message: status.blockedReason,
+        if (result.ok) {
+          res.json(result);
+        } else {
+          // Status 400 for blocked/bad request, 500 for actual errors
+          const statusCode = result.truthState === TRUTH_STATES.ERROR ? 500 : 400;
+          res.status(statusCode).json(result);
+        }
+      } catch (error) {
+        res.status(500).json({ 
+          ok: false, 
+          truthState: TRUTH_STATES.ERROR, 
+          error: error.message,
+          message: 'Internal server error during preview deployment request.'
         });
-        return res.status(400).json({ ok: false, truthState: TRUTH_STATES.NEEDS_CREDENTIALS, error: status.blockedReason, receiptId: receipt.id });
       }
-
-      // We do not have a full Vercel Adapter in this phase.
-      // We must return honestly PROVIDER_GATED without claiming fake success.
-      const receipt = createDeploymentReceipt({
-        action: 'preview_deploy', provider: 'vercel', status: 'blocked',
-        truthState: TRUTH_STATES.PROVIDER_GATED,
-        request: { action: 'preview_deploy', approvalReceiptId: approval?.receiptId },
-        message: 'Vercel API calls are safely disabled during this phase. Provider integration is incomplete.',
-      });
-
-      return res.json({
-        ok: false,
-        truthState: TRUTH_STATES.PROVIDER_GATED,
-        message: 'Vercel preview deploy is provider-gated. Owner approval is valid and token is configured, but the real Vercel API call is disabled for this test phase.',
-        receiptId: receipt.id,
-      });
     }
   );
 }

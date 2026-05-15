@@ -23,6 +23,10 @@ vi.mock('../src/components/ProviderCredentialChecklistPanel.jsx', () => ({
   default: () => <div data-testid="mock-provider-credential" />
 }));
 
+vi.mock('../src/components/StripeTestCheckoutPanel.jsx', () => ({
+  default: () => <div data-testid="mock-stripe-checkout" />
+}));
+
 describe('ProofCenterView', () => {
   beforeEach(() => {
     vi.resetAllMocks();

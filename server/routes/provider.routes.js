@@ -1,6 +1,6 @@
 import { TRUTH_STATES } from '../services/truth-labels.js';
 import { getProviderGateStatus } from '../services/provider-gates.js';
-import { getReceiptsByProvider } from '../services/provider-receipts.js';
+import { listProviderReceipts } from '../services/provider-receipts.js';
 import { createRegisteredRouteMiddleware } from '../route-registry.js';
 import { SECURITY_ACTION_TYPES as S } from '../services/security-classifier.js';
 
@@ -52,7 +52,10 @@ export function registerProviderRoutes(app, context) {
     async (req, res) => {
       const { provider } = req.query;
       try {
-        const receipts = provider ? await getReceiptsByProvider(provider) : [];
+        let receipts = listProviderReceipts(50);
+        if (provider) {
+          receipts = receipts.filter(r => r.provider === provider);
+        }
         res.json({ ok: true, receipts });
       } catch (err) {
         res.status(500).json({ ok: false, error: err.message });
