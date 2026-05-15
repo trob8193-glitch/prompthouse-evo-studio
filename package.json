@@ -17,7 +17,12 @@
     "ai:pack": "node scripts/ai_context_pack.mjs",
     "ai:review": "node scripts/ai_review_openai.mjs",
     "ai:train": "node scripts/ai_self_train.mjs",
-    "ai:loop": "node scripts/ai_loop.mjs"
+    "ai:loop": "node scripts/ai_loop.mjs",
+    "evolve:status": "node scripts/self_evolution_cycle.mjs --status",
+    "evolve:list": "node scripts/self_evolution_cycle.mjs --list",
+    "evolve:propose": "node scripts/self_evolution_cycle.mjs --mode=proposal",
+    "evolve:sandbox": "node scripts/self_evolution_cycle.mjs --mode=sandbox_apply",
+    "evolve:proof": "node scripts/self_evolution_cycle.mjs --mode=proof"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
