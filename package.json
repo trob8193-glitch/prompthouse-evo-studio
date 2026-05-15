@@ -7,7 +7,7 @@
     "dev": "vite",
     "singularity": "concurrently \"npm run dev\" \"cd evogenage && npm run dev -- --port 5174\"",
     "build": "vite build",
-    "test": "vitest run --pool=forks",
+    "test": "vitest run",
     "start": "node promptbridge-server.js",
     "preview": "vite preview",
     "bridge": "node promptbridge-server.js",
