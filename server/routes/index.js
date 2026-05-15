@@ -9,6 +9,8 @@ import { registerProviderCredentialChecklistRoutes } from './provider-credential
 import { registerStripeHealthRoutes } from './stripe-health.routes.js';
 import { registerAiProviderStatusRoutes } from './ai-provider-status.routes.js';
 import { registerAiProviderProbeRoutes } from './ai-provider-probe.routes.js';
+import { registerVercelStatusRoutes } from './vercel-status.routes.js';
+import { registerVercelPreviewDeployRoutes } from './vercel-preview-deploy.routes.js';
 
 export function registerCoreRoutes(app, context) {
   const summary = {
@@ -38,6 +40,8 @@ export function registerCoreRoutes(app, context) {
   attemptRegistration('stripe-health', registerStripeHealthRoutes);
   attemptRegistration('ai-provider-status', registerAiProviderStatusRoutes);
   attemptRegistration('ai-provider-probe', registerAiProviderProbeRoutes);
+  attemptRegistration('vercel-status', registerVercelStatusRoutes);
+  attemptRegistration('vercel-preview-deploy', registerVercelPreviewDeployRoutes);
 
   if (context.routeRegistry) {
     summary.routes = context.routeRegistry.routes;

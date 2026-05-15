@@ -7,6 +7,7 @@ import EnvironmentStatusPanel from '../components/EnvironmentStatusPanel.jsx';
 import ProviderCredentialChecklistPanel from '../components/ProviderCredentialChecklistPanel.jsx';
 import StripeProofPanel from '../components/StripeProofPanel.jsx';
 import AiProviderProofPanel from '../components/AiProviderProofPanel.jsx';
+import VercelPreviewDeployPanel from '../components/VercelPreviewDeployPanel.jsx';
 
 /**
  * PH EVO STUDIO — DEPLOYMENT CENTER VIEW
@@ -51,6 +52,7 @@ export default function DeploymentCenterView() {
           <ProviderCredentialChecklistPanel />
           <StripeProofPanel />
           <AiProviderProofPanel />
+          <VercelPreviewDeployPanel />
           <DeploymentControlPanel />
         </div>
       </div>

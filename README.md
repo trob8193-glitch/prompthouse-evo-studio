@@ -374,4 +374,15 @@ PromptHouse Evo Studio implements a secure AI provider verification layer for Op
 - Probes require explicit owner approval and perform a minimally scoped transaction to confirm connectivity.
 - No autonomous token spending loop is run by default.
 
+## Vercel Preview Deploy Proof Rail
+
+PromptHouse Evo Studio implements a safe Vercel preview deployment proof layer.
+
+- Preview deployments require a configured `VERCEL_TOKEN` in `.env`.
+- Preview deployments require explicit owner approval (scope: `deploy`).
+- Production deployments remain hard-blocked while `DEPLOY_ALLOW_PRODUCTION=false`.
+- Real Vercel API calls are provider-gated during the local proof phase; success is never claimed without a real Vercel deployment URL and ID.
+- Status routes (`GET /api/vercel/status`, `GET /api/vercel/readiness`) are read-only and never expose tokens.
+- The preview deploy route (`POST /api/vercel/preview-deploy`) creates deployment receipts for every attempt (blocked, gated, or success).
+
 

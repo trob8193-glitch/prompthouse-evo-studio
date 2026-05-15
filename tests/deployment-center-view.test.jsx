@@ -22,6 +22,10 @@ vi.mock('../src/config/bridge-config.js', () => ({
   safeFetchBridge: vi.fn().mockResolvedValue({ ok: true, data: {} }),
 }));
 
+vi.mock('../src/components/VercelPreviewDeployPanel.jsx', () => ({
+  default: () => <div data-testid="mock-vercel-preview" />
+}));
+
 import DeploymentCenterView from '../src/features/DeploymentCenterView.jsx';
 import { requestVercelPreviewDeploy } from '../src/services/deployment-client.js';
 

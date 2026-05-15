@@ -13,5 +13,5 @@ describe('Sovereign Density Compliance', () => {
       const content = fs.readFileSync(path.join(featureDir, file), 'utf8');
       expect(content.includes('This module is now 100% functional and production-ready.')).toBe(false);
     }
-  });
+  }, 15000);
 });

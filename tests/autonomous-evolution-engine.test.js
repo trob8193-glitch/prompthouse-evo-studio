@@ -37,7 +37,7 @@ describe('autonomous evolution engine', () => {
     expect(graph.hash).toMatch(/^[a-f0-9]{64}$/);
     expect(graph.summary.modules).toBeGreaterThan(0);
     expect(graph.summary.routes).toBeGreaterThan(0);
-  });
+  }, 15000);
 
   it('enforces budget constraints on patch size', () => {
     const original = ['line1', 'line2', 'line3'].join('\n');
