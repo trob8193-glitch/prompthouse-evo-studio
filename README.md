@@ -352,4 +352,15 @@ npm run deployment:readiness
 npm run simulate:local-production
 ```
 
+## Stripe Test-Mode Billing Proof
+
+PromptHouse Evo Studio implements a safe test-mode execution rail for Stripe.
+
+- Use `STRIPE_SECRET_KEY=sk_test_...`
+- Live billing (`sk_live_`) is explicitly blocked during the local proof phase.
+- Account probes are owner-approval gated to prevent accidental API interaction.
+- Account probes do **not** create charges, customers, or checkout sessions.
+- If the Stripe key is missing, the studio will continue to function normally with a `PROVIDER_GATED` status for commerce-dependent actions.
+- Billing is not considered production-live until the explicit explicit production phase with `DEPLOY_ALLOW_PRODUCTION=true`.
+
 

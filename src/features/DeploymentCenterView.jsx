@@ -5,6 +5,7 @@ import DeploymentReceiptsPanel from '../components/DeploymentReceiptsPanel.jsx';
 import DeploymentControlPanel from '../components/DeploymentControlPanel.jsx';
 import EnvironmentStatusPanel from '../components/EnvironmentStatusPanel.jsx';
 import ProviderCredentialChecklistPanel from '../components/ProviderCredentialChecklistPanel.jsx';
+import StripeProofPanel from '../components/StripeProofPanel.jsx';
 
 /**
  * PH EVO STUDIO — DEPLOYMENT CENTER VIEW
@@ -47,6 +48,7 @@ export default function DeploymentCenterView() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <EnvironmentStatusPanel />
           <ProviderCredentialChecklistPanel />
+          <StripeProofPanel />
           <DeploymentControlPanel />
         </div>
       </div>

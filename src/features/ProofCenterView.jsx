@@ -2,6 +2,7 @@ import React from 'react';
 import { Shield } from 'lucide-react';
 import ProviderStatusPanel from '../components/ProviderStatusPanel.jsx';
 import ProviderCredentialChecklistPanel from '../components/ProviderCredentialChecklistPanel.jsx';
+import StripeProofPanel from '../components/StripeProofPanel.jsx';
 import SecurityAuditPanel from '../components/SecurityAuditPanel.jsx';
 import RouteDiagnosticsPanel from '../components/RouteDiagnosticsPanel.jsx';
 import OwnerApprovalPanel from '../components/OwnerApprovalPanel.jsx';
@@ -49,6 +50,7 @@ export function ProofCenterView() {
         {/* Right Column: Provider & Owner Approvals */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <ProviderCredentialChecklistPanel />
+          <StripeProofPanel />
           <ProviderStatusPanel />
 
           <div style={{

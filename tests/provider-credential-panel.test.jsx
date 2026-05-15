@@ -2,6 +2,11 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
+beforeEach(() => {
+  vi.resetModules();
+  vi.clearAllMocks();
+});
+
 vi.mock('../src/services/provider-credential-client.js', () => ({
   getProviderCredentialChecklist: vi.fn().mockResolvedValue({
     ok: true,

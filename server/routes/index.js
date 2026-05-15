@@ -6,6 +6,7 @@ import { registerDeploymentReadinessRoutes } from './deployment-readiness.routes
 import { registerDeployActionRoutes } from './deploy-action.routes.js';
 import { registerEnvValidationRoutes } from './env-validation.routes.js';
 import { registerProviderCredentialChecklistRoutes } from './provider-credential-checklist.routes.js';
+import { registerStripeHealthRoutes } from './stripe-health.routes.js';
 
 export function registerCoreRoutes(app, context) {
   const summary = {
@@ -32,6 +33,7 @@ export function registerCoreRoutes(app, context) {
   attemptRegistration('deploy-action', registerDeployActionRoutes);
   attemptRegistration('env-validation', registerEnvValidationRoutes);
   attemptRegistration('provider-credential-checklist', registerProviderCredentialChecklistRoutes);
+  attemptRegistration('stripe-health', registerStripeHealthRoutes);
 
   if (context.routeRegistry) {
     summary.routes = context.routeRegistry.routes;
