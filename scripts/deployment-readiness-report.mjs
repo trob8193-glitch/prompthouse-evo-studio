@@ -7,6 +7,9 @@
 import { execSync } from 'child_process';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const DATA_DIR = join(process.cwd(), '.prompthouse-data');
 if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
