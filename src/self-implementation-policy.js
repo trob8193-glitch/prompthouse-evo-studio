@@ -5,18 +5,11 @@ import { Log } from './core/autonomy/SovereignLogger.js';
  * PH EVO STUDIO — SELF-IMPLEMENTATION-POLICY (PRODUCTION GRADE)
  * ═══════════════════════════════════════════════════════════════
  * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
+ * Operational status is determined by live audits and proof receipts.
  */
 
 
-            param($match)
-            $parts = $match.Value.Split("-")
-            $res = $parts[0]
-            for ($i = 1; $i -lt $parts.Length; $i++) {
-                $res += $parts[$i].Substring(0,1).ToUpper() + $parts[$i].Substring(1)
-            }
-            $res
-         {
+export class SelfImplementationPolicy {
   constructor() {
     this.status = 'OMNIPOTENT';
     this.iq_baseline = 165.0;
@@ -36,4 +29,43 @@ import { Log } from './core/autonomy/SovereignLogger.js';
       resonance: 0.99 
     };
   }
+}
+
+export function resolveSelfImplementationCapabilities(params = {}) {
+  const { availableFiles = [], availableEndpoints = [], env = {} } = params;
+  
+  const capabilities = [
+    { id: 'self_maintenance', status: 'gated' },
+    { id: 'autonomous_builder', status: 'gated' },
+    { id: 'production_deploy', status: 'gated' },
+    { id: 'live_commerce', status: 'gated' }
+  ];
+
+  if (availableFiles.includes('promptbridge-server.js') || availableFiles.includes('src/nightforge.js')) {
+    capabilities.find(c => c.id === 'self_maintenance').status = 'active';
+  }
+  if (availableFiles.includes('src/autonomous-builder.js') || availableEndpoints.includes('POST /build')) {
+    capabilities.find(c => c.id === 'autonomous_builder').status = 'active';
+  }
+
+  return capabilities;
+}
+
+export function createSelfImplementationState({ capabilities = [] } = {}) {
+  return {
+    active: true,
+    policies: {
+      noDelete: true,
+      proofRequiredForCompleteClaim: true
+    },
+    summary: {
+      total: capabilities.length
+    }
+  };
+}
+
+export function summarizeSelfImplementationCapabilities(capabilities = []) {
+  return {
+    total: capabilities.length
+  };
 }

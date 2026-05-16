@@ -3,7 +3,7 @@
 import { promises as fs } from 'fs';
 import fetch from 'node-fetch';
 
-const LOCAL_BRIDGE_URL = 'http://localhost:3001';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 const SCOPE_FILE = './scope_permissions.json';
 
 class ScopeManager {

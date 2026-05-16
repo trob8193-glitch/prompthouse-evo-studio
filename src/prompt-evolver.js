@@ -5,7 +5,8 @@
  * No fake logic. Real experiments with real statistical evaluation.
  */
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
+import { universalSend } from './lib/universal-transport.js';
 
 /**
  * Given a weak pattern and its AI analysis, generate an improved 6-layer prompt stack.
@@ -41,13 +42,8 @@ Respond in strict JSON:
 }`;
 
   try {
-    const res = await fetch(`${BRIDGE}/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
-    });
-    const data = await res.json();
-    const raw = data.message || '';
+    const res = await universalSend([{ role: 'user', content: prompt }]);
+    const raw = res.message || '';
     const cleaned = raw.replace(/```json\n?|```/g, '').trim();
     const stack = JSON.parse(cleaned);
 

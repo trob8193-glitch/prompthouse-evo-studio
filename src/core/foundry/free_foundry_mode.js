@@ -1,31 +1,33 @@
+const BASE_URL = 'http://127.0.0.1:3001';
 
-import { Log } from '../autonomy/SovereignLogger.js';
+class FreeFoundryMode {
+  async train(params = {}) {
+    const response = await fetch(`${BASE_URL}/train`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params)
+    });
 
-/**
- * PH EVO STUDIO — FREEFOUNDRYMODE (PRODUCTION GRADE)
- * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
- */
+    if (!response.ok) {
+      throw new Error(`Train request failed: ${response.status}`);
+    }
 
-export class FreeFoundryMode {
-  constructor() {
-    this.status = 'OMNIPOTENT';
-    this.iq_baseline = 165.0;
+    return response.json();
   }
 
-  async execute(params = {}) {
-    Log.info('🚀 [FreeFoundryMode] Executing production logic...');
-    // Absolute production logic implementation
-    return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
-  }
+  async infer(params = {}) {
+    const response = await fetch(`${BASE_URL}/infer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params)
+    });
 
-  getStatus() {
-    return { 
-      id: 'free_foundry_mode', 
-      grade: 'S+++++', 
-      state: 'VERIFIED',
-      resonance: 0.99 
-    };
+    if (!response.ok) {
+      throw new Error(`Infer request failed: ${response.status}`);
+    }
+
+    return response.json();
   }
 }
+
+export default new FreeFoundryMode();

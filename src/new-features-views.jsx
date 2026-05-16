@@ -7,9 +7,39 @@ import {
 } from 'lucide-react';
 import { Card, Button, StatusBadge, IconButton } from './components/primitives.jsx';
 
-const BRIDGE = 'http://localhost:3001';
+
+const BRIDGE = 'http://127.0.0.1:3001';
 
 export function VectorMemoryView() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'VectorMemory',
+            action: 'get',
+            payload: {}
+          })
+        });
+        const responseData = await response.json();
+        if (responseData.success) {
+          setData(responseData.result);
+        }
+      } catch (e) {
+        console.error('Failed to load vector memory data:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
   return (
     <div className="space-y-8">
       <Card className="p-10 bg-gradient-to-br from-indigo-950/20 to-black/40">
@@ -24,9 +54,18 @@ export function VectorMemoryView() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatMini label="Dimensions" value="1,536" />
-          <StatMini label="Stabilized" value="100%" />
-          <StatMini label="Latency" value="0.2ms" />
+          <div className="p-4 bg-black/30 border border-slate-800 rounded-xl">
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Memories</div>
+            <div className="text-xl font-black text-white tracking-tight">{loading ? '...' : data?.memories || 0}</div>
+          </div>
+          <div className="p-4 bg-black/30 border border-slate-800 rounded-xl">
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Dimensions</div>
+            <div className="text-xl font-black text-white tracking-tight">{loading ? '...' : data?.dimensions || 1536}</div>
+          </div>
+          <div className="p-4 bg-black/30 border border-slate-800 rounded-xl">
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Status</div>
+            <div className="text-xl font-black text-white tracking-tight">{loading ? '...' : data?.status || 'IDLE'}</div>
+          </div>
         </div>
 
         <div className="mt-10 p-8 bg-black/40 rounded-3xl border border-slate-800 border-dashed text-center">
@@ -40,6 +79,35 @@ export function VectorMemoryView() {
 }
 
 export function TemporalForesightView() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'TemporalForesight',
+            action: 'get',
+            payload: {}
+          })
+        });
+        const responseData = await response.json();
+        if (responseData.success) {
+          setData(responseData.result);
+        }
+      } catch (e) {
+        console.error('Failed to load temporal foresight data:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
   return (
     <div className="space-y-8">
       <Card className="p-10 border-violet-500/30 bg-violet-500/5">
@@ -53,7 +121,7 @@ export function TemporalForesightView() {
               <p className="text-slate-500 font-mono text-xs uppercase tracking-widest">Predictive Anomaly Detection & Drift Prevention</p>
             </div>
           </div>
-          <StatusBadge status="verified" label="SCANNING_TIMELINE" />
+          <StatusBadge status="verified" label={loading ? "SCANNING..." : data?.trend || "STABLE"} />
         </div>
 
         <div className="space-y-4">
@@ -61,8 +129,8 @@ export function TemporalForesightView() {
             <div className="flex items-center gap-4">
               <AlertTriangle className="text-amber-500" size={20} />
               <div>
-                <h4 className="text-white font-bold text-sm">[FORECAST] Dependency Drift Detected</h4>
-                <p className="text-xs text-slate-500">Flutter 4.x transition may break current Navigator logic.</p>
+                <h4 className="text-white font-bold text-sm">[FORECAST] {loading ? 'Analyzing trend...' : data?.forecast || 'No immediate drift detected.'}</h4>
+                <p className="text-xs text-slate-500">Confidence: {loading ? '...' : Math.round((data?.confidence || 0) * 100)}%</p>
               </div>
             </div>
             <Button variant="secondary" size="sm">RESOLVE GAP</Button>
@@ -74,17 +142,49 @@ export function TemporalForesightView() {
 }
 
 export function RecursiveSwarmView() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'RecursiveSwarm',
+            action: 'get',
+            payload: {}
+          })
+        });
+        const responseData = await response.json();
+        if (responseData.success) {
+          setData(responseData.result);
+        }
+      } catch (e) {
+        console.error('Failed to load swarm data:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  const agentCount = data?.agentsPerSwarm || 6;
+  const agents = Array.from({ length: agentCount }, (_, i) => i + 1);
+
   return (
     <div className="space-y-8">
       <header className="flex justify-between items-center">
         <h2 className="text-2xl font-black text-white tracking-tight">Autonomous Team Swarm</h2>
         <div className="flex gap-2">
-          <StatusBadge status="executing" label="6 AGENTS ACTIVE" />
+          <StatusBadge status={data?.status === 'ACTIVE' ? "executing" : "verified"} label={loading ? "LOADING..." : `${data?.activeSwarms || 0} SWARMS ACTIVE`} />
         </div>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[1, 2, 3, 4, 5, 6].map(i => (
+        {agents.map(i => (
           <motion.div key={i} whileHover={{ y: -5 }}>
             <Card className="p-6 bg-slate-900/40 border-slate-800/50 flex items-center gap-4">
               <div className="text-3xl">🤖</div>
@@ -104,6 +204,35 @@ export function RecursiveSwarmView() {
 }
 
 export function EntropyLockView() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'EntropyLock',
+            action: 'get',
+            payload: {}
+          })
+        });
+        const responseData = await response.json();
+        if (responseData.success) {
+          setData(responseData.result);
+        }
+      } catch (e) {
+        console.error('Failed to load entropy lock data:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[400px] text-center space-y-8">
       <motion.div 
@@ -116,10 +245,12 @@ export function EntropyLockView() {
       
       <div className="relative z-10 space-y-6">
         <div className="text-7xl font-black text-white tracking-tighter">∞</div>
-        <h2 className="text-4xl font-black text-white">Logic Inevitability: 100%</h2>
-        <p className="text-slate-500 max-w-md font-medium">Zero-drift state achieved via Recursive Entropy Locking. All hallucinations have been purged from the active context.</p>
+        <h2 className="text-4xl font-black text-white">Logic Inevitability: {loading ? '...' : (data?.inevitability || 0)}%</h2>
+        <p className="text-slate-500 max-w-md font-medium">
+          {loading ? 'Analyzing entropy state...' : data?.message || 'Zero-drift state achieved via Recursive Entropy Locking.'}
+        </p>
         <div className="pt-6">
-          <StatusBadge status="verified" label="ENTROPY_LOCKED" />
+          <StatusBadge status={data?.inevitability === 100 ? "verified" : "executing"} label={loading ? "ANALYZING..." : data?.status || "LOCKED"} />
         </div>
       </div>
     </div>
@@ -127,6 +258,34 @@ export function EntropyLockView() {
 }
 
 export function RealitySynthesisView() {
+  const [prompt, setPrompt] = useState('');
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSynthesize = async () => {
+    if (!prompt) return;
+    setLoading(true);
+    try {
+      const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          module: 'RealitySynthesis',
+          action: 'synthesize',
+          payload: { prompt }
+        })
+      });
+      const responseData = await response.json();
+      if (responseData.success) {
+        setResult(responseData.result);
+      }
+    } catch (e) {
+      console.error('Failed to synthesize reality:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-8">
       <Card className="p-10">
@@ -144,10 +303,24 @@ export function RealitySynthesisView() {
           <div className="field">
             <label className="field-label">Target Visual URL / Identity</label>
             <div className="flex gap-4">
-              <input className="field-input flex-1" placeholder="https://linear.app/ui-clone" />
-              <Button>SYNTHESIZE</Button>
+              <input 
+                className="field-input flex-1" 
+                ghostInput="https://linear.app/ui-clone" 
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+              />
+              <Button onClick={handleSynthesize} disabled={loading}>
+                {loading ? 'SYNTHESIZING...' : 'SYNTHESIZE'}
+              </Button>
             </div>
           </div>
+          
+          {result && (
+            <div className="mt-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+              <div className="text-xs font-bold text-emerald-400 mb-1">Result</div>
+              <p className="text-sm text-white">{result.message}</p>
+            </div>
+          )}
         </div>
       </Card>
     </div>
@@ -155,36 +328,82 @@ export function RealitySynthesisView() {
 }
 
 export function TruthAuditorView() {
+  const [auditResult, setAuditResult] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const runAudit = async () => {
+      setLoading(true);
+      try {
+        const sampleLedger = [
+          { id: '1', asset: 'TruthGate.js', reference: 'origin' },
+          { id: '2', asset: 'engine.js', reference: 'local' },
+          { id: '3', asset: 'ghost.js', reference: '' } // Should trigger hallucination detection
+        ];
+        
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'TruthAuditor',
+            action: 'audit',
+            payload: { ledger: sampleLedger }
+          })
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+          setAuditResult(data.result);
+        } else {
+          console.error('Audit failed:', data.error);
+        }
+      } catch (e) {
+        console.error('Audit failed:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    runAudit();
+  }, []);
+
   return (
     <div className="space-y-8">
       <Card className="p-0 overflow-hidden">
         <div className="p-8 border-b border-slate-800 bg-slate-900/20 flex justify-between items-center">
           <h3 className="text-xs font-black text-white uppercase tracking-widest">Truth Verification Registry</h3>
-          <StatusBadge status="verified" label="AUDIT_PASSED" />
+          {loading ? (
+            <StatusBadge status="executing" label="AUDITING..." />
+          ) : (
+            <StatusBadge status={auditResult?.integrity ? "verified" : "error"} label={auditResult?.integrity ? "AUDIT_PASSED" : "AUDIT_FAILED"} />
+          )}
         </div>
         <div className="p-8">
           <table className="w-full text-left">
             <thead>
               <tr className="text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-800">
                 <th className="pb-4">Logic Asset</th>
-                <th className="pb-4">Source Origin</th>
-                <th className="pb-4">Truth Density</th>
                 <th className="pb-4">Status</th>
+                <th className="pb-4">Integrity</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/50">
               <tr className="group hover:bg-white/5 transition-all">
                 <td className="py-4 font-mono text-xs text-white">TruthGate.js</td>
-                <td className="py-4 text-xs text-slate-500">Sovereign Core</td>
-                <td className="py-4 text-xs text-indigo-400 font-bold">100.0%</td>
                 <td className="py-4"><StatusBadge status="verified" label="SEALED" /></td>
+                <td className="py-4 text-xs text-emerald-400 font-bold">Passed</td>
               </tr>
                <tr className="group hover:bg-white/5 transition-all">
                 <td className="py-4 font-mono text-xs text-white">engine.js</td>
-                <td className="py-4 text-xs text-slate-500">Local FS</td>
-                <td className="py-4 text-xs text-indigo-400 font-bold">98.4%</td>
                 <td className="py-4"><StatusBadge status="verified" label="SIGNED" /></td>
+                <td className="py-4 text-xs text-emerald-400 font-bold">Passed</td>
               </tr>
+              {!loading && auditResult?.hallucinations && (
+                <tr className="group hover:bg-white/5 transition-all">
+                  <td className="py-4 font-mono text-xs text-red-400">ghost.js</td>
+                  <td className="py-4"><StatusBadge status="error" label="HALLUCINATION" /></td>
+                  <td className="py-4 text-xs text-red-400 font-bold">Failed</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -194,6 +413,38 @@ export function TruthAuditorView() {
 }
 
 export function CommandDeckView() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'CommandDeck',
+            action: 'get',
+            payload: {}
+          })
+        });
+        const responseData = await response.json();
+        if (responseData.success) {
+          setData(responseData.result);
+        }
+      } catch (e) {
+        console.error('Failed to load command deck data:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  const missions = data?.missions || [];
+  const allocation = data?.allocation || 0;
+
   return (
     <div className="space-y-8">
       <Card className="p-10">
@@ -209,17 +460,32 @@ export function CommandDeckView() {
           </div>
           <div className="text-right">
              <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Resource Allocation</div>
-             <div className="text-2xl font-black text-white">42%</div>
+             <div className="text-2xl font-black text-white">{loading ? '...' : `${allocation}%`}</div>
           </div>
         </div>
 
         <div className="space-y-4">
           <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-            <motion.div initial={{ width: 0 }} animate={{ width: '42%' }} className="h-full bg-indigo-500" />
+            <motion.div initial={{ width: 0 }} animate={{ width: `${allocation}%` }} className="h-full bg-indigo-500" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-            <MissionPill label="MISSION_ALPHA" status="BUILDING_CORE" />
-            <MissionPill label="MISSION_BETA" status="AUDITING_GENOME" />
+            {loading ? (
+              <div className="text-sm text-slate-500">Loading missions...</div>
+            ) : missions.length === 0 ? (
+              <div className="text-sm text-slate-500">No active missions found.</div>
+            ) : (
+              missions.slice(0, 4).map(mission => (
+                <div key={mission.mission_id} className="p-4 bg-black/30 border border-slate-800 rounded-lg flex justify-between items-center">
+                  <div>
+                    <div className="text-xs font-bold text-white">{mission.title || mission.mission_id}</div>
+                    <div className="text-[10px] text-slate-500 font-mono">{mission.mission_id}</div>
+                  </div>
+                  <span className={`text-[10px] font-black uppercase ${mission.status === 'executed' ? 'text-emerald-400' : 'text-indigo-400'}`}>
+                    {mission.status}
+                  </span>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </Card>
@@ -244,6 +510,37 @@ export function OmegaRealityView() {
 }
 
 export function MergeCourtView() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'MergeCourt',
+            action: 'get',
+            payload: {}
+          })
+        });
+        const responseData = await response.json();
+        if (responseData.success) {
+          setData(responseData.result);
+        }
+      } catch (e) {
+        console.error('Failed to load merge court data:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  const conflicts = data?.conflicts || [];
+
   return (
     <Card className="p-8 border-cyan-500/30 bg-cyan-500/5">
       <div className="flex items-center gap-4 mb-6">
@@ -251,14 +548,61 @@ export function MergeCourtView() {
         <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Merge Court</h3>
       </div>
       <p className="text-slate-500 text-sm mb-6 font-mono">Autonomous conflict resolution for multi-agent logic branches.</p>
-      <div className="p-12 border-2 border-dashed border-cyan-500/10 rounded-3xl text-center text-slate-600 font-mono text-[10px] uppercase tracking-widest">
-        Zero Conflicts Detected in Active Reality
-      </div>
+      {loading ? (
+        <div className="p-12 border-2 border-dashed border-cyan-500/10 rounded-3xl text-center text-slate-600 font-mono text-[10px] uppercase tracking-widest">
+          Analyzing Conflicts...
+        </div>
+      ) : conflicts.length === 0 ? (
+        <div className="p-12 border-2 border-dashed border-cyan-500/10 rounded-3xl text-center text-slate-600 font-mono text-[10px] uppercase tracking-widest">
+          {data?.message || 'Zero Conflicts Detected in Active Reality'}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {conflicts.map((conflict, index) => (
+            <div key={index} className="p-4 bg-black/30 border border-red-500/30 rounded-lg">
+              <div className="text-xs font-bold text-white">{conflict.file}</div>
+              <div className="text-[10px] text-slate-500 font-mono">{conflict.reason}</div>
+            </div>
+          ))}
+        </div>
+      )}
     </Card>
   );
 }
 
 export function PatternMirrorView() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'PatternMirror',
+            action: 'get',
+            payload: {}
+          })
+        });
+        const responseData = await response.json();
+        if (responseData.success) {
+          setData(responseData.result);
+        }
+      } catch (e) {
+        console.error('Failed to load pattern mirror data:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  const patterns = data?.patterns || [];
+  const mirrorState = data?.mirrorState || 'UNKNOWN';
+
   return (
     <Card className="p-8 border-indigo-500/30">
       <div className="flex items-center gap-4 mb-6">
@@ -268,11 +612,19 @@ export function PatternMirrorView() {
       <div className="grid grid-cols-2 gap-4">
         <div className="p-4 bg-white/5 rounded-xl border border-white/5">
           <div className="text-[10px] font-black text-slate-500 mb-2">Detected Patterns</div>
-          <div className="text-indigo-400 font-mono text-xs">RECURSIVE_CALL_LOOP</div>
+          {loading ? (
+            <div className="text-slate-500 font-mono text-xs">Loading...</div>
+          ) : (
+            patterns.map((p, i) => (
+              <div key={i} className="text-indigo-400 font-mono text-xs">{p}</div>
+            ))
+          )}
         </div>
         <div className="p-4 bg-white/5 rounded-xl border border-white/5">
           <div className="text-[10px] font-black text-slate-500 mb-2">Mirror State</div>
-          <div className="text-emerald-400 font-mono text-xs">SYNCHRONIZED</div>
+          <div className={`font-mono text-xs ${mirrorState === 'SYNCHRONIZED' ? 'text-emerald-400' : 'text-slate-400'}`}>
+            {loading ? '...' : mirrorState}
+          </div>
         </div>
       </div>
     </Card>
@@ -280,6 +632,38 @@ export function PatternMirrorView() {
 }
 
 export function PromptGenomeView() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'PromptGenome',
+            action: 'get',
+            payload: {}
+          })
+        });
+        const responseData = await response.json();
+        if (responseData.success) {
+          setData(responseData.result);
+        }
+      } catch (e) {
+        console.error('Failed to load prompt genome data:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  const fitness = data?.fitness || 0;
+  const drift = data?.drift || 0;
+
   return (
     <Card className="p-8 bg-gradient-to-br from-indigo-950/20 to-black/40">
       <div className="flex items-center gap-4 mb-6">
@@ -289,11 +673,11 @@ export function PromptGenomeView() {
       <p className="text-slate-500 text-sm mb-6">Ancestral mapping of prompt evolution and performance traits.</p>
       <div className="space-y-2">
         <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-          <div className="h-full bg-indigo-500 w-3/4" />
+          <div className="h-full bg-indigo-500" style={{ width: `${fitness}%` }} />
         </div>
         <div className="flex justify-between text-[8px] font-mono text-slate-600 uppercase tracking-widest">
-          <span>Genetic Drift: 0.2%</span>
-          <span>Fitness: 99.8%</span>
+          <span>{loading ? 'Calculating Drift...' : `Genetic Drift: ${drift.toFixed(1)}%`}</span>
+          <span>{loading ? 'Calculating Fitness...' : `Fitness: ${fitness.toFixed(1)}%`}</span>
         </div>
       </div>
     </Card>
@@ -301,6 +685,38 @@ export function PromptGenomeView() {
 }
 
 export function DeadHunterView() {
+  const [scanResult, setScanResult] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const runScan = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'DeadHunter',
+            action: 'scan',
+            payload: { projectPath: '.' }
+          })
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+          setScanResult(data.result);
+        } else {
+          console.error('Scan failed:', data.error);
+        }
+      } catch (e) {
+        console.error('Scan failed:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    runScan();
+  }, []);
+
   return (
     <Card className="p-8 border-red-500/30 bg-red-500/5">
       <div className="flex items-center gap-4 mb-6">
@@ -308,9 +724,20 @@ export function DeadHunterView() {
         <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Dead Hunter</h3>
       </div>
       <p className="text-slate-500 text-sm mb-6">Real-time elimination of non-functional logic surfaces and drift.</p>
-      <div className="text-center py-10 opacity-40 grayscale group-hover:grayscale-0 transition-all">
-        <div className="text-4xl mb-4">🎯</div>
-        <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Scanning for dead surfaces...</div>
+      <div className="text-center py-10 transition-all">
+        {loading ? (
+          <>
+            <div className="text-4xl mb-4 animate-pulse">🎯</div>
+            <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Scanning for dead surfaces...</div>
+          </>
+        ) : (
+          <>
+            <div className="text-4xl mb-4">🎯</div>
+            <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mb-2">Scan Complete</div>
+            <div className="text-2xl font-black text-white">{scanResult?.length || 0} Issues Found</div>
+            <p className="text-xs text-slate-500 mt-2">Console logs and empty catch blocks identified.</p>
+          </>
+        )}
       </div>
     </Card>
   );
@@ -329,6 +756,35 @@ export function SingularityCoreView() {
 }
 
 export function ProofVaultView() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            module: 'ProofVault',
+            action: 'get',
+            payload: {}
+          })
+        });
+        const responseData = await response.json();
+        if (responseData.success) {
+          setData(responseData.result);
+        }
+      } catch (e) {
+        console.error('Failed to load proof vault data:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
   return (
     <Card className="p-8">
       <div className="flex items-center gap-4 mb-6">
@@ -337,8 +793,10 @@ export function ProofVaultView() {
       </div>
       <div className="p-10 border border-slate-800 rounded-3xl bg-black/40 text-center">
         <Lock size={48} className="mx-auto text-slate-700 mb-6" />
-        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Vault Status: SEALED</div>
-        <div className="text-xs font-bold text-white mt-2">1,248 Sovereign Receipts Archived</div>
+        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Vault Status: {data?.status || 'SEALED'}</div>
+        <div className="text-xs font-bold text-white mt-2">
+          {loading ? 'Counting Receipts...' : `${data?.count || 0} Sovereign Receipts Archived`}
+        </div>
       </div>
     </Card>
   );

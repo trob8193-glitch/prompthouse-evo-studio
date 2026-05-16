@@ -4,7 +4,82 @@ import { Activity, Shield, Zap, TrendingUp, Cpu, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const StudioDashboard = () => {
-  const [iq, setIq] = React.useState(2354500); // Sovereign IQ baseline
+  const [iq, setIq] = React.useState(null);
+
+  const [ops, setOps] = React.useState([
+    { id: 'bridge', type: 'Bridge', desc: 'Awaiting bridge telemetry...', status: 'PENDING' },
+    { id: 'queue', type: 'Execution Queue', desc: 'Awaiting queue telemetry...', status: 'PENDING' }
+  ]);
+
+  React.useEffect(() => {
+    let mounted = true;
+    async function fetchLive() {
+      try {
+        const [statusRes, metricsRes, queueRes, nfRes] = await Promise.all([
+          fetch('http://127.0.0.1:3001/status'),
+          fetch('http://127.0.0.1:3001/api/metrics'),
+          fetch('http://127.0.0.1:3001/api/queue/master'),
+          fetch('http://127.0.0.1:3001/api/nightforge/status'),
+        ]);
+
+        const status = statusRes.ok ? await statusRes.json() : null;
+        const metrics = metricsRes.ok ? await metricsRes.json() : null;
+        const queue = queueRes.ok ? await queueRes.json() : null;
+        const nightforge = nfRes.ok ? await nfRes.json() : null;
+
+        if (!mounted) return;
+
+        if (status?.iq_metrics) {
+          setIq(status.iq_metrics.baseline + status.iq_metrics.sovereign_gain);
+        } else {
+          setIq(null);
+        }
+
+        const queueCount = Array.isArray(queue) ? queue.length : 0;
+        const rps = metrics?.requests?.requestsPerSecond;
+        const latency = metrics?.requests?.avgLatencyMs;
+        const nfState = nightforge?.state || {};
+
+        setOps([
+          {
+            id: 'bridge',
+            type: 'Bridge',
+            desc: status ? `ONLINE v${status.version} • avg ${latency ?? '—'}ms • rps ${rps ?? '—'}` : 'OFFLINE',
+            status: status ? 'ACTIVE' : 'OFFLINE'
+          },
+          {
+            id: 'queue',
+            type: 'Execution Queue',
+            desc: `Items: ${queueCount}`,
+            status: 'ACTIVE'
+          },
+          {
+            id: 'nightforge',
+            type: 'NightForge Daemon',
+            desc: `Active: ${nfState.active ? 'YES' : 'NO'} • Running: ${nfState.running ? 'YES' : 'NO'}`,
+            status: nfState.active ? 'ACTIVE' : 'IDLE'
+          },
+          {
+            id: 'savings',
+            type: 'Cost Firewall',
+            desc: `Saved tokens: ${metrics?.firewall?.savedTokens ?? 0} • Saved $: ${metrics?.firewall?.savedDollars ?? '0.0000'}`,
+            status: 'ACTIVE'
+          }
+        ]);
+      } catch (e) {
+        if (!mounted) return;
+        setIq(null);
+        setOps([
+          { id: 'bridge', type: 'Bridge', desc: 'OFFLINE', status: 'OFFLINE' },
+          { id: 'queue', type: 'Execution Queue', desc: 'Unavailable', status: 'OFFLINE' }
+        ]);
+      }
+    }
+    
+    fetchLive();
+    const interval = setInterval(fetchLive, 5000);
+    return () => { mounted = false; clearInterval(interval); };
+  }, []);
 
   return (
     <motion.div 
@@ -40,7 +115,7 @@ export const StudioDashboard = () => {
               <TrendingUp size={20} className="text-indigo-400" />
               <span className="text-xs font-black uppercase tracking-[0.2em]">Sovereign IQ Baseline</span>
             </div>
-            <h2 className="text-7xl font-black mb-2 tracking-tighter tabular-nums">{(iq / 1000000).toFixed(1)}M</h2>
+            <h2 className="text-7xl font-black mb-2 tracking-tighter tabular-nums">{iq == null ? '—' : `${(iq / 1000000).toFixed(1)}M`}</h2>
             <div className="h-1.5 w-full bg-white/10 rounded-full mt-8 overflow-hidden">
               <motion.div 
                 initial={{ width: 0 }}
@@ -62,20 +137,15 @@ export const StudioDashboard = () => {
               <Activity size={24} className="text-indigo-500" /> ACTIVE SOVEREIGN OPS
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="p-8 bg-black/40 rounded-3xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-500 group">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-xs text-slate-500 uppercase font-black tracking-widest group-hover:text-indigo-400">Intelligence Vein</span>
-                  <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
+              {ops.map(op => (
+                <div key={op.id} className="p-8 bg-black/40 rounded-3xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-500 group">
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="text-xs text-slate-500 uppercase font-black tracking-widest group-hover:text-indigo-400">{op.type}</span>
+                    <div className={`w-3 h-3 rounded-full ${op.id === 1 ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]'} animate-pulse`} />
+                  </div>
+                  <p className="text-base text-slate-300 leading-relaxed">{op.desc}</p>
                 </div>
-                <p className="text-base text-slate-300 leading-relaxed">Ingesting truth-verified PromptLink data streams into WebWeaver core...</p>
-              </div>
-              <div className="p-8 bg-black/40 rounded-3xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-500 group">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-xs text-slate-500 uppercase font-black tracking-widest group-hover:text-indigo-400">Foundry Engine</span>
-                  <div className="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
-                </div>
-                <p className="text-base text-slate-300 leading-relaxed">DatasetForge: <span className="text-indigo-400 font-black">SYNTHESIZING</span></p>
-              </div>
+              ))}
             </div>
           </section>
           
@@ -91,4 +161,4 @@ export const StudioDashboard = () => {
       </div>
     </motion.div>
   );
-};
+};

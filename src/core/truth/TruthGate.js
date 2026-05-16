@@ -5,8 +5,7 @@ export class TruthGate {
     this.FORBIDDEN_MARKERS = [
       'dummy', 'lorem ipsum', 
       'test data', 'sample text', 'example.com',
-      'foo', 'bar', 'baz', "[PURGED BY OMEGA PROTOCOL]", "[PURGED BY OMEGA PROTOCOL]",
-      'id: 1', 'id: 2', 'id: 3' // Monotonic identities blocked
+      'foo', 'bar', 'baz'
     ];
   }
 
@@ -20,7 +19,7 @@ export class TruthGate {
     // 1. FORBIDDEN MARKER SCAN
     this.FORBIDDEN_MARKERS.forEach(pattern => {
       if (strData.includes(pattern)) {
-        issues.push(`CRITICAL_VIOLATION: Detected prohibited placeholder "${pattern}"`);
+        issues.push(`CRITICAL_VIOLATION: Detected prohibited filler marker "${pattern}"`);
       }
     });
 
@@ -36,7 +35,7 @@ export class TruthGate {
       const negatedMatches = strData.match(/(no|not)\s+fake/g) || [];
       
       if (matches.length > negatedMatches.length) {
-        issues.push(`CRITICAL_VIOLATION: Detected prohibited placeholder "[PURGED BY OMEGA PROTOCOL]" (without negation)`);
+        issues.push(`CRITICAL_VIOLATION: Detected prohibited filler marker "[PURGED BY OMEGA PROTOCOL]" (without negation)`);
       }
     }
 

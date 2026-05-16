@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"workbench.editorAssociations": {
+			"*.copilotmd": "vscode.markdown.preview.editor",
+			"*.svg": "default",
+			"*.sprite": "d2rmodding.spriteViewer"
+		}
+	}
+}

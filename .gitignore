@@ -39,3 +39,13 @@ android/.gradle/
 ios/Pods/
 ios/.symlinks/
 macos/Pods/
+
+# Scratch and temporary files
+scratch/
+temp_zip/
+temp_mobile_engine.js
+test-output.txt
+vitest-output.txt
+.sovereign-cache/
+.sovereign-shards/
+src/store.js.restored

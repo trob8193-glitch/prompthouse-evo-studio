@@ -22,7 +22,7 @@ export function EvoExchangeView() {
 
   const filtered = activeCategory === 'all' 
     ? recipes 
-    : recipes.filter(r => r.type === activeCategory);
+    : recipes.filter(r => (r.type || 'template') === activeCategory);
 
   return (
     <div className="flex-col animate-in">
@@ -59,13 +59,13 @@ export function EvoExchangeView() {
           <div key={r.id} className="card bot-card" style={{ '--bot-accent': '#38bdf8' }}>
             <div className="card-body flex-col gap-12">
               <div className="flex-between">
-                <span className="badge badge-cyan">{r.type}</span>
-                <span style={{ fontSize: 10, color: 'var(--text-dim)' }}>{r.status}</span>
+                <span className="badge badge-cyan">{r.type || 'template'}</span>
+                <span style={{ fontSize: 10, color: 'var(--text-dim)' }}>{r.consentScope || 'private'}</span>
               </div>
               <div>
                 <div style={{ fontWeight: 800, fontSize: 14, marginBottom: 4 }}>{r.name}</div>
                 <div style={{ fontSize: 11, color: 'var(--text-secondary)', lineHeight: 1.4 }}>
-                  {r.promptRecipe?.slice(0, 100)}...
+                  {(r.instructions || r.signature || '').slice(0, 100)}...
                 </div>
               </div>
               <div className="flex-between" style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid var(--border-dim)' }}>
@@ -75,26 +75,6 @@ export function EvoExchangeView() {
             </div>
           </div>
         ))}
-
-        {/* Example Premium Listings (Mocked) */}
-        <div className="card bot-card" style={{ '--bot-accent': '#f5c842', opacity: 0.8 }}>
-          <div className="card-body flex-col gap-12">
-            <div className="flex-between">
-              <span className="badge badge-violet">PREMIUM</span>
-              <span style={{ fontSize: 10, color: 'var(--text-dim)' }}>Official</span>
-            </div>
-            <div>
-              <div style={{ fontWeight: 800, fontSize: 14, marginBottom: 4 }}>Omnipotent Agent V3</div>
-              <div style={{ fontSize: 11, color: 'var(--text-secondary)', lineHeight: 1.4 }}>
-                The ultimate autonomous builder agent with full file-system and terminal access.
-              </div>
-            </div>
-            <div className="flex-between" style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid var(--border-dim)' }}>
-              <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--accent-gold)' }}>$49.99</span>
-              <button className="btn btn-secondary btn-sm" disabled>🔒 Blocked</button>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div className="card" style={{ marginTop: 24, background: 'rgba(248,113,113,0.05)', border: '1px solid rgba(248,113,113,0.2)' }}>

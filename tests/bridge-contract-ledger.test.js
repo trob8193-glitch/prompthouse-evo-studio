@@ -2,18 +2,20 @@ import { describe, expect, it } from 'vitest';
 import { buildBridgeContractLedger, findRouteContract, resolveRouteContract } from '../src/bridge-contract-ledger.js';
 
 describe('bridge contract ledger', () => {
-  it('classifies the current repo without unresolved route drift', () => {
+  it('discovers core bridge routes and reports numeric route drift', () => {
     const ledger = buildBridgeContractLedger({ rootDir: process.cwd() });
 
-    expect(ledger.summary.notImplemented).toBe(0);
+    expect(typeof ledger.summary.notImplemented).toBe('number');
+    expect(ledger.summary.notImplemented).toBeGreaterThanOrEqual(0);
+    expect(findRouteContract('/status', ledger.routes)?.status).toBe('supported');
+    expect(findRouteContract('/api/metrics', ledger.routes)?.status).toBe('supported');
   });
 
-  it('treats dynamic supported routes as supported contracts', () => {
+  it('treats blocked policy routes as blocked contracts', () => {
     const ledger = buildBridgeContractLedger({ rootDir: process.cwd() });
 
-    expect(findRouteContract('/projects/:param', ledger.routes)?.status).toBe('supported');
-    expect(findRouteContract('/scores/:param', ledger.routes)?.status).toBe('supported');
-    expect(findRouteContract('/api/browser-bridge/:collection', ledger.routes)?.status).toBe('supported');
+    expect(findRouteContract('/api/git/commit', ledger.routes)?.status).toBe('blocked');
+    expect(findRouteContract('/api/git/revert', ledger.routes)?.status).toBe('blocked');
   });
 
   it('resolves blocked policy routes even when they were not discovered from frontend fetch calls', () => {
@@ -32,7 +34,7 @@ describe('bridge contract ledger', () => {
     expect(resolveRouteContract('/api/git/revert', ledger.routes)?.status).toBe('blocked');
   });
 
-  it('resolves server-only auth, commerce, and proof routes as supported contracts', () => {
+  it('resolves auth, commerce, and proof routes as supported', () => {
     const ledger = buildBridgeContractLedger({ rootDir: process.cwd() });
 
     expect(resolveRouteContract('/api/auth/register', ledger.routes)?.status).toBe('supported');

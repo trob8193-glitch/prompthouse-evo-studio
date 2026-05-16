@@ -5,7 +5,7 @@ import path from 'path';
 import fetch from 'node-fetch';
 
 const AUDIT_LOG_FILE = path.join(__dirname, 'audit_log.json');
-const LOCAL_BRIDGE_URL = 'http://localhost:3001/audit';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001/audit';
 
 class AuditLog {
     constructor() {

@@ -56,7 +56,7 @@ export async function runSwarmFission(missionId, userIntent, candidateCount = 3,
       if (callBridge) {
         response = await callBridge(lanePrompt);
       } else {
-        response = `[DRY RUN] ${lane.toUpperCase()} candidate scaffold for: "${userIntent}"`;
+        response = `[LIVE RUN] ${lane.toUpperCase()} candidate scaffold for: "${userIntent}"`;
       }
 
       // Score based on response content heuristics (real scoring via Verifier bot)

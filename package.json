@@ -22,7 +22,11 @@
     "evolve:list": "node scripts/self_evolution_cycle.mjs --list",
     "evolve:propose": "node scripts/self_evolution_cycle.mjs --mode=proposal",
     "evolve:sandbox": "node scripts/self_evolution_cycle.mjs --mode=sandbox_apply",
-    "evolve:proof": "node scripts/self_evolution_cycle.mjs --mode=proof"
+    "evolve:proof": "node scripts/self_evolution_cycle.mjs --mode=proof",
+    "test": "vitest run",
+    "audit:imports": "node scripts/audit-imports.mjs",
+    "audit:css": "node scripts/audit-css-vars.mjs",
+    "verify:studio": "node scripts/verify-studio.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",

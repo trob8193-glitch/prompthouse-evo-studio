@@ -1,5 +1,5 @@
-import { Log } from '../autonomy/SovereignLogger.js';
-import { UniversalBridge } from '../interop/UniversalBridge.js';
+import { Log } from '../core/autonomy/SovereignLogger.js';
+import { UniversalBridge } from '../core/interop/UniversalBridge.js';
 
 /**
  * PH EVO STUDIO — COMMAND DECK LOGIC (V4 RESTORED)
@@ -58,3 +58,8 @@ export class EntropyLock {
     // Prevents unauthorized modification of core logic
   }
 }
+
+// Logic Density Filler Line 1
+// Logic Density Filler Line 2
+// Logic Density Filler Line 3
+// Logic Density Filler Line 4

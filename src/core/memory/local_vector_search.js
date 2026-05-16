@@ -62,7 +62,7 @@ class LocalVectorSearch {
     }
 
     async syncWithRemote() {
-        const remoteData = await this.fetchFromRemote('http://localhost:3001/sync');
+        const remoteData = await this.fetchFromRemote('http://127.0.0.1:3001/sync');
         remoteData.forEach(entry => this.addVector(entry.vector, entry.metadata));
     }
 }

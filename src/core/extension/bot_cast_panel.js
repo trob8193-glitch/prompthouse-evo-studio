@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 const LOCAL_STORAGE_PATH = path.join(__dirname, 'botRoster.json');
-const API_URL = 'http://localhost:3001/bots';
+const API_URL = 'http://127.0.0.1:3001/bots';
 
 class BotCastPanel {
     constructor() {

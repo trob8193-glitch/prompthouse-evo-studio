@@ -3,7 +3,17 @@ import path from 'path';
 import { execFileSync } from 'child_process';
 
 function ignoreName(name) {
-  return ['node_modules', '.git', 'dist', '.prompthouse-data'].includes(name);
+  const ignored = [
+    'node_modules', '.git', 'dist', '.prompthouse-data',
+    'buildkit_import', 'generated_apps', 'build_queues',
+    'extension_build', 'zip_temp', 'zip_temp_chunk', 'zip_temp_v1_2',
+    'scratch', 'temp_prompts', 'evogenage', 'browser_bridge_receipts',
+    'proof_receipts', 'server_output.txt', 'bridge-runtime.log',
+    'bridge_ignition.log', 'bridge-runtime.err.log', 'bridge-dev.out.log',
+    'bridge-dev.err.log', 'frontend-runtime.log', 'vite-runtime.log',
+    'pioneer_oracle_v2_5.json', 'lexicon.json'
+  ];
+  return ignored.includes(name) || name.endsWith('.log') || name.endsWith('.shard.json');
 }
 
 function copyRecursive(src, dest) {

@@ -4,7 +4,7 @@
  * Powers: Pattern Analysis, Prompt Evolution, Fine-Tuning Pipeline.
  */
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 
 /**
  * Log an AI interaction for later analysis and rating.

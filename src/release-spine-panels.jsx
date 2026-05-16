@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 
 async function getJson(path) {
   const res = await fetch(`${BRIDGE}${path}`);

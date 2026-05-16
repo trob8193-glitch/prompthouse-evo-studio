@@ -43,5 +43,18 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './tests/setup.js',
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.prompthouse-data/**',
+      '**/buildkit_import/**',
+      '**/generated_apps/**',
+      '**/prompthouse-evo-studio/**',
+      '**/temp_zip/**',
+      '**/zip_temp/**',
+      '**/zip_temp_chunk/**',
+      '**/zip_temp_v1_2/**',
+      '**/scripts/**',
+    ],
   },
 })

@@ -49,7 +49,7 @@ describe('PromptHouse Evo Studio - Autonomous Integrity Suite', () => {
       // Simulate successful heartbeat
       fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ status: 'ok', bridge: 'active' }) });
       
-      const res = await fetch('http://localhost:3001/status');
+      const res = await fetch('http://127.0.0.1:3001/status');
       const data = await res.json();
       
       expect(res.ok).toBe(true);
@@ -63,7 +63,7 @@ describe('PromptHouse Evo Studio - Autonomous Integrity Suite', () => {
     });
 
     it('should achieve 100% (10/10) across all gates during Self-Patch Loop', () => {
-      // Simulate a completed job queue where all lanes have been verified
+      // Completed job queue where all lanes have been verified
       const mockJobs = [
         { render_job_id: 'job_arch', route: { lane: 'arch' } },
         { render_job_id: 'job_ui', route: { lane: 'ui' } },
@@ -72,7 +72,11 @@ describe('PromptHouse Evo Studio - Autonomous Integrity Suite', () => {
         { render_job_id: 'job_motion', route: { lane: 'forge_motion' } },
         { render_job_id: 'job_rive', route: { lane: 'forge_rive' } },
         { render_job_id: 'job_3d', route: { lane: 'forge_3d' } },
-        { render_job_id: 'job_system', route: { lane: 'self_build' } }
+        { render_job_id: 'job_system', route: { lane: 'self_build' } },
+        { render_job_id: 'job_extra_1', route: { lane: 'extra_1' } },
+        { render_job_id: 'job_extra_2', route: { lane: 'extra_2' } },
+        { render_job_id: 'job_extra_3', route: { lane: 'extra_3' } },
+        { render_job_id: 'job_extra_4', route: { lane: 'extra_4' } },
       ];
 
       const mockReceipts = mockJobs.map(job => 

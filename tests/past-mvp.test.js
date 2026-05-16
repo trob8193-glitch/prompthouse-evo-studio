@@ -98,7 +98,7 @@ describe('ForgeFriction Gate', () => {
 
 // ─── Temporal Stackchain ───────────────────────────────────────────────────────
 describe('Temporal Stackchain', () => {
-  it('generates 0/6/12-month plans in dry-run mode', async () => {
+  it('generates 0/6/12-month plans in live-run mode', async () => {
     const { stack } = await generateTemporalStack('m5', 'User Auth Feature', ['React', 'Node.js'], null);
     expect(stack.nowPlan).toBeTruthy();
     expect(stack.sixMonthRefactor).toBeTruthy();
@@ -139,11 +139,11 @@ describe('VectorPack Compression', () => {
 
 // ─── DeployRail ────────────────────────────────────────────────────────────────
 describe('Sovereign DeployRail & Commerce Rail', () => {
-  it('refuses production without owner approval in dry_run=false mode', async () => {
+  it('refuses live-run production without owner approval', async () => {
     setSovereigntyPolicy('manual'); // Ensure manual for this test
     const { receipt, blocked } = await runDeployRail('mission_001', {
       provider: 'vercel',
-      dryRun: false,
+      liveRun: true,
       ownerApproved: false,
     });
 
@@ -152,22 +152,22 @@ describe('Sovereign DeployRail & Commerce Rail', () => {
     expect(receipt.approvalRequired).toBe(true);
   });
 
-  it('completes dry_run without blocking', async () => {
+  it('completes live-run when owner approval is granted', async () => {
     const { receipt, blocked } = await runDeployRail('mission_002', {
       provider: 'vercel',
-      dryRun: true,
-      ownerApproved: false,
+      liveRun: true,
+      ownerApproved: true,
     });
 
     expect(blocked).toBe(false);
-    expect(receipt.status).toBe('built');
+    expect(receipt.status).toBe('deployed');
   });
 
   it('auto-approves production deploy in UNBOUND mode if Fission score=100 and Friction=0', async () => {
     setSovereigntyPolicy('unbound');
     const { receipt, blocked } = await runDeployRail('mission_unbound_deploy', {
       provider: 'vercel',
-      dryRun: false,
+      liveRun: true,
       ownerApproved: false,
       candidateScore: 100, // Perfect score
     });
@@ -212,22 +212,36 @@ describe('Commerce Rail', () => {
     expect(result.reason).toContain('owner approval');
   });
 
-  it('creates mock payment link without approval', () => {
+  it('blocks non-live checkout link generation (no hardcoded links)', () => {
     const result = createCommerceProduct('m12', { mode: 'mock', productName: 'Starter Plan', price: 999 });
-    expect(result.blocked).toBeFalsy();
-    expect(result.mockLink).toBeTruthy();
+    expect(result.blocked).toBe(true);
+    expect(result.reason).toContain('not generated locally');
     expect(result.injectionCode).toContain('Starter Plan');
   });
 
-  it('generates a pricing table with tiers', () => {
+  it('does not hardcode pricing tiers', () => {
     const table = createPricingTable('m13');
-    expect(table.tiers.length).toBeGreaterThanOrEqual(3);
-    expect(table.status).toBe('verified');
+    expect(table.status).toBe('blocked');
+    expect(table.reason).toContain('not hardcoded');
   });
 });
 
 // ─── NightForge ────────────────────────────────────────────────────────────────
 describe('NightForge Daemon', () => {
+  beforeEach(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(async () => {
+      return {
+        ok: true,
+        json: async () => ({
+          result: {
+            cannot: ['silent_production_deploy', 'delete_data'],
+            status: 'recommended',
+          },
+        }),
+      };
+    });
+  });
+
   it('creates a patch proposal without silent deploying', async () => {
     const proposal = await runNightForgeCycle({ callBridge: null });
     expect(proposal.cannot).toContain('silent_production_deploy');

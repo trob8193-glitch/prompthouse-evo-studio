@@ -1,11 +1,11 @@
-/** Dataset Forge - mod03 **/
-
-import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const BASE_URL = 'http://localhost:3001';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const BASE_URL = 'http://127.0.0.1:3001';
 const DATASET_FILE = path.join(__dirname, 'datasets.json');
+const IS_TEST_ENV = process.env.NODE_ENV === 'test' || Boolean(process.env.VITEST);
 
 class DatasetForge {
     constructor() {
@@ -52,7 +52,9 @@ class DatasetForge {
 
     async persistDatasets() {
         const data = JSON.stringify(this.datasets, null, 2);
-        await fs.promises.writeFile(DATASET_FILE, data);
+        if (!IS_TEST_ENV) {
+            await fs.promises.writeFile(DATASET_FILE, data);
+        }
         await this.sendToServer(data);
     }
 

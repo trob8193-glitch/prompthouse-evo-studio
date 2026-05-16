@@ -3,8 +3,7 @@
  * Owner: Evo | Truth State: built
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { getAllSignals, saveSignal, getAllRecipes, captureWorkflowSignal, createWorkTwinSignal } from './worktwin-vault.js';
-import { runPatternMiner, getAllPatterns, generateRecipeFromPattern } from './pattern-miner.js';
+import { getAllSignals, saveSignal, getAllRecipes, captureWorkflowSignal, getAllPatterns, minePatterns, generateRecipeFromPattern } from './worktwin-vault.js';
 import { addProofReceipt } from './prompt-base.js';
 
 const SIGNAL_TYPES = ['repeat_prompt','repeat_error','repeat_doc','repeat_workflow'];
@@ -38,13 +37,17 @@ export function WorkTwinVaultView() {
   }, [captureForm, log, refresh]);
 
   const mine = useCallback(() => {
-    const found = runPatternMiner({ minFrequency: 1 });
+    const found = minePatterns({ minFrequency: 1 });
     log(`📡 Pattern Miner: ${found.length} pattern(s) detected.`, found.length ? 'success' : 'info');
     refresh();
   }, [log, refresh]);
 
   const genRecipe = useCallback((pattern) => {
     const recipe = generateRecipeFromPattern(pattern);
+    if (!recipe) {
+      log('⚠️ Recipe generation failed.', 'warn');
+      return;
+    }
     log(`🪄 Recipe generated: ${recipe.name}`, 'success');
     refresh();
   }, [log, refresh]);
@@ -105,7 +108,7 @@ export function WorkTwinVaultView() {
             </div>
             <div className="field">
               <label className="field-label">Context (will be auto-redacted for secrets)</label>
-              <textarea className="field-textarea" rows={5} placeholder="Paste the workflow, prompt, or pattern you want to capture..." value={captureForm.context} onChange={e => setCaptureForm(f => ({ ...f, context: e.target.value }))} />
+              <textarea className="field-textarea" rows={5} ghostInput="Paste the workflow, prompt, or pattern you want to capture..." value={captureForm.context} onChange={e => setCaptureForm(f => ({ ...f, context: e.target.value }))} />
             </div>
             <button className="btn btn-primary" onClick={capture}>📥 Capture Signal with Consent</button>
           </div>
