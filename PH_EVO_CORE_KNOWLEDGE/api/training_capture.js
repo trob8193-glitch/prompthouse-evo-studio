@@ -20,7 +20,7 @@ const logToFile = async (data) => {
 
 // Function to send training candidate data to the local server
 const sendToServer = async (data) => {
-    const response = await fetch('http://localhost:3001/api/training-capture', {
+    const response = await fetch('http://127.0.0.1:3001/api/training-capture', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

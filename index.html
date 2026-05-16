@@ -1,24 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script>
-      window.onerror = function(message, source, lineno, colno, error) {
-        var errorDiv = document.createElement('div');
-        errorDiv.style = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: red; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; z-index: 99999; padding: 50px; font-size: 24px; white-space: pre-wrap; font-family: monospace; overflow: auto;";
-        errorDiv.innerText = "CRITICAL GLOBAL ERROR:\n\n" + message + "\n\n" + (error && error.stack ? error.stack : '');
-        document.body.appendChild(errorDiv);
-      };
-      window.addEventListener('unhandledrejection', function(event) {
-        var errorDiv = document.createElement('div');
-        errorDiv.style = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: darkred; color: white; z-index: 99999; padding: 50px; font-size: 24px; white-space: pre-wrap; font-family: monospace; overflow: auto;";
-        errorDiv.innerText = "UNHANDLED PROMISE REJECTION:\n\n" + (event.reason && event.reason.stack ? event.reason.stack : event.reason);
-        document.body.appendChild(errorDiv);
-      });
-    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/ph-icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="PromptHouse Evo Studio — Sovereign-grade prompt engineering. Build, score, and stress-test production prompt stacks." />
+    <meta name="description" content="PromptHouse Evo Studio — Enterprise-grade prompt engineering platform. Build, score, and deploy production prompt stacks." />
     <title>PromptHouse Evo Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

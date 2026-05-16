@@ -63,7 +63,7 @@ function integrateAgent() {
   console.log('📋 Next steps:');
   console.log('   1. Run: npm run create:agent');
   console.log('   2. Run: npm run dev:all');
-  console.log('   3. Test: curl http://localhost:3001/api/agent/health\n');
+  console.log('   3. Test: curl http://127.0.0.1:3001/api/agent/health\n');
 }
 
 // Run integration if this file is executed directly

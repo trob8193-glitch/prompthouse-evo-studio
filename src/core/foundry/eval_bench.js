@@ -15,12 +15,17 @@ export async function benchmarkChat({
   const data = await res.json().catch(() => ({}));
   const endedAt = Date.now();
 
+<<<<<<< HEAD
   if (!res.ok) {
     const msg = data?.error || res.statusText || 'chat failed';
     const err = new Error(msg);
     err.status = res.status;
     throw err;
   }
+=======
+const BASE_URL = 'http://127.0.0.1:3001';
+const DATA_FILE = path.resolve('eval_bench_results.json');
+>>>>>>> main
 
   return {
     ok: true,

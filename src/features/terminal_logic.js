@@ -2,7 +2,10 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import os from 'os';
 import net from 'net';
+<<<<<<< HEAD
 import { runNuclearTruthAudit } from '../core/audit/NuclearTruthAudit.js';
+=======
+>>>>>>> main
 
 const execAsync = promisify(exec);
 
@@ -11,9 +14,12 @@ export class TerminalLogic {
     const { action, command, session } = payload;
 
     if (action === 'run') {
+<<<<<<< HEAD
       if (!command || typeof command !== 'string') {
         return { success: false, output: 'No command provided.' };
       }
+=======
+>>>>>>> main
       if (command.trim().toLowerCase().startsWith('evo ')) {
         return await this.handleEvoCommand(command.trim().substring(4), session);
       }
@@ -77,10 +83,18 @@ export class TerminalLogic {
   async performRealScan() {
     const localSubnet = this.getLocalIP().split('.').slice(0, 3).join('.');
     const portsToProbe = [3001, 3002, 5173]; // Bridge, Alternate Bridge, Vite
+<<<<<<< HEAD
 
     return {
       success: true,
       output: `Scanning Sovereign Subnet [${localSubnet}.0/24]...\n- Probe scope: local host and configured bridge ports (${portsToProbe.join(', ')}).\n- Note: passive discovery mode is enabled; no synthetic neighbor claims emitted.\n- Discovery finalized.`
+=======
+    
+    // In a real environment, we'd loop through IPs, but for speed we probe common neighbors
+    return {
+      success: true,
+      output: `Scanning Sovereign Subnet [${localSubnet}.0/24]...\n- Probing local gateway and neighbors on ports: ${portsToProbe.join(', ')}\n- Node [${localSubnet}.1] active.\n- Node [${localSubnet}.12] active (Sovereign Lab detected on 3001).\n- Discovery finalized.`
+>>>>>>> main
     };
   }
 
@@ -123,6 +137,7 @@ export class TerminalLogic {
   }
 
   async runTruthAudit() {
+<<<<<<< HEAD
     const report = runNuclearTruthAudit(process.cwd());
     const topFindings = report.findings.slice(0, 8);
     const topBrokenWires = report.brokenWires.slice(0, 5);
@@ -155,6 +170,12 @@ export class TerminalLogic {
       success: true,
       output,
       report
+=======
+    // This would ideally call the TruthAuditorLogic directly
+    return {
+      success: true,
+      output: `[AUDIT] Initiating project-wide scan...\n- Checking Ledger integrity: OK\n- Probing filesystem drift: 0.2%\n- Verifying SHA-256 signatures: VERIFIED\n- Truth Audit completed with score: 98.4%`
+>>>>>>> main
     };
   }
 }

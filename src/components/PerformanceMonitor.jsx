@@ -7,10 +7,17 @@ export const PerformanceMonitor = () => {
   const storeMetrics = useSovereignStore((s) => s.metrics);
 
   const metrics = {
+<<<<<<< HEAD
     latency: typeof storeMetrics?.latency_ms === 'number' ? storeMetrics.latency_ms : null,
     cacheHit: typeof storeMetrics?.cache?.hitRate === 'number' ? storeMetrics.cache.hitRate : null,
     cpuUserSeconds: typeof storeMetrics?.cpu_usage?.user === 'number' ? (storeMetrics.cpu_usage.user / 1_000_000) : null,
     rps: typeof storeMetrics?.requests?.requestsPerSecond === 'number' ? storeMetrics.requests.requestsPerSecond : null
+=======
+    latency: storeMetrics?.latency || 12,
+    cacheHit: storeMetrics?.cache?.hitRate || 85,
+    dbSpeed: 4, 
+    cpuLoad: storeMetrics?.cpu_usage?.user ? (storeMetrics.cpu_usage.user / 1000000) : 12
+>>>>>>> main
   };
 
   const MetricCard = ({ title, value, unit, icon: Icon, color, max = 100 }) => (

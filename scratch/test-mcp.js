@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 async function testMcp() {
-  const url = 'http://localhost:3001/mcp/messages';
+  const url = 'http://127.0.0.1:3001/mcp/messages';
   const body = {
     method: 'call_tool',
     params: {

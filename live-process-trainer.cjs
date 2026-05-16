@@ -14,7 +14,7 @@ async function executeLiveTraining() {
   console.log('║   Target: Evo Eyes | Agent | Studio OS                         ║');
   console.log('╚═══════════════════════════════════════════════════════════════╝\n');
 
-  const BRIDGE = 'http://localhost:3001';
+  const BRIDGE = 'http://127.0.0.1:3001';
   const PROOF_DIR = path.join(__dirname, 'proof_receipts');
   const TRAINING_DATA = path.join(__dirname, '.prompthouse-data', 'live_training_payload.jsonl');
 

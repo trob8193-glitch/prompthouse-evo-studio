@@ -15,7 +15,7 @@ async function initializeSwarm() {
   console.log('║   Mode: Multi-Process Autonomous Deployment                    ║');
   console.log('╚═══════════════════════════════════════════════════════════════╝\n');
 
-  const BRIDGE = 'http://localhost:3001';
+  const BRIDGE = 'http://127.0.0.1:3001';
 
   // 1. Check Bridge
   try {

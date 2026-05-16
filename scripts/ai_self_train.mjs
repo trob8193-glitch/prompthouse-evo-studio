@@ -4,6 +4,9 @@ import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import fetch from 'node-fetch';
 
+import dotenv from 'dotenv';
+dotenv.config({ override: true });
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const configPath = path.join(root, '.ai', 'config', 'bridge.config.json');
@@ -61,7 +64,7 @@ const main = async () => {
     throw new Error('Required review or next-pass output is missing; run ai:review first.');
   }
 
-  const bridgeUrl = process.env.BRIDGE_URL || 'http://localhost:3000';
+  const bridgeUrl = process.env.BRIDGE_URL || 'http://127.0.0.1:3001';
   const capture = {
     id: `training_${Date.now()}`,
     source: 'ai_self_train.mjs',

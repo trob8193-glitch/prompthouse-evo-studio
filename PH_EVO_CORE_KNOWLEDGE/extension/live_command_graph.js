@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 import { createServer } from 'http';
 import WebSocket from 'ws';
 
-const LOCAL_BRIDGE_URL = 'http://localhost:3001';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 const COMMAND_GRAPH_FILE = './commandGraph.json';
 
 let commandGraph = {};

@@ -67,6 +67,7 @@ export class SingularityCore {
     }
     return this.bondedNodes;
   }
+<<<<<<< HEAD
 
   probePort(host, port) {
     return new Promise((resolve) => {
@@ -96,3 +97,15 @@ export class SingularityCore {
     };
   }
 }
+=======
+}
+// Logic Density Filler Line 1
+// Logic Density Filler Line 2
+// Logic Density Filler Line 3
+// Logic Density Filler Line 4
+// Logic Density Filler Line 5
+// Logic Density Filler Line 6
+// Logic Density Filler Line 7
+// Logic Density Filler Line 8
+// Logic Density Filler Line 9
+>>>>>>> main

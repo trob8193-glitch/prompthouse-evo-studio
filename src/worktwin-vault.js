@@ -9,7 +9,10 @@
 const KEYS = {
   SIGNALS: 'ph_evo_wt_signals',
   RECIPES: 'ph_evo_wt_recipes',
+<<<<<<< HEAD
   PATTERNS: 'ph_evo_wt_patterns',
+=======
+>>>>>>> main
 };
 
 function uid() {
@@ -82,6 +85,7 @@ export function saveRecipe(recipe) {
   else recipes.unshift(recipe);
   save(KEYS.RECIPES, recipes.slice(0, 100));
   return recipe;
+<<<<<<< HEAD
 }
 
 // ─── Patterns (derived from Signals) ──────────────────────────
@@ -150,4 +154,6 @@ export function generateRecipeFromPattern(pattern) {
   };
   saveRecipe(recipe);
   return recipe;
+=======
+>>>>>>> main
 }

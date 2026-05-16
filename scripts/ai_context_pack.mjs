@@ -91,8 +91,11 @@ async function pack() {
       const content = await guardrails.safeReadTextFile(fullPath, config.maxFileBytes);
       const redacted = guardrails.redactSensitiveText(content);
       if (redacted !== content) redactedCount++;
+      
+      // Optimization: Compress multiple blank lines to save tokens and space
+      const compressed = redacted.replace(/\n\s*\n/g, '\n');
 
-      const byteSize = Buffer.byteLength(redacted, 'utf8');
+      const byteSize = Buffer.byteLength(compressed, 'utf8');
       
       if (runningTotalBytes + byteSize > config.maxTotalBytes) {
         payload.limits.truncatedFiles.push(`${relative} (Total Budget Exceeded)`);
@@ -102,7 +105,7 @@ async function pack() {
       payload.files.push({
         path: relative,
         sizeBytes: byteSize,
-        content: redacted
+        content: compressed
       });
 
       payload.tree.push(relative);

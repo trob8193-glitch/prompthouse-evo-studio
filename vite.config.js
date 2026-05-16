@@ -8,6 +8,9 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     clearScreen: false,
+    watch: {
+      ignored: ['**/.ai/**', '**/.sovereign-shards/**', '**/.prompthouse-data/**', '**/.prompt-garden/**', '**/scratch/**'],
+    },
   },
   build: {
     target: "esnext",

@@ -23,7 +23,7 @@
     "offscreen"
   ],
   "host_permissions": [
-    "http://localhost:3001/*",
+    "http://127.0.0.1:3001/*",
     "https://api.openai.com/*",
     "<all_urls>"
   ],

@@ -15,13 +15,18 @@ import {
   Shield,
   Zap,
   Activity,
+<<<<<<< HEAD
   Layers,
   Command,
   Search
+=======
+  Layers
+>>>>>>> main
 } from 'lucide-react';
 
 const BRIDGE_URL = 'http://127.0.0.1:3001';
 
+<<<<<<< HEAD
 const COMMAND_CATALOG = [
   { id: 'audit', label: 'Nuclear Truth Audit', command: 'evo:audit', session: 'security', description: 'Full studio wiring and truth-state audit.', tags: ['audit', 'truth', 'security'] },
   { id: 'compact', label: 'Logic Compaction', command: 'evo:compact', session: 'main', description: 'Compresses file logic density by purging entropy.', tags: ['compact', 'logic', 'density'] },
@@ -62,6 +67,8 @@ const COMMAND_CATALOG = [
   { id: 'files', label: 'List Workspace Files', command: 'Get-ChildItem', session: 'main', description: 'Lists files and folders in current directory.', tags: ['files', 'inspect'] }
 ];
 
+=======
+>>>>>>> main
 export function Terminal() {
   const { 
     terminalOpen, 
@@ -75,7 +82,10 @@ export function Terminal() {
     setTerminalTheme,
     terminalHistory,
     addTerminalHistory,
+<<<<<<< HEAD
     addBondedNode,
+=======
+>>>>>>> main
     bondedNodes
   } = useSovereignStore();
 
@@ -83,6 +93,7 @@ export function Terminal() {
   const [executing, setExecuting] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(-1);
+<<<<<<< HEAD
   const [catalogOpen, setCatalogOpen] = useState(true);
   const [catalogFilter, setCatalogFilter] = useState('');
   const scrollRef = useRef(null);
@@ -94,6 +105,11 @@ export function Terminal() {
     const searchText = `${item.label} ${item.command} ${item.description} ${item.tags.join(' ')}`.toLowerCase();
     return searchText.includes(normalizedFilter);
   });
+=======
+  const scrollRef = useRef(null);
+
+  const logs = terminalSessions[activeTerminalSession] || [];
+>>>>>>> main
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -101,10 +117,23 @@ export function Terminal() {
     }
   }, [logs, terminalOpen]);
 
+<<<<<<< HEAD
   const runCommandText = async (cmdText, session = activeTerminalSession) => {
     if (!cmdText || executing) return;
     setExecuting(true);
     addTerminalLog(`$ ${cmdText}`, 'command', session);
+=======
+  const handleRunCommand = async (e) => {
+    e?.preventDefault();
+    if (!command.trim() || executing) return;
+
+    const cmdText = command.trim();
+    setCommand('');
+    setHistoryIndex(-1);
+    setExecuting(true);
+    
+    addTerminalLog(`$ ${cmdText}`, 'command', activeTerminalSession);
+>>>>>>> main
     addTerminalHistory(cmdText);
 
     try {
@@ -114,11 +143,16 @@ export function Terminal() {
         body: JSON.stringify({
           module: 'Terminal',
           action: 'run',
+<<<<<<< HEAD
           payload: { command: cmdText, session }
+=======
+          payload: { command: cmdText, session: activeTerminalSession }
+>>>>>>> main
         }),
       });
       const data = await res.json();
       if (data.success) {
+<<<<<<< HEAD
         const result = data.result || {};
         const logEntry = {
           content: result.output || 'EvoShell: Completed.',
@@ -136,11 +170,23 @@ export function Terminal() {
       }
     } catch (err) {
       addTerminalLog(`System Error: ${err.message}`, 'error', session);
+=======
+        addTerminalLog(data.result.output || 'EvoShell: Completed.', 'success', activeTerminalSession);
+        if (data.result.node) {
+          addBondedNode(data.result.node);
+        }
+      } else {
+        addTerminalLog(data.error || 'EvoShell: Failed.', 'error', activeTerminalSession);
+      }
+    } catch (err) {
+      addTerminalLog(`System Error: ${err.message}`, 'error', activeTerminalSession);
+>>>>>>> main
     } finally {
       setExecuting(false);
     }
   };
 
+<<<<<<< HEAD
   const handleRunCommand = async (e) => {
     e?.preventDefault();
     if (!command.trim() || executing) return;
@@ -160,6 +206,8 @@ export function Terminal() {
     await runCommandText(item.command, item.session || activeTerminalSession);
   };
 
+=======
+>>>>>>> main
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -184,6 +232,10 @@ export function Terminal() {
   const copyToClipboard = () => {
     const text = logs.map(l => l.content).join('\n');
     navigator.clipboard.writeText(text);
+<<<<<<< HEAD
+=======
+    // Simple notification would be nice, but we'll stick to the log
+>>>>>>> main
     addTerminalLog('System: Terminal output copied to clipboard.', 'system', activeTerminalSession);
   };
 
@@ -300,6 +352,7 @@ export function Terminal() {
         <span className="flex items-center gap-2 text-slate-500"><Layers size={10} className="text-indigo-400" /> Session: {activeTerminalSession.toUpperCase()}</span>
       </div>
 
+<<<<<<< HEAD
       {/* Clickable Command Catalog */}
       <div className={`border-b ${s.border} bg-black/30`}>
         <div className="px-6 py-2 flex items-center gap-3">
@@ -349,12 +402,15 @@ export function Terminal() {
         )}
       </div>
 
+=======
+>>>>>>> main
       {/* Terminal Output */}
       <div 
         ref={scrollRef}
         className={`flex-1 overflow-auto p-6 font-mono text-[11px] space-y-1.5 selection:bg-indigo-500/40 ${s.logBg} scrollbar-hide`}
       >
         {logs.map((log) => (
+<<<<<<< HEAD
           <div key={log.id} className="flex flex-col gap-1 mb-2 animate-in fade-in slide-in-from-left-1 duration-200">
             <div className="flex gap-4 leading-relaxed">
               <span className="text-slate-700 shrink-0 select-none text-[9px] mt-0.5">[{new Date(log.timestamp).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
@@ -375,15 +431,32 @@ export function Terminal() {
                 <span className="text-emerald-500/50"> [REALITY_SIGNED]</span>
               </div>
             )}
+=======
+          <div key={log.id} className="flex gap-4 leading-relaxed animate-in fade-in slide-in-from-left-1 duration-200">
+            <span className="text-slate-700 shrink-0 select-none text-[9px] mt-0.5">[{new Date(log.timestamp).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
+            <span className={`break-all whitespace-pre-wrap flex-1 ${
+              log.type === 'command' ? 'text-white font-bold' :
+              log.type === 'error' ? 'text-rose-400 drop-shadow-[0_0_5px_rgba(251,113,133,0.3)]' :
+              log.type === 'success' ? 'text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.3)]' :
+              log.type === 'system' ? 'text-indigo-400 font-black' : 
+              s.text
+            }`}>
+              {log.content}
+            </span>
+>>>>>>> main
           </div>
         ))}
         {executing && (
           <div className="flex gap-4 animate-pulse">
             <span className="text-slate-700 text-[9px] mt-0.5">[......]</span>
+<<<<<<< HEAD
             <span className="text-indigo-400 italic flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-cyan-500 animate-ping" />
               ANCHORING_REALITY...
             </span>
+=======
+            <span className="text-indigo-400 italic">Processing high-density directive...</span>
+>>>>>>> main
           </div>
         )}
       </div>
@@ -404,9 +477,14 @@ export function Terminal() {
           onChange={(e) => setCommand(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={executing}
+<<<<<<< HEAD
           aria-label="Terminal command input"
           title="Type a command and press Enter"
           className="flex-1 bg-transparent border-none outline-none text-white font-mono text-[12px]"
+=======
+          placeholder="Awaiting master command..."
+          className="flex-1 bg-transparent border-none outline-none text-white font-mono text-[12px] placeholder:text-slate-700"
+>>>>>>> main
           autoFocus
         />
         {command.trim() && (

@@ -4,7 +4,7 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import path from 'path';
 
-const LOCAL_BRIDGE_URL = 'http://localhost:3001';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 const PERSISTENCE_FILE = path.resolve(__dirname, 'simulator_data.json');
 
 class ShadowRunSimulator {

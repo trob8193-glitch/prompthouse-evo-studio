@@ -16,14 +16,22 @@ export class SovereignFirewall {
     let tokensSaved = 0;
     let moneySaved = 0;
 
+<<<<<<< HEAD
     
+=======
+    console.log('[FIREWALL] Intercepting request...');
+>>>>>>> main
 
     // 1. Context Compaction
     const compactor = new ContextCompactor();
     const { compactedContext, savings } = compactor.compress(context);
     tokensSaved += savings.tokens;
     moneySaved += savings.cost;
+<<<<<<< HEAD
     
+=======
+    console.log(`[FIREWALL] Compacted Context. Saved ${savings.tokens} tokens ($${savings.cost.toFixed(4)}).`);
+>>>>>>> main
 
     // 2. Shadow Cache Lookup
     const cache = new ShadowCache();
@@ -31,7 +39,11 @@ export class SovereignFirewall {
     const cachedResponse = await cache.lookup(cacheKey);
 
     if (cachedResponse) {
+<<<<<<< HEAD
       
+=======
+      console.log('[FIREWALL] CACHE HIT! Bypassing API completely.');
+>>>>>>> main
       const simulatedTokens = prompt.length + compactedContext.length + cachedResponse.length; 
       const simulatedCost = (simulatedTokens / 1000) * 0.005; 
       
@@ -49,7 +61,11 @@ export class SovereignFirewall {
     // 3. Semantic Routing (Local vs Cloud)
     const router = new SemanticRouter();
     const route = router.determineRoute(prompt, compactedContext);
+<<<<<<< HEAD
     
+=======
+    console.log(`[FIREWALL] Routing to: ${route.provider} (${route.model})`);
+>>>>>>> main
 
     // 4. Execution 
     let generatedResponse = await this._executeModel(prompt, compactedContext, route, aiAdaptor, systemPrompt);
@@ -59,16 +75,27 @@ export class SovereignFirewall {
       const simulatedTokens = prompt.length + compactedContext.length + generatedResponse.length;
       const simulatedCost = (simulatedTokens / 1000) * 0.005;
       moneySaved += simulatedCost;
+<<<<<<< HEAD
       
+=======
+      console.log(`[FIREWALL] Local Execution Saved $${simulatedCost.toFixed(4)}`);
+>>>>>>> main
     }
 
     // 5. Zero-Shot Pre-flight Sandbox
     const sandbox = new SyntaxSandbox();
     if (sandbox.containsCode(generatedResponse)) {
+<<<<<<< HEAD
       
       const { fixedCode, wasFixed } = await sandbox.verifyAndFix(generatedResponse);
       if (wasFixed) {
         
+=======
+      console.log('[FIREWALL] Entering Pre-flight Sandbox...');
+      const { fixedCode, wasFixed } = await sandbox.verifyAndFix(generatedResponse);
+      if (wasFixed) {
+        console.log('[FIREWALL] Syntax errors caught and fixed locally!');
+>>>>>>> main
         generatedResponse = fixedCode;
       }
     }

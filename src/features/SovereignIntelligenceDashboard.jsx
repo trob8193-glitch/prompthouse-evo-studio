@@ -259,6 +259,7 @@ export function SovereignIntelligenceDashboard() {
             color="#10b981"
           />
           <QuickAction
+<<<<<<< HEAD
             icon={Zap}
             label="Trigger Evolution Cycle"
             sub="Execute physical logic evolution & compaction"
@@ -279,6 +280,8 @@ export function SovereignIntelligenceDashboard() {
             color="#6366f1"
           />
           <QuickAction
+=======
+>>>>>>> main
             icon={Activity}
             label="View Metrics"
             sub="Detailed performance monitoring dashboard"

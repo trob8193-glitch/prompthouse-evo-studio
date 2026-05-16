@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 const PROMPT_LIBRARY_FILE = path.resolve('promptLibrary.json');
-const LOCAL_BRIDGE_URL = 'http://localhost:3001/prompts';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001/prompts';
 
 class PromptLibrary {
     constructor() {

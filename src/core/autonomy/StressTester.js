@@ -1,12 +1,16 @@
 import { Log } from './SovereignLogger.js';
 import { TruthChain } from '../truth/TruthChain.js';
 
+<<<<<<< HEAD
 /**
  * PH EVO STUDIO — STRESS TESTER (Absolute Operational Reality)
  * ═══════════════════════════════════════════════════════════════
  * ABSOLUTE REALITY: Physically hardens the studio via real failure injection.
  * Triggers physical OS-level throttling and audits the recovery.
  */
+=======
+import { TruthChain } from '../truth/TruthChain.js';
+>>>>>>> main
 
 export class StressTester {
   constructor() {

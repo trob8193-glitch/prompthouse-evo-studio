@@ -170,7 +170,11 @@ export default function PastMVPConsole() {
       mode: 'offline',
     });
     setCommerceResult(result);
+<<<<<<< HEAD
     log(result?.blocked ? `Commerce blocked: ${result.reason || 'not available'}` : 'Commerce request accepted.');
+=======
+    log(`Commerce spec created.`);
+>>>>>>> main
     refreshAll();
   };
 
@@ -389,11 +393,18 @@ export default function PastMVPConsole() {
       {commerceResult && (
         <div style={{ ...card, border: '1px solid #4ade8044' }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', marginBottom: 6 }}>💳 Commerce Rail</div>
+<<<<<<< HEAD
           <div style={{ fontSize: 11, color: '#a0a0c0' }}>Product: {commerceResult.requested?.productName || '—'}</div>
           <div style={{ fontSize: 11, color: '#a0a0c0' }}>Price: {commerceResult.requested?.price ? `$${(commerceResult.requested.price / 100).toFixed(2)}` : '—'}</div>
           <div style={{ marginTop: 8, fontSize: 10, color: commerceResult.blocked ? '#f87171' : '#4ade80', fontStyle: 'italic' }}>
             {commerceResult.blocked ? `Blocked: ${commerceResult.reason || 'owner approval + Stripe required'}` : 'Checkout ready.'}
           </div>
+=======
+          <div style={{ fontSize: 11, color: '#a0a0c0' }}>Product: {commerceResult.spec.productName}</div>
+          <div style={{ fontSize: 11, color: '#a0a0c0' }}>Price: ${(commerceResult.spec.price/100).toFixed(2)}</div>
+          {commerceResult.mockLink && <div style={{ fontSize: 10, color: '#4ade80', marginTop: 4 }}>URL: {commerceResult.mockLink}</div>}
+          <div style={{ marginTop: 8, fontSize: 10, color: '#666', fontStyle: 'italic' }}>⚠️ Live payment links require owner approval</div>
+>>>>>>> main
         </div>
       )}
 

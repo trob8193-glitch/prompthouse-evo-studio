@@ -8,6 +8,7 @@ export function SwarmCouncil() {
   ]);
 
   useEffect(() => {
+<<<<<<< HEAD
     let mounted = true;
 
     const poll = async () => {
@@ -40,6 +41,16 @@ export function SwarmCouncil() {
     poll();
     const interval = setInterval(poll, 15000);
     return () => { mounted = false; clearInterval(interval); };
+=======
+    // Simulate real-time voting / deliberation
+    const interval = setInterval(() => {
+      setAgents(prev => prev.map(agent => ({
+        ...agent,
+        status: Math.random() > 0.7 ? 'VOTING' : 'IDLE'
+      })));
+    }, 3000);
+    return () => clearInterval(interval);
+>>>>>>> main
   }, []);
 
   return (

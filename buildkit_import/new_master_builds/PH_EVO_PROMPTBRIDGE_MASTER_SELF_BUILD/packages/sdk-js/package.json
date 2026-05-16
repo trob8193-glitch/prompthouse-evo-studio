@@ -1,6 +1,0 @@
-{
-  "name": "@ph-evo/sdk-js",
-  "version": "0.1.0",
-  "type": "module",
-  "main": "src/client.js"
-}

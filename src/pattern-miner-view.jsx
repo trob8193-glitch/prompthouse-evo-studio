@@ -4,7 +4,14 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { addProofReceipt } from './prompt-base.js';
+<<<<<<< HEAD
 import { minePatterns, getAllPatterns, generateRecipeFromPattern } from './worktwin-vault.js';
+=======
+// Dummy implementations for missing pattern-miner.js
+const runPatternMiner = () => [];
+const getAllPatterns = () => [];
+const generateRecipeFromPattern = (p) => ({ name: 'Mock Recipe' });
+>>>>>>> main
 
 export function PatternMinerView() {
   const [patterns, setPatterns] = useState([]);

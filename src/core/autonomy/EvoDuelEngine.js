@@ -22,7 +22,11 @@ export class EvoDuelEngine {
     Log.info(`⚔️ [Duel] Initiating logic duel: ${botA.name} vs ${botB.name}`);
     Log.info(`📍 Target: ${logicTarget}`);
 
+<<<<<<< HEAD
     // Deterministic evaluation based on keyword matching + stable hash tie-break.
+=======
+    // Real evaluation based on keyword matching
+>>>>>>> main
     const evaluate = (bot, target) => {
       const keywords = target.toLowerCase().split(' ');
       const botNameWords = bot.name.toLowerCase().split(' ');
@@ -34,6 +38,7 @@ export class EvoDuelEngine {
         if (botRoleWords.includes(word)) score += 5;
       });
       
+<<<<<<< HEAD
       // Bonus for experience (numeric id if present).
       const numericId = Number(bot.id);
       if (Number.isFinite(numericId)) score += numericId * 0.1;
@@ -47,6 +52,14 @@ export class EvoDuelEngine {
       return n;
     };
 
+=======
+      // Bonus for experience (id)
+      score += (bot.id || 0) * 0.1;
+      
+      return score || Math.random(); // Fallback if no match
+    };
+
+>>>>>>> main
     const scoreA = evaluate(botA, logicTarget);
     const scoreB = evaluate(botB, logicTarget);
 

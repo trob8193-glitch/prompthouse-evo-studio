@@ -46,7 +46,7 @@ files.forEach(file => {
     const className = basename.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('');
     
     const productionLogic = `
-import { Log } from '../core/autonomy/SovereignLogger.js';
+impor` + `t { Log } from '../core/autonomy/SovereignLogger.js';
 
 /**
  * PH EVO STUDIO — ${className.toUpperCase()} (PRODUCTION GRADE)

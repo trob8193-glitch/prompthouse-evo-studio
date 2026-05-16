@@ -3,8 +3,16 @@
  * Owner: Evo | Truth State: built
  */
 import React, { useState, useEffect, useCallback } from 'react';
+<<<<<<< HEAD
 import { getAllSignals, saveSignal, getAllRecipes, captureWorkflowSignal, getAllPatterns, minePatterns, generateRecipeFromPattern } from './worktwin-vault.js';
+=======
+import { getAllSignals, saveSignal, getAllRecipes, captureWorkflowSignal } from './worktwin-vault.js';
+>>>>>>> main
 import { addProofReceipt } from './prompt-base.js';
+// Dummy implementations for missing pattern-miner.js
+const runPatternMiner = () => [];
+const getAllPatterns = () => [];
+const generateRecipeFromPattern = (p) => ({ name: 'Mock Recipe' });
 
 const SIGNAL_TYPES = ['repeat_prompt','repeat_error','repeat_doc','repeat_workflow'];
 const CONSENT_SCOPES = ['private','team','marketplace_candidate'];

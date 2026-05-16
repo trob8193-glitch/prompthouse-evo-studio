@@ -1,7 +1,14 @@
 import { Log } from '../autonomy/SovereignLogger.js';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
+<<<<<<< HEAD
 import fs from 'fs';
+=======
+import { exec } from 'child_process';
+import util from 'util';
+
+const execPromise = util.promisify(exec);
+>>>>>>> main
 
 /**
  * PH EVO STUDIO — SELF-MAINTENANCE (V5 PRODUCTION)
@@ -66,6 +73,7 @@ export class SelfMaintenance {
   }
 
   async auditLogicDensity() {
+<<<<<<< HEAD
     try {
       const root = join(process.cwd(), 'src', 'features');
       const files = [];
@@ -94,6 +102,15 @@ export class SelfMaintenance {
       return { density, filesScanned: files.length, totalLines, totalFunctions };
     } catch (e) {
       return { density: 0, error: e.message };
+=======
+    // Simple heuristic for demo: count files in src/features
+    try {
+      const { stdout } = await execPromise('dir /b /s src\\features\\*.js');
+      const files = stdout.split('\n').filter(f => f.trim().length > 0);
+      return { density: files.length / 100 }; // Placeholder logic for real density
+    } catch (e) {
+      return { density: 0.1 };
+>>>>>>> main
     }
   }
 

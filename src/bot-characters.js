@@ -30,3 +30,8 @@ export const EVO_DEV_TEAM = [
 ];
 
 export const getBotById = (id) => EVO_DEV_TEAM.find(b => b.id === id);
+
+export const EXPRESSIONS = { neutral: 'neutral' };
+export const MOTIONS = { idle: 'idle' };
+export const BotCharacter = () => null;
+export const BotStageCharacter = () => null;

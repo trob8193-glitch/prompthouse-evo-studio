@@ -37,7 +37,11 @@ export function StudioGradingSystemView() {
         <Award size={16} color="#f59e0b" />
         <span style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0' }}>Prompt Grading Engine</span>
       </div>
+<<<<<<< HEAD
       <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} ghostInput="Paste a prompt to grade..."
+=======
+      <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="Paste a prompt to grade..."
+>>>>>>> main
         style={{ width: '100%', minHeight: 120, background: '#0f172a', border: '1px solid #1e293b', borderRadius: 8, padding: 14, color: '#e2e8f0', fontSize: 13, fontFamily: 'Inter, system-ui, sans-serif', outline: 'none', resize: 'vertical', marginBottom: 12 }} />
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <button onClick={gradePrompt}
@@ -64,7 +68,11 @@ const RELEASE_GATES = [
   { id: 6, label: 'Dashboard shows live metrics', category: 'Core' },
   { id: 7, label: 'Navigation routes to all pages', category: 'UI' },
   { id: 8, label: 'Mobile viewport renders correctly', category: 'UI' },
+<<<<<<< HEAD
   { id: 9, label: 'No non-executable artifacts visible', category: 'Quality' },
+=======
+  { id: 9, label: 'No placeholder or stub content visible', category: 'Quality' },
+>>>>>>> main
   { id: 10, label: 'Error boundaries catch crashes', category: 'Quality' },
   { id: 11, label: 'Sensitive data redacted in logs', category: 'Security' },
   { id: 12, label: 'Production build under 500KB gzip', category: 'Performance' },

@@ -53,18 +53,35 @@ export const createCommerceProduct = (session, spec) => {
     return { blocked: true, reason: 'owner approval required' };
   }
 
+<<<<<<< HEAD
   return {
     blocked: true,
     reason: 'Checkout links are not generated locally. Use the live checkout endpoint with owner approval (/api/commerce/checkout).',
     injectionCode: `Product: ${productName}`,
     requested: { session, productName, price }
+=======
+  const encodedName = encodeURIComponent(productName || 'product');
+  return {
+    blocked: false,
+    mockLink: `https://checkout.prompthouse.local/mock?session=${encodeURIComponent(session)}&product=${encodedName}&price=${price}`,
+    injectionCode: `Product: ${productName}`
+>>>>>>> main
   };
 };
 
 export const createPricingTable = (session) => {
   return {
+<<<<<<< HEAD
     status: 'blocked',
     reason: 'Pricing tiers are not hardcoded. Fetch pricing from a real commerce provider or configured product catalog.',
     requested: { session }
+=======
+    status: 'verified',
+    tiers: [
+      { name: 'Starter', price: 999 },
+      { name: 'Pro', price: 1999 },
+      { name: 'Enterprise', price: 4999 }
+    ]
+>>>>>>> main
   };
 };

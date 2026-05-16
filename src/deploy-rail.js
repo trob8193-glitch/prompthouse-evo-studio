@@ -33,6 +33,7 @@ import { getSovereigntyPolicy } from './prompt-base.js';
 }
 
 export const runDeployRail = async (missionId, params = {}) => {
+<<<<<<< HEAD
   const hasLegacyDryRun = Object.prototype.hasOwnProperty.call(params || {}, 'dryRun');
   const liveRun = hasLegacyDryRun
     ? !Boolean(params?.dryRun)
@@ -48,20 +49,46 @@ export const runDeployRail = async (missionId, params = {}) => {
         liveRun,
         receipt: { status: 'blocked', approvalRequired: false, mode: 'live_run' },
         log: ['[LIVE-RUN] blocked by runtime/provider boundaries (owner gate bypassed by UNBOUND policy).']
+=======
+  const { dryRun = true, ownerApproved = false, candidateScore = 0 } = params;
+  
+  const isUnbound = getSovereigntyPolicy() === 'unbound';
+  
+  if (!dryRun && !ownerApproved) {
+    if (isUnbound && candidateScore === 100) {
+      return {
+        blocked: true,
+        receipt: { status: 'blocked', approvalRequired: false }
+>>>>>>> main
       };
     }
     return {
       blocked: true,
+<<<<<<< HEAD
       liveRun,
       receipt: { status: 'blocked', approvalRequired: true, mode: 'live_run' },
       log: ['[LIVE-RUN] owner approval is required before deployment execution.']
+=======
+      receipt: { status: 'blocked', approvalRequired: true }
+    };
+  }
+  
+  if (dryRun) {
+    return {
+      blocked: false,
+      receipt: { status: 'built' }
+>>>>>>> main
     };
   }
   
   return {
     blocked: false,
+<<<<<<< HEAD
     liveRun,
     receipt: { status: 'deployed', mode: 'live_run' },
     log: ['[LIVE-RUN] deployment gate passed.']
+=======
+    receipt: { status: 'deployed' }
+>>>>>>> main
   };
 };

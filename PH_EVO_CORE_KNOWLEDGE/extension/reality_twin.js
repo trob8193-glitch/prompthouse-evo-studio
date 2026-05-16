@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const LOCAL_BRIDGE_URL = 'http://localhost:3001';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 const STATE_FILE = path.join(__dirname, 'realityTwinState.json');
 
 class RealityTwin {

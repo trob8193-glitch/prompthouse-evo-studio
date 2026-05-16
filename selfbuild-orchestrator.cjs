@@ -8,7 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 const FEATURES_PATH = path.join(__dirname, 'master_features.json');
 const OUTPUT_DIR = path.join(__dirname, 'src', 'features');
 
@@ -37,7 +37,7 @@ function build6LayerStack(feature) {
 
     mission: `Build the complete implementation for the "${feature.name}" feature. Description: ${feature.description}. This is a real production feature — write real, working code.`,
 
-    domainLock: `Domain: JavaScript/ES Modules. Runtime: Browser (localStorage available) + Node.js bridge at http://localhost:3001. Framework: React 18. State: Zustand. The code will be imported by other modules in the studio.`,
+    domainLock: `Domain: JavaScript/ES Modules. Runtime: Browser (localStorage available) + Node.js bridge at http://127.0.0.1:3001. Framework: React 18. State: Zustand. The code will be imported by other modules in the studio.`,
 
     constraints: `Rules:
 1. Export all public functions and classes using ES module syntax (export function / export class)
@@ -47,8 +47,8 @@ function build6LayerStack(feature) {
 5. Include JSDoc comments for every exported function
 6. MINIMUM 100 LINES of real logic. This is an OMEGA-LEVEL BUILD.
 7. Implement deep, complex logic. Use state machines, caching, and multi-step verification.
-8. If the feature needs persistence, use fetch() to the bridge API at http://localhost:3001
-9. If the feature needs AI, use fetch() to http://localhost:3001/chat`,
+8. If the feature needs persistence, use fetch() to the bridge API at http://127.0.0.1:3001
+9. If the feature needs AI, use fetch() to http://127.0.0.1:3001/chat`,
 
     variables: `Feature ID: ${feature.id}. Feature Name: ${feature.name}. Module: ${feature.module}. Description: ${feature.description}.`,
 

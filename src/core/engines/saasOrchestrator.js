@@ -1,6 +1,9 @@
 import { join } from 'path';
 import { writeFileSync, mkdirSync } from 'fs';
+<<<<<<< HEAD
 import { Log } from '../autonomy/SovereignLogger.js';
+=======
+>>>>>>> main
 
 /**
  * SaaS Orchestrator Engine
@@ -20,7 +23,11 @@ export class SaasOrchestrator {
       { role: 'user', content: `Design a full-stack architecture for: ${prompt}` }
     ];
 
+<<<<<<< HEAD
     Log.info('🏗️ [SaasOrchestrator] Generating Blueprint...');
+=======
+    console.log('[SaasOrchestrator] Generating Blueprint...');
+>>>>>>> main
     const blueprintRes = await this.ai.generateResponse(blueprintMessage);
     
     let blueprint;
@@ -36,7 +43,11 @@ export class SaasOrchestrator {
       throw new Error('Invalid blueprint format.');
     }
 
+<<<<<<< HEAD
     Log.info(`🏗️ [SaasOrchestrator] Blueprint created with ${blueprint.architecture.length} files.`);
+=======
+    console.log(`[SaasOrchestrator] Blueprint created with ${blueprint.architecture.length} files.`);
+>>>>>>> main
 
     // 2. Generation Phase (Parallel)
     const files = [];
@@ -58,7 +69,11 @@ export class SaasOrchestrator {
     await Promise.all(buildPromises);
 
     // 3. Assembly Phase
+<<<<<<< HEAD
     Log.info('🏗️ [SaasOrchestrator] Assembling files in sandbox...');
+=======
+    console.log('[SaasOrchestrator] Assembling files in sandbox...');
+>>>>>>> main
     for (const file of files) {
       const fullPath = join(this.sandboxDir, file.path);
       const dir = fullPath.substring(0, fullPath.lastIndexOf('/'));

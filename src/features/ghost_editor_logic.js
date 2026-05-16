@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+<<<<<<< HEAD
 import { getApprovalBlockReason, hasExplicitOwnerApproval } from '../owner-approval.js';
 
 const BLOCKED_MERGE_PATTERNS = [
@@ -17,6 +18,8 @@ const BLOCKED_MERGE_PATTERNS = [
 ];
 
 const CODE_SIGNAL_PATTERN = /[{}()[\];]|=>|\b(import|export|const|let|class|function|return|async|await)\b/;
+=======
+>>>>>>> main
 
 export class GhostEditorLogic {
   constructor(ai) {
@@ -24,7 +27,11 @@ export class GhostEditorLogic {
   }
 
   async execute(payload) {
+<<<<<<< HEAD
     const { action, filePath, code, ownerApproval } = payload;
+=======
+    const { action, filePath, code } = payload;
+>>>>>>> main
     const absolutePath = path.resolve(process.cwd(), filePath);
 
     if (action === 'get') {
@@ -32,7 +39,11 @@ export class GhostEditorLogic {
     }
 
     if (action === 'merge') {
+<<<<<<< HEAD
       return this.mergeOptimization(absolutePath, code, ownerApproval);
+=======
+      return this.mergeOptimization(absolutePath, code);
+>>>>>>> main
     }
 
     throw new Error(`Unknown action: ${action}`);
@@ -75,6 +86,7 @@ ${originalCode}`;
     return { originalCode, ghostCode };
   }
 
+<<<<<<< HEAD
   mergeOptimization(absolutePath, code, ownerApproval = {}) {
     if (!fs.existsSync(absolutePath)) {
       throw new Error(`Cannot merge ghost layer: target file not found (${absolutePath})`);
@@ -140,4 +152,10 @@ ${originalCode}`;
 
     return relativePath === 'src/core' || relativePath.startsWith('src/core/');
   }
+=======
+  mergeOptimization(absolutePath, code) {
+    fs.writeFileSync(absolutePath, code, 'utf8');
+    return { success: true, message: `Merged optimization into ${path.basename(absolutePath)}` };
+  }
+>>>>>>> main
 }
