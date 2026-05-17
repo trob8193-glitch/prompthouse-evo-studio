@@ -1,8 +1,12 @@
-
+import React from 'react';
 import { Log } from './core/autonomy/SovereignLogger.js';
 import SovereignChat from './features/SovereignChat';
 import RareCapabilities from './features/RareCapabilities';
+<<<<<<< HEAD
+import { EvoEyesView } from './features/EvoEyesView';
+=======
 import EvoEyesView from './features/EvoEyesView';
+>>>>>>> main
 import MetricsView from './features/MetricsView';
 
 
@@ -10,7 +14,7 @@ import MetricsView from './features/MetricsView';
  * PH EVO STUDIO — AI-VIEWS (PRODUCTION GRADE)
  * ═══════════════════════════════════════════════════════════════
  * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
+ * Operational status is determined by live audits and proof receipts.
  */
 
 
@@ -109,4 +113,7 @@ export const AutoRepairView = () => {
     </div>
   );
 };
+<<<<<<< HEAD
+=======
 
+>>>>>>> main

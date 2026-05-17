@@ -60,7 +60,41 @@ export default function BotOrb({ mode = 'IDLE', resonance = 0.99 }) {
 }
 
 export const BotBus = {
+<<<<<<< HEAD
+  _listeners: new Map(),
+  on(eventName, handler) {
+    if (!eventName || typeof handler !== 'function') return () => {};
+    const key = String(eventName);
+    const set = this._listeners.get(key) || new Set();
+    set.add(handler);
+    this._listeners.set(key, set);
+    return () => this.off(key, handler);
+  },
+  off(eventName, handler) {
+    const key = String(eventName);
+    const set = this._listeners.get(key);
+    if (!set) return;
+    set.delete(handler);
+    if (set.size === 0) this._listeners.delete(key);
+  },
+  emit(eventName, payload) {
+    const key = String(eventName);
+    const set = this._listeners.get(key);
+    if (!set) return 0;
+    let delivered = 0;
+    for (const fn of [...set]) {
+      try {
+        fn(payload);
+        delivered += 1;
+      } catch (e) {
+        Log.error(`❌ [BotBus] handler error for ${key}: ${e.message}`);
+      }
+    }
+    return delivered;
+  },
+=======
   emit: (event) => console.log('[BotBus]', event)
+>>>>>>> main
 };
 
 export const BOT_EMOJI = {};

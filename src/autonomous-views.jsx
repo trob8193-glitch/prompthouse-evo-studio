@@ -74,7 +74,7 @@ export function AutonomousBuilderView() {
     <div className="flex-col">
       <div>
         <div className="page-title">🤖 Autonomous App Builder</div>
-        <div className="page-subtitle">Tell the bots what to build. They design, code, audit, and deliver — end to end. Real code. Real files. No mocks.</div>
+        <div className="page-subtitle">Tell the bots what to build. They design, code, audit, and deliver — end to end. Real code. Real files. No Theatrical-Stubs.</div>
       </div>
 
       {/* Mission Input */}
@@ -83,19 +83,19 @@ export function AutonomousBuilderView() {
           <div className="field">
             <label className="field-label">🎯 Mission — What are we building?</label>
             <textarea className="field-textarea" value={mission} onChange={e => setMission(e.target.value)}
-              placeholder="Build a task management app with auth, dashboard, task lists, and settings..."
+              ghostInput="Build a task management app with auth, dashboard, task lists, and settings..."
               style={{ minHeight: 80 }} disabled={building} />
           </div>
           <div className="grid-2" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
             <div className="field">
               <label className="field-label">App Name</label>
               <input className="field-input" value={appName} onChange={e => setAppName(e.target.value)}
-                placeholder="my_awesome_app" disabled={building} />
+                ghostInput="my_awesome_app" disabled={building} />
             </div>
             <div className="field">
               <label className="field-label">Features (comma separated)</label>
               <input className="field-input" value={features} onChange={e => setFeatures(e.target.value)}
-                placeholder="home, auth, dashboard, settings" disabled={building} />
+                ghostInput="home, auth, dashboard, settings" disabled={building} />
             </div>
             <div className="field">
               <label className="field-label">Platform</label>

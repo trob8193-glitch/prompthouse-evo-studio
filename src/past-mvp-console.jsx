@@ -153,7 +153,7 @@ export default function PastMVPConsole() {
     if (!selectedMission) { log('Select a mission first.', '#f87171'); return; }
     setLoading(true);
     log('[UNBOUND] Blueprint Orca initializing DeployRail (Shadow-Dome Protocol)...');
-    const result = await runDeployRail(selectedMission.id, { dryRun: false, candidateScore: 100, provider: 'vercel' });
+    const result = await runDeployRail(selectedMission.id, { liveRun: true, candidateScore: 100, provider: 'vercel' });
     setDeployResult(result);
     result.log.forEach(l => log(l));
     log('[UNBOUND] DeployRail complete. Sovereign auto-approved.', '#4ade80');
@@ -163,14 +163,18 @@ export default function PastMVPConsole() {
 
   const handleCommerce = () => {
     if (!selectedMission) { log('Select a mission first.', '#f87171'); return; }
-    log('Compiler Bearcat creating Commerce Rail spec (mock mode)...');
+    log('Compiler Bearcat requesting Commerce Rail checkout (gated until live + owner-approved)...');
     const result = createCommerceProduct(selectedMission.id, {
       productName: selectedMission.title || 'PromptHouse Feature',
       price: 2999,
-      mode: "[PURGED BY OMEGA PROTOCOL]",
+      mode: 'offline',
     });
     setCommerceResult(result);
+<<<<<<< HEAD
+    log(result?.blocked ? `Commerce blocked: ${result.reason || 'not available'}` : 'Commerce request accepted.');
+=======
     log(`Commerce spec created.`);
+>>>>>>> main
     refreshAll();
   };
 
@@ -206,7 +210,7 @@ export default function PastMVPConsole() {
     await generateTemporalStack(selectedMission.id, selectedMission.title, ['React','Node.js','OpenAI'], callBridge);
 
     log('Step 5/7: DeployRail (Shadow-Dome Protocol)...');
-    await runDeployRail(selectedMission.id, { dryRun: false, candidateScore: 100 });
+    await runDeployRail(selectedMission.id, { liveRun: true, candidateScore: 100 });
 
     log('Step 6/7: Commerce Rail...');
     createCommerceProduct(selectedMission.id, { productName: selectedMission.title, price: 2999, mode: "[PURGED BY OMEGA PROTOCOL]" });
@@ -290,7 +294,7 @@ export default function PastMVPConsole() {
         <input
           value={newMissionTitle}
           onChange={e => setNewMissionTitle(e.target.value)}
-          placeholder="New mission title..."
+          ghostInput="New mission title..."
           style={{ flex: 1, minWidth: 180, background: '#0f0f1e', border: '1px solid #2a2a4a', borderRadius: 6, padding: '6px 10px', color: '#e0e0ff', fontSize: 12 }}
           onKeyDown={e => e.key === 'Enter' && handleCreateMission()}
         />
@@ -307,7 +311,7 @@ export default function PastMVPConsole() {
       <textarea
         value={userPrompt}
         onChange={e => setUserPrompt(e.target.value)}
-        placeholder="Enter your prompt or mission intent here..."
+        ghostInput="Enter your prompt or mission intent here..."
         style={{ width: '100%', minHeight: 70, background: '#0a0a18', border: '1px solid #2a2a4a', borderRadius: 8, padding: '8px 12px', color: '#e0e0ff', fontSize: 12, resize: 'vertical', boxSizing: 'border-box', marginBottom: 12 }}
       />
 
@@ -317,8 +321,8 @@ export default function PastMVPConsole() {
         <button onClick={handleFission} disabled={loading} style={btn('#818cf8')}>⚡ Run Fission</button>
         <button onClick={handleVectorPack} disabled={loading} style={btn('#22d3ee')}>📦 VectorPack</button>
         <button onClick={handleTemporal} disabled={loading} style={btn('#a78bfa')}>⏳ Temporal Stack</button>
-        <button onClick={handleDeploy} disabled={loading} style={btn('#f5c842')}>🚀 DeployRail (dry)</button>
-        <button onClick={handleCommerce} disabled={loading} style={btn('#4ade80')}>💳 Commerce Mock</button>
+        <button onClick={handleDeploy} disabled={loading} style={btn('#f5c842')}>🚀 DeployRail (live)</button>
+        <button onClick={handleCommerce} disabled={loading} style={btn('#4ade80')}>💳 Commerce (gated)</button>
         <button onClick={handleNightForge} disabled={loading} style={btn('#fb923c')}>🌙 NightForge</button>
         <button onClick={handleFullAudit} disabled={loading} style={{ ...btn('#ec4899'), fontWeight: 900, fontSize: 13 }}>
           {loading ? '⏳ Running...' : '🤖 FULL AUDIT (All 7 Gates)'}
@@ -380,19 +384,27 @@ export default function PastMVPConsole() {
       {deployResult && (
         <div style={{ ...card, border: '1px solid #f5c84244' }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: '#f5c842', marginBottom: 6 }}>
-            🚀 DeployRail — {deployResult.dryRun ? 'DRY RUN' : deployResult.blocked ? 'BLOCKED' : 'DEPLOYED'}
+            🚀 DeployRail — {deployResult.liveRun ? (deployResult.blocked ? 'BLOCKED' : 'DEPLOYED') : 'LIVE RUN'}
           </div>
           {deployResult.log.slice(0, 5).map((l, i) => <div key={i} style={{ fontSize: 11, color: '#a0a0c0' }}>{l}</div>)}
         </div>
       )}
 
-      {commerceResult && !commerceResult.blocked && (
+      {commerceResult && (
         <div style={{ ...card, border: '1px solid #4ade8044' }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: '#4ade80', marginBottom: 6 }}>💳 Commerce Rail</div>
+<<<<<<< HEAD
+          <div style={{ fontSize: 11, color: '#a0a0c0' }}>Product: {commerceResult.requested?.productName || '—'}</div>
+          <div style={{ fontSize: 11, color: '#a0a0c0' }}>Price: {commerceResult.requested?.price ? `$${(commerceResult.requested.price / 100).toFixed(2)}` : '—'}</div>
+          <div style={{ marginTop: 8, fontSize: 10, color: commerceResult.blocked ? '#f87171' : '#4ade80', fontStyle: 'italic' }}>
+            {commerceResult.blocked ? `Blocked: ${commerceResult.reason || 'owner approval + Stripe required'}` : 'Checkout ready.'}
+          </div>
+=======
           <div style={{ fontSize: 11, color: '#a0a0c0' }}>Product: {commerceResult.spec.productName}</div>
           <div style={{ fontSize: 11, color: '#a0a0c0' }}>Price: ${(commerceResult.spec.price/100).toFixed(2)}</div>
           {commerceResult.mockLink && <div style={{ fontSize: 10, color: '#4ade80', marginTop: 4 }}>URL: {commerceResult.mockLink}</div>}
           <div style={{ marginTop: 8, fontSize: 10, color: '#666', fontStyle: 'italic' }}>⚠️ Live payment links require owner approval</div>
+>>>>>>> main
         </div>
       )}
 

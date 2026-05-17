@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 /** Auth - api01 **/
 
 import fetch from 'node-fetch';
@@ -84,3 +86,4 @@ export const bridgeLogin = async (username, password) => {
     });
     return response.json();
 };
+>>>>>>> main

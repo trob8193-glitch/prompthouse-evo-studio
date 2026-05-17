@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 # AI Self-Training Report
 Generated: 2026-05-09T03:27:54.286Z
 Bridge: http://127.0.0.1:3001
@@ -70,3 +72,4 @@ Read the full review at .ai/outbox/gpt-review.md and execute the recommended pro
     }
   }
 }
+>>>>>>> main

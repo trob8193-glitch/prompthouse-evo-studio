@@ -40,6 +40,24 @@ ios/Pods/
 ios/.symlinks/
 macos/Pods/
 
+<<<<<<< HEAD
+# Scratch and temporary files
+scratch/
+temp_zip/
+temp_mobile_engine.js
+test-output.txt
+vitest-output.txt
+.sovereign-cache/
+.sovereign-shards/
+src/store.js.restored
+docs/knowledge/
+extracted_images/
+evo-extension/
+.firebase/
+.firebaserc
+PH_EVO_CORE_KNOWLEDGE/extension/
+buildkit_import/
+=======
 # Sovereign Scratch & Temp
 scratch/
 temp_mobile_engine.js
@@ -47,3 +65,4 @@ temp_mobile_engine.js
 .prompt-garden/
 .prompthouse-data/
 .sovereign-shards/
+>>>>>>> main

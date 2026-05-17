@@ -1,9 +1,10 @@
 import { Log } from './SovereignLogger.js';
+import crypto from 'crypto';
 
 /**
  * PH EVO STUDIO — EVO DUEL ENGINE (PHASE 14)
  * ═══════════════════════════════════════════════════════════════
- * Competitive simulation framework for sentient agents. 
+ * Competitive evaluation framework for sentient agents.
  * Resolves logic conflicts by pitting bot-strategies against 
  * each other in the 'Logic Arena'.
  */
@@ -21,7 +22,11 @@ export class EvoDuelEngine {
     Log.info(`⚔️ [Duel] Initiating logic duel: ${botA.name} vs ${botB.name}`);
     Log.info(`📍 Target: ${logicTarget}`);
 
+<<<<<<< HEAD
+    // Deterministic evaluation based on keyword matching + stable hash tie-break.
+=======
     // Real evaluation based on keyword matching
+>>>>>>> main
     const evaluate = (bot, target) => {
       const keywords = target.toLowerCase().split(' ');
       const botNameWords = bot.name.toLowerCase().split(' ');
@@ -33,12 +38,28 @@ export class EvoDuelEngine {
         if (botRoleWords.includes(word)) score += 5;
       });
       
+<<<<<<< HEAD
+      // Bonus for experience (numeric id if present).
+      const numericId = Number(bot.id);
+      if (Number.isFinite(numericId)) score += numericId * 0.1;
+
+      if (score > 0) return score;
+
+      // Stable fallback (no randomness): hash(botId + target) mapped to [0, 1).
+      const seed = `${String(bot.id ?? bot.name)}::${target}`;
+      const h = crypto.createHash('sha256').update(seed).digest('hex').slice(0, 8);
+      const n = parseInt(h, 16) / 0xffffffff;
+      return n;
+    };
+
+=======
       // Bonus for experience (id)
       score += (bot.id || 0) * 0.1;
       
       return score || Math.random(); // Fallback if no match
     };
 
+>>>>>>> main
     const scoreA = evaluate(botA, logicTarget);
     const scoreB = evaluate(botB, logicTarget);
 

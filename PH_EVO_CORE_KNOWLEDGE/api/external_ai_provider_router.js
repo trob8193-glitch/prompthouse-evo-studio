@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 /** External AI provider router - api17 **/
 
 import fetch from 'node-fetch';
@@ -109,3 +111,4 @@ export async function handleRequest(provider, prompt) {
 }
 
 export const getProviders = () => Object.values(MODEL_PROVIDERS);
+>>>>>>> main

@@ -1,6 +1,10 @@
 import { join } from 'path';
 import { readFileSync, writeFileSync } from 'fs';
 import { SovereignFirewall } from '../intelligence/SovereignFirewall.js';
+<<<<<<< HEAD
+import { Log } from '../autonomy/SovereignLogger.js';
+=======
+>>>>>>> main
 
 /**
  * SOVEREIGN INTELLIGENCE CORE
@@ -16,7 +20,11 @@ export class IntelligenceCore {
   }
 
   async executeAction(moduleName, action, payload = {}) {
+<<<<<<< HEAD
+    Log.info(`🧠 [IntelligenceCore] Executing: ${moduleName} -> ${action}`);
+=======
     console.log(`[IntelligenceCore] Executing: ${moduleName} -> ${action}`);
+>>>>>>> main
     
     try {
       // Check for real logic files first!
@@ -44,14 +52,22 @@ export class IntelligenceCore {
       if (moduleName === 'Terminal') {
         const { TerminalLogic } = await import('../../features/terminal_logic.js');
         const terminal = new TerminalLogic();
+<<<<<<< HEAD
+        const result = await terminal.execute({ ...(payload || {}), action });
+=======
         const result = await terminal.execute(payload);
+>>>>>>> main
         return { success: true, module: moduleName, action, result };
       }
 
       if (moduleName === 'GhostEditor') {
         const { GhostEditorLogic } = await import('../../features/ghost_editor_logic.js');
         const editor = new GhostEditorLogic(this.ai);
+<<<<<<< HEAD
+        const result = await editor.execute({ ...(payload || {}), action });
+=======
         const result = await editor.execute(payload);
+>>>>>>> main
         return { success: true, module: moduleName, action, result };
       }
 
@@ -91,7 +107,11 @@ export class IntelligenceCore {
         source: fwResult.source
       };
     } catch (error) {
+<<<<<<< HEAD
+      Log.error(`❌ [IntelligenceCore] Error in ${moduleName}: ${error.message}`);
+=======
       console.error(`[IntelligenceCore] Error in ${moduleName}:`, error);
+>>>>>>> main
       return {
         success: false,
         error: error.message || 'Unknown intelligence error'

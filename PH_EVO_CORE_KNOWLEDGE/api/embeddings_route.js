@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 /** Embeddings route - api07 **/
 
 import fetch from 'node-fetch';
@@ -90,3 +92,4 @@ export const removeAllEmbeddings = async () => {
 export const closeDatabase = () => {
     db.close();
 };
+>>>>>>> main

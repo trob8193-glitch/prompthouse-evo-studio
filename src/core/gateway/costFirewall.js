@@ -44,7 +44,11 @@ export class CostFirewall {
       throw new Error('Insufficient credits. Please upgrade or purchase more credits.');
     }
 
+<<<<<<< HEAD
+    // 5. Check daily limits (optional; enable when usage tables exist).
+=======
     // 5. Check Daily Limits (Placeholder for now, can be expanded with a ledger query)
+>>>>>>> main
     // const dailyUsage = db.prepare('SELECT SUM(credits_used) FROM api_requests WHERE organization_id = ? AND date(created_at) = date('now')').get(orgId);
     
     return true;
@@ -74,7 +78,19 @@ export class CostFirewall {
       `).run(`ledger_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, orgId, creditsUsed);
     })();
     
+<<<<<<< HEAD
+    
+  }
+
+  /**
+   * Retrieves the remaining credits for an organization.
+   */
+  static async getRemainingCredits(orgId) {
+    const row = db.prepare('SELECT credits_remaining FROM api_credits WHERE organization_id = ?').get(orgId);
+    return row ? row.credits_remaining : 0;
+=======
     console.log(`[FIREWALL] Deducted ${creditsUsed} credits from Org ${orgId}`);
+>>>>>>> main
   }
 }
 

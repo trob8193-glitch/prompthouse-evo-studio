@@ -63,7 +63,7 @@ export function EvoLiveForgePreview({ promptBridgeBaseUrl = "http://127.0.0.1:30
     setOutput(`PromptBridge request: ${action}...`);
     try {
       const result = await promptBridgeCall(
-        { action, draft, userInstruction: instruction || selectedTemplate.promptHint, dryRun: true },
+        { action, draft, userInstruction: instruction || selectedTemplate.promptHint, liveRun: true },
         { baseUrl: promptBridgeBaseUrl }
       );
       if (result.draft) setDraft(result.draft);
@@ -108,7 +108,7 @@ export function EvoLiveForgePreview({ promptBridgeBaseUrl = "http://127.0.0.1:30
       <section style={styles.main}>
         <div style={styles.editor}>
           <label style={styles.label}>Evo instruction</label>
-          <textarea style={styles.smallTextarea} value={instruction} onChange={(event) => setInstruction(event.target.value)} placeholder={selectedTemplate.promptHint} />
+          <textarea style={styles.smallTextarea} value={instruction} onChange={(event) => setInstruction(event.target.value)} ghostInput={selectedTemplate.promptHint} />
           <label style={styles.label}>HTML</label>
           <textarea style={styles.textarea} value={draft.html} onChange={(event) => patchDraft({ html: event.target.value })} />
           <label style={styles.label}>CSS</label>

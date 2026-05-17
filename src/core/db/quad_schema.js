@@ -256,7 +256,11 @@ CREATE TABLE IF NOT EXISTS sovereign_ledger (
 
 export function initDatabase() {
   db.exec(SCHEMA);
+<<<<<<< HEAD
+  
+=======
   console.log('Database schema initialized successfully.');
+>>>>>>> main
 }
 
 export default db;

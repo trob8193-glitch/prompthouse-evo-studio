@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Bot, Trello, Slack, TrendingUp, Users, ShieldCheck, ChevronRight } from 'lucide-react';
+import { Bot, Kanban, MessageSquare, TrendingUp, Users, ShieldCheck, ChevronRight } from 'lucide-react';
 
 export const BotAutomationDeck = () => {
   const [phase, setPhase] = useState(1);
@@ -54,7 +54,7 @@ export const BotAutomationDeck = () => {
           <div className="space-y-4">
             <div className="bg-black/30 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-500/10 rounded-lg"><Trello className="text-blue-400" /></div>
+                <div className="p-3 bg-blue-500/10 rounded-lg"><Kanban className="text-blue-400" /></div>
                 <div>
                   <h3 className="font-bold text-sm">Trello Automation</h3>
                   <p className="text-xs text-slate-500">Auto-sync project tasks & status</p>
@@ -70,7 +70,7 @@ export const BotAutomationDeck = () => {
 
             <div className="bg-black/30 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-purple-500/10 rounded-lg"><Slack className="text-purple-400" /></div>
+                <div className="p-3 bg-purple-500/10 rounded-lg"><MessageSquare className="text-purple-400" /></div>
                 <div>
                   <h3 className="font-bold text-sm">Slack Bridge</h3>
                   <p className="text-xs text-slate-500">Automated client updates & feedback</p>

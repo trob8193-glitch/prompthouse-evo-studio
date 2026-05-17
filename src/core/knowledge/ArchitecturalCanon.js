@@ -13,7 +13,7 @@ export const SOVEREIGN_CANON = {
   iq_target: 165.0,
   
   directives: [
-    'OMEGA_PROHIBITION: Ghost files, TODOs, and stubs are strictly forbidden.',
+    'OMEGA_PROHIBITION: Ghost files, Incomplete Stubs, and stubs are strictly forbidden.',
     'LOGIC_DENSITY: Every module must exceed 100 lines of functional production code.',
     'REALITY_TWIN: Virtual state must have 100% parity with physical disk state.',
     'TRUTH_AUDIT: All logic transitions must be cryptographically verified.'

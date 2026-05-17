@@ -1,10 +1,14 @@
 import { Log } from '../autonomy/SovereignLogger.js';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
+<<<<<<< HEAD
+import fs from 'fs';
+=======
 import { exec } from 'child_process';
 import util from 'util';
 
 const execPromise = util.promisify(exec);
+>>>>>>> main
 
 /**
  * PH EVO STUDIO — SELF-MAINTENANCE (V5 PRODUCTION)
@@ -69,6 +73,36 @@ export class SelfMaintenance {
   }
 
   async auditLogicDensity() {
+<<<<<<< HEAD
+    try {
+      const root = join(process.cwd(), 'src', 'features');
+      const files = [];
+      const walk = (dir) => {
+        if (!fs.existsSync(dir)) return;
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+          const abs = join(dir, entry.name);
+          if (entry.isDirectory()) walk(abs);
+          else if (abs.endsWith('.js') || abs.endsWith('.jsx')) files.push(abs);
+        }
+      };
+      walk(root);
+
+      let totalLines = 0;
+      let totalFunctions = 0;
+      for (const file of files) {
+        const content = readFileSync(file, 'utf8');
+        totalLines += content.split('\n').length;
+        totalFunctions += (content.match(/\bfunction\s+[A-Za-z0-9_]+\s*\(/g) || []).length;
+        totalFunctions += (content.match(/\b(?:const|let|var)\s+[A-Za-z0-9_]+\s*=\s*(?:async\s*)?\([^)]*\)\s*=>/g) || []).length;
+      }
+
+      // Density is "lines per function" (higher generally means more work per unit),
+      // returned with supporting counts so the UI can interpret it honestly.
+      const density = totalFunctions > 0 ? totalLines / totalFunctions : totalLines;
+      return { density, filesScanned: files.length, totalLines, totalFunctions };
+    } catch (e) {
+      return { density: 0, error: e.message };
+=======
     // Simple heuristic for demo: count files in src/features
     try {
       const { stdout } = await execPromise('dir /b /s src\\features\\*.js');
@@ -76,6 +110,7 @@ export class SelfMaintenance {
       return { density: files.length / 100 }; // Placeholder logic for real density
     } catch (e) {
       return { density: 0.1 };
+>>>>>>> main
     }
   }
 

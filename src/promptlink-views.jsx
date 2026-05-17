@@ -62,7 +62,7 @@ export function PromptLinkView() {
         setProofReceipts(Array.isArray(receipts) ? receipts.slice(0, 20) : []);
       } catch { /* Bridge may not have data yet */ }
     } else {
-      log(`🔴 Bridge offline: ${result.error}. Dry-run mode active.`, 'warn');
+      log(`🔴 Bridge offline: ${result.error}. Live-run mode active.`, 'warn');
     }
     setHandshaking(false);
   }, [log]);

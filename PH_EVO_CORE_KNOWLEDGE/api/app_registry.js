@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 /** App registry - api04 **/
 
 import fs from 'fs';
@@ -89,3 +91,4 @@ export const clearRegistry = () => {
     }
     saveRegistry(registry);
 };
+>>>>>>> main

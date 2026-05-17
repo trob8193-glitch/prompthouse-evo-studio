@@ -23,8 +23,8 @@ const buildOrder = [
   "Tool Autogenerator",
   "Proof-to-Value Deck",
   "Evo Exchange private marketplace",
-  "DeployRail dry-run",
-  "Commerce Rail mock/test",
+  "DeployRail live-run",
+  "Commerce Rail local test",
   "NightForge scheduled patch proposal",
   "Acceptance tests",
   "Runtime proof receipts",
@@ -64,6 +64,9 @@ export function AutonomousSelfBuildCommandCenter() {
   const [isUnbound, setIsUnbound] = useState(false);
   const [activeTab, setActiveTab] = useState("modules");
   const [receipts, setReceipts] = useState([]);
+  const [nuclearAudit, setNuclearAudit] = useState(null);
+  const [selfImplementationState, setSelfImplementationState] = useState(null);
+  const [autonomousEvolutionStatus, setAutonomousEvolutionStatus] = useState(null);
 
   const gateScores = useMemo(() => computeAllGateScores(GATE_DEFINITIONS), [receipts]);
 
@@ -103,11 +106,35 @@ export function AutonomousSelfBuildCommandCenter() {
     const init = async () => {
       await syncTruthFromBridge();
       setReceipts(getAllReceipts());
+      try {
+        const [auditRes, implRes, evoRes] = await Promise.all([
+          fetch('http://127.0.0.1:3001/api/audit/nuclear-truth'),
+          fetch('http://127.0.0.1:3001/api/self-implementation/status'),
+          fetch('http://127.0.0.1:3001/api/evolution/autonomous/status')
+        ]);
+        if (auditRes.ok) setNuclearAudit(await auditRes.json());
+        if (implRes.ok) setSelfImplementationState(await implRes.json());
+        if (evoRes.ok) setAutonomousEvolutionStatus(await evoRes.json());
+      } catch {
+        // Keep working with receipt-only view.
+      }
     };
     init();
 
     const interval = setInterval(() => {
-      syncTruthFromBridge().then(() => setReceipts(getAllReceipts()));
+      syncTruthFromBridge().then(async () => {
+        setReceipts(getAllReceipts());
+        try {
+          const [auditRes, evoRes] = await Promise.all([
+            fetch('http://127.0.0.1:3001/api/audit/nuclear-truth'),
+            fetch('http://127.0.0.1:3001/api/evolution/autonomous/status')
+          ]);
+          if (auditRes.ok) setNuclearAudit(await auditRes.json());
+          if (evoRes.ok) setAutonomousEvolutionStatus(await evoRes.json());
+        } catch {
+          // Keep rendering previous report.
+        }
+      });
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -134,21 +161,40 @@ export function AutonomousSelfBuildCommandCenter() {
     ]);
 
     try {
+<<<<<<< HEAD
+      const res = await fetch('http://127.0.0.1:3001/api/self-implementation/cycle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ applyFixes: false })
+      });
+=======
       const res = await fetch('http://127.0.0.1:3001/api/test/run', { method: 'POST' });
+>>>>>>> main
       const data = await res.json();
-      if (data.success) {
+      if (res.ok && data.success) {
+        let auditSnapshot = null;
+        try {
+          const auditRes = await fetch('http://127.0.0.1:3001/api/audit/nuclear-truth');
+          if (auditRes.ok) {
+            auditSnapshot = await auditRes.json();
+            setNuclearAudit(auditSnapshot);
+          }
+        } catch {
+          // Keep cycle usable even when audit endpoint is unavailable.
+        }
+
         setLog((items) => [
-          `Cycle ${cycle + 1}: Test suite passed. Proof receipts generated.`,
-          `Cycle ${cycle + 1}: Truth state updated for all 13 gates.`,
+          `Cycle ${cycle + 1}: Self-implementation cycle completed in ${data.status}.`,
+          auditSnapshot ? `Cycle ${cycle + 1}: Nuclear Truth score ${auditSnapshot.score}% (${String(auditSnapshot.truthState).toUpperCase()}).` : `Cycle ${cycle + 1}: Nuclear Truth snapshot unavailable.`,
           `Cycle ${cycle + 1}: Weakest gate: ${weakest.gate} (${weakest.score}%).`,
           ...items,
         ]);
         setReceipts(getAllReceipts());
       } else {
-        setLog((items) => [`Cycle ${cycle + 1}: Build failed. Error: ${data.error}`, ...items]);
+        setLog((items) => [`Cycle ${cycle + 1}: Cycle failed. Error: ${data.error || 'Unknown failure'}`, ...items]);
       }
     } catch (e) {
-      setLog((items) => [`Cycle ${cycle + 1}: Bridge offline. Virtual audit only.`, ...items]);
+      setLog((items) => [`Cycle ${cycle + 1}: Bridge offline. No new proof receipts.`, ...items]);
     }
   }
 
@@ -160,6 +206,7 @@ export function AutonomousSelfBuildCommandCenter() {
 
   const tabs = [
     { id: 'modules', label: 'Modules' },
+    { id: 'evolution_os', label: 'Evolution OS' },
     { id: 'inventions', label: 'Breakout Invention' },
     { id: 'controllers', label: 'Controllers' },
     { id: 'wires', label: 'Wires' },
@@ -231,7 +278,7 @@ export function AutonomousSelfBuildCommandCenter() {
                 boxShadow: isUnbound ? '0 0 15px rgba(239, 68, 68, 0.5)' : 'none'
               }}
             >
-              {isUnbound ? '⚠️ CI/CD AUTODEPLOY ACTIVE' : 'Enable Automated Deployment'}
+              {isUnbound ? '⚠️ UNBOUND DEPLOYMENT MODE' : 'Enable Automated Deployment'}
             </button>
           </div>
         </div>
@@ -262,29 +309,29 @@ export function AutonomousSelfBuildCommandCenter() {
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 24 }}>
             <div style={{ background: 'rgba(0,0,0,0.5)', padding: 16, borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Live Agents Deployed</div>
-              <div style={{ color: '#6ee7b7', fontSize: 32, fontWeight: 900 }}>14,203</div>
-              <div style={{ color: '#6ee7b7', fontSize: 10, marginTop: 4 }}>↑ 342 this hour</div>
+              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Modules Scanned</div>
+              <div style={{ color: '#6ee7b7', fontSize: 32, fontWeight: 900 }}>{nuclearAudit?.summary?.modulesScanned ?? '-'}</div>
+              <div style={{ color: '#6ee7b7', fontSize: 10, marginTop: 4 }}>Nuclear Truth inventory</div>
             </div>
             <div style={{ background: 'rgba(0,0,0,0.5)', padding: 16, borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Autonomous Daily Revenue</div>
-              <div style={{ color: '#fde047', fontSize: 32, fontWeight: 900 }}>$14,042</div>
-              <div style={{ color: '#fde047', fontSize: 10, marginTop: 4 }}>via Evo Exchange</div>
+              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Nuclear Truth Score</div>
+              <div style={{ color: '#fde047', fontSize: 32, fontWeight: 900 }}>{nuclearAudit?.score ?? '-'}%</div>
+              <div style={{ color: '#fde047', fontSize: 10, marginTop: 4 }}>Audit-backed</div>
             </div>
             <div style={{ background: 'rgba(0,0,0,0.5)', padding: 16, borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Darwinian Generations</div>
-              <div style={{ color: '#67e8f9', fontSize: 32, fontWeight: 900 }}>1,842,910</div>
-              <div style={{ color: '#67e8f9', fontSize: 10, marginTop: 4 }}>Mutations simulated</div>
+              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Broken API Wires</div>
+              <div style={{ color: '#67e8f9', fontSize: 32, fontWeight: 900 }}>{nuclearAudit?.summary?.brokenWires ?? '-'}</div>
+              <div style={{ color: '#67e8f9', fontSize: 10, marginTop: 4 }}>Route integrity</div>
             </div>
             <div style={{ background: 'rgba(0,0,0,0.5)', padding: 16, borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Auto-Merge Confidence</div>
-              <div style={{ color: 'white', fontSize: 32, fontWeight: 900 }}>100%</div>
-              <div style={{ color: '#cbd5e1', fontSize: 10, marginTop: 4 }}>0 friction • 100% test pass</div>
+              <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8 }}>Self-Implementation Active</div>
+              <div style={{ color: 'white', fontSize: 32, fontWeight: 900 }}>{selfImplementationState?.active ? 'YES' : 'NO'}</div>
+              <div style={{ color: '#cbd5e1', fontSize: 10, marginTop: 4 }}>Policy-backed runtime state</div>
             </div>
           </div>
           
           <div style={{ background: 'rgba(239, 68, 68, 0.1)', padding: 16, borderRadius: 8, border: '1px solid rgba(239, 68, 68, 0.3)', color: '#fca5a5', fontSize: 13, lineHeight: 1.5 }}>
-            <strong>WARNING: CI/CD AUTODEPLOY IS ACTIVE.</strong> The studio is now operating with Admin Root access. Deploy pipeline candidates that achieve a 100% test score will automatically bypass manual approval and deploy to production, publish to the repository, and merge into the codebase via the background daemon. You are governing a fully automated infrastructure.
+            <strong>WARNING:</strong> Unbound mode removes manual guardrails. Production deploy and live commerce remain policy-gated until explicit owner approval and proof receipts exist.
           </div>
         </div>
       )}
@@ -308,6 +355,54 @@ export function AutonomousSelfBuildCommandCenter() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {activeTab === 'evolution_os' && (
+        <div style={{ ...cardStyle, background: '#020617' }}>
+          <h2 style={{ margin: '0 0 14px 0', fontSize: 24, fontWeight: 900 }}>Autonomous Evolution OS</h2>
+          {!autonomousEvolutionStatus ? (
+            <div style={{ color: '#94a3b8', fontSize: 13 }}>Awaiting live evolution telemetry from PromptBridge...</div>
+          ) : (
+            <div style={{ display: 'grid', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 10 }}>
+                <div style={{ background: 'rgba(0,0,0,0.32)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: 10 }}>
+                  <div style={{ fontSize: 10, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Capability Graph</div>
+                  <div style={{ marginTop: 6, fontSize: 18, fontWeight: 900, color: '#6ee7b7' }}>{autonomousEvolutionStatus.capabilityGraph?.summary?.modules ?? 0} modules</div>
+                  <div style={{ marginTop: 4, fontSize: 12, color: '#cbd5e1' }}>Drift: {autonomousEvolutionStatus.drift?.score ?? 0}% ({autonomousEvolutionStatus.drift?.status || 'unknown'})</div>
+                </div>
+                <div style={{ background: 'rgba(0,0,0,0.32)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: 10 }}>
+                  <div style={{ fontSize: 10, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Failure Memory</div>
+                  <div style={{ marginTop: 6, fontSize: 18, fontWeight: 900, color: '#fca5a5' }}>{autonomousEvolutionStatus.failureMemory?.total ?? 0} failures</div>
+                  <div style={{ marginTop: 4, fontSize: 12, color: '#cbd5e1' }}>Weak point: {autonomousEvolutionStatus.failureMemory?.recoveryPlan?.topStage || 'none'}</div>
+                </div>
+                <div style={{ background: 'rgba(0,0,0,0.32)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: 10 }}>
+                  <div style={{ fontSize: 10, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.14em' }}>NightForge Challenge</div>
+                  <div style={{ marginTop: 6, fontSize: 18, fontWeight: 900, color: '#fde047' }}>{autonomousEvolutionStatus.nightforgeChallenge?.activeChallenge?.name || 'none'}</div>
+                  <div style={{ marginTop: 4, fontSize: 12, color: '#cbd5e1' }}>{autonomousEvolutionStatus.nightforgeChallenge?.activeChallenge?.target || 'No challenge active.'}</div>
+                </div>
+                <div style={{ background: 'rgba(0,0,0,0.32)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: 10 }}>
+                  <div style={{ fontSize: 10, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Replay Theater</div>
+                  <div style={{ marginTop: 6, fontSize: 18, fontWeight: 900, color: '#67e8f9' }}>{autonomousEvolutionStatus.replayTheater?.total ?? 0} runs</div>
+                  <div style={{ marginTop: 4, fontSize: 12, color: '#cbd5e1' }}>Verified: {autonomousEvolutionStatus.replayTheater?.statusMix?.verified ?? 0}</div>
+                </div>
+              </div>
+
+              <div style={{ background: 'rgba(0,0,0,0.32)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: 12 }}>
+                <div style={{ fontSize: 11, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: 8 }}>Top Feature Fusions</div>
+                {(autonomousEvolutionStatus.featureFusion?.top || []).slice(0, 5).map((fusion) => (
+                  <div key={fusion.id} style={{ padding: '8px 10px', marginBottom: 8, borderRadius: 6, border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(15,23,42,0.5)' }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: '#e2e8f0' }}>{fusion.route}</div>
+                    <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 3 }}>{fusion.fromUi} ↔ {fusion.toApi}</div>
+                    <div style={{ fontSize: 11, color: '#cbd5e1', marginTop: 4 }}>{fusion.proposal}</div>
+                  </div>
+                ))}
+                {(autonomousEvolutionStatus.featureFusion?.top || []).length === 0 && (
+                  <div style={{ color: '#64748b', fontSize: 12 }}>No live fusion candidates found yet.</div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
 

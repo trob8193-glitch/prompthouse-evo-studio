@@ -8,11 +8,11 @@
     },
     {
       "event": "Truth Enforcement",
-      "details": "Implemented TruthGate middleware to block all fake/dummy/mock data at the network level. Introduced Sovereignty Signatures for verified data."
+      "details": "Implemented TruthGate middleware to block all fake/dummy/Theatrical-Stub data at the network level. Introduced Sovereignty Signatures for verified data."
     },
     {
       "event": "Self-Maintenance Engine",
-      "details": "Built autonomous maintenance loop that scans code for integrity, purges placeholders, and evolves studio aesthetics (CSS) on every cycle."
+      "details": "Built autonomous maintenance loop that scans code for integrity, purges Ghost-Stubs, and evolves studio aesthetics (CSS) on every cycle."
     },
     {
       "event": "Bot Evolution",

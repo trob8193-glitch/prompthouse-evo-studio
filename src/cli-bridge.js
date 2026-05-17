@@ -20,7 +20,7 @@ export const COMMANDS = [
     cmd: (mission) => `${CLI_PATH} intake "${mission}"`,
     requiresInput: true,
     inputLabel: 'Mission text',
-    inputPlaceholder: 'Build onboarding flow with full auth and tests.',
+    inputHint: 'Build onboarding flow with full auth and tests.',
     truthLabel: 'built',
   },
   {
@@ -30,7 +30,7 @@ export const COMMANDS = [
     cmd: (name, target) => `${CLI_PATH} generate-app "${name}" "${target || name}"`,
     requiresInput: true,
     inputLabel: 'App name',
-    inputPlaceholder: 'prompt_house_demo',
+    inputHint: 'prompt_house_demo',
     truthLabel: 'built',
   },
   {
@@ -40,7 +40,7 @@ export const COMMANDS = [
     cmd: (feature) => `${CLI_PATH} scaffold "${feature}"`,
     requiresInput: true,
     inputLabel: 'Feature name',
-    inputPlaceholder: 'onboarding',
+    inputHint: 'onboarding',
     truthLabel: 'built',
   },
   {

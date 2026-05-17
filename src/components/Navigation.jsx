@@ -2,7 +2,11 @@ import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
   Activity, Eye, Swords, Sparkles, BarChart3, FolderOpen, Gauge, Zap, ChevronRight,
+<<<<<<< HEAD
+  ExternalLink, Share2
+=======
   ExternalLink
+>>>>>>> main
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -13,7 +17,11 @@ import { useSovereignStore } from '../store.js';
  * Drives the activePage state in the Zustand store.
  */
 
+<<<<<<< HEAD
+export const NAV_GROUPS = [
+=======
 const NAV_GROUPS = [
+>>>>>>> main
   {
     id: 'studio',
     label: 'Studio',
@@ -33,6 +41,10 @@ const NAV_GROUPS = [
       { id: 'forge-labs', label: 'Forge Labs', icon: Sparkles },
       { id: 'duel-arena', label: 'Duel Arena', icon: Swords },
       { id: 'ai-generator', label: 'AI Generator', icon: Zap },
+<<<<<<< HEAD
+      { id: 'evopulse-grid', label: 'EvoPulse Grid', icon: Share2 },
+=======
+>>>>>>> main
     ],
   },
   {
@@ -41,8 +53,15 @@ const NAV_GROUPS = [
     items: [
       { id: 'execution-queue', label: 'Execution Queue', icon: Rocket },
       { id: 'proof-console', label: 'Proof Console', icon: Shield },
+<<<<<<< HEAD
+      { id: 'proof-center', label: 'Proof Center', icon: Shield },
       { id: 'evo-eyes', label: 'Evo Eyes', icon: Eye },
       { id: 'metrics', label: 'Metrics', icon: BarChart3 },
+      { id: 'deployment-center', label: 'Deployment Center', icon: Rocket },
+=======
+      { id: 'evo-eyes', label: 'Evo Eyes', icon: Eye },
+      { id: 'metrics', label: 'Metrics', icon: BarChart3 },
+>>>>>>> main
     ],
   },
   {
@@ -77,6 +96,11 @@ export function Navigation() {
         overflowX: 'hidden',
         transition: 'width 0.2s ease, min-width 0.2s ease',
         flexShrink: 0,
+<<<<<<< HEAD
+        position: 'relative',
+        zIndex: 1000,
+=======
+>>>>>>> main
       }}
     >
       <div style={{ padding: collapsed ? '12px 6px' : '12px 10px', flex: 1 }}>
