@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+=======
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+>>>>>>> main
 import { Send, Trash2, Terminal, Loader2, Wifi, Bluetooth, Globe, Cpu, Signal, ChevronDown, Settings } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 import { universalSend, probeAllTransports, syncOfflineQueue, getCustomEndpoints, addCustomEndpoint, removeCustomEndpoint } from '../lib/universal-transport.js';
@@ -61,6 +65,15 @@ function AddEndpointModal({ onAdd, onClose }) {
             <option value="evo">Evo LM Endpoint</option>
           </select>
           <input value={url} onChange={e => setUrl(e.target.value)}
+<<<<<<< HEAD
+            ghostInput="http://192.168.1.x:3001"
+            style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, padding: '8px 12px', color: '#e2e8f0', fontSize: 12 }} />
+          <input value={label} onChange={e => setLabel(e.target.value)}
+            ghostInput="Label (e.g. Home Server)"
+            style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, padding: '8px 12px', color: '#e2e8f0', fontSize: 12 }} />
+          <input value={apiKey} onChange={e => setApiKey(e.target.value)}
+            ghostInput="API Key (optional)"
+=======
             placeholder="http://192.168.1.x:3001"
             style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, padding: '8px 12px', color: '#e2e8f0', fontSize: 12 }} />
           <input value={label} onChange={e => setLabel(e.target.value)}
@@ -68,6 +81,7 @@ function AddEndpointModal({ onAdd, onClose }) {
             style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, padding: '8px 12px', color: '#e2e8f0', fontSize: 12 }} />
           <input value={apiKey} onChange={e => setApiKey(e.target.value)}
             placeholder="API Key (optional)"
+>>>>>>> main
             type="password"
             style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, padding: '8px 12px', color: '#e2e8f0', fontSize: 12 }} />
         </div>
@@ -106,6 +120,12 @@ export default function SovereignChat() {
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
 
+<<<<<<< HEAD
+  const memoizedTransportMeta = useMemo(() => TRANSPORT_META, []);
+  const memoizedEndpoints = useMemo(() => customEndpoints, [customEndpoints]);
+
+=======
+>>>>>>> main
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, loading]);
@@ -128,7 +148,11 @@ export default function SovereignChat() {
   }, []);
 
   const buildSystemPrompt = useCallback(() => {
+<<<<<<< HEAD
+    const base = 'You are PH Evo Studio — a sovereign-grade AI development platform. Be precise, technical, and production-focused. No Ghost-Stubs, no Theatrical-Stubs.';
+=======
     const base = 'You are PH Evo Studio — a sovereign-grade AI development platform. Be precise, technical, and production-focused. No placeholders, no mocks.';
+>>>>>>> main
     if (!activeBot) return base;
     return `You are ${activeBot.name} (${activeBot.species}). Role: ${activeBot.role}. Signature: "${activeBot.signature}". Respond in character. ${base}`;
   }, [activeBot]);
@@ -138,6 +162,21 @@ export default function SovereignChat() {
     if (!text || loading) return;
     setInput('');
 
+<<<<<<< HEAD
+    if (text.startsWith('/gen ')) {
+      const prompt = text.replace('/gen ', '');
+      await EVOLUTION_BRIDGE.requestEvolution('Asset-Generation', `User Request: ${prompt}`);
+      setMessages(prev => [...prev, { id: `sys-${Date.now()}`, role: 'system', content: `✨ Generation Mission Dispatched: ${prompt}` }]);
+      return;
+    } else if (text.startsWith('/evolve ')) {
+      const target = text.replace('/evolve ', '');
+      await EVOLUTION_BRIDGE.requestEvolution(target, 'Manual user evolution trigger.');
+      setMessages(prev => [...prev, { id: `sys-${Date.now()}`, role: 'system', content: `🌀 Evolution Mission Started: ${target}` }]);
+      return;
+    }
+
+=======
+>>>>>>> main
     const userMsg = { id: `u-${Date.now()}`, role: 'user', content: text, timestamp: Date.now() };
     setMessages(prev => [...prev, userMsg]);
     setLoading(true);
@@ -413,7 +452,11 @@ export default function SovereignChat() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
+<<<<<<< HEAD
+            ghostInput={activeBot ? `Message ${activeBot.name}...` : 'Ask AI or a bot, start a mission, send a command...'}
+=======
             placeholder={activeBot ? `Message ${activeBot.name}...` : 'Ask AI or a bot, start a mission, send a command...'}
+>>>>>>> main
             rows={1}
             style={{ flex: 1, resize: 'none', background: '#0f172a', border: '1px solid #1e293b', borderRadius: 10, padding: '12px 16px', color: '#e2e8f0', fontSize: 13, fontFamily: 'Inter, system-ui, sans-serif', outline: 'none', lineHeight: 1.5, minHeight: 44, maxHeight: 120, overflow: 'auto' }}
             onFocus={(e) => e.target.style.borderColor = '#4f46e580'}

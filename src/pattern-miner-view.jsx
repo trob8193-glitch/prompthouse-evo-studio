@@ -4,10 +4,14 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { addProofReceipt } from './prompt-base.js';
+<<<<<<< HEAD
+import { minePatterns, getAllPatterns, generateRecipeFromPattern } from './worktwin-vault.js';
+=======
 // Dummy implementations for missing pattern-miner.js
 const runPatternMiner = () => [];
 const getAllPatterns = () => [];
 const generateRecipeFromPattern = (p) => ({ name: 'Mock Recipe' });
+>>>>>>> main
 
 export function PatternMinerView() {
   const [patterns, setPatterns] = useState([]);
@@ -29,12 +33,9 @@ export function PatternMinerView() {
   const scan = useCallback(async () => {
     setScanning(true);
     log('📡 Starting pattern scan of WorkTwin signals...', 'info');
-    
-    // Simulate scan time
-    await new Promise(r => setTimeout(r, 1500));
-    
+
     try {
-      const found = runPatternMiner({ minFrequency: 1 });
+      const found = minePatterns({ minFrequency: 1 });
       setPatterns(found);
       log(`✅ Scan complete: ${found.length} pattern(s) detected.`, found.length > 0 ? 'success' : 'info');
       addProofReceipt('pattern_miner', 'scan', 'verified', { count: found.length });
@@ -91,20 +92,18 @@ export function PatternMinerView() {
                       <div className="card-body">
                         <div className="flex-between" style={{ marginBottom: 8 }}>
                           <span className="badge badge-violet">{p.patternType}</span>
-                          <span style={{ fontSize: 11, color: 'var(--accent-gold)' }}>Frequency: {p.frequency}x</span>
+                          <span style={{ fontSize: 11, color: 'var(--accent-gold)' }}>Frequency: {p.count}x</span>
                         </div>
                         <div style={{ fontSize: 13, color: 'var(--text-primary)', marginBottom: 8 }}>
                           Examples:
                         </div>
                         <div className="flex-col gap-4">
-                          {p.examples.map((ex, i) => (
-                            <div key={i} style={{ fontSize: 11, color: 'var(--text-muted)', background: 'var(--bg-void)', padding: '4px 8px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>
-                              "{ex}..."
-                            </div>
-                          ))}
+                          <div style={{ fontSize: 11, color: 'var(--text-muted)', background: 'var(--bg-void)', padding: '4px 8px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>
+                            "{p.example || p.signature || ''}"
+                          </div>
                         </div>
                         <div className="flex-between" style={{ marginTop: 12 }}>
-                          <span style={{ fontSize: 11, color: 'var(--text-dim)' }}>Status: {p.status}</span>
+                          <span style={{ fontSize: 11, color: 'var(--text-dim)' }}>Last seen: {p.lastSeenAt || '—'}</span>
                           <button className="btn btn-secondary btn-sm" onClick={() => createRecipe(p)}>🪄 Gen Recipe</button>
                         </div>
                       </div>

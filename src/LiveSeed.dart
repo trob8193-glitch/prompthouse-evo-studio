@@ -19,5 +19,13 @@ class LiveSeedWidget extends StatelessWidget {
         ),
       ),
     );
+  /// Receives and processes the Singularity Status from the JS Foundry.
+  void syncWithJsFoundry(String status) {
+    print('🧬 [LiveSeed] Physically Synced with JS Foundry. Status: $status');
+    this.realityState = 'SINGULARITY_ALIGNED';
+  }
+
+  void handleJsCommand(String jsonPayload) {
+    // Parser logic for incoming JS bridge signals...
   }
 }

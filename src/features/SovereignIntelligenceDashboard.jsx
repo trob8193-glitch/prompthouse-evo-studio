@@ -259,6 +259,29 @@ export function SovereignIntelligenceDashboard() {
             color="#10b981"
           />
           <QuickAction
+<<<<<<< HEAD
+            icon={Zap}
+            label="Trigger Evolution Cycle"
+            sub="Execute physical logic evolution & compaction"
+            onClick={async () => {
+              try {
+                const res = await fetch('http://127.0.0.1:3001/api/study/initiate', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ protocolId: 'DREAM_CYCLE' })
+                });
+                const data = await res.json();
+                useSovereignStore.getState().addNotification(`Evolution Cycle Complete: ${data.signature}`, 'success');
+                useSovereignStore.getState().fetchMetrics();
+              } catch (err) {
+                useSovereignStore.getState().addNotification(`Evolution Failed: ${err.message}`, 'error');
+              }
+            }}
+            color="#6366f1"
+          />
+          <QuickAction
+=======
+>>>>>>> main
             icon={Activity}
             label="View Metrics"
             sub="Detailed performance monitoring dashboard"

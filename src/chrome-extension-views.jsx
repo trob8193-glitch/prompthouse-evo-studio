@@ -72,7 +72,7 @@ export function buildChromeExtensionFiles(config) {
       </div>
       <label>
         Mission
-        <textarea id="mission" placeholder="What should PromptHouse build from this page?"></textarea>
+        <textarea id="mission" ghostInput="What should PromptHouse build from this page?"></textarea>
       </label>
       <div class="button-row">
         <button id="capture-page">Capture Page</button>

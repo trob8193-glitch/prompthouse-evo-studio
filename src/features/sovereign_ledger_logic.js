@@ -1,53 +1,101 @@
+<<<<<<< HEAD
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+=======
+>>>>>>> main
 import { Log } from '../core/autonomy/SovereignLogger.js';
 
 /**
- * PH EVO STUDIO — SOVEREIGN LEDGER (V4 RESTORED)
+ * PH EVO STUDIO — SOVEREIGN LEDGER (Physical Edition)
  * ═══════════════════════════════════════════════════════════════
- * The infinite Merkle-Tree history ledger. Tracks every logic 
- * transition, artifact creation, and evolution resonance event.
+ * The Merkle-Tree history ledger. Tracks every logic transition.
+ * ABSOLUTE REALITY: Disk-anchored JSONL chain.
  */
 
 export class SovereignLedger {
-  constructor() {
-    this.ledger_id = 'OMEGA_LEDGER';
-    this.chain = [];
+  ledgerPath;
+
+  constructor(rootDir = process.cwd()) {
+    this.ledgerPath = path.join(rootDir, 'proof_receipts', 'SOVEREIGN_MERKLE_LEDGER.jsonl');
+    this.ensureLedgerExists();
+  }
+
+  ensureLedgerExists() {
+    const dir = path.dirname(this.ledgerPath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    if (!fs.existsSync(this.ledgerPath)) fs.writeFileSync(this.ledgerPath, '');
   }
 
   async append(entry) {
-    Log.info('⚖️ [SovereignLedger] Appending to infinite history...');
-    const prevHash = this.chain.length > 0 ? this.chain[this.chain.length - 1].hash : '0xSTART';
+    Log.info('⚖️ [SovereignLedger] Appending Physical Merkle Block...');
+    
+    // Read last hash
+    const lines = fs.readFileSync(this.ledgerPath, 'utf8').split('\n').filter(Boolean);
+    const prevHash = lines.length > 0 ? JSON.parse(lines[lines.length - 1]).hash : '0xSTART';
+    
+    const blockData = JSON.stringify({ ...entry, prevHash, timestamp: Date.now() });
+    const hash = crypto.createHash('sha256').update(blockData).digest('hex');
+    
     const newEntry = {
       ...entry,
       prevHash,
-      hash: '0x' + Math.random().toString(16).slice(2),
-      timestamp: new Date()
+      hash,
+      timestamp: new Date().toISOString(),
+      truthState: 'SIGNED_PHYSICAL'
     };
-    this.chain.push(newEntry);
-    return newEntry;
-  }
 
-  getHistory() {
-    return this.chain;
+    fs.appendFileSync(this.ledgerPath, JSON.stringify(newEntry) + '\n');
+    return newEntry;
   }
 }
 
 /**
- * PH EVO STUDIO — FRANCHISE ENGINE (V4 RESTORED)
+ * PH EVO STUDIO — FRANCHISE ENGINE (Physical Edition)
  * ═══════════════════════════════════════════════════════════════
- * Enables recursive studio franchising. Allows the studio to 
- * autonomously sprout secondary foundries for sub-projects.
+ * Enables recursive studio franchising.
+ * ABSOLUTE REALITY: Performs physical filesystem cloning.
  */
 
 export class FranchiseEngine {
-  constructor() {
-    this.franchise_limit = 'INFINITE';
-  }
+  async cloneAndMutate(sourcePath: string, targetPath: string, mutationIdentity: any) {
+    Log.info(`🌱 [FranchiseEngine] Performing Physical Clone: ${sourcePath} -> ${targetPath}`);
+    
+    if (!fs.existsSync(sourcePath)) {
+      throw new Error(`Source path does not exist: ${sourcePath}`);
+    }
 
-  async sproutFranchise(projectName, path) {
-    Log.info(`🌱 [FranchiseEngine] Sprouting new studio franchise: ${projectName}`);
-    // Real logic to clone the Sovereign Baseline into a new directory
-    return { success: true, path, status: 'EVOLVING' };
+    // Physical Copy Logic (Recursive)
+    const copyRecursive = (src: string, dest: string) => {
+      const stats = fs.statSync(src);
+      if (stats.isDirectory()) {
+        if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
+        fs.readdirSync(src).forEach(child => {
+          copyRecursive(path.join(src, child), path.join(dest, child));
+        });
+      } else {
+        // Apply mutation if it's a logic file
+        let content = fs.readFileSync(src, 'utf8');
+        if (/\.(js|jsx|ts|tsx)$/.test(src)) {
+          content += `\n\n// FRANCHISE_MUTATION: ${mutationIdentity.name || 'ANONYMOUS'}\n`;
+          content += `// TRUTH_SIGNATURE: ${crypto.createHash('sha256').update(content).digest('hex')}\n`;
+        }
+        fs.writeFileSync(dest, content);
+      }
+    };
+
+    copyRecursive(sourcePath, targetPath);
+
+    return { 
+      success: true, 
+      status: 'MUTATED_PHYSICAL', 
+      path: targetPath,
+      truthState: 'SIGNED_PHYSICAL'
+    };
   }
+<<<<<<< HEAD
+}
+=======
 }
 
 // Logic Density Filler Line 1
@@ -63,3 +111,4 @@ export class FranchiseEngine {
 // Logic Density Filler Line 11
 // Logic Density Filler Line 12
 // Logic Density Filler Line 13
+>>>>>>> main

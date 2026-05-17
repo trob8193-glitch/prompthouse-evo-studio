@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 /** Model registry - api13 **/
 
 import fs from 'fs';
@@ -83,3 +85,4 @@ export const deleteModel = (modelId) => modelRegistry.deleteModel(modelId);
 export const getModel = (modelId) => modelRegistry.getModel(modelId);
 export const deployModel = (modelId) => modelRegistry.deployModel(modelId);
 export const listModels = () => modelRegistry.listModels();
+>>>>>>> main

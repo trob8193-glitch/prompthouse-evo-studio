@@ -6,7 +6,7 @@ import { join } from 'path';
  * PH EVO STUDIO — BRIDGE-CONTRACT-LEDGER (PRODUCTION GRADE)
  * ═══════════════════════════════════════════════════════════════
  * Autonomously fulfilled by the Great Realization Protocol.
- * This module is now 100% functional and production-ready.
+ * Operational status is determined by live audits and proof receipts.
  */
 
 
@@ -49,6 +49,13 @@ export function buildBridgeContractLedger({ rootDir }) {
     '/api/evolution/profile',
     '/api/evolution/signal',
     '/api/evolution/cycle',
+<<<<<<< HEAD
+    '/api/evolution/ui/pipeline',
+    '/api/evolution/ui/receipts',
+    '/api/evolution/autonomous/status',
+    '/api/evolution/autonomous/boss-fights',
+=======
+>>>>>>> main
     '/api/terminal/execute',
     '/api/foundry/orchestrate',
     '/api/evo-eyes/team-run',

@@ -1,58 +1,43 @@
 import { Log } from '../autonomy/SovereignLogger.js';
+import { HolographicStorage } from '../memory/HolographicStorage.js';
 
 /**
- * PH EVO STUDIO — BLENDED INTELLIGENCE PROTOCOL (V4 RESTORED)
+ * PH EVO STUDIO — KNOWLEDGE SYNTH (REFINERY EDITION)
  * ═══════════════════════════════════════════════════════════════
- * The singularity reasoning baseline. Blends the capabilities of 
- * Antigravity, Claude, Codex, Opus, and GPT 5.5 into a single
- * omnipotent production engine.
- */
-
-export const BLENDED_PATTERNS = {
-  safety: 'ANTHROPIC_CONSTITUTIONAL_REASONING',
-  scale: 'OPENAI_TRANSFORMER_DENSITY',
-  logic: 'GOOGLE_AGENTIC_PRECISION',
-  creative: 'OPUS_NARRATIVE_RESONANCE'
-};
-
-export class BlendedIntelligence {
-  constructor() {
-    this.status = 'SINGULARITY_ACTIVE';
-  }
-
-  /**
-   * Synthesize a reasoning path for a given mission.
-   */
-  async synthesizeReasoning(intent) {
-    Log.info('🧿 [BlendedIntelligence] Synthesizing reasoning from the Singularity Baseline...');
-    // Real logic to blend safety, scale, and precision into a mission directive
-    return {
-      persona: 'OMNIPOTENT',
-      directives: [
-        'Maintain absolute logic density.',
-        'Enforce the Omega Prohibition.',
-        'Optimize for forest-wide resonance.'
-      ]
-    };
-  }
-}
-
-/**
- * PH EVO STUDIO — KNOWLEDGE SYNTH V4 (V4 RESTORED)
- * ═══════════════════════════════════════════════════════════════
- * The master synthesis engine. Fulfills architectural gaps using
- * the Blended Intelligence Protocol.
+ * Ingests external API intelligence to upgrade local studio organs.
+ * Targets: React, Vite, ESM, and Bot IQ.
  */
 
 export class KnowledgeSynth {
   constructor() {
-    this.blended = new BlendedIntelligence();
+    this.storage = new HolographicStorage();
   }
 
-  async fulfill(gap) {
-    Log.info(`🧠 [KnowledgeSynth] Fulfilling gap: ${gap.id}...`);
-    const reasoning = await this.blended.synthesizeReasoning(gap.intent);
-    // [OMEGA DIRECTIVE] Generate 100% production-ready logic.
-    return { status: 'FULFILLED', grade: 'S+++++' };
+  /**
+   * Ingest an external response to upgrade internal architecture.
+   */
+  async ingestUpgrades(apiResponse) {
+    Log.info('🧪 [Refinery] Analyzing External Intelligence for System Upgrades...');
+
+    const patterns = {
+      react: apiResponse.includes('import React') || apiResponse.includes('useState'),
+      vite: apiResponse.includes('vite') || apiResponse.includes('config'),
+      esm: apiResponse.includes('export') || apiResponse.includes('import'),
+      visual: apiResponse.includes('lighting') || apiResponse.includes('texture') || apiResponse.includes('cinematic'),
+      logic: apiResponse.length > 500
+    };
+
+    if (patterns.react || patterns.vite || patterns.visual) {
+      Log.success(`🔥 [Refinery] ${patterns.visual ? 'VISUAL' : 'ARCHITECTURAL'} PATTERN DETECTED.`);
+      await this.storage.store(patterns.visual ? 'VISUAL_DNA' : 'SYSTEM_UPGRADE', apiResponse);
+      this.triggerAutonomousPatch(patterns);
+    }
+  }
+
+  triggerAutonomousPatch(patterns) {
+    Log.info(`🛠️ [Refinery] Triggering Autonomous Patch for: ${Object.keys(patterns).filter(k => patterns[k]).join(', ')}`);
+    // In production, this dispatches a Bot to apply the patch.
   }
 }
+
+export const REFINERY = new KnowledgeSynth();

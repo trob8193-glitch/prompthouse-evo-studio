@@ -14,6 +14,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import Stripe from 'stripe';
 
 // Import our core engines
 import { UniversalAIAdaptor } from './lib/ai/UniversalAIAdaptor.js';
@@ -3148,6 +3151,103 @@ app.get('/api/training/stats', (req, res) => {
   }
 });
 
+<<<<<<< HEAD
+// ─── Authentication (Real Local JWT) ────────────────────────────────────────────────
+const JWT_SECRET = process.env.JWT_SECRET || 'ph_evo_local_secure_secret_999';
+const MOCK_USER = { id: 'u1', email: 'admin@ph-evo.local', role: 'team_lead' };
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'Unauthorized: No token provided' });
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ error: 'Forbidden: Invalid token' });
+    req.user = user;
+    next();
+  });
+};
+
+app.post('/api/auth/register', async (req, res) => {
+  const { email, password, name } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+  
+  const users = readStore('users');
+  if (users.find(u => u.email === email)) return res.status(400).json({ error: 'User already exists' });
+  
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = {
+    id: `usr_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+    email,
+    name: name || email.split('@')[0],
+    password: hashedPassword,
+    createdAt: new Date().toISOString()
+  };
+  
+  users.push(user);
+  writeStore('users', users);
+  
+  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+  res.json({ success: true, token, user: { id: user.id, email: user.email, name: user.name } });
+});
+
+app.post('/api/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+  const users = readStore('users');
+  const user = users.find(u => u.email === email);
+  
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return res.status(401).json({ error: 'Invalid email or password' });
+  }
+  
+  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+  res.json({ success: true, token, user: { id: user.id, email: user.email, name: user.name } });
+});
+
+app.get('/api/auth/me', authenticateToken, (req, res) => {
+  const users = readStore('users');
+  const user = users.find(u => u.id === req.user.id);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  res.json({ success: true, user: { id: user.id, email: user.email, name: user.name } });
+});
+
+app.post('/api/auth/logout', authenticateToken, (req, res) => {
+  res.json({ success: true, message: 'Logged out successfully' });
+});
+
+// ─── Commerce (Real Stripe Integration) ─────────────────────────────────────────────
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
+
+app.post('/api/commerce/checkout', async (req, res) => {
+  const { productName, priceCents, currency } = req.body;
+  if (!productName || !priceCents) return res.status(400).json({ error: 'Missing product details' });
+  
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: currency || 'usd',
+          product_data: { name: productName },
+          unit_amount: priceCents,
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      success_url: `http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `http://localhost:5173/cancel`,
+    });
+    
+    res.json({ success: true, url: session.url, sessionId: session.id });
+  } catch (err) {
+    console.error('[Commerce] Stripe Error:', err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ─── Proof Intercept ─────────────────────────────────────────────────────────────
+app.post('/api/studio-os/proof/intercept', (req, res) => {
+  res.json({ success: true });
+=======
 app.get('/api/training/export', (req, res) => {
   if (!existsSync(TRAINING_FILE)) return res.status(404).json({ error: 'No training data yet' });
   res.setHeader('Content-Type', 'application/x-ndjson');
@@ -3197,4 +3297,5 @@ app.listen(port, '0.0.0.0', () => {
   console.log(`║  Version 2.1.0 — SMFF PRODUCTION       ║`);
   console.log(`╚════════════════════════════════════════╝`);
   console.log(`[BRIDGE ACTIVE] http://127.0.0.1:${port}`);
+>>>>>>> main
 });

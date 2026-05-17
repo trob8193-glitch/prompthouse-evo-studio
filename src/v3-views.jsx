@@ -5,7 +5,7 @@ import { useSovereignStore } from './store.js';
 // Restored View Imports
 import SovereignChat from './features/SovereignChat';
 import RareCapabilities from './features/RareCapabilities';
-import EvoEyesView from './features/EvoEyesView';
+import { EvoEyesView } from './features/EvoEyesView';
 
 /**
  * PH EVO STUDIO — V3 MODULAR VIEWS (V4 RESTORED)
@@ -66,13 +66,39 @@ export const BotStageView = () => {
       </div>
       <div className="mt-8 p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
         <div className="text-[10px] text-indigo-400 font-black uppercase tracking-widest mb-1">Reality Log</div>
+<<<<<<< HEAD
+        <div className="text-xs text-indigo-300/70 font-medium">System state synchronized with Bridge 127.0.0.1:3001. No drift markers detected.</div>
+=======
         <div className="text-xs text-indigo-300/70 font-medium">System state synchronized with Bridge 127.0.0.1:3001. No simulation detected.</div>
+>>>>>>> main
       </div>
     </div>
   );
 };
 
 export const MasterPromptVaultView = () => {
+<<<<<<< HEAD
+  const [isSyncing, setIsSyncing] = React.useState(false);
+  const [prompts, setPrompts] = React.useState([]);
+  const [error, setError] = React.useState(null);
+
+  React.useEffect(() => {
+    async function fetchPrompts() {
+      setIsSyncing(true);
+      setError(null);
+      try {
+        const res = await fetch('/src/prompthouse_50_master_build_prompts.json');
+        if (!res.ok) throw new Error(`Prompt vault fetch failed (${res.status})`);
+        const data = await res.json();
+        const list = Array.isArray(data?.features) ? data.features.slice(0, 8).map(f => f.name).filter(Boolean) : [];
+        setPrompts(list);
+      } catch (e) {
+        console.error('Failed to fetch prompts:', e);
+        setPrompts([]);
+        setError(String(e.message || e));
+      } finally {
+        setIsSyncing(false);
+=======
   const [isSyncing, setIsSyncing] = React.useState(true);
   const [prompts, setPrompts] = React.useState([]);
 
@@ -92,6 +118,7 @@ export const MasterPromptVaultView = () => {
       } catch (e) {
         console.error('Failed to fetch prompts:', e);
         setPrompts(['System Archetype', 'Nuclear Truth Gate', 'Evo Core Manifest', 'Logic Density Auditor']);
+>>>>>>> main
       }
     }
     fetchPrompts();
@@ -105,6 +132,25 @@ export const MasterPromptVaultView = () => {
           {isSyncing ? 'SYNCING...' : 'VERIFIED'}
         </div>
       </div>
+<<<<<<< HEAD
+      {error ? (
+        <div className="text-xs text-rose-300/80 border border-rose-500/20 bg-rose-500/5 rounded-xl p-3 mb-4">
+          Vault load failed: {error}
+        </div>
+      ) : null}
+      <div className="space-y-4">
+        {(prompts.length > 0 ? prompts : []).map((item) => (
+          <div key={item} className="flex items-center justify-between p-4 bg-black/20 border border-slate-800/50 rounded-xl hover:border-indigo-500/30 transition-colors cursor-pointer group">
+            <span className="text-slate-400 font-bold text-sm group-hover:text-white transition-colors">{item}</span>
+            <span className="text-[9px] font-black uppercase px-2 py-1 rounded bg-emerald-900/50 text-emerald-400">
+              LOCKED
+            </span>
+          </div>
+        ))}
+        {prompts.length === 0 && !isSyncing ? (
+          <div className="text-xs text-slate-500">No prompts loaded.</div>
+        ) : null}
+=======
       <div className="space-y-4">
         {(prompts.length > 0 ? prompts : ['System Archetype', 'Nuclear Truth Gate', 'Evo Core Manifest', 'Logic Density Auditor']).map((item, idx) => (
           <div key={item} className="flex items-center justify-between p-4 bg-black/20 border border-slate-800/50 rounded-xl hover:border-indigo-500/30 transition-colors cursor-pointer group">
@@ -114,6 +160,7 @@ export const MasterPromptVaultView = () => {
             </span>
           </div>
         ))}
+>>>>>>> main
       </div>
     </div>
   );
@@ -158,4 +205,7 @@ export const BotRosterView = () => {
     </div>
   );
 };
+<<<<<<< HEAD
+=======
 
+>>>>>>> main

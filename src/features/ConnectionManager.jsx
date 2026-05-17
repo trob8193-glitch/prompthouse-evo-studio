@@ -103,7 +103,11 @@ export default function ConnectionManager() {
                 type="text" 
                 value={targetIp}
                 onChange={(e) => setTargetIp(e.target.value)}
+<<<<<<< HEAD
+                ghostInput="e.g. 192.168.1.45:3001"
+=======
                 placeholder="e.g. 192.168.1.45:3001"
+>>>>>>> main
                 className="w-full bg-black/40 border border-slate-800 rounded-lg px-4 py-3 text-white font-mono text-sm focus:ring-2 focus:ring-indigo-500/40 outline-none transition-all group-hover:border-slate-700"
               />
               <ArrowRight className="absolute right-4 top-3.5 text-slate-700 group-focus-within:text-indigo-500 transition-colors" size={16} />

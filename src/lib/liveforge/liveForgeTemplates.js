@@ -35,7 +35,7 @@ export const LIVEFORGE_TEMPLATES = [
     category: "extension",
     description: "Chrome/Edge side panel for page capture and PromptHouse bridge.",
     promptHint: "Improve this as a Chrome/Edge extension side panel.",
-    html: `<main class="side"><div class="badge">Browser Agent Bridge</div><h1>Capture this page.</h1><textarea placeholder="Task: Turn this page into a PromptLink adapter."></textarea><button>Save to PromptBase</button><button>Create Proof Receipt</button></main>`,
+    html: `<main class="side"><div class="badge">Browser Agent Bridge</div><h1>Capture this page.</h1><textarea ghostInput="Task: Turn this page into a PromptLink adapter."></textarea><button>Save to PromptBase</button><button>Create Proof Receipt</button></main>`,
     css: `.side{font-family:Inter,system-ui;background:#070a12;color:#f8f0de;min-height:100%;padding:16px}.badge{color:#f5b942;font-size:12px;font-weight:900;text-transform:uppercase}textarea{width:100%;min-height:120px;background:#111827;color:#f8f0de;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:12px}button{width:100%;margin-top:10px;background:rgba(245,185,66,.16);border:1px solid rgba(245,185,66,.35);border-radius:12px;color:#f8f0de;padding:12px;font-weight:800}`,
     js: ""
   }

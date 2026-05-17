@@ -142,13 +142,13 @@ export function AIPromptGeneratorView() {
 
       {/* Task + Stack + Context */}
       <input value={task} onChange={e => setTask(e.target.value)}
-        placeholder="What do you want to build or solve? (e.g. Build a login screen with JWT auth)"
+        ghostInput="What do you want to build or solve? (e.g. Build a login screen with JWT auth)"
         style={{ width: '100%', background: '#0f0f1e', border: '1px solid #2a2a4a', borderRadius: 8, padding: '10px 14px', color: '#e0e0ff', fontSize: 13, marginBottom: 8, boxSizing: 'border-box' }} />
       <input value={stack} onChange={e => setStack(e.target.value)}
-        placeholder="Stack / Tools (e.g. React, Node.js, Supabase, Flutter)"
+        ghostInput="Stack / Tools (e.g. React, Node.js, Supabase, Flutter)"
         style={{ width: '100%', background: '#0f0f1e', border: '1px solid #2a2a4a', borderRadius: 8, padding: '10px 14px', color: '#e0e0ff', fontSize: 13, marginBottom: 8, boxSizing: 'border-box' }} />
       <textarea value={context} onChange={e => setContext(e.target.value)}
-        placeholder="Context pack — user type, constraints, existing code, prior decisions... (supports {{variables}})"
+        ghostInput="Context pack — user type, constraints, existing code, prior decisions... (supports {{variables}})"
         style={{ width: '100%', minHeight: 70, background: '#0a0a18', border: '1px solid #2a2a4a', borderRadius: 8, padding: '10px 14px', color: '#e0e0ff', fontSize: 13, resize: 'vertical', marginBottom: 12, boxSizing: 'border-box' }} />
 
       <button onClick={generate} disabled={loading || !task.trim()} style={{

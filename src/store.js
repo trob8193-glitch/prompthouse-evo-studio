@@ -7,6 +7,183 @@ import { create } from 'zustand';
  * navigation, bridge connectivity, chat, metrics, and API config.
  */
 
+<<<<<<< HEAD
+import { BRIDGE_URL, safeFetchBridge } from './config/bridge-config.js';
+
+const getInitialToken = () => {
+  if (typeof localStorage !== 'undefined') {
+    return localStorage.getItem('ph_evo_token') || null;
+  }
+  return null;
+};
+
+export const useSovereignStore = create((set, get) => ({
+  // ─── Authentication ─────────────────────────────────────────
+  user: null,
+  token: getInitialToken(),
+  isAuthenticated: !!getInitialToken(),
+  authLoading: false,
+  authError: null,
+
+  login: async (email, password) => {
+    set({ authLoading: true, authError: null });
+    try {
+      const result = await safeFetchBridge('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
+      const data = result.data;
+      if (!result.ok) throw new Error(result.error || 'Login failed');
+      
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('ph_evo_token', data.token);
+      }
+      set({ user: data.user, token: data.token, isAuthenticated: true, authLoading: false });
+      return true;
+    } catch (err) {
+      set({ authError: err.message, authLoading: false });
+      return false;
+    }
+  },
+
+  register: async (email, password, displayName) => {
+    set({ authLoading: true, authError: null });
+    try {
+      const result = await safeFetchBridge('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ email, password, displayName })
+      });
+      const data = result.data;
+      if (!result.ok) throw new Error(result.error || 'Registration failed');
+      
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('ph_evo_token', data.token);
+      }
+      set({ user: data.user, token: data.token, isAuthenticated: true, authLoading: false });
+      return true;
+    } catch (err) {
+      set({ authError: err.message, authLoading: false });
+      return false;
+    }
+  },
+
+  logout: () => {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('ph_evo_token');
+    }
+    set({ user: null, token: null, isAuthenticated: false });
+  },
+
+  checkAuth: async () => {
+    const token = get().token;
+    if (!token) return;
+    try {
+      const result = await safeFetchBridge('/api/auth/me');
+      if (result.ok) {
+        const data = result.data;
+        set({ user: data.user, isAuthenticated: true });
+      } else {
+        get().logout();
+      }
+    } catch {
+      get().logout();
+    }
+  },
+
+  // ─── Navigation ─────────────────────────────────────────────
+  activePage: 'dashboard',
+  sidebarCollapsed: false,
+  activeFile: 'src/App.jsx',
+  terminalOpen: true,
+  terminalTheme: 'sovereign', // 'sovereign' | 'matrix' | 'classic'
+  activeTerminalSession: 'main',
+  terminalHistory: [],
+  bondedNodes: [], 
+  singularityLayer: 'diagnostics', // 'diagnostics' | 'semantic' | 'temporal' | 'network' | 'sprouts'
+  singularityActive: false,
+  terminalSessions: {
+    main: [{ id: 'l1', type: 'system', content: 'PH Evo Master Terminal v3.0 [Sovereign Core] online.', timestamp: Date.now() }],
+    build: [{ id: 'l2', type: 'system', content: 'Build & Compilation Pipeline ready.', timestamp: Date.now() }],
+    watch: [{ id: 'l3', type: 'system', content: 'Live Watcher / Hot-Reload channel active.', timestamp: Date.now() }],
+    security: [{ id: 'l4', type: 'system', content: 'Shadow Protocol / Security Log active.', timestamp: Date.now() }],
+  },
+
+  setActivePage: (page) => set({ activePage: page }),
+  setActiveFile: (file) => set({ activeFile: file }),
+  setTerminalOpen: (open) => set({ terminalOpen: open }),
+  setTerminalTheme: (theme) => set({ terminalTheme: theme }),
+  setActiveTerminalSession: (session) => set({ activeTerminalSession: session }),
+  setSingularityLayer: (layer) => set({ singularityLayer: layer }),
+  setSingularityActive: (active) => set({ singularityActive: active }),
+  
+  addBondedNode: (node) => set((s) => ({ 
+    bondedNodes: [...s.bondedNodes.filter(n => n.ip !== node.ip || n.port !== node.port), { ...node, status: 'VERIFIED', timestamp: Date.now() }] 
+  })),
+  removeBondedNode: (ip, port) => set((s) => ({ 
+    bondedNodes: s.bondedNodes.filter(n => n.ip !== ip || n.port !== port) 
+  })),
+  
+  refreshNodeMesh: async () => {
+    try {
+      const result = await safeFetchBridge('/api/intelligence/nodes/probe');
+      const data = result.data;
+      if (data.success) {
+        set({ bondedNodes: data.nodes });
+      }
+    } catch (err) {
+      console.warn('[Store] Node mesh refresh failed:', err.message);
+    }
+  },
+  
+  addTerminalLog: (content, type = 'info', session = 'main') => set((s) => ({
+    terminalSessions: {
+      ...s.terminalSessions,
+      [session]: [...(s.terminalSessions[session] || []), { id: `log-${Date.now()}`, type, content, timestamp: Date.now() }].slice(-250)
+    }
+  })),
+  
+  addTerminalHistory: (cmd) => set((s) => ({
+    terminalHistory: [...new Set([cmd, ...s.terminalHistory])].slice(0, 50)
+  })),
+  
+  clearTerminal: (session) => set((s) => ({
+    terminalSessions: {
+      ...s.terminalSessions,
+      [session]: []
+    }
+  })),
+  toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+
+  // ─── Evolution Runtime ─────────────────────────────────────
+  evolutionProfile: null,
+  evolutionRuntime: null,
+  setEvolutionProfile: (profile) => set({ evolutionProfile: profile || null }),
+  applyEvolutionRuntime: (runtime) => set((state) => ({
+    evolutionRuntime: runtime || null,
+    sidebarCollapsed: typeof runtime?.layoutHints?.sidebarCollapsed === 'boolean'
+      ? runtime.layoutHints.sidebarCollapsed
+      : state.sidebarCollapsed
+  })),
+
+  // ─── Bridge Connection ──────────────────────────────────────
+  bridgeStatus: 'disconnected', // 'connected' | 'disconnected' | 'error'
+  bridgeData: null,
+  bridgeError: null,
+
+  fetchBridgeStatus: async () => {
+    try {
+      const result = await safeFetchBridge('/status', { timeout: 5000 });
+      if (!result.ok) throw new Error(result.error || 'Bridge disconnected');
+      const data = result.data;
+      set({ bridgeStatus: 'connected', bridgeData: data, bridgeError: null });
+      return data;
+    } catch (err) {
+      set({ bridgeStatus: 'error', bridgeError: err.message });
+      return null;
+    }
+  },
+
+=======
 const BRIDGE_URL = 'http://127.0.0.1:3001';
 
 export const useSovereignStore = create((set, get) => ({
@@ -91,6 +268,7 @@ export const useSovereignStore = create((set, get) => ({
     }
   },
 
+>>>>>>> main
   // ─── System Metrics ─────────────────────────────────────────
   metrics: null,
   metricsLoading: false,
@@ -98,9 +276,15 @@ export const useSovereignStore = create((set, get) => ({
   fetchMetrics: async () => {
     set({ metricsLoading: true });
     try {
+<<<<<<< HEAD
+      const result = await safeFetchBridge('/api/metrics');
+      if (!result.ok) throw new Error(result.error || 'Metrics unavailable');
+      const data = result.data;
+=======
       const res = await fetch(`${BRIDGE_URL}/api/metrics`, { signal: AbortSignal.timeout(1500) });
       if (!res.ok) throw new Error(`Metrics returned ${res.status}`);
       const data = await res.json();
+>>>>>>> main
       set({ metrics: data, metricsLoading: false });
       return data;
     } catch (err) {
@@ -127,17 +311,27 @@ export const useSovereignStore = create((set, get) => ({
         .concat(userMsg)
         .map((m) => ({ role: m.role === 'system' ? 'system' : m.role, content: m.content }));
 
+<<<<<<< HEAD
+      const result = await safeFetchBridge('/api/evo-lm/chat', {
+        method: 'POST',
+=======
       const res = await fetch(`${BRIDGE_URL}/api/evo-lm/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+>>>>>>> main
         body: JSON.stringify({
           messages: apiMessages.filter((m) => m.role !== 'system'),
           systemPrompt: 'You are PH Evo Studio — a sovereign-grade AI development platform. Help the user with prompt engineering, code generation, architecture planning, and studio operations. Be precise, technical, and production-focused.'
         }),
       });
 
+<<<<<<< HEAD
+      if (!result.ok) throw new Error(result.error || 'Chat error');
+      const data = result.data;
+=======
       if (!res.ok) throw new Error(`Chat returned ${res.status}`);
       const data = await res.json();
+>>>>>>> main
       const botMsg = {
         id: `bot-${Date.now()}`,
         role: 'assistant',
@@ -190,12 +384,20 @@ export const useSovereignStore = create((set, get) => ({
     const state = get();
     set({ apiConfigSaving: true, apiConfigError: null });
     try {
+<<<<<<< HEAD
+      const result = await safeFetchBridge('/api/config/keys', {
+        method: 'POST',
+        body: JSON.stringify({ keys: { openai: state.apiConfig.openaiKey, vercel: state.apiConfig.vercelToken } }),
+      });
+      if (!result.ok) throw new Error(result.error || 'Failed to save config');
+=======
       const res = await fetch(`${BRIDGE_URL}/api/config/keys`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ keys: { openai: state.apiConfig.openaiKey, vercel: state.apiConfig.vercelToken } }),
       });
       if (!res.ok) throw new Error(`Config save returned ${res.status}`);
+>>>>>>> main
       set({ apiConfigSaving: false });
       return true;
     } catch (err) {
@@ -206,6 +408,14 @@ export const useSovereignStore = create((set, get) => ({
 
   logToLedger: async (feature_id, action, proof_hash, truth_state = 'UNVERIFIED', iq_gain = 0) => {
     try {
+<<<<<<< HEAD
+      const result = await safeFetchBridge('/api/sovereign-ledger/log', {
+        method: 'POST',
+        body: JSON.stringify({ feature_id, action, proof_hash, truth_state, iq_gain }),
+      });
+      if (!result.ok) throw new Error(result.error || 'Ledger log failed');
+      return result.data;
+=======
       const res = await fetch(`${BRIDGE_URL}/api/sovereign-ledger/log`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -213,6 +423,7 @@ export const useSovereignStore = create((set, get) => ({
       });
       if (!res.ok) throw new Error(`Ledger log returned ${res.status}`);
       return await res.json();
+>>>>>>> main
     } catch (err) {
       console.warn('[Store] Ledger log failed:', err.message);
       return null;
@@ -234,9 +445,15 @@ export const useSovereignStore = create((set, get) => ({
   // ─── Maintenance ────────────────────────────────────────────
   runMaintenance: async () => {
     try {
+<<<<<<< HEAD
+      const result = await safeFetchBridge('/api/maintenance/run', { method: 'POST' });
+      if (!result.ok) throw new Error(result.error || 'Maintenance cycle failed');
+      const data = result.data;
+=======
       const res = await fetch(`${BRIDGE_URL}/api/maintenance/run`, { method: 'POST' });
       if (!res.ok) throw new Error(`Maintenance returned ${res.status}`);
       const data = await res.json();
+>>>>>>> main
       get().addNotification('Maintenance cycle completed.', 'success');
       return data;
     } catch (err) {
@@ -245,13 +462,55 @@ export const useSovereignStore = create((set, get) => ({
     }
   },
 
+<<<<<<< HEAD
+  // ─── Rift Grid & EvoPulse ──────────────────────────────────
+  riftStatus: 'disconnected',
+  riftData: null,
+  gridNodes: [],
+  gridRoutes: [],
+
+  fetchRiftStatus: async () => {
+    try {
+      const res = await fetch('http://127.0.0.1:3002/status', { signal: AbortSignal.timeout(3000) });
+      if (!res.ok) throw new Error(`Rift returned ${res.status}`);
+      const data = await res.json();
+      set({ riftStatus: 'connected', riftData: data });
+      return data;
+    } catch {
+      set({ riftStatus: 'disconnected', riftData: null });
+      return null;
+    }
+  },
+
+  fetchGridMesh: async () => {
+    try {
+      const [nodesRes, routesRes] = await Promise.all([
+        fetch('http://127.0.0.1:3002/api/evopulse/nodes'),
+        fetch('http://127.0.0.1:3002/api/evopulse/routes')
+      ]);
+      const nodes = await nodesRes.json();
+      const routes = await routesRes.json();
+      set({ gridNodes: nodes.data?.nodes || [], gridRoutes: routes.data?.routes || [] });
+    } catch {
+      // Stay silent on mesh failure
+    }
+  },
+
+=======
+>>>>>>> main
   // ─── Global Sync ──────────────────────────────────────────
   syncInterval: null,
   runTruthProbe: async () => {
     try {
+<<<<<<< HEAD
+      const result = await safeFetchBridge('/api/truth/probe');
+      if (!result.ok) throw new Error(result.error || 'Probe failed');
+      const data = result.data;
+=======
       const res = await fetch(`${BRIDGE_URL}/api/truth/probe`);
       if (!res.ok) throw new Error('Probe failed');
       const data = await res.json();
+>>>>>>> main
       set({ bridgeData: { ...get().bridgeData, probes: data.results } });
       return data.results;
     } catch (err) {
@@ -264,6 +523,15 @@ export const useSovereignStore = create((set, get) => ({
     const state = get();
     if (state.syncInterval) return;
 
+<<<<<<< HEAD
+    const poll = () => {
+      get().fetchBridgeStatus().catch(() => {});
+      get().fetchMetrics().catch(() => {});
+      get().fetchRiftStatus().catch(() => {});
+      get().fetchGridMesh().catch(() => {});
+    };
+    poll(); 
+=======
     // Run immediately (non-blocking) then every 8 seconds
     // No await — never blocks the UI thread
     const poll = () => {
@@ -271,6 +539,7 @@ export const useSovereignStore = create((set, get) => ({
       get().fetchMetrics().catch(() => {});
     };
     poll(); // initial probe
+>>>>>>> main
     const interval = setInterval(poll, 8000);
     set({ syncInterval: interval });
   },

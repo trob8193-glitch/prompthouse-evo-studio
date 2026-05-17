@@ -239,7 +239,7 @@ export function AgentBridgeView() {
                 { title: 'Biometric Ethic Lock', icon: '🫀', desc: 'Hardware-level heartbeat/pulse matching against a global Ethical Canon before mission execution.' },
                 { title: 'Liquid Codebases', icon: '💧', desc: 'Code that self-monitors and requests its own studio updates when new API versions are released.' },
                 { title: 'Federated Mind', icon: '🧠', desc: 'P2P swarm intelligence where studios share prompt architectures globally without leaking private data.' },
-                { title: 'Temporal Execution', icon: '⏳', desc: 'Simulates tech trends 5 years out to build "future-proof" architectures that never deprecate.' },
+                { title: 'Temporal Execution', icon: '⏳', desc: 'Forecasts tech trends 5 years out to build architectures with clear deprecation paths.' },
               ].map((f, i) => (
                 <div 
                   key={i} 

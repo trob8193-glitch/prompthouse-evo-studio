@@ -6,10 +6,11 @@ import { summarizeSovereignIntelligenceLog } from '../src/core/logging/sovereign
 describe('archive compatibility modules', () => {
   it('provides a safe recursive swarm execution surface', async () => {
     const swarm = new RecursiveSwarm({ fetchImpl: null });
-    const results = await swarm.execute(['verify bridge', 'train local model']);
+    const response = await swarm.execute(['verify bridge', 'train local model']);
 
-    expect(results).toHaveLength(2);
-    expect(results.every((result) => result.status === 'recommended')).toBe(true);
+    expect(response.success).toBe(true);
+    expect(response.results).toHaveLength(2);
+    expect(response.results.every((result) => result.status === 'MANIFESTED')).toBe(true);
   });
 
   it('ranks capability gravity from proof and gate state', () => {

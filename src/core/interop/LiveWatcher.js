@@ -48,4 +48,42 @@ export class LiveWatcher {
 
     Log.success(`👁️ [LiveWatcher] Hot-Link: ${filename} is now synchronized across all platforms.`);
   }
+
+  /**
+   * Physically audit the local network for compatible 'Sovereign' nodes.
+   */
+  async performGridAudit() {
+    Log.info('📡 [LiveWatcher] Probing Local Subnet for Physical Devices...');
+    
+    return new Promise((resolve) => {
+      import('child_process').then(({ exec }) => {
+        exec('arp -a', (error, stdout) => {
+          if (error) {
+            Log.error('📡 [LiveWatcher] Failed to probe network.');
+            return resolve([]);
+          }
+
+          const lines = stdout.split('\n');
+          const results = [];
+
+          lines.forEach(line => {
+            const match = line.match(/(\d+\.\d+\.\d+\.\d+)\s+([a-fA-F0-9-]+)\s+(dynamic|static)/);
+            if (match) {
+              results.push({
+                ip: match[1],
+                mac: match[2],
+                type: 'NETWORK_DEVICE',
+                status: 'DETECTED'
+              });
+            }
+          });
+
+          Log.success(`📡 [LiveWatcher] Grid Audit Complete. ${results.length} Physical Devices Identified.`);
+          resolve(results);
+        });
+      });
+    });
+  }
 }
+
+export const LIVE_WATCHER = new LiveWatcher();

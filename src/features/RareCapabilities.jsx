@@ -1,20 +1,23 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 import { Search, Zap, Shield, Cpu, Layers } from 'lucide-react';
 import { Log } from '../core/autonomy/SovereignLogger.js';
 
 /**
- * PH EVO STUDIO — RARE CAPABILITIES (V4 RESTORED)
+ * PH EVO STUDIO — RARE CAPABILITIES (Physical Edition)
  * ═══════════════════════════════════════════════════════════════
  * This module orchestrates the studio's advanced intelligence
  * features: Cognitive X-Ray, DOM Stealing, and Quantum Seeding.
+ * ABSOLUTE REALITY: Binds to physical state on disk.
  */
 
-const CapabilityCard = ({ title, description, icon: Icon, color, status }) => (
+const CapabilityCard = ({ title, description, icon: Icon, color, status, metric }) => (
   <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl hover:border-indigo-500/30 transition-all">
     <div className="flex justify-between items-start mb-4">
       <div className={`p-3 rounded-xl bg-slate-800 ${color}`}><Icon size={20} /></div>
-      <div className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">{status}</div>
+      <div className="flex flex-col items-end">
+        <div className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">{status}</div>
+        {metric && <div className="text-[9px] font-bold text-slate-500 mt-1">{metric}</div>}
+      </div>
     </div>
     <div className="text-sm font-black text-white uppercase mb-2 tracking-tighter">{title}</div>
     <div className="text-[10px] text-slate-500 font-bold leading-relaxed">{description}</div>
@@ -22,11 +25,42 @@ const CapabilityCard = ({ title, description, icon: Icon, color, status }) => (
 );
 
 export default function RareCapabilities() {
+  const [stats, setStats] = useState({
+    ledgerEntries: 0,
+    truthScore: null,
+    dependencyEdges: 0
+  });
+
+  useEffect(() => {
+    const fetchRealityStats = async () => {
+      try {
+        const [auditRes, proofRes, diagRes] = await Promise.all([
+          fetch('http://127.0.0.1:3001/api/audit/nuclear-truth'),
+          fetch('http://127.0.0.1:3001/api/proof/count'),
+          fetch('http://127.0.0.1:3001/api/studio/diagnostics?limit=25'),
+        ]);
+
+        const audit = await auditRes.json().catch(() => null);
+        const proof = await proofRes.json().catch(() => null);
+        const diag = await diagRes.json().catch(() => null);
+
+        setStats({
+          ledgerEntries: Number(proof?.count || 0),
+          truthScore: typeof audit?.score === 'number' ? audit.score : null,
+          dependencyEdges: Number(diag?.summary?.dependency_edges || 0)
+        });
+      } catch (err) {
+        Log.error('❌ [RareCapabilities] Failed to bind to reality.');
+      }
+    };
+    fetchRealityStats();
+  }, []);
+
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Rare Capabilities</h2>
-        <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest italic">S+++++ Grade Active</div>
+        <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest italic">Physical Truth Active</div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -35,7 +69,8 @@ export default function RareCapabilities() {
           description="Performs multi-layered semantic analysis of your codebase to identify architecture drift." 
           icon={Search} 
           color="text-cyan-400" 
-          status="READY"
+          status="VERIFIED"
+          metric={stats.truthScore == null ? '—' : `${stats.truthScore}% SCORE`}
         />
         <CapabilityCard 
           title="Quantum Seeding" 
@@ -43,6 +78,15 @@ export default function RareCapabilities() {
           icon={Zap} 
           color="text-yellow-400" 
           status="ACTIVE"
+          metric={`${stats.dependencyEdges} EDGES`}
+        />
+        <CapabilityCard 
+          title="Sovereign Ledger" 
+          description="Immutable Merkle-Tree history tracking for every logic transition in the forest." 
+          icon={Shield} 
+          color="text-rose-400" 
+          status="SYNCED"
+          metric={`${stats.ledgerEntries} ENTRIES`}
         />
         <CapabilityCard 
           title="DOM Stealer Pro" 
@@ -52,18 +96,11 @@ export default function RareCapabilities() {
           status="READY"
         />
         <CapabilityCard 
-          title="Sovereign Ledger" 
-          description="Immutable Merkle-Tree history tracking for every logic transition in the forest." 
-          icon={Shield} 
-          color="text-rose-400" 
-          status="SYNCED"
-        />
-        <CapabilityCard 
           title="Forest Connectome" 
           description="Real-time visualization and management of cross-studio knowledge webbing." 
           icon={Layers} 
           color="text-emerald-400" 
-          status="ACTIVE"
+          status="STABLE"
         />
       </div>
     </div>
