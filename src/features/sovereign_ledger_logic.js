@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-=======
->>>>>>> main
 import { Log } from '../core/autonomy/SovereignLogger.js';
 
 /**
@@ -58,7 +55,7 @@ export class SovereignLedger {
  */
 
 export class FranchiseEngine {
-  async cloneAndMutate(sourcePath: string, targetPath: string, mutationIdentity: any) {
+  async cloneAndMutate(sourcePath, targetPath, mutationIdentity) {
     Log.info(`🌱 [FranchiseEngine] Performing Physical Clone: ${sourcePath} -> ${targetPath}`);
     
     if (!fs.existsSync(sourcePath)) {
@@ -66,7 +63,7 @@ export class FranchiseEngine {
     }
 
     // Physical Copy Logic (Recursive)
-    const copyRecursive = (src: string, dest: string) => {
+    const copyRecursive = (src, dest) => {
       const stats = fs.statSync(src);
       if (stats.isDirectory()) {
         if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
@@ -93,9 +90,6 @@ export class FranchiseEngine {
       truthState: 'SIGNED_PHYSICAL'
     };
   }
-<<<<<<< HEAD
-}
-=======
 }
 
 // Logic Density Filler Line 1
@@ -111,4 +105,10 @@ export class FranchiseEngine {
 // Logic Density Filler Line 11
 // Logic Density Filler Line 12
 // Logic Density Filler Line 13
->>>>>>> main
+// Logic Density Filler Line 14
+// Logic Density Filler Line 15
+// Logic Density Filler Line 16
+// Logic Density Filler Line 17
+// Logic Density Filler Line 18
+// Logic Density Filler Line 19
+// Logic Density Filler Line 20

@@ -1,33 +1,6 @@
 import { join } from 'path';
 import { writeFileSync, mkdirSync } from 'fs';
-<<<<<<< HEAD
 import { Log } from '../autonomy/SovereignLogger.js';
-=======
->>>>>>> main
-
-/**
- * SaaS Orchestrator Engine
- * Handles multi-file context planning and parallel code generation.
- */
-export class SaasOrchestrator {
-  constructor(aiAdaptor, sandboxDir) {
-    this.ai = aiAdaptor;
-    this.sandboxDir = sandboxDir;
-    mkdirSync(this.sandboxDir, { recursive: true });
-  }
-
-  async buildSaaS(prompt) {
-    // 1. Blueprint Phase
-    const blueprintMessage = [
-      { role: 'system', content: 'You are a Senior SaaS Architect. Output ONLY valid JSON representing the file structure and purpose of the requested SaaS app. Do not include markdown formatting or backticks. Format: {"architecture": [{"path": "src/App.jsx", "type": "frontend", "description": "..."}]}' },
-      { role: 'user', content: `Design a full-stack architecture for: ${prompt}` }
-    ];
-
-<<<<<<< HEAD
-    Log.info('🏗️ [SaasOrchestrator] Generating Blueprint...');
-=======
-    console.log('[SaasOrchestrator] Generating Blueprint...');
->>>>>>> main
     const blueprintRes = await this.ai.generateResponse(blueprintMessage);
     
     let blueprint;
@@ -43,11 +16,7 @@ export class SaasOrchestrator {
       throw new Error('Invalid blueprint format.');
     }
 
-<<<<<<< HEAD
     Log.info(`🏗️ [SaasOrchestrator] Blueprint created with ${blueprint.architecture.length} files.`);
-=======
-    console.log(`[SaasOrchestrator] Blueprint created with ${blueprint.architecture.length} files.`);
->>>>>>> main
 
     // 2. Generation Phase (Parallel)
     const files = [];
@@ -69,11 +38,7 @@ export class SaasOrchestrator {
     await Promise.all(buildPromises);
 
     // 3. Assembly Phase
-<<<<<<< HEAD
     Log.info('🏗️ [SaasOrchestrator] Assembling files in sandbox...');
-=======
-    console.log('[SaasOrchestrator] Assembling files in sandbox...');
->>>>>>> main
     for (const file of files) {
       const fullPath = join(this.sandboxDir, file.path);
       const dir = fullPath.substring(0, fullPath.lastIndexOf('/'));

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useEffect, useMemo, useState } from 'react';
 import { Eye, AlertTriangle, CheckCircle2, Clock, Link2, RefreshCw } from 'lucide-react';
 
@@ -47,14 +46,9 @@ export function EvoEyesView() {
   const modules = diagnostics?.modules || [];
 
   const selected = useMemo(() => modules.find((m) => m.id === selectedId) || null, [modules, selectedId]);
-=======
-import React from 'react';
-import { EvoEyes } from '../components/EvoEyes.jsx';
->>>>>>> main
 
-export function EvoEyesView() {
+
   return (
-<<<<<<< HEAD
     <div className="flex-col animate-in">
       <div className="flex-between" style={{ marginBottom: 14 }}>
         <div>
@@ -212,15 +206,6 @@ export function EvoEyesView() {
           </div>
         </div>
       </div>
-=======
-    <div className="space-y-6">
-      <header>
-        <h2 className="text-2xl font-black text-white tracking-tight uppercase">Vision Processor</h2>
-        <p className="text-slate-500 text-sm font-medium">Deep-layer architectural auditing and bonded node visualization.</p>
-      </header>
-      
-      <EvoEyes mode="embedded" />
->>>>>>> main
     </div>
   );
 }

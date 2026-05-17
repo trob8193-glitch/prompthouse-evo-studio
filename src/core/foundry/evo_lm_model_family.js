@@ -5,10 +5,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MODEL_DEFINITIONS_PATH = path.join(__dirname, 'model_definitions.json');
 const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001/models';
-<<<<<<< HEAD
 const IS_TEST_ENV = process.env.NODE_ENV === 'test' || Boolean(process.env.VITEST);
-=======
->>>>>>> main
 
 class EvoLMModelFamily {
     constructor() {

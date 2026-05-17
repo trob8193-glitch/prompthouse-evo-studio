@@ -14,8 +14,6 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import crypto from 'crypto';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 import Stripe from 'stripe';
 
 // Import our core engines
@@ -3151,21 +3149,40 @@ app.get('/api/training/stats', (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 // ─── Authentication (Real Local JWT) ────────────────────────────────────────────────
-const JWT_SECRET = process.env.JWT_SECRET || 'ph_evo_local_secure_secret_999';
+const JWT_SECRET_TOKEN = process.env.JWT_SECRET || 'ph_evo_local_secure_secret_999';
 const MOCK_USER = { id: 'u1', email: 'admin@ph-evo.local', role: 'team_lead' };
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (!token) return res.status(401).json({ error: 'Unauthorized: No token provided' });
-  jwt.verify(token, JWT_SECRET, (err, user) => {
+  jwt.verify(token, JWT_SECRET_TOKEN, (err, user) => {
     if (err) return res.status(403).json({ error: 'Forbidden: Invalid token' });
     req.user = user;
     next();
   });
 };
+
+function readStore(key) {
+  const filePath = path.join(DATA_DIR, `${key}.json`);
+  if (!fs.existsSync(filePath)) return [];
+  try {
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeStore(key, data) {
+  const filePath = path.join(DATA_DIR, `${key}.json`);
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+  } catch (err) {
+    console.error(`Failed to write store for ${key}:`, err);
+  }
+}
 
 app.post('/api/auth/register', async (req, res) => {
   const { email, password, name } = req.body;
@@ -3186,7 +3203,7 @@ app.post('/api/auth/register', async (req, res) => {
   users.push(user);
   writeStore('users', users);
   
-  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET_TOKEN, { expiresIn: '7d' });
   res.json({ success: true, token, user: { id: user.id, email: user.email, name: user.name } });
 });
 
@@ -3199,7 +3216,7 @@ app.post('/api/auth/login', async (req, res) => {
     return res.status(401).json({ error: 'Invalid email or password' });
   }
   
-  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET_TOKEN, { expiresIn: '7d' });
   res.json({ success: true, token, user: { id: user.id, email: user.email, name: user.name } });
 });
 
@@ -3215,14 +3232,14 @@ app.post('/api/auth/logout', authenticateToken, (req, res) => {
 });
 
 // ─── Commerce (Real Stripe Integration) ─────────────────────────────────────────────
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
+const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
 
 app.post('/api/commerce/checkout', async (req, res) => {
   const { productName, priceCents, currency } = req.body;
   if (!productName || !priceCents) return res.status(400).json({ error: 'Missing product details' });
   
   try {
-    const session = await stripe.checkout.sessions.create({
+    const session = await stripeInstance.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
         price_data: {
@@ -3247,16 +3264,17 @@ app.post('/api/commerce/checkout', async (req, res) => {
 // ─── Proof Intercept ─────────────────────────────────────────────────────────────
 app.post('/api/studio-os/proof/intercept', (req, res) => {
   res.json({ success: true });
-=======
+});
+
 app.get('/api/training/export', (req, res) => {
-  if (!existsSync(TRAINING_FILE)) return res.status(404).json({ error: 'No training data yet' });
+  if (!fs.existsSync(TRAINING_FILE)) return res.status(404).json({ error: 'No training data yet' });
   res.setHeader('Content-Type', 'application/x-ndjson');
   res.setHeader('Content-Disposition', `attachment; filename="evo_training_${Date.now()}.jsonl"`);
   res.sendFile(TRAINING_FILE);
 });
 
 // ─── PAGE CAPTURE (from browser extension) ────────────────────────────────────
-const CAPTURES_FILE = join(DATA_DIR, 'captures.jsonl');
+const CAPTURES_FILE = path.join(DATA_DIR, 'captures.jsonl');
 
 app.post('/api/capture', (req, res) => {
   const { text, url, tabTitle, source = 'browser_extension' } = req.body;
@@ -3264,7 +3282,7 @@ app.post('/api/capture', (req, res) => {
 
   const record = JSON.stringify({ text, url, tabTitle, source, capturedAt: new Date().toISOString() }) + '\n';
   try {
-    writeFileSync(CAPTURES_FILE, record, { flag: 'a', encoding: 'utf8' });
+    fs.writeFileSync(CAPTURES_FILE, record, { flag: 'a', encoding: 'utf8' });
     res.json({ captured: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -3286,7 +3304,6 @@ app.use((err, req, res, next) => {
 
 // ─── STARTUP ─────────────────────────────────────────────────────────────────
 
-
 if (nightforgeState.active) {
   scheduleNightforgeDaemon();
 }
@@ -3297,5 +3314,4 @@ app.listen(port, '0.0.0.0', () => {
   console.log(`║  Version 2.1.0 — SMFF PRODUCTION       ║`);
   console.log(`╚════════════════════════════════════════╝`);
   console.log(`[BRIDGE ACTIVE] http://127.0.0.1:${port}`);
->>>>>>> main
 });

@@ -2,10 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { MOBILE_ARCHITECTURES, CODE_TEMPLATES, CHAIN_STEP_TYPES, MISSION_PHASES, TRUTH_STATES, buildChainPrompt, buildMissionPacket, exportAsMarkdown, exportAsText, exportAsJson } from './mobile-engine.js';
 import { useEvoStore } from './store.js';
 import { Card, Button, Panel, StateView, StatusBadge } from './components/primitives.jsx';
-<<<<<<< HEAD
 import { UniversalBridge } from './core/interop/UniversalBridge.js';
-=======
->>>>>>> main
 
 function copyText(t) { navigator.clipboard.writeText(t); }
 
@@ -92,11 +89,7 @@ export function CodeForgeView() {
                   {copied ? '✅ COPIED TO CLIPBOARD' : '📋 CLONE SOURCE CODE'}
                 </Button>
                 <Button variant="secondary" onClick={async () => {
-<<<<<<< HEAD
                   const bridge = new UniversalBridge();
-=======
-                  const bridge = new (await import('./core/interop/UniversalBridge.js')).UniversalBridge();
->>>>>>> main
                   const res = await bridge.dispatch('codeforge', 'save', { filename: `${feature || 'Feature'}.dart`, content: code });
                   if (res.success) alert(`Saved to: ${res.path}`);
                   else alert(`Save failed: ${res.error}`);

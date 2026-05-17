@@ -62,8 +62,6 @@
   --font-mono: 'JetBrains Mono', monospace;
   --transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
   --evo-density-scale: 1;
-<<<<<<< HEAD
-
   /* ── COMPONENT-LEVEL TOKENS (bot, forge, chrome-ext) ── */
   --char-size: 48px;
   --bot-accent: var(--accent-violet);
@@ -80,8 +78,6 @@
   --dim: var(--text-dim);
   --panel2: var(--bg-elevated);
   --gold: var(--accent-gold);
-=======
->>>>>>> main
 }
 
 html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-primary); font-family: var(--font-sans); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
@@ -251,10 +247,7 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
 :root[data-evo-motion="calm"] .nav-item {
   transition-duration: 0.35s;
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 .btn-primary {
   background: linear-gradient(135deg, var(--accent-gold), #e8a020);
   color: #0a0800;

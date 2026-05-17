@@ -14,7 +14,6 @@ export class RecursiveSwarm {
   }
 
   async execute(tasks = []) {
-<<<<<<< HEAD
     Log.info(`🚀 [RecursiveSwarm] Launching swarm for ${tasks.length} sub-tasks...`);
     
     const results = tasks.map(task => {
@@ -31,13 +30,6 @@ export class RecursiveSwarm {
       timestamp: new Date().toISOString(), 
       results 
     };
-=======
-    Log.info('🚀 [RecursiveSwarm] Executing production logic...');
-    if (Array.isArray(tasks)) {
-      return tasks.map(task => ({ task, status: 'recommended' }));
-    }
-    return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
->>>>>>> main
   }
 
   getStatus() {

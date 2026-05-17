@@ -18,7 +18,6 @@ export class SovereignSharder {
     const content = JSON.stringify(data, null, 2);
     
     try {
-<<<<<<< HEAD
       const res = await fetch('http://127.0.0.1:3001/api/memory/shard', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -36,15 +35,6 @@ export class SovereignSharder {
           })
         }).catch(() => {}); // Fire and forget
 
-=======
-      const res = await fetch('http://127.0.0.1:3001/api/files/write', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path, content })
-      });
-      const result = await res.json();
-      if (result.success) {
->>>>>>> main
         return { status: 'SHARDED', bytes: content.length, path };
       } else {
         throw new Error(result.error);

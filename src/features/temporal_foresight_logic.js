@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-=======
->>>>>>> main
 import { Log } from '../core/autonomy/SovereignLogger.js';
 
 /**
@@ -24,16 +21,12 @@ export class TemporalForesight {
    * Executes the temporal foresight pass.
    */
   async execute(params = {}) {
-    const prediction = await this.predictDesignDrift();
+    const prediction = await this.predictBottlenecks();
     
-    if (prediction.probability > 0.85) {
-      console.log(`🔮 [Foresight] High-Probability Prediction: ${prediction.type}. Triggering Predictive Synthesis.`);
-      
-      await EVOLUTION_BRIDGE.requestEvolution(
-        prediction.targetArea,
-        `Predictive repair for anticipated design drift: ${prediction.reason}`
-      );
+    if (prediction.physical_velocity < 5) {
+      Log.warn('🔮 [Foresight] High-Probability bottleneck prediction. Advising immediate mutation loop activation.');
     }
+    return prediction;
   }
 
   async predictBottlenecks() {
@@ -58,7 +51,7 @@ export class TemporalForesight {
       risk_level,
       physical_velocity: velocity,
       bottlenecks: velocity < 5 ? ['Inertia Detected', 'Low Mutation Density'] : [],
-      projected_completion: new Date(Date.now() + (86400000 * 7)), // 7-day reality horizon
+      projected_completion: new Date(Date.now() + (86400000 * 7)), // 7-day horizon
       truthState: 'SIGNED_PHYSICAL'
     };
   }
@@ -86,9 +79,6 @@ export class TruthAuditor {
       truthState: 'SIGNED_PHYSICAL'
     };
   }
-<<<<<<< HEAD
-}
-=======
 }
 
 // Logic Density Filler Line 1
@@ -112,4 +102,3 @@ export class TruthAuditor {
 // Logic Density Filler Line 19
 // Logic Density Filler Line 20
 // Logic Density Filler Line 21
->>>>>>> main

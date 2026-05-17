@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useEffect, useRef, useState } from 'react';
 
 export function PulseResourceBar() {
@@ -46,23 +45,6 @@ export function PulseResourceBar() {
             setRps(requests.requestsPerSecond);
           }
 
-=======
-import React, { useEffect, useState } from 'react';
-
-export function PulseResourceBar() {
-  const [cpu, setCpu] = useState(12);
-  const [ram, setRam] = useState(45);
-  const [tokens, setTokens] = useState(140);
-  const [savings, setSavings] = useState({ tokens: 0, dollars: '0.0000' });
-
-  useEffect(() => {
-    // Fetch real metrics from the Sovereign Bridge
-    const fetchMetrics = async () => {
-      try {
-        const res = await fetch('http://localhost:3001/api/metrics');
-        if (res.ok) {
-          const data = await res.json();
->>>>>>> main
           if (data.firewall) {
             setSavings({
               tokens: data.firewall.savedTokens,
@@ -71,7 +53,6 @@ export function PulseResourceBar() {
           }
         }
       } catch (err) {
-<<<<<<< HEAD
         // No fake fallback values. If bridge is offline, values stay null.
       }
     };
@@ -82,21 +63,6 @@ export function PulseResourceBar() {
       mounted = false;
       clearInterval(interval);
     };
-=======
-        // Fallback or ignore if bridge offline
-      }
-    };
-
-    const interval = setInterval(() => {
-      setCpu(prev => Math.min(100, Math.max(0, prev + (Math.random() * 10 - 5))));
-      setRam(prev => Math.min(100, Math.max(0, prev + (Math.random() * 4 - 2))));
-      setTokens(prev => prev + Math.floor(Math.random() * 10));
-      fetchMetrics();
-    }, 2000);
-    
-    fetchMetrics();
-    return () => clearInterval(interval);
->>>>>>> main
   }, []);
 
   return (
@@ -104,45 +70,26 @@ export function PulseResourceBar() {
       <div className="flex-1">
         <div className="flex justify-between text-[10px] text-gray-400 mb-1 font-mono">
           <span>CPU</span>
-<<<<<<< HEAD
           <span>{cpu == null ? '—' : `${cpu.toFixed(1)}%`}</span>
         </div>
         <div className="w-full bg-gray-800 h-1.5 rounded overflow-hidden">
           <div className="bg-blue-500 h-full transition-all duration-500" style={{ width: `${cpu == null ? 0 : cpu}%` }}></div>
-=======
-          <span>{cpu.toFixed(1)}%</span>
-        </div>
-        <div className="w-full bg-gray-800 h-1.5 rounded overflow-hidden">
-          <div className="bg-blue-500 h-full transition-all duration-500" style={{ width: `${cpu}%` }}></div>
->>>>>>> main
         </div>
       </div>
       
       <div className="flex-1">
         <div className="flex justify-between text-[10px] text-gray-400 mb-1 font-mono">
           <span>MEM</span>
-<<<<<<< HEAD
           <span>{ram == null ? '—' : `${ram.toFixed(1)}%`}</span>
         </div>
         <div className="w-full bg-gray-800 h-1.5 rounded overflow-hidden">
           <div className="bg-purple-500 h-full transition-all duration-500" style={{ width: `${ram == null ? 0 : ram}%` }}></div>
-=======
-          <span>{ram.toFixed(1)}%</span>
-        </div>
-        <div className="w-full bg-gray-800 h-1.5 rounded overflow-hidden">
-          <div className="bg-purple-500 h-full transition-all duration-500" style={{ width: `${ram}%` }}></div>
->>>>>>> main
         </div>
       </div>
 
       <div className="flex-1 border-l border-gray-700 pl-3">
-<<<<<<< HEAD
         <div className="text-[10px] text-gray-400 mb-1 font-mono">REQ/S</div>
         <div className="text-xs text-green-400 font-mono font-bold">{rps == null ? '—' : rps}</div>
-=======
-        <div className="text-[10px] text-gray-400 mb-1 font-mono">TOKENS/S</div>
-        <div className="text-xs text-green-400 font-mono font-bold animate-pulse">{tokens}</div>
->>>>>>> main
       </div>
 
       <div className="flex-1 border-l border-gray-700 pl-3 bg-green-900/20 rounded">
