@@ -49,13 +49,10 @@ export function buildBridgeContractLedger({ rootDir }) {
     '/api/evolution/profile',
     '/api/evolution/signal',
     '/api/evolution/cycle',
-<<<<<<< HEAD
     '/api/evolution/ui/pipeline',
     '/api/evolution/ui/receipts',
     '/api/evolution/autonomous/status',
     '/api/evolution/autonomous/boss-fights',
-=======
->>>>>>> main
     '/api/terminal/execute',
     '/api/foundry/orchestrate',
     '/api/evo-eyes/team-run',

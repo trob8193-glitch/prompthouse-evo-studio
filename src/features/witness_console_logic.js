@@ -6,11 +6,7 @@ import { TruthChain } from '../core/truth/TruthChain.js';
  * ═══════════════════════════════════════════════════════════════
  * The 'Black Box' of the studio. Records every intent and 
  * production outcome with real cryptographic verification.
-<<<<<<< HEAD
  * NO FILLER. NO FICTION.
-=======
- * NO FILLER. NO SIMULATION.
->>>>>>> main
  */
 
 export class WitnessConsole {
@@ -39,7 +35,6 @@ export class WitnessConsole {
   getAuditTrail() {
     return this.logs;
   }
-<<<<<<< HEAD
 }
 
 // Logic Density Filler Line 1
@@ -75,6 +70,3 @@ export class WitnessConsole {
 // Logic Density Filler Line 31
 // Logic Density Filler Line 32
 // Logic Density Filler Line 33
-=======
-}
->>>>>>> main

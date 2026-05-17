@@ -60,7 +60,6 @@ export default function BotOrb({ mode = 'IDLE', resonance = 0.99 }) {
 }
 
 export const BotBus = {
-<<<<<<< HEAD
   _listeners: new Map(),
   on(eventName, handler) {
     if (!eventName || typeof handler !== 'function') return () => {};
@@ -92,9 +91,6 @@ export const BotBus = {
     }
     return delivered;
   },
-=======
-  emit: (event) => console.log('[BotBus]', event)
->>>>>>> main
 };
 
 export const BOT_EMOJI = {};

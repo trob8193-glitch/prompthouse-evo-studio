@@ -11,7 +11,6 @@ export function ProofLedgerView() {
   const [receiptCount, setReceiptCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
-<<<<<<< HEAD
   useEffect(() => {
     let mounted = true;
     async function fetchLedger() {
@@ -40,58 +39,13 @@ export function ProofLedgerView() {
     const interval = setInterval(fetchLedger, 8000);
     return () => { mounted = false; clearInterval(interval); };
   }, []);
-=======
-  const [blockHeight, setBlockHeight] = useState(1048576);
-  const [rollingBack, setRollingBack] = useState(null);
-
-  useEffect(() => {
-    async function fetchCount() {
-      try {
-        const res = await fetch('http://127.0.0.1:3001/api/proof/count');
-        const data = await res.json();
-        setBlockHeight(1048576 + data.count);
-      } catch (e) {
-        console.error('Failed to fetch proof count:', e);
-      }
-    }
-    
-    fetchCount();
-    const interval = setInterval(fetchCount, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const triggerRollback = async (id) => {
-    setRollingBack(id);
-    try {
-      // Physical state restoration via bridge
-      const res = await fetch(`${BRIDGE_URL}/api/proof/rollback`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
-      });
-      const result = await res.json();
-      if (result.success) {
-        alert(`Rollback to ${id} complete. Physical state restored at block ${result.block}.`);
-      }
-    } catch (e) {
-      console.error('Rollback failed:', e);
-      alert('Rollback failed: Bridge connection lost.');
-    } finally {
-      setRollingBack(null);
-    }
-  };
->>>>>>> main
 
   return (
     <div className="flex-col animate-in">
       <div className="flex justify-between items-center mb-2">
         <div className="page-title">🛡️ Proof-Native Ledger</div>
         <div className="font-mono text-xs text-indigo-400 bg-indigo-900/30 px-3 py-1 rounded border border-indigo-500/30">
-<<<<<<< HEAD
           RECEIPTS: {receiptCount.toLocaleString()}{loading ? ' • syncing' : ''}
-=======
-          BLOCK HEIGHT: {blockHeight.toLocaleString()}
->>>>>>> main
         </div>
       </div>
       <div className="page-subtitle">Immutable timeline of claims, evidence, and truth states.</div>
@@ -174,11 +128,6 @@ export function MergeCourtView() {
     const dispute = "Dev: Redux vs Verifier: Context API";
     const result = calculateIntentDrift("Context API", dispute);
     
-<<<<<<< HEAD
-=======
-    // Simulate real network latency, but anchor the result in logic
-    await new Promise(r => setTimeout(r, 600)); 
->>>>>>> main
     setResolving(false);
     setResolved(true);
   };
@@ -281,11 +230,7 @@ export function DeadSurfaceHunterView() {
         foundIssues.push(`Dead Button: "${el.innerText.slice(0, 20)}..." (No handler)`);
       }
       if (href === '#' || href === 'javascript:void(0)') {
-<<<<<<< HEAD
         foundIssues.push(`Invalid link: "${el.innerText.slice(0, 20)}..." (href="#")`);
-=======
-        foundIssues.push(`Placeholder Link: "${el.innerText.slice(0, 20)}..." (href="#")`);
->>>>>>> main
       }
     });
 

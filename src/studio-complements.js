@@ -1,6 +1,5 @@
 // src/studio-complements.js
 
-<<<<<<< HEAD
 function routeProductIdea(params) {
   const { idea } = params;
   const lane = idea.includes('commerce') ? 'commerce_flow' : 'generic_flow';
@@ -8,19 +7,6 @@ function routeProductIdea(params) {
   return { lane, defaults };
 }
 
-=======
-class StudioComplements {
-  // Placeholder for any shared logic or data
-}
-
-function routeProductIdea(params) {
-  const { idea } = params;
-  const lane = idea.includes('commerce') ? 'commerce_flow' : 'generic_flow';
-  const defaults = { needsLaunch: lane === 'commerce_flow' };
-  return { lane, defaults };
-}
-
->>>>>>> main
 function buildCounterpartRegistry(params) {
   const { availableEndpoints, availableStores } = params;
   const registry = [
@@ -94,8 +80,4 @@ export {
   buildLaunchPlan,
   buildRealityTwin,
   buildAsyncWorkflowPlan,
-<<<<<<< HEAD
-=======
-  StudioComplements,
->>>>>>> main
 };

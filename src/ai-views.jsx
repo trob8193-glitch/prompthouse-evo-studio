@@ -2,11 +2,7 @@ import React from 'react';
 import { Log } from './core/autonomy/SovereignLogger.js';
 import SovereignChat from './features/SovereignChat';
 import RareCapabilities from './features/RareCapabilities';
-<<<<<<< HEAD
 import { EvoEyesView } from './features/EvoEyesView';
-=======
-import EvoEyesView from './features/EvoEyesView';
->>>>>>> main
 import MetricsView from './features/MetricsView';
 
 
@@ -113,7 +109,3 @@ export const AutoRepairView = () => {
     </div>
   );
 };
-<<<<<<< HEAD
-=======
-
->>>>>>> main

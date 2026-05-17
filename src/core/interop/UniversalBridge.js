@@ -2,11 +2,7 @@ import { useWitnessStore } from "../../features/witnessStore.js";
 import { Log } from '../autonomy/SovereignLogger.js';
 
 /**
-<<<<<<< HEAD
  * PH EVO STUDIO — UNIVERSAL BRIDGE (Physical Reality Edition)
-=======
- * PH EVO STUDIO — UNIVERSAL BRIDGE (ENTERPRISE GRADE)
->>>>>>> main
  * ═══════════════════════════════════════════════════════════════
  * Binds the studio to physical developer tools (IDE, Git, Flutter).
  * ABSOLUTE REALITY: Verified IPC through process-anchored truth-gates.
@@ -49,28 +45,6 @@ async function discoverBridge() {
 
 discoverBridge();
 
-let BRIDGE_URL = 'http://127.0.0.1:3001';
-
-async function discoverBridge() {
-  const ports = [3001, 3002, 3003, 3004];
-  for (const port of ports) {
-    try {
-      const res = await fetch(`http://127.0.0.1:${port}/status`, { signal: AbortSignal.timeout(500) });
-      const data = await res.json();
-      if (data.status === 'ONLINE') {
-        BRIDGE_URL = `http://127.0.0.1:${port}`;
-        Log.info(`🌉 [UniversalBridge] Discovered active bridge at ${BRIDGE_URL}`);
-        return;
-      }
-    } catch (e) {
-      // Ignore
-    }
-  }
-  Log.warn(`🌉 [UniversalBridge] No active bridge found on ports ${ports.join(', ')}. Falling back to default.`);
-}
-
-discoverBridge();
-
 export class UniversalBridge {
   constructor() {
     this.adaptors = {
@@ -79,12 +53,8 @@ export class UniversalBridge {
       git: new GitAdaptor(),
       antigravity: new AntigravityAdaptor(),
       foundry: new FoundryAdaptor(),
-<<<<<<< HEAD
       codeforge: new ForgeAdaptor(),
       memory: new MemoryAdaptor()
-=======
-      codeforge: new ForgeAdaptor()
->>>>>>> main
     };
   }
 
@@ -95,7 +65,6 @@ export class UniversalBridge {
       return { success: false, error: 'DRY_RUN_BLOCKED' };
     }
 
-<<<<<<< HEAD
     const adaptor = this.adaptors[toolId];
     if (!adaptor) return { success: false, error: 'UNKNOWN_TOOL' };
 
@@ -119,15 +88,6 @@ export class UniversalBridge {
   async syncAll() {
     Log.info('🌉 [Bridge] Initiating Physical Interop Sync...');
     return await Promise.all(Object.entries(this.adaptors).map(([id, a]) => a.sync()));
-=======
-    Log.info(`🌉 [UniversalBridge] Dispatching to ${toolId}: ${command}`);
-    try {
-      return await adaptor.execute(command, params);
-    } catch (err) {
-      Log.error(`🌉 [UniversalBridge] Dispatch failed for ${toolId}: ${err.message}`);
-      return { success: false, error: err.message };
-    }
->>>>>>> main
   }
 
   /**
@@ -179,25 +139,15 @@ class VSCAdaptor {
 
 class FlutterAdaptor {
   async execute(cmd, p) { 
-<<<<<<< HEAD
     const isRunning = await physicalRealityAudit('PROCESS_CHECK', { name: 'flutter' });
     if (!isRunning) throw new Error('IDE Bonding Failed: Flutter daemon not detected.');
     return { tool: 'flutter', status: 'OK', truthState: 'SIGNED_PHYSICAL' }; 
-=======
-    Log.info(`🐦 [FlutterAdaptor] Executing: ${cmd}`);
-    // Future: Connect to real flutter daemon via bridge
-    return { tool: 'flutter', status: 'OK', command: cmd }; 
->>>>>>> main
   }
   async sync() { return { tool: 'flutter', status: 'SYNCED' }; }
 }
 
 class GitAdaptor {
   async execute(cmd, p) { 
-<<<<<<< HEAD
-=======
-    Log.info(`📂 [GitAdaptor] Executing: ${cmd}`);
->>>>>>> main
     if (cmd === 'commit') {
       const res = await fetch(`${BRIDGE_URL}/api/git/commit`, {
         method: 'POST',
@@ -206,79 +156,29 @@ class GitAdaptor {
       });
       return await res.json();
     }
-<<<<<<< HEAD
     return { tool: 'git', status: 'OK', truthState: 'SIGNED_PHYSICAL' }; 
-=======
-    return { tool: 'git', status: 'OK' }; 
->>>>>>> main
   }
   async sync() { return { tool: 'git', status: 'SYNCED' }; }
 }
 
 class AntigravityAdaptor {
   async execute(cmd, p) { 
-<<<<<<< HEAD
     // Logic for internal Antigravity protocols...
     return { tool: 'antigravity', status: 'OK', truthState: 'SIGNED_PHYSICAL' }; 
-=======
-    Log.info(`🧠 [AntigravityAdaptor] Executing: ${cmd}`);
-    if (cmd === 'initiate-strategy') {
-      const res = await fetch(`${BRIDGE_URL}/api/strategy/initiate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ objective: p.objective })
-      });
-      return await res.json();
-    }
-    if (cmd === 'activate-evolution') {
-      const res = await fetch(`${BRIDGE_URL}/api/evolution/activate`, { method: 'POST' });
-      return await res.json();
-    }
-    return { tool: 'antigravity', status: 'OK' }; 
->>>>>>> main
   }
   async sync() { return { tool: 'antigravity', status: 'SYNCED' }; }
 }
 
 class FoundryAdaptor {
   async execute(cmd, p) {
-<<<<<<< HEAD
     // Logic for studio fabrication...
     return { tool: 'foundry', status: 'OK', truthState: 'SIGNED_PHYSICAL' }; 
-=======
-    Log.info(`🏗️ [FoundryAdaptor] Executing: ${cmd}`);
-    if (cmd === 'harvest') {
-      try {
-        const res = await fetch('/src/generated/missions.json');
-        const data = await res.json();
-        return { success: true, missions: data };
-      } catch (e) {
-        return { success: false, error: 'FAILED_TO_LOAD_MISSIONS' };
-      }
-    }
-    if (cmd === 'initiate') {
-      const res = await fetch(`${BRIDGE_URL}/api/files/write`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          path: 'src/generated/active_mission.json',
-          content: JSON.stringify(p, null, 2)
-        })
-      });
-      if (res.ok) {
-        return { success: true, manifest: { id: p.id, status: 'BUILDING' } };
-      }
-      return { success: false, error: 'FAILED_TO_WRITE_MISSION' };
-    }
-    return { success: false, error: 'UNKNOWN_COMMAND' };
->>>>>>> main
   }
   async sync() { return { tool: 'foundry', status: 'SYNCED' }; }
 }
 
 class ForgeAdaptor {
   async execute(cmd, p) {
-<<<<<<< HEAD
     // Logic for code generation...
     return { tool: 'codeforge', status: 'OK', truthState: 'SIGNED_PHYSICAL' }; 
   }
@@ -321,24 +221,3 @@ class MemoryAdaptor {
   }
   async sync() { return { tool: 'memory', status: 'SYNCED' }; }
 }
-=======
-    Log.info(`🔨 [ForgeAdaptor] Executing: ${cmd}`);
-    if (cmd === 'save') {
-      const res = await fetch(`${BRIDGE_URL}/api/files/write`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          path: `src/generated/${p.filename}`,
-          content: p.content
-        })
-      });
-      if (res.ok) {
-        return { success: true, path: `src/generated/${p.filename}` };
-      }
-      return { success: false, error: 'FAILED_TO_SAVE_FILE' };
-    }
-    return { success: false, error: 'UNKNOWN_COMMAND' };
-  }
-  async sync() { return { tool: 'codeforge', status: 'SYNCED' }; }
-}
->>>>>>> main

@@ -161,15 +161,11 @@ export function AutonomousSelfBuildCommandCenter() {
     ]);
 
     try {
-<<<<<<< HEAD
       const res = await fetch('http://127.0.0.1:3001/api/self-implementation/cycle', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ applyFixes: false })
       });
-=======
-      const res = await fetch('http://127.0.0.1:3001/api/test/run', { method: 'POST' });
->>>>>>> main
       const data = await res.json();
       if (res.ok && data.success) {
         let auditSnapshot = null;

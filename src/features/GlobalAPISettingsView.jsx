@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Settings, Key, Save, TestTube, CheckCircle2, AlertCircle, Loader2, Shield } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 import { getNightForgeSettings, updateNightForgeSettings } from '../nightforge.js';
-<<<<<<< HEAD
 import OwnerApprovalPanel from '../components/OwnerApprovalPanel.jsx';
 import { OWNER_APPROVAL_SCOPES } from '../services/owner-approval-client.js';
-=======
->>>>>>> main
 
 /**
  * PH EVO STUDIO — GLOBAL API SETTINGS (ENTERPRISE GRADE)
@@ -29,10 +26,7 @@ export function GlobalAPISettingsView() {
   const [nfLoading, setNfLoading] = useState(false);
   const [nfSaving, setNfSaving] = useState(false);
   const [nfForce3, setNfForce3] = useState(false);
-<<<<<<< HEAD
   const [deployApproval, setDeployApproval] = useState(null);
-=======
->>>>>>> main
 
   const handleSave = async () => {
     const ok = await saveApiKeys();
@@ -108,22 +102,14 @@ export function GlobalAPISettingsView() {
 
         <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>OpenAI API Key</label>
-<<<<<<< HEAD
           <input type="password" value={apiConfig.openaiKey} onChange={(e) => updateApiConfig({ openaiKey: e.target.value })} ghostInput="sk-proj-..." style={fieldStyle}
-=======
-          <input type="password" value={apiConfig.openaiKey} onChange={(e) => updateApiConfig({ openaiKey: e.target.value })} placeholder="sk-proj-..." style={fieldStyle}
->>>>>>> main
             onFocus={(e) => e.target.style.borderColor = '#4f46e580'} onBlur={(e) => e.target.style.borderColor = '#1e293b'} />
           <div style={{ fontSize: 10, color: '#475569', marginTop: 4 }}>Your key is sent to the local bridge server only — never to external services directly.</div>
         </div>
 
         <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>Vercel API Token (For Deployments)</label>
-<<<<<<< HEAD
           <input type="password" value={apiConfig.vercelToken || ''} onChange={(e) => updateApiConfig({ vercelToken: e.target.value })} ghostInput="vA123..." style={fieldStyle}
-=======
-          <input type="password" value={apiConfig.vercelToken || ''} onChange={(e) => updateApiConfig({ vercelToken: e.target.value })} placeholder="vA123..." style={fieldStyle}
->>>>>>> main
             onFocus={(e) => e.target.style.borderColor = '#4f46e580'} onBlur={(e) => e.target.style.borderColor = '#1e293b'} />
           <div style={{ fontSize: 10, color: '#475569', marginTop: 4 }}>Used by the SaaS Orchestrator to autonomously deploy your generated apps.</div>
         </div>
@@ -145,7 +131,6 @@ export function GlobalAPISettingsView() {
             {apiConfigSaving ? 'Saving...' : saved ? 'Saved!' : 'Save Keys'}
           </button>
         </div>
-<<<<<<< HEAD
 
         {apiConfig.vercelToken && (
           <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid #1e293b' }}>
@@ -164,8 +149,6 @@ export function GlobalAPISettingsView() {
             )}
           </div>
         )}
-=======
->>>>>>> main
       </div>
 
       {/* Bridge Connection Card */}

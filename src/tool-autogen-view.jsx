@@ -36,11 +36,7 @@ export function ToolAutogenView() {
   const [activeTab, setActiveTab] = useState('generate');
 
   useEffect(() => {
-<<<<<<< HEAD
     getAllRecipes().then(setRecipes);
-=======
-    setRecipes(getAllRecipes());
->>>>>>> main
     fetch('http://127.0.0.1:3001/status', { signal: AbortSignal.timeout(2000) })
       .then(r => setBridgeLive(r.ok)).catch(() => setBridgeLive(false));
   }, []);

@@ -133,13 +133,8 @@ export function GhostEditor() {
       <div className="p-2 px-4 bg-black/60 border-t border-slate-800 flex justify-between items-center text-[9px] text-slate-500 font-bold uppercase tracking-widest">
         <span>Active File: {activeFile}</span>
         <span className="flex items-center gap-4">
-<<<<<<< HEAD
           <span>Overlay ratio: {originalCode && ghostCode ? `${(ghostCode.length / Math.max(1, originalCode.length)).toFixed(2)}x` : '—'}</span>
           <span>Chars delta: {originalCode && ghostCode ? `${ghostCode.length - originalCode.length}` : '—'}</span>
-=======
-          <span>Density: 1.4x</span>
-          <span>Entropy: Stable</span>
->>>>>>> main
         </span>
       </div>
     </Card>
