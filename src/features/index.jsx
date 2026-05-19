@@ -43,6 +43,7 @@ import EmojiGallery from './EmojiGallery.jsx';
 import SelfEvolutionDashboard from './SelfEvolutionDashboard.jsx';
 import CostFirewallDashboard from './CostFirewallDashboard.jsx';
 import ThemeEvolutionDashboard from './ThemeEvolutionDashboard.jsx';
+import ModuleMaturityDashboard from './ModuleMaturityDashboard.jsx';
 import { SelfBuildForgeView } from '../self-build-forge-view.jsx';
 import { ForgeRenderConsoleView } from '../forge-render-views.jsx';
 import { ProofToValueView } from '../proof-to-value-view.jsx';
@@ -153,12 +154,17 @@ export function ExecutionQueue() {
 
 export function ProofConsole() {
   return (
-    <ScreenTemplate title="Proof Console" subtitle="Multi-layer truth verification, self-evolution, cost firewall, theme evolution, and immutable memory auditing.">
+    <ScreenTemplate title="Proof Console" subtitle="Multi-layer truth verification, self-evolution, cost firewall, theme evolution, module maturity, and immutable memory auditing.">
       <SovereignTabs tabs={[
         { id: 'ledger', label: 'Ledger & Memory', component: (
           <div className="space-y-6">
             <ProofLedgerView />
             <CanonMemoryView />
+          </div>
+        )},
+        { id: 'module-maturity', label: 'Module Maturity', component: (
+          <div className="space-y-6">
+            <ModuleMaturityDashboard />
           </div>
         )},
         { id: 'self-evolution', label: 'Self-Evolution', component: (
