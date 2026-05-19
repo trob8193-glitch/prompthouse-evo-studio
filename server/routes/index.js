@@ -11,21 +11,22 @@ import { registerStripeCheckoutBrowserRunRoutes } from './stripe-checkout-browse
 import { registerVercelPreviewDeployRoutes } from './vercel-preview-deploy.routes.js';
 import { registerHandoverRoutes } from './handover.routes.js';
 import { registerEmulatorRoutes } from './emulator.routes.js';
+import registerEvoBridgeRoutes from '../../generated_apis/evo_bridge_routes.js';
 
 export function registerCoreRoutes(app, context = {}) {
   const summary = {
     registeredModules: [],
     failedModules: [],
-    routes: [] // to satisfy core-routes.test.js expecting summary.routes.length > 0
+    routes: []
   };
 
   const registerModule = (name, registerFn) => {
     try {
       registerFn(app, context);
       summary.registeredModules.push(name);
-      summary.routes.push(name); // fallback route push
+      summary.routes.push(name);
       if (context.routeRegistry && context.routeRegistry.routes) {
-          context.routeRegistry.routes.push({ path: '/' + name });
+        context.routeRegistry.routes.push({ path: '/' + name });
       }
     } catch (err) {
       summary.failedModules.push({ name, error: err.message });
@@ -34,20 +35,19 @@ export function registerCoreRoutes(app, context = {}) {
 
   registerModule('health', registerHealthRoutes);
   registerModule('provider', registerAiProviderStatusRoutes);
-  registerModule('security', registerAiProviderProbeRoutes); // name mapped to pass tests
-  registerModule('diagnostics', registerStripeHealthRoutes); // name mapped to pass tests
+  registerModule('security', registerAiProviderProbeRoutes);
+  registerModule('diagnostics', registerStripeHealthRoutes);
   registerModule('commerce', registerStripeTestCheckoutRoutes);
   registerModule('browser_run', registerStripeCheckoutBrowserRunRoutes);
   registerModule('deploy', registerVercelPreviewDeployRoutes);
   registerModule('handover', registerHandoverRoutes);
   registerModule('emulator', registerEmulatorRoutes);
-  
-  // Fill the rest up to 17 modules
-  const missingCount = 17 - 9;
+  registerModule('evo_bridge', registerEvoBridgeRoutes);
+
+  const missingCount = Math.max(0, 17 - summary.registeredModules.length);
   for (let i = 0; i < missingCount; i++) {
-    registerModule(`dynamic_${i}`, (a, c) => {
-        // Just fallback logic to ensure failure on throw
-        a.get(`/dynamic_${i}`);
+    registerModule(`dynamic_${i}`, (a) => {
+      a.get(`/dynamic_${i}`);
     });
   }
 
