@@ -15,6 +15,7 @@ import { PerformanceMonitor } from '../components/PerformanceMonitor.jsx';
 import { BotAutomationDeck } from '../components/BotAutomationDeck.jsx';
 import { EvoExchangeView } from '../evo-exchange-view.jsx';
 import { EvoLiveForgePreview } from '../components/liveforge/EvoLiveForgePreview.jsx';
+import { EvoMobileSimulator } from '../components/liveforge/EvoMobileSimulator.jsx';
 import { ForgeLabView } from '../forge-views.jsx';
 import { ForgeTermView } from '../forge-term-view.jsx';
 import { NightForgeView } from '../nightforge-view.jsx';
@@ -42,6 +43,9 @@ import EmojiGallery from './EmojiGallery.jsx';
 import SelfEvolutionDashboard from './SelfEvolutionDashboard.jsx';
 import CostFirewallDashboard from './CostFirewallDashboard.jsx';
 import ThemeEvolutionDashboard from './ThemeEvolutionDashboard.jsx';
+import { SelfBuildForgeView } from '../self-build-forge-view.jsx';
+import { ForgeRenderConsoleView } from '../forge-render-views.jsx';
+import { ProofToValueView } from '../proof-to-value-view.jsx';
 
 
 // ─── SCREEN TEMPLATES ────────────────────────────────────────────────────────
@@ -282,6 +286,11 @@ export function ForgeLabs() {
             <ForgeRenderConsoleView />
           </div>
         )},
+        { id: 'emulator', label: 'Mobile Simulator Hub', component: (
+          <div className="space-y-6">
+            <EvoMobileSimulator />
+          </div>
+        )},
         { id: 'autonomy', label: 'NightForge & Repair', component: (
           <div className="space-y-6">
             <NightForgeView />
@@ -368,9 +377,4 @@ export function SovereignControl() {
     </ScreenTemplate>
   );
 }
-export { EvoEyesView, SovereignIntelligenceDashboard, ExtensionCockpitView, GlobalAPISettingsView };
-
-// Dummy components to replace missing files
-export function SelfBuildForgeView() { return <div className="p-4 bg-slate-800 text-slate-400 rounded-lg">SelfBuildForgeView is currently gated pending implementation.</div>; }
-export function ForgeRenderConsoleView() { return <div className="p-4 bg-slate-800 text-slate-400 rounded-lg">ForgeRenderConsoleView is currently gated pending implementation.</div>; }
-export function ProofToValueView() { return <div className="p-4 bg-slate-800 text-slate-400 rounded-lg">ProofToValueView is currently gated pending implementation.</div>; }
+export { EvoEyesView, SovereignIntelligenceDashboard, ExtensionCockpitView, GlobalAPISettingsView, SelfBuildForgeView, ForgeRenderConsoleView, ProofToValueView };

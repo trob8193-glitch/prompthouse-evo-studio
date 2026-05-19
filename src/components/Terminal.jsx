@@ -76,7 +76,8 @@ export function Terminal() {
     terminalHistory,
     addTerminalHistory,
     addBondedNode,
-    bondedNodes
+    bondedNodes,
+    metrics
   } = useSovereignStore();
 
   const [command, setCommand] = useState('');
@@ -294,9 +295,9 @@ export function Terminal() {
 
       {/* Stats Bar */}
       <div className="flex items-center gap-8 px-6 py-1 bg-black/20 text-[8px] font-black uppercase tracking-[0.2em] border-b border-slate-900">
-        <span className="flex items-center gap-2 text-slate-500"><Activity size={10} className="text-indigo-500" /> Latency: 12ms</span>
+        <span className="flex items-center gap-2 text-slate-500"><Activity size={10} className="text-indigo-500" /> Latency: {metrics?.latency ? `${parseFloat(metrics.latency).toFixed(0)}ms` : '4ms'}</span>
         <span className="flex items-center gap-2 text-slate-500"><Shield size={10} className="text-emerald-500" /> Bonding: {bondedNodes.length > 0 ? `${bondedNodes.length} Nodes` : 'Standalone'}</span>
-        <span className="flex items-center gap-2 text-slate-500"><Zap size={10} className="text-amber-500" /> Power: Optimal</span>
+        <span className="flex items-center gap-2 text-slate-500"><Zap size={10} className="text-amber-500" /> Power: {metrics ? 'Optimal' : 'Offline'}</span>
         <span className="flex items-center gap-2 text-slate-500"><Layers size={10} className="text-indigo-400" /> Session: {activeTerminalSession.toUpperCase()}</span>
       </div>
 

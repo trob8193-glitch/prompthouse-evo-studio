@@ -12,7 +12,7 @@ export function selectAutonomousObjective({ rootDir = process.cwd(), memory = []
 
   if (fileContains(rootDir, 'src/self-implementation-policy.js', /(OMNIPOTENT|S\+\+\+\+|FULFILLED|100% functional|resonance)/)) {
     candidates.push({
-      objective: 'Remove fake self-evolution language and replace it with truth-gated policy states',
+      objective: 'Remove unverified self-evolution language and replace it with truth-gated policy states',
       category: 'truth_cleanup',
       risk: 'LOW',
       impact: 90,

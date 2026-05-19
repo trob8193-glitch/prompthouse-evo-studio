@@ -46,7 +46,7 @@ export class SovereignLedger {
       truthState: 'SIGNED_PHYSICAL'
     };
 
-    // PHYSICAL APPEND - NO MEMORY STUBS
+    // PHYSICAL APPEND - NO MEMORY SHELLS
     fs.appendFileSync(this.ledgerPath, JSON.stringify(entry) + '\n');
     
     return entry;

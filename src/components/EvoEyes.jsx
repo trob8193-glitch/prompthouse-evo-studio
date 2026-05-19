@@ -28,15 +28,19 @@ export function EvoEyes({ mode = 'overlay' }) {
     singularityLayer,
     setSingularityLayer,
     bondedNodes,
+    refreshNodeMesh,
   } = useSovereignStore();
 
   const [diagnostics, setDiagnostics] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [latency, setLatency] = useState(4);
+  const [sovereigntyScore, setSovereigntyScore] = useState(99.8);
   const containerRef = useRef(null);
 
   const fetchState = async () => {
     setLoading(true);
+    const startTime = performance.now();
     try {
       const res = await fetch(`${BRIDGE_URL}/api/intelligence/execute`, {
         method: 'POST',
@@ -48,7 +52,21 @@ export function EvoEyes({ mode = 'overlay' }) {
         }),
       });
       const data = await res.json();
+      const endTime = performance.now();
+      setLatency(Math.max(1, Math.round(endTime - startTime)));
       if (data.success) setDiagnostics(data.result);
+
+      // Fetch dynamic truth audit score
+      const auditRes = await fetch(`${BRIDGE_URL}/api/nuclear-truth/audit`);
+      const auditData = await auditRes.json();
+      if (auditData && typeof auditData.score === 'number') {
+        setSovereigntyScore(auditData.score);
+      }
+
+      // Refresh node mesh from bridge
+      if (refreshNodeMesh) {
+        await refreshNodeMesh();
+      }
     } catch (err) {
       console.error('Evo Eyes Sync Failed:', err);
     } finally {
@@ -57,7 +75,11 @@ export function EvoEyes({ mode = 'overlay' }) {
   };
 
   useEffect(() => {
-    if (evoEyesActive || mode === 'embedded') fetchState();
+    if (evoEyesActive || mode === 'embedded') {
+      fetchState();
+      const interval = setInterval(fetchState, 3000);
+      return () => clearInterval(interval);
+    }
   }, [evoEyesActive, mode]);
 
   const nodes = useMemo(() => {
@@ -92,9 +114,9 @@ export function EvoEyes({ mode = 'overlay' }) {
           <div>
             <h1 className="text-xl font-black italic tracking-tighter text-white uppercase">Evo Eyes <span className="text-[10px] text-indigo-500 not-italic font-mono ml-2 uppercase tracking-[0.3em]">Sovereign Edition</span></h1>
             <div className="flex gap-4 text-[9px] font-black uppercase tracking-widest text-slate-500 mt-0.5">
-              <span className="flex items-center gap-1.5"><Activity size={10} className="text-emerald-500" /> Latency: 4ms</span>
-              <span className="flex items-center gap-1.5"><Shield size={10} className="text-indigo-400" /> Sovereignty: 99.8%</span>
-              <span className="flex items-center gap-1.5"><Network size={10} className="text-pink-500" /> Bonded Nodes: {bondedNodes.length}</span>
+              <span className="flex items-center gap-1.5"><Activity size={10} className="text-emerald-500" /> Latency: {latency}ms</span>
+              <span className="flex items-center gap-1.5"><Shield size={10} className="text-indigo-400" /> Sovereignty: {sovereigntyScore}%</span>
+              <span className="flex items-center gap-1.5"><Network size={10} className="text-pink-500" /> Bonded Nodes: {bondedNodes ? bondedNodes.length : 0}</span>
             </div>
           </div>
         </div>

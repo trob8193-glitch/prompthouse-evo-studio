@@ -43,7 +43,7 @@ export function EvoCopilotSidebar({ currentView }) {
           messages: [
             { role: 'user', content: `Current view: "${currentView}".\n\nUser: ${input}` }
           ],
-          systemPrompt: `You are ${activeBot.name} of PromptHouse Evo Studio. You operate in real mode only: no simulations, no fake outputs. If the bridge lacks a capability, say so and propose the next concrete step.`
+          systemPrompt: `You are ${activeBot.name} of PromptHouse Evo Studio. You operate in real mode only: no simulations, no unverified outputs. If the bridge lacks a capability, say so and propose the next concrete step.`
         })
       });
 

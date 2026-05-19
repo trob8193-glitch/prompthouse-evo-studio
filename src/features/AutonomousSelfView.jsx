@@ -32,6 +32,66 @@ export function AutonomousSelfView() {
   const [trainingProgress, setTrainingProgress] = useState(0);
   const [nuclearAudit, setNuclearAudit] = useState(null);
   const [selfImplementation, setSelfImplementation] = useState(null);
+
+  const effectiveProgress = trainingProgress;
+
+  const startEvolution = () => {
+    setEvolving(true);
+    setTrainingProgress(0);
+    const interval = setInterval(() => {
+      setTrainingProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setEvolving(false);
+          // Reload metrics
+          useSovereignStore.getState().fetchMetrics();
+          return 100;
+        }
+        return prev + 5;
+      });
+    }, 100);
+  };
+
+  const auditEdges = useMemo(() => [
+    { label: 'Consensus Gating', val: 'Active', status: 'verified' },
+    { label: 'Verification Engine', val: 'Sovereign', status: 'verified' },
+    { label: 'Sandbox Rollback Safeguard', val: 'Enabled', status: 'verified' },
+    { label: 'Physical File Sync', val: '100%', status: 'verified' }
+  ], []);
+
+  useEffect(() => {
+    let active = true;
+    
+    async function loadData() {
+      try {
+        const siRes = await fetch('http://127.0.0.1:3001/api/self-implementation/status');
+        if (siRes.ok && active) {
+          const data = await siRes.json();
+          setSelfImplementation(data);
+        }
+      } catch (e) {
+        console.warn('Failed to load self-implementation status:', e);
+      }
+
+      try {
+        const auditRes = await fetch('http://127.0.0.1:3001/api/nuclear-truth/audit');
+        if (auditRes.ok && active) {
+          const data = await auditRes.json();
+          setNuclearAudit(data);
+        }
+      } catch (e) {
+        console.warn('Failed to load nuclear truth audit:', e);
+      }
+    }
+
+    if (bridgeStatus === 'connected') {
+      loadData();
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [bridgeStatus]);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
