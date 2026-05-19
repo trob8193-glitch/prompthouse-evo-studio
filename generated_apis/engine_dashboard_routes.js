@@ -29,6 +29,17 @@ import {
   markCostReview,
 } from '../src/core/gateway/index.js';
 
+import {
+  getThemeEvolutionStatus,
+  suggestThemeEvolution,
+  previewThemeEvolution,
+  approveThemeEvolution,
+  applyThemeEvolution,
+  rollbackThemeEvolution,
+  buildThemeRuntimePayload,
+  listThemeProfiles,
+} from '../src/core/theme-evolution/index.js';
+
 const ok = (res, payload = {}) => res.json({ success: true, ...payload });
 const fail = (res, error, status = 500) => res.status(status).json({ success: false, error: error?.message || String(error) });
 const asyncRoute = (handler) => async (req, res) => {
@@ -202,5 +213,39 @@ export default function registerEngineDashboardRoutes(app) {
       expectedOutputTokens: Number(req.body?.expectedOutputTokens || 1200),
     });
     ok(res, { result });
+  });
+
+  // ─── THEME EVOLUTION DASHBOARD ROUTES ──────────────────────────────────────
+
+  app.get('/api/theme-evolution/status', (req, res) => {
+    ok(res, { status: getThemeEvolutionStatus() });
+  });
+
+  app.get('/api/theme-evolution/profiles', (req, res) => {
+    ok(res, { profiles: listThemeProfiles() });
+  });
+
+  app.get('/api/theme-evolution/runtime', (req, res) => {
+    ok(res, { runtime: buildThemeRuntimePayload() });
+  });
+
+  app.post('/api/theme-evolution/suggest', (req, res) => {
+    ok(res, { suggestion: suggestThemeEvolution({ page: req.body?.page || 'dashboard', state: req.body?.state || 'normal', preference: req.body?.preference || '' }) });
+  });
+
+  app.post('/api/theme-evolution/preview', (req, res) => {
+    ok(res, { preview: previewThemeEvolution({ themeId: req.body?.themeId || 'evoCore' }) });
+  });
+
+  app.post('/api/theme-evolution/approve', (req, res) => {
+    ok(res, { receipt: approveThemeEvolution({ themeId: req.body?.themeId || null, actor: req.body?.actor || 'studio_owner' }) });
+  });
+
+  app.post('/api/theme-evolution/apply', (req, res) => {
+    ok(res, { receipt: applyThemeEvolution({ themeId: req.body?.themeId || null, actor: req.body?.actor || 'studio_owner' }) });
+  });
+
+  app.post('/api/theme-evolution/rollback', (req, res) => {
+    ok(res, { receipt: rollbackThemeEvolution({ actor: req.body?.actor || 'studio_owner' }) });
   });
 }
