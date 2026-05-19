@@ -51,7 +51,7 @@ export default function SelfEvolutionDashboard() {
   const [receipts, setReceipts] = React.useState([]);
   const [memory, setMemory] = React.useState([]);
   const [approvals, setApprovals] = React.useState([]);
-  const [objective, setObjective] = React.useState('Remove fake self-evolution language and verify proof-gated safety.');
+  const [objective, setObjective] = React.useState('Remove unverified self-evolution language and verify proof-gated safety.');
   const [busy, setBusy] = React.useState(false);
   const [message, setMessage] = React.useState('');
 

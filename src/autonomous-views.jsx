@@ -74,7 +74,7 @@ export function AutonomousBuilderView() {
     <div className="flex-col">
       <div>
         <div className="page-title">🤖 Autonomous App Builder</div>
-        <div className="page-subtitle">Tell the bots what to build. They design, code, audit, and deliver — end to end. Real code. Real files. No Theatrical-Stubs.</div>
+        <div className="page-subtitle">Tell the bots what to build. They design, code, audit, and deliver — end to end. Real code. Real files. Fully verified.</div>
       </div>
 
       {/* Mission Input */}

@@ -5,7 +5,7 @@ export const LIVEFORGE_TEMPLATES = [
     category: "mobile",
     description: "Mobile-first app builder screen.",
     promptHint: "Improve this as a mobile app builder interface with proof gates.",
-    html: `<main class="app-shell"><section class="hero"><div class="badge">PromptHouse Evo</div><h1>Build your app from a prompt.</h1><p>Describe the app, choose a stack, and let Evo create a proof-gated blueprint.</p><button>Start Build</button></section><section class="cards"><article><h2>Prompt</h2><p>Turn your idea into a clear mission.</p></article><article><h2>Blueprint</h2><p>Generate screens, data, and tasks.</p></article><article><h2>Proof</h2><p>Block fake shipping until proof exists.</p></article></section></main>`,
+    html: `<main class="app-shell"><section class="hero"><div class="badge">PromptHouse Evo</div><h1>Build your app from a prompt.</h1><p>Describe the app, choose a stack, and let Evo create a proof-gated blueprint.</p><button>Start Build</button></section><section class="cards"><article><h2>Prompt</h2><p>Turn your idea into a clear mission.</p></article><article><h2>Blueprint</h2><p>Generate screens, data, and tasks.</p></article><article><h2>Proof</h2><p>Block unverified shipping until proof exists.</p></article></section></main>`,
     css: `.app-shell{font-family:Inter,system-ui;background:#070a12;color:#f8f0de;min-height:100%;padding:24px}.hero{border:1px solid rgba(255,255,255,.12);background:linear-gradient(135deg,#17223a,#0a0f1d);border-radius:24px;padding:28px}.badge{color:#f5b942;font-weight:900;text-transform:uppercase;letter-spacing:.12em}h1{font-size:40px;line-height:1;margin:12px 0}p{color:#b8c0d4}button{background:#f5b942;color:#070a12;border:0;border-radius:14px;padding:12px 18px;font-weight:900}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}article{background:#111827;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px}@media(max-width:720px){.cards{grid-template-columns:1fr}h1{font-size:30px}}`,
     js: ""
   },
@@ -23,7 +23,7 @@ export const LIVEFORGE_TEMPLATES = [
     id: "proof_deck",
     name: "Proof Deck",
     category: "proof",
-    description: "Receipts and verification status for no-fake shipping.",
+    description: "Receipts and verification status for verified shipping.",
     promptHint: "Make this Proof Deck clearer with receipt cards and verification labels.",
     html: `<main class="proof"><header><div class="badge">Proof Deck</div><h1>No receipt, no verified claim.</h1></header><section class="grid"><article><strong>Test Output</strong><p>Status: verified</p></article><article><strong>Build Log</strong><p>Status: built</p></article><article><strong>Deployment</strong><p>Status: blocked</p></article></section></main>`,
     css: `.proof{font-family:Inter,system-ui;background:#080b12;color:#f8f0de;min-height:100%;padding:24px}.badge{color:#57d47f;font-weight:900}header{padding:20px;border-radius:22px;background:#111827;border:1px solid rgba(255,255,255,.12)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}article{border:1px solid rgba(255,255,255,.12);background:#151f33;border-radius:18px;padding:16px}p{color:#b8c0d4}@media(max-width:720px){.grid{grid-template-columns:1fr}}`,

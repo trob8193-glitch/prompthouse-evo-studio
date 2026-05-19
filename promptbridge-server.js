@@ -7,7 +7,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
-import { join, relative, dirname, resolve, extname } from 'path';
+import path, { join, relative, dirname, resolve, extname } from 'path';
 import OpenAI from 'openai';
 import { execSync } from 'child_process';
 import bcrypt from 'bcryptjs';
@@ -50,6 +50,7 @@ import {
   buildPromptPacketPreview,
 } from './src/native-prompt-packet.js';
 import { hasExplicitOwnerApproval, getApprovalBlockReason } from './src/owner-approval.js';
+import { runNuclearTruthAudit } from './src/core/audit/NuclearTruthAudit.js';
 
 dotenv.config({ override: true });
 
@@ -57,9 +58,12 @@ dotenv.config({ override: true });
 initDatabase();
 ensureAuthSchema();
 ensureGatewayBootstrapData();
+import { registerEmulatorRoutes } from './server/routes/emulator.routes.js';
+
 ensureEvolutionSchema();
 
 const app = express();
+registerEmulatorRoutes(app);
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
 
 // ─── INITIALIZATION ──────────────────────────────────────────────────────────
@@ -1605,6 +1609,15 @@ app.get('/api/self-implementation/status', (req, res) => {
   }
 });
 
+app.get('/api/nuclear-truth/audit', (req, res) => {
+  try {
+    const report = runNuclearTruthAudit(process.cwd());
+    res.json(report);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/api/prompt-os/packet', (req, res) => {
   try {
     const packetPath = process.env.PROMPT_PACKET_PATH || DEFAULT_PROMPT_PACKET_PATH;
@@ -2166,6 +2179,13 @@ app.post('/api/intelligence/execute', maybeRequireAuthOrMaster, enforceJsonObjec
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
+});
+
+app.get('/api/intelligence/nodes/probe', maybeRequireAuthOrMaster, (req, res) => {
+  res.json({
+    success: true,
+    nodes: bondedNodes
+  });
 });
 
 app.post('/api/evo-eyes/team-run', maybeRequireAuthOrMaster, writeRateLimit, enforceJsonObjectBody, async (req, res) => {

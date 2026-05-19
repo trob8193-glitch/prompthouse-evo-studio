@@ -8,7 +8,7 @@ import { getProviderGateStatus, getProviderReceipts } from '../services/provider
  * ═══════════════════════════════════════════════════════════════
  * Displays provider gate status and recent receipts.
  * Uses TruthBadge for all truth-state labels.
- * No secret display. No fake provider success.
+ * No secret display. No unverified provider success.
  */
 export default function ProviderStatusPanel() {
   const [gates, setGates] = useState({});
