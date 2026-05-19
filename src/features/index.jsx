@@ -44,6 +44,7 @@ import SelfEvolutionDashboard from './SelfEvolutionDashboard.jsx';
 import CostFirewallDashboard from './CostFirewallDashboard.jsx';
 import ThemeEvolutionDashboard from './ThemeEvolutionDashboard.jsx';
 import ModuleMaturityDashboard from './ModuleMaturityDashboard.jsx';
+import EvoLlmTrainingDashboard from './EvoLlmTrainingDashboard.jsx';
 import { SelfBuildForgeView } from '../self-build-forge-view.jsx';
 import { ForgeRenderConsoleView } from '../forge-render-views.jsx';
 import { ProofToValueView } from '../proof-to-value-view.jsx';
@@ -154,7 +155,7 @@ export function ExecutionQueue() {
 
 export function ProofConsole() {
   return (
-    <ScreenTemplate title="Proof Console" subtitle="Multi-layer truth verification, self-evolution, cost firewall, theme evolution, module maturity, and immutable memory auditing.">
+    <ScreenTemplate title="Proof Console" subtitle="Multi-layer truth verification, Evo LLM training, self-evolution, cost firewall, theme evolution, module maturity, and immutable memory auditing.">
       <SovereignTabs tabs={[
         { id: 'ledger', label: 'Ledger & Memory', component: (
           <div className="space-y-6">
@@ -165,6 +166,11 @@ export function ProofConsole() {
         { id: 'module-maturity', label: 'Module Maturity', component: (
           <div className="space-y-6">
             <ModuleMaturityDashboard />
+          </div>
+        )},
+        { id: 'evo-llm', label: 'Evo LLM Training', component: (
+          <div className="space-y-6">
+            <EvoLlmTrainingDashboard />
           </div>
         )},
         { id: 'self-evolution', label: 'Self-Evolution', component: (
