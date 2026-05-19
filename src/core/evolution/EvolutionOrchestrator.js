@@ -10,6 +10,7 @@ import { compareEvolutionRun, isImprovement } from './EvolutionComparator.js';
 import { shouldRollback, rollbackEvolutionRun } from './RollbackEngine.js';
 import { createEvolutionReceipt, updateEvolutionReceipt, listEvolutionReceipts, readEvolutionReceipt } from './EvolutionReceiptLedger.js';
 import { recordEvolutionOutcome } from './EvolutionMemory.js';
+import { recordEvolutionForEvoLlm } from './EvolutionEvoLlmBridge.js';
 
 function dirs(rootDir, runId) {
   const base = path.join(rootDir, '.prompthouse-data', 'evolution');
@@ -19,6 +20,18 @@ function dirs(rootDir, runId) {
     snapshotRoot: path.join(base, 'snapshots', runId),
     proofRoot: path.join(base, 'proof', runId),
   };
+}
+
+function attachEvoLlmCapture({ rootDir, receipt, result }) {
+  try {
+    return recordEvolutionForEvoLlm({ rootDir, receipt, result });
+  } catch (error) {
+    return {
+      success: false,
+      truthState: 'SELF_EVOLUTION_EVO_LLM_CAPTURE_FAILED_NON_BLOCKING',
+      error: error.message || String(error)
+    };
+  }
 }
 
 export async function runEvolutionCycle({
@@ -46,12 +59,16 @@ export async function runEvolutionCycle({
   receipt = updateEvolutionReceipt(runId, { truthState: TRUTH_STATES.PROPOSED, proposal, blockedReasons: proposal.blockedReasons || [] }, d.receiptRoot);
 
   if (mode === 'proposal' || (!applyFixes && mode !== 'sandbox_apply' && mode !== 'proof')) {
-    return { success: proposal.blockedReasons.length === 0, runId, truthState: TRUTH_STATES.PROPOSED, proposal, receipt };
+    const result = { success: proposal.blockedReasons.length === 0, runId, objective, truthState: TRUTH_STATES.PROPOSED, proposal, receipt };
+    const evoLlmCapture = attachEvoLlmCapture({ rootDir, receipt, result });
+    return { ...result, evoLlmCapture };
   }
 
   if (proposal.blockedReasons?.length) {
     receipt = updateEvolutionReceipt(runId, { truthState: TRUTH_STATES.BLOCKED, blockedReasons: proposal.blockedReasons }, d.receiptRoot);
-    return { success: false, runId, truthState: TRUTH_STATES.BLOCKED, proposal, receipt };
+    const result = { success: false, runId, objective, truthState: TRUTH_STATES.BLOCKED, proposal, receipt };
+    const evoLlmCapture = attachEvoLlmCapture({ rootDir, receipt, result });
+    return { ...result, evoLlmCapture };
   }
 
   const workspace = createEvolutionWorkspace({ rootDir, runId, strategy: 'copy' });
@@ -63,7 +80,9 @@ export async function runEvolutionCycle({
   }, d.receiptRoot);
 
   if (mode === 'sandbox_apply') {
-    return { success: true, runId, truthState: TRUTH_STATES.PATCHED_IN_SANDBOX, workspace, patch, receipt };
+    const result = { success: true, runId, objective, truthState: TRUTH_STATES.PATCHED_IN_SANDBOX, workspace, patch, receipt };
+    const evoLlmCapture = attachEvoLlmCapture({ rootDir, receipt, result });
+    return { ...result, evoLlmCapture };
   }
 
   const commands = [];
@@ -87,14 +106,18 @@ export async function runEvolutionCycle({
       rollback,
     }, d.receiptRoot);
     recordEvolutionOutcome({ receipt });
-    return { success: false, runId, truthState: TRUTH_STATES.ROLLED_BACK, proof, comparison, rollback, receipt };
+    const result = { success: false, runId, objective, truthState: TRUTH_STATES.ROLLED_BACK, proof, comparison, rollback, receipt };
+    const evoLlmCapture = attachEvoLlmCapture({ rootDir, receipt, result });
+    return { ...result, evoLlmCapture };
   }
 
   const passed = proof.passed && isImprovement(comparison);
   const nextState = passed ? TRUTH_STATES.PROOF_PASSED : TRUTH_STATES.PROOF_FAILED;
   receipt = updateEvolutionReceipt(runId, { truthState: nextState, afterSnapshot, proof, comparison }, d.receiptRoot);
   recordEvolutionOutcome({ receipt });
-  return { success: passed, runId, truthState: nextState, proof, comparison, receipt };
+  const result = { success: passed, runId, objective, truthState: nextState, proof, comparison, receipt };
+  const evoLlmCapture = attachEvoLlmCapture({ rootDir, receipt, result });
+  return { ...result, evoLlmCapture };
 }
 
 export function getEvolutionStatus({ rootDir = process.cwd() } = {}) {
