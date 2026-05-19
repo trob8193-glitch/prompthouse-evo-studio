@@ -16,3 +16,4 @@ export * from './AutonomousObjectiveSelector.js';
 export * from './EvolutionApprovalQueue.js';
 export * from './EvolutionKillSwitch.js';
 export * from './AutonomousEvolutionDaemon.js';
+export * from './EvolutionEvoLlmBridge.js';
