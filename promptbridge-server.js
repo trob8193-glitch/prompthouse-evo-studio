@@ -3267,14 +3267,14 @@ app.post('/api/studio-os/proof/intercept', (req, res) => {
 });
 
 app.get('/api/training/export', (req, res) => {
-  if (!fs.existsSync(TRAINING_FILE)) return res.status(404).json({ error: 'No training data yet' });
+  if (!existsSync(TRAINING_FILE)) return res.status(404).json({ error: 'No training data yet' });
   res.setHeader('Content-Type', 'application/x-ndjson');
   res.setHeader('Content-Disposition', `attachment; filename="evo_training_${Date.now()}.jsonl"`);
   res.sendFile(TRAINING_FILE);
 });
 
 // ─── PAGE CAPTURE (from browser extension) ────────────────────────────────────
-const CAPTURES_FILE = path.join(DATA_DIR, 'captures.jsonl');
+const CAPTURES_FILE = join(DATA_DIR, 'captures.jsonl');
 
 app.post('/api/capture', (req, res) => {
   const { text, url, tabTitle, source = 'browser_extension' } = req.body;
@@ -3282,7 +3282,7 @@ app.post('/api/capture', (req, res) => {
 
   const record = JSON.stringify({ text, url, tabTitle, source, capturedAt: new Date().toISOString() }) + '\n';
   try {
-    fs.writeFileSync(CAPTURES_FILE, record, { flag: 'a', encoding: 'utf8' });
+    writeFileSync(CAPTURES_FILE, record, { flag: 'a', encoding: 'utf8' });
     res.json({ captured: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
