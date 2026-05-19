@@ -43,7 +43,10 @@
     "evo:eval": "node scripts/evo_llm_pipeline.mjs --eval",
     "evo:model-card": "node scripts/evo_llm_pipeline.mjs --model-card",
     "evo:receipt": "node scripts/evo_llm_pipeline.mjs --dataset --eval --model-card --receipt",
-    "evo:strict": "node scripts/evo_llm_pipeline.mjs --dataset --eval --strict"
+    "evo:strict": "node scripts/evo_llm_pipeline.mjs --dataset --eval --strict",
+    "evo:train-status": "node scripts/evo_llm_orchestrator_status.mjs",
+    "evo:train-plan": "node scripts/evo_llm_orchestrator_status.mjs --plan --provider=local-dataset",
+    "evo:train-plan-provider": "node scripts/evo_llm_orchestrator_status.mjs --plan --provider=openai"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
