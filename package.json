@@ -33,7 +33,11 @@
     "cost:check:paid": "node scripts/cost_firewall_v2_check.mjs --paid",
     "cost:summary": "node scripts/cost_firewall_v2_check.mjs --summary",
     "cost:claims": "node scripts/cost_firewall_v2_check.mjs --claims",
-    "cost:cache": "node scripts/cost_firewall_v2_check.mjs --cache"
+    "cost:cache": "node scripts/cost_firewall_v2_check.mjs --cache",
+    "maturity:check": "node scripts/module_maturity_check.mjs --summary",
+    "maturity:json": "node scripts/module_maturity_check.mjs --json",
+    "maturity:receipt": "node scripts/module_maturity_check.mjs --summary --receipt",
+    "maturity:strict": "node scripts/module_maturity_check.mjs --summary --strict"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
