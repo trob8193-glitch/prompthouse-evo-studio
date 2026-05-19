@@ -75,3 +75,8 @@ export function spinePaths(rootDir = process.cwd()) {
 export function evolutionReceiptDir(rootDir = process.cwd()) {
   return path.join(rootDir, '.prompthouse-data', 'evolution', 'receipts');
 }
+
+export function getSpineCoreContract() {
+  return SPINECORE_CONTRACT;
+}
+
