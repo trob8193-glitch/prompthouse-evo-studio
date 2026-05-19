@@ -41,6 +41,7 @@ import { FeatureFoundryView } from './FeatureFoundryView.jsx';
 import EmojiGallery from './EmojiGallery.jsx';
 import SelfEvolutionDashboard from './SelfEvolutionDashboard.jsx';
 import CostFirewallDashboard from './CostFirewallDashboard.jsx';
+import ThemeEvolutionDashboard from './ThemeEvolutionDashboard.jsx';
 
 
 // ─── SCREEN TEMPLATES ────────────────────────────────────────────────────────
@@ -148,7 +149,7 @@ export function ExecutionQueue() {
 
 export function ProofConsole() {
   return (
-    <ScreenTemplate title="Proof Console" subtitle="Multi-layer truth verification, self-evolution, cost firewall, and immutable memory auditing.">
+    <ScreenTemplate title="Proof Console" subtitle="Multi-layer truth verification, self-evolution, cost firewall, theme evolution, and immutable memory auditing.">
       <SovereignTabs tabs={[
         { id: 'ledger', label: 'Ledger & Memory', component: (
           <div className="space-y-6">
@@ -164,6 +165,11 @@ export function ProofConsole() {
         { id: 'cost-firewall', label: 'Cost Firewall', component: (
           <div className="space-y-6">
             <CostFirewallDashboard />
+          </div>
+        )},
+        { id: 'theme-evolution', label: 'Theme Evolution', component: (
+          <div className="space-y-6">
+            <ThemeEvolutionDashboard />
           </div>
         )},
         { id: 'auditor', label: 'Truth Auditor', component: (
