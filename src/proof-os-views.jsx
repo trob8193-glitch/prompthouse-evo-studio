@@ -223,14 +223,21 @@ export function DeadSurfaceHunterView() {
     buttons.forEach(el => {
       const isButton = el.tagName === 'BUTTON';
       const hasOnClick = !!el.onclick || el.getAttribute('onclick');
-      const hasReactHandler = Object.keys(el).some(key => key.startsWith('__reactProps'));
+       const hasReactHandler = Object.keys(el).some(key => {
+        if (key.startsWith('__reactProps')) {
+          const props = el[key];
+          return !!(props?.onClick || props?.onKeyDown || props?.onSubmit || props?.onChange || props?.onClickCapture);
+        }
+        return false;
+      });
       const href = el.getAttribute('href');
+      const textVal = (el.textContent || el.innerText || '').trim();
       
       if (isButton && !hasOnClick && !hasReactHandler) {
-        foundIssues.push(`Dead Button: "${el.innerText.slice(0, 20)}..." (No handler)`);
+        foundIssues.push(`Dead Button: "${textVal.slice(0, 20)}..." (No handler)`);
       }
       if (href === '#' || href === 'javascript:void(0)') {
-        foundIssues.push(`Invalid link: "${el.innerText.slice(0, 20)}..." (href="#")`);
+        foundIssues.push(`Invalid link: "${textVal.slice(0, 20)}..." (href="#")`);
       }
     });
 
