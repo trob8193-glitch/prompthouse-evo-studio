@@ -34,47 +34,104 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Syntax check bridge and generated APIs
+      - name: Run proof chain with captured first failure
+        shell: bash
         run: |
-          node --check promptbridge-server.js
+          set +e
+          LOG_FILE="ci-proof.log"
+          STATUS_FILE="ci-proof-status.txt"
+          FIRST_FAILURE_FILE="ci-proof-first-failure.txt"
+          : > "$LOG_FILE"
+          echo "0" > "$STATUS_FILE"
+          : > "$FIRST_FAILURE_FILE"
+
+          run_step() {
+            local name="$1"
+            shift
+            echo "══════════════════════════════════════════════════════════════" | tee -a "$LOG_FILE"
+            echo "STEP: $name" | tee -a "$LOG_FILE"
+            echo "COMMAND: $*" | tee -a "$LOG_FILE"
+            echo "══════════════════════════════════════════════════════════════" | tee -a "$LOG_FILE"
+            "$@" 2>&1 | tee -a "$LOG_FILE"
+            local code=${PIPESTATUS[0]}
+            if [ "$code" -ne 0 ]; then
+              echo "$code" > "$STATUS_FILE"
+              {
+                echo "FIRST FAILURE"
+                echo "STEP: $name"
+                echo "COMMAND: $*"
+                echo "EXIT_CODE: $code"
+              } > "$FIRST_FAILURE_FILE"
+              echo "❌ First failure: $name exited with $code" | tee -a "$LOG_FILE"
+              return "$code"
+            fi
+            echo "✅ PASS: $name" | tee -a "$LOG_FILE"
+            return 0
+          }
+
+          run_step "Install dependencies" npm ci || exit 0
+          run_step "Syntax check PromptBridge" node --check promptbridge-server.js || exit 0
+
+          echo "══════════════════════════════════════════════════════════════" | tee -a "$LOG_FILE"
+          echo "STEP: Syntax check generated APIs" | tee -a "$LOG_FILE"
+          echo "══════════════════════════════════════════════════════════════" | tee -a "$LOG_FILE"
           for file in generated_apis/*.js; do
-            echo "Checking $file"
-            node --check "$file"
+            echo "Checking $file" | tee -a "$LOG_FILE"
+            node --check "$file" 2>&1 | tee -a "$LOG_FILE"
+            code=${PIPESTATUS[0]}
+            if [ "$code" -ne 0 ]; then
+              echo "$code" > "$STATUS_FILE"
+              {
+                echo "FIRST FAILURE"
+                echo "STEP: Syntax check generated APIs"
+                echo "COMMAND: node --check $file"
+                echo "EXIT_CODE: $code"
+              } > "$FIRST_FAILURE_FILE"
+              echo "❌ First failure: generated API syntax check exited with $code" | tee -a "$LOG_FILE"
+              exit 0
+            fi
           done
+          echo "✅ PASS: Syntax check generated APIs" | tee -a "$LOG_FILE"
 
-      - name: Syntax check maturity engine
+          run_step "Syntax check maturity engine" node --check src/core/maturity/ModuleMaturityEngine.js || exit 0
+          run_step "Syntax check maturity script" node --check scripts/module_maturity_check.mjs || exit 0
+          run_step "Import audit" npm run audit:imports || exit 0
+          run_step "CSS variable audit" npm run audit:css || exit 0
+          run_step "Studio static verification" npm run verify:studio || exit 0
+          run_step "Module maturity scan" npm run maturity:check || exit 0
+          run_step "Cost firewall check" npm run cost:check || exit 0
+          run_step "Cost firewall paid check" npm run cost:check:paid || exit 0
+          run_step "Cost firewall summary" npm run cost:summary || exit 0
+          run_step "Cost firewall claims" npm run cost:claims || exit 0
+          run_step "Cost firewall cache" npm run cost:cache || exit 0
+          run_step "Self-evolution status" npm run evolve:status || exit 0
+          run_step "Unit tests" npm test || exit 0
+          run_step "Production build" npm run build || exit 0
+
+          echo "✅ Full proof chain passed." | tee -a "$LOG_FILE"
+
+      - name: Upload CI proof logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-proof-logs
+          path: |
+            ci-proof.log
+            ci-proof-status.txt
+            ci-proof-first-failure.txt
+          if-no-files-found: warn
+
+      - name: Enforce proof result
+        shell: bash
         run: |
-          node --check src/core/maturity/ModuleMaturityEngine.js
-          node --check scripts/module_maturity_check.mjs
-
-      - name: Import audit
-        run: npm run audit:imports
-
-      - name: CSS variable audit
-        run: npm run audit:css
-
-      - name: Studio static verification
-        run: npm run verify:studio
-
-      - name: Module maturity scan
-        run: npm run maturity:check
-
-      - name: Cost firewall proof
-        run: |
-          npm run cost:check
-          npm run cost:check:paid
-          npm run cost:summary
-          npm run cost:claims
-          npm run cost:cache
-
-      - name: Self-evolution status
-        run: npm run evolve:status
-
-      - name: Unit tests
-        run: npm test
-
-      - name: Production build
-        run: npm run build
+          status="0"
+          if [ -f ci-proof-status.txt ]; then
+            status="$(cat ci-proof-status.txt)"
+          fi
+          if [ "$status" != "0" ]; then
+            echo "Studio proof chain failed. First failure summary:"
+            cat ci-proof-first-failure.txt || true
+            echo "Open the studio-proof-logs artifact for full output."
+            exit "$status"
+          fi
+          echo "Studio proof chain passed."
