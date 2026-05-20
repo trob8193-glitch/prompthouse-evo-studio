@@ -59,11 +59,13 @@ initDatabase();
 ensureAuthSchema();
 ensureGatewayBootstrapData();
 import { registerEmulatorRoutes } from './server/routes/emulator.routes.js';
+import registerEvoBridgeRoutes from './generated_apis/evo_bridge_routes.js';
 
 ensureEvolutionSchema();
 
 const app = express();
 registerEmulatorRoutes(app);
+registerEvoBridgeRoutes(app);
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
 
 // ─── INITIALIZATION ──────────────────────────────────────────────────────────
