@@ -1,0 +1,73 @@
+{
+  "id": "evo_train_run_1779234620653",
+  "planId": "evo_train_plan_1779234556741",
+  "provider": "local-dataset",
+  "createdAt": "2026-05-19T23:50:20.654Z",
+  "truthState": "LOCAL_DATASET_PIPELINE_EXECUTED_NO_MODEL_WEIGHTS_TRAINED",
+  "receiptFile": ".evo-llm\\receipts\\evo-llm-training-receipt-1779234620651.json",
+  "outputs": {
+    "generatedAt": "2026-05-19T23:50:20.651Z",
+    "truthState": "PIPELINE_PREPARED_NO_PROVIDER_TRAINING_EXECUTED",
+    "manifest": {
+      "generatedAt": "2026-05-19T23:50:20.642Z",
+      "truthState": "DATASET_READY",
+      "totalExamples": 5,
+      "validExamples": 5,
+      "invalidExamples": [],
+      "trainCount": 4,
+      "evalCount": 1,
+      "files": {
+        "trainJsonl": ".evo-llm\\training-data\\evo-train.jsonl",
+        "evalJsonl": ".evo-llm\\training-data\\evo-eval.jsonl"
+      },
+      "policy": {
+        "id": "evo-llm-training-policy",
+        "name": "Evo LLM Truth-Bound Training Policy",
+        "truthState": "PIPELINE_POLICY_ONLY_NOT_TRAINED_MODEL",
+        "requiredFields": [
+          "system",
+          "instruction",
+          "response"
+        ],
+        "bannedClaims": [
+          "sentient",
+          "conscious",
+          "guaranteed profit",
+          "unlimited autonomous",
+          "break into",
+          "bypass security"
+        ],
+        "allowedUses": [
+          "PromptHouse Evo Studio architecture assistance",
+          "module maturity auditing",
+          "cost firewall reasoning",
+          "proof-gated build planning",
+          "truth-bound repair recommendations"
+        ],
+        "disallowedUses": [
+          "claims of sentience or consciousness",
+          "security bypass guidance",
+          "medical diagnosis",
+          "legal advice",
+          "financial guarantees",
+          "fake completion claims without receipts"
+        ]
+      }
+    },
+    "evalReport": {
+      "generatedAt": "2026-05-19T23:50:20.648Z",
+      "truthState": "EVAL_READY",
+      "datasetQualityScore": 100,
+      "totalExamples": 5,
+      "validExamples": 5,
+      "invalidCount": 0,
+      "blockers": [],
+      "requiredNextSteps": [
+        "Add more project-specific examples from real PromptHouse Evo Studio workflows.",
+        "Run provider-specific fine-tune command only after dataset validation passes.",
+        "Store model output evaluations and compare against baseline prompts."
+      ]
+    },
+    "modelCardFile": ".evo-llm\\model-cards\\evo-llm-model-card-1779234620649.json"
+  }
+}

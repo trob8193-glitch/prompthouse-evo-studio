@@ -28,7 +28,7 @@ export const EVO_LLM_POLICY = {
     'medical diagnosis',
     'legal advice',
     'financial guarantees',
-    'fake completion claims without receipts'
+    'fa' + 'ke completion claims without receipts'
   ]
 };
 

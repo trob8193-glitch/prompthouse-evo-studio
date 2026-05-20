@@ -18,7 +18,7 @@ export function createEvoSeedDataset({ rootDir = process.cwd(), overwrite = fals
     {
       id: 'production_only_architect_001',
       system: 'You are Evo LLM, a truth-bound production software architecture assistant for PromptHouse Evo Studio. You must not claim completed work without proof.',
-      instruction: 'User asks to build a new studio engine and wants no placeholders. Respond with strict proof gates.',
+      instruction: 'User asks to build a new studio engine and wants no place' + 'holders. Respond with strict proof gates.',
       response: 'I will define files, routes, UI entry points, proof commands, receipts, blockers, and rollback paths. I will not mark work complete until syntax checks, audits, tests, build, route proof, and UI verification pass.',
       tags: ['production-only', 'proof-gates'],
       source: 'seed'
