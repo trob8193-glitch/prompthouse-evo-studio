@@ -13,7 +13,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
 
 concurrency:
   group: studio-proof-${{ github.ref }}
@@ -29,141 +28,93 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Initialize CI proof diagnostics
-        if: always()
-        shell: bash
-        run: |
-          : > ci-proof.log
-          echo "0" > ci-proof-status.txt
-          : > ci-proof-first-failure.txt
-          {
-            echo "# Studio Proof Gates"
-            echo ""
-            echo "Initialized diagnostics before Node setup so failures cannot hide."
-            echo "Commit: $GITHUB_SHA"
-            echo "Ref: $GITHUB_REF"
-          } >> "$GITHUB_STEP_SUMMARY"
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Run proof chain with captured first failure
+      - name: Run proof chain and report first failure
         shell: bash
         run: |
           set +e
-          LOG_FILE="ci-proof.log"
-          STATUS_FILE="ci-proof-status.txt"
-          FIRST_FAILURE_FILE="ci-proof-first-failure.txt"
-
-          mark_failure() {
-            local name="$1"
-            local command="$2"
-            local code="$3"
-            echo "$code" > "$STATUS_FILE"
-            {
-              echo "FIRST FAILURE"
-              echo "STEP: $name"
-              echo "COMMAND: $command"
-              echo "EXIT_CODE: $code"
-            } > "$FIRST_FAILURE_FILE"
-            {
-              echo "## ❌ First failure"
-              echo ""
-              echo "- Step: $name"
-              echo "- Command: $command"
-              echo "- Exit code: $code"
-              echo ""
-              echo "See ci-proof.log in the artifact for full output."
-            } >> "$GITHUB_STEP_SUMMARY"
-          }
+          status=0
+          first_failure_step=""
+          first_failure_command=""
 
           run_step() {
             local name="$1"
             shift
             local command="$*"
-            echo "══════════════════════════════════════════════════════════════" | tee -a "$LOG_FILE"
-            echo "STEP: $name" | tee -a "$LOG_FILE"
-            echo "COMMAND: $command" | tee -a "$LOG_FILE"
-            echo "══════════════════════════════════════════════════════════════" | tee -a "$LOG_FILE"
-            "$@" 2>&1 | tee -a "$LOG_FILE"
-            local code=${PIPESTATUS[0]}
+            echo "══════════════════════════════════════════════════════════════"
+            echo "STEP: $name"
+            echo "COMMAND: $command"
+            echo "══════════════════════════════════════════════════════════════"
+            "$@"
+            local code=$?
             if [ "$code" -ne 0 ]; then
-              mark_failure "$name" "$command" "$code"
-              echo "❌ First failure: $name exited with $code" | tee -a "$LOG_FILE"
+              status="$code"
+              first_failure_step="$name"
+              first_failure_command="$command"
+              echo "❌ First failure: $name exited with $code"
               return "$code"
             fi
-            echo "✅ PASS: $name" | tee -a "$LOG_FILE"
+            echo "✅ PASS: $name"
             return 0
           }
 
-          run_step "Install dependencies" npm ci || exit 0
-          run_step "Syntax check PromptBridge" node --check promptbridge-server.js || exit 0
+          run_step "Install dependencies" npm ci || true
+          if [ "$status" = "0" ]; then run_step "Syntax check PromptBridge" node --check promptbridge-server.js || true; fi
 
-          echo "══════════════════════════════════════════════════════════════" | tee -a "$LOG_FILE"
-          echo "STEP: Syntax check generated APIs" | tee -a "$LOG_FILE"
-          echo "══════════════════════════════════════════════════════════════" | tee -a "$LOG_FILE"
-          for file in generated_apis/*.js; do
-            echo "Checking $file" | tee -a "$LOG_FILE"
-            node --check "$file" 2>&1 | tee -a "$LOG_FILE"
-            code=${PIPESTATUS[0]}
-            if [ "$code" -ne 0 ]; then
-              mark_failure "Syntax check generated APIs" "node --check $file" "$code"
-              echo "❌ First failure: generated API syntax check exited with $code" | tee -a "$LOG_FILE"
-              exit 0
-            fi
-          done
-          echo "✅ PASS: Syntax check generated APIs" | tee -a "$LOG_FILE"
-
-          run_step "Syntax check maturity engine" node --check src/core/maturity/ModuleMaturityEngine.js || exit 0
-          run_step "Syntax check maturity script" node --check scripts/module_maturity_check.mjs || exit 0
-          run_step "Import audit" npm run audit:imports || exit 0
-          run_step "CSS variable audit" npm run audit:css || exit 0
-          run_step "Studio static verification" npm run verify:studio || exit 0
-          run_step "Module maturity scan" npm run maturity:check || exit 0
-          run_step "Cost firewall check" npm run cost:check || exit 0
-          run_step "Cost firewall paid check" npm run cost:check:paid || exit 0
-          run_step "Cost firewall summary" npm run cost:summary || exit 0
-          run_step "Cost firewall claims" npm run cost:claims || exit 0
-          run_step "Cost firewall cache" npm run cost:cache || exit 0
-          run_step "Self-evolution status" npm run evolve:status || exit 0
-          run_step "Unit tests" npm test || exit 0
-          run_step "Production build" npm run build || exit 0
-
-          {
-            echo "## ✅ Full proof chain passed"
-            echo ""
-            echo "All Studio Proof Gates commands completed successfully."
-          } >> "$GITHUB_STEP_SUMMARY"
-          echo "✅ Full proof chain passed." | tee -a "$LOG_FILE"
-
-      - name: Upload CI proof logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: studio-proof-logs-${{ github.run_id }}
-          path: |
-            ci-proof.log
-            ci-proof-status.txt
-            ci-proof-first-failure.txt
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Enforce proof result
-        if: always()
-        shell: bash
-        run: |
-          status="1"
-          if [ -f ci-proof-status.txt ]; then
-            status="$(cat ci-proof-status.txt)"
-          else
-            echo "ci-proof-status.txt was not created. Failing closed."
+          if [ "$status" = "0" ]; then
+            echo "══════════════════════════════════════════════════════════════"
+            echo "STEP: Syntax check generated APIs"
+            echo "══════════════════════════════════════════════════════════════"
+            for file in generated_apis/*.js; do
+              echo "Checking $file"
+              node --check "$file"
+              code=$?
+              if [ "$code" -ne 0 ]; then
+                status="$code"
+                first_failure_step="Syntax check generated APIs"
+                first_failure_command="node --check $file"
+                echo "❌ First failure: generated API syntax check exited with $code"
+                break
+              fi
+            done
+            if [ "$status" = "0" ]; then echo "✅ PASS: Syntax check generated APIs"; fi
           fi
+
+          if [ "$status" = "0" ]; then run_step "Syntax check maturity engine" node --check src/core/maturity/ModuleMaturityEngine.js || true; fi
+          if [ "$status" = "0" ]; then run_step "Syntax check maturity script" node --check scripts/module_maturity_check.mjs || true; fi
+          if [ "$status" = "0" ]; then run_step "Import audit" npm run audit:imports || true; fi
+          if [ "$status" = "0" ]; then run_step "CSS variable audit" npm run audit:css || true; fi
+          if [ "$status" = "0" ]; then run_step "Studio static verification" npm run verify:studio || true; fi
+          if [ "$status" = "0" ]; then run_step "Module maturity scan" npm run maturity:check || true; fi
+          if [ "$status" = "0" ]; then run_step "Cost firewall check" npm run cost:check || true; fi
+          if [ "$status" = "0" ]; then run_step "Cost firewall paid check" npm run cost:check:paid || true; fi
+          if [ "$status" = "0" ]; then run_step "Cost firewall summary" npm run cost:summary || true; fi
+          if [ "$status" = "0" ]; then run_step "Cost firewall claims" npm run cost:claims || true; fi
+          if [ "$status" = "0" ]; then run_step "Cost firewall cache" npm run cost:cache || true; fi
+          if [ "$status" = "0" ]; then run_step "Self-evolution status" npm run evolve:status || true; fi
+          if [ "$status" = "0" ]; then run_step "Unit tests" npm test || true; fi
+          if [ "$status" = "0" ]; then run_step "Production build" npm run build || true; fi
+
           if [ "$status" != "0" ]; then
-            echo "Studio proof chain failed. First failure summary:"
-            cat ci-proof-first-failure.txt || true
-            echo "Open the studio-proof-logs artifact for full output."
+            {
+              echo "## ❌ Studio Proof Gates failed"
+              echo ""
+              echo "- First failing step: $first_failure_step"
+              echo "- Command: $first_failure_command"
+              echo "- Exit code: $status"
+              echo ""
+              echo "Read the failed step output above."
+            } >> "$GITHUB_STEP_SUMMARY"
             exit "$status"
           fi
-          echo "Studio proof chain passed."
+
+          {
+            echo "## ✅ Studio Proof Gates passed"
+            echo ""
+            echo "All audit, syntax, maturity, cost, test, and build checks passed on Ubuntu."
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "✅ Full proof chain passed."
