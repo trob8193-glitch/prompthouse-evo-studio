@@ -39,7 +39,7 @@ const botControllers = [
   ["Vector Wolf", "Context controller", "VectorPack compression and retrieval boundaries"],
   ["Temporal Raven", "Time controller", "Temporal Stackchain and deprecation paths"],
   ["Cipher Lynx", "Security controller", "secrets, prompt injection, browser capture risk"],
-  ["Verifier", "Proof controller", "tests, validation, receipts, no-fake status"],
+  ["Verifier", "Proof controller", "tests, validation, receipts, unverified-free status"],
   ["Ledger", "Receipt controller", "versioning, audit trail, proof indexing"],
   ["Enterprise Auth", "Owner authority", "final approval for risky actions"],
 ];

@@ -1,0 +1,80 @@
+name: Studio Proof Gates
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - feature/nuclear-static-audit-gates
+      - feature/engine-dashboard-routes
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: studio-proof-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  proof:
+    name: Audit, Test, Build, and Engine Proof
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Syntax check bridge and generated APIs
+        run: |
+          node --check promptbridge-server.js
+          for file in generated_apis/*.js; do
+            echo "Checking $file"
+            node --check "$file"
+          done
+
+      - name: Syntax check maturity engine
+        run: |
+          node --check src/core/maturity/ModuleMaturityEngine.js
+          node --check scripts/module_maturity_check.mjs
+
+      - name: Import audit
+        run: npm run audit:imports
+
+      - name: CSS variable audit
+        run: npm run audit:css
+
+      - name: Studio static verification
+        run: npm run verify:studio
+
+      - name: Module maturity scan
+        run: npm run maturity:check
+
+      - name: Cost firewall proof
+        run: |
+          npm run cost:check
+          npm run cost:check:paid
+          npm run cost:summary
+          npm run cost:claims
+          npm run cost:cache
+
+      - name: Self-evolution status
+        run: npm run evolve:status
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Production build
+        run: npm run build

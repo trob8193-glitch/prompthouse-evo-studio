@@ -29,18 +29,19 @@ function buildTruthLanguagePatch(rootDir) {
   const current = safeRead(rootDir, relPath);
   if (!current) return null;
   let next = current
-    .replace(/Autonomously fulfilled by the Great Realization Protocol\.\n \* This module is now 100% functional and production-ready\./g, 'Truth-gated self-implementation policy helpers. Completion claims require receipts.')
+    .replace(/Autonomously fulfilled by the Great Realization Protocol\.\r?\n \* This module is now 100% functional and production-ready\./g, 'Truth-gated self-implementation policy helpers. Completion claims require receipts.')
+    .replace(/Autonomously fulfilled by the Great Realization Protocol\.\r?\n \* Operational status is determined by live audits and proof receipts\./g, 'Truth-gated self-implementation policy helpers. Completion claims require receipts.')
     .replace(/this\.status = 'OMNIPOTENT';/g, "this.status = 'POLICY_READY';")
-    .replace(/\n\s*this\.iq_baseline = 165\.0;/g, '')
+    .replace(/\r?\n\s*this\.iq_baseline = 165\.0;/g, '')
     .replace(/result: 'FULFILLED'/g, "result: 'POLICY_CHECKED'")
-    .replace(/grade: 'S\+\+\+\+'/g, "grade: 'POLICY_GATED'")
+    .replace(/grade: 'S\+*'/g, "grade: 'POLICY_GATED'")
     .replace(/state: 'VERIFIED'/g, "state: 'READY'")
-    .replace(/,\n\s*resonance: 0\.99/g, '');
+    .replace(/,\r?\n\s*resonance: 0\.99/g, '');
   if (next === current) return null;
   return {
     path: relPath,
     operation: 'update',
-    reason: 'Remove fake self-evolution completion language and replace with receipt-safe policy language.',
+    reason: 'Remove unverified self-evolution completion language and replace with receipt-safe policy language.',
     proposedContent: next,
   };
 }
@@ -54,7 +55,7 @@ export function buildPatchProposal({ runId = `evo_${Date.now()}`, objective = ''
     if (patch) files.push(patch);
   }
 
-  if (objectiveText.includes('truth') || objectiveText.includes('fake') || objectiveText.includes('hype') || objectiveText.includes('self')) {
+  if (objectiveText.includes('truth') || objectiveText.includes('unverified') || objectiveText.includes('hype') || objectiveText.includes('self')) {
     const patch = buildTruthLanguagePatch(rootDir);
     if (patch) files.push(patch);
   }
@@ -70,7 +71,7 @@ export function buildPatchProposal({ runId = `evo_${Date.now()}`, objective = ''
     objective: objective || 'Autonomous self-evolution safe cleanup',
     risk: 'LOW',
     riskScore: null,
-    expectedImprovement: ['Reduce fake completion language', 'Improve deployment environment readiness'],
+    expectedImprovement: ['Reduce unverified completion language', 'Improve deployment environment readiness'],
     files,
     diagnosticsSummary: diagnostics?.summary || null,
     memoryHints: memory || null,

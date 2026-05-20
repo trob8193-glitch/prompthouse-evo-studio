@@ -38,7 +38,7 @@ function walkFiles(dir, rootDir, out = []) {
   return out;
 }
 
-export function createRepoSnapshot({ rootDir = process.cwd(), label = 'snapshot', fileLimit = 400 } = {}) {
+export function createRepoSnapshot({ rootDir = process.cwd(), label = 'snapshot', fileLimit = 5000 } = {}) {
   const git = readGitState(rootDir);
   const files = walkFiles(rootDir, rootDir).slice(0, fileLimit);
   const fileHashes = {};

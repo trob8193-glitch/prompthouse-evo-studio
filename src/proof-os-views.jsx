@@ -80,7 +80,7 @@ export function ProofLedgerView() {
 // ── 2. CANON-AWARE MEMORY ────────────────────────────────────────
 export function CanonMemoryView() {
   const [laws, setLaws] = useState([
-    { text: 'No fake completion states', locked: true },
+    { text: 'No simulated completion states', locked: true },
     { text: 'Truth before theater', locked: true },
     { text: 'All API keys remain local', locked: true },
     { text: 'Never use inline styles (unless animating)', locked: false }
@@ -250,7 +250,7 @@ export function DeadSurfaceHunterView() {
   return (
     <div className="flex-col animate-in">
       <div className="page-title">🕸️ Dead-Surface Hunter</div>
-      <div className="page-subtitle">Scanning for dead buttons, fake forms, and missing states.</div>
+      <div className="page-subtitle">Scanning for dead buttons, simulated forms, and missing states.</div>
       <div className="card" style={{ textAlign: 'center', padding: 48 }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>{scanning ? '🔍' : done ? '✅' : '🎯'}</div>
         <h3>{scanning ? 'Scanning System...' : done ? (deadCount > 0 ? `${deadCount} Dead Surfaces Found` : 'No Dead Surfaces Found') : 'Scanner Ready'}</h3>

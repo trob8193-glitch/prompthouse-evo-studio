@@ -1,0 +1,70 @@
+{
+  "modelName": "Evo LLM Local Pipeline",
+  "generatedAt": "2026-05-19T23:32:09.138Z",
+  "truthState": "PIPELINE_MODEL_CARD_NOT_TRAINED_MODEL",
+  "intendedUse": "PromptHouse Evo Studio architecture, audit, cost-control, module maturity, and proof-gated build assistance.",
+  "notFor": [
+    "medical diagnosis",
+    "legal advice",
+    "financial guarantees",
+    "security bypass",
+    "claims of sentience or consciousness"
+  ],
+  "dataset": {
+    "generatedAt": "2026-05-19T23:32:09.137Z",
+    "truthState": "DATASET_READY",
+    "totalExamples": 5,
+    "validExamples": 5,
+    "invalidExamples": [],
+    "trainCount": 4,
+    "evalCount": 1,
+    "files": {
+      "trainJsonl": ".evo-llm\\training-data\\evo-train.jsonl",
+      "evalJsonl": ".evo-llm\\training-data\\evo-eval.jsonl"
+    },
+    "policy": {
+      "id": "evo-llm-training-policy",
+      "name": "Evo LLM Truth-Bound Training Policy",
+      "truthState": "PIPELINE_POLICY_ONLY_NOT_TRAINED_MODEL",
+      "requiredFields": [
+        "system",
+        "instruction",
+        "response"
+      ],
+      "bannedClaims": [
+        "sentient",
+        "conscious",
+        "guaranteed profit",
+        "unlimited autonomous",
+        "break into",
+        "bypass security"
+      ],
+      "allowedUses": [
+        "PromptHouse Evo Studio architecture assistance",
+        "module maturity auditing",
+        "cost firewall reasoning",
+        "proof-gated build planning",
+        "truth-bound repair recommendations"
+      ],
+      "disallowedUses": [
+        "claims of sentience or consciousness",
+        "security bypass guidance",
+        "medical diagnosis",
+        "legal advice",
+        "financial guarantees",
+        "fake completion claims without receipts"
+      ]
+    }
+  },
+  "trainingStatus": "DATASET_PREPARED_PROVIDER_TRAINING_NOT_EXECUTED",
+  "proofCommands": [
+    "npm run evo:dataset",
+    "npm run evo:eval",
+    "npm run evo:model-card"
+  ],
+  "limitations": [
+    "No provider fine-tune is executed by this local pipeline.",
+    "Model quality depends on validated project examples.",
+    "Outputs must remain truth-bound and proof-gated."
+  ]
+}

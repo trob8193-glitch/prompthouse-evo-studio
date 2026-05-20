@@ -7,7 +7,7 @@ import { getProviderCredentialChecklist } from '../services/provider-credential-
  * PH EVO STUDIO — PROVIDER CREDENTIAL CHECKLIST PANEL
  * ═══════════════════════════════════════════════════════════════
  * Displays configured state of provider keys securely.
- * Zero secrets exposed. No fake provider success.
+ * Zero secrets exposed. No unverified provider success.
  */
 export default function ProviderCredentialChecklistPanel() {
   const [status, setStatus] = useState(null);

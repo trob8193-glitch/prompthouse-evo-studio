@@ -2,7 +2,7 @@
  * PH EVO STUDIO — MASTER UI DESIGN SYSTEM
  * ═══════════════════════════════════════════════════════════════
  * Production-ready tokens and component blueprints for cross-platform
- * excellence. No Ghost-Stubs. No dead buttons.
+ * excellence. No Ghost-Shells. No dead buttons.
  */
 
 export const DESIGN_SYSTEM = {

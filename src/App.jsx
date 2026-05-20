@@ -98,6 +98,7 @@ function NotificationToasts() {
 }
 
 export default function App() {
+  const evolutionClientIdRef = React.useRef(null);
   const startGlobalSync = useSovereignStore((s) => s.startGlobalSync);
   const stopGlobalSync = useSovereignStore((s) => s.stopGlobalSync);
   const activePage = useSovereignStore((s) => s.activePage);

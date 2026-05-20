@@ -1,0 +1,8 @@
+{
+  "id": "evo_train_approval_1779234605725",
+  "planId": "evo_train_plan_1779234556741",
+  "actor": "studio_owner",
+  "scope": "dataset-only",
+  "approvedAt": "2026-05-19T23:50:05.725Z",
+  "truthState": "LOCAL_DATASET_APPROVED"
+}
