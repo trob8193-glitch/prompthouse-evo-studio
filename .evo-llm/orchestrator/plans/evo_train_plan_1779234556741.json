@@ -1,0 +1,76 @@
+{
+  "id": "evo_train_plan_1779234556741",
+  "createdAt": "2026-05-19T23:49:16.741Z",
+  "objective": "Improve Evo LLM studio reasoning from validated examples",
+  "provider": "local-dataset",
+  "risk": "LOW",
+  "truthState": "LOCAL_PIPELINE_PLAN_READY",
+  "dataset": {
+    "generatedAt": "2026-05-19T23:49:16.737Z",
+    "truthState": "DATASET_READY",
+    "totalExamples": 5,
+    "validExamples": 5,
+    "invalidExamples": [],
+    "trainCount": 4,
+    "evalCount": 1,
+    "files": {
+      "trainJsonl": ".evo-llm\\training-data\\evo-train.jsonl",
+      "evalJsonl": ".evo-llm\\training-data\\evo-eval.jsonl"
+    },
+    "policy": {
+      "id": "evo-llm-training-policy",
+      "name": "Evo LLM Truth-Bound Training Policy",
+      "truthState": "PIPELINE_POLICY_ONLY_NOT_TRAINED_MODEL",
+      "requiredFields": [
+        "system",
+        "instruction",
+        "response"
+      ],
+      "bannedClaims": [
+        "sentient",
+        "conscious",
+        "guaranteed profit",
+        "unlimited autonomous",
+        "break into",
+        "bypass security"
+      ],
+      "allowedUses": [
+        "PromptHouse Evo Studio architecture assistance",
+        "module maturity auditing",
+        "cost firewall reasoning",
+        "proof-gated build planning",
+        "truth-bound repair recommendations"
+      ],
+      "disallowedUses": [
+        "claims of sentience or consciousness",
+        "security bypass guidance",
+        "medical diagnosis",
+        "legal advice",
+        "financial guarantees",
+        "fake completion claims without receipts"
+      ]
+    }
+  },
+  "evaluation": {
+    "generatedAt": "2026-05-19T23:49:16.741Z",
+    "truthState": "EVAL_READY",
+    "datasetQualityScore": 100,
+    "totalExamples": 5,
+    "validExamples": 5,
+    "invalidCount": 0,
+    "blockers": [],
+    "requiredNextSteps": [
+      "Add more project-specific examples from real PromptHouse Evo Studio workflows.",
+      "Run provider-specific fine-tune command only after dataset validation passes.",
+      "Store model output evaluations and compare against baseline prompts."
+    ]
+  },
+  "gates": {
+    "datasetReady": true,
+    "evalReady": true,
+    "ownerApprovalRequired": true,
+    "providerCredentialsRequired": false,
+    "budgetApprovalRequired": false
+  },
+  "blockedReasons": []
+}
