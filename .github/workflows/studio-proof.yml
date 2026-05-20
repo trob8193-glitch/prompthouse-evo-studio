@@ -13,26 +13,41 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 concurrency:
   group: studio-proof-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   proof:
     name: Audit, Test, Build, and Engine Proof
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Initialize CI proof diagnostics
+        if: always()
+        shell: bash
+        run: |
+          : > ci-proof.log
+          echo "0" > ci-proof-status.txt
+          : > ci-proof-first-failure.txt
+          {
+            echo "# Studio Proof Gates"
+            echo ""
+            echo "Initialized diagnostics before Node setup so failures cannot hide."
+            echo "Commit: $GITHUB_SHA"
+            echo "Ref: $GITHUB_REF"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - name: Run proof chain with captured first failure
         shell: bash
@@ -41,27 +56,41 @@ jobs:
           LOG_FILE="ci-proof.log"
           STATUS_FILE="ci-proof-status.txt"
           FIRST_FAILURE_FILE="ci-proof-first-failure.txt"
-          : > "$LOG_FILE"
-          echo "0" > "$STATUS_FILE"
-          : > "$FIRST_FAILURE_FILE"
+
+          mark_failure() {
+            local name="$1"
+            local command="$2"
+            local code="$3"
+            echo "$code" > "$STATUS_FILE"
+            {
+              echo "FIRST FAILURE"
+              echo "STEP: $name"
+              echo "COMMAND: $command"
+              echo "EXIT_CODE: $code"
+            } > "$FIRST_FAILURE_FILE"
+            {
+              echo "## ❌ First failure"
+              echo ""
+              echo "- Step: $name"
+              echo "- Command: $command"
+              echo "- Exit code: $code"
+              echo ""
+              echo "See ci-proof.log in the artifact for full output."
+            } >> "$GITHUB_STEP_SUMMARY"
+          }
 
           run_step() {
             local name="$1"
             shift
+            local command="$*"
             echo "══════════════════════════════════════════════════════════════" | tee -a "$LOG_FILE"
             echo "STEP: $name" | tee -a "$LOG_FILE"
-            echo "COMMAND: $*" | tee -a "$LOG_FILE"
+            echo "COMMAND: $command" | tee -a "$LOG_FILE"
             echo "══════════════════════════════════════════════════════════════" | tee -a "$LOG_FILE"
             "$@" 2>&1 | tee -a "$LOG_FILE"
             local code=${PIPESTATUS[0]}
             if [ "$code" -ne 0 ]; then
-              echo "$code" > "$STATUS_FILE"
-              {
-                echo "FIRST FAILURE"
-                echo "STEP: $name"
-                echo "COMMAND: $*"
-                echo "EXIT_CODE: $code"
-              } > "$FIRST_FAILURE_FILE"
+              mark_failure "$name" "$command" "$code"
               echo "❌ First failure: $name exited with $code" | tee -a "$LOG_FILE"
               return "$code"
             fi
@@ -80,13 +109,7 @@ jobs:
             node --check "$file" 2>&1 | tee -a "$LOG_FILE"
             code=${PIPESTATUS[0]}
             if [ "$code" -ne 0 ]; then
-              echo "$code" > "$STATUS_FILE"
-              {
-                echo "FIRST FAILURE"
-                echo "STEP: Syntax check generated APIs"
-                echo "COMMAND: node --check $file"
-                echo "EXIT_CODE: $code"
-              } > "$FIRST_FAILURE_FILE"
+              mark_failure "Syntax check generated APIs" "node --check $file" "$code"
               echo "❌ First failure: generated API syntax check exited with $code" | tee -a "$LOG_FILE"
               exit 0
             fi
@@ -108,25 +131,34 @@ jobs:
           run_step "Unit tests" npm test || exit 0
           run_step "Production build" npm run build || exit 0
 
+          {
+            echo "## ✅ Full proof chain passed"
+            echo ""
+            echo "All Studio Proof Gates commands completed successfully."
+          } >> "$GITHUB_STEP_SUMMARY"
           echo "✅ Full proof chain passed." | tee -a "$LOG_FILE"
 
       - name: Upload CI proof logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: studio-proof-logs
+          name: studio-proof-logs-${{ github.run_id }}
           path: |
             ci-proof.log
             ci-proof-status.txt
             ci-proof-first-failure.txt
-          if-no-files-found: warn
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Enforce proof result
+        if: always()
         shell: bash
         run: |
-          status="0"
+          status="1"
           if [ -f ci-proof-status.txt ]; then
             status="$(cat ci-proof-status.txt)"
+          else
+            echo "ci-proof-status.txt was not created. Failing closed."
           fi
           if [ "$status" != "0" ]; then
             echo "Studio proof chain failed. First failure summary:"
