@@ -238,6 +238,15 @@ export function runNuclearTruthAudit(rootDir = process.cwd()) {
       addFinding(findings, 'high', relativeFile, findLine(content, content.indexOf('Math.random')), 'UI uses Math.random (simulated behavior).');
     }
 
+    // Hardcoded theatrical UI stats/placeholders audit rule
+    if (isUi && !relativeFile.endsWith('NuclearTruthAudit.js')) {
+      const hardcodedUiStatPattern = /value=["'](?:99\.\d+%?|1\.\d+ms|2\.\d+ms|12ms)["']|>\s*Latency:\s*\d+ms\s*</i;
+      const match = hardcodedUiStatPattern.exec(content);
+      if (match) {
+        addFinding(findings, 'high', relativeFile, findLine(content, match.index), `Hardcoded theatrical UI placeholder detected: "${match[0]}". Must be bound to dynamic telemetry.`);
+      }
+    }
+
     // Nuclear means repo-wide: scan UI + backend for any simulation/mock/stub/placeholder markers.
     // Self-exempt to avoid flagging the marker list itself.
     if (!relativeFile.endsWith('src/core/audit/NuclearTruthAudit.js')) {

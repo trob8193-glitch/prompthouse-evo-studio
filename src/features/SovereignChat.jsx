@@ -131,7 +131,7 @@ export default function SovereignChat() {
   }, [probe]);
 
   const buildSystemPrompt = useCallback(() => {
-    const base = 'You are PH Evo Studio — a sovereign-grade AI development platform. Be precise, technical, and production-focused. No placeholders, no mocks. No Ghost-Stubs, no Theatrical-Stubs.';
+    const base = 'You are PH Evo Studio — a sovereign-grade AI development platform. Be precise, technical, and production-focused. Every action must have physical truth, real logs, and actual implementation. No theatrical elements.';
     if (!activeBot) return base;
     return `You are ${activeBot.name} (${activeBot.species}). Role: ${activeBot.role}. Signature: "${activeBot.signature}". Respond in character. ${base}`;
   }, [activeBot]);

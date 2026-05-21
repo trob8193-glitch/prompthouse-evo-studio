@@ -1,0 +1,120 @@
+name: Studio Proof Gates
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - feature/nuclear-static-audit-gates
+      - feature/engine-dashboard-routes
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: studio-proof-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  proof:
+    name: Audit, Test, Build, and Engine Proof
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run proof chain and report first failure
+        shell: bash
+        run: |
+          set +e
+          status=0
+          first_failure_step=""
+          first_failure_command=""
+
+          run_step() {
+            local name="$1"
+            shift
+            local command="$*"
+            echo "══════════════════════════════════════════════════════════════"
+            echo "STEP: $name"
+            echo "COMMAND: $command"
+            echo "══════════════════════════════════════════════════════════════"
+            "$@"
+            local code=$?
+            if [ "$code" -ne 0 ]; then
+              status="$code"
+              first_failure_step="$name"
+              first_failure_command="$command"
+              echo "❌ First failure: $name exited with $code"
+              return "$code"
+            fi
+            echo "✅ PASS: $name"
+            return 0
+          }
+
+          run_step "Install dependencies" npm ci || true
+          if [ "$status" = "0" ]; then run_step "Syntax check PromptBridge" node --check promptbridge-server.js || true; fi
+
+          if [ "$status" = "0" ]; then
+            echo "══════════════════════════════════════════════════════════════"
+            echo "STEP: Syntax check generated APIs"
+            echo "══════════════════════════════════════════════════════════════"
+            for file in generated_apis/*.js; do
+              echo "Checking $file"
+              node --check "$file"
+              code=$?
+              if [ "$code" -ne 0 ]; then
+                status="$code"
+                first_failure_step="Syntax check generated APIs"
+                first_failure_command="node --check $file"
+                echo "❌ First failure: generated API syntax check exited with $code"
+                break
+              fi
+            done
+            if [ "$status" = "0" ]; then echo "✅ PASS: Syntax check generated APIs"; fi
+          fi
+
+          if [ "$status" = "0" ]; then run_step "Syntax check maturity engine" node --check src/core/maturity/ModuleMaturityEngine.js || true; fi
+          if [ "$status" = "0" ]; then run_step "Syntax check maturity script" node --check scripts/module_maturity_check.mjs || true; fi
+          if [ "$status" = "0" ]; then run_step "Import audit" npm run audit:imports || true; fi
+          if [ "$status" = "0" ]; then run_step "CSS variable audit" npm run audit:css || true; fi
+          if [ "$status" = "0" ]; then run_step "Studio static verification" npm run verify:studio || true; fi
+          if [ "$status" = "0" ]; then run_step "Module maturity scan" npm run maturity:check || true; fi
+          if [ "$status" = "0" ]; then run_step "Cost firewall check" npm run cost:check || true; fi
+          if [ "$status" = "0" ]; then run_step "Cost firewall paid check" npm run cost:check:paid || true; fi
+          if [ "$status" = "0" ]; then run_step "Cost firewall summary" npm run cost:summary || true; fi
+          if [ "$status" = "0" ]; then run_step "Cost firewall claims" npm run cost:claims || true; fi
+          if [ "$status" = "0" ]; then run_step "Cost firewall cache" npm run cost:cache || true; fi
+          if [ "$status" = "0" ]; then run_step "Self-evolution status" npm run evolve:status || true; fi
+          if [ "$status" = "0" ]; then run_step "Unit tests" npm test || true; fi
+          if [ "$status" = "0" ]; then run_step "Production build" npm run build || true; fi
+
+          if [ "$status" != "0" ]; then
+            {
+              echo "## ❌ Studio Proof Gates failed"
+              echo ""
+              echo "- First failing step: $first_failure_step"
+              echo "- Command: $first_failure_command"
+              echo "- Exit code: $status"
+              echo ""
+              echo "Read the failed step output above."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit "$status"
+          fi
+
+          {
+            echo "## ✅ Studio Proof Gates passed"
+            echo ""
+            echo "All audit, syntax, maturity, cost, test, and build checks passed on Ubuntu."
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "✅ Full proof chain passed."

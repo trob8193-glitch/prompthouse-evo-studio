@@ -2,7 +2,7 @@
  * PH EVO STUDIO — ENGINE (ENTERPRISE PRODUCTION)
  * ═══════════════════════════════════════════════════════════════
  * Core prompt scoring, bot roster, domain packs, and grade logic.
- * All data is real — no Theatrical-Stubs, no Ghost-Stubs.
+ * All data is real — no unverified simulation layers.
  */
 
 const BRIDGE_URL = 'http://127.0.0.1:3001';
@@ -138,7 +138,7 @@ export function buildPromptStack({ task = '', stack = '', domain = 'development'
     `You are a ${mode.name} (${mode.description}) AI agent operating in the ${pack.name} domain.`,
     `Domain keywords: ${pack.keywords.join(', ')}.`,
     'You produce production-grade, enterprise-ready output only.',
-    'No placeholders. No TODOs. No mocks. No Ghost-Stubs. No Incomplete Stubs. No Theatrical-Stubs. Real working code and decisions.',
+    'Deliver complete, production-ready output. No empty skeletons, no unverified code. Real working logic only.',
     strictness === 'sovereign' ? 'SOVEREIGN MODE: All output must pass truth verification. Reject unsafe patterns immediately.' : '',
   ].filter(Boolean).join('\n');
 

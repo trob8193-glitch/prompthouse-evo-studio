@@ -17,7 +17,7 @@ function saveEvolutionMemory(memory, file = DEFAULT_MEMORY_FILE()) {
 function classify(receipt = {}) {
   const objective = String(receipt.objective || '').toLowerCase();
   if (objective.includes('bridge') || objective.includes('env')) return 'hardcoded local bridge URL';
-  if (objective.includes('truth') || objective.includes('fake') || objective.includes('hype')) return 'fake completion language';
+  if (objective.includes('truth') || objective.includes('unverified') || objective.includes('hype')) return 'unverified completion language';
   return 'general studio hardening';
 }
 

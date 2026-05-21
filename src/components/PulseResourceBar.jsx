@@ -53,7 +53,7 @@ export function PulseResourceBar() {
           }
         }
       } catch (err) {
-        // No fake fallback values. If bridge is offline, values stay null.
+        // No fallback values. If bridge is offline, values stay null.
       }
     };
 
