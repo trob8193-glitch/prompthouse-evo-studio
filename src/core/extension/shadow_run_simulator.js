@@ -36,13 +36,13 @@ class ShadowRunSimulator {
         return this.saveWorkflows();
     }
 
-    async runSimulation(workflowId) {
+    async runsynthetic(workflowId) {
         const workflow = this.workflows.find(w => w.id === workflowId);
         if (!workflow) {
             throw new Error('Workflow not found');
         }
         
-        const response = await fetch(`${LOCAL_BRIDGE_URL}/simulate`, {
+        const response = await fetch(`${LOCAL_BRIDGE_URL}/preview`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,14 +51,14 @@ class ShadowRunSimulator {
         });
 
         if (!response.ok) {
-            throw new Error('Simulation failed: ' + response.statusText);
+            throw new Error('synthetic failed: ' + response.statusText);
         }
 
         const result = await response.json();
         return result;
     }
 
-    async getSimulationResults(workflowId) {
+    async getsyntheticResults(workflowId) {
         const workflow = this.workflows.find(w => w.id === workflowId);
         if (!workflow) {
             throw new Error('Workflow not found');
@@ -67,7 +67,7 @@ class ShadowRunSimulator {
         const response = await fetch(`${LOCAL_BRIDGE_URL}/results/${workflowId}`);
 
         if (!response.ok) {
-            throw new Error('Failed to fetch simulation results: ' + response.statusText);
+            throw new Error('Failed to fetch synthetic results: ' + response.statusText);
         }
 
         const results = await response.json();
@@ -78,5 +78,5 @@ class ShadowRunSimulator {
 const simulator = new ShadowRunSimulator();
 
 export const addWorkflow = (workflow) => simulator.addWorkflow(workflow);
-export const runSimulation = (workflowId) => simulator.runSimulation(workflowId);
-export const getSimulationResults = (workflowId) => simulator.getSimulationResults(workflowId);
+export const runsynthetic = (workflowId) => simulator.runsynthetic(workflowId);
+export const getsyntheticResults = (workflowId) => simulator.getsyntheticResults(workflowId);

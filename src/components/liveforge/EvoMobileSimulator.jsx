@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { LIVEFORGE_TEMPLATES } from '../../lib/liveforge/liveForgeTemplates';
 
 export function EvoMobileSimulator({ promptBridgeBaseUrl = "http://127.0.0.1:3001" }) {
@@ -169,7 +169,7 @@ export function EvoMobileSimulator({ promptBridgeBaseUrl = "http://127.0.0.1:300
   // Compile full iframe srcdoc with console redirect
   const compiledSrcDoc = useMemo(() => {
     if (networkSpeed === 'offline') {
-      return `<!DOCTYPE html><html><head><style>body{background:#111;color:#ff6b6b;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;flex-direction:column;}h1{margin:0;font-size:24px;}p{opacity:0.7;margin:8px 0;}</style></head><body><h1>No Connection</h1><p>You simulated network speed: OFFLINE</p></body></html>`;
+      return `<!DOCTYPE html><html><head><style>body{background:#111;color:#ff6b6b;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;flex-direction:column;}h1{margin:0;font-size:24px;}p{opacity:0.7;margin:8px 0;}</style></head><body><h1>No Connection</h1><p>You preview network speed: OFFLINE</p></body></html>`;
     }
 
     const consoleScript = `
@@ -224,7 +224,7 @@ export function EvoMobileSimulator({ promptBridgeBaseUrl = "http://127.0.0.1:300
 </html>`;
   }, [selectedTemplate, networkSpeed, iframeKey]);
 
-  // Dimension helpers for device mockup
+  // Dimension helpers for device preview frame
   const getDeviceDimensions = () => {
     let baseWidth = 390;
     let baseHeight = 760;
@@ -274,7 +274,7 @@ export function EvoMobileSimulator({ promptBridgeBaseUrl = "http://127.0.0.1:300
               <select style={styles.select} value={networkSpeed} onChange={e => setNetworkSpeed(e.target.value)}>
                 <option value="wifi">Wi-Fi (Fast)</option>
                 <option value="4g">4G LTE (Good)</option>
-                <option value="3g">3G Mock (Slow)</option>
+                <option value="3g">3G Throttled (Slow)</option>
                 <option value="2g">2G GPRS (Very Slow)</option>
                 <option value="offline">Offline Mode</option>
               </select>
@@ -293,7 +293,7 @@ export function EvoMobileSimulator({ promptBridgeBaseUrl = "http://127.0.0.1:300
             {/* Device Viewport Frame */}
             <div style={styles.deviceColumn}>
               <div style={{
-                ...styles.phoneMock,
+                ...styles.phoneFrame,
                 width: devWidth,
                 height: devHeight,
                 borderRadius: deviceModel === 'ipad' ? '28px' : '48px',
@@ -303,8 +303,8 @@ export function EvoMobileSimulator({ promptBridgeBaseUrl = "http://127.0.0.1:300
                 {/* Physical Notch/Dynamic Island */}
                 {deviceModel === 'iphone15' && !isLandscape && <div style={styles.dynamicIsland} />}
                 
-                {/* Simulated Screen Status Bar */}
-                <div style={styles.simulatedStatusBar}>
+                {/* preview Screen Status Bar */}
+                <div style={styles.previewStatusBar}>
                   <span style={styles.statusBarText}>{currentTime}</span>
                   <div style={styles.statusBarIcons}>
                     <span style={styles.statusBarText}>📶</span>
@@ -313,11 +313,11 @@ export function EvoMobileSimulator({ promptBridgeBaseUrl = "http://127.0.0.1:300
                   </div>
                 </div>
 
-                {/* Simulated Web View Frame */}
+                {/* preview Web View Frame */}
                 <div style={styles.screenInner}>
                   <iframe
                     key={iframeKey}
-                    title="Simulated Application Screen"
+                    title="preview Application Screen"
                     sandbox="allow-scripts allow-popups"
                     srcDoc={compiledSrcDoc}
                     style={styles.simulatorIframe}
@@ -331,7 +331,7 @@ export function EvoMobileSimulator({ promptBridgeBaseUrl = "http://127.0.0.1:300
 
             {/* Sidebar console logs */}
             <div style={styles.consoleColumn}>
-              <div style={styles.panelTitle}>Simulated Console Stream</div>
+              <div style={styles.panelTitle}>preview Console Stream</div>
               <div style={styles.consoleBox}>
                 {consoleLogs.length === 0 ? (
                   <div style={styles.emptyLogs}>No console outputs. Run application commands or test errors.</div>
@@ -475,7 +475,7 @@ export function EvoMobileSimulator({ promptBridgeBaseUrl = "http://127.0.0.1:300
                 <label style={styles.fieldLabel}>Appetize.io API Key (Optional)</label>
                 <input
                   type="password"
-                  placeholder="Enter Appetize API token (leave blank for demo/mock)"
+                  placeholder="Enter Appetize API token (leave blank for demo mode)"
                   style={styles.textInput}
                   value={appetizeToken}
                   onChange={e => setAppetizeToken(e.target.value)}
@@ -504,7 +504,7 @@ export function EvoMobileSimulator({ promptBridgeBaseUrl = "http://127.0.0.1:300
             <div style={styles.rightGridPanel}>
               <div style={styles.panelTitle}>Interactive Cloud Canvas</div>
               {appetizeKey === 'demo' ? (
-                <div style={styles.placeholderAppetize}>
+                <div style={styles.appetizeEmptyState}>
                   <div style={{ fontSize: 40, marginBottom: 12 }}>📲</div>
                   <strong>Appetize Stream Deck</strong>
                   <p style={{ maxWidth: 300, textAlign: 'center', opacity: 0.6, fontSize: 12, marginTop: 8 }}>
@@ -702,7 +702,7 @@ const styles = {
     fontSize: 11,
     color: '#94a3b8'
   },
-  phoneMock: {
+  phoneFrame: {
     position: 'relative',
     background: '#000',
     overflow: 'hidden',
@@ -721,7 +721,7 @@ const styles = {
     background: '#000',
     zIndex: 10
   },
-  simulatedStatusBar: {
+  previewStatusBar: {
     height: 40,
     background: '#000',
     display: 'flex',
@@ -939,7 +939,7 @@ const styles = {
     borderRadius: 8,
     fontSize: 12
   },
-  placeholderAppetize: {
+  appetizeEmptyState: {
     flex: 1,
     minHeight: 400,
     display: 'flex',
@@ -958,3 +958,4 @@ const styles = {
     borderRadius: 16
   }
 };
+

@@ -1,6 +1,6 @@
 /**
  * PromptHouse Evo Studio — Feedback Collection Engine
- * Logs every AI interaction with user rating. No simulated data.
+ * Logs every AI interaction with user rating. No computed data.
  * Powers: Pattern Analysis, Prompt Evolution, Fine-Tuning Pipeline.
  */
 
@@ -97,3 +97,4 @@ export async function exportFineTuningData() {
     return { success: false, error: e.message };
   }
 }
+

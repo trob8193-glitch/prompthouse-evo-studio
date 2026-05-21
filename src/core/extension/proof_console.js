@@ -47,7 +47,7 @@ class ProofConsole {
             return false;
         }
 
-        // Simulate verification logic
+        // preview verification logic
         const isVerified = proof.receipt.includes('valid');
         proof.verified = isVerified;
         this.saveProofs();

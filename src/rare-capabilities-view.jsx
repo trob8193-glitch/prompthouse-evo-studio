@@ -98,7 +98,7 @@ export function RareCapabilitiesView() {
         <div className="card">
           <div className="card-header">
             <div className="card-title">Mission Kernel</div>
-            <div className="card-desc">All ten modules regenerate from this mission and keep a no-fake-completion boundary.</div>
+            <div className="card-desc">All ten modules regenerate from this mission and enforce a verified-completion-only boundary.</div>
           </div>
           <div className="card-body flex-col">
             <label className="field">

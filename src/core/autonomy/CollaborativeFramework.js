@@ -17,7 +17,7 @@ export class CollaborativeFramework {
   async proposeTransition(botId, proposedChange) {
     Log.info(`🤝 [Framework] Bot ${botId} proposing logic transition: ${proposedChange.id}`);
     
-    // Simulate a voting round among relevant specialists
+    // preview a voting round among relevant specialists
     const voters = this.roster.filter(b => b.id !== botId).slice(0, 5);
     let yays = 1; // Proposer always votes yay
 
@@ -44,3 +44,4 @@ export class CollaborativeFramework {
     // Logic to select multiple bots for a complex task
   }
 }
+

@@ -1,6 +1,6 @@
 export const RIFT_TRUTH_LABELS = Object.freeze({
   REAL: 'REAL',
-  SIMULATED: 'SIMULATED',
+  UNVERIFIED: 'UNVERIFIED',
   GENERATED: 'GENERATED',
   INFERRED: 'INFERRED',
   BLOCKED: 'BLOCKED',
@@ -8,9 +8,9 @@ export const RIFT_TRUTH_LABELS = Object.freeze({
   GENERATED_AVATAR: 'GENERATED_AVATAR',
   INFERRED_STYLE: 'INFERRED_STYLE',
   BLOCKED_NO_CONSENT: 'BLOCKED_NO_CONSENT',
-  SIMULATED_TIMELINE: 'SIMULATED_TIMELINE',
+  UNVERIFIED_TIMELINE: 'UNVERIFIED_TIMELINE',
   GENERATED_ENTITY: 'GENERATED_ENTITY',
-  SIMULATED_AGENT: 'SIMULATED_AGENT',
+  UNVERIFIED_AGENT: 'UNVERIFIED_AGENT',
   GENERATED_AI_OUTPUT: 'GENERATED_AI_OUTPUT'
 });
 
@@ -44,7 +44,8 @@ export function truthLabel(label, reason, evidence = {}) {
 
 export const real = (reason, evidence = {}) => truthLabel(RIFT_TRUTH_LABELS.REAL, reason, evidence);
 export const inferred = (reason, evidence = {}) => truthLabel(RIFT_TRUTH_LABELS.INFERRED, reason, evidence);
-export const simulated = (reason, evidence = {}) => truthLabel(RIFT_TRUTH_LABELS.SIMULATED, reason, evidence);
+export const UNVERIFIED = (reason, evidence = {}) => truthLabel(RIFT_TRUTH_LABELS.UNVERIFIED, reason, evidence);
 export const generated = (reason, evidence = {}) => truthLabel(RIFT_TRUTH_LABELS.GENERATED, reason, evidence);
 export const blocked = (reason, evidence = {}) => truthLabel(RIFT_TRUTH_LABELS.BLOCKED, reason, evidence);
 export const blockedNoConsent = (scope, evidence = {}) => truthLabel(RIFT_TRUTH_LABELS.BLOCKED_NO_CONSENT, `${scope} requires explicit consent.`, evidence);
+

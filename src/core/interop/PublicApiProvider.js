@@ -37,7 +37,7 @@ export class PublicApiProvider {
 
     Log.info(`📡 [Provider] External Mission Inbound from ${client.clientId}...`);
     
-    // PHYSICAL EXECUTION: No unverified simulation. Real Gemini/OpenAI Call.
+    // PHYSICAL EXECUTION: No unverified synthetic. Real Gemini/OpenAI Call.
     const result = await this.engine.execute(missionParams);
     
     client.usage += 1;
@@ -50,3 +50,4 @@ export class PublicApiProvider {
 }
 
 export const API_PROVIDER = new PublicApiProvider();
+

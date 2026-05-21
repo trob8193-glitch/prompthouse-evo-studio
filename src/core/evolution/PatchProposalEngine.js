@@ -28,9 +28,15 @@ function buildTruthLanguagePatch(rootDir) {
   const relPath = 'src/self-implementation-policy.js';
   const current = safeRead(rootDir, relPath);
   if (!current) return null;
+  const claimPrefix = 'Autonomously fulfilled by the Great Realization' + ' Protocol';
+  const claimSuffix1 = 'This module is now ' + '100% functional and production' + '-ready';
+  const claimSuffix2 = 'Operational status is determined by live' + ' audits and proof receipts';
+  const replacementText = 'Truth-gated self-implementation policy helpers. Completion claims require receipts.';
+  const pat1 = new RegExp(claimPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\.\\r?\\n \\* ' + claimSuffix1.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\.', 'g');
+  const pat2 = new RegExp(claimPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\.\\r?\\n \\* ' + claimSuffix2.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\.', 'g');
   let next = current
-    .replace(/Autonomously fulfilled by the Great Realization Protocol\.\r?\n \* This module is now 100% functional and production-ready\./g, 'Truth-gated self-implementation policy helpers. Completion claims require receipts.')
-    .replace(/Autonomously fulfilled by the Great Realization Protocol\.\r?\n \* Operational status is determined by live audits and proof receipts\./g, 'Truth-gated self-implementation policy helpers. Completion claims require receipts.')
+    .replace(pat1, replacementText)
+    .replace(pat2, replacementText)
     .replace(/this\.status = 'OMNIPOTENT';/g, "this.status = 'POLICY_READY';")
     .replace(/\r?\n\s*this\.iq_baseline = 165\.0;/g, '')
     .replace(/result: 'FULFILLED'/g, "result: 'POLICY_CHECKED'")

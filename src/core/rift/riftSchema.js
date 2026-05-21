@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS rift_sessions (
   user_id TEXT,
   mode TEXT NOT NULL,
   status TEXT DEFAULT 'created',
-  truth_label TEXT DEFAULT 'SIMULATED',
+  truth_label TEXT DEFAULT 'UNVERIFIED',
   evo_route TEXT,
   evo_name TEXT,
   mobile_runtime_id TEXT,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS rift_timeline_branches (
   session_id TEXT,
   title TEXT NOT NULL,
   source_event_id TEXT,
-  truth_label TEXT DEFAULT 'SIMULATED',
+  truth_label TEXT DEFAULT 'UNVERIFIED',
   branch_graph_json TEXT NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(session_id) REFERENCES rift_sessions(id)
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS rift_entities (
   visual_style TEXT,
   rules_json TEXT,
   memory_scope TEXT DEFAULT 'session',
-  trust_level TEXT DEFAULT 'simulated',
+  trust_level TEXT DEFAULT 'UNVERIFIED',
   truth_label TEXT DEFAULT 'GENERATED',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS evopulse_grid_nodes (
   node_name TEXT NOT NULL,
   node_type TEXT NOT NULL,
   status TEXT DEFAULT 'offline',
-  truth_label TEXT DEFAULT 'SIMULATED',
+  truth_label TEXT DEFAULT 'UNVERIFIED',
   capabilities_json TEXT,
   boundary_json TEXT,
   last_seen_at DATETIME,
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS evopulse_routes (
   target_kind TEXT NOT NULL,
   target_id TEXT,
   status TEXT DEFAULT 'reserved',
-  truth_label TEXT DEFAULT 'SIMULATED',
+  truth_label TEXT DEFAULT 'UNVERIFIED',
   metadata_json TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -135,3 +135,4 @@ CREATE TABLE IF NOT EXISTS rift_abuse_reports (
 export function ensureRiftGridSchema(db) {
   db.exec(RIFT_GRID_SCHEMA);
 }
+

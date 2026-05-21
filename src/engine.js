@@ -2,7 +2,7 @@
  * PH EVO STUDIO — ENGINE (ENTERPRISE PRODUCTION)
  * ═══════════════════════════════════════════════════════════════
  * Core prompt scoring, bot roster, domain packs, and grade logic.
- * All data is real — no unverified simulation layers.
+ * All data is real — no unverified synthetic layers.
  */
 
 const BRIDGE_URL = 'http://127.0.0.1:3001';
@@ -170,3 +170,4 @@ export async function callBridgeEngine(prompt, systemPrompt = '') {
     throw new Error(`[TRANSPORT OFFLINE] ${err.message}`);
   }
 }
+

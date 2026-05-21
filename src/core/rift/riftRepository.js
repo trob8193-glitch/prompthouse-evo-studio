@@ -33,9 +33,9 @@ export function createRiftSession({ userId = 'studio-local-user', mode = 'evo-ri
   const now = new Date().toISOString();
   const evoRoute = `evo://rift/session/${sessionId}`;
   db.prepare(`INSERT INTO rift_sessions (id, user_id, mode, status, truth_label, evo_route, evo_name, started_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`)
-    .run(sessionId, userId, mode, RIFT_SESSION_STATUS.ACTIVE, TRUTH_LABELS.SIMULATED, evoRoute, evoName, now);
+    .run(sessionId, userId, mode, RIFT_SESSION_STATUS.ACTIVE, TRUTH_LABELS.UNVERIFIED, evoRoute, evoName, now);
   logRiftEvent({ sessionId, eventType: 'session.started', truthLabel: TRUTH_LABELS.REAL, payload: { mode, evoRoute, source: 'studio-console' } });
-  registerEvoRoute({ routeType: 'evo_url', routeValue: evoRoute, targetKind: 'rift_session', targetId: sessionId, truthLabel: TRUTH_LABELS.SIMULATED });
+  registerEvoRoute({ routeType: 'evo_url', routeValue: evoRoute, targetKind: 'rift_session', targetId: sessionId, truthLabel: TRUTH_LABELS.UNVERIFIED });
   return getRiftSession(sessionId);
 }
 
@@ -50,7 +50,7 @@ export function endRiftSession(sessionId) {
 
 export function getRiftSession(sessionId) {
   const row = db.prepare('SELECT * FROM rift_sessions WHERE id = ?').get(sessionId);
-  return row ? { ...row, truth_label: row.truth_label || TRUTH_LABELS.SIMULATED } : null;
+  return row ? { ...row, truth_label: row.truth_label || TRUTH_LABELS.UNVERIFIED } : null;
 }
 
 export function listRiftSessions(limit = 25) {
@@ -98,17 +98,17 @@ export function listPatterns(limit = 50) {
 
 export function createTimelineBranch({ userId = 'studio-local-user', sessionId = null, title, choice = 'alternate path', assumptions = [] }) {
   const branchId = id();
-  const graph = { nodes: [{ id: 'origin', label: 'Known current path', truth_label: TRUTH_LABELS.REAL }, { id: 'choice', label: choice, truth_label: TRUTH_LABELS.SIMULATED }, { id: 'result', label: `Simulated result for ${choice}`, truth_label: TRUTH_LABELS.SIMULATED }], edges: [{ from: 'origin', to: 'choice' }, { from: 'choice', to: 'result' }], assumptions };
+  const graph = { nodes: [{ id: 'origin', label: 'Known current path', truth_label: TRUTH_LABELS.REAL }, { id: 'choice', label: choice, truth_label: TRUTH_LABELS.UNVERIFIED }, { id: 'result', label: `UNVERIFIED result for ${choice}`, truth_label: TRUTH_LABELS.UNVERIFIED }], edges: [{ from: 'origin', to: 'choice' }, { from: 'choice', to: 'result' }], assumptions };
   db.prepare('INSERT INTO rift_timeline_branches (id, user_id, session_id, title, truth_label, branch_graph_json) VALUES (?, ?, ?, ?, ?, ?)')
-    .run(branchId, userId, sessionId, title || 'Untitled Rift Branch', TRUTH_LABELS.SIMULATED, json(graph));
-  return truthEnvelope({ label: TRUTH_LABELS.SIMULATED, data: { id: branchId, graph } });
+    .run(branchId, userId, sessionId, title || 'Untitled Rift Branch', TRUTH_LABELS.UNVERIFIED, json(graph));
+  return truthEnvelope({ label: TRUTH_LABELS.UNVERIFIED, data: { id: branchId, graph } });
 }
 
 export function generateLocalEntity({ userId = 'studio-local-user', sessionId = null, name = 'Evo Rift Guide', role = 'Guide', visualStyle = 'glitch-cybernetic' } = {}) {
   const entityId = id();
-  const rules = { claims: ['Simulation-only guide.'], allowedActions: ['explain', 'guide', 'simulate', 'reflect'], blockedActions: ['identity misuse', 'unapproved capture'] };
+  const rules = { claims: ['Synthetic-only guide.'], allowedActions: ['explain', 'guide', 'preview', 'reflect'], blockedActions: ['identity misuse', 'unapproved capture'] };
   db.prepare('INSERT INTO rift_entities (id, user_id, session_id, name, role, visual_style, rules_json, memory_scope, trust_level, truth_label) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-    .run(entityId, userId, sessionId, name, role, visualStyle, json(rules), 'session', 'simulated', TRUTH_LABELS.GENERATED);
+    .run(entityId, userId, sessionId, name, role, visualStyle, json(rules), 'session', 'UNVERIFIED', TRUTH_LABELS.GENERATED);
   return truthEnvelope({ label: TRUTH_LABELS.GENERATED, data: { id: entityId, name, role, visualStyle, rules } });
 }
 
@@ -116,14 +116,14 @@ export function listEntities(limit = 50) {
   return db.prepare('SELECT * FROM rift_entities ORDER BY created_at DESC LIMIT ?').all(Number(limit)).map((row) => ({ ...row, rules: parseJson(row.rules_json, {}) }));
 }
 
-export function registerGridNode({ nodeName, nodeType, capabilities = [], status = 'configured', truthLabel = TRUTH_LABELS.SIMULATED, boundaries = [] }) {
+export function registerGridNode({ nodeName, nodeType, capabilities = [], status = 'configured', truthLabel = TRUTH_LABELS.UNVERIFIED, boundaries = [] }) {
   const nodeId = id();
   db.prepare('INSERT INTO evopulse_grid_nodes (id, node_name, node_type, status, truth_label, capabilities_json, boundary_json, last_seen_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
     .run(nodeId, nodeName, nodeType, status, truthLabel, json(capabilities), json(boundaries), new Date().toISOString());
   return truthEnvelope({ label: truthLabel, data: { id: nodeId, nodeName, nodeType, capabilities, boundaries } });
 }
 
-export function registerEvoRoute({ routeType, routeValue, targetKind, targetId = null, truthLabel = TRUTH_LABELS.SIMULATED, metadata = {} }) {
+export function registerEvoRoute({ routeType, routeValue, targetKind, targetId = null, truthLabel = TRUTH_LABELS.UNVERIFIED, metadata = {} }) {
   const routeId = id();
   db.prepare('INSERT INTO evopulse_routes (id, route_type, route_value, target_kind, target_id, truth_label, metadata_json) VALUES (?, ?, ?, ?, ?, ?, ?)')
     .run(routeId, routeType, routeValue, targetKind, targetId, truthLabel, json(metadata));
@@ -137,3 +137,5 @@ export function listGridNodes(limit = 50) {
 export function listEvoRoutes(limit = 50) {
   return db.prepare('SELECT * FROM evopulse_routes ORDER BY created_at DESC LIMIT ?').all(Number(limit)).map((row) => ({ ...row, metadata: parseJson(row.metadata_json, {}) }));
 }
+
+

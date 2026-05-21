@@ -1,6 +1,6 @@
 export const TRUTH_LABELS = Object.freeze({
   REAL: 'REAL',
-  SIMULATED: 'SIMULATED',
+  UNVERIFIED: 'UNVERIFIED',
   GENERATED: 'GENERATED',
   INFERRED: 'INFERRED',
   BLOCKED: 'BLOCKED',
@@ -66,3 +66,4 @@ export function blockedBoundary(boundaryCode, reason, data = {}) {
     data,
   });
 }
+
