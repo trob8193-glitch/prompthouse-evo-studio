@@ -1,5 +1,6 @@
 import { execSync } from 'child_process';
 import process from 'process';
+import dgram from 'dgram';
 // Sovereign Network Matrix: Hardware Interface Daemon
 // Physically maps and interrogates IP, WiFi, Bluetooth, Local Nodes, and Signals.
 
@@ -79,6 +80,42 @@ try {
             result.hotspot_start = runPhysical('netsh wlan start hostednetwork');
             break;
 
+        case 'actuate_power_max':
+            console.log("📡 [Hardware Daemon] OS Injection: Forcing High Performance Silicon State...");
+            result.power = runPhysical('powercfg -setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c'); // GUID for High Performance
+            break;
+
+        case 'kill_rogue_process':
+            if (!target) throw new Error("Requires --target=<ProcessName>");
+            console.log(`📡 [Hardware Daemon] OS Injection: Terminating rogue process ${target}...`);
+            result.kill = runPhysical(`taskkill /F /IM ${target}`);
+            break;
+
+        case 'actuate_global_tunnel':
+            console.log("📡 [Hardware Daemon] Tunneling Local Mesh to Global Port Proxy...");
+            // Map 0.0.0.0:3002 to localhost:3002
+            result.tunnel = runPhysical('netsh interface portproxy add v4tov4 listenport=3002 listenaddress=0.0.0.0 connectport=3002 connectaddress=127.0.0.1');
+            break;
+
+        case 'map_sensory':
+            console.log("📡 [Hardware Daemon] Activating WMI Sensory Arrays (Optical/Audio)...");
+            result.cameras = runPhysical('powershell -Command "Get-PnpDevice -Class Camera -ErrorAction SilentlyContinue | Select-Object -Property Status, Class, FriendlyName | ConvertTo-Json"');
+            result.audio = runPhysical('powershell -Command "Get-PnpDevice -Class Media -ErrorAction SilentlyContinue | Select-Object -Property Status, Class, FriendlyName | ConvertTo-Json"');
+            break;
+
+        case 'iot_broadcast':
+            console.log("📡 [Hardware Daemon] Broadcasting UDP Protocol to Smart Devices...");
+            const client = dgram.createSocket('udp4');
+            const message = Buffer.from('EVO_SWARM_PULSE_INIT');
+            client.bind(() => {
+                client.setBroadcast(true);
+                client.send(message, 0, message.length, 9999, '255.255.255.255', (err) => {
+                    client.close();
+                });
+            });
+            result.iot = "UDP Datagram Fired to 255.255.255.255:9999";
+            break;
+
         case 'ping_signals':
             console.log("📡 [Hardware Daemon] Broadcasting ICMP Signal Sweeps...");
             // Ping google DNS as a signal out/in test
@@ -91,10 +128,24 @@ try {
             result.netstat = runPhysical('netstat -ano | findstr LISTENING');
             result.wifi = runPhysical('netsh wlan show interfaces');
             result.arp = runPhysical('arp -a');
+            
             try {
                 result.silicon = runPhysical('powershell -Command "Get-CimInstance Win32_Processor | Select-Object -Property LoadPercentage | ConvertTo-Json"');
             } catch (e) {
                 result.silicon = "[ERROR] Silicon probe failed.";
+            }
+
+            try {
+                result.sensory = runPhysical('powershell -Command "Get-PnpDevice -Class Camera -ErrorAction SilentlyContinue | Select-Object -Property Status, FriendlyName | ConvertTo-Json"');
+            } catch (e) {
+                result.sensory = "[ERROR] Sensory probe failed.";
+            }
+
+            try {
+                // Get active power scheme name
+                result.power = runPhysical('powercfg /GETACTIVESCHEME');
+            } catch (e) {
+                result.power = "[ERROR] Power state unknown.";
             }
             break;
 

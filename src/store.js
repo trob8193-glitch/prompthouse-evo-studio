@@ -447,6 +447,7 @@ export const useSovereignStore = create((set, get) => ({
       }
 
       // Read Silicon Telemetry
+      // Read Silicon Telemetry
       let siliconMsg = 'Physical Hardware Matrix fully engaged.';
       if (physicalData.silicon && !physicalData.silicon.includes('[ERROR]')) {
           try {
@@ -455,6 +456,20 @@ export const useSovereignStore = create((set, get) => ({
                   siliconMsg = `Silicon Telemetry: CPU Load at ${cpuData.LoadPercentage}%. Swarm is healthy.`;
               }
           } catch(e) {}
+      }
+
+      // Read God Node Power State
+      if (physicalData.power && !physicalData.power.includes('[ERROR]')) {
+          // Extract the name from something like: "Power Scheme GUID: 8c5e7fda...  (High performance) *"
+          const powerMatch = physicalData.power.match(/\(([^)]+)\)/);
+          if (powerMatch) {
+              siliconMsg += ` OS Enforced Power: [${powerMatch[1].toUpperCase()}].`;
+          }
+      }
+
+      // Read Sensory Array
+      if (physicalData.sensory && !physicalData.sensory.includes('[ERROR]')) {
+          siliconMsg += ` [OPTICAL SENSORY ONLINE]`;
       }
 
       // Parse IPCONFIG for Routes
