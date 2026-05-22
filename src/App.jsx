@@ -98,6 +98,7 @@ function NotificationToasts() {
 }
 
 export default function App() {
+  const evolutionClientIdRef = React.useRef(null);
   const startGlobalSync = useSovereignStore((s) => s.startGlobalSync);
   const stopGlobalSync = useSovereignStore((s) => s.stopGlobalSync);
   const activePage = useSovereignStore((s) => s.activePage);
@@ -107,7 +108,12 @@ export default function App() {
   const singularityActive = useSovereignStore((s) => s.singularityActive);
   const setSingularityActive = useSovereignStore((s) => s.setSingularityActive);
   const checkAuth = useSovereignStore((s) => s.checkAuth);
-  const isAuthenticated = useSovereignStore((s) => s.isAuthenticated);
+
+  React.useEffect(() => {
+    checkAuth().catch(() => {});
+    startGlobalSync();
+    return () => stopGlobalSync();
+  }, [checkAuth, startGlobalSync, stopGlobalSync]);
 
   React.useEffect(() => {
     const clientId = getEvolutionClientId();
