@@ -425,6 +425,38 @@ export const useSovereignStore = create((set, get) => ({
           });
       }
 
+      // Parse ARP for P2P Swarm Nodes (Other laptops/phones on network)
+      if (physicalData.arp) {
+          const lines = physicalData.arp.split('\n');
+          let count = 0;
+          lines.forEach((line) => {
+              // Match IP and MAC in arp -a output (e.g. "  192.168.1.1       bc-96-e5-50-49-11     dynamic")
+              const match = line.match(/^\s*(\d+\.\d+\.\d+\.\d+)\s+([0-9a-fA-F-]+)\s+(\w+)/);
+              if (match && match[1] !== '192.168.1.255' && count < 8) {
+                  count++;
+                  parsedNodes.push({
+                      id: `p2p-node-${match[2]}`,
+                      node_name: `Subnet Peer (${match[1]})`,
+                      node_type: 'SWARM_RADAR',
+                      truth_label: 'SIGNED_PHYSICAL',
+                      status: 'ACTIVE',
+                      capabilities: ['P2P_LINK', 'LAN', match[3].toUpperCase()]
+                  });
+              }
+          });
+      }
+
+      // Read Silicon Telemetry
+      let siliconMsg = 'Physical Hardware Matrix fully engaged.';
+      if (physicalData.silicon && !physicalData.silicon.includes('[ERROR]')) {
+          try {
+              const cpuData = JSON.parse(physicalData.silicon);
+              if (cpuData.LoadPercentage !== undefined) {
+                  siliconMsg = `Silicon Telemetry: CPU Load at ${cpuData.LoadPercentage}%. Swarm is healthy.`;
+              }
+          } catch(e) {}
+      }
+
       // Parse IPCONFIG for Routes
       if (physicalData.ipconfig) {
           const lines = physicalData.ipconfig.split('\n');
@@ -456,7 +488,7 @@ export const useSovereignStore = create((set, get) => ({
           });
       }
 
-      set({ gridNodes: parsedNodes, gridRoutes: parsedRoutes, riftData: { system_msg: 'Physical Hardware Matrix fully engaged and verified.' }});
+      set({ gridNodes: parsedNodes, gridRoutes: parsedRoutes, riftData: { system_msg: siliconMsg }});
 
     } catch (err) {
       console.warn('[Hardware Mesh] Physical polling failed:', err.message);

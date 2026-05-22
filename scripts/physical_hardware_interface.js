@@ -7,10 +7,13 @@ console.log("📡 [Hardware Daemon] Initiating Physical Subnet & Signal Sweep...
 
 const args = process.argv.slice(2);
 let action = '';
+let target = '';
 
 for (const arg of args) {
     if (arg.startsWith('--action=')) {
         action = arg.split('=')[1];
+    } else if (arg.startsWith('--target=')) {
+        target = arg.split('=')[1];
     }
 }
 
@@ -53,6 +56,29 @@ try {
             result.netstat = runPhysical('netstat -ano | findstr LISTENING');
             break;
 
+        case 'arp_sweep':
+            console.log("📡 [Hardware Daemon] Sweeping Physical Subnet for Peer Devices...");
+            result.arp = runPhysical('arp -a');
+            break;
+
+        case 'map_silicon':
+            console.log("📡 [Hardware Daemon] Probing Silicon Telemetry via WMI...");
+            result.cpu = runPhysical('powershell -Command "Get-CimInstance Win32_Processor | Select-Object -Property LoadPercentage, MaxClockSpeed | ConvertTo-Json"');
+            result.os = runPhysical('powershell -Command "Get-CimInstance Win32_OperatingSystem | Select-Object -Property FreePhysicalMemory, TotalVisibleMemorySize | ConvertTo-Json"');
+            break;
+
+        case 'actuate_wifi_connect':
+            if (!target) throw new Error("Requires --target=<SSID>");
+            console.log(`📡 [Hardware Daemon] Forcing Physical WiFi Bind to: ${target}`);
+            result.wifi_connect = runPhysical(`netsh wlan connect name="${target}"`);
+            break;
+
+        case 'actuate_hotspot':
+            console.log("📡 [Hardware Daemon] Actuating Local Swarm Hotspot...");
+            result.hotspot_set = runPhysical('netsh wlan set hostednetwork mode=allow ssid=PH-EVO-NEXUS key=SwarmConnect2026');
+            result.hotspot_start = runPhysical('netsh wlan start hostednetwork');
+            break;
+
         case 'ping_signals':
             console.log("📡 [Hardware Daemon] Broadcasting ICMP Signal Sweeps...");
             // Ping google DNS as a signal out/in test
@@ -64,6 +90,12 @@ try {
             result.ipconfig = runPhysical('ipconfig');
             result.netstat = runPhysical('netstat -ano | findstr LISTENING');
             result.wifi = runPhysical('netsh wlan show interfaces');
+            result.arp = runPhysical('arp -a');
+            try {
+                result.silicon = runPhysical('powershell -Command "Get-CimInstance Win32_Processor | Select-Object -Property LoadPercentage | ConvertTo-Json"');
+            } catch (e) {
+                result.silicon = "[ERROR] Silicon probe failed.";
+            }
             break;
 
         default:
