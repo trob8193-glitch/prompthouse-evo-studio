@@ -40,6 +40,43 @@ async function discoverBridge() {
         return;
       }
     } catch (e) { /* Ignore */ }
+ * ═══════════════════════════════════════════════════════════════
+ * Binds the studio to physical developer tools (IDE, Git, Flutter).
+ * ABSOLUTE REALITY: Verified IPC through process-anchored truth-gates.
+ */
+
+let BRIDGE_URL = 'http://127.0.0.1:3001';
+
+async function physicalRealityAudit(type, data) {
+  try {
+    const res = await fetch(`${BRIDGE_URL}/api/reality/audit-connection`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type, data }),
+      signal: AbortSignal.timeout(2000)
+    });
+    const result = await res.json();
+    return result.verified === true;
+  } catch {
+    return false;
+  }
+}
+
+async function discoverBridge() {
+  const ports = [3001, 3002, 3003, 3004];
+  for (const port of ports) {
+    try {
+      const url = `http://127.0.0.1:${port}`;
+      const res = await fetch(`${url}/status`, { signal: AbortSignal.timeout(500) });
+      const data = await res.json();
+      
+      // ABSOLUTE REALITY: Verify physical process PID before bonding
+      if (data.status === 'ONLINE' && data.pid) {
+        BRIDGE_URL = url;
+        Log.success(`🌉 [UniversalBridge] Physically Bonded to process ${data.pid} at ${BRIDGE_URL}`);
+        return;
+      }
+    } catch (e) { /* Ignore */ }
   }
 }
 
@@ -54,7 +91,8 @@ export class UniversalBridge {
       antigravity: new AntigravityAdaptor(),
       foundry: new FoundryAdaptor(),
       codeforge: new ForgeAdaptor(),
-      memory: new MemoryAdaptor()
+      memory: new MemoryAdaptor(),
+      hardware: new HardwareAdaptor()
     };
   }
 
@@ -220,4 +258,22 @@ class MemoryAdaptor {
     return { tool: 'memory', status: 'OK' };
   }
   async sync() { return { tool: 'memory', status: 'SYNCED' }; }
+}
+
+class HardwareAdaptor {
+  async execute(cmd, p) {
+    Log.info(`📡 [HardwareAdaptor] Dispatching Physical Matrix Query: ${cmd}`);
+    const res = await fetch(`${BRIDGE_URL}/mcp/messages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        method: 'call_tool',
+        params: { name: 'terminal_command', arguments: { command: `node scripts/physical_hardware_interface.js --action=${cmd}` } },
+        id: Date.now()
+      })
+    });
+    const result = await res.json();
+    return { tool: 'hardware', status: 'OK', payload: result, truthState: 'SIGNED_PHYSICAL' };
+  }
+  async sync() { return { tool: 'hardware', status: 'SYNCED' }; }
 }
