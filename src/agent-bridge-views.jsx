@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BRIDGE_URL } from './config/bridge-config.js';
 import { useSovereignStore } from './store.js';
 
 export function AgentBridgeView() {
@@ -8,7 +9,7 @@ export function AgentBridgeView() {
 
   const fetchReceipts = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:3001/api/browser-bridge/list');
+      const res = await fetch(`${BRIDGE_URL}/api/browser-bridge/list`);
       const data = await res.json();
       setReceipts(data.sort((a, b) => b.id.localeCompare(a.id)));
     } catch (e) {

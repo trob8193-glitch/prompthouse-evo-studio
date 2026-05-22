@@ -52,7 +52,7 @@ export class StressTester {
    * Performs an iterative stability check.
    */
   async auditEvolutionVariant(variantCode, targetArea) {
-    console.log(`🛡️ [StressTester] Performing Evolution Audit on ${targetArea}...`);
+
     
     // Step A: Code Integrity Check
     const hasCriticalExports = variantCode.includes('export const') || variantCode.includes('export default');
@@ -67,7 +67,7 @@ export class StressTester {
     const componentSize = variantCode.length;
     const score = componentSize > 100 ? 0.95 : 0.4; // Higher density = higher stability score
 
-    console.log(`✅ [StressTester] Audit Complete. Stability Score: ${score}`);
+
     return { score, status: 'PASSED' };
   }
 }

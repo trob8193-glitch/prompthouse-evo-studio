@@ -71,10 +71,11 @@ export function ProofCenterView() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div style={{
-                width: '36px', height: '36px', background: 'rgba(245, 158, 11, 0.1)',
-                borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                width: '36px', height: '36px', background: 'var(--accent-gold-dim)',
+                borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                border: '1px solid var(--accent-gold-glow)',
               }}>
-                <Shield size={18} color="#f59e0b" />
+                <Shield size={18} color="var(--accent-gold)" />
               </div>
               <div>
                 <div style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>Owner Approvals</div>

@@ -29,27 +29,37 @@ async function savePrompts(prompts) {
 
 // Fetch visual assets from the local bridge
 async function fetchAssets() {
-    const response = await fetch(`${BASE_URL}/assets`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch assets');
+    try {
+        const response = await fetch(`${BASE_URL}/assets`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch assets');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
-    return await response.json();
 }
 
 // Upload a new visual asset
 async function uploadAsset(filePath) {
-    const file = fs.readFileSync(filePath);
-    const response = await fetch(`${BASE_URL}/upload`, {
-        method: 'POST',
-        body: file,
-        headers: {
-            'Content-Type': 'application/octet-stream',
-        },
-    });
-    if (!response.ok) {
-        throw new Error('Failed to upload asset');
+    try {
+        const file = fs.readFileSync(filePath);
+        const response = await fetch(`${BASE_URL}/upload`, {
+            method: 'POST',
+            body: file,
+            headers: {
+                'Content-Type': 'application/octet-stream',
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Failed to upload asset');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
-    return await response.json();
 }
 
 // Track prompt-to-image mapping

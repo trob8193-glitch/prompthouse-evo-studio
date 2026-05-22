@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSovereignStore } from '../store.js';
 import { Button, Card, StatusBadge } from './primitives.jsx';
-import { Sparkles, FileCode, Check, RefreshCw, X } from 'lucide-react';
+import { Sparkles, Check, RefreshCw } from 'lucide-react';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
-const BRIDGE_URL = 'http://127.0.0.1:3001';
+/**
+ * PH EVO STUDIO — GHOST EDITOR
+ * ═══════════════════════════════════════════════════════════════
+ * Holographic overlay editor that shows AI-suggested code on top
+ * of the original file, allowing one-click sovereign merge.
+ */
 
 export function GhostEditor() {
   const { activeFile, addNotification, logToLedger } = useSovereignStore();
@@ -13,9 +19,7 @@ export function GhostEditor() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (activeFile) {
-      loadOptimization();
-    }
+    if (activeFile) loadOptimization();
   }, [activeFile]);
 
   const loadOptimization = async () => {
@@ -24,11 +28,7 @@ export function GhostEditor() {
       const res = await fetch(`${BRIDGE_URL}/api/intelligence/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          module: 'GhostEditor',
-          action: 'get',
-          payload: { filePath: activeFile }
-        }),
+        body: JSON.stringify({ module: 'GhostEditor', action: 'get', payload: { filePath: activeFile } }),
       });
       const data = await res.json();
       if (data.success) {
@@ -50,11 +50,7 @@ export function GhostEditor() {
       const res = await fetch(`${BRIDGE_URL}/api/intelligence/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          module: 'GhostEditor',
-          action: 'merge',
-          payload: { filePath: activeFile, code: ghostCode }
-        }),
+        body: JSON.stringify({ module: 'GhostEditor', action: 'merge', payload: { filePath: activeFile, code: ghostCode } }),
       });
       const data = await res.json();
       if (data.success) {
@@ -71,68 +67,73 @@ export function GhostEditor() {
   };
 
   return (
-    <Card className="flex-1 bg-[#0d1117] relative p-0 font-mono text-sm overflow-hidden h-full flex flex-col border-none">
+    <Card
+      className="flex-1 relative p-0 font-mono text-sm overflow-hidden h-full flex flex-col border-none"
+      style={{ background: 'var(--bg-deep)' }}
+    >
       {/* Ghost Toolbar */}
-      <div className="flex items-center justify-between p-4 bg-black/40 border-b border-slate-800 z-20">
-        <div className="flex items-center gap-3">
-          <Sparkles size={18} className="text-indigo-400" />
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest truncate max-w-[200px]">
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '12px 16px', background: 'rgba(0,0,0,0.4)', borderBottom: '1px solid var(--border-subtle)', zIndex: 20,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Sparkles size={16} color="var(--accent-indigo)" />
+          <span style={{ fontSize: 10, color: 'var(--text-secondary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {activeFile || 'No file selected'}
           </span>
-          {loading && <RefreshCw size={12} className="animate-spin text-slate-500" />}
+          {loading && <RefreshCw size={12} color="var(--text-dim)" style={{ animation: 'spin 1s linear infinite' }} />}
         </div>
-        
-        <div className="flex items-center gap-2">
-          {isGhostActive && (
-            <StatusBadge status="executing" label="GHOST LAYER ACTIVE" />
-          )}
-          <Button 
-            size="sm" 
-            variant="ghost" 
-            onClick={() => setIsGhostActive(!isGhostActive)}
-            className="text-[10px]"
-          >
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {isGhostActive && <StatusBadge status="executing" label="GHOST LAYER ACTIVE" />}
+          <Button size="sm" variant="ghost" onClick={() => setIsGhostActive(!isGhostActive)} className="text-[10px]">
             {isGhostActive ? 'Hide Overlay' : 'Show Ghost'}
           </Button>
-          <Button 
-            size="sm" 
-            variant="primary" 
-            onClick={handleMerge}
-            disabled={!isGhostActive || loading}
-            className="text-[10px] gap-2"
-          >
+          <Button size="sm" variant="primary" onClick={handleMerge} disabled={!isGhostActive || loading} className="text-[10px] gap-2">
             <Check size={14} /> Merge
           </Button>
         </div>
       </div>
 
-      <div className="relative flex-1 overflow-auto p-6 bg-[rgba(2,6,23,0.5)]">
+      <div style={{ position: 'relative', flex: 1, overflow: 'auto', padding: 24, background: 'rgba(2,6,23,0.5)' }}>
         {/* Original Code Layer */}
-        <pre className={`text-slate-600 transition-opacity duration-500 ${isGhostActive ? 'opacity-30' : 'opacity-100'}`}>
+        <pre style={{ color: 'var(--text-dim)', transition: 'opacity 0.4s', opacity: isGhostActive ? 0.3 : 1 }}>
           <code>{originalCode}</code>
         </pre>
 
         {/* Holographic Ghost Layer */}
         {isGhostActive && !loading && (
-          <pre className="absolute top-6 left-6 text-indigo-300 drop-shadow-[0_0_8px_rgba(99,102,241,0.6)] animate-in fade-in slide-in-from-top-1 duration-500 pointer-events-none">
+          <pre style={{
+            position: 'absolute', top: 24, left: 24,
+            color: 'var(--accent-violet)',
+            filter: 'drop-shadow(0 0 8px rgba(99,102,241,0.6))',
+            pointerEvents: 'none',
+            animation: 'fadeInUp 0.4s ease',
+          }}>
             <code>{ghostCode}</code>
           </pre>
         )}
-        
+
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-10">
-            <div className="flex flex-col items-center gap-4">
-              <RefreshCw size={32} className="animate-spin text-indigo-500" />
-              <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Generating Sovereign Reality...</span>
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(4px)', zIndex: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+              <RefreshCw size={28} color="var(--accent-indigo)" style={{ animation: 'spin 1s linear infinite' }} />
+              <span style={{ fontSize: 10, color: 'var(--accent-indigo)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                Generating Sovereign Reality...
+              </span>
             </div>
           </div>
         )}
       </div>
 
       {/* Mini Info Bar */}
-      <div className="p-2 px-4 bg-black/60 border-t border-slate-800 flex justify-between items-center text-[9px] text-slate-500 font-bold uppercase tracking-widest">
-        <span>Active File: {activeFile}</span>
-        <span className="flex items-center gap-4">
+      <div style={{
+        padding: '6px 16px', background: 'rgba(0,0,0,0.6)', borderTop: '1px solid var(--border-subtle)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        fontSize: 9, color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
+      }}>
+        <span>Active File: {activeFile || '—'}</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <span>Overlay ratio: {originalCode && ghostCode ? `${(ghostCode.length / Math.max(1, originalCode.length)).toFixed(2)}x` : '—'}</span>
           <span>Chars delta: {originalCode && ghostCode ? `${ghostCode.length - originalCode.length}` : '—'}</span>
         </span>

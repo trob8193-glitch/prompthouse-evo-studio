@@ -254,9 +254,23 @@ CREATE TABLE IF NOT EXISTS sovereign_ledger (
 );
 `;
 
+export function ensureImmutableLedger() {
+  const IMMUTABLE_SCHEMA = `
+CREATE TABLE IF NOT EXISTS proof_ledger (
+  id TEXT PRIMARY KEY,
+  signature TEXT NOT NULL,
+  payload TEXT NOT NULL,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TRIGGER IF NOT EXISTS prevent_ledger_update BEFORE UPDATE ON proof_ledger BEGIN SELECT RAISE(ABORT, 'Ledger is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS prevent_ledger_delete BEFORE DELETE ON proof_ledger BEGIN SELECT RAISE(ABORT, 'Ledger is immutable'); END;
+`;
+  db.exec(IMMUTABLE_SCHEMA);
+}
+
 export function initDatabase() {
   db.exec(SCHEMA);
-  
+  ensureImmutableLedger();
 }
 
 export default db;

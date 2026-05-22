@@ -99,7 +99,7 @@ export const useSovereignStore = create((set, get) => ({
   terminalHistory: [],
   bondedNodes: [], 
   singularityLayer: 'diagnostics', // 'diagnostics' | 'semantic' | 'temporal' | 'network' | 'sprouts'
-  singularityActive: false,
+  singularityActive: true,
   terminalSessions: {
     main: [{ id: 'l1', type: 'system', content: 'PH Evo Master Terminal v3.0 [Sovereign Core] online.', timestamp: Date.now() }],
     build: [{ id: 'l2', type: 'system', content: 'Build & Compilation Pipeline ready.', timestamp: Date.now() }],

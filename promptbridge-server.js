@@ -12,6 +12,9 @@ import OpenAI from 'openai';
 import { execSync } from 'child_process';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import rateLimit from 'express-rate-limit';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 
 import crypto from 'crypto';
 import Stripe from 'stripe';
@@ -64,6 +67,14 @@ import registerEvoBridgeRoutes from './generated_apis/evo_bridge_routes.js';
 ensureEvolutionSchema();
 
 const app = express();
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 200, // limit each IP to 200 requests per windowMs
+  message: { error: "Sovereign Firewall: Rate limit exceeded. Too many requests." }
+});
+app.use('/api/', apiLimiter);
+
 registerEmulatorRoutes(app);
 registerEvoBridgeRoutes(app);
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
@@ -3416,11 +3427,21 @@ if (nightforgeState.active) {
   scheduleNightforgeDaemon();
 }
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`\n╔════════════════════════════════════════╗`);
-  console.log(`║  PromptHouse Evo Studio — PromptBridge  ║`);
-  console.log(`║  Version 2.1.0 — SMFF PRODUCTION       ║`);
-  console.log(`╚════════════════════════════════════════╝`);
-  console.log(`[BRIDGE ACTIVE] http://127.0.0.1:${port}`);
+const httpServer = createServer(app);
+export const io = new Server(httpServer, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+});
+
+io.on('connection', (socket) => {
+  console.log(`[Socket] Client connected: ${socket.id}`);
+  socket.on('disconnect', () => console.log(`[Socket] Client disconnected: ${socket.id}`));
+});
+
+httpServer.listen(port, () => {
+  console.log(`🚀 [PromptBridge] Server running on port ${port}`);
+  console.log(`⚡ [Sockets] Live Telemetry Active.`);
 });
 

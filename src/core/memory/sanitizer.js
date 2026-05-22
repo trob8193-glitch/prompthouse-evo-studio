@@ -17,11 +17,16 @@ export class Sanitizer {
     }
 
     async fetchMemoryData() {
-        const response = await fetch(`${LOCAL_BRIDGE_URL}/memory`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch memory data');
+        try {
+            const response = await fetch(`${LOCAL_BRIDGE_URL}/memory`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch memory data');
+            }
+            this.memoryData = await response.json();
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
-        this.memoryData = await response.json();
     }
 
     sanitizeData(data) {
@@ -47,16 +52,21 @@ export class Sanitizer {
     }
 
     async persistSanitizedMemory(data) {
-        const response = await fetch(`${LOCAL_BRIDGE_URL}/memory`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
+        try {
+            const response = await fetch(`${LOCAL_BRIDGE_URL}/memory`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
-        if (!response.ok) {
-            throw new Error('Failed to persist sanitized memory data');
+            if (!response.ok) {
+                throw new Error('Failed to persist sanitized memory data');
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
     }
 

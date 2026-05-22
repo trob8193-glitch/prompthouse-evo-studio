@@ -54,11 +54,16 @@ class LocalVectorSearch {
     }
 
     async fetchFromRemote(endpoint) {
-        const response = await fetch(endpoint);
-        if (!response.ok) {
-            throw new Error('Failed to fetch data from remote');
+        try {
+            const response = await fetch(endpoint);
+            if (!response.ok) {
+                throw new Error('Failed to fetch data from remote');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
-        return response.json();
     }
 
     async syncWithRemote() {

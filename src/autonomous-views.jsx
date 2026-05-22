@@ -2,7 +2,7 @@
 // Bots build apps in real-time with animated collaboration pipeline
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { BotCharacter, BotStageCharacter, EXPRESSIONS, MOTIONS } from './bot-characters.js';
+import { BotCharacter, BotStageCharacter, EXPRESSIONS, MOTIONS } from './bot-characters.jsx';
 import { BOT_ROSTER } from './engine.js';
 import { APP_TYPES, generateApp, runBotPipeline, downloadAsZip, downloadFile, writeToLocalDisk } from './autonomous-builder.js';
 import { BotBus } from './bot-orb.jsx';
@@ -116,7 +116,7 @@ export function AutonomousBuilderView() {
         <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 16 }}>
           {/* Active Bot Character */}
           <div className="card" style={{
-            background: 'linear-gradient(180deg, #030508 0%, #0a0e1a 100%)',
+            background: 'linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-void) 100%)',
             border: `1px solid ${activeBot.palette.accent}33`,
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
             padding: 24, minHeight: 340,

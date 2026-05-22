@@ -19,28 +19,33 @@ function scoreAlignment(output, feedback) {
 }
 
 export async function submitFeedback(input, feedback) {
-  const response = await fetch(`${BASE_URL}/infer`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ input, feedback })
-  });
+  try {
+    const response = await fetch(`${BASE_URL}/infer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ input, feedback })
+    });
 
-  if (!response.ok) {
-    throw new Error(`Preference tuning request failed: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Preference tuning request failed: ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const output = normalizeOutputText(payload?.output ?? payload?.message ?? payload);
+    const tuned = {
+      output,
+      feedback: String(feedback ?? ''),
+      alignmentScore: scoreAlignment(output, feedback),
+      tunedAt: new Date().toISOString()
+    };
+
+    preferences[String(input)] = tuned;
+    savePreferences();
+    return tuned;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
-
-  const payload = await response.json();
-  const output = normalizeOutputText(payload?.output ?? payload?.message ?? payload);
-  const tuned = {
-    output,
-    feedback: String(feedback ?? ''),
-    alignmentScore: scoreAlignment(output, feedback),
-    tunedAt: new Date().toISOString()
-  };
-
-  preferences[String(input)] = tuned;
-  savePreferences();
-  return tuned;
 }
 
 export function getPreferences() {

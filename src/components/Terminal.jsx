@@ -20,7 +20,7 @@ import {
   Search
 } from 'lucide-react';
 
-const BRIDGE_URL = 'http://127.0.0.1:3001';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
 const COMMAND_CATALOG = [
   { id: 'audit', label: 'Nuclear Truth Audit', command: 'evo:audit', session: 'security', description: 'Full studio wiring and truth-state audit.', tags: ['audit', 'truth', 'security'] },
@@ -212,12 +212,12 @@ export function Terminal() {
 
   const themeStyles = {
     sovereign: {
-      bg: 'bg-[#050508]',
+      bg: 'bg-black/90',
       border: 'border-indigo-500/40',
       text: 'text-slate-300',
       accent: 'text-indigo-400',
       header: 'bg-indigo-500/5',
-      logBg: 'bg-[rgba(10,10,15,0.7)]'
+      logBg: 'bg-black/70'
     },
     matrix: {
       bg: 'bg-black',
@@ -228,7 +228,7 @@ export function Terminal() {
       logBg: 'bg-black'
     },
     classic: {
-      bg: 'bg-[#1e1e1e]',
+      bg: 'bg-slate-900',
       border: 'border-slate-700',
       text: 'text-white',
       accent: 'text-slate-400',

@@ -26,14 +26,19 @@ class GlobalPatternMemory {
     }
 
     async fetchPatterns() {
-        const response = await fetch(`${BASE_URL}/patterns`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch patterns from server');
+        try {
+            const response = await fetch(`${BASE_URL}/patterns`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch patterns from server');
+            }
+            const patterns = await response.json();
+            this.memory.patterns = [...new Set([...this.memory.patterns, ...patterns])];
+            await this.saveMemory();
+            return this.memory.patterns;
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
-        const patterns = await response.json();
-        this.memory.patterns = [...new Set([...this.memory.patterns, ...patterns])];
-        await this.saveMemory();
-        return this.memory.patterns;
     }
 
     async addPattern(pattern) {

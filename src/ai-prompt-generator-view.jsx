@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DOMAIN_PACKS, STRICTNESS_MODES, scorePrompt, getGrade, getBarColor, buildPromptStack } from './engine.js';
 
-const BRIDGE = 'http://127.0.0.1:3001';
+import { BRIDGE_URL as BRIDGE } from './config/bridge-config.js';
 
 import { universalSend } from './lib/universal-transport.js';
 

@@ -19,7 +19,7 @@ export class DriftGuard {
   registerIntent(methodId, logicString) {
     const hash = crypto.createHash('sha256').update(logicString).digest('hex');
     this.identityHashes.set(methodId, hash);
-    console.log(`🛡️ [DriftGuard] Identity Locked for: ${methodId} [${hash.slice(0, 8)}]`);
+
   }
 
   /**
@@ -35,7 +35,7 @@ export class DriftGuard {
       throw new Error('DRIFT_FORBIDDEN_BREACH');
     }
 
-    console.log(`🛡️ [DriftGuard] Truth Verified for: ${methodId}. Zero Drift.`);
+
     return true;
   }
 }

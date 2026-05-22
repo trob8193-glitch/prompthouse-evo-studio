@@ -47,24 +47,24 @@ export class CommerceRail {
 /**
  * Helper to create commerce product (compat layer for older views)
  */
-export const createCommerceProduct = (session, spec) => {
-  const { mode, productName, price = 0 } = spec;
-  if (mode === 'live') {
-    return { blocked: true, reason: 'owner approval required' };
+export const createCommerceProduct = async (session, spec) => {
+  const stripeKey = typeof process !== 'undefined' ? process.env.STRIPE_SECRET_KEY : null;
+  if (!stripeKey) {
+    throw new Error('STRIPE_SECRET_KEY is required for physical commerce generation. Emulation is disabled.');
   }
 
-  return {
-    blocked: true,
-    reason: 'Checkout links are not generated locally. Use the live checkout endpoint with owner approval (/api/commerce/checkout).',
-    injectionCode: `Product: ${productName}`,
-    requested: { session, productName, price }
-  };
+  Log.info(`💎 [Commerce] Executing physical Stripe product creation for: ${spec.productName}`);
+  const bridge = new UniversalBridge();
+  return await bridge.dispatch('commerce', 'create_product', spec);
 };
 
-export const createPricingTable = (session) => {
-  return {
-    status: 'blocked',
-    reason: 'Pricing tiers are not hardcoded. Fetch pricing from a real commerce provider or configured product catalog.',
-    requested: { session }
-  };
+export const createPricingTable = async (session) => {
+  const stripeKey = typeof process !== 'undefined' ? process.env.STRIPE_SECRET_KEY : null;
+  if (!stripeKey) {
+    throw new Error('STRIPE_SECRET_KEY is required to fetch pricing table. Emulation is disabled.');
+  }
+
+  Log.info('💎 [Commerce] Fetching physical pricing table from Stripe...');
+  const bridge = new UniversalBridge();
+  return await bridge.dispatch('commerce', 'get_pricing_table', {});
 };

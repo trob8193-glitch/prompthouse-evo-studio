@@ -95,7 +95,7 @@ export default function ConnectionManager() {
 
       {/* Bonding Input */}
       <div className="bg-gradient-to-br from-indigo-500/10 to-transparent p-1 rounded-xl border border-indigo-500/20 shadow-2xl shadow-indigo-500/5">
-        <form onSubmit={handleBond} className="bg-[#0c0c0e] rounded-[10px] p-6 flex flex-col md:flex-row items-center gap-4">
+        <form onSubmit={handleBond} className="bg-black/60 rounded-[10px] p-6 flex flex-col md:flex-row items-center gap-4">
           <div className="flex-1 space-y-1 w-full">
             <label className="text-[10px] font-black uppercase tracking-widest text-indigo-400/70 ml-1">Initiate Handshake (IP or URL)</label>
             <div className="relative group">
@@ -134,7 +134,7 @@ export default function ConnectionManager() {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {items.map((item, idx) => (
-                  <div key={idx} className="group relative bg-[#0c0c0e] border border-slate-800 hover:border-indigo-500/40 rounded-xl p-5 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/5">
+                  <div key={idx} className="group relative bg-black/60 border border-slate-800 hover:border-indigo-500/40 rounded-xl p-5 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/5">
                     {/* Status Dot */}
                     <div className={`absolute top-5 right-5 w-1.5 h-1.5 rounded-full ${item.status === 'active' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-slate-700'}`} />
                     

@@ -1,4 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
+import { io } from 'socket.io-client';
+import { BRIDGE_URL } from './config/bridge-config.js';
 import { 
   getSovereigntyPolicy, setSovereigntyPolicy, 
   getAllReceipts, computeAllGateScores, syncTruthFromBridge 
@@ -32,16 +34,17 @@ const buildOrder = [
 
 
 const botControllers = [
-  ["Evo", "Mission commander", "approves mission path and product direction"],
-  ["Conductor", "Route controller", "splits work across modules and tracks dependencies"],
-  ["Swarm Falcon", "Fission controller", "creates candidate lanes and merge order"],
-  ["Forge Rhino", "Release controller", "DeployRail, Commerce Rail, production gates"],
-  ["Vector Wolf", "Context controller", "VectorPack compression and retrieval boundaries"],
-  ["Temporal Raven", "Time controller", "Temporal Stackchain and deprecation paths"],
-  ["Cipher Lynx", "Security controller", "secrets, prompt injection, browser capture risk"],
-  ["Verifier", "Proof controller", "tests, validation, receipts, unverified-free status"],
-  ["Ledger", "Receipt controller", "versioning, audit trail, proof indexing"],
-  ["Enterprise Auth", "Owner authority", "final approval for risky actions"],
+  { id: 'evo',            name: 'Evo',            role: 'Mission Commander',   icon: '⚡', palette: { primary: '#6366f1', accent: '#a5b4fc', glow: 'rgba(99,102,241,0.35)' },  detail: 'Approves mission path and product direction; sovereign command authority over all gate decisions.' },
+  { id: 'conductor',     name: 'Conductor',      role: 'Route Controller',    icon: '🎯', palette: { primary: '#06b6d4', accent: '#67e8f9', glow: 'rgba(6,182,212,0.35)' },   detail: 'Splits work across modules, tracks dependencies, and dispatches tasks with zero latency.' },
+  { id: 'swarm_falcon',  name: 'Swarm Falcon',   role: 'Fission Controller',  icon: '🦅', palette: { primary: '#f59e0b', accent: '#fde68a', glow: 'rgba(245,158,11,0.35)' },  detail: 'Runs Fission Arena with 3–5 candidate approaches, picks the winner, and sets merge order.' },
+  { id: 'forge_rhino',   name: 'Forge Rhino',    role: 'Release Controller',  icon: '🦏', palette: { primary: '#f43f5e', accent: '#fda4af', glow: 'rgba(244,63,94,0.35)' },   detail: 'Applies ForgeFriction gates, blocks unsafe deployments, and enforces production quality floors.' },
+  { id: 'vector_wolf',   name: 'Vector Wolf',    role: 'Context Controller',  icon: '🐺', palette: { primary: '#10b981', accent: '#6ee7b7', glow: 'rgba(16,185,129,0.35)' },  detail: 'Builds VectorPacks, redacts secrets, and compresses mission context for precise LLM injection.' },
+  { id: 'temporal_raven',name: 'Temporal Raven', role: 'Time Controller',     icon: '🪶', palette: { primary: '#8b5cf6', accent: '#c4b5fd', glow: 'rgba(139,92,246,0.35)' },  detail: 'Generates NOW/6-month/12-month technical stackchains and manages all deprecation paths.' },
+  { id: 'cipher_lynx',   name: 'Cipher Lynx',    role: 'Security Controller', icon: '🔐', palette: { primary: '#f97316', accent: '#fdba74', glow: 'rgba(249,115,22,0.35)' },  detail: 'Audits for secrets leakage, prompt injection, browser capture risk, and unsafe patterns.' },
+  { id: 'verifier',      name: 'Verifier',       role: 'Proof Controller',    icon: '✅', palette: { primary: '#14b8a6', accent: '#5eead4', glow: 'rgba(20,184,166,0.35)' },  detail: 'Runs tests, validates receipts, and enforces unverified-free status across all proof gates.' },
+  { id: 'ledger',        name: 'Ledger',         role: 'Receipt Controller',  icon: '📒', palette: { primary: '#0ea5e9', accent: '#7dd3fc', glow: 'rgba(14,165,233,0.35)' },  detail: 'Manages versioning, maintains the immutable audit trail, and indexes all proof receipts.' },
+  { id: 'enterprise_auth',name: 'Enterprise Auth',role: 'Owner Authority',    icon: '👑', palette: { primary: '#eab308', accent: '#fef08a', glow: 'rgba(234,179,8,0.35)' },   detail: 'Final approval authority for risky actions, destructive commands, and production deployments.' },
+  { id: 'ghost_scout',   name: 'Ghost Scout',    role: 'Recon Agent',         icon: '👻', palette: { primary: '#64748b', accent: '#cbd5e1', glow: 'rgba(100,116,139,0.35)' }, detail: 'Silent recon agent for environment discovery, gap detection, and pre-mission intelligence.' },
 ];
 
 function getTone(status) {
@@ -108,9 +111,9 @@ export function AutonomousSelfBuildCommandCenter() {
       setReceipts(getAllReceipts());
       try {
         const [auditRes, implRes, evoRes] = await Promise.all([
-          fetch('http://127.0.0.1:3001/api/audit/nuclear-truth'),
-          fetch('http://127.0.0.1:3001/api/self-implementation/status'),
-          fetch('http://127.0.0.1:3001/api/evolution/autonomous/status')
+          fetch(`${BRIDGE_URL}/api/audit/nuclear-truth`),
+          fetch(`${BRIDGE_URL}/api/self-implementation/status`),
+          fetch(`${BRIDGE_URL}/api/evolution/autonomous/status`)
         ]);
         if (auditRes.ok) setNuclearAudit(await auditRes.json());
         if (implRes.ok) setSelfImplementationState(await implRes.json());
@@ -121,22 +124,13 @@ export function AutonomousSelfBuildCommandCenter() {
     };
     init();
 
-    const interval = setInterval(() => {
-      syncTruthFromBridge().then(async () => {
-        setReceipts(getAllReceipts());
-        try {
-          const [auditRes, evoRes] = await Promise.all([
-            fetch('http://127.0.0.1:3001/api/audit/nuclear-truth'),
-            fetch('http://127.0.0.1:3001/api/evolution/autonomous/status')
-          ]);
-          if (auditRes.ok) setNuclearAudit(await auditRes.json());
-          if (evoRes.ok) setAutonomousEvolutionStatus(await evoRes.json());
-        } catch {
-          // Keep rendering previous report.
-        }
-      });
-    }, 5000);
-    return () => clearInterval(interval);
+    const socket = io(BRIDGE_URL);
+    socket.on('telemetry_update', async (data) => {
+      if (data.type === 'audit') setNuclearAudit(data.payload);
+      if (data.type === 'evolution') setAutonomousEvolutionStatus(data.payload);
+      if (data.type === 'receipts') setReceipts(data.payload);
+    });
+    return () => socket.disconnect();
   }, []);
 
   function toggleUnbound() {
@@ -161,7 +155,7 @@ export function AutonomousSelfBuildCommandCenter() {
     ]);
 
     try {
-      const res = await fetch('http://127.0.0.1:3001/api/self-implementation/cycle', {
+      const res = await fetch(`${BRIDGE_URL}/api/self-implementation/cycle`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ applyFixes: false })
@@ -170,7 +164,7 @@ export function AutonomousSelfBuildCommandCenter() {
       if (res.ok && data.success) {
         let auditSnapshot = null;
         try {
-          const auditRes = await fetch('http://127.0.0.1:3001/api/audit/nuclear-truth');
+          const auditRes = await fetch(`${BRIDGE_URL}/api/audit/nuclear-truth`);
           if (auditRes.ok) {
             auditSnapshot = await auditRes.json();
             setNuclearAudit(auditSnapshot);
@@ -449,13 +443,32 @@ export function AutonomousSelfBuildCommandCenter() {
 
       {activeTab === 'controllers' && (
         <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
-          {botControllers.map(([bot, role, detail]) => (
-            <div key={bot} style={{ ...cardStyle, background: '#020617', display: 'flex', gap: 12 }}>
-              <div style={{ fontSize: 24 }}>🤖</div>
-              <div>
-                <h3 style={{ margin: '0 0 4px 0', fontSize: 16, fontWeight: 900 }}>{bot}</h3>
-                <div style={{ fontSize: 13, fontWeight: 700, color: '#cbd5e1', marginBottom: 4 }}>{role}</div>
-                <div style={{ fontSize: 12, color: '#94a3b8' }}>{detail}</div>
+          {botControllers.map((bot) => (
+            <div
+              key={bot.id}
+              style={{
+                ...cardStyle,
+                background: '#020617',
+                display: 'flex',
+                gap: 14,
+                border: `1px solid ${bot.palette.accent}33`,
+                boxShadow: `0 0 18px ${bot.palette.glow}`,
+                transition: 'box-shadow 0.3s ease',
+              }}
+            >
+              <div style={{
+                fontSize: 26,
+                width: 46, height: 46, flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                borderRadius: 10,
+                background: `linear-gradient(135deg, ${bot.palette.primary}22, ${bot.palette.accent}11)`,
+                border: `1px solid ${bot.palette.primary}44`,
+                boxShadow: `0 0 12px ${bot.palette.glow}`,
+              }}>{bot.icon}</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h3 style={{ margin: '0 0 2px 0', fontSize: 15, fontWeight: 900, color: bot.palette.accent }}>{bot.name}</h3>
+                <div style={{ fontSize: 11, fontWeight: 700, color: bot.palette.primary, marginBottom: 6, letterSpacing: '0.06em', textTransform: 'uppercase' }}>{bot.role}</div>
+                <div style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5 }}>{bot.detail}</div>
               </div>
             </div>
           ))}

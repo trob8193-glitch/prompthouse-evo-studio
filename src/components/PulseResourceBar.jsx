@@ -13,7 +13,7 @@ export function PulseResourceBar() {
 
     const fetchMetrics = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:3001/api/metrics');
+        const res = await fetch(`${BRIDGE_URL}/api/metrics`);
         if (res.ok) {
           const data = await res.json();
           if (!mounted) return;

@@ -49,6 +49,7 @@ import { SelfBuildForgeView } from '../self-build-forge-view.jsx';
 import { ForgeRenderConsoleView } from '../forge-render-views.jsx';
 import { ProofToValueView } from '../proof-to-value-view.jsx';
 
+import { ErrorBoundary } from '../components/ErrorBoundary.jsx';
 
 // ─── SCREEN TEMPLATES ────────────────────────────────────────────────────────
 
@@ -66,7 +67,9 @@ function ScreenTemplate({ title, subtitle, children, state = 'idle', errorMsg })
          </div>
       ) : (
          <div className="flex-1 overflow-y-auto pb-10 space-y-[var(--space-24)]">
-           {children}
+           <ErrorBoundary fallbackMessage={`Component failure in ${title}`}>
+             {children}
+           </ErrorBoundary>
          </div>
       )}
     </div>

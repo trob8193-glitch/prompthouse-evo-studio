@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react-swc'
 
 export default defineConfig({
   plugins: [react()],
@@ -13,10 +13,10 @@ export default defineConfig({
     },
   },
   build: {
-    target: "esnext",
-    minify: "esbuild",
+    target: 'esnext',
     sourcemap: true,
     reportCompressedSize: true,
+    chunkSizeWarningLimit: 800,
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -31,6 +31,7 @@ export default defineConfig({
 
           if (normalized.endsWith('/src/engine.js')) return 'engine-core'
           if (normalized.endsWith('/src/mobile-engine.js')) return 'mobile-engine'
+          if (/\/src\/core\/evolution\//.test(normalized)) return 'evolution-engine'
           if (/(\/src\/features\/|\/src\/app\/AppShell\.jsx$)/.test(normalized)) return 'studio-shell'
           if (/(\/src\/proof-|\/src\/new-features-views\.jsx$|\/src\/release-spine-panels\.jsx$|\/src\/studio-complement-views\.jsx$)/.test(normalized)) return 'truth-surfaces'
           if (/(\/src\/forge-|\/src\/nightforge|\/src\/tool-autogen|\/src\/pattern-miner|\/src\/real-execution)/.test(normalized)) return 'forge-surfaces'
@@ -48,6 +49,8 @@ export default defineConfig({
     setupFiles: './tests/setup.js',
     testTimeout: 20000,
     hookTimeout: 120000,
+    pool: 'forks',
+    css: false,
     exclude: [
       '**/node_modules/**',
       '**/dist/**',

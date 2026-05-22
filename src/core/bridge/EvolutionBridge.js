@@ -14,8 +14,8 @@ export class EvolutionBridge {
    * Request an autonomous UI Evolution Mission.
    */
   async requestEvolution(targetArea, reasoning) {
-    console.log(`🌀 [EvolutionBridge] Requesting Evolution Mission for: ${targetArea}`);
-    console.log(`   - Reasoning: ${reasoning}`);
+
+
 
     try {
       const response = await fetch(`${this.apiBaseUrl}/api/evolution/missions`, {
@@ -30,7 +30,7 @@ export class EvolutionBridge {
       });
 
       const data = await response.json();
-      console.log(`✅ [EvolutionBridge] Mission Manifested: ${data.missionId}`);
+
       return data.missionId;
     } catch (error) {
       console.error(`❌ [EvolutionBridge] Failed to dispatch mission: ${error.message}`);
@@ -42,7 +42,7 @@ export class EvolutionBridge {
    * Sync Visual DNA from Studio Knowledge.
    */
   async syncDesignSignature(dnaProfile) {
-    console.log(`🧬 [EvolutionBridge] Syncing Design Signature to EVOGENAGE...`);
+
     // Logic to push Knowledge Shards to DNA Engine...
   }
 }

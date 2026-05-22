@@ -151,12 +151,7 @@ export async function bootLocalDevice(platform, idOrName) {
  */
 export async function installAppOnDevice(platform, targetDeviceId, appPath) {
   if (!existsSync(appPath)) {
-    // Return an emulated success if file is absent to allow testing UI components
-    return {
-      success: true,
-      installed: false,
-      message: `Emulated install triggered. Build file "${appPath}" was not found, but command interface validated.`,
-    };
+    throw new Error(`Build binary not found on disk at "${appPath}". Physical install failed.`);
   }
 
   if (platform === 'android') {
@@ -215,25 +210,41 @@ export async function fetchDeviceLogs(platform, targetDeviceId) {
   return { success: false, logs: 'Platform not supported for log streaming.' };
 }
 
-/**
- * Emulates Appetize.io integration.
- */
 export async function uploadToAppetize(filePath, apiToken) {
   if (!apiToken) {
-    return {
-      success: true,
-      publicKey: 'demo_appetize_key',
-      appUrl: 'https://appetize.io/embed/demo_appetize_key?device=iphone15pro&scale=100&autoplay=true',
-      message: 'Demo upload simulated. Configure Appetize API token for real publishing.',
-      truthState: TRUTH_STATES.PROVIDER_GATED,
-    };
+    throw new Error('Appetize API token is required for physical cloud uploads. Emulation is disabled.');
+  }
+  if (!existsSync(filePath)) {
+    throw new Error(`Build file not found at ${filePath}. Cannot upload to Appetize.`);
+  }
+
+  // Execute actual Appetize HTTP POST
+  const fileBuffer = fs.readFileSync(filePath);
+  const blob = new Blob([fileBuffer]);
+  const formData = new FormData();
+  // We extract the basename safely (handles both \ and /)
+  const basename = filePath.replace(/\\/g, '/').split('/').pop() || 'app.zip';
+  formData.append('file', blob, basename);
+  formData.append('platform', filePath.endsWith('.apk') ? 'android' : 'ios');
+
+  const response = await fetch('https://api.appetize.io/v1/apps', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Basic ' + Buffer.from(apiToken + ':').toString('base64')
+    },
+    body: formData
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(`Appetize API Error: ${data.message || response.statusText}`);
   }
 
   return {
     success: true,
-    publicKey: `appetize_built_${Date.now()}`,
-    appUrl: `https://appetize.io/embed/appetize_built_${Date.now()}?device=iphone15pro&scale=100&autoplay=true`,
-    message: 'App successfully packaged and pushed to cloud Appetize device farm.',
+    publicKey: data.publicKey,
+    appUrl: `https://appetize.io/embed/${data.publicKey}?device=iphone15pro&scale=100&autoplay=true`,
+    message: 'App successfully packaged and physically pushed to cloud Appetize device farm.',
     truthState: TRUTH_STATES.PROVEN,
   };
 }

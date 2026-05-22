@@ -34,16 +34,19 @@ export default function TopBar() {
   return (
     <header style={{
       height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      padding: '0 20px', borderBottom: '1px solid #1e293b',
-      background: 'rgba(15,23,42,0.8)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+      padding: '0 20px', borderBottom: '1px solid var(--border-subtle)',
+      background: 'rgba(9, 9, 11, 0.75)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
       position: 'sticky', top: 0, zIndex: 100, flexShrink: 0,
+      boxShadow: '0 1px 0 rgba(255,255,255,0.04)',
     }}>
       {/* Left: Toggle + Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <button
           onClick={toggleSidebar}
-          style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', padding: 4, display: 'flex' }}
+          style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', padding: 4, display: 'flex', borderRadius: 6, transition: 'color 0.2s ease' }}
           aria-label="Toggle sidebar"
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'var(--text-dim)'}
         >
           {sidebarCollapsed ? <PanelLeft size={18} /> : <PanelLeftClose size={18} />}
         </button>
@@ -51,10 +54,10 @@ export default function TopBar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <img src="/assets/generated_logo.png" alt="PH Evo Logo" style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }} />
           <div>
-            <div style={{ fontSize: 13, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.02em', lineHeight: 1 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em', lineHeight: 1 }}>
               PromptHouse Evo
             </div>
-            <div style={{ fontSize: 9, fontWeight: 700, color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.08em', lineHeight: 1, marginTop: 2 }}>
+            <div style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent-indigo)', textTransform: 'uppercase', letterSpacing: '0.08em', lineHeight: 1, marginTop: 2 }}>
               Studio
             </div>
           </div>
@@ -62,13 +65,13 @@ export default function TopBar() {
       </div>
 
       {/* Center: Pulse Telemetry */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, background: '#020617', padding: '4px 16px', borderRadius: 20, border: '1px solid #1e293b' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 11, fontWeight: 600 }}>
-          <Shield size={12} color="#6366f1" /> LOGIC DENSITY: <span style={{ color: '#f1f5f9' }}>{metrics?.logic?.density || '0.00M'} IQ</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, background: 'rgba(9,9,11,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', padding: '4px 16px', borderRadius: 20, border: '1px solid var(--border-dim)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 11, fontWeight: 600 }}>
+          <Shield size={12} color="var(--accent-indigo)" /> LOGIC DENSITY: <span style={{ color: 'var(--text-primary)' }}>{metrics?.logic?.density || '0.00M'} IQ</span>
         </div>
-        <div style={{ width: 1, height: 12, background: '#334155' }} />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 11, fontWeight: 600 }}>
-          <span style={{ display: 'inline-block', width: 6, height: 6, background: '#22c55e', borderRadius: '50%' }} /> STUDIO IQ: <span style={{ color: '#f1f5f9' }}>{metrics?.logic?.iq?.toLocaleString() || '0'}</span>
+        <div style={{ width: 1, height: 12, background: 'var(--border-mid)' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 11, fontWeight: 600 }}>
+          <span style={{ display: 'inline-block', width: 6, height: 6, background: 'var(--accent-green)', borderRadius: '50%', boxShadow: '0 0 6px var(--accent-green)' }} /> STUDIO IQ: <span style={{ color: 'var(--text-primary)' }}>{metrics?.logic?.iq?.toLocaleString() || '0'}</span>
         </div>
       </div>
 
@@ -90,14 +93,17 @@ export default function TopBar() {
 
         {/* Notifications */}
         <button
-          style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', padding: 6, display: 'flex', position: 'relative' }}
+          style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', padding: 6, display: 'flex', position: 'relative', borderRadius: 6, transition: 'color 0.2s ease' }}
           aria-label="Notifications"
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'var(--text-dim)'}
         >
           <Bell size={16} />
           {notifications.length > 0 && (
             <div style={{
               position: 'absolute', top: 2, right: 2, width: 8, height: 8,
-              borderRadius: '50%', background: '#ef4444', border: '2px solid #0f172a',
+              borderRadius: '50%', background: 'var(--accent-red)', border: '2px solid var(--bg-void)',
+              boxShadow: '0 0 6px var(--accent-red)',
             }} />
           )}
         </button>
@@ -105,8 +111,10 @@ export default function TopBar() {
         {/* Settings */}
         <button
           onClick={() => setActivePage('settings')}
-          style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', padding: 6, display: 'flex' }}
+          style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', padding: 6, display: 'flex', borderRadius: 6, transition: 'color 0.2s ease' }}
           aria-label="Settings"
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'var(--text-dim)'}
         >
           <Settings size={16} />
         </button>

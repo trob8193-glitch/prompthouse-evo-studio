@@ -26,43 +26,58 @@ const PROVIDER_CONFIG = {
 };
 
 async function callOpenAI(prompt) {
-    const response = await fetch(PROVIDER_CONFIG[MODEL_PROVIDERS.OPENAI].url, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${PROVIDER_CONFIG[MODEL_PROVIDERS.OPENAI].apiKey}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-            model: 'gpt-4o',
-            messages: [{ role: 'user', content: prompt }],
-            max_tokens: 500 
-        })
-    });
-    const data = await response.json();
-    return data.choices?.[0]?.message?.content || data;
+    try {
+        const response = await fetch(PROVIDER_CONFIG[MODEL_PROVIDERS.OPENAI].url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${PROVIDER_CONFIG[MODEL_PROVIDERS.OPENAI].apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                model: 'gpt-4o',
+                messages: [{ role: 'user', content: prompt }],
+                max_tokens: 500 
+            })
+        });
+        const data = await response.json();
+        return data.choices?.[0]?.message?.content || data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
 
 async function callAnthropic(prompt) {
-    const response = await fetch(PROVIDER_CONFIG[MODEL_PROVIDERS.ANTHROPIC].url, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${PROVIDER_CONFIG[MODEL_PROVIDERS.ANTHROPIC].apiKey}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ prompt })
-    });
-    return await response.json();
+    try {
+        const response = await fetch(PROVIDER_CONFIG[MODEL_PROVIDERS.ANTHROPIC].url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${PROVIDER_CONFIG[MODEL_PROVIDERS.ANTHROPIC].apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ prompt })
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
 
 async function callLocal(prompt) {
-    const response = await fetch(`${PROVIDER_CONFIG[MODEL_PROVIDERS.LOCAL].url}/generate`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ prompt })
-    });
-    return await response.json();
+    try {
+        const response = await fetch(`${PROVIDER_CONFIG[MODEL_PROVIDERS.LOCAL].url}/generate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ prompt })
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
 
 async function routeRequest(provider, prompt) {

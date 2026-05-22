@@ -21,18 +21,23 @@ db.serialize(() => {
 });
 
 const generateEmbedding = async (text) => {
-    const response = await fetch('http://127.0.0.1:3001/generate-embedding', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text })
-    });
+    try {
+        const response = await fetch('http://127.0.0.1:3001/generate-embedding', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+        });
 
-    if (!response.ok) {
-        throw new Error('Error generating embedding');
+        if (!response.ok) {
+            throw new Error('Error generating embedding');
+        }
+
+        const { vector } = await response.json();
+        return vector;
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
-
-    const { vector } = await response.json();
-    return vector;
 };
 
 const saveEmbedding = (text, vector) => {

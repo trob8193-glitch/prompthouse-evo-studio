@@ -19,7 +19,7 @@ export class WebWevoWeaver {
    * Coordinate a Swarm Audit on a synthesized UI component.
    */
   async coordinateSwarmAudit(variantCode, targetArea) {
-    console.log(`🐝 [WebWevoSwarm] Dispatching specialized swarm for audit of: ${targetArea}`);
+
 
     const agents = [
       { name: 'Accessibility-Bot', focus: 'aria, contrast' },
@@ -28,12 +28,12 @@ export class WebWevoWeaver {
     ];
 
     const results = await Promise.all(agents.map(agent => {
-      console.log(`   - Agent [${agent.name}] probing ${agent.focus}...`);
+
       return tester.auditEvolutionVariant(variantCode, targetArea);
     }));
 
     const compositeScore = results.reduce((acc, r) => acc + r.score, 0) / results.length;
-    console.log(`📊 [WebWevoSwarm] Swarm Audit Complete. Composite Score: ${compositeScore}`);
+
     
     return { compositeScore, agentsProcessed: agents.length };
   }

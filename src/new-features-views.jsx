@@ -804,7 +804,7 @@ export function ProofVaultView() {
 
 export function SovereignFinalityView() {
   return (
-    <div className="p-10 bg-[#09090b] rounded-[40px] border border-indigo-500/20 shadow-[0_0_100px_rgba(99,102,241,0.05)] text-center space-y-8">
+    <div className="p-10 bg-black/60 rounded-[40px] border border-indigo-500/20 shadow-[0_0_100px_rgba(99,102,241,0.05)] text-center space-y-8">
        <div className="w-24 h-24 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto">
           <Shield size={48} className="text-indigo-400" />
        </div>

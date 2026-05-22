@@ -1,5 +1,5 @@
 import { createHash } from 'crypto';
-import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync, mkdirSync, unlinkSync } from 'fs';
 import { extname, join, relative, resolve } from 'path';
 
 const SOURCE_EXTENSIONS = new Set(['.js', '.jsx', '.mjs', '.cjs', '.ts', '.tsx']);
@@ -58,34 +58,43 @@ function hashObject(value) {
 
 function parseImports(filePath, content, rootDir) {
   const edges = [];
-  const importRegex = /import\s+[^'"]*['"]([^'"]+)['"]/g;
-  let match;
-  while ((match = importRegex.exec(content)) !== null) {
-    const target = String(match[1] || '');
-    if (!target.startsWith('.')) continue;
-    const sourceAbsolute = resolve(rootDir, filePath);
+  // Handles: import statements and export statements
+  const importRegex = /(?:import|export)\s+(?:[\s\S]*?)\s*from\s*['"]([^'"]+)['"]|import\s*['"]([^'"]+)['"]/g;
+  // Also handle dynamic imports: import('...')
+  const dynamicImportRegex = /import\(\s*['"]([^'"]+)['"]\s*\)/g;
+  const sourceAbsolute = resolve(rootDir, filePath);
+  const fromPosix = toPosixPath(filePath);
+
+  function addEdge(target) {
+    if (!target || !target.startsWith('.')) return;
     const targetAbsolute = resolve(sourceAbsolute, '..', target);
     const resolved = toPosixPath(relative(rootDir, targetAbsolute));
-    edges.push({
-      from: toPosixPath(filePath),
-      to: resolved,
-      type: 'import'
-    });
+    edges.push({ from: fromPosix, to: resolved, type: 'import' });
+  }
+
+  let match;
+  while ((match = importRegex.exec(content)) !== null) {
+    addEdge(match[1] || match[2]);
+  }
+  while ((match = dynamicImportRegex.exec(content)) !== null) {
+    addEdge(match[1]);
   }
   return edges;
 }
 
 function parseRoutes(filePath, content) {
   const routes = [];
-  const regex = /app\.(get|post|put|patch|delete)\(\s*['"`]([^'"`]+)['"`]/g;
+  // Match app.get/post/... AND router.get/post/... patterns
+  const regex = /(?:app|router)\.(get|post|put|patch|delete)\(\s*['"`]([^'"`]+)['"`]/gi;
   let match;
   while ((match = regex.exec(content)) !== null) {
-    routes.push({
-      id: `${match[1].toUpperCase()} ${match[2]}`,
-      method: match[1].toUpperCase(),
-      path: match[2],
-      file: toPosixPath(filePath)
-    });
+    const method = match[1].toUpperCase();
+    const routePath = match[2];
+    const id = `${method} ${routePath}`;
+    // Deduplicate within the same file
+    if (!routes.some(r => r.id === id)) {
+      routes.push({ id, method, path: routePath, file: toPosixPath(filePath) });
+    }
   }
   return routes;
 }
@@ -246,8 +255,13 @@ export function computeCapabilityDrift(currentGraph, baselineGraph) {
     deltas[key] = next - prev;
   }
 
+  // Scale drift penalty relative to codebase size so large repos don't falsely
+  // report 'volatile' from small absolute changes. Uses log-scaled baseline.
+  const baselineTotal = summaryKeys.reduce((sum, key) => sum + Math.abs(Number(baselineGraph.summary?.[key] || 0)), 0);
+  const scaleFactor = baselineTotal > 0 ? Math.max(1, Math.log2(baselineTotal + 1)) : 1;
   const absoluteDrift = Object.values(deltas).reduce((sum, value) => sum + Math.abs(Number(value || 0)), 0);
-  const score = clamp(100 - (absoluteDrift * 2), 0, 100);
+  const normalizedPenalty = (absoluteDrift / scaleFactor) * 2;
+  const score = clamp(Math.round(100 - normalizedPenalty), 0, 100);
   return {
     score,
     status: score >= 85 ? 'stable' : score >= 60 ? 'shifted' : 'volatile',
@@ -258,22 +272,30 @@ export function computeCapabilityDrift(currentGraph, baselineGraph) {
 }
 
 export function enforceEvolutionBudget({ originalCode, candidateCode, budget = {} }) {
+  const HARD_CEILING_LINES = 2000;
+  const HARD_CEILING_CHARS = 200000;
+
   const normalized = {
-    maxFilesTouched: Number.isFinite(Number(budget.maxFilesTouched)) ? Number(budget.maxFilesTouched) : 1,
-    maxChangedLines: Number.isFinite(Number(budget.maxChangedLines)) ? Number(budget.maxChangedLines) : 320,
-    maxCharDelta: Number.isFinite(Number(budget.maxCharDelta)) ? Number(budget.maxCharDelta) : 24000
+    maxFilesTouched: clamp(Number.isFinite(Number(budget.maxFilesTouched)) ? Number(budget.maxFilesTouched) : 1, 1, 20),
+    maxChangedLines: clamp(Number.isFinite(Number(budget.maxChangedLines)) ? Number(budget.maxChangedLines) : 320, 1, HARD_CEILING_LINES),
+    maxCharDelta: clamp(Number.isFinite(Number(budget.maxCharDelta)) ? Number(budget.maxCharDelta) : 24000, 1, HARD_CEILING_CHARS)
   };
 
   const changedLines = lineChangeCount(originalCode, candidateCode);
   const charDelta = Math.abs(String(candidateCode || '').length - String(originalCode || '').length);
   const violations = [];
 
-  if (normalized.maxFilesTouched < 1) violations.push('maxFilesTouched must be >= 1');
   if (changedLines > normalized.maxChangedLines) {
     violations.push(`changed lines ${changedLines} exceed budget ${normalized.maxChangedLines}`);
   }
   if (charDelta > normalized.maxCharDelta) {
-    violations.push(`char delta ${charDelta} exceed budget ${normalized.maxCharDelta}`);
+    violations.push(`char delta ${charDelta} exceeds budget ${normalized.maxCharDelta}`);
+  }
+  if (changedLines > HARD_CEILING_LINES) {
+    violations.push(`changed lines ${changedLines} exceed hard ceiling ${HARD_CEILING_LINES}`);
+  }
+  if (charDelta > HARD_CEILING_CHARS) {
+    violations.push(`char delta ${charDelta} exceeds hard ceiling ${HARD_CEILING_CHARS}`);
   }
 
   return {
@@ -464,3 +486,21 @@ export function loadRealityReceipts(filePath, limit = 100) {
   return readJsonl(filePath, limit);
 }
 
+export function mergeGenesisConcept(quarantinePath, componentName) {
+  const targetDir = resolve('./src/components/generated');
+  if (!existsSync(targetDir)) {
+    mkdirSync(targetDir, { recursive: true });
+  }
+
+  const destPath = join(targetDir, `${componentName}.jsx`);
+  const code = safeReadText(quarantinePath);
+
+  if (!code) throw new Error('Quarantine file empty.');
+
+  writeFileSync(destPath, code, 'utf8');
+  
+  // Clean up quarantine
+  unlinkSync(quarantinePath);
+
+  return { success: true, path: destPath, mergedAt: new Date().toISOString() };
+}

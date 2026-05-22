@@ -52,9 +52,9 @@ export function Button({
   const base = "inline-flex items-center justify-center font-[var(--text-label)] uppercase tracking-wider rounded-[var(--radius-md)] transition-all min-h-[44px] min-w-[44px]";
   
   const variants = {
-    primary: "bg-[var(--accent-color)] text-white hover:bg-[#7c3aed] shadow-[var(--shadow-glow)]",
-    secondary: "bg-[var(--surface-elevated)] text-[var(--text-primary)] border border-[var(--border-color)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-muted)]",
-    destructive: "bg-[var(--error-color)] text-white hover:bg-[#dc2626]",
+    primary: "bg-[var(--accent-color)] text-white hover:bg-[var(--accent-violet)] shadow-[var(--shadow-glow)]",
+    secondary: "bg-[var(--bg-card)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] border border-[var(--border-color)]",
+    destructive: "bg-[var(--error-color)] text-white hover:bg-[var(--accent-red)]",
     ghost: "bg-transparent text-[var(--text-secondary)] hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)]"
   };
 
@@ -83,7 +83,7 @@ export function Button({
 
 export function IconButton({ icon: Icon, onClick, variant = 'ghost', className, label }) {
   const variants = {
-    primary: "bg-[var(--accent-color)] text-white hover:bg-[#7c3aed]",
+    primary: "bg-[var(--accent-color)] text-white hover:bg-[var(--accent-violet)]",
     ghost: "bg-transparent text-[var(--text-secondary)] hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)]",
     surface: "bg-[var(--surface-elevated)] text-[var(--text-primary)] border border-[var(--border-color)] hover:border-[var(--border-strong)]"
   };

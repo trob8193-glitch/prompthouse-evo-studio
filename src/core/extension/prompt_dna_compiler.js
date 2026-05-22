@@ -56,14 +56,19 @@ class PromptDNACompiler {
     }
 
     async persistToAPI() {
-        const response = await fetch(`${API_URL}/saveStacks`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.stacks),
-        });
+        try {
+            const response = await fetch(`${API_URL}/saveStacks`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.stacks),
+            });
 
-        if (!response.ok) {
-            throw new Error('Failed to persist stacks to API');
+            if (!response.ok) {
+                throw new Error('Failed to persist stacks to API');
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
     }
 

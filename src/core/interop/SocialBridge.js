@@ -20,15 +20,19 @@ export class SocialBridge {
     };
 
     const formattedMessage = `${botStyles[botId] || '🤖 '}${message}`;
-    console.log(`📢 [SocialBridge] Broadcasting: ${formattedMessage}`);
+
 
     if (this.webhookUrl) {
-      // Physical Webhook Dispatch
-      await fetch(this.webhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: formattedMessage })
-      });
+      try {
+        // Physical Webhook Dispatch
+        await fetch(this.webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: formattedMessage })
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     return true;

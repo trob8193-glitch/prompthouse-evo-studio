@@ -36,7 +36,7 @@ export function GodsEyeMap() {
 
     const poll = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:3001/api/studio/diagnostics?limit=70');
+        const res = await fetch(`${BRIDGE_URL}/api/studio/diagnostics?limit=70`);
         if (!res.ok) throw new Error('Diagnostics unavailable');
         const data = await res.json();
         if (!mounted) return;

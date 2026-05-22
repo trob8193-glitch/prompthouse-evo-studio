@@ -215,7 +215,7 @@ export function EvoMobileSimulator({ promptBridgeBaseUrl = "http://127.0.0.1:300
   ${selectedTemplate.html}
   <script>
     try {
-      ${selectedTemplate.js || "console.log('App sandbox started.');"}
+      ${selectedTemplate.js || ""}
     } catch(err) {
       console.error(err);
     }

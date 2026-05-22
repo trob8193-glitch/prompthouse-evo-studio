@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Bot, Kanban, MessageSquare, TrendingUp, Users, ShieldCheck, ChevronRight } from 'lucide-react';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
 export const BotAutomationDeck = () => {
   const [phase, setPhase] = useState(1);
@@ -8,9 +9,13 @@ export const BotAutomationDeck = () => {
   const [kpis, setKpis] = useState(null);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:3001/api/reports/kpi')
-      .then(r => r.json())
-      .then(setKpis);
+    try {
+      fetch(`${BRIDGE_URL}/api/reports/kpi`)
+        .then(r => r.json())
+        .then(setKpis);
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   const handleSync = (provider) => {

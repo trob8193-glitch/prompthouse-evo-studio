@@ -59,15 +59,20 @@ class DatasetForge {
     }
 
     async sendToServer(data) {
-        const response = await fetch(`${BASE_URL}/datasets`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: data
-        });
-        if (!response.ok) {
-            throw new Error('Failed to send dataset to server: ' + response.statusText);
+        try {
+            const response = await fetch(`${BASE_URL}/datasets`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: data
+            });
+            if (!response.ok) {
+                throw new Error('Failed to send dataset to server: ' + response.statusText);
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
     }
 

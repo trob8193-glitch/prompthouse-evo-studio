@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
-const BRIDGE_URL = 'http://127.0.0.1:3001';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
 export function EvoEyes({ mode = 'overlay' }) {
   const { 

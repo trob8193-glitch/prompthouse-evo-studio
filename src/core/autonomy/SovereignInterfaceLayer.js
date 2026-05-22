@@ -15,7 +15,7 @@ export class SovereignInterfaceLayer {
    * Allows a bot to call any registered studio feature.
    */
   async botAction(botId, action, params = {}) {
-    console.log(`🤖 [SIL] Bot ${botId} is executing: ${action}`);
+
 
     switch (action) {
       case 'TOGGLE_REALITY_GUARD':
@@ -33,8 +33,8 @@ export class SovereignInterfaceLayer {
 }
 
 export const SIL = new SovereignInterfaceLayer({
-  realityGuard: { toggle: () => console.log('🛡️ RealityGuard Toggled.') },
-  selfHeal: { execute: (p) => console.log(`🛠️ Healing ${p.target}...`) },
-  seedSower: { sowGenesisPack: (id, env) => console.log(`🌱 Sowing ${id} to ${env}...`) },
-  evoEngine: { evolveProfile: (u) => console.log(`🧬 Evolving DNA: ${JSON.stringify(u)}`) }
+  realityGuard: { toggle: () => {} },
+  selfHeal: { execute: (p) => {} },
+  seedSower: { sowGenesisPack: (id, env) => {} },
+  evoEngine: { evolveProfile: (u) => {}}`) }
 });
