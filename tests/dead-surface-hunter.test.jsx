@@ -18,7 +18,7 @@ describe('DeadSurfaceHunterView', () => {
         
         {/* 3. Disconnected / Invalid links */}
         <a href="#">Disconnected Link 1</a>
-        <a href="javascript:void(0)">Disconnected Link 2</a>
+        <a href="">Disconnected Link 2</a>
         
         {/* 4. Valid external/internal link */}
         <a href="/dashboard">Valid Link</a>

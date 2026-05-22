@@ -236,8 +236,8 @@ export function DeadSurfaceHunterView() {
       if (isButton && !hasOnClick && !hasReactHandler) {
         foundIssues.push(`Dead Button: "${textVal.slice(0, 20)}..." (No handler)`);
       }
-      if (href === '#' || href === 'javascript:void(0)') {
-        foundIssues.push(`Invalid link: "${textVal.slice(0, 20)}..." (href="#")`);
+      if (href === '#' || href === '' || href === 'javascript:void(0)') {
+        foundIssues.push(`Invalid link: "${textVal.slice(0, 20)}..." (Dead href)`);
       }
     });
 

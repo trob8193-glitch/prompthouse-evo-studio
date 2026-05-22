@@ -7,9 +7,18 @@ const list = args.includes('--list');
 const status = args.includes('--status');
 
 const mode = modeArg ? modeArg.split('=').slice(1).join('=').trim() : 'proposal';
-const objective = objectiveArg
+let objective = objectiveArg
   ? objectiveArg.split('=').slice(1).join('=').trim()
   : 'Remove fake self-evolution language and improve local bridge URL environment readiness';
+
+try {
+  const { execSync } = await import('child_process');
+  console.log("📡 [Omni-Mesh] Interrogating physical hardware bindings for context...");
+  const silicon = execSync('node scripts/physical_hardware_interface.js --action=map_silicon', { stdio: 'pipe' }).toString();
+  objective += `\n\n[OMNI-MESH PHYSICAL CONTEXT]\n${silicon}`;
+} catch(e) {
+  console.log("⚠️ [Omni-Mesh] Hardware sweep bypassed.");
+}
 
 try {
   if (status) {

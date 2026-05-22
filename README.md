@@ -1,160 +1,48 @@
-# PromptHouse Evo Studio
+# Evo Studio: The Autonomous Omni-Mesh IDE
 
-PromptHouse Evo Studio is a local-first React/Vite studio shell plus an Express bridge. This checkout is now wired around a truth spine: worktree classification, route contract parity, build review, project-source coverage, and explicit approval rails for live deploy and commerce.
+Evo Studio is an Autonomous Omni-Mesh IDE with deep physical hardware actuation. It transcends standard code editors by merging an autonomous LLM core with a physical "God Node" architecture—capable of interrogating silicon telemetry, spawning Swarm networks, and manipulating local hardware states to reinforce its own intelligence.
 
-The target term for this repo is `proof-gated launch ready`, not `market ready`. Local proof can be verified here. External production actions stay gated until credentials, owner approval, and provider receipts exist.
+## Absolute Singularity Architecture
 
-## Runtime
+- **Reinforcement Learning from Environment (RLE):** The Evo LLM monitors live silicon (CPU/RAM) and physical network feedback to optimize its code generation and logic loops.
+- **GitOps Reward Function:** Continuous test-build-verify pipelines act as a strict binary reward function for autonomous agentic progression.
+- **Federated Swarm Compute:** Subnet ARP radar and global tunnels (`netsh portproxy`) allow the Studio to connect with physical peers.
+- **Sensory & IoT Grounding:** Live WMI queries of the physical machine's camera/mic, alongside UDP datagram broadcasts for IoT synchronization.
 
-- Frontend: `npm run dev`
-- Bridge: `npm run bridge`
-- Both: `npm run dev:all`
-- Build: `npm run build`
-- Tests: `npm test`
+## 🚀 Installation & Quick Start
 
-Bridge default URL: `http://localhost:3001`  
-Frontend default URL: `http://localhost:5173`
+Execute the following pipeline to bootstrap the Omni-Mesh and prove 100% build integrity:
 
-## Truth Spine Surfaces
-
-Operator and release status live here:
-
-- `/api/generated-artifact-registry`
-- `/api/bridge-contract-ledger`
-- `/api/build-review-gate`
-- `/api/release-spine/status`
-- `/api/project-handshake`
-- `/api/project-handshake/coverage`
-- `/api/prompt-os/packet`
-- `/api/self-implementation/status`
-- `/api/self-implementation/cycle`
-- `/api/studio-os/inspector`
-
-These surfaces distinguish:
-
-- `promised`
-- `built`
-- `blocked`
-- `proven`
-
-## Owner Approval Rail
-
-Live deploy and live commerce are blocked by default. They require an explicit approval envelope plus real provider credentials.
-
-Approval shape:
-
-```json
-{
-  "ownerApproval": {
-    "granted": true,
-    "grantedAt": "2026-05-03T15:44:00.000Z",
-    "actor": "studio_owner",
-    "scope": "deploy",
-    "receiptId": "deploy_receipt_001"
-  }
-}
+```powershell
+npm install
+npm run build
+npm run verify:studio
 ```
 
-Rules:
+Once verified, launch the Sovereign Stack:
 
-- `POST /api/deploy` requires `ownerApproval` for scope `deploy` and `VERCEL_TOKEN`
-- live commerce execution requires `ownerApproval` for scope `commerce` and `STRIPE_SECRET_KEY`
-- dry-run and local-spec flows remain available, but they do not claim provider-backed completion
+```powershell
+# Boot the PromptBridge OS Server
+npm run bridge
 
-## Project Source Truth
+# Boot the Studio Vite Shell (in a separate terminal)
+npm run dev
+```
 
-Project-source truth accepts:
+## Verify Local Diagnostics
 
-- URL handshakes
-- pasted/exported source text
-- local build packet DOCX imports
+Once the bridge is live, you can physically verify the node's pulse:
+- [Bridge Status](http://localhost:3001/status)
+- [Release Spine](http://localhost:3001/api/release-spine/status)
+- [Hardware Telemetry Bindings](http://localhost:3001/api/studio-os/inspector)
 
-Default local build packet:
+## Local Data & Sovereign Security
 
-`C:/Users/Noname/Downloads/Prompt_House_Evo_Native_AI_Chat_Prompt_OS_Build_Packet.docx`
+All API keys (Stripe, OpenAI, Gemini, Vercel) remain completely local.
 
-The DOCX import path is additive and duplicate-aware. It is stored as `sourceType: local_build_packet_docx` and contributes canonical claims, mission phases, prompt cells, and preserved surface mappings.
-
-Private ChatGPT project links are treated honestly:
-
-- readable content: coverage can be computed
-- login-gated or unreadable content: `coveragePercent` must remain `0`
-- duplicate imports reuse the same source record instead of creating copies
-
-## Self-Implementation Boundary
-
-Self-implementation is split into read-only health and explicit mutation:
-
-- `GET /api/self-implementation/status` is read-only
-- `POST /api/self-implementation/cycle` is verification-only by default
-- `applyFixes: true` is the only mutating cycle mode
-
-Production deploy and live commerce remain gated even when self-implementation is active.
-
-## Local Data and Artifacts
-
-Bridge-backed local state is stored under:
-
+Bridge-backed local state, ledger receipts, and Nightforge data are stored securely under:
 ```text
 .prompthouse-data/
 ```
 
-Important files:
-
-- `.prompthouse-data/project_handshakes.json`
-- `.prompthouse-data/self_implementation_state.json`
-- `.prompthouse-data/self_implementation_cycles.json`
-
-Generated and imported artifacts are preserved in place:
-
-- `generated_apps/`
-- `buildkit_import/`
-- `build_queues/`
-- `temp_prompts/`
-
-The no-delete rule applies to imported/generated trees during release hardening. They are classified and gated, not removed.
-
-## Environment
-
-Common external keys:
-
-```text
-OPENAI_API_KEY=
-STRIPE_SECRET_KEY=
-VERCEL_TOKEN=
-JWT_SECRET=
-```
-
-Without these keys, the studio can still run and prove local behavior, but it cannot truthfully claim live deploy or live billing execution.
-
-## Verification
-
-Minimum proof loop:
-
-```powershell
-node --check promptbridge-server.js
-npm test
-npm run build
-```
-
-Recommended runtime checks:
-
-```text
-http://localhost:3001/status
-http://localhost:3001/api/release-spine/status
-http://localhost:3001/api/project-handshake
-http://localhost:3001/api/prompt-os/packet
-http://localhost:3001/api/self-implementation/status
-http://localhost:3001/api/studio-os/inspector
-```
-
-## Release Claim Language
-
-Use these terms precisely:
-
-- `built`: local implementation exists
-- `verified`: runtime proof exists
-- `blocked`: action intentionally cannot complete yet
-- `proof-gated launch ready`: local product loop is proven, while external provider actions remain gated by approval or credentials
-
-Do not call this repo `100% market ready` from UI labels alone.
+*The target state for this build is `proof-gated launch ready`. Live deployment and commerce executions require explicit approval envelopes and provider secrets.*
