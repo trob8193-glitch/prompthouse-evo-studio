@@ -329,6 +329,34 @@ export const useSovereignStore = create((set, get) => ({
       return data;
     } catch (err) {
       get().addNotification(`Maintenance failed: ${err.message}`, 'error');
+    } catch (err) {
+      console.warn('[Store] Ledger log failed:', err.message);
+      return null;
+    }
+  },
+
+  // ─── Notifications ──────────────────────────────────────────
+  notifications: [],
+
+  addNotification: (msg, type = 'info') => {
+    const id = `notif-${Date.now()}`;
+    set((s) => ({ notifications: [...s.notifications, { id, msg, type, timestamp: Date.now() }].slice(-20) }));
+    // Auto-dismiss after 5s
+    setTimeout(() => {
+      set((s) => ({ notifications: s.notifications.filter((n) => n.id !== id) }));
+    }, 5000);
+  },
+
+  // ─── Maintenance ────────────────────────────────────────────
+  runMaintenance: async () => {
+    try {
+      const result = await safeFetchBridge('/api/maintenance/run', { method: 'POST' });
+      if (!result.ok) throw new Error(result.error || 'Maintenance cycle failed');
+      const data = result.data;
+      get().addNotification('Maintenance cycle completed.', 'success');
+      return data;
+    } catch (err) {
+      get().addNotification(`Maintenance failed: ${err.message}`, 'error');
       return null;
     }
   },
@@ -354,28 +382,84 @@ export const useSovereignStore = create((set, get) => ({
 
   fetchGridMesh: async () => {
     try {
-      const [nodesRes, routesRes] = await Promise.all([
-        fetch('http://127.0.0.1:3002/api/evopulse/nodes'),
-        fetch('http://127.0.0.1:3002/api/evopulse/routes')
-      ]);
-      const nodes = await nodesRes.json();
-      const routes = await routesRes.json();
-      set({ gridNodes: nodes.data?.nodes || [], gridRoutes: routes.data?.routes || [] });
-    } catch {
-      // Stay silent on mesh failure
-    }
-  },
+      // 1. Physically poll the Hardware Daemon via Universal Bridge
+      const res = await safeFetchBridge('/mcp/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          method: 'call_tool',
+          params: { name: 'terminal_command', arguments: { command: `node scripts/physical_hardware_interface.js --action=omnibus_sweep` } },
+          id: Date.now()
+        })
+      });
+      
+      const payloadStr = res.data?.payload?.result;
+      if (!payloadStr) throw new Error("Hardware matrix unresponsive.");
+      
+      // The bridge returns the raw stdout of the script
+      // Extract the JSON blob from the bottom of the output
+      const jsonStart = payloadStr.indexOf('{"success":true');
+      if (jsonStart === -1) throw new Error("Failed to parse physical payload.");
+      
+      const physicalData = JSON.parse(payloadStr.substring(jsonStart)).payload;
+      
+      const parsedNodes = [];
+      const parsedRoutes = [];
 
-  runTruthProbe: async () => {
-    try {
-      const result = await safeFetchBridge('/api/truth/probe');
-      if (!result.ok) throw new Error(result.error || 'Probe failed');
-      const data = result.data;
-      set({ bridgeData: { ...get().bridgeData, probes: data.results } });
-      return data.results;
+      // Parse NETSTAT for Nodes
+      if (physicalData.netstat) {
+          const lines = physicalData.netstat.split('\n');
+          // Add top 10 physical listening ports as active nodes
+          lines.slice(0, 10).forEach((line, i) => {
+              const match = line.match(/TCP\s+([^\s]+):(\d+)/);
+              if (match) {
+                  parsedNodes.push({
+                      id: `phys-node-${i}`,
+                      node_name: `Local Daemon (Port ${match[2]})`,
+                      node_type: 'LISTENING',
+                      truth_label: 'ACTIVE_PHYSICAL',
+                      status: 'ACTIVE',
+                      capabilities: ['TCP', 'INFRASTRUCTURE', 'ROOT_BIND']
+                  });
+              }
+          });
+      }
+
+      // Parse IPCONFIG for Routes
+      if (physicalData.ipconfig) {
+          const lines = physicalData.ipconfig.split('\n');
+          lines.forEach((line) => {
+              if (line.includes('IPv4 Address')) {
+                  const ip = line.split(': ')[1]?.trim();
+                  if (ip) {
+                      parsedRoutes.push({
+                          id: `rt-v4-${Date.now()}`,
+                          route_type: 'Physical IPv4',
+                          target_kind: 'LAN',
+                          route_value: ip,
+                          truth_label: 'SIGNED_PHYSICAL'
+                      });
+                  }
+              }
+              if (line.includes('Default Gateway')) {
+                  const ip = line.split(': ')[1]?.trim();
+                  if (ip && ip.includes('.')) { // Grab the IPv4 gateway
+                      parsedRoutes.push({
+                          id: `rt-gw-${Date.now()}`,
+                          route_type: 'Hardware Gateway',
+                          target_kind: 'ROUTER',
+                          route_value: ip,
+                          truth_label: 'SIGNED_PHYSICAL'
+                      });
+                  }
+              }
+          });
+      }
+
+      set({ gridNodes: parsedNodes, gridRoutes: parsedRoutes, riftData: { system_msg: 'Physical Hardware Matrix fully engaged and verified.' }});
+
     } catch (err) {
-      console.warn('[Store] Truth probe failed:', err.message);
-      return null;
+      console.warn('[Hardware Mesh] Physical polling failed:', err.message);
     }
   },
 

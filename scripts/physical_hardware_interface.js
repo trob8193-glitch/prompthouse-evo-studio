@@ -1,5 +1,5 @@
-const { execSync } = require('child_process');
-
+import { execSync } from 'child_process';
+import process from 'process';
 // Sovereign Network Matrix: Hardware Interface Daemon
 // Physically maps and interrogates IP, WiFi, Bluetooth, Local Nodes, and Signals.
 
