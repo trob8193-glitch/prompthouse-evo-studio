@@ -36,6 +36,16 @@ export async function ensureSchemaForFeature(componentName, code) {
             return;
         }
 
+        // SQL Firewall: strictly block destructive queries
+        const uppercaseSql = sql.toUpperCase();
+        const destructiveKeywords = ['DROP', 'DELETE', 'TRUNCATE', 'ALTER', 'UPDATE', 'GRANT', 'REVOKE'];
+        for (const keyword of destructiveKeywords) {
+            if (uppercaseSql.includes(keyword)) {
+                console.error(`❌ [Schema Firewall] Destructive keyword "${keyword}" detected. Execution aborted for safety.`);
+                return;
+            }
+        }
+
         console.log("🗄️ [Schema Engineer] Database structure inferred. Executing migration...");
         const dbPath = path.resolve('./prompthouse.db');
         const db = new Database(dbPath);

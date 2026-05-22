@@ -16,9 +16,13 @@ function runAudit() {
     });
 }
 
-async function healFile(filePath, errorLog) {
+async function healFile(filePath, errorLog, pastErrors = []) {
     console.log(`\n🏥 [Immune System] Attempting to heal: ${filePath}`);
     const originalCode = fs.readFileSync(filePath, 'utf8');
+
+    const pastFailuresStr = pastErrors.length > 0 
+        ? `\nPREVIOUS HEALING ATTEMPTS FAILED WITH THESE ERRORS:\n${pastErrors.join('\n---\n')}\nDO NOT REPEAT YOUR PREVIOUS MISTAKES.` 
+        : '';
 
     const prompt = `
     You are the Autonomous Immune System. 
@@ -27,6 +31,7 @@ async function healFile(filePath, errorLog) {
     File path: ${filePath}
     Error Log: 
     ${errorLog}
+    ${pastFailuresStr}
     
     Current Code:
     ${originalCode}
@@ -62,6 +67,7 @@ async function runImmuneCycle() {
     console.log("🛡️ [Immune System] Initiating System Health Scan...");
     let maxRetries = 3;
     let attempt = 0;
+    const failureHistory = {}; // Track errors per file
 
     while (attempt < maxRetries) {
         attempt++;
@@ -94,7 +100,11 @@ async function runImmuneCycle() {
         }
 
         for (const file of failedFiles) {
-            await healFile(file, audit.output);
+            const pastErrors = failureHistory[file] || [];
+            await healFile(file, audit.output, pastErrors);
+            // Record this error for the next potential loop
+            if (!failureHistory[file]) failureHistory[file] = [];
+            failureHistory[file].push(audit.output);
         }
     }
 

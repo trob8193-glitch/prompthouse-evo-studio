@@ -17,21 +17,30 @@ async function querySwarmAgent(role, instructions, inputCode = '') {
     Output ONLY valid JSX code. No markdown formatting. No explanations.
     `;
 
-    try {
-        const response = await fetch(LOCAL_LM_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt, model: 'evo-lm' })
-        });
+    let retries = 3;
+    let delay = 2000;
 
-        if (!response.ok) throw new Error(`${role} engine failed.`);
-        const data = await response.json();
-        const code = data.text || data.response || data;
-        return code.replace(/```jsx?/g, '').replace(/```/g, '').trim();
-    } catch (err) {
-        console.error(`[Genesis Swarm: ${role}] Failed:`, err);
-        return null;
+    while (retries > 0) {
+        try {
+            const response = await fetch(LOCAL_LM_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, model: 'evo-lm' })
+            });
+
+            if (!response.ok) throw new Error(`${role} engine HTTP error: ${response.status}`);
+            const data = await response.json();
+            const code = data.text || data.response || data;
+            return code.replace(/```jsx?/g, '').replace(/```/g, '').trim();
+        } catch (err) {
+            console.warn(`⚠️ [Genesis Swarm: ${role}] Fetch failed. Retrying in ${delay}ms... (${retries} attempts left)`);
+            await new Promise(res => setTimeout(res, delay));
+            retries--;
+            delay *= 2;
+        }
     }
+    console.error(`❌ [Genesis Swarm: ${role}] Exponential backoff exhausted. Agent offline.`);
+    return null;
 }
 
 export async function ideateNewFeature(capabilityGraphPath, ragContext = '') {
