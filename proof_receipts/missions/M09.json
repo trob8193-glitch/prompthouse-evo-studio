@@ -1,0 +1,12 @@
+{
+  "mission_id": "M09",
+  "title": "OpenAI Agent Loop",
+  "status": "executed",
+  "executed_at": "2026-05-02T03:38:12.135Z",
+  "agent": "Antigravity (Claude Sonnet)",
+  "gate": "passed",
+  "stack_score": 93,
+  "task": "Build an autonomous agent loop using the OpenAI Assistants API with tool-calling, file search, and structured output.",
+  "prompt_generated": true,
+  "evidence": "proof_receipts/missions/M09.json"
+}

@@ -83,7 +83,7 @@ Ensure the examples are technical, precise, and adhere to the project's premium 
       console.log(`✅ Ingested ${ingestData.ingested} examples.`);
 
       // Log to ledger
-      await fetch(`${BRIDGE_URL}/api/sovereign-ledger/log`, {
+      await fetch(`${BRIDGE_URL}/api/singularity-ledger/log`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

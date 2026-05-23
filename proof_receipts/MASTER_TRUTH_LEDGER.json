@@ -1,0 +1,104 @@
+{
+  "session_id": "SOVEREIGN_SESSION_1777952902462",
+  "finalized_at": "2026-05-05T03:48:22.462Z",
+  "receipt_count": 19,
+  "manifest": [
+    {
+      "file": "build_receipt_max_execution_v1.json",
+      "hash": "d3560e646839db49050e98c540d7e28d816a4fdc629a00a4afe1e3b2e41c6052",
+      "timestamp": "2026-05-01T19:36:15.554Z"
+    },
+    {
+      "file": "evo_eyes_audit.json",
+      "hash": "3f07ae8a810f3862c725d4bae536685be0a6d7824990cc293a06499443d84a58",
+      "timestamp": "2026-05-05T03:42:28.950Z"
+    },
+    {
+      "file": "handshake.json",
+      "hash": "75a261e4760a9ad56bd6d4c1d2991eb7ff50dde104ed56de21b88ce55c4dba46",
+      "timestamp": "2026-05-02T03:13:39.021Z"
+    },
+    {
+      "file": "master_build_report.json",
+      "hash": "0fa42679746f0849e7dc71debfe11f6afc410aad9987c32fa2151cdad7ecd5bb",
+      "timestamp": "2026-05-02T09:22:34.045Z"
+    },
+    {
+      "file": "mission_receipt_M-001.json",
+      "hash": "8894f9c141c2957c87d39f8fdc8157d9b41a4be38bdc85cd3c0c1c6a4e7940ac",
+      "timestamp": "2026-05-05T03:44:34.026Z"
+    },
+    {
+      "file": "mission_receipt_M-002.json",
+      "hash": "869e8d3b25f571c75958068d56b6e036c3a187e26b0753a251dd80e26145ccec",
+      "timestamp": "2026-05-05T03:44:34.238Z"
+    },
+    {
+      "file": "mission_receipt_M-003.json",
+      "hash": "626455a4fdcee2cc6a48793b061f70b893db168815b0e37c71b58f12125eab2f",
+      "timestamp": "2026-05-05T03:44:34.454Z"
+    },
+    {
+      "file": "mission_receipt_M-004.json",
+      "hash": "3729e90f69a81f3c0469b7f45faedd36580c66c7cb5476c5bb69b0d81cfbe321",
+      "timestamp": "2026-05-05T03:44:34.671Z"
+    },
+    {
+      "file": "mission_receipt_M-005.json",
+      "hash": "236c9ee405e471dacbfd81637e996dae6601c033be8c3b84d6d7927c504f2982",
+      "timestamp": "2026-05-05T03:44:34.887Z"
+    },
+    {
+      "file": "mission_run_summary.json",
+      "hash": "0535fe2e54d723ec19d2930ca53ad00b6e3d923d0ec8000dd722235ad2cdbc61",
+      "timestamp": "2026-05-02T03:38:12.139Z"
+    },
+    {
+      "file": "selfbuild_report.json",
+      "hash": "b10f6363be5080c3045f62ea6e2ad27d463fbc8a91d93c096c9c5bb8b2edfc06",
+      "timestamp": "2026-05-05T03:38:33.270Z"
+    },
+    {
+      "file": "sovereign_intelligence_log.json",
+      "hash": "37198748c24f018dbd808e4917f49fc246fe2d582e9d303900e8e698e9538733",
+      "timestamp": "2026-05-05T03:38:13.830Z"
+    },
+    {
+      "file": "swarm_init_1777951041308.json",
+      "hash": "0af64e9de33e7fba782bea7d697ca86dd51b2a695bf7d5104a10f179fe65aac5",
+      "timestamp": "2026-05-05T03:17:21.309Z"
+    },
+    {
+      "file": "swarm_init_1777952021939.json",
+      "hash": "e90786c367bb832d1618aa8a3c757508f8d6b6e0be9241e7b604e033e4506aa0",
+      "timestamp": "2026-05-05T03:33:41.943Z"
+    },
+    {
+      "file": "swarm_init_1777952313292.json",
+      "hash": "3c2815fa97b5db1b8bc47f09f708dc43bb2698e0cd13b892612e392f117c7142",
+      "timestamp": "2026-05-05T03:38:33.293Z"
+    },
+    {
+      "file": "test_report.json",
+      "hash": "4a68f24745541d7cc465cf360b6809a7f1924290439ec72f732f38cba0b49166",
+      "timestamp": "2026-05-03T01:12:01.095Z"
+    },
+    {
+      "file": "training_proof_1777952146880.json",
+      "hash": "596dd74baaab50a49ff0ea6cd002ce790ae6498deb9c2b75771e1cb395b2ce6d",
+      "timestamp": "2026-05-05T03:35:46.883Z"
+    },
+    {
+      "file": "training_proof_1777952559647.json",
+      "hash": "a7f7c2e6c8fd17edee4bfb8db1fdaef697949b2ba93651ec2afb92113c0e6762",
+      "timestamp": "2026-05-05T03:42:39.648Z"
+    },
+    {
+      "file": "ui_build_report.json",
+      "hash": "5b29b1a2783f6228f25a9219c359ced3c6590d414d2b9d6a637106d8d2418d92",
+      "timestamp": "2026-05-02T10:56:51.791Z"
+    }
+  ],
+  "master_seal": "29eda1c5e7d92740a586080b42cdb4df98b352291a1ac71c5e61a3b89450ce4f",
+  "status": "IMMUTABLE_TRUTH_STATE"
+}

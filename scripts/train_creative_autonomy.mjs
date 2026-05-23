@@ -31,7 +31,7 @@ Generate a massive, high-density, production-grade guide covering:
 3. **Uniqueness & Personalization**: How to profile the user (or the current session context) to deliver a unique design every time. How to ensure that work generated for "User A" looks completely different from "User B", tailored to their brand or personality.
 4. **Autonomous Execution of Art**: The pipeline from Creative Prompt -> Mood Board (color/style selection) -> Code Generation -> Visual Audit (checking if it looks good) -> Refinement.
 
-Format the output as a clean Markdown file with a professional, sovereign tone.
+Format the output as a clean Markdown file with a professional, singularity tone.
 Include code snippets or system prompt templates where relevant.
 `;
 

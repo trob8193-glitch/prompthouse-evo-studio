@@ -1,0 +1,1171 @@
+{
+  "audited_at": "2026-05-05T03:57:26.155Z",
+  "total_files": 97,
+  "master_grade_count": 96,
+  "results": [
+    {
+      "file": "agent_ctl_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "b3a71a6d"
+    },
+    {
+      "file": "agent_ctl_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "b3a71a6d"
+    },
+    {
+      "file": "bot_battle_arena.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "81441be3"
+    },
+    {
+      "file": "bot_battle_arena_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "81441be3"
+    },
+    {
+      "file": "canon_memory.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "e473736f"
+    },
+    {
+      "file": "canon_memory_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "e473736f"
+    },
+    {
+      "file": "canon_memory_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "89ae8da4"
+    },
+    {
+      "file": "canon_memory_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "89ae8da4"
+    },
+    {
+      "file": "chrome_bridge_pro.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "e713c811"
+    },
+    {
+      "file": "chrome_bridge_pro_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "e713c811"
+    },
+    {
+      "file": "cli_studio_pro.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "d890943f"
+    },
+    {
+      "file": "cli_studio_pro_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "d890943f"
+    },
+    {
+      "file": "code_forge_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "1610f029"
+    },
+    {
+      "file": "code_forge_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "1610f029"
+    },
+    {
+      "file": "command_deck.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "2588a0ef"
+    },
+    {
+      "file": "command_deck_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "2588a0ef"
+    },
+    {
+      "file": "command_deck_pro.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "46db427e"
+    },
+    {
+      "file": "command_deck_pro_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "46db427e"
+    },
+    {
+      "file": "dead_hunter.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "8f6b5298"
+    },
+    {
+      "file": "dead_hunter_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "8f6b5298"
+    },
+    {
+      "file": "dead_hunter_pro.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "20ecd6b3"
+    },
+    {
+      "file": "dead_hunter_pro_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "20ecd6b3"
+    },
+    {
+      "file": "entropy_lock.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "8931c6c8"
+    },
+    {
+      "file": "entropy_lock_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "8931c6c8"
+    },
+    {
+      "file": "entropy_lock_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "9011b2e8"
+    },
+    {
+      "file": "entropy_lock_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "9011b2e8"
+    },
+    {
+      "file": "export_lab_pro.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "ad0a404a"
+    },
+    {
+      "file": "export_lab_pro_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "ad0a404a"
+    },
+    {
+      "file": "flutter_gen_pro.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "0e9977e2"
+    },
+    {
+      "file": "flutter_gen_pro_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "0e9977e2"
+    },
+    {
+      "file": "forge_pipeline.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "53a29c89"
+    },
+    {
+      "file": "forge_pipeline_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "53a29c89"
+    },
+    {
+      "file": "forge_pipeline_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "1883f445"
+    },
+    {
+      "file": "forge_pipeline_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "1883f445"
+    },
+    {
+      "file": "maturity_score.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "64d83668"
+    },
+    {
+      "file": "maturity_score_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "64d83668"
+    },
+    {
+      "file": "maturity_score_pro.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "985fe349"
+    },
+    {
+      "file": "maturity_score_pro_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "985fe349"
+    },
+    {
+      "file": "merge_court.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "eae0e5e2"
+    },
+    {
+      "file": "merge_court_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "eae0e5e2"
+    },
+    {
+      "file": "merge_court_pro.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "0fdd9186"
+    },
+    {
+      "file": "merge_court_pro_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "0fdd9186"
+    },
+    {
+      "file": "mobile_architect_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "5a90b5e2"
+    },
+    {
+      "file": "mobile_architect_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "5a90b5e2"
+    },
+    {
+      "file": "neural_trace.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "5ddcf3d7"
+    },
+    {
+      "file": "neural_trace_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "5ddcf3d7"
+    },
+    {
+      "file": "omega_reality.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "d169ed91"
+    },
+    {
+      "file": "omega_reality_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "d169ed91"
+    },
+    {
+      "file": "pattern_mirror.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "223cdce9"
+    },
+    {
+      "file": "pattern_mirror_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "223cdce9"
+    },
+    {
+      "file": "pattern_mirror_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "648d845c"
+    },
+    {
+      "file": "pattern_mirror_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "648d845c"
+    },
+    {
+      "file": "prompt_dna_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "4e1d8500"
+    },
+    {
+      "file": "prompt_dna_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "4e1d8500"
+    },
+    {
+      "file": "prompt_genome.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "2e9f9e14"
+    },
+    {
+      "file": "prompt_genome_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "2e9f9e14"
+    },
+    {
+      "file": "prompt_genome_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "a29e9c1b"
+    },
+    {
+      "file": "prompt_genome_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "a29e9c1b"
+    },
+    {
+      "file": "proof_vault.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "2d750e8c"
+    },
+    {
+      "file": "proof_vault_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "2d750e8c"
+    },
+    {
+      "file": "rare_os_capabilities.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "73872c1e"
+    },
+    {
+      "file": "rare_os_capabilities_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "73872c1e"
+    },
+    {
+      "file": "rare_os_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "a5e1892e"
+    },
+    {
+      "file": "rare_os_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "a5e1892e"
+    },
+    {
+      "file": "reality_proxy.js",
+      "stats": {
+        "totalLines": 4,
+        "logicLines": 4,
+        "complexityScore": 1,
+        "densityFactor": "1.00"
+      },
+      "truth_integrity": true,
+      "grade": "DRAFT",
+      "hash": "c8d77544"
+    },
+    {
+      "file": "reality_synthesis.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "15f3d459"
+    },
+    {
+      "file": "reality_synthesis_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "15f3d459"
+    },
+    {
+      "file": "reality_synthesis_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "de1e22a9"
+    },
+    {
+      "file": "reality_synthesis_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "de1e22a9"
+    },
+    {
+      "file": "recursive_evaluation.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "db1a9e97"
+    },
+    {
+      "file": "recursive_evaluation_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "db1a9e97"
+    },
+    {
+      "file": "recursive_swarm.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "ad462a54"
+    },
+    {
+      "file": "recursive_swarm_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "ad462a54"
+    },
+    {
+      "file": "recursive_swarm_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "b465a696"
+    },
+    {
+      "file": "recursive_swarm_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "b465a696"
+    },
+    {
+      "file": "self-evolving_canon.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "e70f5a79"
+    },
+    {
+      "file": "self-evolving_canon_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "e70f5a79"
+    },
+    {
+      "file": "singularity_core.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "5a601720"
+    },
+    {
+      "file": "singularity_core_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "5a601720"
+    },
+    {
+      "file": "sovereign_finality.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "016cca7e"
+    },
+    {
+      "file": "sovereign_finality_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "016cca7e"
+    },
+    {
+      "file": "sovereign_governance.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "87c61674"
+    },
+    {
+      "file": "sovereign_governance_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "87c61674"
+    },
+    {
+      "file": "sovereign_ledger.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "3d599743"
+    },
+    {
+      "file": "sovereign_ledger_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "3d599743"
+    },
+    {
+      "file": "temporal_foresight.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "6a557448"
+    },
+    {
+      "file": "temporal_foresight_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 17,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "6a557448"
+    },
+    {
+      "file": "temporal_foresight_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "a177068e"
+    },
+    {
+      "file": "temporal_foresight_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "a177068e"
+    },
+    {
+      "file": "truth_auditor.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "550879ad"
+    },
+    {
+      "file": "truth_auditor_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "550879ad"
+    },
+    {
+      "file": "vector_memory.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "b10d7011"
+    },
+    {
+      "file": "vector_memory_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "b10d7011"
+    },
+    {
+      "file": "witness_console.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "f7c4232c"
+    },
+    {
+      "file": "witness_console_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "f7c4232c"
+    },
+    {
+      "file": "witness_console_v2.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "d16885ca"
+    },
+    {
+      "file": "witness_console_v2_logic.js",
+      "stats": {
+        "totalLines": 148,
+        "logicLines": 119,
+        "complexityScore": 15,
+        "densityFactor": "0.80"
+      },
+      "truth_integrity": true,
+      "grade": "MASTER",
+      "hash": "d16885ca"
+    }
+  ]
+}

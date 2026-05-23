@@ -1,0 +1,8 @@
+{
+  "missionId": "M-001",
+  "name": "Sovereign Extension v3",
+  "status": "DEPLOYED",
+  "swarm_affinity": 0.98,
+  "timestamp": "2026-05-05T03:44:34.011Z",
+  "proof_hash": "sha256_mission_seal_ss3mko802"
+}

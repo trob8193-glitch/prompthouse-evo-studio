@@ -31,7 +31,7 @@ Generate a massive, high-density, production-grade guide covering:
 3. **Control Logic**: How an AI should generate machine-code or high-precision control instructions (like G-code or SVGs) for such tasks.
 4. **How to Evolve Them**: Principles of improving path efficiency and fidelity autonomously.
 
-Format the output as a clean Markdown file with a professional, sovereign tone.
+Format the output as a clean Markdown file with a professional, singularity tone.
 Include code snippets (e.g., in Python or JS for path algorithms) where relevant.
 `;
 

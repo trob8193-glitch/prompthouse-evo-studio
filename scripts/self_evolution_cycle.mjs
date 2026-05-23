@@ -30,16 +30,56 @@ try {
     process.exit(0);
   }
 
-  const result = await runEvolutionCycle({
-    objective,
-    mode,
-    applyFixes: mode !== 'proposal',
-    runTests: !args.includes('--skip-tests'),
-    runBuild: !args.includes('--skip-build'),
-    allowRollback: !args.includes('--no-rollback'),
-  });
-  console.log(JSON.stringify(result, null, 2));
-  process.exit(result.success ? 0 : 1);
+  const unattended = args.includes('--unattended');
+
+  let success = false;
+  let attempts = 0;
+  const maxAttempts = unattended ? 5 : 1;
+  let currentObjective = objective;
+  let finalResult = null;
+
+  while (!success && attempts < maxAttempts) {
+    attempts++;
+    if (attempts > 1) {
+      console.log(`\n🔄 [Omni-Mesh] Autonomous CI Retry (Attempt ${attempts}/${maxAttempts})`);
+    }
+
+    const result = await runEvolutionCycle({
+      objective: currentObjective,
+      mode,
+      applyFixes: mode !== 'proposal',
+      runTests: !args.includes('--skip-tests'),
+      runBuild: !args.includes('--skip-build'),
+      allowRollback: !args.includes('--no-rollback'),
+      policy: { unattended },
+    });
+
+    finalResult = result;
+    if (result.success) {
+      console.log(`🛡️ [Omni-Mesh] Logic mutated. Routing to ShadowForge for permutation validation...`);
+      try {
+        const { ShadowForge } = await import('../src/core/autonomy/ShadowForge.js');
+        const shadow = new ShadowForge();
+        const shadowValid = await shadow.compilePermutation(currentObjective);
+        
+        if (shadowValid) {
+          success = true;
+          console.log(`✅ [Omni-Mesh] ShadowForge validated. Absolute CI Green State Achieved.`);
+        } else {
+          throw new Error('ShadowForge Permutation Compilation Failed');
+        }
+      } catch (err) {
+         console.log(`⚠️ [Omni-Mesh] ShadowForge validation failed: ${err.message}. Recalculating Matrix...`);
+         currentObjective = `SHADOWFORGE REJECTED PREVIOUS MUTATION. REASON: ${err.message}\n\nObjective: ${objective}`;
+      }
+    } else if (unattended) {
+      console.log(`⚠️ [Omni-Mesh] CI Validation Failed. Recalculating Matrix...`);
+      currentObjective = `PREVIOUS RUN FAILED. REASON: ${JSON.stringify(result.proof || result.blockedReasons)}\n\nObjective: ${objective}`;
+    }
+  }
+
+  console.log(JSON.stringify(finalResult, null, 2));
+  process.exit(success ? 0 : 1);
 } catch (error) {
   console.error(JSON.stringify({ success: false, error: error.message, code: error.code || 'SELF_EVOLUTION_CLI_ERROR' }, null, 2));
   process.exit(1);

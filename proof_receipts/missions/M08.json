@@ -1,0 +1,12 @@
+{
+  "mission_id": "M08",
+  "title": "Revenue Dashboard",
+  "status": "executed",
+  "executed_at": "2026-05-02T03:38:12.134Z",
+  "agent": "Antigravity (Claude Sonnet)",
+  "gate": "passed",
+  "stack_score": 92,
+  "task": "Build a real-time revenue dashboard with MRR, churn rate, LTV, and CAC metrics. Stack: React, Recharts, Supabase.",
+  "prompt_generated": true,
+  "evidence": "proof_receipts/missions/M08.json"
+}

@@ -1,7 +1,7 @@
 /**
  * scripts/generate-handover-report.mjs
  * 
- * Generates the sovereign studio handover report.
+ * Generates the singularity studio handover report.
  * "No secrets. No provider calls."
  */
 

@@ -32,7 +32,7 @@ Generate a massive, high-density, production-grade guide covering:
 3. **Micro-Animations**: Using Framer Motion or CSS transitions to make the interface feel alive and responsive.
 4. **How to Evolve Them**: Principles of iterative UI evolution. How an AI should assess current UI code, identify low-fidelity areas, and generate upgrades (e.g., adding gradients, hover effects, or improving spacing) without breaking functionality.
 
-Format the output as a clean Markdown file with a professional, sovereign tone.
+Format the output as a clean Markdown file with a professional, singularity tone.
 Include code snippets and component templates where relevant.
 `;
 

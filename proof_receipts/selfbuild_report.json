@@ -1,0 +1,409 @@
+{
+  "id": "selfbuild_1777952313268",
+  "timestamp": "2026-05-05T03:38:33.268Z",
+  "total": 50,
+  "succeeded": 0,
+  "failed": 50,
+  "results": [
+    {
+      "name": "Vector Memory",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Temporal Foresight",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Recursive Swarm",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Entropy Lock",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Reality Synthesis",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Truth Auditor",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Forge Pipeline v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Canon Memory",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Witness Console",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Rare OS Capabilities",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Witness Console",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Command Deck",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Merge Court",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Pattern Mirror",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Prompt Genome",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Dead Hunter",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Maturity Score",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Forge Pipeline",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Canon Memory",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Sovereign Ledger",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Neural Trace",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Bot Battle Arena",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Export Lab Pro",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Prompt DNA v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Recursive Evaluation",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Self-Evolving Canon",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Entropy Lock v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Temporal Foresight v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Recursive Swarm v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Sovereign Governance",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Singularity Core",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Reality Synthesis v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Proof Vault",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Agent CTL v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Rare OS v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Chrome Bridge Pro",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Flutter Gen Pro",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Mobile Architect v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Code Forge v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "CLI Studio Pro",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Omega Reality",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Canon Memory v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Witness Console v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Command Deck Pro",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Merge Court Pro",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Pattern Mirror v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Prompt Genome v2",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Dead Hunter Pro",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Maturity Score Pro",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    },
+    {
+      "name": "Sovereign Finality",
+      "success": false,
+      "errors": [
+        "Only 1 lines of logic. Need 20+ lines of real code.",
+        "No exports found. Code must export public API."
+      ]
+    }
+  ]
+}

@@ -76,7 +76,7 @@ async function runAudit() {
   console.log('\n⚙️ Verifying required project files...');
   await verifyRequiredFile('vite.config.js', 'Vite config', failures);
   await verifyRequiredFile('src/App.jsx', 'App shell', failures);
-  await verifyRequiredFile('src/store.js', 'Sovereign store', failures);
+  await verifyRequiredFile('src/store.js', 'Singularity store', failures);
   await verifyRequiredFile('src/features/EvoPulseGridView.jsx', 'EvoPulse Grid view', failures);
   await verifyRequiredFile('promptbridge-server.js', 'PromptBridge server', failures);
 

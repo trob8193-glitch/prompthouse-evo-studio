@@ -41,9 +41,26 @@ async function syncProviderKeys() {
   }
 }
 
+const MAX_DAILY_CREDITS = Number.parseInt(process.env.PH_EVO_MAX_DAILY_CREDITS || '500', 10);
+let dailyCreditsUsed = 0;
+let lastResetDate = new Date().toDateString();
+
+async function checkCostFirewall() {
+  const currentDate = new Date().toDateString();
+  if (currentDate !== lastResetDate) {
+    dailyCreditsUsed = 0;
+    lastResetDate = currentDate;
+  }
+
+  if (dailyCreditsUsed >= MAX_DAILY_CREDITS) {
+    throw new Error(`Cost Firewall Block: Daily credit limit of ${MAX_DAILY_CREDITS} exceeded. Cycle aborted.`);
+  }
+}
+
 async function runCycle() {
   console.log(`\n🔔 [AI_Daemon] NightForge cycle at ${new Date().toISOString()}`);
   await syncProviderKeys();
+  await checkCostFirewall();
 
   const result = await request('/api/nightforge/cycle', {
     method: 'POST',
@@ -59,6 +76,8 @@ async function runCycle() {
   const cycle = result?.result;
   const summary = cycle?.diagnostics?.summary || {};
   const cost = cycle?.costSummary || {};
+  
+  dailyCreditsUsed += cost.creditsUsed || 0;
 
   console.log(`✅ [AI_Daemon] Cycle ${cycle?.id || 'unknown'} complete.`);
   console.log(`   Modules=${summary.modules_scanned ?? 'n/a'} Errors=${summary.modules_error ?? 'n/a'} Warnings=${summary.modules_warning ?? 'n/a'}`);

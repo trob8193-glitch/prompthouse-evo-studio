@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import process from 'process';
 import dgram from 'dgram';
-// Sovereign Network Matrix: Hardware Interface Daemon
+// Singularity Network Matrix: Hardware Interface Daemon
 // Physically maps and interrogates IP, WiFi, Bluetooth, Local Nodes, and Signals.
 
 console.log("📡 [Hardware Daemon] Initiating Physical Subnet & Signal Sweep...");

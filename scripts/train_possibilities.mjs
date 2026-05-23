@@ -36,7 +36,7 @@ Generate a visionary, high-density guide exploring **What is possible** with the
 - How can it invent new tools for itself?
 - What is the ultimate endgame for a studio with these capabilities?
 
-Keep it concise, deep, and written in a professional, sovereign tone.
+Keep it concise, deep, and written in a professional, singularity tone.
 `;
 
   try {

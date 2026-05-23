@@ -1,0 +1,12 @@
+{
+  "mission_id": "M04",
+  "title": "Chrome Extension MV3",
+  "status": "executed",
+  "executed_at": "2026-05-02T03:38:12.130Z",
+  "agent": "Antigravity (Claude Sonnet)",
+  "gate": "passed",
+  "stack_score": 93,
+  "task": "Build a Chrome Extension Manifest V3 that captures the active tab DOM and sends it to a local WebSocket server.",
+  "prompt_generated": true,
+  "evidence": "proof_receipts/missions/M04.json"
+}

@@ -26,12 +26,12 @@ async function train() {
 You are the Cloud Core of the PromptHouse Evo Studio. 
 The user wants to train the studio on "Vite, connections, APIs, and IDEs".
 Generate a massive, high-density, production-grade guide covering:
-1. **Vite**: Build optimizations, HMR (Hot Module Replacement) principles, plugin structures, and handling asset resolution in a sovereign studio.
+1. **Vite**: Build optimizations, HMR (Hot Module Replacement) principles, plugin structures, and handling asset resolution in a singularity studio.
 2. **Connections**: Bridge server orchestration, WebSocket/HTTP communication patterns between the UI and the local filesystem, and maintaining state across disconnected sessions.
 3. **APIs**: Secure key management (redaction), exponential backoff for rate limits, payload minimization, and fallback strategies (like the Local Heuristic Core we just built).
 4. **Autonomous IDEs**: Principles of a self-evolving development environment—how an AI should read files, generate tests, apply fixes, and audit its own code safely without breaking the user's workspace.
 
-Format the output as a clean Markdown file with a professional, sovereign tone.
+Format the output as a clean Markdown file with a professional, singularity tone.
 Include code snippets and architecture diagrams (in text or mermaid if applicable) where relevant.
 `;
 

@@ -72,7 +72,7 @@ async function review() {
   if (score < 0) score = 0;
 
   // Generate the full review in the format expected by the system
-  const fullReview = `# Sovereign Offline Heuristic Review
+  const fullReview = `# Singularity Offline Heuristic Review
 **Status**: OFFLINE MODE (Fallback)
 **System IQ Score**: ${score}/100
 **Files Scanned**: ${snapshot.files.length}
@@ -89,7 +89,7 @@ ${issues.length === 0 ? '- [x] Maintain current zero-drift state.' : issues.map(
 
 # Exact Antigravity Execution Prompt
 The studio is in stable offline mode with a logic density score of ${score}/100. 
-Execute the repair checklist to resolve detected placeholders and maintain the Sovereign baseline.
+Execute the repair checklist to resolve detected placeholders and maintain the Singularity baseline.
 If online quota is available, switch to Cloud Core for deep architectural synthesis.
 `;
 

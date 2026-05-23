@@ -22,7 +22,7 @@ async function train() {
   const systemPrompt = `You are an expert AI trainer. Generate 10 high-quality training examples for the PromptHouse Evo Studio.
 The studio has the following brain structure and local abilities:
 1. **TruthGate**: Guardrails that scan for forbidden markers (dummy, lorem ipsum, etc.) and enforce reality truth states.
-2. **Sovereign Ledger**: A persistent SQLite table that logs actions, truth states, and IQ gains.
+2. **Singularity Ledger**: A persistent SQLite table that logs actions, truth states, and IQ gains.
 3. **Evo LM**: A local model proxy that routes chat to Ollama (Llama3) or falls back to OpenAI/Gemini.
 4. **UniversalAIAdaptor**: A multi-API synergy layer that handles fallback between OpenAI and Gemini.
 
@@ -45,7 +45,7 @@ Ensure the examples are technical, precise, and help the model learn how to use 
       model: "gpt-4o", // Using a higher model to ensure good quality and spend the budget!
       messages: [
         { role: 'system', content: systemPrompt },
-        { role: 'user', content: "Generate 10 examples focusing on TruthGate and Sovereign Ledger." }
+        { role: 'user', content: "Generate 10 examples focusing on TruthGate and Singularity Ledger." }
       ],
       temperature: 0.7,
       response_format: { type: "json_object" }
@@ -78,7 +78,7 @@ Ensure the examples are technical, precise, and help the model learn how to use 
     console.log(`✅ [Train_Brain] Ingested ${ingestData.ingested} examples into ${ingestData.file}`);
 
     // Log to ledger
-    await fetch(`${BRIDGE_URL}/api/sovereign-ledger/log`, {
+    await fetch(`${BRIDGE_URL}/api/singularity-ledger/log`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

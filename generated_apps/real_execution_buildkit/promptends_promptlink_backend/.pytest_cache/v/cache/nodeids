@@ -1,0 +1,6 @@
+[
+  "tests/test_real_logic.py::test_health",
+  "tests/test_real_logic.py::test_manifest_persists_artifacts_and_proof",
+  "tests/test_real_logic.py::test_openai_handshake_blocks_without_secret",
+  "tests/test_real_logic.py::test_promptlink_health_and_connectors"
+]

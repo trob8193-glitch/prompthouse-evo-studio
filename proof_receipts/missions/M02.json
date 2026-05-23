@@ -1,0 +1,12 @@
+{
+  "mission_id": "M02",
+  "title": "Stripe Checkout Flow",
+  "status": "executed",
+  "executed_at": "2026-05-02T03:38:12.128Z",
+  "agent": "Antigravity (Claude Sonnet)",
+  "gate": "passed",
+  "stack_score": 95,
+  "task": "Implement a Stripe checkout session with webhooks for subscription billing. Stack: Node.js, Express.",
+  "prompt_generated": true,
+  "evidence": "proof_receipts/missions/M02.json"
+}

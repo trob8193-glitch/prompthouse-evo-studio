@@ -29,9 +29,9 @@ Generate a massive, high-density, production-grade guide covering:
 1. **Advanced Self-Evolution**: Strategies for autonomous self-reflection, code refactoring, and logic compaction. How the studio should analyze its own codebase to find inefficiencies and rewrite itself to be better.
 2. **Autonomous Automation**: Best practices for background daemons, state machines, and self-healing loops. How to ensure the studio can run 24/7 without deadlocks, infinite loops, or crashing during self-modification.
 3. **Recursive Tool Building**: The concept of the AI building its own tools (like audit scripts, test suites, or visual processors) to help it work better.
-4. **Measuring Intelligence (Sovereign Gain)**: How to quantify the growth of the system (e.g., line coverage, logic density, successful cycles) and use that data to drive the next evolution pass.
+4. **Measuring Intelligence (Singularity Gain)**: How to quantify the growth of the system (e.g., line coverage, logic density, successful cycles) and use that data to drive the next evolution pass.
 
-Format the output as a clean Markdown file with a professional, sovereign tone.
+Format the output as a clean Markdown file with a professional, singularity tone.
 Include system prompt templates or architectural diagrams (in text/mermaid) where relevant.
 `;
 

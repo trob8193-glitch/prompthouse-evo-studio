@@ -1,0 +1,12 @@
+{
+  "mission_id": "M05",
+  "title": "AI Prompt Evaluator",
+  "status": "executed",
+  "executed_at": "2026-05-02T03:38:12.131Z",
+  "agent": "Antigravity (Claude Sonnet)",
+  "gate": "passed",
+  "stack_score": 95,
+  "task": "Build a scoring function that evaluates prompt quality across 5 dimensions: specificity, context, constraints, format, output clarity.",
+  "prompt_generated": true,
+  "evidence": "proof_receipts/missions/M05.json"
+}

@@ -1,0 +1,108 @@
+import fs from 'fs';
+import path from 'path';
+import { spawn } from 'child_process';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const rootDir = path.resolve(__dirname, '..');
+const srcDir = path.join(rootDir, 'src');
+
+const fakePatterns = [
+  { pattern: /mockData/i, label: 'mockData' },
+  { pattern: /(?<!\/\/.*|\/\*.*|\*).*TODO:/i, label: 'TODO (not in audit code)' },
+  { pattern: /(?<!\/\/.*|\/\*.*|\*).*FIXME:/i, label: 'FIXME' },
+  { pattern: /throw new Error\(['"]Not implemented['"]\)/i, label: 'Not Implemented stub' },
+  { pattern: /\/\/ fake(?! positive)/i, label: '// fake comment' },
+];
+
+const scanningFiles = new Set(); // Per-file scanner lock to allow concurrent multi-file scanning
+
+console.log('\x1b[35m[CRUCIBLE] Daemon ignited. Watching for imperfections...\x1b[0m');
+
+function scanFile(filePath) {
+  try {
+    const content = fs.readFileSync(filePath, 'utf-8');
+    
+    for (const { pattern, label } of fakePatterns) {
+      pattern.lastIndex = 0;
+      if (pattern.test(content)) {
+        return { isClean: false, reason: `Detected: ${label}` };
+      }
+    }
+    
+    return { isClean: true };
+  } catch (err) {
+    return { isClean: false, reason: err.message };
+  }
+}
+
+function runRealTest(filePath) {
+  return new Promise((resolve) => {
+    console.log(`\x1b[36m[CRUCIBLE] Auditing real execution metrics for: ${path.basename(filePath)}\x1b[0m`);
+    // Run vitest related to this specific file, enforcing real logic
+    const testProc = spawn('npx', ['vitest', 'run', filePath, '--passWithNoTests'], { cwd: rootDir, shell: true });
+    
+    let stderr = '';
+    testProc.stderr.on('data', d => { stderr += d.toString(); });
+    
+    testProc.on('close', (code) => {
+      if (code !== 0) {
+        resolve({ passed: false, error: stderr || 'Test execution failed.' });
+      } else {
+        resolve({ passed: true });
+      }
+    });
+  });
+}
+
+function invokeRepairAgent(filePath, reason) {
+  return new Promise((resolve) => {
+    console.log(`\x1b[31m[CRUCIBLE] Imperfection detected: ${reason}\x1b[0m`);
+    console.log(`\x1b[33m[CRUCIBLE] Spawning autonomous repair agent for: ${filePath}\x1b[0m`);
+    
+    // Invoke the studio's internal AI agent to replace the fake code with real implementation
+    const prompt = `CRITICAL REPAIR: The file ${filePath} failed the Crucible audit because: ${reason}. Rewrite this file to remove all stubs, mocks, and placeholders. Implement the REAL logic and real database connections.`;
+    
+    const repairProc = spawn('node', ['agent-runtime.js', prompt], { cwd: rootDir, shell: true });
+    
+    repairProc.on('close', (code) => {
+      console.log(`\x1b[32m[CRUCIBLE] Repair agent completed self-implementation.\x1b[0m`);
+      resolve();
+    });
+  });
+}
+
+async function handleFileChange(eventType, filename) {
+  if (!filename || (!filename.endsWith('.js') && !filename.endsWith('.jsx'))) return;
+  
+  const filePath = path.join(srcDir, filename);
+  if (scanningFiles.has(filePath)) return; // Debounce per-file
+  if (!fs.existsSync(filePath)) return;
+  
+  scanningFiles.add(filePath);
+  try {
+    const scanResult = scanFile(filePath);
+    
+    if (!scanResult.isClean) {
+      await invokeRepairAgent(filePath, scanResult.reason);
+    } else {
+      const testResult = await runRealTest(filePath);
+      if (!testResult.passed) {
+        await invokeRepairAgent(filePath, `Tests failed: ${testResult.error}`);
+      } else {
+        console.log(`\x1b[32m[CRUCIBLE] ${filename} is perfectly forged.\x1b[0m`);
+      }
+    }
+  } finally {
+    // Debounce to prevent infinite loops from the repair agent's own writes on this specific file
+    setTimeout(() => { scanningFiles.delete(filePath); }, 2000);
+  }
+}
+
+// Watch the src directory
+if (fs.existsSync(srcDir)) {
+  fs.watch(srcDir, { recursive: true }, handleFileChange);
+} else {
+  console.log('\x1b[31m[CRUCIBLE] No src directory found.\x1b[0m');
+}

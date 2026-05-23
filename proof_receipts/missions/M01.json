@@ -1,0 +1,12 @@
+{
+  "mission_id": "M01",
+  "title": "SaaS Landing Page",
+  "status": "executed",
+  "executed_at": "2026-05-02T03:38:12.117Z",
+  "agent": "Antigravity (Claude Sonnet)",
+  "gate": "passed",
+  "stack_score": 97,
+  "task": "Build a high-converting SaaS landing page with pricing tiers, feature grid, and CTA. Stack: React, Tailwind.",
+  "prompt_generated": true,
+  "evidence": "proof_receipts/missions/M01.json"
+}

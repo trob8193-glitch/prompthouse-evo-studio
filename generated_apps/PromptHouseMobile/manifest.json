@@ -1,0 +1,11 @@
+{
+  "appName": "PromptHouseMobile",
+  "platform": "react-native",
+  "screens": [
+    "Home",
+    "Projects",
+    "Settings"
+  ],
+  "generatedAt": "2026-05-23T06:35:30.685Z",
+  "outputDir": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\generated_apps\\PromptHouseMobile"
+}

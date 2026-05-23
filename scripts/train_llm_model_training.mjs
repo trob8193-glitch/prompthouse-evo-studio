@@ -31,7 +31,7 @@ Generate a massive, high-density, production-grade guide covering:
 3. **API-Based Training**: How to use high-tier cloud models (OpenAI, Gemini) to process large codebase corpora, generate synthetic training data, and guide self-evolution loops.
 4. **Hybrid Orchestration**: Strategies for seamlessly switching between Local Core and Cloud Core based on cost, latency, and task complexity (the Dual-Core architecture).
 
-Format the output as a clean Markdown file with a professional, sovereign tone.
+Format the output as a clean Markdown file with a professional, singularity tone.
 Include code snippets and architecture concepts where relevant.
 `;
 

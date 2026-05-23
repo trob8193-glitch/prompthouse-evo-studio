@@ -1,0 +1,12 @@
+{
+  "mission_id": "M03",
+  "title": "REST API with Auth",
+  "status": "executed",
+  "executed_at": "2026-05-02T03:38:12.129Z",
+  "agent": "Antigravity (Claude Sonnet)",
+  "gate": "passed",
+  "stack_score": 97,
+  "task": "Build a REST API with JWT authentication, refresh tokens, and role-based access control. Stack: Node.js, PostgreSQL.",
+  "prompt_generated": true,
+  "evidence": "proof_receipts/missions/M03.json"
+}

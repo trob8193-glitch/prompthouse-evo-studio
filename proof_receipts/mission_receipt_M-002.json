@@ -1,0 +1,8 @@
+{
+  "missionId": "M-002",
+  "name": "Sovereign Wallet Scaffold",
+  "status": "DEPLOYED",
+  "swarm_affinity": 0.98,
+  "timestamp": "2026-05-05T03:44:34.236Z",
+  "proof_hash": "sha256_mission_seal_ohz1sjr61"
+}

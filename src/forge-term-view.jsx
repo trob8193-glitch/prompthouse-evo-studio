@@ -14,6 +14,8 @@ const SAFE_COMMANDS = [
   /^git (log|status|diff|show|branch)\b/, /^npm (list|run|test)\b/,
   /^node --version/, /^node -v/, /^npx vite\b/, /^npm run dev\b/,
   /^flutter (analyze|test|pub get|pub outdated)\b/,
+  /^npm run (singularity|crucible|lint|format)\b/,
+  /^node scripts\/(singularity|crucible|evolution|spatial|pixel-diff|stable-diffusion|mobile-app-maker|crucible-full-sweep)/,
 ];
 
 const DANGEROUS_COMMANDS = [
@@ -32,30 +34,47 @@ function classifyCommand(cmd) {
 
 // ─── Built-In Command Templates ──────────────────────────────────────────────────
 const COMMAND_TEMPLATES = [
-  { label: '📦 npm install', cmd: 'npm install', category: 'Setup' },
+  // ─── Singularity Tier ──────────────────────────────────
+  { label: '🌀 Singularity Core', cmd: 'npm run singularity', category: 'Singularity' },
+  { label: '🔥 Crucible Daemon', cmd: 'npm run crucible', category: 'Singularity' },
+  { label: '🧬 Evolution Daemon', cmd: 'node scripts/evolution-daemon.mjs', category: 'Singularity' },
+  { label: '🔍 Full Studio Sweep', cmd: 'node scripts/crucible-full-sweep.mjs', category: 'Singularity' },
+  // ─── Vision & Spatial ──────────────────────────────────
+  { label: '🗺️ Spatial Mapper', cmd: 'node scripts/spatial-mapper.mjs', category: 'Vision' },
+  { label: '🔴 Pixel Diff', cmd: 'node scripts/pixel-diff.mjs', category: 'Vision' },
+  { label: '🎨 Stable Diffusion', cmd: 'node scripts/stable-diffusion-node.mjs', category: 'Vision' },
+  { label: '👁️ Evo Eyes Audit', cmd: 'node evo-eyes-audit.cjs', category: 'Vision' },
+  // ─── Mobile ────────────────────────────────────────────
+  { label: '📱 Mobile App Maker', cmd: 'node scripts/mobile-app-maker.mjs', category: 'Mobile' },
+  { label: '🔬 Flutter Analyze', cmd: 'flutter analyze', category: 'Mobile' },
+  { label: '🧹 Flutter Test', cmd: 'flutter test', category: 'Mobile' },
+  // ─── Dev ────────────────────────────────────────────────
   { label: '🚀 Dev Server', cmd: 'npm run dev', category: 'Dev' },
   { label: '🌉 Start Bridge', cmd: 'npm run bridge', category: 'Dev' },
   { label: '🔄 Dev + Bridge', cmd: 'npm run dev:all', category: 'Dev' },
   { label: '🧪 Run Tests', cmd: 'npm test', category: 'Test' },
   { label: '🏗️ Build', cmd: 'npm run build', category: 'Build' },
+  // ─── Quality Gates ─────────────────────────────────────
+  { label: '🧹 Lint', cmd: 'npm run lint', category: 'Quality' },
+  { label: '✨ Format', cmd: 'npm run format', category: 'Quality' },
+  // ─── Info & Git ────────────────────────────────────────
+  { label: '📦 npm install', cmd: 'npm install', category: 'Setup' },
   { label: '🔍 Vite Version', cmd: 'npx vite --version', category: 'Info' },
   { label: '📋 List Files', cmd: 'ls -la src/', category: 'Info' },
   { label: '🌿 Git Status', cmd: 'git status', category: 'Git' },
   { label: '📜 Git Log', cmd: 'git log --oneline -10', category: 'Git' },
-  { label: '🔬 Flutter Analyze', cmd: 'flutter analyze', category: 'Flutter' },
-  { label: '🧹 Flutter Test', cmd: 'flutter test', category: 'Flutter' },
 ];
 
 // ─── ForgeTerm Component ─────────────────────────────────────────────────────────
 export function ForgeTermView() {
   const [history, setHistory] = useState([
-    { type: 'system', text: '╔══════════════════════════════════════╗' },
-    { type: 'system', text: '║  ForgeTerm — Safe Mode Active        ║' },
-    { type: 'system', text: '║  Owner: Dev Bot | Bridge: :3001      ║' },
-    { type: 'system', text: '╚══════════════════════════════════════╝' },
-    { type: 'info', text: '» Virtual safe-mode terminal. Real execution requires PromptBridge on port 3001.' },
-    { type: 'info', text: '» Dangerous commands require Sovereignty approval before sending.' },
-    { type: 'info', text: '» Type "help" to list available templates.' },
+    { type: 'system', text: '╔══════════════════════════════════════════════════════════════╗' },
+    { type: 'system', text: '║  ForgeTerm — Singularity Tier Active                         ║' },
+    { type: 'system', text: '║  Daemons: Crucible • Evolution • Spatial • Vision AI          ║' },
+    { type: 'system', text: '╚══════════════════════════════════════════════════════════════╝' },
+    { type: 'info', text: '» Self-evolving autonomous terminal. Real execution via PromptBridge on port 3001.' },
+    { type: 'info', text: '» Singularity Core scans, repairs, tests, and commits every 60 seconds.' },
+    { type: 'info', text: '» Type "help" to list all available commands.' },
   ]);
   const [input, setInput] = useState('');
   const [bridgeConnected, setBridgeConnected] = useState(false);
@@ -134,7 +153,7 @@ export function ForgeTermView() {
 
     if (classification === 'dangerous') {
       log('error', '⛔ BLOCKED by Boundary: This command is classified as dangerous.');
-      log('error', '   Sovereignty approval required. Contact the studio owner.');
+      log('error', '   Singularityty approval required. Contact the studio owner.');
       addProofReceipt('forge_term', `forge_term_blocked`, 'blocked', { cmd: trimmed, reason: 'dangerous_command' });
       return;
     }

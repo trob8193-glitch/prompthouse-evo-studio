@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
 async function runNuclearAudit() {
-  console.log('\n☢️ [NUCLEAR_AUDIT] Initializing 10-Mission Sovereign Sweep...');
+  console.log('\n☢️ [NUCLEAR_AUDIT] Initializing 10-Mission Singularity Sweep...');
   console.log('══════════════════════════════════════════════════════════════');
 
   const results = {
@@ -63,7 +63,7 @@ async function runNuclearAudit() {
 
     // Generate Report
     const reportPath = path.join(root, '.ai/outbox/nuclear-audit-report.md');
-    const report = `# ☢️ Sovereign Nuclear Audit Report
+    const report = `# ☢️ Singularity Nuclear Audit Report
 Generated: ${new Date().toISOString()}
 
 ## 📡 Truth Integrity
@@ -82,7 +82,7 @@ ${results.evolution_missions.map(m => `- Mission ${m.mission}: ${m.status}`).joi
 - **Unit Tests**: ${results.test_suite}
 
 ## 🏁 Conclusion
-**Sovereign Grade**: ${results.evolution_missions.every(m => m.status === 'SUCCESS') ? 'S-TIER (OMNIPOTENT)' : 'A-TIER (EVOLVING)'}
+**Singularity Grade**: ${results.evolution_missions.every(m => m.status === 'SUCCESS') ? 'S-TIER (OMNIPOTENT)' : 'A-TIER (EVOLVING)'}
 `;
 
     fs.writeFileSync(reportPath, report);

@@ -16,7 +16,7 @@ async function train() {
   You are generating training data for a sentient AI coding studio called PromptHouse Evo Studio.
   The studio uses a "Tree and Web" architecture (Evo Forest) where independent modules are trees, features are branches, and training examples are seeds.
   
-  We recently implemented "ForestSwinger.js", which allows an agent to "swing" between different studios in the ".prompt-garden" directory by calculating "resonance" (relevance scores) with their ".sovereign-brain.json" files.
+  We recently implemented "ForestSwinger.js", which allows an agent to "swing" between different studios in the ".prompt-garden" directory by calculating "resonance" (relevance scores) with their ".singularity-brain.json" files.
   
   Generate 10 high-quality training examples (JSON objects) that teach the AI how to use this advanced autonomy infrastructure.
   The examples should use the metaphors requested by the user: "connecting the webs tree to tree", "branch to branch", "seed to seed", and "webevo".
@@ -24,7 +24,7 @@ async function train() {
   Each example must have:
   - systemPrompt: "You are the Evo Forest Autonomy Guide. You understand the ForestSwinger and the prompt garden."
   - input: A question or command about finding the right tree, calculating resonance, or connecting branches.
-  - output: A detailed answer explaining how to use ForestSwinger, .sovereign-brain.json, or the resonance scoring (+10 for parent seed, +1 for patterns).
+  - output: A detailed answer explaining how to use ForestSwinger, .singularity-brain.json, or the resonance scoring (+10 for parent seed, +1 for patterns).
   
   Return ONLY a JSON array of these objects. No markdown, no code blocks.
   `;

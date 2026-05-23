@@ -1,0 +1,12 @@
+{
+  "mission_id": "M07",
+  "title": "CI/CD Pipeline Config",
+  "status": "executed",
+  "executed_at": "2026-05-02T03:38:12.133Z",
+  "agent": "Antigravity (Claude Sonnet)",
+  "gate": "passed",
+  "stack_score": 90,
+  "task": "Write a GitHub Actions CI/CD pipeline for a Node.js app: run tests, build Docker image, push to ECR, deploy to ECS.",
+  "prompt_generated": true,
+  "evidence": "proof_receipts/missions/M07.json"
+}

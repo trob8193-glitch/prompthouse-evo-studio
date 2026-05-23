@@ -1,0 +1,101 @@
+{
+  "id": "test_run_1777770721094",
+  "timestamp": "2026-05-03T01:12:01.094Z",
+  "passed": 17,
+  "failed": 1,
+  "coverage": 94,
+  "truthState": "broken",
+  "receipts": [
+    {
+      "test": "Proof receipt has correct fields",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.675Z"
+    },
+    {
+      "test": "Proof Deck blocks verified claim without evidence",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.675Z"
+    },
+    {
+      "test": "PromptBase saves a mission",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.767Z"
+    },
+    {
+      "test": "Swarm Fission generates 3+ candidates",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.768Z"
+    },
+    {
+      "test": "Swarm Fission has a winner",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.770Z"
+    },
+    {
+      "test": "ForgeFriction blocks password-in-prompt",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.773Z"
+    },
+    {
+      "test": "ForgeFriction provides repair prompt",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.775Z"
+    },
+    {
+      "test": "Temporal plan has now implementation",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.777Z"
+    },
+    {
+      "test": "VectorPack redacts API keys",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.779Z"
+    },
+    {
+      "test": "DeployRail live-run runs without credentials",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.781Z"
+    },
+    {
+      "test": "DeployRail blocks production deploy without approval",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.782Z"
+    },
+    {
+      "test": "Commerce Rail creates mock product",
+      "status": "broken",
+      "error": "Cannot read properties of undefined (reading 'mode')",
+      "timestamp": "2026-05-03T01:12:00.783Z"
+    },
+    {
+      "test": "NightForge creates patch proposal without deploying",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.948Z"
+    },
+    {
+      "test": "Persistence wires to bridge when active",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.959Z"
+    },
+    {
+      "test": "Bridge status check returns ok",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.959Z"
+    },
+    {
+      "test": "LiveForge renders template draft",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.959Z"
+    },
+    {
+      "test": "Self-Build cycle records audit receipt",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:00.967Z"
+    },
+    {
+      "test": "All 13 gates have verified logic",
+      "status": "verified",
+      "timestamp": "2026-05-03T01:12:01.093Z"
+    }
+  ]
+}

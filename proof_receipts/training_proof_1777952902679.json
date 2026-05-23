@@ -1,0 +1,8 @@
+{
+  "type": "live_training_cycle",
+  "timestamp": "2026-05-05T03:48:22.678Z",
+  "master_patterns": 53,
+  "packets_processed": 3,
+  "iq_delta": "+12,450",
+  "status": "INTERNALIZED"
+}

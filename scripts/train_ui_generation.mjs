@@ -30,7 +30,7 @@ Generate a massive, high-density, production-grade guide covering:
 2. **UI Generation**: Component-driven design, state management, and semantic structure.
 3. **Layout Generation**: Modern CSS (Grid, Flexbox), responsive design, and AI-assisted layout principles (how an AI should structure a layout).
 
-Format the output as a clean Markdown file with a professional, sovereign tone.
+Format the output as a clean Markdown file with a professional, singularity tone.
 Include code snippets and prompt templates where relevant.
 `;
 
