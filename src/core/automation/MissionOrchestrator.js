@@ -1,4 +1,4 @@
-import { Log } from '../autonomy/SovereignLogger.js';
+import { Log } from '../autonomy/SingularityLogger.js';
 import { EVO_DEV_TEAM } from '../../bot-characters.jsx';
 
 /**
@@ -63,7 +63,7 @@ export class MissionOrchestrator {
             eventType: 'NPC_EVENT_GENERATED',
             payload: { botId: mission.botId, botName: bot.name, task: mission.task }
           })
-        }).catch(() => {});
+        }).catch((err) => { Log.info(`[Orchestrator] Rift event log skipped: ${err.message}`); });
       }
     }
   }

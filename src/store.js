@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 /**
- * PH EVO STUDIO — SOVEREIGN STORE (ENTERPRISE GRADE)
+ * PH EVO STUDIO — SINGULARITY STORE (ENTERPRISE GRADE)
  * ═══════════════════════════════════════════════════════════════
  * Central state management for the entire studio. Manages
  * navigation, bridge connectivity, chat, metrics, and API config.
@@ -16,7 +16,7 @@ const getInitialToken = () => {
   return null;
 };
 
-export const useSovereignStore = create((set, get) => ({
+export const useSingularityStore = create((set, get) => ({
   // ─── Authentication ─────────────────────────────────────────
   user: null,
   token: getInitialToken(),
@@ -94,14 +94,14 @@ export const useSovereignStore = create((set, get) => ({
   sidebarCollapsed: false,
   activeFile: 'src/App.jsx',
   terminalOpen: true,
-  terminalTheme: 'sovereign', // 'sovereign' | 'matrix' | 'classic'
+  terminalTheme: 'singularity', // 'singularity' | 'matrix' | 'classic'
   activeTerminalSession: 'main',
   terminalHistory: [],
   bondedNodes: [], 
   singularityLayer: 'diagnostics', // 'diagnostics' | 'semantic' | 'temporal' | 'network' | 'sprouts'
   singularityActive: false,
   terminalSessions: {
-    main: [{ id: 'l1', type: 'system', content: 'PH Evo Master Terminal v3.0 [Sovereign Core] online.', timestamp: Date.now() }],
+    main: [{ id: 'l1', type: 'system', content: 'PH Evo Master Terminal v3.0 [Singularity Core] online.', timestamp: Date.now() }],
     build: [{ id: 'l2', type: 'system', content: 'Build & Compilation Pipeline ready.', timestamp: Date.now() }],
     watch: [{ id: 'l3', type: 'system', content: 'Live Watcher / Hot-Reload channel active.', timestamp: Date.now() }],
     security: [{ id: 'l4', type: 'system', content: 'Shadow Protocol / Security Log active.', timestamp: Date.now() }],
@@ -202,7 +202,7 @@ export const useSovereignStore = create((set, get) => ({
 
   // ─── AI Chat ────────────────────────────────────────────────
   chatMessages: [
-    { id: 'sys-1', role: 'system', content: 'Sovereign Command Deck Online. Ask me anything or give me a production mission.', timestamp: Date.now() }
+    { id: 'sys-1', role: 'system', content: 'Singularity Command Deck Online. Ask me anything or give me a production mission.', timestamp: Date.now() }
   ],
   chatLoading: false,
   chatError: null,
@@ -222,7 +222,7 @@ export const useSovereignStore = create((set, get) => ({
         method: 'POST',
         body: JSON.stringify({
           messages: apiMessages.filter((m) => m.role !== 'system'),
-          systemPrompt: 'You are PH Evo Studio — a sovereign-grade AI development platform. Help the user with prompt engineering, code generation, architecture planning, and studio operations. Be precise, technical, and production-focused.'
+          systemPrompt: 'You are PH Evo Studio — a singularity-grade AI development platform. Help the user with prompt engineering, code generation, architecture planning, and studio operations. Be precise, technical, and production-focused.'
         }),
       });
 
@@ -295,7 +295,7 @@ export const useSovereignStore = create((set, get) => ({
 
   logToLedger: async (feature_id, action, proof_hash, truth_state = 'UNVERIFIED', iq_gain = 0) => {
     try {
-      const result = await safeFetchBridge('/api/sovereign-ledger/log', {
+      const result = await safeFetchBridge('/api/singularity-ledger/log', {
         method: 'POST',
         body: JSON.stringify({ feature_id, action, proof_hash, truth_state, iq_gain }),
       });
@@ -384,10 +384,10 @@ export const useSovereignStore = create((set, get) => ({
     if (state.syncInterval) return;
 
     const poll = () => {
-      get().fetchBridgeStatus().catch(() => {});
-      get().fetchMetrics().catch(() => {});
-      get().fetchRiftStatus().catch(() => {});
-      get().fetchGridMesh().catch(() => {});
+      get().fetchBridgeStatus().catch(Function.prototype);
+      get().fetchMetrics().catch(Function.prototype);
+      get().fetchRiftStatus().catch(Function.prototype);
+      get().fetchGridMesh().catch(Function.prototype);
     };
     poll(); 
     const interval = setInterval(poll, 8000);
@@ -403,4 +403,4 @@ export const useSovereignStore = create((set, get) => ({
 }));
 
 // Legacy compatibility alias
-export const useEvoStore = useSovereignStore;
+export const useEvoStore = useSingularityStore;

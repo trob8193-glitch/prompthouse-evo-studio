@@ -1,5 +1,5 @@
 
-import { Log } from '../autonomy/SovereignLogger.js';
+import { Log } from '../autonomy/SingularityLogger.js';
 import { SelfForge } from '../autonomy/SelfForge.js';
 
 /**
@@ -38,7 +38,7 @@ export class SelfHealer {
             eventType: 'PERMISSION_PROBED',
             payload: { file: filePath, auditType: 'physical_repair' }
           })
-        }).catch(() => {});
+        }).catch((err) => { Log.info(`[SelfHealer] Rift probe skipped: ${err.message}`); });
 
         // In a real cycle, we would create a gap object from the audit
         const gap = { file: filePath, violation: 'drift_detected', severity: 'CRITICAL' };
