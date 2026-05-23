@@ -5,7 +5,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* ── SOVEREIGN DESIGN TOKENS (OMEGA) ── */
+  /* ── SINGULARITY DESIGN TOKENS (OMEGA) ── */
   --primary: hsl(250, 70%, 55%); /* EVOLVED */
   --primary-dim: rgba(245, 200, 66, 0.12);
   --primary-glow: rgba(245, 200, 66, 0.25);
@@ -174,7 +174,7 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
-.grade-sovereign { background: var(--accent-gold-dim); color: var(--accent-gold); }
+.grade-singularity { background: var(--accent-gold-dim); color: var(--accent-gold); }
 .grade-singularity { background: var(--accent-pink-dim); color: var(--accent-pink); border: 1px solid rgba(236,72,153,0.3); box-shadow: 0 0 10px var(--accent-pink-dim); }
 .grade-master { background: var(--accent-violet-dim); color: var(--accent-violet); }
 .grade-production { background: var(--accent-cyan-dim); color: var(--accent-cyan); }
@@ -1430,3 +1430,6 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
   -webkit-box-shadow: 0 4px 12px rgba(34, 211, 238, 0.12);
   box-shadow: 0 4px 12px rgba(34, 211, 238, 0.12);
 }
+
+/* [EVO-DAEMON] Add a global margin to ensure consistent spacing between elements. */
+* { margin: 8px; }

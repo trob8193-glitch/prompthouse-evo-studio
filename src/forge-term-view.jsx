@@ -39,6 +39,8 @@ const COMMAND_TEMPLATES = [
   { label: '🔥 Crucible Daemon', cmd: 'npm run crucible', category: 'Singularity' },
   { label: '🧬 Evolution Daemon', cmd: 'node scripts/evolution-daemon.mjs', category: 'Singularity' },
   { label: '🔍 Full Studio Sweep', cmd: 'node scripts/crucible-full-sweep.mjs', category: 'Singularity' },
+  { label: '🧠 Deep AST Audit', cmd: 'node scripts/deep-audit.mjs src', category: 'Singularity' },
+  { label: '🔧 Gemini Repair', cmd: 'node scripts/gemini-repair.mjs', category: 'Singularity' },
   // ─── Vision & Spatial ──────────────────────────────────
   { label: '🗺️ Spatial Mapper', cmd: 'node scripts/spatial-mapper.mjs', category: 'Vision' },
   { label: '🔴 Pixel Diff', cmd: 'node scripts/pixel-diff.mjs', category: 'Vision' },
