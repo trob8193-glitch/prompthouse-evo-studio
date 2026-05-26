@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "prompthouse-evo-bots": {
+      "command": "node",
+      "args": ["scripts/antigravity-mcp-server.mjs"],
+      "cwd": ".",
+      "env": {}
+    }
+  }
+}
