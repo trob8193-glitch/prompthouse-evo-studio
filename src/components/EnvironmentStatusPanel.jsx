@@ -7,7 +7,7 @@ import { getEnvironmentValidation } from '../services/env-status-client.js';
  * PH EVO STUDIO — ENVIRONMENT STATUS PANEL
  * ═══════════════════════════════════════════════════════════════
  * Displays safe environment configuration status.
- * No secret values. No fake production-ready labels.
+ * No secret values. No unverified production-ready labels.
  */
 export default function EnvironmentStatusPanel() {
   const [status, setStatus] = useState(null);

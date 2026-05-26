@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
  /**
   * Onboarding — Sovereign Implementation
-  * Live status surface only (no fake claims): reports current bridge health.
+  * Live status surface only (no unverified claims): reports current bridge health.
   */
 export const Onboarding = ({ bridgeUrl = 'http://127.0.0.1:3001' }) => {
   const [state, setState] = useState({ status: 'initializing', data: null, error: null });

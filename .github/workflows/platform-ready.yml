@@ -1,0 +1,26 @@
+name: Platform Ready Gates
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/platform-sentinel-engine
+
+permissions:
+  contents: read
+
+jobs:
+  platform-ready:
+    name: Platform Sentinel Readiness Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: node --check src/core/platform-sentinel/index.js
+      - run: node --check generated_apis/platform_sentinel_routes.js
+      - run: npm run platform:strict
+      - run: npm run platform:receipt

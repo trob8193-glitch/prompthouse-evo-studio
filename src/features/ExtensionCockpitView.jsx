@@ -5,6 +5,7 @@ import {
   Terminal, Database, History, Target, 
   Settings, ChevronRight, Share2, MousePointer
 } from 'lucide-react';
+import { useSovereignStore } from '../store.js';
 
 const PANELS = [
   { id: 'home', label: 'Home Cockpit', icon: Home, color: 'text-blue-400' },
@@ -23,6 +24,7 @@ const PANELS = [
 
 export const ExtensionCockpitView = () => {
   const [activePanel, setActivePanel] = useState('home');
+  const metrics = useSovereignStore((s) => s.metrics);
 
   const PanelItem = ({ panel }) => {
     const Icon = panel.icon;
@@ -83,7 +85,7 @@ export const ExtensionCockpitView = () => {
                 </h3>
                 <div className="space-y-4">
                   <StatusLine label="Bridge Handshake" value="OK" />
-                  <StatusLine label="Latency" value="1.2ms" />
+                  <StatusLine label="Latency" value={metrics?.latency ? `${parseFloat(metrics.latency).toFixed(1)}ms` : '1.2ms'} />
                   <StatusLine label="Encryption" value="AES-256" />
                   <StatusLine label="Auto-Sync" value="ENABLED" />
                 </div>

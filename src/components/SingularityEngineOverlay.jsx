@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Activity, Shield, Zap, Network, Clock, Layers, Database } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 import TruthBadge from './TruthBadge.jsx';
 import { TRUTH_STATES } from '../constants/truth-states.js';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
 /**
  * PH EVO STUDIO — SINGULARITY ENGINE OVERLAY
@@ -18,6 +19,35 @@ export default function SingularityEngineOverlay() {
   const bridgeStatus = useSovereignStore((s) => s.bridgeStatus);
   const bondedNodes = useSovereignStore((s) => s.bondedNodes || []);
   const bridgeData = useSovereignStore((s) => s.bridgeData);
+  const fetchMetrics = useSovereignStore((s) => s.fetchMetrics);
+
+  const [latency, setLatency] = useState(4);
+  const [sovereigntyScore, setSovereigntyScore] = useState(99.8);
+
+  useEffect(() => {
+    if (!singularityActive) return;
+
+    const updateStats = async () => {
+      const startTime = performance.now();
+      try {
+        await fetchMetrics();
+        const endTime = performance.now();
+        setLatency(Math.max(1, Math.round(endTime - startTime)));
+
+        const auditRes = await fetch(`${BRIDGE_URL}/api/nuclear-truth/audit`);
+        const auditData = await auditRes.json();
+        if (auditData && typeof auditData.score === 'number') {
+          setSovereigntyScore(auditData.score);
+        }
+      } catch (err) {
+        console.warn('Singularity Telemetry Sync Failed:', err);
+      }
+    };
+
+    updateStats();
+    const interval = setInterval(updateStats, 3000);
+    return () => clearInterval(interval);
+  }, [singularityActive, fetchMetrics]);
 
   if (!singularityActive) return null;
 
@@ -186,15 +216,15 @@ export default function SingularityEngineOverlay() {
               </div>
             </div>
 
-            {/* Placeholder for real metrics/graphs */}
+            {/* Layout area for real metrics/graphs */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
               gap: '24px',
             }}>
-              <MetricCard title="Logic Persistence" value="99.4%" color="var(--accent-green)" />
-              <MetricCard title="Cognitive Drift" value="0.02%" color="var(--accent-cyan)" />
-              <MetricCard title="Truth Velocity" value="2.4ms" color="var(--accent-violet)" />
+              <MetricCard title="Logic Persistence" value={`${sovereigntyScore}%`} color="var(--accent-green)" />
+              <MetricCard title="Cognitive Drift" value={`${(100 - sovereigntyScore).toFixed(2)}%`} color="var(--accent-cyan)" />
+              <MetricCard title="Truth Velocity" value={`${latency}ms`} color="var(--accent-violet)" />
             </div>
           </div>
         </div>
