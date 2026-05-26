@@ -46,7 +46,14 @@
     "evo:strict": "node scripts/evo_llm_pipeline.mjs --dataset --eval --strict",
     "evo:train-status": "node scripts/evo_llm_orchestrator_status.mjs",
     "evo:train-plan": "node scripts/evo_llm_orchestrator_status.mjs --plan --provider=local-dataset",
-    "evo:train-plan-provider": "node scripts/evo_llm_orchestrator_status.mjs --plan --provider=openai"
+    "evo:train-plan-provider": "node scripts/evo_llm_orchestrator_status.mjs --plan --provider=openai",
+    "platform:status": "node scripts/platform_ready_check.mjs --json",
+    "platform:audit": "node scripts/platform_ready_check.mjs --audit --json",
+    "platform:strict": "node scripts/platform_ready_strict.mjs",
+    "platform:receipt": "node scripts/platform_ready_receipt.mjs",
+    "platform:repair-plan": "node scripts/platform_repair_plan.mjs",
+    "platform:release-verdict": "node scripts/platform_ready_check.mjs --release-verdict",
+    "platform:ready": "npm run platform:strict && npm run platform:receipt"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
