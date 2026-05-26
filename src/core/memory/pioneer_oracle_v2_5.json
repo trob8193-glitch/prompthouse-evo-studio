@@ -1849,7 +1849,7 @@
       "id": "truth_gap_TruthGate.js",
       "file": "C:\\Users\\Noname\\.gemini\\antigravity\\scratch\\prompthouse-evo-studio\\src\\core\\truth\\TruthGate.js",
       "severity": "high",
-      "issue": "Detected Fake Pattern: \"dummy\", Detected Fake Pattern: \"Ghost-Stub\", Detected Fake Pattern: \"lorem ipsum\", Detected Fake Pattern: \"test data\", Detected Fake Pattern: \"sample text\", Detected Fake Pattern: \"example.com\", Detected Fake Pattern: \"foo\", Detected Fake Pattern: \"bar\", Detected Fake Pattern: \"baz\", Detected Fake Pattern: \"Theatrical-Stub\"",
+      "issue": "Detected Fake Pattern: \"stub-value\", Detected Fake Pattern: \"Ghost-Stub\", Detected Fake Pattern: \"lorem ipsum\", Detected Fake Pattern: \"test data\", Detected Fake Pattern: \"sample text\", Detected Fake Pattern: \"example.com\", Detected Fake Pattern: \"foo\", Detected Fake Pattern: \"bar\", Detected Fake Pattern: \"baz\", Detected Fake Pattern: \"Theatrical-Stub\"",
       "status": "open"
     },
     {
@@ -2304,7 +2304,7 @@
       "id": "truth_gap_rare-capabilities-engine.js",
       "file": "C:\\Users\\Noname\\.gemini\\antigravity\\scratch\\prompthouse-evo-studio\\src\\rare-capabilities-engine.js",
       "severity": "high",
-      "issue": "Detected Fake Pattern: \"dummy\", Detected Fake Pattern: \"Ghost-Stub\", Detected Fake Pattern: \"Theatrical-Stub\"",
+      "issue": "Detected Fake Pattern: \"stub-value\", Detected Fake Pattern: \"Ghost-Stub\", Detected Fake Pattern: \"Theatrical-Stub\"",
       "status": "open"
     },
     {
@@ -2318,7 +2318,7 @@
       "id": "truth_gap_real-execution-views.jsx",
       "file": "C:\\Users\\Noname\\.gemini\\antigravity\\scratch\\prompthouse-evo-studio\\src\\real-execution-views.jsx",
       "severity": "high",
-      "issue": "Detected Fake Pattern: \"dummy\", Detected Fake Pattern: \"bar\", Detected Fake Pattern: \"Theatrical-Stub\"",
+      "issue": "Detected Fake Pattern: \"stub-value\", Detected Fake Pattern: \"bar\", Detected Fake Pattern: \"Theatrical-Stub\"",
       "status": "open"
     },
     {

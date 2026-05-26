@@ -1,6 +1,13 @@
 import { join } from 'path';
 import { writeFileSync, mkdirSync } from 'fs';
 import { Log } from '../autonomy/SovereignLogger.js';
+export class SaasOrchestrator {
+  constructor(aiAdaptor) {
+    this.ai = aiAdaptor;
+    this.sandboxDir = './sandbox';
+  }
+
+  async generate(blueprintMessage) {
     const blueprintRes = await this.ai.generateResponse(blueprintMessage);
     
     let blueprint;

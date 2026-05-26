@@ -518,8 +518,48 @@ export class MobileEngine {
     this.iq_baseline = 165.0;
   }
   async execute(params = {}) {
-    Log.info('🚀 [Mobile-engine] Executing production logic...');
-    return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
+    Log.info(`🚀 [Mobile-engine] Forging Mobile Architecture: ${params.appName || 'App'}`);
+    
+    // Evaluate the code templates
+    const appName = params.appName || 'EvoApp';
+    const arch = params.architecture || 'clean_riverpod';
+    const features = params.features || ['Home', 'Profile', 'Settings'];
+    
+    const files = {};
+    const isFlutter = arch.includes('clean') || arch.includes('riverpod') || arch.includes('bloc');
+    
+    if (isFlutter) {
+      files['pubspec.yaml'] = CODE_TEMPLATES.flutter_pubspec(appName, arch);
+      files['lib/router/app_router.dart'] = CODE_TEMPLATES.flutter_router(features.join(', '));
+      files['lib/services/api_service.dart'] = CODE_TEMPLATES.api_service(appName);
+      
+      for (const feature of features) {
+        files[`lib/features/${toSnake(feature)}/${toSnake(feature)}_feature.dart`] = 
+          CODE_TEMPLATES.flutter_feature(feature, arch);
+      }
+    } else {
+      // React Native logic
+      for (const feature of features) {
+        files[`src/screens/${toPascal(feature)}Screen.js`] = CODE_TEMPLATES.rn_component(feature);
+        files[`src/stores/${toSnake(feature)}_store.js`] = CODE_TEMPLATES.zustand_store(feature);
+      }
+    }
+
+    try {
+      const res = await fetch('http://127.0.0.1:3001/api/mobile/scaffold', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ appName, architecture: arch, features, files })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Scaffolding failed');
+      
+      Log.success(`✅ [Mobile-engine] Successfully scaffolded ${appName} to ${data.exportDir}`);
+      return { success: true, timestamp: new Date().toISOString(), result: data };
+    } catch (err) {
+      Log.error(`❌ [Mobile-engine] Execution failed: ${err.message}`);
+      return { success: false, error: err.message };
+    }
   }
   getStatus() {
     return { id: 'mobile-engine', grade: 'S+++++', state: 'VERIFIED', resonance: 0.99 };

@@ -4,5 +4,17 @@
         "*.svg": "default",
         "*.sprite": "d2rmodding.spriteViewer"
     },
-    "python.terminal.useEnvFile": true
+    "python.terminal.useEnvFile": true,
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/dist": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true
+    },
+    "eslint.workingDirectories": [
+        { "mode": "auto" }
+    ],
+    "eslint.ignorePath": ".eslintignore"
 }

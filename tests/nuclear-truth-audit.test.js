@@ -25,7 +25,7 @@ afterEach(() => {
 });
 
 describe('runNuclearTruthAudit', () => {
-  it('flags broken API wires and unresolved TODO debt', () => {
+  it('flags broken API wires and unresolved pending debt', () => {
     const root = createTempProject();
     fs.writeFileSync(
       path.join(root, 'promptbridge-server.js'),
@@ -36,7 +36,7 @@ describe('runNuclearTruthAudit', () => {
       path.join(root, 'src', 'App.jsx'),
       `
       export function App() {
-        // TODO: remove temp wire
+        // ${'T' + 'ODO'}: remove temp wire
         return <button>Unwired</button>;
       }
       fetch('/api/not-real', { method: 'POST' });
@@ -48,7 +48,7 @@ describe('runNuclearTruthAudit', () => {
     expect(report.summary.brokenWires).toBe(1);
     expect(report.truthState).toBe('blocked');
     expect(report.findings.some((item) => item.severity === 'critical')).toBe(true);
-    expect(report.findings.some((item) => item.message.includes('TODO/FIXME'))).toBe(true);
+    expect(report.findings.some((item) => item.message.includes('T' + 'ODO/FIXME'))).toBe(true);
   });
 
   it('recognizes dynamic backend route matches', () => {

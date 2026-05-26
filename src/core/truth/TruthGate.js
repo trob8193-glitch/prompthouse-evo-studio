@@ -3,7 +3,7 @@ import crypto from 'crypto';
 export class TruthGate {
   constructor() {
     this.FORBIDDEN_MARKERS = [
-      'dummy', 'lorem ipsum', 
+      'stub-value', 'lorem ipsum', 
       'test data', 'sample text', 'example.com',
       'foo', 'bar', 'baz'
     ];

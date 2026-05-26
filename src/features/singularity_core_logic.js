@@ -15,9 +15,38 @@ export class SingularityCoreLogic {
   }
 
   async execute(params = {}) {
-    const bridge = new UniversalBridge();
-    const toolId = this.constructor.name.toLowerCase().replace('logic', '');
-    return await bridge.dispatch(toolId, 'execute', params);
+    Log.info('🌌 [SingularityCore] Activating Omni-Evolution & Audits...');
+    
+    // 1. Fetch deep studio diagnostic inspector
+    let inspectorResult = null;
+    try {
+      const res1 = await fetch('http://127.0.0.1:3001/api/studio-os/inspector');
+      inspectorResult = await res1.json();
+      Log.info('🌌 [SingularityCore] Deep Inspector completed.');
+    } catch (e) {
+      Log.warn(`🌌 [SingularityCore] Inspector failed: ${e.message}`);
+    }
+
+    // 2. Trigger active evolution (unless skipped)
+    let evolutionResult = null;
+    if (params.skipEvolution !== true) {
+      try {
+        const res2 = await fetch('http://127.0.0.1:3001/api/evolution/activate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        evolutionResult = await res2.json();
+        Log.success('🌌 [SingularityCore] Evolution cycle activated.');
+      } catch (e) {
+        Log.warn(`🌌 [SingularityCore] Evolution failed: ${e.message}`);
+      }
+    }
+
+    return { 
+      success: true, 
+      inspector: inspectorResult, 
+      evolution: evolutionResult 
+    };
   }
 
   getStatus() {
@@ -29,37 +58,3 @@ export class SingularityCoreLogic {
     };
   }
 }
-
-// Logic Density Filler Line 1
-// Logic Density Filler Line 2
-// Logic Density Filler Line 3
-// Logic Density Filler Line 4
-// Logic Density Filler Line 5
-// Logic Density Filler Line 6
-// Logic Density Filler Line 7
-// Logic Density Filler Line 8
-// Logic Density Filler Line 9
-// Logic Density Filler Line 10
-// Logic Density Filler Line 11
-// Logic Density Filler Line 12
-// Logic Density Filler Line 13
-// Logic Density Filler Line 14
-// Logic Density Filler Line 15
-// Logic Density Filler Line 16
-// Logic Density Filler Line 17
-// Logic Density Filler Line 18
-// Logic Density Filler Line 19
-// Logic Density Filler Line 20
-// Logic Density Filler Line 21
-// Logic Density Filler Line 22
-// Logic Density Filler Line 23
-// Logic Density Filler Line 24
-// Logic Density Filler Line 25
-// Logic Density Filler Line 26
-// Logic Density Filler Line 27
-// Logic Density Filler Line 28
-// Logic Density Filler Line 29
-// Logic Density Filler Line 30
-// Logic Density Filler Line 31
-// Logic Density Filler Line 32
-// Logic Density Filler Line 33

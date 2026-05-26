@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
   Activity, Eye, Swords, Sparkles, BarChart3, FolderOpen, Gauge, Zap, ChevronRight,
-  ExternalLink, Share2
+  ExternalLink, Share2, Bot
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -34,6 +34,7 @@ export const NAV_GROUPS = [
       { id: 'duel-arena', label: 'Duel Arena', icon: Swords },
       { id: 'ai-generator', label: 'AI Generator', icon: Zap },
       { id: 'evopulse-grid', label: 'EvoPulse Grid', icon: Share2 },
+      { id: 'agent-copilot', label: 'Agent Copilot', icon: Bot },
     ],
   },
   {

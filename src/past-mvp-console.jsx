@@ -11,7 +11,10 @@ import { generateTemporalStack } from './temporal-stackchain.js';
 import { buildVectorPack, packToContextString } from './vector-pack.js';
 import { runDeployRail } from './deploy-rail.js';
 import { createCommerceProduct, createPricingTable } from './commerce-rail.js';
-import { runNightForgeCycle } from './nightforge.js';
+async function runNightForgeCycle(payload) {
+  const r = await fetch('/api/nightforge/cycle', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+  return r.json();
+}
 
 import { universalSend } from './lib/universal-transport.js';
 
@@ -177,7 +180,7 @@ export default function PastMVPConsole() {
   const handleNightForge = async () => {
     setLoading(true);
     log('NightForge Daemon running scan cycle...');
-    const result = await runNightForgeCycle({ callBridge });
+    const result = await runNightForgeCycle({});
     setNightforgeResult(result);
     log(`NightForge complete. ${result.proposedActions.length} proposals. No silent deploys made.`);
     refreshAll();
@@ -212,7 +215,7 @@ export default function PastMVPConsole() {
     createCommerceProduct(selectedMission.id, { productName: selectedMission.title, price: 2999, mode: "[PURGED BY OMEGA PROTOCOL]" });
 
     log('Step 7/7: NightForge scan...');
-    await runNightForgeCycle({ callBridge });
+    await runNightForgeCycle({});
 
     addProofReceipt(selectedMission.id, 'self_build:full_audit', 'verified', { evidenceType: 'audit_log' });
 

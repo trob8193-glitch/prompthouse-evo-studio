@@ -11,7 +11,7 @@ const BRIDGE_URL = 'http://127.0.0.1:3001';
 
 async function train() {
   if (!process.env.OPENAI_API_KEY) {
-    console.log('❌ OPENAI_API_KEY is not set.');
+    console.log('[REDACTED KEY LOG]');
     process.exit(1);
   }
 
@@ -21,7 +21,7 @@ async function train() {
 
   const systemPrompt = `You are an expert AI trainer. Generate 10 high-quality training examples for the PromptHouse Evo Studio.
 The studio has the following brain structure and local abilities:
-1. **TruthGate**: Guardrails that scan for forbidden markers (dummy, lorem ipsum, etc.) and enforce reality truth states.
+1. **TruthGate**: Guardrails that scan for forbidden markers (stub-value, lorem ipsum, etc.) and enforce reality truth states.
 2. **Singularity Ledger**: A persistent SQLite table that logs actions, truth states, and IQ gains.
 3. **Evo LM**: A local model proxy that routes chat to Ollama (Llama3) or falls back to OpenAI/Gemini.
 4. **UniversalAIAdaptor**: A multi-API synergy layer that handles fallback between OpenAI and Gemini.

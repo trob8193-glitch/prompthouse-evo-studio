@@ -11,7 +11,7 @@ const BRIDGE_URL = 'http://127.0.0.1:3001';
 
 async function train() {
   if (!process.env.OPENAI_API_KEY) {
-    console.log('❌ OPENAI_API_KEY is not set.');
+    console.log('[REDACTED KEY LOG]');
     process.exit(1);
   }
 

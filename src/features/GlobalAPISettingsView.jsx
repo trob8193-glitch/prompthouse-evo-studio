@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Key, Save, TestTube, CheckCircle2, AlertCircle, Loader2, Shield } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
-import { getNightForgeSettings, updateNightForgeSettings } from '../nightforge.js';
 import OwnerApprovalPanel from '../components/OwnerApprovalPanel.jsx';
 import { OWNER_APPROVAL_SCOPES } from '../services/owner-approval-client.js';
 
@@ -39,7 +38,8 @@ export function GlobalAPISettingsView() {
   useEffect(() => {
     let mounted = true;
     setNfLoading(true);
-    getNightForgeSettings()
+    fetch('/api/nightforge/settings')
+      .then(res => res.json())
       .then((payload) => {
         if (mounted) setNfForce3(Boolean(payload?.settings?.forceThreeProviderTeam));
       })
@@ -72,7 +72,12 @@ export function GlobalAPISettingsView() {
     const nextValue = !nfForce3;
     setNfSaving(true);
     try {
-      await updateNightForgeSettings({ forceThreeProviderTeam: nextValue });
+      const res = await fetch('/api/nightforge/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ forceThreeProviderTeam: nextValue })
+      });
+      if (!res.ok) throw new Error('Network error');
       setNfForce3(nextValue);
       addNotification(
         nextValue

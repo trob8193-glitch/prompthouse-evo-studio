@@ -9,11 +9,17 @@ function ignoreName(name) {
     'extension_build', 'zip_temp', 'zip_temp_chunk', 'zip_temp_v1_2',
     'scratch', 'temp_prompts', 'evogenage', 'browser_bridge_receipts',
     'proof_receipts', 'server_output.txt', 'bridge-runtime.log',
-    'bridge_ignition.log', 'bridge-runtime.err.log', 'bridge-dev.out.log',
-    'bridge-dev.err.log', 'frontend-runtime.log', 'vite-runtime.log',
-    'pioneer_oracle_v2_5.json', 'lexicon.json'
+    'bridge-dev.out.log', 'bridge-dev.err.log', 'frontend-runtime.log',
+    'vite-runtime.log', 'bridge-runtime.err.log', 'bridge_ignition.log',
+    'pioneer_oracle_v2_5.json', 'lexicon.json',
+    '.gradle', '.prompt-garden', '.shadow-forge', 'android',
+    '.idea', '.kotlin', '.cxx', 'build'
   ];
-  return ignored.includes(name) || name.endsWith('.log') || name.endsWith('.shard.json');
+  return ignored.includes(name)
+    || name.endsWith('.log')
+    || name.endsWith('.shard.json')
+    || name.endsWith('.lock')
+    || name.endsWith('.hprof');
 }
 
 function copyRecursive(src, dest) {
@@ -26,7 +32,15 @@ function copyRecursive(src, dest) {
     }
   } else {
     fs.mkdirSync(path.dirname(dest), { recursive: true });
-    fs.copyFileSync(src, dest);
+    try {
+      fs.copyFileSync(src, dest);
+    } catch (err) {
+      if (err.code === 'EBUSY' || err.code === 'EPERM') {
+        // Skip locked/busy files — they are runtime artifacts, not source
+        return;
+      }
+      throw err;
+    }
   }
 }
 

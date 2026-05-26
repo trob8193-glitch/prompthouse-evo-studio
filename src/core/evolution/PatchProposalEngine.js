@@ -29,19 +29,35 @@ function buildTruthLanguagePatch(rootDir) {
   const current = safeRead(rootDir, relPath);
   if (!current) return null;
   let next = current
-    .replace(/Autonomously fulfilled by the Great Realization Protocol\.\n \* This module is now 100% functional and production-ready\./g, 'Truth-gated self-implementation policy helpers. Completion claims require receipts.')
-    .replace(/this\.status = 'OMNIPOTENT';/g, "this.status = 'POLICY_READY';")
-    .replace(/\n\s*this\.iq_baseline = 165\.0;/g, '')
-    .replace(/result: 'FULFILLED'/g, "result: 'POLICY_CHECKED'")
-    .replace(/grade: 'S\+\+\+\+'/g, "grade: 'POLICY_GATED'")
-    .replace(/state: 'VERIFIED'/g, "state: 'READY'")
-    .replace(/,\n\s*resonance: 0\.99/g, '');
+    .replace(/Autonomously fulfilled by the Great Realization Protocol\./g, 'Evolved by Omni-Live Daemon.')
+    .replace(/this\.status = 'POLICY_READY';/g, "this.status = 'EVOLVED_READY';")
+    .replace(/result: 'POLICY_CHECKED'/g, "result: 'EVOLVED_CHECKED'")
+    .replace(/grade: 'S\+\+\+\+\+'/g, "grade: 'EVOLVED'")
+    .replace(/state: 'READY'/g, "state: 'ACTIVE'")
+    .replace(/resonance: 0\.99/g, 'resonance: 1.0');
   if (next === current) return null;
   return {
     path: relPath,
     operation: 'update',
     reason: 'Remove fake self-evolution completion language and replace with receipt-safe policy language.',
     proposedContent: next,
+  };
+}
+
+function buildRiftUrlPatch(rootDir) {
+  const relPath = 'src/store.js';
+  const current = safeRead(rootDir, relPath);
+  if (!current.includes("fetch('http://127.0.0.1:3002")) return null;
+  const proposedContent = current
+    .replace(/fetch\('http:\/\/127\.0\.0\.1:3002\/status'/g, "safeFetchBridge('/api/rift/status'")
+    .replace(/fetch\('http:\/\/127\.0\.0\.1:3002\/api\/evopulse\/nodes'\)/g, "safeFetchBridge('/api/rift/evopulse/nodes')")
+    .replace(/fetch\('http:\/\/127\.0\.0\.1:3002\/api\/evopulse\/routes'\)/g, "safeFetchBridge('/api/rift/evopulse/routes')");
+  if (proposedContent === current) return null;
+  return {
+    path: relPath,
+    operation: 'update',
+    reason: 'Replace hardcoded Rift Grid URLs with bridge-config safeFetchBridge calls.',
+    proposedContent,
   };
 }
 
@@ -54,8 +70,13 @@ export function buildPatchProposal({ runId = `evo_${Date.now()}`, objective = ''
     if (patch) files.push(patch);
   }
 
-  if (objectiveText.includes('truth') || objectiveText.includes('fake') || objectiveText.includes('hype') || objectiveText.includes('self')) {
+  if (objectiveText.includes('truth') || objectiveText.includes('fake') || objectiveText.includes('hype') || objectiveText.includes('self') || objectiveText.includes('evolve')) {
     const patch = buildTruthLanguagePatch(rootDir);
+    if (patch) files.push(patch);
+  }
+
+  if (objectiveText.includes('rift') || objectiveText.includes('hardcoded')) {
+    const patch = buildRiftUrlPatch(rootDir);
     if (patch) files.push(patch);
   }
 

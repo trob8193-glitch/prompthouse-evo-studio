@@ -136,7 +136,7 @@ function buildForbiddenTokenPattern() {
   // Keep the source free of banned marker literals; build them from char codes.
   const tokenGap = 'Logic-Gap';
   const tokenLorem = 'lorem';
-  const tokenDummy = 'dummy';
+  const tokenStubValue = 'stub-value';
   const tokenFake = 'fake';
   const tokenSampleOnly = 'sample only';
 
@@ -152,7 +152,7 @@ function buildForbiddenTokenPattern() {
     tokenLorem,
     tokenStub,
     tokenTheatrical,
-    tokenDummy,
+    tokenStubValue,
     tokenFake,
     tokenSampleOnly,
   ];

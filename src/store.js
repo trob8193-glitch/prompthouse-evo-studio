@@ -404,3 +404,4 @@ export const useSingularityStore = create((set, get) => ({
 
 // Legacy compatibility alias
 export const useEvoStore = useSingularityStore;
+export const useSovereignStore = useSingularityStore;

@@ -15,9 +15,23 @@ export class PromptGenomeLogic {
   }
 
   async execute(params = {}) {
-    const bridge = new UniversalBridge();
-    const toolId = this.constructor.name.toLowerCase().replace('logic', '');
-    return await bridge.dispatch(toolId, 'execute', params);
+    const rawPrompt = params.prompt || 'Please create a web app';
+    Log.info('🧬 [PromptGenome] Dispatching prompt compilation...');
+    try {
+      const res = await fetch('http://127.0.0.1:3001/v1/prompts/compile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: rawPrompt })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Compile failed');
+      
+      Log.success(`🧬 [PromptGenome] Prompt dense-compiled by ${data.provider}`);
+      return { success: true, result: data.result, provider: data.provider };
+    } catch (err) {
+      Log.error(`🧬 [PromptGenome] Compile error: ${err.message}`);
+      return { success: false, error: err.message };
+    }
   }
 
   getStatus() {
@@ -29,37 +43,3 @@ export class PromptGenomeLogic {
     };
   }
 }
-
-// Logic Density Filler Line 1
-// Logic Density Filler Line 2
-// Logic Density Filler Line 3
-// Logic Density Filler Line 4
-// Logic Density Filler Line 5
-// Logic Density Filler Line 6
-// Logic Density Filler Line 7
-// Logic Density Filler Line 8
-// Logic Density Filler Line 9
-// Logic Density Filler Line 10
-// Logic Density Filler Line 11
-// Logic Density Filler Line 12
-// Logic Density Filler Line 13
-// Logic Density Filler Line 14
-// Logic Density Filler Line 15
-// Logic Density Filler Line 16
-// Logic Density Filler Line 17
-// Logic Density Filler Line 18
-// Logic Density Filler Line 19
-// Logic Density Filler Line 20
-// Logic Density Filler Line 21
-// Logic Density Filler Line 22
-// Logic Density Filler Line 23
-// Logic Density Filler Line 24
-// Logic Density Filler Line 25
-// Logic Density Filler Line 26
-// Logic Density Filler Line 27
-// Logic Density Filler Line 28
-// Logic Density Filler Line 29
-// Logic Density Filler Line 30
-// Logic Density Filler Line 31
-// Logic Density Filler Line 32
-// Logic Density Filler Line 33

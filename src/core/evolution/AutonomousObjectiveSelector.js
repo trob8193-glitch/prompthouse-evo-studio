@@ -10,9 +10,9 @@ function fileContains(rootDir, relPath, pattern) {
 export function selectAutonomousObjective({ rootDir = process.cwd(), memory = [], focusAreas = [] } = {}) {
   const candidates = [];
 
-  if (fileContains(rootDir, 'src/self-implementation-policy.js', /(OMNIPOTENT|S\+\+\+\+|FULFILLED|100% functional|resonance)/)) {
+  if (fileContains(rootDir, 'src/self-implementation-policy.js', /(Great Realization Protocol|S\+\+\+\+\+|resonance: 0\.99|POLICY_READY|POLICY_CHECKED)/)) {
     candidates.push({
-      objective: 'Remove fake self-evolution language and replace it with truth-gated policy states',
+      objective: 'Evolve self-implementation-policy to EVOLVED state with Omni-Live Daemon provenance',
       category: 'truth_cleanup',
       risk: 'LOW',
       impact: 90,
@@ -27,6 +27,17 @@ export function selectAutonomousObjective({ rootDir = process.cwd(), memory = []
       risk: 'LOW',
       impact: 80,
       confidence: 90,
+    });
+  }
+
+  // Audit for stale rift hardcoded URLs
+  if (fileContains(rootDir, 'src/store.js', /fetch\('http:\/\/127\.0\.0\.1:3002/)) {
+    candidates.push({
+      objective: 'Replace hardcoded Rift Grid URLs in store.js with bridge-config references',
+      category: 'config',
+      risk: 'LOW',
+      impact: 70,
+      confidence: 85,
     });
   }
 

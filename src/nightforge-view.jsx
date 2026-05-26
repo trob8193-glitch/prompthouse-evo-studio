@@ -3,15 +3,34 @@
  * Real daemon control + diagnostics-backed cycle reports.
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  runNightForgeCycle,
-  startNightForge,
-  stopNightForge,
-  getNightForgeStatus,
-  getNightForgeMetrics,
-  getNightForgeSettings,
-  updateNightForgeSettings,
-} from './nightforge.js';
+async function runNightForgeCycle(payload) {
+  const r = await fetch('/api/nightforge/cycle', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+  return r.json();
+}
+async function startNightForge(payload) {
+  const r = await fetch('/api/nightforge/daemon/start', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+  return r.json();
+}
+async function stopNightForge() {
+  const r = await fetch('/api/nightforge/daemon/stop', { method: 'POST' });
+  return r.json();
+}
+async function getNightForgeStatus() {
+  const r = await fetch('/api/nightforge/status');
+  return r.json();
+}
+async function getNightForgeMetrics() {
+  const r = await fetch('/api/nightforge/metrics');
+  return r.json();
+}
+async function getNightForgeSettings() {
+  const r = await fetch('/api/nightforge/settings');
+  return r.json();
+}
+async function updateNightForgeSettings(payload) {
+  const r = await fetch('/api/nightforge/settings', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+  return r.json();
+}
 
 function tone(priority = 'LOW') {
   if (priority === 'HIGH') return '#f87171';

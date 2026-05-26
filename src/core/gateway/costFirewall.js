@@ -37,11 +37,16 @@ export class CostFirewall {
     if (!credits) {
       // If no credit record exists, and it's a free plan, maybe allowed?
       if (org.plan === 'free') return true;
-      throw new Error('Credit account not found.');
+      
+      const err = new Error('Credit account not found. FALLBACK_REQUIRED');
+      err.fallback = true;
+      throw err;
     }
 
     if (credits.credits_remaining < cost) {
-      throw new Error('Insufficient credits. Please upgrade or purchase more credits.');
+      const err = new Error('Insufficient credits. FALLBACK_REQUIRED');
+      err.fallback = true;
+      throw err;
     }
 
     // 5. Check daily limits (optional; enable when usage tables exist).

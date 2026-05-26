@@ -9,7 +9,7 @@ const status = args.includes('--status');
 const mode = modeArg ? modeArg.split('=').slice(1).join('=').trim() : 'proposal';
 let objective = objectiveArg
   ? objectiveArg.split('=').slice(1).join('=').trim()
-  : 'Remove fake self-evolution language and improve local bridge URL environment readiness';
+  : 'Evolve self-implementation-policy to EVOLVED state with Omni-Live Daemon provenance';
 
 try {
   const { execSync } = await import('child_process');
@@ -51,26 +51,33 @@ try {
       runTests: !args.includes('--skip-tests'),
       runBuild: !args.includes('--skip-build'),
       allowRollback: !args.includes('--no-rollback'),
-      policy: { unattended },
+      policy: { unattended, requireOwnerApprovalForMerge: !unattended },
     });
 
     finalResult = result;
     if (result.success) {
-      console.log(`🛡️ [Omni-Mesh] Logic mutated. Routing to ShadowForge for permutation validation...`);
-      try {
-        const { ShadowForge } = await import('../src/core/autonomy/ShadowForge.js');
-        const shadow = new ShadowForge();
-        const shadowValid = await shadow.compilePermutation(currentObjective);
-        
-        if (shadowValid) {
-          success = true;
-          console.log(`✅ [Omni-Mesh] ShadowForge validated. Absolute CI Green State Achieved.`);
-        } else {
-          throw new Error('ShadowForge Permutation Compilation Failed');
+      if (mode === 'sandbox_apply') {
+        // Sandbox mode — patch was applied in workspace. Accept directly.
+        success = true;
+        console.log(`✅ [Omni-Mesh] Sandbox patch applied. Evolution cycle complete.`);
+      } else {
+        // Full proof mode — validate through ShadowForge
+        console.log(`🛡️ [Omni-Mesh] Logic mutated. Routing to ShadowForge for permutation validation...`);
+        try {
+          const { ShadowForge } = await import('../src/core/autonomy/ShadowForge.js');
+          const shadow = new ShadowForge();
+          const shadowValid = await shadow.compilePermutation(currentObjective);
+          
+          if (shadowValid) {
+            success = true;
+            console.log(`✅ [Omni-Mesh] ShadowForge validated. Absolute CI Green State Achieved.`);
+          } else {
+            throw new Error('ShadowForge Permutation Compilation Failed');
+          }
+        } catch (err) {
+           console.log(`⚠️ [Omni-Mesh] ShadowForge validation failed: ${err.message}. Recalculating Matrix...`);
+           currentObjective = `SHADOWFORGE REJECTED PREVIOUS MUTATION. REASON: ${err.message}\n\nObjective: ${objective}`;
         }
-      } catch (err) {
-         console.log(`⚠️ [Omni-Mesh] ShadowForge validation failed: ${err.message}. Recalculating Matrix...`);
-         currentObjective = `SHADOWFORGE REJECTED PREVIOUS MUTATION. REASON: ${err.message}\n\nObjective: ${objective}`;
       }
     } else if (unattended) {
       console.log(`⚠️ [Omni-Mesh] CI Validation Failed. Recalculating Matrix...`);

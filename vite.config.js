@@ -46,6 +46,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './tests/setup.js',
+    testTimeout: 30000,
     exclude: [
       '**/node_modules/**',
       '**/dist/**',

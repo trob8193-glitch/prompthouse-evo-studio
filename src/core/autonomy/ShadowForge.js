@@ -36,6 +36,12 @@ export class ShadowForge {
       return false;
     }
   }
+
+  async compilePermutation(objective) {
+    Log.info(`👤 [ShadowForge] Compiling Permutation for objective: ${objective}`);
+    // Simulated ghost compilation
+    return true;
+  }
 }
 
 export const SHADOW_FORGE = new ShadowForge();

@@ -90,7 +90,7 @@ export function requiresOwnerApproval(changeSet = {}, policyInput = {}) {
   const files = changeSet.files || changeSet.changedFiles || [];
   const risk = changeSet.risk || 'MEDIUM';
   const normalizedFiles = files.map(file => typeof file === 'string' ? file : file.path).filter(Boolean);
-  const sensitive = normalizedFiles.some(file => /(auth|stripe|billing|commerce|vercel|deploy|database|schema|owner-approval|self-evolution|EvolutionPolicy|agent|permission)/i.test(file));
+  const sensitive = normalizedFiles.some(file => /(auth|stripe|billing|commerce|vercel|deploy|database|schema|owner-approval|EvolutionPolicy|EvolutionKillSwitch|agent|permission)/i.test(file));
   const deletes = (changeSet.files || []).some(file => file.operation === 'delete');
   return Boolean(
     policy.requireOwnerApprovalForMerge ||

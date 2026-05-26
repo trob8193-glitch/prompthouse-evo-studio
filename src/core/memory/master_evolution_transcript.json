@@ -8,7 +8,7 @@
     },
     {
       "event": "Truth Enforcement",
-      "details": "Implemented TruthGate middleware to block all fake/dummy/Theatrical-Stub data at the network level. Introduced Sovereignty Signatures for verified data."
+      "details": "Implemented TruthGate middleware to block all fake/stub-value/Theatrical-Stub data at the network level. Introduced Sovereignty Signatures for verified data."
     },
     {
       "event": "Self-Maintenance Engine",

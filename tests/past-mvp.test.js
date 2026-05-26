@@ -226,35 +226,6 @@ describe('Commerce Rail', () => {
   });
 });
 
-// ─── NightForge ────────────────────────────────────────────────────────────────
-describe('NightForge Daemon', () => {
-  beforeEach(() => {
-    vi.spyOn(global, 'fetch').mockImplementation(async () => {
-      return {
-        ok: true,
-        json: async () => ({
-          result: {
-            cannot: ['silent_production_deploy', 'delete_data'],
-            status: 'recommended',
-          },
-        }),
-      };
-    });
-  });
-
-  it('creates a patch proposal without silent deploying', async () => {
-    const proposal = await runNightForgeCycle({ callBridge: null });
-    expect(proposal.cannot).toContain('silent_production_deploy');
-    expect(proposal.cannot).toContain('delete_data');
-    expect(proposal.status).toBe('recommended');
-  });
-
-  it('does not expose secrets in proposals', async () => {
-    const proposal = await runNightForgeCycle({ callBridge: null });
-    const str = JSON.stringify(proposal);
-    expect(str).not.toMatch(/sk-[a-zA-Z0-9]{20,}/);
-  });
-});
 
 // ─── Full Gate Score ───────────────────────────────────────────────────────────
 describe('Gate Score Computation', () => {

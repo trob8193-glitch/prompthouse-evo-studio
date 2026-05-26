@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { getNightForgeStatus, runNightForgeCycle } from '../nightforge.js';
+async function getNightForgeStatus() {
+  const r = await fetch('/api/nightforge/status');
+  return r.json();
+}
+async function runNightForgeCycle(payload) {
+  const r = await fetch('/api/nightforge/cycle', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+  return r.json();
+}
 
 export function NightForgePanel() {
   const [state, setState] = useState(null);

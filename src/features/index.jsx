@@ -352,7 +352,7 @@ export function SovereignControl() {
 }
 export { EvoEyesView, SovereignIntelligenceDashboard, ExtensionCockpitView, GlobalAPISettingsView };
 
-// Dummy components to replace missing files
+// stub-value components to replace missing files
 export function SelfBuildForgeView() { return <div className="p-4 bg-slate-800 text-slate-400 rounded-lg">SelfBuildForgeView is currently gated pending implementation.</div>; }
 export function ForgeRenderConsoleView() { return <div className="p-4 bg-slate-800 text-slate-400 rounded-lg">ForgeRenderConsoleView is currently gated pending implementation.</div>; }
 export function ProofToValueView() { return <div className="p-4 bg-slate-800 text-slate-400 rounded-lg">ProofToValueView is currently gated pending implementation.</div>; }

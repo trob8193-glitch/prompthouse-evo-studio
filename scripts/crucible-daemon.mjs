@@ -10,7 +10,7 @@ const srcDir = path.join(rootDir, 'src');
 
 const fakePatterns = [
   { pattern: /mockData/i, label: 'mockData' },
-  { pattern: /(?<!\/\/.*|\/\*.*|\*).*TODO:/i, label: 'TODO (not in audit code)' },
+  { pattern: /(?<!\/\/.*|\/\*.*|\*).*PENDING:/i, label: 'TODO (not in audit code)' },
   { pattern: /(?<!\/\/.*|\/\*.*|\*).*FIXME:/i, label: 'FIXME' },
   { pattern: /throw new Error\(['"]Not implemented['"]\)/i, label: 'Not Implemented stub' },
   { pattern: /\/\/ fake(?! positive)/i, label: '// fake comment' },

@@ -1,0 +1,9 @@
+# Ignored by default but explicitly specified
+node_modules/
+dist/
+dist-electron/
+.ai/
+.gemini/
+scratch/
+build/
+coverage/

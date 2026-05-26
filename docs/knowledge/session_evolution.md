@@ -23,7 +23,7 @@ This document records the specific training and evolution steps taken during the
 
 ### Continuous Learning:
 - The system must read these `docs/knowledge/` files in every cycle to remind itself of its capabilities and constraints.
-- When a file is flagged as incomplete (like `StripeAdaptor.js` was), the system must prioritize removing mocks and making it production-ready.
+- When a file is flagged as incomplete (like `StripeAdaptor.js` was), the system must prioritize making it production-ready.
 
 ### Feedback Loop:
 - The system should analyze the results of its own runs (success/failure) and update its internal strategies.

@@ -2,6 +2,9 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import os from 'os';
 import net from 'net';
+import fs from 'fs';
+import path from 'path';
+import { pathToFileURL } from 'url';
 import { runNuclearTruthAudit } from '../core/audit/NuclearTruthAudit.js';
 
 const execAsync = promisify(exec);
@@ -14,7 +17,7 @@ export class TerminalLogic {
       if (!command || typeof command !== 'string') {
         return { success: false, output: 'No command provided.' };
       }
-if (command.trim().toLowerCase().startsWith('evo ')) {
+      if (command.trim().toLowerCase().startsWith('evo ')) {
         return await this.handleEvoCommand(command.trim().substring(4), session);
       }
       return await this.runCommand(command);
@@ -28,6 +31,23 @@ if (command.trim().toLowerCase().startsWith('evo ')) {
     const main = parts[0].toLowerCase();
     const args = parts.slice(1);
 
+    // 1. Check invented dynamic registry
+    try {
+      const registryPath = path.join(process.cwd(), 'src/invented_tools/registry.json');
+      if (fs.existsSync(registryPath)) {
+        const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+        if (registry.tools && registry.tools[main]) {
+          const toolFile = path.join(process.cwd(), registry.tools[main].file);
+          const DynamicModule = await import(pathToFileURL(toolFile).href);
+          const instance = new DynamicModule.default();
+          return await instance.execute(args, session);
+        }
+      }
+    } catch (e) {
+      return { success: false, output: `[Error] Dynamic tool check failed: ${e.message}` };
+    }
+
+    // 2. Built-in Commands
     switch (main) {
       case 'scan':
         return await this.performRealScan();

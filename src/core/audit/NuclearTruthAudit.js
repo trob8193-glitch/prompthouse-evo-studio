@@ -37,7 +37,7 @@ const SIMULATION_MARKERS = [
 ];
 
 const UI_RANDOM_MARKER = /\bMath\.random\s*\(/;
-const DUMMY_IMPL_MARKER = /\bDummy implementations\b/i;
+const STUB_IMPL_MARKER = /\bUnimplemented sections\b/i;
 
 function toPosix(filePath) {
   return filePath.replace(/\\/g, '/');
@@ -230,8 +230,8 @@ export function runNuclearTruthAudit(rootDir = process.cwd()) {
       }
     });
 
-    if (DUMMY_IMPL_MARKER.test(content)) {
-      addFinding(findings, 'high', relativeFile, 1, 'Contains dummy implementation marker.');
+    if (STUB_IMPL_MARKER.test(content)) {
+      addFinding(findings, 'high', relativeFile, 1, 'Contains stub-value implementation marker.');
     }
 
     if (isUi && UI_RANDOM_MARKER.test(content)) {

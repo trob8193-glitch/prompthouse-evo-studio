@@ -23,6 +23,30 @@ import { StripeAdaptor } from './lib/commerce/StripeAdaptor.js';
 import { FoundryOrchestrator } from './lib/foundry/FoundryOrchestrator.js';
 import { TruthGate } from './src/core/truth/TruthGate.js';
 
+// NightForge Daemon
+import {
+  nightforgeState,
+  runNightforgeCycle,
+  buildNightforgeMetrics,
+  updateNightforgeState,
+  scheduleNightforgeDaemon,
+  clearNightforgeDaemon
+} from './src/nightforge.js';
+
+// Antigravity Blended Agent Daemon
+import {
+  agentState,
+  runAgentCycle,
+  buildAgentMetrics,
+  updateAgentState,
+  updateTetherStatus,
+  scheduleAgentDaemon,
+  clearAgentDaemon,
+  getAgentTasks,
+  approveAgentTask,
+  rejectAgentTask,
+  handshakeWithDaemon as agentHandshake,
+} from './src/antigravity-agent.js';
 // Hybrid Quad System Imports
 import { ModelRouter } from './src/core/gateway/modelRouter.js';
 import { CostFirewall } from './src/core/gateway/costFirewall.js';
@@ -1020,488 +1044,6 @@ function appendTrainingExamples(examples = [], source = 'evo_team_run') {
   return file;
 }
 
-function defaultNightforgeState() {
-  return {
-    active: false,
-    running: false,
-    intervalMinutes: 360,
-    orgId: 'org_test',
-    includeProviders: ['evo_lm', 'openai', 'gemini'],
-    forceThreeProviderTeam: false,
-    train: true,
-    useLiveStudio: true,
-    mode: 'cost_guarded',
-    totalCycles: 0,
-    successfulCycles: 0,
-    failedCycles: 0,
-    lastCycleAt: null,
-    lastSuccessAt: null,
-    lastErrorAt: null,
-    lastError: null,
-    nextCycleAt: null,
-    lastResult: null
-  };
-}
-
-function loadNightforgeState() {
-  const base = defaultNightforgeState();
-  if (!existsSync(NIGHTFORGE_STATE_FILE)) return base;
-  try {
-    const raw = JSON.parse(readFileSync(NIGHTFORGE_STATE_FILE, 'utf8'));
-    return { ...base, ...raw, running: false };
-  } catch {
-    return base;
-  }
-}
-
-function saveNightforgeState(state) {
-  writeFileSync(NIGHTFORGE_STATE_FILE, JSON.stringify(state, null, 2), 'utf8');
-}
-
-let nightforgeState = loadNightforgeState();
-
-function updateNightforgeState(patch) {
-  nightforgeState = { ...nightforgeState, ...patch };
-  saveNightforgeState(nightforgeState);
-  return nightforgeState;
-}
-
-function clearNightforgeDaemon() {
-  if (nightforgeDaemonTimer) {
-    clearInterval(nightforgeDaemonTimer);
-    nightforgeDaemonTimer = null;
-  }
-}
-
-function readNightforgeReceipts() {
-  if (!existsSync(NIGHTFORGE_RECEIPTS_FILE)) return [];
-  try {
-    const lines = readFileSync(NIGHTFORGE_RECEIPTS_FILE, 'utf8').split('\n').map(line => line.trim()).filter(Boolean);
-    return lines.map((line) => {
-      try {
-        return JSON.parse(line);
-      } catch {
-        return null;
-      }
-    }).filter(Boolean);
-  } catch {
-    return [];
-  }
-}
-
-function buildNightforgeMetrics() {
-  const receipts = readNightforgeReceipts();
-  const todayIso = new Date().toISOString().slice(0, 10);
-  const todayReceipts = receipts.filter((entry) => String(entry.timestamp || '').slice(0, 10) === todayIso);
-
-  const providerMix = { evo_lm: 0, openai: 0, gemini: 0, other: 0 };
-  for (const entry of todayReceipts) {
-    for (const providerEntry of entry.providers || []) {
-      const key = providerEntry.provider;
-      if (key === 'evo_lm' || key === 'openai' || key === 'gemini') {
-        providerMix[key] += 1;
-      } else {
-        providerMix.other += 1;
-      }
-    }
-  }
-
-  const cyclesToday = todayReceipts.length;
-  const creditsToday = todayReceipts.reduce((sum, entry) => sum + Number(entry.cost?.creditsUsed || 0), 0);
-  const externalCallsToday = todayReceipts.reduce((sum, entry) => sum + Number(entry.cost?.externalCalls || 0), 0);
-  const cacheHitsToday = todayReceipts.reduce((sum, entry) => sum + Number(entry.cost?.cacheHits || 0), 0);
-  const savedTokensToday = todayReceipts.reduce((sum, entry) => sum + Number(entry.cost?.estimatedSavedTokens || 0), 0);
-
-  const trend = receipts.slice(-10).map((entry) => ({
-    id: entry.id,
-    timestamp: entry.timestamp,
-    creditsUsed: Number(entry.cost?.creditsUsed || 0),
-    externalCalls: Number(entry.cost?.externalCalls || 0),
-    cacheHits: Number(entry.cost?.cacheHits || 0),
-    savedTokens: Number(entry.cost?.estimatedSavedTokens || 0)
-  }));
-
-  return {
-    date: todayIso,
-    cyclesToday,
-    creditsToday,
-    externalCallsToday,
-    cacheHitsToday,
-    savedTokensToday,
-    providerMix,
-    trend
-  };
-}
-
-function buildNightforgeActions(diagnostics) {
-  const actions = [];
-  const failingProbes = (diagnostics?.probes || []).filter(item => !item.ok);
-  if (failingProbes.length > 0) {
-    actions.push({
-      action: 'repair_failing_runtime_probes',
-      priority: 'HIGH',
-      note: `Probe failures detected: ${failingProbes.map(item => item.id).join(', ')}`,
-      targets: failingProbes.map(item => item.path)
-    });
-  }
-
-  const errorModules = (diagnostics?.modules || []).filter(item => item.health === 'error').slice(0, 6);
-  if (errorModules.length > 0) {
-    actions.push({
-      action: 'fix_module_errors',
-      priority: 'HIGH',
-      note: `Modules with hard errors: ${errorModules.length}`,
-      targets: errorModules.map(item => item.path)
-    });
-  }
-
-  const warningModules = (diagnostics?.modules || []).filter(item => item.health === 'warning').slice(0, 6);
-  if (warningModules.length > 0) {
-    actions.push({
-      action: 'reduce_warning_surface',
-      priority: 'MEDIUM',
-      note: `Modules with warnings: ${warningModules.length}`,
-      targets: warningModules.map(item => item.path)
-    });
-  }
-
-  const unresolved = diagnostics?.unresolved_dependencies || [];
-  if (unresolved.length > 0) {
-    actions.push({
-      action: 'resolve_dependency_breaks',
-      priority: 'HIGH',
-      note: `Unresolved imports detected: ${unresolved.length}`,
-      targets: unresolved.slice(0, 8).map(item => item.module)
-    });
-  }
-
-  const avgLatency = diagnostics?.summary?.avg_probe_latency_ms || 0;
-  if (avgLatency > 350) {
-    actions.push({
-      action: 'optimize_bridge_latency',
-      priority: 'MEDIUM',
-      note: `Probe latency is elevated (${avgLatency}ms).`,
-      targets: ['promptbridge-server.js', '/api/metrics', '/api/evo-lm/chat']
-    });
-  }
-
-  if (actions.length === 0) {
-    actions.push({
-      action: 'maintain_stability_window',
-      priority: 'LOW',
-      note: 'No urgent runtime faults detected.',
-      targets: ['continuous_monitoring']
-    });
-  }
-
-  return actions;
-}
-
-async function runNightforgeCycle({
-  objective,
-  orgId = 'org_test',
-  includeProviders = ['evo_lm', 'openai', 'gemini'],
-  forceThreeProviderTeam = nightforgeState.forceThreeProviderTeam ?? false,
-  train = true,
-  useLiveStudio = true,
-  mode = 'cost_guarded',
-  scanLimit = 60,
-  trigger = 'manual'
-} = {}) {
-  if (nightforgeState.running) {
-    throw new Error('NightForge cycle already running.');
-  }
-
-  updateNightforgeState({ running: true, lastError: null });
-
-  try {
-    const diagnostics = await buildStudioDiagnostics(scanLimit);
-    const proposedActions = buildNightforgeActions(diagnostics);
-    const failingProbes = (diagnostics.probes || []).filter(item => !item.ok);
-    const topRiskModules = (diagnostics.modules || [])
-      .filter(item => item.health !== 'healthy')
-      .slice(0, 8)
-      .map(item => ({
-        path: item.path,
-        health: item.health,
-        issues: (item.issues || []).slice(0, 2).map(issue => issue.code)
-      }));
-
-    const computedObjective = objective || [
-      'NightForge daemon cycle.',
-      `Modules scanned: ${diagnostics.summary.modules_scanned}.`,
-      `Errors: ${diagnostics.summary.modules_error}, warnings: ${diagnostics.summary.modules_warning}.`,
-      `Failing probes: ${failingProbes.length}.`,
-      `Use cost-aware provider routing and produce implementation-ready repairs only.`
-    ].join(' ');
-
-    await CostFirewall.authorize(orgId, '/api/nightforge/cycle');
-    const routedProvider = await ModelRouter.route(orgId, '/api/nightforge/cycle');
-    const requiredTeam = ['evo_lm', 'openai', 'gemini'];
-    const requested = new Set(forceThreeProviderTeam
-      ? requiredTeam
-      : (Array.isArray(includeProviders) && includeProviders.length > 0 ? includeProviders : ['evo_lm']));
-    const canUseCloud = routedProvider === 'any' || routedProvider === 'cloud' || routedProvider === 'openai' || routedProvider === 'gemini';
-    if (forceThreeProviderTeam) {
-      if (!userConfig.keys.openai) {
-        throw new Error('NightForge strict 3-provider mode requires a configured OpenAI API key.');
-      }
-      if (!userConfig.keys.gemini) {
-        throw new Error('NightForge strict 3-provider mode requires a configured Gemini API key.');
-      }
-      if (!canUseCloud) {
-        throw new Error('NightForge strict 3-provider mode requires cloud routing permission for this org/plan.');
-      }
-    }
-
-    const providerOutputs = [];
-    const digest = {
-      summary: diagnostics.summary,
-      failingProbes: failingProbes.map(item => ({ id: item.id, path: item.path, status: item.status, latency_ms: item.latency_ms })),
-      topRiskModules,
-      proposedActions: proposedActions.slice(0, 8)
-    };
-
-    const baseMessages = [
-      { role: 'user', content: `${computedObjective}\n\nDiagnostics digest:\n${JSON.stringify(digest, null, 2)}` }
-    ];
-    const coordinationPrompt = [
-      'You are NightForge, a cost-aware studio reliability daemon.',
-      'Return concrete fixes only. No hype.',
-      `Mode: ${mode}.`,
-      `LiveStudio: ${useLiveStudio ? 'enabled' : 'disabled'}.`,
-      `ProviderRoute: ${routedProvider}.`
-    ].join(' ');
-
-    if (requested.has('evo_lm')) {
-      try {
-        const evoLm = await runEvoLmTeamChat(baseMessages, coordinationPrompt);
-        providerOutputs.push({
-          provider: 'evo_lm',
-          success: evoLm.success,
-          from_cache: Boolean(evoLm.from_cache),
-          content: evoLm.message,
-          model: evoLm.model,
-          transport: evoLm.transport
-        });
-      } catch (e) {
-        providerOutputs.push({
-          provider: 'evo_lm',
-          success: false,
-          from_cache: false,
-          content: String(e.message || e),
-          model: 'unavailable',
-          transport: 'failed'
-        });
-      }
-    }
-
-    if (requested.has('openai') && userConfig.keys.openai && canUseCloud) {
-      try {
-        const openaiResult = await ai.chat(
-          coordinationPrompt ? [{ role: 'system', content: coordinationPrompt }, ...baseMessages] : baseMessages,
-          { provider: 'openai', model: process.env.OPENAI_MODEL || 'gpt-4o-mini' }
-        );
-        if (openaiResult.success && openaiResult.content) truthGate.enforce(openaiResult.content, 'NightForge:openai');
-        providerOutputs.push({
-          provider: 'openai',
-          success: Boolean(openaiResult.success),
-          from_cache: Boolean(openaiResult.from_cache),
-          content: openaiResult.content || openaiResult.error || '',
-          model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-          transport: 'universal_ai_adaptor'
-        });
-      } catch (e) {
-        providerOutputs.push({
-          provider: 'openai',
-          success: false,
-          from_cache: false,
-          content: String(e.message || e),
-          model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-          transport: 'failed'
-        });
-      }
-    }
-
-    if (requested.has('gemini') && userConfig.keys.gemini && canUseCloud) {
-      try {
-        const geminiResult = await ai.chat(
-          coordinationPrompt ? [{ role: 'system', content: coordinationPrompt }, ...baseMessages] : baseMessages,
-          { provider: 'gemini', model: 'gemini-1.5-pro' }
-        );
-        if (geminiResult.success && geminiResult.content) truthGate.enforce(geminiResult.content, 'NightForge:gemini');
-        providerOutputs.push({
-          provider: 'gemini',
-          success: Boolean(geminiResult.success),
-          from_cache: Boolean(geminiResult.from_cache),
-          content: geminiResult.content || geminiResult.error || '',
-          model: 'gemini-1.5-pro',
-          transport: 'universal_ai_adaptor'
-        });
-      } catch (e) {
-        providerOutputs.push({
-          provider: 'gemini',
-          success: false,
-          from_cache: false,
-          content: String(e.message || e),
-          model: 'gemini-1.5-pro',
-          transport: 'failed'
-        });
-      }
-    }
-
-    if (providerOutputs.length === 0 || providerOutputs.every(item => !item.success)) {
-      throw new Error('No providers available for NightForge cycle. Configure keys or include evo_lm.');
-    }
-
-    const synthesisInput = providerOutputs
-      .map(item => `${item.provider.toUpperCase()}(${item.success ? 'ok' : 'error'}): ${item.content}`)
-      .join('\n\n');
-    const synthesis = await runEvoLmTeamChat(
-      [{ role: 'user', content: `Objective:\n${computedObjective}\n\nProvider outputs:\n${synthesisInput}` }],
-      'Synthesize a strict repair plan for NightForge with numbered actions and safety guards.'
-    );
-    const finalPlan = synthesis.message || providerOutputs.find(item => item.success)?.content || providerOutputs[0].content;
-
-    const externalCalls = providerOutputs.filter(item => (item.provider === 'openai' || item.provider === 'gemini') && !item.from_cache).length;
-    const cacheHits = providerOutputs.filter(item => item.from_cache).length;
-    const localCalls = providerOutputs.filter(item => item.provider === 'evo_lm').length;
-    const creditsUsed = Math.max(1, externalCalls === 0 ? 1 : externalCalls);
-    await CostFirewall.deduct(orgId, '/api/nightforge/cycle', creditsUsed);
-
-    const estimatedSavedTokens = externalCalls === 0 ? 2500 : cacheHits * 1200;
-    if (estimatedSavedTokens > 0) {
-      globalFirewallSavings.tokens += estimatedSavedTokens;
-      globalFirewallSavings.dollars += estimatedSavedTokens * 0.000002;
-    }
-
-    let trainingFile = null;
-    if (train) {
-      trainingFile = appendTrainingExamples([
-        {
-          systemPrompt: 'You are PromptHouse Evo Studio NightForge trainer. Preserve runtime diagnostics, cost-aware routing, and concrete repair actions.',
-          input: `Objective: ${computedObjective}\nMode: ${mode}\nRoute: ${routedProvider}\nDiagnostics: ${JSON.stringify(digest)}`,
-          output: finalPlan,
-          transport: 'nightforge_cycle',
-          timestamp: new Date().toISOString()
-        }
-      ], 'nightforge_cycle');
-    }
-
-    const cycleId = `nightforge_${Date.now()}`;
-    const receipt = {
-      id: cycleId,
-      trigger,
-      orgId,
-      mode,
-      forceThreeProviderTeam: Boolean(forceThreeProviderTeam),
-      routedProvider,
-      objective: computedObjective,
-      diagnostics: diagnostics.summary,
-      providers: providerOutputs.map(item => ({ provider: item.provider, success: item.success, from_cache: item.from_cache })),
-      cost: { externalCalls, cacheHits, localCalls, creditsUsed, estimatedSavedTokens },
-      timestamp: new Date().toISOString()
-    };
-    writeFileSync(NIGHTFORGE_RECEIPTS_FILE, `${toSafeJson(receipt)}\n`, { flag: 'a', encoding: 'utf8' });
-
-    const result = {
-      id: cycleId,
-      status: 'recommended',
-      description: 'NightForge produced a real diagnostics-backed repair cycle.',
-      timestamp: receipt.timestamp,
-      scannedItems: [
-        `modules_scanned:${diagnostics.summary.modules_scanned}`,
-        `module_errors:${diagnostics.summary.modules_error}`,
-        `module_warnings:${diagnostics.summary.modules_warning}`,
-        `failing_probes:${failingProbes.length}`,
-        `dependency_edges:${diagnostics.summary.dependency_edges}`
-      ],
-      proposedActions,
-      cannot: ['silent_production_deploy', 'delete_data', 'live_commerce_without_approval'],
-      diagnostics: {
-        summary: diagnostics.summary,
-        failingProbes,
-        topRiskModules,
-        graph: diagnostics.graph
-      },
-      team: {
-        objective: computedObjective,
-        routedProvider,
-        providerOutputs,
-        synthesis: {
-          provider: synthesis.provider || 'evo_lm',
-          transport: synthesis.transport,
-          output: finalPlan
-        }
-      },
-      costSummary: {
-        externalCalls,
-        cacheHits,
-        localCalls,
-        creditsUsed,
-        estimatedSavedTokens,
-        estimatedSavedDollars: Number((estimatedSavedTokens * 0.000002).toFixed(6))
-      },
-      training: {
-        enabled: Boolean(train),
-        file: trainingFile
-      }
-    };
-
-    const nextCycleAt = nightforgeState.active
-      ? new Date(Date.now() + (nightforgeState.intervalMinutes * 60 * 1000)).toISOString()
-      : null;
-
-    updateNightforgeState({
-      running: false,
-      lastCycleAt: receipt.timestamp,
-      lastSuccessAt: receipt.timestamp,
-      lastErrorAt: null,
-      lastError: null,
-      totalCycles: (nightforgeState.totalCycles || 0) + 1,
-      successfulCycles: (nightforgeState.successfulCycles || 0) + 1,
-      nextCycleAt,
-      lastResult: result
-    });
-
-    return result;
-  } catch (error) {
-    const nowIso = new Date().toISOString();
-    updateNightforgeState({
-      running: false,
-      lastCycleAt: nowIso,
-      lastErrorAt: nowIso,
-      lastError: String(error.message || error),
-      totalCycles: (nightforgeState.totalCycles || 0) + 1,
-      failedCycles: (nightforgeState.failedCycles || 0) + 1
-    });
-    throw error;
-  }
-}
-
-function scheduleNightforgeDaemon() {
-  clearNightforgeDaemon();
-  if (!nightforgeState.active) return;
-
-  const intervalMs = Math.max(1, Number(nightforgeState.intervalMinutes || 360)) * 60 * 1000;
-  updateNightforgeState({ nextCycleAt: new Date(Date.now() + intervalMs).toISOString() });
-  nightforgeDaemonTimer = setInterval(async () => {
-    if (!nightforgeState.active || nightforgeState.running) return;
-    try {
-      await runNightforgeCycle({
-        orgId: nightforgeState.orgId,
-        includeProviders: nightforgeState.includeProviders,
-        forceThreeProviderTeam: Boolean(nightforgeState.forceThreeProviderTeam),
-        train: nightforgeState.train,
-        useLiveStudio: nightforgeState.useLiveStudio,
-        mode: nightforgeState.mode,
-        trigger: 'daemon'
-      });
-    } catch (e) {
-      console.error('[NightForge] daemon cycle failed:', e.message || e);
-    }
-  }, intervalMs);
-}
 
 // ─── MIDDLEWARE ──────────────────────────────────────────────────────────────
 
@@ -1754,6 +1296,58 @@ app.post('/api/terminal/bond', express.json(), async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Mobile Scaffolder API
+app.post('/api/mobile/scaffold', writeRateLimit, enforceJsonObjectBody, async (req, res) => {
+  const { appName = 'EvoApp', architecture = 'clean_riverpod', features = [], files = {} } = req.body;
+  const exportDir = join(process.cwd(), 'mobile_exports', appName);
+
+  try {
+    if (!existsSync(exportDir)) {
+      mkdirSync(exportDir, { recursive: true });
+    }
+
+    // Write all code files requested by the UI payload
+    for (const [relPath, content] of Object.entries(files)) {
+      const fullPath = join(exportDir, relPath);
+      const dir = dirname(fullPath);
+      if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+      writeFileSync(fullPath, content, 'utf8');
+    }
+
+    // Attempt to invoke LLM hydration (mock fallback if offline)
+    let aiHydrationSuccess = false;
+    try {
+      // Simulate LLM filling the [SOVEREIGN: Implemented] tags
+      const systemPrompt = "Hydrate the implementation for " + appName;
+      const res = await runEvoLmTeamChat([{role: 'user', content: 'Generate code for features: ' + features.join(', ')}], systemPrompt);
+      if (res.success) {
+        aiHydrationSuccess = true;
+      }
+    } catch (e) {
+      console.warn('AI Hydration skipped due to quota/offline', e);
+    }
+
+    // Run compiler hooks natively
+    try {
+      if (architecture.includes('clean') || architecture.includes('riverpod') || architecture.includes('mvvm')) {
+        execSync('flutter format .', { cwd: exportDir, stdio: 'ignore' });
+        execSync('flutter pub get', { cwd: exportDir, stdio: 'ignore' });
+      }
+    } catch (cmdErr) {
+      console.log('Compiler hook warning (e.g. flutter not installed): ', cmdErr.message);
+    }
+
+    return res.json({ 
+      success: true, 
+      exportDir, 
+      aiHydrationSuccess, 
+      message: 'Mobile app scaffolded successfully to disk!' 
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -2337,6 +1931,163 @@ app.get('/api/evo-eyes/team-last', (req, res) => {
   }
 });
 
+// ─── NIGHTFORGE DAEMON & CYCLES ──────────────────────────────────────────────
+
+app.post('/api/nightforge/cycle', maybeRequireAuthOrMaster, writeRateLimit, enforceJsonObjectBody, async (req, res) => {
+  try {
+    const result = await runNightforgeCycle(req.body);
+    res.json({ success: true, result });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/nightforge/status', (req, res) => {
+  res.json({ success: true, state: nightforgeState });
+});
+
+app.get('/api/nightforge/metrics', (req, res) => {
+  try {
+    const metrics = buildNightforgeMetrics();
+    res.json({ success: true, metrics });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/nightforge/settings', (req, res) => {
+  res.json({ success: true, settings: nightforgeState });
+});
+
+app.post('/api/nightforge/settings', maybeRequireAuthOrMaster, enforceJsonObjectBody, (req, res) => {
+  try {
+    updateNightforgeState(req.body);
+    scheduleNightforgeDaemon();
+    res.json({ success: true, settings: nightforgeState });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/nightforge/daemon/start', maybeRequireAuthOrMaster, enforceJsonObjectBody, (req, res) => {
+  try {
+    updateNightforgeState({ active: true, ...req.body });
+    scheduleNightforgeDaemon();
+    res.json({ success: true, state: nightforgeState });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/nightforge/daemon/stop', maybeRequireAuthOrMaster, (req, res) => {
+  try {
+    updateNightforgeState({ active: false });
+    clearNightforgeDaemon();
+    res.json({ success: true, state: nightforgeState });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── ANTIGRAVITY BLENDED AGENT DAEMON ────────────────────────────────────────
+
+app.get('/api/agent/status', (req, res) => {
+  res.json({ success: true, state: agentState });
+});
+
+app.get('/api/agent/metrics', (req, res) => {
+  try {
+    const metrics = buildAgentMetrics();
+    res.json({ success: true, metrics });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/agent/cycle', maybeRequireAuthOrMaster, writeRateLimit, enforceJsonObjectBody, async (req, res) => {
+  try {
+    const orgId = req.user?.orgId || req.body.orgId || 'org_test';
+    
+    // Authorize through CostFirewall before running the cycle
+    await CostFirewall.authorize(orgId, '/api/agent/cycle');
+    
+    // Handshake with NightForge before running cycle
+    const result = runAgentCycle({
+      ...req.body,
+      trigger: req.body.trigger || 'manual',
+      nightforgeState: nightforgeState,
+    });
+    
+    // If agent uses providers, deduct 1 credit for the cycle
+    if (result.providerResults?.consulted && result.providerResults.consulted.length > 0) {
+      await CostFirewall.deduct(orgId, '/api/agent/cycle', 1);
+    }
+    
+    res.json({ success: true, result });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/agent/daemon/start', maybeRequireAuthOrMaster, enforceJsonObjectBody, (req, res) => {
+  try {
+    const interval = req.body.intervalMinutes || 30;
+    scheduleAgentDaemon(interval, () => nightforgeState);
+    res.json({ success: true, state: agentState });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/agent/daemon/stop', maybeRequireAuthOrMaster, (req, res) => {
+  try {
+    clearAgentDaemon();
+    res.json({ success: true, state: agentState });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/agent/tasks', (req, res) => {
+  try {
+    const statusFilter = req.query.status || null;
+    const tasks = getAgentTasks(statusFilter);
+    res.json({ success: true, tasks });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/agent/tasks/:id/approve', maybeRequireAuthOrMaster, (req, res) => {
+  try {
+    const result = approveAgentTask(req.params.id);
+    res.json(result);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/agent/tasks/:id/reject', maybeRequireAuthOrMaster, (req, res) => {
+  try {
+    const result = rejectAgentTask(req.params.id);
+    res.json(result);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/agent/tether/ping', enforceJsonObjectBody, (req, res) => {
+  try {
+    const tether = updateTetherStatus({
+      connected: true,
+      ideVersion: req.body.ideVersion || null,
+    });
+    res.json({ success: true, tether });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ─── TERMINAL & DEPLOYMENT ───────────────────────────────────────────────────
 
 app.post('/api/terminal/execute', maybeRequireAuthOrMaster, writeRateLimit, enforceJsonObjectBody, async (req, res) => {
@@ -2851,12 +2602,30 @@ const validateApiKey = async (req, res, next) => {
 app.post('/v1/prompts/compile', validateApiKey, async (req, res) => {
   const { prompt } = req.body;
   try {
-    await CostFirewall.authorize(req.orgId, '/v1/prompts/compile');
-    const provider = await ModelRouter.route(req.orgId, '/v1/prompts/compile');
-    
-    let result;
-    if (provider === 'local') {
+    // 1. Authorize cost
+    let fallback = false;
+    try {
+      await CostFirewall.authorize(req.orgId, '/v1/prompts/compile');
+    } catch (authErr) {
+      if (authErr.fallback) {
+        fallback = true;
+      } else {
+        throw authErr;
+      }
+    }
+
+    if (fallback) {
+      // Local regex fallback mode to save credits
       const cleaned = PromptCompiler.compile(prompt);
+      return res.json({ success: true, provider: 'offline_regex_fallback', result: cleaned });
+    }
+
+    // 2. Active LLM Mode
+    const provider = await ModelRouter.route(req.orgId, '/v1/prompts/compile');
+    const cleaned = PromptCompiler.compile(prompt);
+    let result = cleaned;
+
+    if (provider === 'local') {
       try {
         const response = await fetch(`http://localhost:11434/api/chat`, {
           method: 'POST',
@@ -2875,15 +2644,13 @@ app.post('/v1/prompts/compile', validateApiKey, async (req, res) => {
         if (response.ok) {
           const data = await response.json();
           result = data.message?.content || data.response || cleaned;
-        } else {
-          result = cleaned;
         }
       } catch (e) {
-        result = cleaned;
+        // keep result = cleaned
       }
     } else {
-      // Call Gemini or OpenAI via UniversalAIAdaptor
-      const resp = await ai.generateResponse([{ role: 'user', content: prompt }], 'Compile this prompt.');
+      // External APIs
+      const resp = await ai.generateResponse([{ role: 'user', content: prompt }], 'Rewrite this prompt to be extremely dense, imperative, and production-ready. Remove all fluff.');
       result = resp.message || resp;
     }
     
@@ -3274,7 +3041,7 @@ app.get('/api/training/export', (req, res) => {
 });
 
 // ─── PAGE CAPTURE (from browser extension) ────────────────────────────────────
-const CAPTURES_FILE = path.join(DATA_DIR, 'captures.jsonl');
+const CAPTURES_FILE = `${DATA_DIR}/captures.jsonl`;
 
 app.post('/api/capture', (req, res) => {
   const { text, url, tabTitle, source = 'browser_extension' } = req.body;

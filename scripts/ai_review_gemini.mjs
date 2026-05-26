@@ -29,7 +29,7 @@ async function review() {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    console.log('⚠️ GEMINI_API_KEY is not set. Context pack created, but review call was skipped.');
+    console.log('[REDACTED KEY LOG]');
     process.exit(0);
   }
 

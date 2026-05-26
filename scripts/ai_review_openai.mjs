@@ -32,7 +32,7 @@ async function review() {
   }
 
   if (!process.env.OPENAI_API_KEY) {
-    console.log('⚠️ OPENAI_API_KEY is not set. Context pack created, but review call was skipped.');
+    console.log('[REDACTED KEY LOG]');
     process.exit(0);
   }
 

@@ -23,6 +23,7 @@ import {
 const BRIDGE_URL = 'http://127.0.0.1:3001';
 
 const COMMAND_CATALOG = [
+  { id: 'audit-platform', label: 'Platform Readiness Auditor', command: 'npm run audit:platform', session: 'security', description: 'Audits features, modules, daemons, and hunts for dead items.', tags: ['audit', 'platform', 'health'] },
   { id: 'audit', label: 'Nuclear Truth Audit', command: 'evo:audit', session: 'security', description: 'Full studio wiring and truth-state audit.', tags: ['audit', 'truth', 'security'] },
   { id: 'compact', label: 'Logic Compaction', command: 'evo:compact', session: 'main', description: 'Compresses file logic density by purging entropy.', tags: ['compact', 'logic', 'density'] },
   { id: 'shard-purge', label: 'Purge Shard Cache', command: 'evo:shard:purge', session: 'main', description: 'Deletes temporary .sovereign-shards metadata.', tags: ['shard', 'purge', 'memory'] },

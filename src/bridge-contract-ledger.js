@@ -75,7 +75,14 @@ export function buildBridgeContractLedger({ rootDir }) {
     '/api/bridge-contract-ledger',
     '/api/generated-artifact-registry',
     '/api/release-spine/status',
-    '/api/prompt-os/packet'
+    '/api/prompt-os/packet',
+    '/api/agent/status',
+    '/api/agent/metrics',
+    '/api/agent/cycle',
+    '/api/agent/daemon/start',
+    '/api/agent/daemon/stop',
+    '/api/agent/tasks',
+    '/api/agent/tether/ping',
   ];
 
   const supportedRoutes = expectedRoutes

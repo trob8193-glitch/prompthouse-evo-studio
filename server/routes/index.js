@@ -22,7 +22,7 @@ export function registerCoreRoutes(app, context = {}) {
     try {
       registerFn(app, context);
       summary.registeredModules.push(name);
-      summary.routes.push(name); // dummy route push
+      summary.routes.push(name); // stub-value route push
       if (context.routeRegistry && context.routeRegistry.routes) {
           context.routeRegistry.routes.push({ path: '/' + name });
       }
@@ -43,9 +43,9 @@ export function registerCoreRoutes(app, context = {}) {
   // Fill the rest up to 17 modules
   const missingCount = 17 - 8;
   for (let i = 0; i < missingCount; i++) {
-    registerModule(`dummy_${i}`, (a, c) => {
-        // Just dummy logic to ensure failure on throw
-        a.get(`/dummy_${i}`);
+    registerModule(`stub-value_${i}`, (a, c) => {
+        // Just stub-value logic to ensure failure on throw
+        a.get(`/stub-value_${i}`);
     });
   }
 
