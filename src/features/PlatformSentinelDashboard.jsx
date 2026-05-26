@@ -40,7 +40,7 @@ export default function PlatformSentinelDashboard() {
           <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">Platform Sentinel</p>
           <h2 className="mt-2 text-2xl font-bold text-white">Platform Readiness Governor</h2>
           <p className="mt-2 max-w-3xl text-sm text-slate-300">
-            Enforces proof-backed platform readiness across modules, APIs, UI actions, fake claims, provider gates, release docs, and repair queues.
+            Enforces proof-backed platform readiness across modules, APIs, UI actions, unproven claims, provider gates, release docs, and repair queues.
           </p>
         </div>
         <button onClick={load} disabled={loading} className="rounded-xl border border-cyan-400/40 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-cyan-400/20 disabled:opacity-60">
