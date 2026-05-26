@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-05-19T23:50:20.647Z",
+  "truthState": "DATASET_READY",
+  "totalExamples": 5,
+  "validExamples": 5,
+  "invalidExamples": [],
+  "trainCount": 4,
+  "evalCount": 1,
+  "files": {
+    "trainJsonl": ".evo-llm\\training-data\\evo-train.jsonl",
+    "evalJsonl": ".evo-llm\\training-data\\evo-eval.jsonl"
+  },
+  "policy": {
+    "id": "evo-llm-training-policy",
+    "name": "Evo LLM Truth-Bound Training Policy",
+    "truthState": "PIPELINE_POLICY_ONLY_NOT_TRAINED_MODEL",
+    "requiredFields": [
+      "system",
+      "instruction",
+      "response"
+    ],
+    "bannedClaims": [
+      "sentient",
+      "conscious",
+      "guaranteed profit",
+      "unlimited autonomous",
+      "break into",
+      "bypass security"
+    ],
+    "allowedUses": [
+      "PromptHouse Evo Studio architecture assistance",
+      "module maturity auditing",
+      "cost firewall reasoning",
+      "proof-gated build planning",
+      "truth-bound repair recommendations"
+    ],
+    "disallowedUses": [
+      "claims of sentience or consciousness",
+      "security bypass guidance",
+      "medical diagnosis",
+      "legal advice",
+      "financial guarantees",
+      "fake completion claims without receipts"
+    ]
+  }
+}

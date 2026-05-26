@@ -18,7 +18,7 @@ import { OWNER_APPROVAL_SCOPES } from '../services/owner-approval-client.js';
  * PH EVO STUDIO — PROOF CENTER VIEW
  * ═══════════════════════════════════════════════════════════════
  * Frontend dashboard for proof-gated readiness.
- * No external provider calls required to view. No fake success.
+ * No external provider calls required to view. No unverified success.
  */
 export function ProofCenterView() {
   return (

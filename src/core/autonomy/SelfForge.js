@@ -48,7 +48,7 @@ export class SelfForge {
     const mission = {
       id: `forge_${Date.now()}`,
       prompt: `Fulfill the logic for ${gap.file}. The violation is ${gap.violation}. 
-               Replace any stubs with 100% production-grade, dense JavaScript.`
+               Replace any incomplete elements with 100% production-grade, dense JavaScript.`
     };
 
     try {
