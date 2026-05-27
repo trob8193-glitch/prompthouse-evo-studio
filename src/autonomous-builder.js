@@ -1,39 +1,66 @@
-
 import { Log } from './core/autonomy/SovereignLogger.js';
 
-/**
- * PH EVO STUDIO — AUTONOMOUS-BUILDER (PRODUCTION GRADE)
- * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * Operational status is determined by live audits and proof receipts.
- */
+export { APP_TYPES } from './core/builder/ProjectTemplates.js';
 
-
-            export class AutonomousBuilder {
+export class AutonomousBuilder {
   constructor() {
     this.status = 'OMNIPOTENT';
-    this.iq_baseline = 165.0;
   }
 
   async execute(params = {}) {
-    Log.info('🚀 [Autonomous-builder] Executing production logic...');
-    // Absolute production logic implementation
     return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
   }
 
   getStatus() {
-    return { 
-      id: 'autonomous-builder', 
-      grade: 'S+++++', 
-      state: 'VERIFIED',
-      resonance: 0.99 
-    };
+    return { id: 'autonomous-builder', grade: 'S+++++', state: 'VERIFIED', resonance: 0.99 };
   }
 }
 
-export const APP_TYPES = [{ id: 'flutter', name: 'Flutter', icon: '📱' }];
-export const generateApp = () => ({});
-export const runBotPipeline = () => ({ timeline: [], fileCount: 0, app: { name: 'app', type: 'flutter', features: [], files: {} } });
-export const downloadAsZip = () => {};
-export const downloadFile = () => {};
-export const writeToLocalDisk = async () => {};
+export async function runBotPipeline(mission, appType, name, features) {
+  Log.info(`🚀 Starting production build for "${name}" (${appType})...`);
+  const BRIDGE_URL = 'http://127.0.0.1:3001';
+  
+  // Build the evo build command with proper flags
+  const command = `evo build ${name} --platform ${appType} --features ${features} ${mission}`;
+  
+  const res = await fetch(`${BRIDGE_URL}/api/intelligence/execute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ core: 'terminal', action: 'run', payload: { action: 'run', command } })
+  });
+  
+  if (!res.ok) throw new Error(`Bridge returned ${res.status}. Is the backend running?`);
+  
+  const data = await res.json();
+  
+  if (data.payload && data.payload.files) {
+    const fileCount = Object.keys(data.payload.files).length;
+    Log.info(`✅ Build complete: ${fileCount} files generated for ${name}.`);
+    return {
+      app: { 
+        name, 
+        type: appType, 
+        features: features.split(',').map(s => s.trim()),
+        files: data.payload.files 
+      },
+      fileCount
+    };
+  }
+  
+  // If no files returned, the build failed
+  const errorMsg = data.payload?.output || data.payload?.error || data.error || 'Build returned no files.';
+  throw new Error(errorMsg);
+}
+
+export function downloadAsZip() {
+  alert('Files are written directly to your disk in /generated_apps/. Check your project folder.');
+}
+
+export function downloadFile() {
+  alert('Files are written directly to your disk.');
+}
+
+export async function writeToLocalDisk() {
+  // Disk writes are handled by TerminalLogic during evo build
+  return;
+}

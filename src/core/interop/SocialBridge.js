@@ -1,3 +1,4 @@
+import { Log } from '../autonomy/SovereignLogger.js';
 /**
  * EVOGENAGE — SOCIAL INTEROP BRIDGE (PRODUCTION)
  * ═══════════════════════════════════════════════════════════════
@@ -20,7 +21,7 @@ export class SocialBridge {
     };
 
     const formattedMessage = `${botStyles[botId] || '🤖 '}${message}`;
-    console.log(`📢 [SocialBridge] Broadcasting: ${formattedMessage}`);
+    Log.info(`📢 [SocialBridge] Broadcasting: ${formattedMessage}`);
 
     if (this.webhookUrl) {
       // Physical Webhook Dispatch

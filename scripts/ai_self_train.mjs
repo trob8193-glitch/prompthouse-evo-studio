@@ -5,6 +5,8 @@ import { execSync } from 'child_process';
 import fetch from 'node-fetch';
 
 import dotenv from 'dotenv';
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 dotenv.config({ override: true });
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -49,7 +51,7 @@ const main = async () => {
   const config = loadConfig();
   ensureDir(outboxDir);
 
-  console.log('📦 Creating context pack...');
+  Log.info('📦 Creating context pack...');
   execSync('node scripts/ai_context_pack.mjs', { cwd: root, stdio: 'inherit' });
 
   const reviewPath = path.join(root, config.reviewOutputPath);
@@ -79,14 +81,14 @@ const main = async () => {
     createdAt: new Date().toISOString()
   };
 
-  console.log(`🔁 Posting training capture to ${bridgeUrl}/api/training-capture`);
+  Log.info(`🔁 Posting training capture to ${bridgeUrl}/api/training-capture`);
   await fetchJson(`${bridgeUrl}/api/training-capture`, capture);
 
   const runId = capture.id;
-  console.log(`🚀 Activating local evo runtime at ${bridgeUrl}/api/evo-runtime/activate`);
+  Log.info(`🚀 Activating local evo runtime at ${bridgeUrl}/api/evo-runtime/activate`);
   await fetchJson(`${bridgeUrl}/api/evo-runtime/activate`, { source: capture.source, runId });
 
-  console.log(`🛠️ Requesting self-implementation cycle at ${bridgeUrl}/api/self-implementation/cycle`);
+  Log.info(`🛠️ Requesting self-implementation cycle at ${bridgeUrl}/api/self-implementation/cycle`);
   const implementationResult = await fetchJson(`${bridgeUrl}/api/self-implementation/cycle`, {
     applyFixes: true,
     runTests: true,
@@ -114,10 +116,10 @@ const main = async () => {
 
   const reportPath = path.join(outboxDir, 'ai-self-train-report.md');
   fs.writeFileSync(reportPath, reportContent, 'utf8');
-  console.log(`✅ Training cycle complete. Report written to ${reportPath}`);
+  Log.info(`✅ Training cycle complete. Report written to ${reportPath}`);
 };
 
 main().catch((err) => {
-  console.error('❌ ai_self_train failed:', err.message || err);
+  Log.error('❌ ai_self_train failed:', err.message || err);
   process.exit(1);
 });

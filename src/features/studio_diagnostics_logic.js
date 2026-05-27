@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 /**
  * STUDIO DIAGNOSTICS LOGIC (Sovereign Edition)
  * ═══════════════════════════════════════════════════════════════

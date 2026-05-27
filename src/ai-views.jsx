@@ -63,7 +63,7 @@ export const AutoRepairView = () => {
       const data = await response.json();
       setResult(data.result);
     } catch (e) {
-      console.error('Auto-repair scan failed:', e);
+      Log.error('Auto-repair scan failed:', e);
     } finally {
       setScanning(false);
     }

@@ -8,6 +8,8 @@ import {
 import { Card, Button, StatusBadge, IconButton } from './components/primitives.jsx';
 
 
+import { Log } from './core/autonomy/SovereignLogger.js';
+
 const BRIDGE = 'http://127.0.0.1:3001';
 
 export function VectorMemoryView() {
@@ -32,7 +34,7 @@ export function VectorMemoryView() {
           setData(responseData.result);
         }
       } catch (e) {
-        console.error('Failed to load vector memory data:', e);
+        Log.error('Failed to load vector memory data:', e);
       } finally {
         setLoading(false);
       }
@@ -100,7 +102,7 @@ export function TemporalForesightView() {
           setData(responseData.result);
         }
       } catch (e) {
-        console.error('Failed to load temporal foresight data:', e);
+        Log.error('Failed to load temporal foresight data:', e);
       } finally {
         setLoading(false);
       }
@@ -163,7 +165,7 @@ export function RecursiveSwarmView() {
           setData(responseData.result);
         }
       } catch (e) {
-        console.error('Failed to load swarm data:', e);
+        Log.error('Failed to load swarm data:', e);
       } finally {
         setLoading(false);
       }
@@ -225,7 +227,7 @@ export function EntropyLockView() {
           setData(responseData.result);
         }
       } catch (e) {
-        console.error('Failed to load entropy lock data:', e);
+        Log.error('Failed to load entropy lock data:', e);
       } finally {
         setLoading(false);
       }
@@ -280,7 +282,7 @@ export function RealitySynthesisView() {
         setResult(responseData.result);
       }
     } catch (e) {
-      console.error('Failed to synthesize reality:', e);
+      Log.error('Failed to synthesize reality:', e);
     } finally {
       setLoading(false);
     }
@@ -355,10 +357,10 @@ export function TruthAuditorView() {
         if (data.success) {
           setAuditResult(data.result);
         } else {
-          console.error('Audit failed:', data.error);
+          Log.error('Audit failed:', data.error);
         }
       } catch (e) {
-        console.error('Audit failed:', e);
+        Log.error('Audit failed:', e);
       } finally {
         setLoading(false);
       }
@@ -434,7 +436,7 @@ export function CommandDeckView() {
           setData(responseData.result);
         }
       } catch (e) {
-        console.error('Failed to load command deck data:', e);
+        Log.error('Failed to load command deck data:', e);
       } finally {
         setLoading(false);
       }
@@ -531,7 +533,7 @@ export function MergeCourtView() {
           setData(responseData.result);
         }
       } catch (e) {
-        console.error('Failed to load merge court data:', e);
+        Log.error('Failed to load merge court data:', e);
       } finally {
         setLoading(false);
       }
@@ -592,7 +594,7 @@ export function PatternMirrorView() {
           setData(responseData.result);
         }
       } catch (e) {
-        console.error('Failed to load pattern mirror data:', e);
+        Log.error('Failed to load pattern mirror data:', e);
       } finally {
         setLoading(false);
       }
@@ -653,7 +655,7 @@ export function PromptGenomeView() {
           setData(responseData.result);
         }
       } catch (e) {
-        console.error('Failed to load prompt genome data:', e);
+        Log.error('Failed to load prompt genome data:', e);
       } finally {
         setLoading(false);
       }
@@ -706,10 +708,10 @@ export function DeadHunterView() {
         if (data.success) {
           setScanResult(data.result);
         } else {
-          console.error('Scan failed:', data.error);
+          Log.error('Scan failed:', data.error);
         }
       } catch (e) {
-        console.error('Scan failed:', e);
+        Log.error('Scan failed:', e);
       } finally {
         setLoading(false);
       }
@@ -777,7 +779,7 @@ export function ProofVaultView() {
           setData(responseData.result);
         }
       } catch (e) {
-        console.error('Failed to load proof vault data:', e);
+        Log.error('Failed to load proof vault data:', e);
       } finally {
         setLoading(false);
       }

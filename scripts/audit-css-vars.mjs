@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
@@ -30,12 +32,12 @@ function getFiles(dir, extensions) {
 }
 
 async function runCssAudit() {
-  console.log(`\n${BOLD}🎨 [CSS_VARS_AUDIT] Initializing CSS Variables & Theme Integrity Scan...${RESET}`);
-  console.log('══════════════════════════════════════════════════════════════');
+  Log.info(`\n${BOLD}🎨 [CSS_VARS_AUDIT] Initializing CSS Variables & Theme Integrity Scan...${RESET}`);
+  Log.info('══════════════════════════════════════════════════════════════');
 
   const srcDir = path.join(root, 'src');
   if (!fs.existsSync(srcDir)) {
-    console.error(`${RED}Error: src/ directory not found.${RESET}`);
+    Log.error(`${RED}Error: src/ directory not found.${RESET}`);
     process.exit(1);
   }
 
@@ -75,7 +77,7 @@ async function runCssAudit() {
     }
   }
 
-  console.log(`✨ Collected ${CYAN}${definedVars.size}${RESET} defined CSS variables across ${CYAN}${cssFiles.length}${RESET} CSS files.`);
+  Log.info(`✨ Collected ${CYAN}${definedVars.size}${RESET} defined CSS variables across ${CYAN}${cssFiles.length}${RESET} CSS files.`);
 
   // 2. Scan JSX, JS, and CSS files for var(--...) usages and broken var() references
   const scanFiles = getFiles(srcDir, ['.css', '.js', '.jsx']);
@@ -160,20 +162,20 @@ async function runCssAudit() {
   }
 
   // 3. Print Summary
-  console.log('══════════════════════════════════════════════════════════════');
+  Log.info('══════════════════════════════════════════════════════════════');
   
   if (violations.length === 0) {
-    console.log(`\n${GREEN}✅ [PASS] CSS Variables Audit completed. All custom properties are valid and resolved!${RESET}\n`);
+    Log.info(`\n${GREEN}✅ [PASS] CSS Variables Audit completed. All custom properties are valid and resolved!${RESET}\n`);
     process.exit(0);
   } else {
-    console.log(`\n${RED}⚠️  [FAIL] CSS Variables Audit found ${violations.length} violation(s):${RESET}`);
+    Log.info(`\n${RED}⚠️  [FAIL] CSS Variables Audit found ${violations.length} violation(s):${RESET}`);
     violations.forEach((v, i) => {
-      console.log(`   ${BOLD}[${i + 1}] ${RED}${v.type}${RESET}`);
-      console.log(`       📍 Location: ${CYAN}${v.file}:${v.line}${RESET}`);
-      console.log(`       💡 Context:  "${YELLOW}${v.context}${RESET}"`);
-      console.log(`       📢 Details:  ${v.detail}`);
+      Log.info(`   ${BOLD}[${i + 1}] ${RED}${v.type}${RESET}`);
+      Log.info(`       📍 Location: ${CYAN}${v.file}:${v.line}${RESET}`);
+      Log.info(`       💡 Context:  "${YELLOW}${v.context}${RESET}"`);
+      Log.info(`       📢 Details:  ${v.detail}`);
     });
-    console.log(`\n${YELLOW}Correction Action Required. Fix the violations above and rerun.${RESET}\n`);
+    Log.info(`\n${YELLOW}Correction Action Required. Fix the violations above and rerun.${RESET}\n`);
     process.exit(1);
   }
 }

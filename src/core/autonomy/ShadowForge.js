@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 import { Log } from './SovereignLogger.js';
+
+const execAsync = promisify(exec);
 
 /**
  * PH EVO STUDIO — SHADOWFORGE (GHOST-BUILDING)
@@ -26,9 +30,9 @@ export class ShadowForge {
     const shadowPath = path.join(this.shadowDir, `${fileId}.ghost`);
     fs.writeFileSync(shadowPath, proposedLogic);
 
-    // PHYSICAL VALIDATION: Check for syntax errors in the ghost-file
+    // PHYSICAL VALIDATION: Actually check for syntax errors in the ghost-file
     try {
-      // In production, this would run a 'vite build' or 'tsc' on the shadow path
+      await execAsync(`node --check "${shadowPath}"`);
       Log.success(`✅ [ShadowForge] Ghost-Build STABLE for ${fileId}. Safe for Evolution.`);
       return true;
     } catch (e) {

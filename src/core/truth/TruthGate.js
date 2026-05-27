@@ -1,5 +1,7 @@
 import crypto from 'crypto';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 export class TruthGate {
   constructor() {
     this.FORBIDDEN_MARKERS = [
@@ -62,7 +64,7 @@ export class TruthGate {
 
     const report = this.inspect(data);
     if (!report.isReal) {
-      console.error(`☢️ [NUCLEAR TRUTH] System Terminated in ${context}!`, report.issues);
+      Log.error(`☢️ [NUCLEAR TRUTH] System Terminated in ${context}!`, report.issues);
       throw new Error(`REALITY_COLLAPSE: ${report.issues.join(' | ')}`);
     }
     return data;

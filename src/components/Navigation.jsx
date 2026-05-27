@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
   Activity, Eye, Swords, Sparkles, BarChart3, FolderOpen, Gauge, Zap, ChevronRight,
-  ExternalLink, Share2
+  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -30,9 +30,10 @@ export const NAV_GROUPS = [
     label: 'Intelligence',
     items: [
       { id: 'prompt-registry', label: 'Prompt Registry', icon: Code2 },
-      { id: 'forge-labs', label: 'Forge Labs', icon: Sparkles },
-      { id: 'duel-arena', label: 'Duel Arena', icon: Swords },
-      { id: 'ai-generator', label: 'AI Generator', icon: Zap },
+      { id: 'evo-diffuser', label: 'Evo Diffuser', icon: Aperture },
+      { id: 'evo-pixelator', label: 'Evo Pixelator', icon: Gamepad2 },
+      { id: 'evo-layout', label: 'Evo Layout', icon: LayoutTemplate },
+      { id: 'theme-evolution', label: 'Theme Evolution', icon: Palette },
       { id: 'evopulse-grid', label: 'EvoPulse Grid', icon: Share2 },
     ],
   },

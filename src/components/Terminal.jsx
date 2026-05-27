@@ -58,8 +58,11 @@ const COMMAND_CATALOG = [
   { id: 'git-diff', label: 'Git Diff Summary', command: 'git diff --stat', session: 'main', description: 'Displays changed-file summary with line deltas.', tags: ['git', 'diff'] },
   { id: 'node-version', label: 'Node Version', command: 'node -v', session: 'main', description: 'Prints active Node.js version.', tags: ['node', 'runtime'] },
   { id: 'npm-version', label: 'NPM Version', command: 'npm -v', session: 'main', description: 'Prints active npm version.', tags: ['npm', 'runtime'] },
+  { id: 'evo-repair', label: 'Evo Code Repair', command: 'evo repair', session: 'main', description: 'Triggers autonomous AI repair on a specific file.', tags: ['repair', 'fix', 'ai'] },
+  { id: 'evo-doctor', label: 'Evo Studio Doctor', command: 'evo doctor', session: 'main', description: 'Diagnoses studio systems and background daemons.', tags: ['doctor', 'health', 'system'] },
   { id: 'pwd', label: 'Working Directory', command: 'pwd', session: 'main', description: 'Shows current workspace path.', tags: ['path', 'workspace'] },
-  { id: 'files', label: 'List Workspace Files', command: 'Get-ChildItem', session: 'main', description: 'Lists files and folders in current directory.', tags: ['files', 'inspect'] }
+  { id: 'files', label: 'List Workspace Files', command: 'Get-ChildItem', session: 'main', description: 'Lists files and folders in current directory.', tags: ['files', 'inspect'] },
+  { id: 'clear', label: 'Clear Terminal', command: 'clear', session: 'main', description: 'Clears terminal output logs.', tags: ['clear', 'cls', 'clean'] }
 ];
 
 export function Terminal() {
@@ -86,6 +89,7 @@ export function Terminal() {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [catalogOpen, setCatalogOpen] = useState(true);
   const [catalogFilter, setCatalogFilter] = useState('');
+  const [sessionCwds, setSessionCwds] = useState({});
   const scrollRef = useRef(null);
 
   const logs = terminalSessions[activeTerminalSession] || [];
@@ -132,6 +136,9 @@ export function Terminal() {
         if (result.node) {
           addBondedNode(result.node);
         }
+        if (result.cwd) {
+          setSessionCwds(prev => ({ ...prev, [session]: result.cwd }));
+        }
       } else {
         addTerminalLog(data.error || 'EvoShell: Failed.', 'error', session);
       }
@@ -146,6 +153,14 @@ export function Terminal() {
     e?.preventDefault();
     if (!command.trim() || executing) return;
     const cmdText = command.trim();
+    
+    if (cmdText.toLowerCase() === 'clear' || cmdText.toLowerCase() === 'cls') {
+      clearTerminal(activeTerminalSession);
+      setCommand('');
+      setHistoryIndex(-1);
+      return;
+    }
+
     setCommand('');
     setHistoryIndex(-1);
     await runCommandText(cmdText, activeTerminalSession);
@@ -396,7 +411,9 @@ export function Terminal() {
       >
         <div className="flex items-center gap-2 shrink-0">
           <span className="text-emerald-500 font-black text-xs">PS</span>
-          <span className="text-slate-600 font-bold">C:\PH\Evo\Studio</span>
+          <span className="text-slate-600 font-bold truncate max-w-[200px]" title={sessionCwds[activeTerminalSession] || 'C:\\PH\\Evo\\Studio'}>
+            {sessionCwds[activeTerminalSession] || 'C:\\PH\\Evo\\Studio'}
+          </span>
           <span className="text-indigo-500 font-black tracking-tighter">❯❯❯</span>
         </div>
         <input 

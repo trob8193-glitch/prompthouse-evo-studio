@@ -18,7 +18,7 @@ export class SelfHealingWorkflowRepair {
    * Perform a physical repair on the studio environment.
    */
   async performPhysicalRepair(anomaly) {
-    console.log(`🛠️ [SelfHealing] Attempting physical repair for: ${anomaly.type}`);
+    Log.info(`🛠️ [SelfHealing] Attempting physical repair for: ${anomaly.type}`);
     
     // New: Sovereign Evolution Edge
     if (anomaly.type === 'VISUAL_DRIFT' || anomaly.type === 'UI_INCONSISTENCY') {
@@ -37,7 +37,7 @@ export class SelfHealingWorkflowRepair {
    * Trigger an autonomous UI evolution to heal visual drift.
    */
   async triggerAutonomousEvolution(anomaly) {
-    console.log(`🧬 [SelfHealing] Anomaly requires Evolution. Contacting EVOGENAGE...`);
+    Log.info(`🧬 [SelfHealing] Anomaly requires Evolution. Contacting EVOGENAGE...`);
     
     const missionId = await EVOLUTION_BRIDGE.requestEvolution(
       anomaly.targetArea || 'Global-UI',

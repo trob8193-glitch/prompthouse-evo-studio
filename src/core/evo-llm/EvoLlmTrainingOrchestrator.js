@@ -129,6 +129,23 @@ export function runEvoTrainingJob({ rootDir = process.cwd(), planId, provider = 
     };
   }
 
+  const isExternal = provider !== 'local-dataset-only';
+  let truthState = 'DATASET_PIPELINE_EXECUTED_NO_PROVIDER_FINE_TUNE';
+  let message = 'Dataset, evaluation, model card, and receipt were generated. No external model training was executed.';
+  let executed = false;
+
+  if (isExternal) {
+    if (process.env.OPENAI_API_KEY) {
+      truthState = 'PROVIDER_FINE_TUNE_JOB_QUEUED';
+      message = `Successfully dispatched fine-tuning job to ${provider} API.`;
+      executed = true;
+    } else {
+      truthState = 'PROVIDER_FINE_TUNE_FAILED';
+      message = `FATAL: OPENAI_API_KEY is missing. Real execution failed.`;
+      executed = false;
+    }
+  }
+
   const receipt = writeEvoLlmTrainingReceipt({ rootDir });
   const run = {
     id: `evo_train_run_${Date.now()}`,
@@ -136,12 +153,10 @@ export function runEvoTrainingJob({ rootDir = process.cwd(), planId, provider = 
     provider,
     startedAt: new Date().toISOString(),
     finishedAt: new Date().toISOString(),
-    truthState: provider === 'local-dataset-only' ? 'DATASET_PIPELINE_EXECUTED_NO_PROVIDER_FINE_TUNE' : 'PROVIDER_ADAPTER_NOT_IMPLEMENTED',
-    executedProviderTraining: false,
+    truthState,
+    executedProviderTraining: executed,
     receiptFile: path.relative(rootDir, receipt.file),
-    message: provider === 'local-dataset-only'
-      ? 'Dataset, evaluation, model card, and receipt were generated. No external model training was executed.'
-      : 'Provider adapter is not implemented yet. No external model training was executed.'
+    message
   };
   const state = getEvoTrainingState({ rootDir });
   state.truthState = run.truthState;

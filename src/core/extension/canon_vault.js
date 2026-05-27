@@ -3,6 +3,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 const VAULT_FILE = path.join(__dirname, 'canon_vault.json');
 const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 
@@ -17,7 +19,7 @@ class CanonVault {
             const data = await fs.promises.readFile(VAULT_FILE, 'utf-8');
             this.verifiedKnowledge = JSON.parse(data);
         } catch (error) {
-            console.error('Failed to load vault:', error);
+            Log.error('Failed to load vault:', error);
             this.verifiedKnowledge = [];
         }
     }
@@ -26,7 +28,7 @@ class CanonVault {
         try {
             await fs.promises.writeFile(VAULT_FILE, JSON.stringify(this.verifiedKnowledge, null, 2));
         } catch (error) {
-            console.error('Failed to save vault:', error);
+            Log.error('Failed to save vault:', error);
         }
     }
 

@@ -3,6 +3,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 const BASE_URL = 'http://127.0.0.1:3001';
 const DATA_FILE = path.resolve('patterns.json');
 
@@ -26,7 +28,7 @@ class GlobalPatternLibrary {
             const rawData = fs.readFileSync(DATA_FILE);
             this.patterns = JSON.parse(rawData);
         } else {
-            this.fetchPatterns().catch(err => console.error(err));
+            this.fetchPatterns().catch(err => Log.error(err));
         }
     }
 

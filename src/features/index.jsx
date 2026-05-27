@@ -15,7 +15,7 @@ import { PerformanceMonitor } from '../components/PerformanceMonitor.jsx';
 import { BotAutomationDeck } from '../components/BotAutomationDeck.jsx';
 import { EvoExchangeView } from '../evo-exchange-view.jsx';
 import { EvoLiveForgePreview } from '../components/liveforge/EvoLiveForgePreview.jsx';
-import { EvoMobileSimulator } from '../components/liveforge/EvoMobileSimulator.jsx';
+import { EvoMobileController } from '../components/liveforge/EvoMobileController.jsx';
 import { ForgeLabView } from '../forge-views.jsx';
 import { ForgeTermView } from '../forge-term-view.jsx';
 import { NightForgeView } from '../nightforge-view.jsx';
@@ -300,7 +300,7 @@ export function ForgeLabs() {
         )},
         { id: 'emulator', label: 'Mobile Simulator Hub', component: (
           <div className="space-y-6">
-            <EvoMobileSimulator />
+            <EvoMobileController />
           </div>
         )},
         { id: 'autonomy', label: 'NightForge & Repair', component: (

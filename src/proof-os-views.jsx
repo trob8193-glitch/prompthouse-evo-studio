@@ -3,6 +3,8 @@ import { useEvoStore } from './store.js';
 import { calculateIntentDrift, verifyCanonDrift } from './ai-engine.js';
 import { scorePrompt } from './engine.js';
 
+import { Log } from './core/autonomy/SovereignLogger.js';
+
 const BRIDGE_URL = 'http://127.0.0.1:3001';
 
 // ── 1. PROOF-NATIVE LEDGER ───────────────────────────────────────
@@ -26,7 +28,7 @@ export function ProofLedgerView() {
         setReceiptCount(Number(countPayload?.count || 0));
         setProofs(Array.isArray(listPayload?.receipts) ? listPayload.receipts : []);
       } catch (e) {
-        console.error('Failed to fetch proof count:', e);
+        Log.error('Failed to fetch proof count:', e);
         if (!mounted) return;
         setProofs([]);
         setReceiptCount(0);

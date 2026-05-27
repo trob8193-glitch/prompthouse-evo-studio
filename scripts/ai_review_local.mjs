@@ -3,6 +3,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import * as guardrails from './ai_guardrails.mjs';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
@@ -10,7 +12,7 @@ async function review() {
   const configPath = path.join(root, '.ai/config/bridge.config.json');
   
   if (!fs.existsSync(configPath)) {
-    console.error('❌ Configuration missing. Run npm run ai:pack first.');
+    Log.error('❌ Configuration missing. Run npm run ai:pack first.');
     process.exit(1);
   }
 
@@ -18,13 +20,13 @@ async function review() {
   const snapshotPath = path.join(root, config.outputSnapshotPath);
 
   if (!fs.existsSync(snapshotPath)) {
-    console.log('❌ Context pack missing. Run npm run ai:pack first.');
+    Log.info('❌ Context pack missing. Run npm run ai:pack first.');
     process.exit(1);
   }
 
   const snapshot = JSON.parse(fs.readFileSync(snapshotPath, 'utf8'));
   
-  console.log('📡 [AI_Review_Local] Running Offline Heuristic Review...');
+  Log.info('📡 [AI_Review_Local] Running Offline Heuristic Review...');
 
   const issues = [];
   let score = 100;
@@ -106,13 +108,13 @@ If online quota is available, switch to Cloud Core for deep architectural synthe
   const checklist = checklistMatch ? checklistMatch[1].trim() : '- [ ] Maintain current state.';
   await guardrails.writeTextFileSafe(root, config.repairChecklistOutputPath, checklist);
 
-  console.log('✅ [AI_Review_Local] Heuristic review completed locally.');
-  console.log(`📍 Review: ${config.reviewOutputPath}`);
-  console.log(`📍 Next Pass: ${config.antigravityPromptOutputPath}`);
-  console.log(`📍 Checklist: ${config.repairChecklistOutputPath}`);
+  Log.info('✅ [AI_Review_Local] Heuristic review completed locally.');
+  Log.info(`📍 Review: ${config.reviewOutputPath}`);
+  Log.info(`📍 Next Pass: ${config.antigravityPromptOutputPath}`);
+  Log.info(`📍 Checklist: ${config.repairChecklistOutputPath}`);
 }
 
 review().catch(err => {
-  console.error('❌ [AI_Review_Local] Unhandled fatal error:', err);
+  Log.error('❌ [AI_Review_Local] Unhandled fatal error:', err);
   process.exit(1);
 });

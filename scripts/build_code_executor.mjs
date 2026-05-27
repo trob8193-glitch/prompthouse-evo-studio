@@ -4,6 +4,8 @@ import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 dotenv.config({ override: true });
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -14,13 +16,13 @@ async function build() {
   const model = process.env.OPENAI_MODEL || 'gpt-4o';
 
   if (!apiKey) {
-    console.error('❌ OPENAI_API_KEY missing in .env');
+    Log.error('❌ OPENAI_API_KEY missing in .env');
     process.exit(1);
   }
 
   const client = new OpenAI({ apiKey });
 
-  console.log(`📡 [Build] Requesting full implementation for src/autonomous_code_executor.py from OpenAI (${model})...`);
+  Log.info(`📡 [Build] Requesting full implementation for src/autonomous_code_executor.py from OpenAI (${model})...`);
 
   const prompt = `
 You are the Cloud Core of the PromptHouse Evo Studio.
@@ -60,10 +62,10 @@ Include comments and error handling.
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     
     fs.writeFileSync(outputPath, finalCode, 'utf8');
-    console.log(`✅ [Build] File created at: ${outputPath}`);
+    Log.info(`✅ [Build] File created at: ${outputPath}`);
     
   } catch (err) {
-    console.error('❌ [Build] Error:', err.message);
+    Log.error('❌ [Build] Error:', err.message);
     process.exit(1); // Exit with error so the loop knows it failed
   }
 }

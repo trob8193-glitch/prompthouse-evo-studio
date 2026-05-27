@@ -38,7 +38,7 @@ const MODULE_SEEDS = [
   { id: 'nuclear-audit', name: 'Nuclear Static Audit Gates', uiHints: ['verify:studio', 'audit:imports', 'audit:css'], apiHints: ['verify-studio', 'audit-imports', 'audit-css-vars'], testHints: ['verify-studio', 'audit-imports', 'audit-css-vars'] },
   { id: 'proof-console', name: 'Proof Console', uiHints: ['ProofConsole', 'ProofLedgerView', 'ProofVaultView'], apiHints: ['proof', 'ledger'], testHints: ['proof'] },
   { id: 'forge-labs', name: 'Forge Labs', uiHints: ['ForgeLabs', 'ForgeLabView', 'ForgeRenderConsoleView'], apiHints: ['forge', 'render'], testHints: ['forge'] },
-  { id: 'mobile-simulator', name: 'Mobile Simulator Hub', uiHints: ['EvoMobileSimulator', 'emulator'], apiHints: ['/api/emulator', 'emulator'], testHints: ['emulator'] },
+  { id: 'mobile-controller', name: 'Mobile Controller Hub', uiHints: ['EvoMobileController', 'emulator'], apiHints: ['/api/emulator', 'emulator'], testHints: ['emulator'] },
   { id: 'prompt-registry', name: 'Prompt Registry', uiHints: ['PromptRegistry', 'MasterPromptVaultView'], apiHints: ['prompt', 'registry'], testHints: ['prompt'] },
   { id: 'ai-generator', name: 'AI Generator Hub', uiHints: ['AIGeneratorHub', 'AIPromptGeneratorView'], apiHints: ['ai', 'generator'], testHints: ['ai-generator', 'prompt-generator'] },
   { id: 'evo-model-foundry', name: 'Evo Model Foundry', uiHints: ['EvoModelFoundry', 'EvoExchangeView', 'PatternMinerView'], apiHints: ['model', 'foundry', 'evo-lm'], testHints: ['evo-runtime', 'model'] },

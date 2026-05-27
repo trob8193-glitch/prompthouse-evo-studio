@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
@@ -42,8 +44,8 @@ const allowedDeps = new Set([
 ]);
 
 async function runImportsAudit() {
-  console.log(`\n${BOLD}🔗 [IMPORTS_AUDIT] Initializing Advanced Principal Imports Gate...${RESET}`);
-  console.log('══════════════════════════════════════════════════════════════');
+  Log.info(`\n${BOLD}🔗 [IMPORTS_AUDIT] Initializing Advanced Principal Imports Gate...${RESET}`);
+  Log.info('══════════════════════════════════════════════════════════════');
 
   const scanDirs = ['src', 'generated_apis', 'scripts', 'server'];
   let allSourceFiles = [];
@@ -52,7 +54,7 @@ async function runImportsAudit() {
     allSourceFiles = allSourceFiles.concat(getFiles(fullPath, ['.js', '.jsx', '.mjs']));
   });
 
-  console.log(`📡 Scanning ${CYAN}${allSourceFiles.length}${RESET} files in [src, generated_apis, scripts, server]...`);
+  Log.info(`📡 Scanning ${CYAN}${allSourceFiles.length}${RESET} files in [src, generated_apis, scripts, server]...`);
 
   const importRegex = /import\s+(?:[\w\s{},*]+|['"][\w\s{},*]+['"]\s+as\s+[\w\s{},*]+)?\s*from\s+['"]([^'"]+)['"]/g;
   const requireRegex = /require\(\s*['"]([^'"]+)['"]\s*\)/g;
@@ -224,20 +226,20 @@ async function runImportsAudit() {
   }
 
   // Print summary & exit
-  console.log('══════════════════════════════════════════════════════════════');
+  Log.info('══════════════════════════════════════════════════════════════');
 
   if (violations.length === 0) {
-    console.log(`\n${GREEN}✅ [PASS] Imports & Dependency Security Audit completed successfully! Zero violations detected.${RESET}\n`);
+    Log.info(`\n${GREEN}✅ [PASS] Imports & Dependency Security Audit completed successfully! Zero violations detected.${RESET}\n`);
     process.exit(0);
   } else {
-    console.log(`\n${RED}⚠️  [FAIL] Imports Security Audit detected ${violations.length} critical violation(s):${RESET}`);
+    Log.info(`\n${RED}⚠️  [FAIL] Imports Security Audit detected ${violations.length} critical violation(s):${RESET}`);
     violations.forEach((v, i) => {
-      console.log(`   ${BOLD}[${i + 1}] ${RED}${v.type}${RESET}`);
-      console.log(`       📍 Location: ${CYAN}${v.file}:${v.line}${RESET}`);
-      console.log(`       💡 Context:  "${YELLOW}${v.rawLine}${RESET}"`);
-      console.log(`       📢 Details:  ${v.message}`);
+      Log.info(`   ${BOLD}[${i + 1}] ${RED}${v.type}${RESET}`);
+      Log.info(`       📍 Location: ${CYAN}${v.file}:${v.line}${RESET}`);
+      Log.info(`       💡 Context:  "${YELLOW}${v.rawLine}${RESET}"`);
+      Log.info(`       📢 Details:  ${v.message}`);
     });
-    console.log(`\n${YELLOW}Correction Action Required. Fix the violations above and rerun.${RESET}\n`);
+    Log.info(`\n${YELLOW}Correction Action Required. Fix the violations above and rerun.${RESET}\n`);
     process.exit(1);
   }
 }

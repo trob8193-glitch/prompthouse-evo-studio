@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 /**
  * SOVEREIGN ADVANCED FEATURES (Physical Truth Edition)
  * ═══════════════════════════════════════════════════════════════
@@ -21,7 +23,7 @@ export class VectorMemoryLogic {
         const content = fs.readFileSync(trainingFile, 'utf8');
         memoryCount = content.split('\n').filter(Boolean).length;
       } catch (e) {
-        console.error('Failed to read training file for VectorMemory:', e);
+        Log.error('Failed to read training file for VectorMemory:', e);
       }
     }
     
@@ -51,7 +53,7 @@ export class TemporalForesightLogic {
         velocity = data.receipt_count || 0;
         trend = velocity > 50 ? 'EVOLVING_RAPIDLY' : 'STABLE';
       } catch (e) {
-        console.error('Failed to analyze ledger for TemporalForesight:', e);
+        Log.error('Failed to analyze ledger for TemporalForesight:', e);
       }
     }
     
@@ -74,7 +76,7 @@ export class RecursiveSwarmLogic {
         const files = fs.readdirSync(proofDir);
         swarmCount = files.filter(f => f.startsWith('swarm_init_')).length;
       } catch (e) {
-        console.error('Failed to read proof receipts for RecursiveSwarm:', e);
+        Log.error('Failed to read proof receipts for RecursiveSwarm:', e);
       }
     }
     
@@ -133,7 +135,7 @@ export class EntropyLockLogic {
         lockedAssets = data.receipt_count || 0;
         status = data.status || 'LOCKED';
       } catch (e) {
-        console.error('Failed to read MASTER_TRUTH_LEDGER for EntropyLock:', e);
+        Log.error('Failed to read MASTER_TRUTH_LEDGER for EntropyLock:', e);
       }
     }
     
@@ -159,7 +161,7 @@ export class CommandDeckLogic {
           return JSON.parse(content);
         });
       } catch (e) {
-        console.error('Failed to read missions for CommandDeck:', e);
+        Log.error('Failed to read missions for CommandDeck:', e);
       }
     }
     
@@ -184,7 +186,7 @@ export class MergeCourtLogic {
           return JSON.parse(content);
         });
       } catch (e) {
-        console.error('Failed to read conflicts for MergeCourt:', e);
+        Log.error('Failed to read conflicts for MergeCourt:', e);
       }
     }
     
@@ -208,7 +210,7 @@ export class PatternMirrorLogic {
         const results = data.results || [];
         patterns = results.filter(r => r.file && r.file.includes('pattern')).map(r => r.file);
       } catch (e) {
-        console.error('Failed to read audit for PatternMirror:', e);
+        Log.error('Failed to read audit for PatternMirror:', e);
       }
     }
     
@@ -231,7 +233,7 @@ export class PromptGenomeLogic {
         const data = JSON.parse(content);
         genomeFound = (data.features || []).some(f => f.name === 'Prompt Genome');
       } catch (e) {
-        console.error('Failed to read genome file:', e);
+        Log.error('Failed to read genome file:', e);
       }
     }
     
@@ -254,7 +256,7 @@ export class ProofVaultLogic {
         const files = fs.readdirSync(receiptsDir);
         count = files.length;
       } catch (e) {
-        console.error('Failed to count receipts for ProofVault:', e);
+        Log.error('Failed to count receipts for ProofVault:', e);
       }
     }
     
@@ -289,7 +291,7 @@ export class RareCapabilitiesLogic {
           }
         }
       } catch (e) {
-        console.error('RareCapabilities Audit Failed:', e);
+        Log.error('RareCapabilities Audit Failed:', e);
       }
     }
 

@@ -4,6 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import fetch from 'node-fetch';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 const AUDIT_LOG_FILE = path.join(__dirname, 'audit_log.json');
 const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001/audit';
 
@@ -43,7 +45,7 @@ class AuditLog {
                 body: JSON.stringify(logEntry),
             });
         } catch (error) {
-            console.error('Error sending log entry to local bridge:', error);
+            Log.error('Error sending log entry to local bridge:', error);
         }
     }
 

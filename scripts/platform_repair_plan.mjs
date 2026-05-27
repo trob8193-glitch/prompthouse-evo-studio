@@ -3,6 +3,8 @@ import { mkdirSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { PlatformReadinessEngine } from '../src/core/platform-sentinel/index.js';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 const result = new PlatformReadinessEngine().status({ runCommands: false });
 const lines = [
   '# Platform Sentinel Repair Queue',
@@ -19,4 +21,4 @@ const lines = [
 const out = join(process.cwd(), 'docs', 'platform-ready', 'REPAIR_QUEUE.md');
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, lines.join('\n'), 'utf8');
-console.log(`Wrote ${out}`);
+Log.info(`Wrote ${out}`);

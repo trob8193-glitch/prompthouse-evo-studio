@@ -33,7 +33,7 @@ export class SovereignSharder {
             eventType: 'EVOPULSE_ENVELOPE_BUILT',
             payload: { shardKey, bytes: content.length, path }
           })
-        }).catch(() => {}); // Fire and forget
+        }).catch((err) => { Log.warn(`[Sharder] Failed to broadcast Shard creation to Rift Grid: ${err.message}`); });
 
         return { status: 'SHARDED', bytes: content.length, path };
       } else {

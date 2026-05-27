@@ -4,6 +4,8 @@ import path from 'path';
 import { execSync } from 'child_process';
 import * as guardrails from './ai_guardrails.mjs';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 /**
  * AI CONTEXT PACKER (V1 PRODUCTION - REPAIRED)
  * ═══════════════════════════════════════════════════════════════
@@ -16,14 +18,14 @@ async function pack() {
   const configPath = path.join(root, '.ai/config/bridge.config.json');
   
   if (!fs.existsSync(configPath)) {
-    console.error('❌ Configuration missing at .ai/config/bridge.config.json');
+    Log.error('❌ Configuration missing at .ai/config/bridge.config.json');
     process.exit(1);
   }
 
   const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
   const timestamp = new Date().toISOString();
   
-  console.log('🚀 [AI_Pack] Initializing context scan...');
+  Log.info('🚀 [AI_Pack] Initializing context scan...');
 
   const payload = {
     meta: {
@@ -134,13 +136,13 @@ async function pack() {
   
   await guardrails.writeTextFileSafe(root, config.summaryOutputPath, summary);
 
-  console.log('✅ [AI_Pack] Context packet created.');
-  console.log(`📍 Snapshot: ${config.outputSnapshotPath}`);
-  console.log(`📍 Summary: ${config.summaryOutputPath}`);
-  console.log(`📊 Stats: ${payload.files.length} files | ${(runningTotalBytes / 1024).toFixed(2)} KB`);
+  Log.info('✅ [AI_Pack] Context packet created.');
+  Log.info(`📍 Snapshot: ${config.outputSnapshotPath}`);
+  Log.info(`📍 Summary: ${config.summaryOutputPath}`);
+  Log.info(`📊 Stats: ${payload.files.length} files | ${(runningTotalBytes / 1024).toFixed(2)} KB`);
 }
 
 pack().catch(err => {
-  console.error('❌ [AI_Pack] Fatal error:', err);
+  Log.error('❌ [AI_Pack] Fatal error:', err);
   process.exit(1);
 });

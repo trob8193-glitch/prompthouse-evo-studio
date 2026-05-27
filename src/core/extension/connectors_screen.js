@@ -2,6 +2,8 @@
 
 import { fetchConnectors, saveConnector, deleteConnector } from './api.js';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 export class ConnectorsScreen {
     constructor() {
         this.connectorsList = document.getElementById('connectorsList');
@@ -24,7 +26,7 @@ export class ConnectorsScreen {
             const connectors = await fetchConnectors();
             this.renderConnectors(connectors);
         } catch (error) {
-            console.error('Error loading connectors:', error);
+            Log.error('Error loading connectors:', error);
         }
     }
 
@@ -65,7 +67,7 @@ export class ConnectorsScreen {
         try {
             await saveConnector({ name });
         } catch (error) {
-            console.error('Error creating connector:', error);
+            Log.error('Error creating connector:', error);
         }
     }
 
@@ -73,7 +75,7 @@ export class ConnectorsScreen {
         try {
             await saveConnector({ id, name });
         } catch (error) {
-            console.error('Error updating connector:', error);
+            Log.error('Error updating connector:', error);
         }
     }
 
@@ -82,7 +84,7 @@ export class ConnectorsScreen {
             await deleteConnector(connectorId);
             await this.loadConnectors();
         } catch (error) {
-            console.error('Error deleting connector:', error);
+            Log.error('Error deleting connector:', error);
         }
     }
 }

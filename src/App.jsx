@@ -38,6 +38,11 @@ import {
   GradingAndRelease, CommerceCore, FeatureFoundry,
 } from './features/index.jsx';
 
+import EvoDiffuserDashboard from './features/EvoDiffuserDashboard.jsx';
+import EvoPixelatorDashboard from './features/EvoPixelatorDashboard.jsx';
+import EvoLayoutDashboard from './features/EvoLayoutDashboard.jsx';
+import ThemeEvolutionDashboard from './features/ThemeEvolutionDashboard.jsx';
+
 export const PAGE_MAP = {
   'dashboard': SovereignIntelligenceDashboard,
   'chat': SovereignChat,
@@ -52,6 +57,10 @@ export const PAGE_MAP = {
   'proof-center': ProofCenterView,
   'deployment-center': DeploymentCenterView,
   'evo-eyes': EvoEyesView,
+  'evo-diffuser': EvoDiffuserDashboard,
+  'evo-pixelator': EvoPixelatorDashboard,
+  'evo-layout': EvoLayoutDashboard,
+  'theme-evolution': ThemeEvolutionDashboard,
   'metrics': MetricsView,
   'settings': GlobalAPISettingsView,
   'connections': ConnectionManager,

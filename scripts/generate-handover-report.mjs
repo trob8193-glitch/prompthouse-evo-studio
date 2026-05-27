@@ -8,6 +8,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 export function redact(val) {
   if (!val) return '';
   return val.slice(0, 8) + '...REDACTED';
@@ -30,7 +32,7 @@ No secrets. No provider calls.
   }
   
   fs.writeFileSync(path.join(outDir, 'handover-report.md'), report);
-  console.log('✅ Handover report generated successfully.');
+  Log.info('✅ Handover report generated successfully.');
 }
 
 // Auto-run if executed directly

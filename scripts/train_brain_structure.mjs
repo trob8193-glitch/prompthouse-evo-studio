@@ -5,13 +5,15 @@ import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 import crypto from 'crypto';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 dotenv.config({ override: true });
 
 const BRIDGE_URL = 'http://127.0.0.1:3001';
 
 async function train() {
   if (!process.env.OPENAI_API_KEY) {
-    console.log('❌ OPENAI_API_KEY is not set.');
+    Log.info('❌ OPENAI_API_KEY is not set.');
     process.exit(1);
   }
 
@@ -38,7 +40,7 @@ Generate training examples in JSON format:
 }
 Ensure the examples are technical, precise, and help the model learn how to use the studio's specific functions (like TruthGate or the Ledger).`;
 
-  console.log('📡 [Train_Brain] Generating training data using OpenAI...');
+  Log.info('📡 [Train_Brain] Generating training data using OpenAI...');
 
   try {
     const response = await client.chat.completions.create({
@@ -58,7 +60,7 @@ Ensure the examples are technical, precise, and help the model learn how to use 
       throw new Error('Invalid response format from OpenAI');
     }
 
-    console.log(`✅ [Train_Brain] Generated ${data.examples.length} examples.`);
+    Log.info(`✅ [Train_Brain] Generated ${data.examples.length} examples.`);
 
     // Ingest into bridge
     const ingestRes = await fetch(`${BRIDGE_URL}/api/training/ingest`, {
@@ -75,7 +77,7 @@ Ensure the examples are technical, precise, and help the model learn how to use 
     }
 
     const ingestData = await ingestRes.json();
-    console.log(`✅ [Train_Brain] Ingested ${ingestData.ingested} examples into ${ingestData.file}`);
+    Log.info(`✅ [Train_Brain] Ingested ${ingestData.ingested} examples into ${ingestData.file}`);
 
     // Log to ledger
     await fetch(`${BRIDGE_URL}/api/sovereign-ledger/log`, {
@@ -90,10 +92,10 @@ Ensure the examples are technical, precise, and help the model learn how to use 
       })
     });
 
-    console.log('✅ [Train_Brain] Training cycle completed and logged to ledger.');
+    Log.info('✅ [Train_Brain] Training cycle completed and logged to ledger.');
 
   } catch (err) {
-    console.error('❌ [Train_Brain] Error:', err.message);
+    Log.error('❌ [Train_Brain] Error:', err.message);
   }
 }
 

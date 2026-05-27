@@ -3,6 +3,8 @@
 import { promises as fs } from 'fs';
 import fetch from 'node-fetch';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 const SCOPE_FILE = './scope_permissions.json';
 
@@ -18,7 +20,7 @@ class ScopeManager {
             const scopes = JSON.parse(data);
             this.scopes = new Map(Object.entries(scopes));
         } catch (error) {
-            console.error('Could not load scopes:', error);
+            Log.error('Could not load scopes:', error);
             this.scopes = new Map();
         }
     }
@@ -28,7 +30,7 @@ class ScopeManager {
             const data = JSON.stringify(Object.fromEntries(this.scopes));
             await fs.writeFile(SCOPE_FILE, data, 'utf8');
         } catch (error) {
-            console.error('Could not save scopes:', error);
+            Log.error('Could not save scopes:', error);
         }
     }
 
@@ -42,7 +44,7 @@ class ScopeManager {
             this.scopes.set(userId, scopeData);
             await this.saveScopes();
         } catch (error) {
-            console.error('Failed to fetch scope from server:', error);
+            Log.error('Failed to fetch scope from server:', error);
         }
     }
 

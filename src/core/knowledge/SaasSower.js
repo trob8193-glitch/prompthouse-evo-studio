@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 /**
  * PH EVO STUDIO — SAAS SOWER (PRODUCTIZATION EDITION)
  * ═══════════════════════════════════════════════════════════════
@@ -17,7 +19,7 @@ export class SaasSower {
    * Bundle a niche-specific SaaS product.
    */
   async bundleProduct(productName, nicheShardId) {
-    console.log(`🌱 [SaasSower] Bundling Product: ${productName} (Niche: ${nicheShardId})...`);
+    Log.info(`🌱 [SaasSower] Bundling Product: ${productName} (Niche: ${nicheShardId})...`);
 
     const seedPath = path.join(this.outputDir, productName);
     if (!fs.existsSync(seedPath)) fs.mkdirSync(seedPath, { recursive: true });
@@ -31,7 +33,7 @@ export class SaasSower {
     // 3. Manifest README & Deployment Logic
     fs.writeFileSync(path.join(seedPath, 'DEPLOY.md'), `# ${productName}\n\n## Deployment\n1. Run npm install\n2. Configure .env\n3. Start the PH Evo API.`);
 
-    console.log(`✅ [SaasSower] Genesis Seed Manifested at: ${seedPath}`);
+    Log.info(`✅ [SaasSower] Genesis Seed Manifested at: ${seedPath}`);
     return seedPath;
   }
 
@@ -39,7 +41,7 @@ export class SaasSower {
    * Manifest a 100% independent Portable Singularity Bundle.
    */
   async manifestPortableBundle(productName) {
-    console.log(`🌍 [SaasSower] Manifesting Portable Bundle: ${productName}...`);
+    Log.info(`🌍 [SaasSower] Manifesting Portable Bundle: ${productName}...`);
     
     // Create Dockerfile and Vercel configs for 'Anywhere' deployment
     const bundleDir = path.join(this.outputDir, `${productName}_portable`);
@@ -48,13 +50,13 @@ export class SaasSower {
     const dockerfile = `FROM node:24-alpine\nWORKDIR /app\nCOPY . .\nRUN npm install\nEXPOSE 3000\nCMD ["npm", "start"]`;
     fs.writeFileSync(path.join(bundleDir, 'Dockerfile'), dockerfile);
     
-    console.log(`🚀 [SaasSower] Portable Bundle Ready for Global Deployment.`);
+    Log.info(`🚀 [SaasSower] Portable Bundle Ready for Global Deployment.`);
     return bundleDir;
   }
 
   copyFolder(src, dest) {
     // Physical copy logic...
-    console.log(`  - Copying ${src} to ${dest}...`);
+    Log.info(`  - Copying ${src} to ${dest}...`);
   }
 
   copyFile(src, dest) {

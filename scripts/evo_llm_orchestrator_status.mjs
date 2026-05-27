@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 import {
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
   createEvoTrainPlan,
   getEvoTrainStatus,
 } from '../src/core/evo-llm/index.js';
@@ -20,9 +22,9 @@ if (flags.has('--plan')) {
     provider: getArg('--provider', 'local-dataset'),
     objective: getArg('--objective', 'Improve Evo LLM studio reasoning from validated examples')
   });
-  console.log(JSON.stringify(result.plan, null, 2));
+  Log.info(JSON.stringify(result.plan, null, 2));
 } else {
-  console.log(JSON.stringify(getEvoTrainStatus({ rootDir }), null, 2));
+  Log.info(JSON.stringify(getEvoTrainStatus({ rootDir }), null, 2));
 }
 
-console.log('✅ Evo LLM orchestrator status command complete.');
+Log.info('✅ Evo LLM orchestrator status command complete.');

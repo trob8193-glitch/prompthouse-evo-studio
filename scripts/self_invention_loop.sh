@@ -25,7 +25,7 @@ while true; do
         echo "📦 Committing improvements..."
         git add .
         git commit -m "feat: auto-invented improvements: $improvements"
-        git push origin main
+        # git push origin main # DISABLED for safety
     else
         echo "⏳ [Self-Invention] No improvements needed at this time."
     fi
