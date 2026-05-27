@@ -1,15 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { spawn } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '../../../..');
+const receiptDir = path.join(rootDir, '.prompthouse-data', 'omni', 'receipts');
 
-console.log('🌌 [OMNI-ORCHESTRATOR] Initializing Omni-Orchestrator Full Matrix Daemon...');
+if (!fs.existsSync(receiptDir)) fs.mkdirSync(receiptDir, { recursive: true });
 
-// Dynamically read bot roster if available, otherwise use core list
+console.log('🌌 [OMNI-ORCHESTRATOR] Initializing receipt-backed mission router...');
+
 let bots = [
   { botId: 1, name: 'Architect', role: 'System Design', status: 'IDLE' },
   { botId: 2, name: 'Builder', role: 'Feature Forging', status: 'IDLE' },
@@ -21,47 +22,50 @@ let bots = [
 
 try {
   const botFile = path.join(rootDir, 'src', 'bot-characters.jsx');
-  if (fs.existsSync(botFile)) {
-    console.log('🌌 [OMNI-ORCHESTRATOR] Verified local bot roster definitions.');
-  }
-} catch (err) {
-  // Graceful fallback
+  if (fs.existsSync(botFile)) console.log('🌌 [OMNI-ORCHESTRATOR] Verified local bot roster definitions.');
+} catch {}
+
+function writeMissionReceipt(cycle, mission, bot) {
+  const receipt = {
+    id: `omni_${cycle}_${mission.botId}_${Date.now()}`,
+    cycle,
+    generatedAt: new Date().toISOString(),
+    bot,
+    mission,
+    status: 'MISSION_RECORDED',
+    truthLabel: 'PROOF_REQUIRED',
+    requiredProof: ['npm run platform:strict', 'npm run master:status']
+  };
+  const file = path.join(receiptDir, `${receipt.id}.json`);
+  fs.writeFileSync(file, JSON.stringify(receipt, null, 2), 'utf8');
+  return file;
 }
 
 let cycleCount = 0;
 
 setInterval(async () => {
-    cycleCount++;
-    console.log(`\n🌌 [OMNI-ORCHESTRATOR] --- CYCLE ${cycleCount} ---`);
-    console.log('🌌 [OMNI-ORCHESTRATOR] Polling architect for new strategies...');
-    
-    try {
-        console.log('🎯 [Orchestrator] Active Strategy: Maintain 100% platform perfection and autonomously forge new features.');
-        console.log('🔍 [Orchestrator] Parsing strategy into bot-specific sub-missions...');
-        
-        const tasks = [
-          { botId: 1, task: 'Audit build stability & routing integrity', status: 'PENDING' },
-          { botId: 12, task: 'Scan for hull fragments & dead surfaces', status: 'PENDING' },
-          { botId: 21, task: 'Cross-Daemon Audit: Force Singularity Core to inspect Crucible Engine', status: 'PENDING' },
-          { botId: 3, task: 'Cross-Daemon Repair: Optimize Watchdog memory consumption', status: 'PENDING' }
-        ];
+  cycleCount++;
+  console.log(`\n🌌 [OMNI-ORCHESTRATOR] --- CYCLE ${cycleCount} ---`);
 
-        console.log(`🚀 [Orchestrator] Launching ${tasks.length} autonomous missions across the grid...`);
-        
-        for (const mission of tasks) {
-          const bot = bots.find(b => b.botId === mission.botId) || { name: 'EvoBot', role: 'Utility' };
-          console.log(`🤖 [${bot.name} | ${bot.role}] Starting task: ${mission.task}`);
-          mission.status = 'EXECUTING';
-        }
+  try {
+    const tasks = [
+      { botId: 1, task: 'Audit build stability and routing integrity', status: 'PENDING' },
+      { botId: 12, task: 'Request Platform Sentinel status review', status: 'PENDING' },
+      { botId: 3, task: 'Prepare convergence-safe repair routing plan', status: 'PENDING' },
+      { botId: 21, task: 'Review model and image routing governance', status: 'PENDING' }
+    ];
 
-        // Simulate a minor task completion event
-        setTimeout(() => {
-          console.log(`✅ [Orchestrator] Bot [${bots[0].name}] completed execution phase.`);
-        }, 5000);
+    console.log(`🚀 [OMNI-ORCHESTRATOR] Recording ${tasks.length} mission receipts.`);
 
-    } catch (err) {
-        console.error('❌ [OMNI-ORCHESTRATOR] Error:', err.message);
+    for (const mission of tasks) {
+      const bot = bots.find(b => b.botId === mission.botId) || { name: 'EvoBot', role: 'Utility' };
+      mission.status = 'MISSION_RECORDED';
+      const receiptPath = writeMissionReceipt(cycleCount, mission, bot);
+      console.log(`🤖 [${bot.name} | ${bot.role}] Mission receipt: ${receiptPath}`);
     }
+  } catch (err) {
+    console.error('❌ [OMNI-ORCHESTRATOR] Error:', err.message);
+  }
 }, 20000);
 
-console.log('🌌 [OMNI-ORCHESTRATOR] Connected to 21 Bot Roster. Listening...');
+console.log('🌌 [OMNI-ORCHESTRATOR] Receipt-backed mode online.');
