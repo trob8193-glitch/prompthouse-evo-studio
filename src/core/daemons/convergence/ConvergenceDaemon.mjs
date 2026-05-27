@@ -1,74 +1,61 @@
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { EvoCoreConvergenceAmplifier } from '../../convergence-amplifier/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '../../../../');
-const enginePath = path.join(rootDir, 'src/core/convergence-amplifier/index.js');
-const proofDir = path.join(rootDir, 'proof_receipts');
+const receiptDir = path.join(rootDir, 'proof_receipts', 'convergence_proposals');
 
-if (!fs.existsSync(proofDir)) fs.mkdirSync(proofDir, { recursive: true });
+if (!fs.existsSync(receiptDir)) fs.mkdirSync(receiptDir, { recursive: true });
 
-console.log('💎 [CONVERGENCE-AMPLIFIER] Initializing Active Daemon Loop...');
+console.log('💎 [CONVERGENCE-AMPLIFIER] Initializing proposal receipt loop...');
 
 const engine = new EvoCoreConvergenceAmplifier();
-
 let cycle = 0;
 
+function readReleaseGate() {
+  try {
+    const output = execSync('npm run platform:release-verdict', { cwd: rootDir, encoding: 'utf8', stdio: 'pipe', timeout: 120000 });
+    return { status: 'CHECKED', output };
+  } catch (error) {
+    return { status: 'BLOCKED', output: String(error.stdout || error.message || '') };
+  }
+}
+
 setInterval(() => {
-    cycle++;
-    console.log(`\n💎 [CONVERGENCE-AMPLIFIER] --- AMPLIFICATION CYCLE ${cycle} ---`);
-    
-    try {
-        const state = engine.run();
-        console.log(`💎 [CONVERGENCE-AMPLIFIER] Truth Label: ${state.truthLabel}`);
-        console.log(`💎 [CONVERGENCE-AMPLIFIER] Scanning ${state.amplificationTargets.length} targets...`);
+  cycle++;
+  console.log(`\n💎 [CONVERGENCE-AMPLIFIER] --- CYCLE ${cycle} ---`);
 
-        // Sort by score ascending so we focus on the lowest scoring target to improve it
-        const pendingTargets = [...state.amplificationTargets].filter(t => t.score < 100).sort((a, b) => a.score - b.score);
-        
-        if (pendingTargets.length > 0) {
-            const target = pendingTargets[0];
-            console.log(`🚀 [CONVERGENCE-AMPLIFIER] Executing Cross-Daemon Target: ${target.title} (Current Score: ${target.score})`);
-            
-            // Execute the work autonomously
-            if (target.id === 'buyer-proof-pack') {
-                const proofPackPath = path.join(proofDir, 'buyer_proof_pack.json');
-                fs.writeFileSync(proofPackPath, JSON.stringify({
-                    generatedAt: new Date().toISOString(),
-                    status: 'PLATFORM_READY',
-                    canonicalAuthorities: state.canonicalModuleMap,
-                    signature: 'EvoCore Convergence Amplifier',
-                    verified: true
-                }, null, 2));
-                console.log(`📦 [CONVERGENCE-AMPLIFIER] Generated Buyer-Ready Proof Pack covering all 15 active Daemons at ${proofPackPath}`);
-            } else if (target.id === 'productize-platform-sentinel' || target.id === 'platform-sentinel-product') {
-                console.log(`🛡️ [CONVERGENCE-AMPLIFIER] Scanning Platform Sentinel APIs for public release constraints...`);
-                // Simulate packaging work
-            } else {
-                console.log(`⚙️ [CONVERGENCE-AMPLIFIER] Synthesizing structural logic for ${target.id}...`);
-            }
+  try {
+    const state = engine.run();
+    const releaseGate = readReleaseGate();
+    const pendingTargets = [...state.amplificationTargets].filter(t => t.score < 100).sort((a, b) => a.score - b.score);
 
-            // Self-Improvement: Inject +2 to the score directly into the source code of the engine
-            const engineSource = fs.readFileSync(enginePath, 'utf8');
-            const scoreRegex = new RegExp(`(id:\\s*'${target.id}'[\\s\\S]*?score:\\s*)(\\d+)`, 'g');
-            
-            const newScore = Math.min(100, target.score + 4);
-            const updatedSource = engineSource.replace(scoreRegex, `$1${newScore}`);
-            
-            if (updatedSource !== engineSource) {
-                fs.writeFileSync(enginePath, updatedSource, 'utf8');
-                console.log(`🔥 [CONVERGENCE-AMPLIFIER] Target [${target.id}] score dynamically upgraded to ${newScore} in Source Code!`);
-            }
-        } else {
-            console.log(`🏆 [CONVERGENCE-AMPLIFIER] All Targets at 100%. Platform Amplification Maximized.`);
-        }
-        
-    } catch (err) {
-        console.error('❌ [CONVERGENCE-AMPLIFIER] Error:', err.message);
+    if (pendingTargets.length === 0) {
+      console.log('🏆 [CONVERGENCE-AMPLIFIER] No proposal targets are pending.');
+      return;
     }
+
+    const target = pendingTargets[0];
+    const receipt = {
+      generatedAt: new Date().toISOString(),
+      cycle,
+      target,
+      releaseGate,
+      canonicalAuthorities: state.canonicalModuleMap,
+      requiredProof: ['npm run platform:strict', 'npm run maturity:check', 'npm run audit:imports', 'npm run audit:css'],
+      rule: 'Convergence records proposals only. Release claims require platform proof.'
+    };
+
+    const receiptPath = path.join(receiptDir, `convergence_cycle_${cycle}.json`);
+    fs.writeFileSync(receiptPath, JSON.stringify(receipt, null, 2));
+    console.log(`📦 [CONVERGENCE-AMPLIFIER] Proposal receipt written: ${receiptPath}`);
+  } catch (err) {
+    console.error('❌ [CONVERGENCE-AMPLIFIER] Error:', err.message);
+  }
 }, 12000);
 
-console.log('💎 [CONVERGENCE-AMPLIFIER] Online and dynamically rewriting core scores...');
+console.log('💎 [CONVERGENCE-AMPLIFIER] Online in proposal receipt mode.');
