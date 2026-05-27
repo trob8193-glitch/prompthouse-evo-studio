@@ -10,13 +10,14 @@ on:
       - main
       - feature/platform-sentinel-engine
       - feature/master-orchestration-kernel-v2
+      - tribrain-contract-core
 
 permissions:
   contents: read
 
 jobs:
   platform-ready:
-    name: Platform Sentinel and Master Kernel Gates
+    name: Platform Sentinel, Master Kernel, and TriBrain Gates
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -27,14 +28,22 @@ jobs:
       - run: npm ci
       - run: node --check src/core/platform-sentinel/index.js
       - run: node --check src/core/master-orchestrator/index.js
+      - run: node --check src/core/tribrain/TriBrainAbilityContract.js
+      - run: node --check src/core/tribrain/TriBrainPermissions.js
+      - run: node --check src/core/tribrain/TriBrainRouter.js
+      - run: node --check src/core/tribrain/FinalResponseArbiter.js
+      - run: node --check src/core/tribrain/index.js
       - run: node --check src/core/ai/ModelRegistry.js
       - run: node --check lib/ai/UniversalImageAdaptor.js
       - run: node --check generated_apis/platform_sentinel_routes.js
       - run: node --check generated_apis/ai_model_routes.js
       - run: node --check generated_apis/evo_diffuser_routes.js
+      - run: node --check generated_apis/tribrain_routes.js
       - run: node --check src/core/daemons/convergence/ConvergenceDaemon.mjs
       - run: node --check src/core/daemons/omni/OmniOrchestrator.mjs
       - run: node --check scripts/master_orchestrator_check.mjs
+      - run: node --check scripts/tribrain_check.mjs
       - run: npm run platform:strict
       - run: npm run platform:receipt
       - run: npm run master:status
+      - run: npm run tribrain:strict
