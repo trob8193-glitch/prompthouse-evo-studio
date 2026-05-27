@@ -68,10 +68,7 @@ export default function ModelSelector() {
           { id: 'claude-sonnet-4', displayName: 'Claude Sonnet 4', tier: 'high', online: true },
           { id: 'claude-opus-4', displayName: 'Claude Opus 4', tier: 'thinking', online: true },
         ],
-        ollama: [
-          { id: 'qwen3.6-local', displayName: 'Qwen 3.6 (Local)', tier: 'local', online: true },
-          { id: 'llama3-local', displayName: 'Llama 3 (Local)', tier: 'local', online: true },
-        ],
+        ollama: [], // Populated dynamically if Ollama is running
       });
       setActiveModel({ id: 'gemini-2.0-flash', displayName: 'Gemini 2.0 Flash', tier: 'fast', provider: 'gemini' });
     } finally {

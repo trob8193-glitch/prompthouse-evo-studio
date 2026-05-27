@@ -26,9 +26,8 @@ export const MODEL_PROVIDERS = Object.freeze({
 });
 
 /**
- * The canonical model registry. Each entry is a selectable model
- * that any daemon, the EvoLLM brain, or a connected IDE extension
- * can request by `id`.
+ * The canonical model registry. Starts with hardcoded premium models,
+ * but can dynamically expand when local offline models are detected.
  */
 export const MODEL_REGISTRY = [
   // ── GEMINI FAMILY ─────────────────────────────────────────────
@@ -126,29 +125,26 @@ export const MODEL_REGISTRY = [
   },
 
   // ── LOCAL / OLLAMA FAMILY (Zero-Cost, Offline) ────────────────
-  {
-    id: 'llama3-local',
-    displayName: 'Llama 3 (Local Ollama)',
-    provider: MODEL_PROVIDERS.OLLAMA,
-    tier: MODEL_TIERS.LOCAL,
-    contextWindow: 8192,
-    capabilities: ['code', 'offline', 'zero-cost'],
-    apiModel: 'llama3:latest',
-    costPer1kTokens: 0,
-    online: true,
-  },
-  {
-    id: 'qwen3.6-local',
-    displayName: 'Qwen 3.6 (Local Ollama)',
-    provider: MODEL_PROVIDERS.OLLAMA,
-    tier: MODEL_TIERS.LOCAL,
-    contextWindow: 32768,
-    capabilities: ['code', 'offline', 'zero-cost', 'high-performance'],
-    apiModel: 'qwen3.6:latest',
-    costPer1kTokens: 0,
-    online: true,
-  },
+  // Local models are now dynamically discovered by the /api/ai/models endpoint
+  // which pings http://localhost:11434/api/tags and injects them here instantly.
 ];
+
+// ═══════════════════════════════════════════════════════════════
+//  DYNAMIC MODEL DISCOVERY
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * Dynamically registers newly discovered offline models (e.g. from Ollama)
+ * so they instantly appear in the UI without restarting the server.
+ */
+export function registerDynamicModel(modelConfig) {
+  const existingIndex = MODEL_REGISTRY.findIndex(m => m.id === modelConfig.id);
+  if (existingIndex >= 0) {
+    MODEL_REGISTRY[existingIndex] = { ...MODEL_REGISTRY[existingIndex], ...modelConfig };
+  } else {
+    MODEL_REGISTRY.push(modelConfig);
+  }
+}
 
 // ═══════════════════════════════════════════════════════════════
 //  ACTIVE MODEL STATE
@@ -161,7 +157,8 @@ let _activeModelId = 'gemini-2.0-flash'; // Default: fast + free-tier friendly
  * Daemons, EvoLLM, and IDE extensions all read from this.
  */
 export function getActiveModel() {
-  return MODEL_REGISTRY.find(m => m.id === _activeModelId) || MODEL_REGISTRY[0];
+  const active = MODEL_REGISTRY.find(m => m.id === _activeModelId);
+  return active || MODEL_REGISTRY[0];
 }
 
 /**
