@@ -10,14 +10,9 @@ if not exist .env (
     call install.bat
 )
 
-echo 🌐 Starting API Bridge (Port 3001) & Frontend (Port 5173)...
-echo.
-echo ===================================================
-echo Frontend Default: http://localhost:5173
-echo API Bridge Default: http://localhost:3001
-echo ===================================================
+echo 🌐 Triggering Smart Collision-Free Boot...
 echo.
 
-call npm run dev:all
+node scripts/smart_launcher.mjs
 
 pause

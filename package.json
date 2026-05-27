@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "test": "vitest run",
+    "smart": "node scripts/smart_launcher.mjs",
     "start": "node promptbridge-server.js",
     "preview": "vite preview",
     "bridge": "node promptbridge-server.js",
