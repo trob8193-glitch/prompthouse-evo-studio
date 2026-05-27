@@ -10,27 +10,35 @@ export default function EvoDiffuserDashboard() {
   const [imageResult, setImageResult] = useState(null);
   const [steps, setSteps] = useState(30);
   const [cfg, setCfg] = useState(7);
+  const [engine, setEngine] = useState('dalle');
 
   const handleGenerate = async () => {
     if (!prompt) return;
     setGenerating(true);
     setImageResult(null);
-    Log.info(`[EvoDiffuser] Generating Latent Architecture for: ${prompt}`);
+    Log.info(`[EvoDiffuser] Generating Latent Architecture via ${engine.toUpperCase()}: ${prompt}`);
     
     try {
-      // Direct call to the backend bridge engine, targeting the evo_diffuser bot
-      const response = await callBridgeEngine(
-        `DIFFUSE_IMAGE: [PROMPT: ${prompt}] [STEPS: ${steps}] [CFG: ${cfg}]`,
-        "You are Evo-Diffuser. Acknowledge image generation request and return a generative manifest."
-      );
-      
-      setImageResult({
-        url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop',
-        manifest: response
+      const res = await fetch('http://127.0.0.1:3001/api/diffuser/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, steps, cfg, engine })
       });
-      setGenerating(false);
+      
+      const data = await res.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Unknown error during generation');
+      }
+
+      setImageResult({
+        url: data.url,
+        manifest: data
+      });
     } catch (e) {
       Log.error(`[EvoDiffuser] Generation failed: ${e.message}`);
+      alert(`Generation failed: ${e.message}`);
+    } finally {
       setGenerating(false);
     }
   };
@@ -58,16 +66,34 @@ export default function EvoDiffuserDashboard() {
             <div className="space-y-6 mb-8">
               <div className="field">
                 <div className="flex justify-between mb-2">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Denoising Steps ({steps})</label>
+                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Generative Engine</label>
                 </div>
-                <input type="range" min="10" max="150" value={steps} onChange={e => setSteps(Number(e.target.value))} className="w-full accent-yellow-400" />
+                <select 
+                  value={engine} 
+                  onChange={e => setEngine(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-md p-3 text-sm font-bold text-white focus:outline-none focus:border-[var(--accent-color)]"
+                >
+                  <option value="dalle">DALL-E 3 (Cloud API - High Fidelity)</option>
+                  <option value="stablediffusion">Stable Diffusion / Automatic1111 (Local Offline - High Control)</option>
+                </select>
               </div>
-              <div className="field">
-                <div className="flex justify-between mb-2">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">CFG Scale ({cfg})</label>
-                </div>
-                <input type="range" min="1" max="20" step="0.5" value={cfg} onChange={e => setCfg(Number(e.target.value))} className="w-full accent-yellow-400" />
-              </div>
+
+              {engine === 'stablediffusion' && (
+                <>
+                  <div className="field">
+                    <div className="flex justify-between mb-2">
+                      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Denoising Steps ({steps})</label>
+                    </div>
+                    <input type="range" min="10" max="150" value={steps} onChange={e => setSteps(Number(e.target.value))} className="w-full accent-yellow-400" />
+                  </div>
+                  <div className="field">
+                    <div className="flex justify-between mb-2">
+                      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">CFG Scale ({cfg})</label>
+                    </div>
+                    <input type="range" min="1" max="20" step="0.5" value={cfg} onChange={e => setCfg(Number(e.target.value))} className="w-full accent-yellow-400" />
+                  </div>
+                </>
+              )}
             </div>
 
             <Button onClick={handleGenerate} disabled={generating || !prompt} className="w-full !bg-[var(--accent-color)] !text-white flex justify-center items-center gap-2">
