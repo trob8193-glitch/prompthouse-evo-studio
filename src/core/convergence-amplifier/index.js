@@ -51,7 +51,7 @@ export function buildAmplificationTargets() {
     {
       id: 'buyer-proof-pack',
       title: 'Generate buyer-ready proof pack',
-      score: 82,
+      score: 90,
       reason: 'Platform value rises when receipts, architecture maps, and release verdicts are easy to inspect.'
     }
   ];
