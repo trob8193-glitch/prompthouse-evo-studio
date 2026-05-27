@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Shield, Wifi, WifiOff, AlertTriangle, Settings, Bell, PanelLeftClose, PanelLeft } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 import { SwarmCouncil } from './SwarmCouncil.jsx';
+import ModelSelector from './ModelSelector.jsx';
 
 /**
  * PH EVO STUDIO — TOP BAR
@@ -74,6 +75,9 @@ export default function TopBar() {
 
       {/* Right: Status + Actions */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <ModelSelector />
+        <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.1)', margin: '0 4px' }} />
+        
         <SwarmCouncil />
         
         {/* Bridge Status Pill */}
