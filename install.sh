@@ -25,7 +25,20 @@ fi
 
 echo ""
 echo "==================================================="
-echo "✅ Setup Complete!"
-echo "==================================================="
-echo "Run './launcher.sh' to start the application."
+echo "📦 Bundling Extension Install Pack..."
+mkdir -p "Evo_Studio_Install_Pack"
+if [ -f "EXTENSIONS_INSTALL_GUIDE.md" ]; then
+    cp "EXTENSIONS_INSTALL_GUIDE.md" "Evo_Studio_Install_Pack/"
+fi
+if [ -d "evo-extension" ]; then
+    mkdir -p "Evo_Studio_Install_Pack/Browser_Extension"
+    cp -r evo-extension/* "Evo_Studio_Install_Pack/Browser_Extension/"
+fi
+if [ -d "dist-electron" ]; then
+    mkdir -p "Evo_Studio_Install_Pack/Desktop_App"
+    cp -r dist-electron/* "Evo_Studio_Install_Pack/Desktop_App/"
+fi
+echo ""
+
+echo "✅ Setup Complete! Run ./launcher.sh to start."
 echo ""
