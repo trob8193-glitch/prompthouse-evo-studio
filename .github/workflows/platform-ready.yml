@@ -2,16 +2,21 @@ name: Platform Ready Gates
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
+      - main
       - feature/platform-sentinel-engine
+      - feature/master-orchestration-kernel-v2
 
 permissions:
   contents: read
 
 jobs:
   platform-ready:
-    name: Platform Sentinel Readiness Gates
+    name: Platform Sentinel and Master Kernel Gates
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -21,6 +26,15 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: node --check src/core/platform-sentinel/index.js
+      - run: node --check src/core/master-orchestrator/index.js
+      - run: node --check src/core/ai/ModelRegistry.js
+      - run: node --check lib/ai/UniversalImageAdaptor.js
       - run: node --check generated_apis/platform_sentinel_routes.js
+      - run: node --check generated_apis/ai_model_routes.js
+      - run: node --check generated_apis/evo_diffuser_routes.js
+      - run: node --check src/core/daemons/convergence/ConvergenceDaemon.mjs
+      - run: node --check src/core/daemons/omni/OmniOrchestrator.mjs
+      - run: node --check scripts/master_orchestrator_check.mjs
       - run: npm run platform:strict
       - run: npm run platform:receipt
+      - run: npm run master:status
