@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "PH Evo Studio DOM Bridge",
+  "version": "1.0.0",
+  "description": "Approval-gated DOM bridge between the active browser tab and PH Evo Studio PromptBridge.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["http://127.0.0.1:3001/*", "http://localhost:3001/*"],
+  "action": {
+    "default_title": "Evo DOM Bridge",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  }
+}
