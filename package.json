@@ -11,8 +11,6 @@
     "preview": "vite preview",
     "bridge": "node promptbridge-server.js",
     "dev:all": "concurrently \"npm run dev\" \"npm run bridge\"",
-    "dev:user": "concurrently \"npm run dev\" \"npm run bridge\"",
-    "dev:dev": "concurrently \"npm run dev\" \"npm run daemons:all\"",
     "verify:agent": "node verify-agent-setup.js",
     "create:agent": "node openai-agent-modern.js",
     "test:agent": "node agent-runtime.js 'Explain your core mission in 2-3 sentences'",
