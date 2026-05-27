@@ -58,6 +58,7 @@
     "sentinel:daemon": "node src/core/daemons/sentinel/PlatformSentinelDaemon.mjs",
     "singularity": "node src/core/daemons/singularity/SingularityCore.mjs",
     "crucible": "node src/core/daemons/crucible/CrucibleDaemon.mjs",
+    "convergence:daemon": "node src/core/daemons/convergence/ConvergenceDaemon.mjs",
     "crucible:sweep": "node scripts/crucible-full-sweep.mjs",
     "audit:platform": "node scripts/audit-platform-readiness.mjs",
     "audit:platform:daemon": "node scripts/audit-platform-daemon.mjs",
@@ -69,7 +70,7 @@
     "self:invent": "node scripts/self-invention-daemon.mjs",
     "self:build": "npm run build && npm run platform:audit",
     "mobile:build": "node scripts/mobile-architect-cli.mjs",
-    "daemons:all": "concurrently \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run antigravity\"",
+    "daemons:all": "concurrently \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run antigravity\"",
     "omni:orchestrator": "node src/core/daemons/omni/OmniOrchestrator.mjs",
     "antigravity": "node scripts/antigravity-daemon.mjs"
   },
