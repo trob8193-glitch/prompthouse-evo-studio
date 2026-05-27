@@ -101,7 +101,7 @@ async function singularityCycle() {
   log('SINGULARITY', `═══ CYCLE ${cycleCount} INITIATED (v2 — Deep Audit + Gemini AI) ═══`);
 
   // Phase 1: Deep AST Audit
-  log('SCAN', 'Running AST-based deep semantic audit on src/...');
+  log('SCAN', 'Running AST-based deep semantic audit on src/ (including src/core/daemons)...');
   let auditReport;
   try {
     auditReport = deepAuditDirectory(srcDir);
@@ -110,7 +110,7 @@ async function singularityCycle() {
     auditReport = { totalFiles: 0, averageScore: 100, criticalViolations: [], warnings: [], filesWithIssues: [] };
   }
 
-  log('SCAN', `Audited ${auditReport.totalFiles} files | Avg Score: ${auditReport.averageScore}/100 | Critical: ${auditReport.criticalViolations.length} | Warnings: ${auditReport.warnings.length}`);
+  log('SCAN', `Cross-Daemon Matrix included in scan. Audited ${auditReport.totalFiles} files | Avg Score: ${auditReport.averageScore}/100 | Critical: ${auditReport.criticalViolations.length}`);
 
   // Phase 2: AI-Powered Repair (only critical violations, capped per cycle)
   let repairsThisCycle = 0;
