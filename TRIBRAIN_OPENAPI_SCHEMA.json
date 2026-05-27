@@ -1,0 +1,262 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PH Evo Studio TriBrain Gateway",
+    "version": "1.0.0",
+    "description": "GPT Action schema for PH Evo Studio Operator. Replace YOUR_NGROK_URL with the public HTTPS tunnel exposing local port 3001."
+  },
+  "servers": [
+    {
+      "url": "YOUR_NGROK_URL",
+      "description": "Public HTTPS URL for the PH Evo Studio PromptBridge server"
+    }
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "healthCheck",
+        "summary": "Check whether the PH Evo Studio PromptBridge server is online.",
+        "responses": {
+          "200": {
+            "description": "Server health response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "service": { "type": "string" },
+                    "timestamp": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tribrain/status": {
+      "get": {
+        "operationId": "getTriBrainStatus",
+        "summary": "Get PH Evo Studio TriBrain status, enabled brains, capability state, and fallback policy.",
+        "parameters": [
+          { "name": "x-tribrain-role", "in": "header", "schema": { "type": "string", "default": "viewer" }, "required": false },
+          { "name": "x-user-id", "in": "header", "schema": { "type": "string" }, "required": false },
+          { "name": "x-tenant-id", "in": "header", "schema": { "type": "string" }, "required": false },
+          { "name": "x-project-ids", "in": "header", "schema": { "type": "string" }, "required": false },
+          { "name": "x-chatgpt-online", "in": "header", "schema": { "type": "string", "enum": ["true", "false"] }, "required": false },
+          { "name": "x-ide-online", "in": "header", "schema": { "type": "string", "enum": ["true", "false"] }, "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "TriBrain status returned",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GenericResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tribrain/contract": {
+      "get": {
+        "operationId": "getTriBrainContract",
+        "summary": "Get TriBrain brain IDs, ability classes, and risk levels.",
+        "responses": {
+          "200": {
+            "description": "TriBrain contract returned",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GenericResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tribrain/route": {
+      "post": {
+        "operationId": "routeTriBrainCommand",
+        "summary": "Route a command through the TriBrain router and permission policy.",
+        "parameters": [
+          { "name": "x-tribrain-role", "in": "header", "schema": { "type": "string", "default": "builder" }, "required": false },
+          { "name": "x-user-id", "in": "header", "schema": { "type": "string" }, "required": false },
+          { "name": "x-tenant-id", "in": "header", "schema": { "type": "string" }, "required": false },
+          { "name": "x-project-ids", "in": "header", "schema": { "type": "string" }, "required": false },
+          { "name": "x-chatgpt-online", "in": "header", "schema": { "type": "string", "enum": ["true", "false"], "default": "true" }, "required": false },
+          { "name": "x-ide-online", "in": "header", "schema": { "type": "string", "enum": ["true", "false"] }, "required": false }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "intent": { "type": "string", "description": "Shortcut intent used when command is omitted." },
+                  "command": { "$ref": "#/components/schemas/TriBrainCommand" },
+                  "approvals": {
+                    "type": "array",
+                    "items": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "TriBrain routing plan returned",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GenericResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tribrain/final-response": {
+      "post": {
+        "operationId": "formTriBrainFinalResponse",
+        "summary": "Form a proof-aware final response from one or more brain outputs.",
+        "parameters": [
+          { "name": "x-tribrain-role", "in": "header", "schema": { "type": "string", "default": "builder" }, "required": false },
+          { "name": "x-user-id", "in": "header", "schema": { "type": "string" }, "required": false },
+          { "name": "x-tenant-id", "in": "header", "schema": { "type": "string" }, "required": false },
+          { "name": "x-project-ids", "in": "header", "schema": { "type": "string" }, "required": false }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "command": { "$ref": "#/components/schemas/TriBrainCommand" },
+                  "responses": {
+                    "type": "array",
+                    "items": { "$ref": "#/components/schemas/TriBrainResponse" }
+                  },
+                  "approvals": {
+                    "type": "array",
+                    "items": { "type": "object" }
+                  }
+                },
+                "required": ["responses"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Final response returned",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GenericResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/platform-sentinel/status": {
+      "get": {
+        "operationId": "getPlatformSentinelStatus",
+        "summary": "Get Platform Sentinel readiness status without heavy command execution.",
+        "responses": {
+          "200": {
+            "description": "Platform Sentinel status returned",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GenericResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/platform-sentinel/repair-queue": {
+      "get": {
+        "operationId": "getPlatformRepairQueue",
+        "summary": "Get pending Platform Sentinel repair queue.",
+        "responses": {
+          "200": {
+            "description": "Repair queue returned",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GenericResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/platform-sentinel/receipts": {
+      "get": {
+        "operationId": "getPlatformReceipts",
+        "summary": "Get recent Platform Sentinel proof receipts.",
+        "parameters": [
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 10, "minimum": 1, "maximum": 50 }, "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Proof receipts returned",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GenericResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GenericResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" }
+        },
+        "additionalProperties": true
+      },
+      "TriBrainCommand": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "tenantId": { "type": "string" },
+          "userId": { "type": "string" },
+          "sourceBrain": { "type": "string", "enum": ["studio_brain", "chatgpt_operator_brain", "ide_agent_brain"] },
+          "targetBrain": { "type": "string" },
+          "intent": { "type": "string" },
+          "abilityClass": { "type": "string", "enum": ["summarize", "audit", "plan", "implement", "verify", "report", "remember", "escalate"] },
+          "riskLevel": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+          "requiresApproval": { "type": "boolean" },
+          "localAllowed": { "type": "boolean" },
+          "fallbackAllowed": { "type": "boolean" },
+          "mode": { "type": "string" },
+          "payload": { "type": "object", "additionalProperties": true },
+          "proofRequired": { "type": "boolean" }
+        },
+        "required": ["intent", "abilityClass"]
+      },
+      "TriBrainResponse": {
+        "type": "object",
+        "properties": {
+          "commandId": { "type": "string" },
+          "respondingBrain": { "type": "string" },
+          "truthState": { "type": "string" },
+          "status": { "type": "string" },
+          "summary": { "type": "string" },
+          "findings": { "type": "array", "items": { "type": "object" } },
+          "evidence": { "type": "object", "additionalProperties": true },
+          "nextActions": { "type": "array", "items": { "type": "string" } },
+          "requiresUserDecision": { "type": "boolean" }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}
