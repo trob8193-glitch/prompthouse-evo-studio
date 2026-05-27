@@ -63,6 +63,7 @@ import registerEvoBridgeRoutes from './generated_apis/evo_bridge_routes.js';
 import registerPlatformSentinelRoutes from './generated_apis/platform_sentinel_routes.js';
 import registerAiModelRoutes from './generated_apis/ai_model_routes.js';
 import registerEvoDiffuserRoutes from './generated_apis/evo_diffuser_routes.js';
+import registerEvoTerminalRoutes from './generated_apis/evo_terminal_routes.js';
 
 ensureEvolutionSchema();
 
@@ -72,6 +73,7 @@ registerEvoBridgeRoutes(app);
 registerPlatformSentinelRoutes(app);
 registerAiModelRoutes(app);
 registerEvoDiffuserRoutes(app);
+registerEvoTerminalRoutes(app);
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
 
 // ─── INITIALIZATION ──────────────────────────────────────────────────────────

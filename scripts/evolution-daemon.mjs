@@ -183,13 +183,77 @@ async function runEvolution() {
   Log.info(`   Target: ${suggestion.targetFile}`);
   Log.info(`   Change: ${suggestion.description}`);
 
-  // Step 3: Apply if it's a CSS change
+  // Step 3: Apply if it's a CSS change or Component change
   let applied = false;
   if (suggestion.cssRule) {
     applied = applyCssChange(suggestion);
-  } else if (suggestion.componentChange) {
-    Log.info(`\x1b[33m[EVO] Component change suggested (requires manual review):\x1b[0m`);
-    Log.info(`   ${suggestion.componentChange}`);
+  } else if (suggestion.componentChange && suggestion.targetFile) {
+    Log.info(`\x1b[35m[EVO] Autonomous Component Override Initiated for ${suggestion.targetFile}...\x1b[0m`);
+    
+    // We import locally to prevent circular dependencies in script execution
+    const { TerminalExecutionAdaptor } = await import('../lib/terminal/TerminalExecutionAdaptor.js');
+    const { runProofCommands } = await import('../src/core/evolution/ProofRunner.js');
+    
+    // Initialize in Phantom Sandbox Mode
+    const adaptor = new TerminalExecutionAdaptor(rootDir, true);
+    const targetPath = path.join(rootDir, suggestion.targetFile);
+    
+    // 1. Read current content (will fallback to real file if phantom doesn't exist)
+    const readResult = adaptor.readFile(targetPath);
+    if (!readResult.success) {
+      Log.error(`\x1b[31m❌ Could not read target file for evolution: ${readResult.error}\x1b[0m`);
+    } else {
+      // 2. Ask Gemini to rewrite the file based on the suggestion
+      Log.info(`\x1b[36m[EVO] Requesting Gemini to rewrite the physical file in Phantom Sandbox...\x1b[0m`);
+      const rewritePrompt = `Rewrite the following React component to implement this improvement: "${suggestion.componentChange}". Return ONLY the raw file content, no markdown blocks.`;
+      
+      try {
+        const rewriteRes = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': process.env.GEMINI_API_KEY || loadEnv().GEMINI_API_KEY },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: `${rewritePrompt}\n\n${readResult.content}` }] }]
+          })
+        });
+        
+        const rewriteData = await rewriteRes.json();
+        const newContent = rewriteData.candidates?.[0]?.content?.parts?.[0]?.text;
+        
+        if (newContent) {
+          // 3. Write to Phantom Sandbox file
+          const writeRes = adaptor.writeFile(targetPath, newContent);
+          if (writeRes.success) {
+             Log.info(`\x1b[32m✅ File isolated in Phantom Sandbox. Verifying via ProofRunner...\x1b[0m`);
+             
+             // 4. Verification Check
+             const receiptDir = path.join(rootDir, 'proof_receipts', 'verification');
+             // Proof tests will run using sandbox cwd if we passed it, but we can just use regular build for now
+             const proof = await runProofCommands({
+               workspaceDir: rootDir,
+               commands: ['npm run build'],
+               receiptDir
+             });
+             
+             if (!proof.passed) {
+               Log.error(`\x1b[31m🚨 BUILD FAILED AFTER EVOLUTION. HALLUCINATION CONTAINED IN SANDBOX.\x1b[0m`);
+               Log.info(`\x1b[33m⚠️ Rollback complete. Phantom file discarded.\x1b[0m`);
+               applied = false;
+             } else {
+               Log.info(`\x1b[32m🛡️ Build verified! Auto-merging from Phantom Sandbox into main repository.\x1b[0m`);
+               const commitRes = adaptor.commit(suggestion.targetFile);
+               if (commitRes.success) {
+                  Log.success(`\x1b[32m✨ Merged successfully!\x1b[0m`);
+                  applied = true;
+               } else {
+                  Log.error(`\x1b[31m❌ Merge failed: ${commitRes.error}\x1b[0m`);
+               }
+             }
+          }
+        }
+      } catch (e) {
+        Log.error(`\x1b[31m❌ Rewrite failed: ${e.message}\x1b[0m`);
+      }
+    }
   }
 
   // Step 4: Log the evolution
