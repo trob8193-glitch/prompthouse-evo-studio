@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { writeDaemonReceipt, createEvoGitSnapshot } from '../../egit/index.js';
+import { writeDaemonReceipt, createEvoGitSnapshot } from '../../../egit/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
