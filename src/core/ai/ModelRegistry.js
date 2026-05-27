@@ -125,18 +125,7 @@ export const MODEL_REGISTRY = [
     online: true,
   },
 
-  // ── LOCAL / OLLAMA FAMILY ─────────────────────────────────────
-  {
-    id: 'evo-lm-local',
-    displayName: 'EvoLM (Local Ollama)',
-    provider: MODEL_PROVIDERS.OLLAMA,
-    tier: MODEL_TIERS.LOCAL,
-    contextWindow: 8192,
-    capabilities: ['code', 'offline', 'zero-cost'],
-    apiModel: 'evo-lm',
-    costPer1kTokens: 0,
-    online: true,
-  },
+  // ── LOCAL / OLLAMA FAMILY (Zero-Cost, Offline) ────────────────
   {
     id: 'llama3-local',
     displayName: 'Llama 3 (Local Ollama)',
@@ -144,7 +133,18 @@ export const MODEL_REGISTRY = [
     tier: MODEL_TIERS.LOCAL,
     contextWindow: 8192,
     capabilities: ['code', 'offline', 'zero-cost'],
-    apiModel: 'llama3',
+    apiModel: 'llama3:latest',
+    costPer1kTokens: 0,
+    online: true,
+  },
+  {
+    id: 'qwen3.6-local',
+    displayName: 'Qwen 3.6 (Local Ollama)',
+    provider: MODEL_PROVIDERS.OLLAMA,
+    tier: MODEL_TIERS.LOCAL,
+    contextWindow: 32768,
+    capabilities: ['code', 'offline', 'zero-cost', 'high-performance'],
+    apiModel: 'qwen3.6:latest',
     costPer1kTokens: 0,
     online: true,
   },

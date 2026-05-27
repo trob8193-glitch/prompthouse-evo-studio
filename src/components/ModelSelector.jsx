@@ -69,7 +69,7 @@ export default function ModelSelector() {
           { id: 'claude-opus-4', displayName: 'Claude Opus 4', tier: 'thinking', online: true },
         ],
         ollama: [
-          { id: 'evo-lm-local', displayName: 'EvoLM (Local)', tier: 'local', online: true },
+          { id: 'qwen3.6-local', displayName: 'Qwen 3.6 (Local)', tier: 'local', online: true },
           { id: 'llama3-local', displayName: 'Llama 3 (Local)', tier: 'local', online: true },
         ],
       });
