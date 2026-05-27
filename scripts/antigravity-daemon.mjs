@@ -1,11 +1,41 @@
-console.log('🛸 [ANTIGRAVITY] Initializing Core Antigravity Agent Tether...');
-console.log('🛸 [ANTIGRAVITY] Synchronizing with Omni-Orchestrator, Singularity, and Crucible...');
+import { checkLocalToolAdapters, checkApiAdapters, summarizeToolReadiness, writeDaemonReceipt } from '../src/core/egit/index.js';
+
+console.log('Antigravity adapter daemon starting with receipts.');
+
+function runCheck() {
+  const local = checkLocalToolAdapters();
+  const api = checkApiAdapters();
+  const readiness = summarizeToolReadiness();
+  const receipt = writeDaemonReceipt({
+    daemonId: 'antigravity-adapter',
+    action: 'adapter_readiness_check',
+    truthState: 'CHECK_RECORDED',
+    details: {
+      localReceipts: local.map(item => item.id),
+      apiReceipts: api.map(item => item.id),
+      readiness
+    },
+    claims: ['adapter_readiness_checked', 'external_tools_truth_labeled']
+  });
+  console.log(`Receipt written: ${receipt.id}`);
+  return receipt;
+}
+
+runCheck();
 
 setInterval(() => {
-    console.log(`\n🛸 [ANTIGRAVITY] Live Connection at ${new Date().toISOString()}`);
-    console.log('🛸 [ANTIGRAVITY] Monitoring self-evolution loops...');
-    console.log('🛸 [ANTIGRAVITY] Working on pending tasks and autonomously analyzing platform readiness...');
-    console.log('🛸 [ANTIGRAVITY] All 21 bot endpoints responding with Omnipotent grade perfection.');
-}, 10000);
+  try {
+    runCheck();
+  } catch (error) {
+    const receipt = writeDaemonReceipt({
+      daemonId: 'antigravity-adapter',
+      action: 'adapter_readiness_error',
+      truthState: 'ERROR_RECORDED',
+      details: { error: error.message },
+      claims: ['error_recorded']
+    });
+    console.error('Error receipt:', receipt.id, error.message);
+  }
+}, 30000);
 
-console.log('🛸 [ANTIGRAVITY] Tether secured. Working on all tasks...');
+console.log('Antigravity adapter loop active.');
