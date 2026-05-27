@@ -38,17 +38,30 @@ class TrainingJobQueue {
         try {
             job.status = 'running';
             this.saveJobs();
-            // Simulating training job
-            const response = await fetch('http://127.0.0.1:3001/train', {
+            // LIVE OpenAI Training Execution
+            const apiKey = process.env.OPENAI_API_KEY;
+            if (!apiKey) {
+                throw new Error("FATAL: OPENAI_API_KEY is missing. No simulated training allowed.");
+            }
+            if (!job.fileId) {
+                throw new Error("FATAL: Missing real OpenAI training file ID. Cannot use static strings.");
+            }
+
+            const response = await fetch('https://api.openai.com/v1/fine_tuning/jobs', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
                 },
-                body: JSON.stringify(job),
+                body: JSON.stringify({
+                    training_file: job.fileId,
+                    model: job.model || 'gpt-4o-mini-2024-07-18'
+                }),
             });
 
             if (!response.ok) {
-                throw new Error(`Training failed: ${response.statusText}`);
+                const errorData = await response.json();
+                throw new Error(`OpenAI API Error: ${errorData.error?.message || response.statusText}`);
             }
 
             job.status = 'completed';
@@ -58,7 +71,7 @@ class TrainingJobQueue {
             job.status = 'failed';
             job.error = error.message;
             this.saveJobs();
-            throw error;
+            // We removed the 'throw error;' here so the server loop doesn't crash.
         }
     }
 

@@ -3,6 +3,8 @@ import { CreditCard, CheckCircle, ExternalLink, Activity, History } from 'lucide
 import TruthBadge from './TruthBadge.jsx';
 import { getStripeCheckoutBrowserRunStatus, listStripeBrowserRunRecords } from '../services/stripe-checkout-browser-run-client.js';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 export default function StripeCheckoutBrowserVerificationPanel() {
   const [status, setStatus] = useState(null);
   const [records, setRecords] = useState([]);
@@ -20,7 +22,7 @@ export default function StripeCheckoutBrowserVerificationPanel() {
         if (statusRes.ok) setStatus(statusRes.data);
         if (recordsRes.ok) setRecords(recordsRes.data);
       } catch (err) {
-        console.error('Failed to fetch Stripe browser run status:', err);
+        Log.error('Failed to fetch Stripe browser run status:', err);
       } finally {
         if (!cancelled) setLoading(false);
       }

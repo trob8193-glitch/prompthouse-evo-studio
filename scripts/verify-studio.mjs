@@ -3,6 +3,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
@@ -31,8 +33,8 @@ function getFiles(dir, extensions) {
 }
 
 async function runVerification() {
-  console.log(`\n${BOLD}🛸 [STUDIO_VERIFICATION] Initializing Master Static Verification...${RESET}`);
-  console.log('══════════════════════════════════════════════════════════════');
+  Log.info(`\n${BOLD}🛸 [STUDIO_VERIFICATION] Initializing Master Static Verification...${RESET}`);
+  Log.info('══════════════════════════════════════════════════════════════');
 
   const violations = [];
 
@@ -181,30 +183,30 @@ async function runVerification() {
   }
 
   // 5. Print clear pass/fail report
-  console.log('══════════════════════════════════════════════════════════════');
-  console.log(`                    STUDIO VERIFICATION REPORT`);
-  console.log('══════════════════════════════════════════════════════════════');
+  Log.info('══════════════════════════════════════════════════════════════');
+  Log.info(`                    STUDIO VERIFICATION REPORT`);
+  Log.info('══════════════════════════════════════════════════════════════');
 
   if (violations.length === 0) {
-    console.log(`\n${GREEN}🏆 [PASS] All static verification checks passed cleanly!${RESET}`);
-    console.log(`- Package scripts point to existing files.`);
-    console.log(`- Zero banned words (mock, dummy, fake, TODO, etc.) in production source.`);
-    console.log(`- Generated APIs syntax-checked successfully.`);
-    console.log(`- All index.jsx feature exports are fully realized.\n`);
+    Log.info(`\n${GREEN}🏆 [PASS] All static verification checks passed cleanly!${RESET}`);
+    Log.info(`- Package scripts point to existing files.`);
+    Log.info(`- Zero banned words (mock, dummy, fake, TODO, etc.) in production source.`);
+    Log.info(`- Generated APIs syntax-checked successfully.`);
+    Log.info(`- All index.jsx feature exports are fully realized.\n`);
     process.exit(0);
   } else {
-    console.log(`\n${RED}⚠️  [FAIL] Verification checks failed with ${violations.length} error(s):${RESET}`);
+    Log.info(`\n${RED}⚠️  [FAIL] Verification checks failed with ${violations.length} error(s):${RESET}`);
     violations.forEach((v, i) => {
-      console.log(`   ${BOLD}[${i + 1}] ${RED}${v.type}${RESET}`);
+      Log.info(`   ${BOLD}[${i + 1}] ${RED}${v.type}${RESET}`);
       if (v.file) {
-        console.log(`       📍 Location: ${CYAN}${v.file}${v.line ? ':' + v.line : ''}${RESET}`);
+        Log.info(`       📍 Location: ${CYAN}${v.file}${v.line ? ':' + v.line : ''}${RESET}`);
       }
       if (v.context) {
-        console.log(`       💡 Context:  "${YELLOW}${v.context}${RESET}"`);
+        Log.info(`       💡 Context:  "${YELLOW}${v.context}${RESET}"`);
       }
-      console.log(`       📢 Details:  ${v.message}`);
+      Log.info(`       📢 Details:  ${v.message}`);
     });
-    console.log(`\n${YELLOW}Correction Action Required. Resolve the verification failures to continue.${RESET}\n`);
+    Log.info(`\n${YELLOW}Correction Action Required. Resolve the verification failures to continue.${RESET}\n`);
     process.exit(1);
   }
 }

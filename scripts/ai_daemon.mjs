@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 dotenv.config({ override: true });
 
 const BRIDGE_URL = process.env.BRIDGE_URL || 'http://127.0.0.1:3001';
@@ -35,14 +37,14 @@ async function syncProviderKeys() {
 
   try {
     await request('/api/config/keys', { method: 'POST', body: { keys } });
-    console.log(`🔐 [AI_Daemon] Synced ${Object.keys(keys).join(', ')} key(s) to live studio bridge.`);
+    Log.info(`🔐 [AI_Daemon] Synced ${Object.keys(keys).join(', ')} key(s) to live studio bridge.`);
   } catch (err) {
     console.warn(`⚠️ [AI_Daemon] Key sync skipped: ${err.message}`);
   }
 }
 
 async function runCycle() {
-  console.log(`\n🔔 [AI_Daemon] NightForge cycle at ${new Date().toISOString()}`);
+  Log.info(`\n🔔 [AI_Daemon] NightForge cycle at ${new Date().toISOString()}`);
   await syncProviderKeys();
 
   const result = await request('/api/nightforge/cycle', {
@@ -60,29 +62,29 @@ async function runCycle() {
   const summary = cycle?.diagnostics?.summary || {};
   const cost = cycle?.costSummary || {};
 
-  console.log(`✅ [AI_Daemon] Cycle ${cycle?.id || 'unknown'} complete.`);
-  console.log(`   Modules=${summary.modules_scanned ?? 'n/a'} Errors=${summary.modules_error ?? 'n/a'} Warnings=${summary.modules_warning ?? 'n/a'}`);
-  console.log(`   Providers ext=${cost.externalCalls ?? 'n/a'} cache=${cost.cacheHits ?? 'n/a'} local=${cost.localCalls ?? 'n/a'} credits=${cost.creditsUsed ?? 'n/a'}`);
-  console.log(`   Cost guard estimated saved tokens=${cost.estimatedSavedTokens ?? 0}`);
+  Log.info(`✅ [AI_Daemon] Cycle ${cycle?.id || 'unknown'} complete.`);
+  Log.info(`   Modules=${summary.modules_scanned ?? 'n/a'} Errors=${summary.modules_error ?? 'n/a'} Warnings=${summary.modules_warning ?? 'n/a'}`);
+  Log.info(`   Providers ext=${cost.externalCalls ?? 'n/a'} cache=${cost.cacheHits ?? 'n/a'} local=${cost.localCalls ?? 'n/a'} credits=${cost.creditsUsed ?? 'n/a'}`);
+  Log.info(`   Cost guard estimated saved tokens=${cost.estimatedSavedTokens ?? 0}`);
 
   try {
     const training = await request('/api/training/stats');
-    console.log(`   Training set size=${training.total ?? 0} examples (${training.sizeBytes ?? 0} bytes)`);
+    Log.info(`   Training set size=${training.total ?? 0} examples (${training.sizeBytes ?? 0} bytes)`);
   } catch (err) {
     console.warn(`   Training stats unavailable: ${err.message}`);
   }
 }
 
-console.log('🌌 [AI_Daemon] Starting NightForge real-time evolution daemon...');
-console.log(`🌉 Bridge: ${BRIDGE_URL}`);
-console.log(`⏱️ Interval: ${INTERVAL_MINUTES} minute(s)`);
+Log.info('🌌 [AI_Daemon] Starting NightForge real-time evolution daemon...');
+Log.info(`🌉 Bridge: ${BRIDGE_URL}`);
+Log.info(`⏱️ Interval: ${INTERVAL_MINUTES} minute(s)`);
 
 runCycle().catch((err) => {
-  console.error(`❌ [AI_Daemon] Initial cycle failed: ${err.message}`);
+  Log.error(`❌ [AI_Daemon] Initial cycle failed: ${err.message}`);
 });
 
 setInterval(() => {
   runCycle().catch((err) => {
-    console.error(`❌ [AI_Daemon] Cycle failed: ${err.message}`);
+    Log.error(`❌ [AI_Daemon] Cycle failed: ${err.message}`);
   });
 }, INTERVAL_MS);

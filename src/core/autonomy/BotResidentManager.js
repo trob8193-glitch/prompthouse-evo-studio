@@ -31,7 +31,7 @@ export class BotResidentManager {
     const bot = this.residents.get(botId);
     if (!bot) return;
 
-    console.log(`🏠 [Manor] ${bot.name} is moving from ${bot.location} to ${newLocation}`);
+    Log.info(`🏠 [Manor] ${bot.name} is moving from ${bot.location} to ${newLocation}`);
     
     bot.location = newLocation;
     bot.action = action;
@@ -46,14 +46,14 @@ export class BotResidentManager {
     const bot = this.residents.get(botId);
     if (!bot) return;
 
-    console.log(`⚡ [Manor] Edging ${bot.name} to Holographic Memory & Predictive Cache...`);
+    Log.info(`⚡ [Manor] Edging ${bot.name} to Holographic Memory & Predictive Cache...`);
     
     bot.memory_edge = storage.id;
     bot.foresight_edge = cache.id;
     bot.iq_boost = 1.5;
 
     this.residents.set(botId, bot);
-    console.log(`✅ [Manor] ${bot.name} has been AMPLIFIED.`);
+    Log.info(`✅ [Manor] ${bot.name} has been AMPLIFIED.`);
   }
 }
 

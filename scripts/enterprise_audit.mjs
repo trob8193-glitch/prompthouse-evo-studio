@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { ProductionAudit } from '../src/core/engines/productionAudit.js';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 function getAllFiles(dir, fileList = []) {
   const files = fs.readdirSync(dir);
   files.forEach(file => {
@@ -18,7 +20,7 @@ function getAllFiles(dir, fileList = []) {
 }
 
 async function runAudit() {
-  console.log('🚀 [Enterprise Audit] Starting full project scan...');
+  Log.info('🚀 [Enterprise Audit] Starting full project scan...');
   
   const roots = ['src', 'lib', 'scripts'];
   const allFiles = [];
@@ -30,7 +32,7 @@ async function runAudit() {
     }
   });
   
-  console.log(`📊 Found ${allFiles.length} files to audit.`);
+  Log.info(`📊 Found ${allFiles.length} files to audit.`);
   
   let totalScore = 0;
   let totalPassed = 0;
@@ -63,22 +65,22 @@ async function runAudit() {
   
   const avgScore = totalScore / allFiles.length;
   
-  console.log('\n╔════════════════════════════════════════╗');
-  console.log('║        ENTERPRISE AUDIT REPORT         ║');
-  console.log('╚════════════════════════════════════════╝');
-  console.log(`Total Files: ${allFiles.length}`);
-  console.log(`Passed: ${totalPassed}`);
-  console.log(`Failed: ${allFiles.length - totalPassed}`);
-  console.log(`Average Score: ${avgScore.toFixed(2)}/100`);
+  Log.info('\n╔════════════════════════════════════════╗');
+  Log.info('║        ENTERPRISE AUDIT REPORT         ║');
+  Log.info('╚════════════════════════════════════════╝');
+  Log.info(`Total Files: ${allFiles.length}`);
+  Log.info(`Passed: ${totalPassed}`);
+  Log.info(`Failed: ${allFiles.length - totalPassed}`);
+  Log.info(`Average Score: ${avgScore.toFixed(2)}/100`);
   
   if (failures.length > 0) {
-    console.log('\n❌ Failures:');
+    Log.info('\n❌ Failures:');
     failures.forEach(f => {
-      console.log(`\n📄 ${path.relative(process.cwd(), f.file)}:`);
-      f.issues.forEach(issue => console.log(`  - ${issue}`));
+      Log.info(`\n📄 ${path.relative(process.cwd(), f.file)}:`);
+      f.issues.forEach(issue => Log.info(`  - ${issue}`));
     });
   } else {
-    console.log('\n✅ All files passed production audit!');
+    Log.info('\n✅ All files passed production audit!');
   }
   
   // Save report
@@ -100,7 +102,7 @@ async function runAudit() {
     'utf8'
   );
   
-  console.log(`\n📍 Detailed report saved to .prompthouse-data/enterprise_audit_report.json`);
+  Log.info(`\n📍 Detailed report saved to .prompthouse-data/enterprise_audit_report.json`);
 }
 
 runAudit().catch(console.error);

@@ -4,6 +4,8 @@ import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import * as guardrails from './ai_guardrails.mjs';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 dotenv.config({ override: true });
 
 /**
@@ -18,7 +20,7 @@ async function review() {
   const configPath = path.join(root, '.ai/config/bridge.config.json');
   
   if (!fs.existsSync(configPath)) {
-    console.error('❌ Configuration missing. Run npm run ai:pack first.');
+    Log.error('❌ Configuration missing. Run npm run ai:pack first.');
     process.exit(1);
   }
 
@@ -27,12 +29,12 @@ async function review() {
   const systemPromptPath = path.join(root, '.ai/prompts/reviewer-system.md');
 
   if (!fs.existsSync(snapshotPath)) {
-    console.log('❌ Context pack missing. Run npm run ai:pack first.');
+    Log.info('❌ Context pack missing. Run npm run ai:pack first.');
     process.exit(1);
   }
 
   if (!process.env.OPENAI_API_KEY) {
-    console.log('⚠️ OPENAI_API_KEY is not set. Context pack created, but review call was skipped.');
+    Log.info('⚠️ OPENAI_API_KEY is not set. Context pack created, but review call was skipped.');
     process.exit(0);
   }
 
@@ -40,7 +42,7 @@ async function review() {
   const systemPrompt = fs.readFileSync(systemPromptPath, 'utf8');
   const model = process.env.OPENAI_MODEL || config.fallbackModel || 'gpt-4o-mini';
 
-  console.log(`📡 [AI_Review] Dispatching context to OpenAI (${model})...`);
+  Log.info(`📡 [AI_Review] Dispatching context to OpenAI (${model})...`);
 
   const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
@@ -71,18 +73,18 @@ async function review() {
     const checklist = checklistMatch ? checklistMatch[1].trim() : 'See full review for the detailed checklist.';
     guardrails.writeTextFileSafe(root, config.repairChecklistOutputPath, checklist);
 
-    console.log('✅ [AI_Review] Architecture review completed.');
-    console.log(`📍 Review: ${config.reviewOutputPath}`);
-    console.log(`📍 Next Pass: ${config.antigravityPromptOutputPath}`);
-    console.log(`📍 Checklist: ${config.repairChecklistOutputPath}`);
+    Log.info('✅ [AI_Review] Architecture review completed.');
+    Log.info(`📍 Review: ${config.reviewOutputPath}`);
+    Log.info(`📍 Next Pass: ${config.antigravityPromptOutputPath}`);
+    Log.info(`📍 Checklist: ${config.repairChecklistOutputPath}`);
 
   } catch (err) {
-    console.error('❌ [AI_Review] OpenAI API error:', err.message);
+    Log.error('❌ [AI_Review] OpenAI API error:', err.message);
     process.exit(1);
   }
 }
 
 review().catch(err => {
-  console.error('❌ [AI_Review] Fatal error:', err);
+  Log.error('❌ [AI_Review] Fatal error:', err);
   process.exit(1);
 });

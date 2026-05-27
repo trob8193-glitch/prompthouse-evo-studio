@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Network, Layout, Play, Eye, Server, Database, Code, Shield, CheckCircle2, Activity } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 /**
  * PH EVO STUDIO — SAAS BUILDER (Absolute Operational Reality)
  * ═══════════════════════════════════════════════════════════════
@@ -45,7 +47,7 @@ export default function SaasBuilderView() {
         setTruthState('SIGNED_PHYSICAL');
       }
     } catch (e) {
-      console.error(e);
+      Log.error(e);
       setTruthState('REALITY_BREACH');
     } finally {
       setBuilding(false);

@@ -4,6 +4,8 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import { EventEmitter } from 'events';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 const PROMPT_LOG_FILE = './prompt_log.json';
 
@@ -19,7 +21,7 @@ class PromptCapture extends EventEmitter {
             const data = await fs.promises.readFile(PROMPT_LOG_FILE, 'utf-8');
             this.prompts = JSON.parse(data);
         } catch (error) {
-            console.error('Error loading prompts:', error);
+            Log.error('Error loading prompts:', error);
             this.prompts = [];
         }
     }
@@ -28,7 +30,7 @@ class PromptCapture extends EventEmitter {
         try {
             await fs.promises.writeFile(PROMPT_LOG_FILE, JSON.stringify(this.prompts, null, 2));
         } catch (error) {
-            console.error('Error saving prompts:', error);
+            Log.error('Error saving prompts:', error);
         }
     }
 
@@ -53,7 +55,7 @@ class PromptCapture extends EventEmitter {
                 throw new Error('Failed to send prompt to local bridge');
             }
         } catch (error) {
-            console.error('Error sending prompt to local bridge:', error);
+            Log.error('Error sending prompt to local bridge:', error);
         }
     }
 

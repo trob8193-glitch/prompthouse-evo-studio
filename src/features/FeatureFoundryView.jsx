@@ -7,6 +7,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Hammer, Sparkles, TrendingUp, ShieldCheck, Zap, Layers, RefreshCw } from 'lucide-react';
 import { UniversalBridge } from '../core/interop/UniversalBridge.js';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 export function FeatureFoundryView() {
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,10 +22,10 @@ export function FeatureFoundryView() {
       if (res.success) {
         setMissions(res.missions);
       } else {
-        console.error('Harvest failed:', res.error);
+        Log.error('Harvest failed:', res.error);
       }
     } catch (e) {
-      console.error('Harvest dispatch error:', e);
+      Log.error('Harvest dispatch error:', e);
     }
     setLoading(false);
   }, []);
@@ -37,7 +39,7 @@ export function FeatureFoundryView() {
         // In Phase D, this would trigger the actual code generation
       }
     } catch (e) {
-      console.error('Build initiation error:', e);
+      Log.error('Build initiation error:', e);
     }
   }, []);
 

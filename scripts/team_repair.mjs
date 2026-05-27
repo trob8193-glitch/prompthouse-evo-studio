@@ -3,6 +3,8 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { UniversalAIAdaptor } from '../lib/ai/UniversalAIAdaptor.js';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 const keys = {
@@ -13,28 +15,28 @@ const keys = {
 const ai = new UniversalAIAdaptor(keys);
 
 async function runTeamRepair() {
-  console.log('🚀 [Team Repair] Starting collaborative review...');
+  Log.info('🚀 [Team Repair] Starting collaborative review...');
   
   const reportPath = path.join(process.cwd(), '.prompthouse-data', 'enterprise_audit_report.json');
   if (!fs.existsSync(reportPath)) {
-    console.error('❌ Audit report missing. Run enterprise audit first.');
+    Log.error('❌ Audit report missing. Run enterprise audit first.');
     process.exit(1);
   }
   
   const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
   const failures = report.failures;
   
-  console.log(`📊 Found ${failures.length} failed files in report.`);
+  Log.info(`📊 Found ${failures.length} failed files in report.`);
   
   for (const failure of failures) {
     const file = failure.file;
     const issues = failure.issues;
     
-    console.log(`\n📄 Analyzing ${path.basename(file)}...`);
-    console.log(`  Issues: ${issues.join(', ')}`);
+    Log.info(`\n📄 Analyzing ${path.basename(file)}...`);
+    Log.info(`  Issues: ${issues.join(', ')}`);
     
     if (!fs.existsSync(file)) {
-      console.log('  ⚠️ File not found on disk.');
+      Log.info('  ⚠️ File not found on disk.');
       continue;
     }
     
@@ -59,25 +61,25 @@ Answer with either "REAL" or "FALSE_POSITIVE" at the start, followed by a brief 
       
       if (resp.success) {
         analysis = resp.content;
-        console.log(`🧠 [Gemini] Analysis: ${analysis.split('\n')[0]}`);
+        Log.info(`🧠 [Gemini] Analysis: ${analysis.split('\n')[0]}`);
       } else {
-        console.log(`⚠️ [Gemini] Failed: ${resp.error}. Falling back to OpenAI...`);
+        Log.info(`⚠️ [Gemini] Failed: ${resp.error}. Falling back to OpenAI...`);
         const respOpenAI = await ai.chat([
           { role: 'user', content: analysisPrompt }
         ], { provider: 'openai', model: 'gpt-4o' });
         
         if (respOpenAI.success) {
           analysis = respOpenAI.content;
-          console.log(`🤖 [OpenAI] Analysis: ${analysis.split('\n')[0]}`);
+          Log.info(`🤖 [OpenAI] Analysis: ${analysis.split('\n')[0]}`);
         }
       }
     } catch (e) {
-      console.error(`❌ Error during analysis: ${e.message}`);
+      Log.error(`❌ Error during analysis: ${e.message}`);
     }
     
     // Step 2: If real, use OpenAI to suggest fix
     if (analysis.startsWith('REAL')) {
-      console.log('🔧 Real issue detected. Requesting fix from OpenAI...');
+      Log.info('🔧 Real issue detected. Requesting fix from OpenAI...');
       const fixPrompt = `Suggest a fix for the following file to resolve the audit failures.
 File: ${path.basename(file)}
 Failures: ${issues.join(', ')}
@@ -94,23 +96,23 @@ Return ONLY the corrected code for the relevant part, or the whole file if it is
         ], { provider: 'openai', model: 'gpt-4o' });
         
         if (respFix.success) {
-          console.log('📝 [OpenAI] Fix suggested:');
-          console.log(respFix.content.slice(0, 200) + '...');
+          Log.info('📝 [OpenAI] Fix suggested:');
+          Log.info(respFix.content.slice(0, 200) + '...');
           // Here we could apply the fix, but let's just log it for now to avoid breaking things!
           // Or we can save it to a .fix file!
           const fixPath = file + '.fix';
           fs.writeFileSync(fixPath, respFix.content, 'utf8');
-          console.log(`📍 Fix saved to ${path.basename(fixPath)}`);
+          Log.info(`📍 Fix saved to ${path.basename(fixPath)}`);
         }
       } catch (e) {
-        console.error(`❌ Error during fix generation: ${e.message}`);
+        Log.error(`❌ Error during fix generation: ${e.message}`);
       }
     } else {
-      console.log('✅ Confirmed as false positive or non-issue.');
+      Log.info('✅ Confirmed as false positive or non-issue.');
     }
   }
   
-  console.log('\n🏁 [Team Repair] Completed.');
+  Log.info('\n🏁 [Team Repair] Completed.');
 }
 
 runTeamRepair().catch(console.error);

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSovereignStore } from './store.js';
 
+import { Log } from './core/autonomy/SovereignLogger.js';
+
 export function AgentBridgeView() {
   const [receipts, setReceipts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +14,7 @@ export function AgentBridgeView() {
       const data = await res.json();
       setReceipts(data.sort((a, b) => b.id.localeCompare(a.id)));
     } catch (e) {
-      console.error('Failed to fetch receipts:', e);
+      Log.error('Failed to fetch receipts:', e);
     } finally {
       setLoading(false);
     }

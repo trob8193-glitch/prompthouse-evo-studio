@@ -19,6 +19,8 @@ import {
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 const BRIDGE_URL = 'http://127.0.0.1:3001';
 
 export function EvoEyes({ mode = 'overlay' }) {
@@ -68,7 +70,7 @@ export function EvoEyes({ mode = 'overlay' }) {
         await refreshNodeMesh();
       }
     } catch (err) {
-      console.error('Evo Eyes Sync Failed:', err);
+      Log.error('Evo Eyes Sync Failed:', err);
     } finally {
       setLoading(false);
     }

@@ -52,14 +52,14 @@ export class StressTester {
    * Performs an iterative stability check.
    */
   async auditEvolutionVariant(variantCode, targetArea) {
-    console.log(`🛡️ [StressTester] Performing Evolution Audit on ${targetArea}...`);
+    Log.info(`🛡️ [StressTester] Performing Evolution Audit on ${targetArea}...`);
     
     // Step A: Code Integrity Check
     const hasCriticalExports = variantCode.includes('export const') || variantCode.includes('export default');
     const hasReactImports = variantCode.includes("import React");
 
     if (!hasCriticalExports || !hasReactImports) {
-      console.error(`❌ [StressTester] Audit Failed: Malformed React synthesis.`);
+      Log.error(`❌ [StressTester] Audit Failed: Malformed React synthesis.`);
       return { score: 0.1, status: 'FAILED' };
     }
 
@@ -67,7 +67,7 @@ export class StressTester {
     const componentSize = variantCode.length;
     const score = componentSize > 100 ? 0.95 : 0.4; // Higher density = higher stability score
 
-    console.log(`✅ [StressTester] Audit Complete. Stability Score: ${score}`);
+    Log.info(`✅ [StressTester] Audit Complete. Stability Score: ${score}`);
     return { score, status: 'PASSED' };
   }
 }

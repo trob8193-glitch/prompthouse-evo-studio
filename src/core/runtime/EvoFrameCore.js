@@ -1,3 +1,4 @@
+import { Log } from '../autonomy/SovereignLogger.js';
 /**
  * PH EVO STUDIO — EVOFRAME CORE (Absolute Operational Reality)
  * ═══════════════════════════════════════════════════════════════
@@ -18,7 +19,7 @@ export class EvoDOM {
    */
   render(vnode) {
     if (vnode.truthState !== 'SIGNED_PHYSICAL') {
-       console.error('❌ [EvoFrame] Render BLOCKED: Component state is unverified.');
+       Log.error('❌ [EvoFrame] Render BLOCKED: Component state is unverified.');
        return;
     }
 

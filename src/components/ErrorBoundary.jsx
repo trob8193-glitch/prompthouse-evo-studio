@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 /**
  * PH EVO STUDIO — ERROR BOUNDARY
  * ═══════════════════════════════════════════════════════════════
@@ -18,7 +20,7 @@ export class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     this.setState({ errorInfo });
-    console.error('[ErrorBoundary] Caught render error:', error, errorInfo);
+    Log.error('[ErrorBoundary] Caught render error:', error, errorInfo);
   }
 
   handleReset = () => {

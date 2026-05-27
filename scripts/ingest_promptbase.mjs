@@ -3,6 +3,8 @@ import path from 'path';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 dotenv.config({ override: true });
 
 const BRIDGE_URL = 'http://127.0.0.1:3001';
@@ -12,13 +14,13 @@ async function ingest() {
   const promptbasePath = path.join(root, '.prompthouse-data', 'promptbase.json');
 
   if (!fs.existsSync(promptbasePath)) {
-    console.log('❌ promptbase.json missing.');
+    Log.info('❌ promptbase.json missing.');
     process.exit(1);
   }
 
-  console.log('📂 Reading promptbase.json...');
+  Log.info('📂 Reading promptbase.json...');
   const promptbase = JSON.parse(fs.readFileSync(promptbasePath, 'utf8'));
-  console.log(`📊 Found ${promptbase.length} items in promptbase.`);
+  Log.info(`📊 Found ${promptbase.length} items in promptbase.`);
 
   const examples = [];
 
@@ -36,7 +38,7 @@ async function ingest() {
     });
   }
 
-  console.log(`✅ Prepared ${examples.length} training examples.`);
+  Log.info(`✅ Prepared ${examples.length} training examples.`);
 
   // Ingest in batches of 5 to avoid large payload issues
   const batchSize = 5;
@@ -44,7 +46,7 @@ async function ingest() {
 
   for (let i = 0; i < examples.length; i += batchSize) {
     const batch = examples.slice(i, i + batchSize);
-    console.log(`▶ Ingesting batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(examples.length / batchSize)}...`);
+    Log.info(`▶ Ingesting batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(examples.length / batchSize)}...`);
 
     try {
       const ingestRes = await fetch(`${BRIDGE_URL}/api/training/ingest`, {
@@ -57,7 +59,7 @@ async function ingest() {
       });
 
       if (!ingestRes.ok) {
-        console.error(`❌ Batch failed: ${ingestRes.statusText}`);
+        Log.error(`❌ Batch failed: ${ingestRes.statusText}`);
         continue;
       }
 
@@ -65,11 +67,11 @@ async function ingest() {
       ingestedCount += ingestData.ingested;
 
     } catch (err) {
-      console.error('❌ Error during ingest:', err.message);
+      Log.error('❌ Error during ingest:', err.message);
     }
   }
 
-  console.log(`\n🎉 Successfully plugged ${ingestedCount} prompts from promptbase into the automated training loop!`);
+  Log.info(`\n🎉 Successfully plugged ${ingestedCount} prompts from promptbase into the automated training loop!`);
 }
 
 ingest();

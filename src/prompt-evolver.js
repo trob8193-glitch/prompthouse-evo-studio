@@ -8,6 +8,8 @@
 const BRIDGE = 'http://127.0.0.1:3001';
 import { universalSend } from './lib/universal-transport.js';
 
+import { Log } from './core/autonomy/SovereignLogger.js';
+
 /**
  * Given a weak pattern and its AI analysis, generate an improved 6-layer prompt stack.
  * The AI rewrites the specific layer identified as the root cause.
@@ -57,7 +59,7 @@ Respond in strict JSON:
 
     return { stack, version: `v_${Date.now()}` };
   } catch (e) {
-    console.error('[PromptEvolver] Stack generation failed:', e.message);
+    Log.error('[PromptEvolver] Stack generation failed:', e.message);
     return null;
   }
 }
@@ -88,7 +90,7 @@ export async function createExperiment(domain, originalStack, improvedStack) {
     const data = await res.json();
     return data.experiment;
   } catch (e) {
-    console.error('[PromptEvolver] Failed to create experiment:', e.message);
+    Log.error('[PromptEvolver] Failed to create experiment:', e.message);
     return null;
   }
 }
@@ -126,7 +128,7 @@ export async function recordExperimentResult(experimentId, variant, rating) {
     });
     return await res.json();
   } catch (e) {
-    console.error('[PromptEvolver] Failed to record experiment result:', e.message);
+    Log.error('[PromptEvolver] Failed to record experiment result:', e.message);
     return null;
   }
 }

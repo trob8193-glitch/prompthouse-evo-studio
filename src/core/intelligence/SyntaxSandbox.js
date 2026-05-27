@@ -3,6 +3,8 @@ import { promisify } from 'util';
 import fs from 'fs';
 import path from 'path';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 const execAsync = promisify(exec);
 
 /**
@@ -40,7 +42,7 @@ export class SyntaxSandbox {
       // Syntax is perfectly fine
       return { fixedCode: response, wasFixed: false };
     } catch (error) {
-      console.error('[SANDBOX] Syntax Error Caught Before Output!');
+      Log.error('[SANDBOX] Syntax Error Caught Before Output!');
       
       // Heuristic Fix 1: Missing closing brace (very common LLM truncation)
       if (error.message.includes('Unexpected end of input')) {

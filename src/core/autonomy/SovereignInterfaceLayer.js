@@ -1,3 +1,4 @@
+import { Log } from './SovereignLogger.js';
 /**
  * EVOGENAGE — SOVEREIGN INTERFACE LAYER (SIL)
  * ═══════════════════════════════════════════════════════════════
@@ -15,7 +16,7 @@ export class SovereignInterfaceLayer {
    * Allows a bot to call any registered studio feature.
    */
   async botAction(botId, action, params = {}) {
-    console.log(`🤖 [SIL] Bot ${botId} is executing: ${action}`);
+    Log.info(`🤖 [SIL] Bot ${botId} is executing: ${action}`);
 
     switch (action) {
       case 'TOGGLE_REALITY_GUARD':
@@ -27,14 +28,14 @@ export class SovereignInterfaceLayer {
       case 'UPDATE_UI_THEME':
         return await this.studio.evoEngine.evolveProfile(params.dnaUpdates);
       default:
-        console.error(`❌ [SIL] Action '${action}' not mapped to a physical control.`);
+        Log.error(`❌ [SIL] Action '${action}' not mapped to a physical control.`);
     }
   }
 }
 
 export const SIL = new SovereignInterfaceLayer({
-  realityGuard: { toggle: () => console.log('🛡️ RealityGuard Toggled.') },
-  selfHeal: { execute: (p) => console.log(`🛠️ Healing ${p.target}...`) },
-  seedSower: { sowGenesisPack: (id, env) => console.log(`🌱 Sowing ${id} to ${env}...`) },
-  evoEngine: { evolveProfile: (u) => console.log(`🧬 Evolving DNA: ${JSON.stringify(u)}`) }
+  realityGuard: { toggle: () => Log.info('🛡️ RealityGuard Toggled.') },
+  selfHeal: { execute: (p) => Log.info(`🛠️ Healing ${p.target}...`) },
+  seedSower: { sowGenesisPack: (id, env) => Log.info(`🌱 Sowing ${id} to ${env}...`) },
+  evoEngine: { evolveProfile: (u) => Log.info(`🧬 Evolving DNA: ${JSON.stringify(u)}`) }
 });

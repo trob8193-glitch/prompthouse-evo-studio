@@ -4,6 +4,8 @@ import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 dotenv.config({ override: true });
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -14,13 +16,13 @@ async function train() {
   const model = process.env.OPENAI_MODEL || 'gpt-4o';
 
   if (!apiKey) {
-    console.error('❌ OPENAI_API_KEY missing in .env');
+    Log.error('❌ OPENAI_API_KEY missing in .env');
     process.exit(1);
   }
 
   const client = new OpenAI({ apiKey });
 
-  console.log(`📡 [Train] Requesting high-density Creative Autonomy knowledge from OpenAI (${model})...`);
+  Log.info(`📡 [Train] Requesting high-density Creative Autonomy knowledge from OpenAI (${model})...`);
 
   const prompt = `
 You are the Cloud Core of the PromptHouse Evo Studio. 
@@ -53,10 +55,10 @@ Include code snippets or system prompt templates where relevant.
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     
     fs.writeFileSync(outputPath, content, 'utf8');
-    console.log(`✅ [Train] Knowledge file created at: ${outputPath}`);
+    Log.info(`✅ [Train] Knowledge file created at: ${outputPath}`);
     
   } catch (err) {
-    console.error('❌ [Train] Error:', err.message);
+    Log.error('❌ [Train] Error:', err.message);
   }
 }
 

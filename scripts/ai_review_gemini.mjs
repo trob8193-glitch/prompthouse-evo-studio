@@ -5,6 +5,8 @@ import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import * as guardrails from './ai_guardrails.mjs';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 dotenv.config({ override: true });
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -14,7 +16,7 @@ async function review() {
   const configPath = path.join(root, '.ai/config/bridge.config.json');
   
   if (!fs.existsSync(configPath)) {
-    console.error('❌ Configuration missing. Run npm run ai:pack first.');
+    Log.error('❌ Configuration missing. Run npm run ai:pack first.');
     process.exit(1);
   }
 
@@ -23,13 +25,13 @@ async function review() {
   const systemPromptPath = path.join(root, '.ai/prompts/reviewer-system.md');
 
   if (!fs.existsSync(snapshotPath)) {
-    console.log('❌ Context pack missing. Run npm run ai:pack first.');
+    Log.info('❌ Context pack missing. Run npm run ai:pack first.');
     process.exit(1);
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    console.log('⚠️ GEMINI_API_KEY is not set. Context pack created, but review call was skipped.');
+    Log.info('⚠️ GEMINI_API_KEY is not set. Context pack created, but review call was skipped.');
     process.exit(0);
   }
 
@@ -37,7 +39,7 @@ async function review() {
   const systemPrompt = fs.readFileSync(systemPromptPath, 'utf8');
   const model = 'gemini-flash-latest';
 
-  console.log(`📡 [AI_Review_Gemini] Dispatching context to Google Gemini (${model})...`);
+  Log.info(`📡 [AI_Review_Gemini] Dispatching context to Google Gemini (${model})...`);
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
@@ -87,18 +89,18 @@ async function review() {
     const checklist = checklistMatch ? checklistMatch[1].trim() : 'See full review for the detailed checklist.';
     guardrails.writeTextFileSafe(root, config.repairChecklistOutputPath, checklist);
 
-    console.log('✅ [AI_Review_Gemini] Architecture review completed via Gemini.');
-    console.log(`📍 Review: ${config.reviewOutputPath}`);
-    console.log(`📍 Next Pass: ${config.antigravityPromptOutputPath}`);
-    console.log(`📍 Checklist: ${config.repairChecklistOutputPath}`);
+    Log.info('✅ [AI_Review_Gemini] Architecture review completed via Gemini.');
+    Log.info(`📍 Review: ${config.reviewOutputPath}`);
+    Log.info(`📍 Next Pass: ${config.antigravityPromptOutputPath}`);
+    Log.info(`📍 Checklist: ${config.repairChecklistOutputPath}`);
 
   } catch (err) {
-    console.error('❌ [AI_Review_Gemini] Fatal error:', err.message);
+    Log.error('❌ [AI_Review_Gemini] Fatal error:', err.message);
     process.exit(1);
   }
 }
 
 review().catch(err => {
-  console.error('❌ [AI_Review_Gemini] Unhandled fatal error:', err);
+  Log.error('❌ [AI_Review_Gemini] Unhandled fatal error:', err);
   process.exit(1);
 });

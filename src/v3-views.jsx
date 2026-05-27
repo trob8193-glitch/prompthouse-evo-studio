@@ -7,6 +7,8 @@ import SovereignChat from './features/SovereignChat';
 import RareCapabilities from './features/RareCapabilities';
 import { EvoEyesView } from './features/EvoEyesView';
 
+import { Log } from './core/autonomy/SovereignLogger.js';
+
 /**
  * PH EVO STUDIO — V3 MODULAR VIEWS (V4 RESTORED)
  * ═══════════════════════════════════════════════════════════════
@@ -88,7 +90,7 @@ export const MasterPromptVaultView = () => {
         const list = Array.isArray(data?.features) ? data.features.slice(0, 8).map(f => f.name).filter(Boolean) : [];
         setPrompts(list);
       } catch (e) {
-        console.error('Failed to fetch prompts:', e);
+        Log.error('Failed to fetch prompts:', e);
         setPrompts([]);
         setError(String(e.message || e));
       } finally {

@@ -1,5 +1,7 @@
 import { runEvolutionCycle, getEvolutionStatus, listEvolutionRuns } from '../src/core/evolution/index.js';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 const args = process.argv.slice(2);
 const modeArg = args.find(arg => arg.startsWith('--mode='));
 const objectiveArg = args.find(arg => arg.startsWith('--objective='));
@@ -13,11 +15,11 @@ const objective = objectiveArg
 
 try {
   if (status) {
-    console.log(JSON.stringify(getEvolutionStatus(), null, 2));
+    Log.info(JSON.stringify(getEvolutionStatus(), null, 2));
     process.exit(0);
   }
   if (list) {
-    console.log(JSON.stringify(listEvolutionRuns({ limit: 25 }), null, 2));
+    Log.info(JSON.stringify(listEvolutionRuns({ limit: 25 }), null, 2));
     process.exit(0);
   }
 
@@ -29,9 +31,9 @@ try {
     runBuild: !args.includes('--skip-build'),
     allowRollback: !args.includes('--no-rollback'),
   });
-  console.log(JSON.stringify(result, null, 2));
+  Log.info(JSON.stringify(result, null, 2));
   process.exit(result.success ? 0 : 1);
 } catch (error) {
-  console.error(JSON.stringify({ success: false, error: error.message, code: error.code || 'SELF_EVOLUTION_CLI_ERROR' }, null, 2));
+  Log.error(JSON.stringify({ success: false, error: error.message, code: error.code || 'SELF_EVOLUTION_CLI_ERROR' }, null, 2));
   process.exit(1);
 }

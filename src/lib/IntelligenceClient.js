@@ -1,5 +1,7 @@
 import { useSovereignStore } from '../store.js';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 /**
  * INTELLIGENCE CLIENT
  * ═══════════════════════════════════════════════════════════════
@@ -39,7 +41,7 @@ export class IntelligenceClient {
 
       return data;
     } catch (error) {
-      console.error(`[IntelligenceClient] ${module} -> ${action} Failed:`, error);
+      Log.error(`[IntelligenceClient] ${module} -> ${action} Failed:`, error);
       throw error;
     }
   }

@@ -1,6 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { RARE_CAPABILITIES, buildRareArtifact } from './rare-capabilities-engine.js';
 
+import { Log } from './core/autonomy/SovereignLogger.js';
+
 const BRIDGE = 'http://127.0.0.1:3001';
 const DEFAULT_MISSION = 'Build a trusted PromptHouse agent that turns a founder idea into proof-backed app, Chrome extension, workflow, test, and receipt artifacts.';
 
@@ -47,7 +49,7 @@ export function RareCapabilitiesView() {
           setArtifactsData(responseData.result);
         }
       } catch (e) {
-        console.error('Failed to load rare capabilities data:', e);
+        Log.error('Failed to load rare capabilities data:', e);
       } finally {
         setLoading(false);
       }

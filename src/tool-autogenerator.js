@@ -1,3 +1,4 @@
+import { Log } from './core/autonomy/SovereignLogger.js';
 /**
  * PH EVO STUDIO — TOOL-AUTOGENERATOR (Bridge Client Edition)
  * ═══════════════════════════════════════════════════════════════
@@ -9,7 +10,7 @@ export const getAllRecipes = async () => {
     const res = await fetch('http://localhost:3001/api/tools/recipes');
     if (res.ok) return await res.json();
   } catch (e) {
-    console.error('❌ [Recipes] Bridge Fetch Error:', e);
+    Log.error('❌ [Recipes] Bridge Fetch Error:', e);
   }
   return [];
 };

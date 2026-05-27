@@ -4,13 +4,15 @@ import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 import OpenAI from 'openai';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 dotenv.config({ override: true });
 
 const BRIDGE_URL = 'http://127.0.0.1:3001';
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 async function train() {
-  console.log('📡 [Train_Autonomy] Generating autonomy training data using OpenAI...');
+  Log.info('📡 [Train_Autonomy] Generating autonomy training data using OpenAI...');
 
   const prompt = `
   You are generating training data for a sentient AI coding studio called PromptHouse Evo Studio.
@@ -46,9 +48,9 @@ async function train() {
     }
 
     const examples = JSON.parse(content);
-    console.log(`✅ Generated ${examples.length} autonomy examples.`);
+    Log.info(`✅ Generated ${examples.length} autonomy examples.`);
 
-    console.log('▶ Ingesting examples into the training loop...');
+    Log.info('▶ Ingesting examples into the training loop...');
     const ingestRes = await fetch(`${BRIDGE_URL}/api/training/ingest`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -63,10 +65,10 @@ async function train() {
     }
 
     const ingestData = await ingestRes.json();
-    console.log(`🎉 Successfully ingested ${ingestData.ingested} autonomy seeds!`);
+    Log.info(`🎉 Successfully ingested ${ingestData.ingested} autonomy seeds!`);
 
   } catch (err) {
-    console.error('❌ Error during autonomy training:', err);
+    Log.error('❌ Error during autonomy training:', err);
   }
 }
 

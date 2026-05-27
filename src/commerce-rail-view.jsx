@@ -7,6 +7,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { CreditCard, Tag, Globe, CheckCircle, AlertTriangle, ExternalLink } from 'lucide-react';
 import { createCommerceProduct, createPricingTable } from './commerce-rail.js';
 
+import { Log } from './core/autonomy/SovereignLogger.js';
+
 export function CommerceRailView() {
   const [form, setForm] = useState({ 
     productName: 'PH Studio Pro', 
@@ -23,7 +25,7 @@ export function CommerceRailView() {
       const table = await createPricingTable();
       if (table && table.tiers) setPricingTable(table);
     } catch (e) {
-      console.error('Failed to fetch pricing:', e);
+      Log.error('Failed to fetch pricing:', e);
     }
   }, []);
 

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { History, GitCommit, GitBranch, Rewind } from 'lucide-react';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 export function TimeSlipLedger() {
   const [isOpen, setIsOpen] = useState(false);
   const [commits, setCommits] = useState([]);
@@ -10,7 +12,7 @@ export function TimeSlipLedger() {
       fetch('http://localhost:3001/api/commits')
         .then(res => res.json())
         .then(data => setCommits(data))
-        .catch(err => console.error(err));
+        .catch(err => Log.error(err));
     }
   }, [isOpen]);
 

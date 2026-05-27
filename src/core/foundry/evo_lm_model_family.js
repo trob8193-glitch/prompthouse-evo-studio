@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MODEL_DEFINITIONS_PATH = path.join(__dirname, 'model_definitions.json');
 const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001/models';
@@ -33,7 +35,7 @@ class EvoLMModelFamily {
             this.models = Array.isArray(data) ? data : data.models || [];
             this.saveModels();
         } catch (error) {
-            console.error('Failed to fetch models from server:', error);
+            Log.error('Failed to fetch models from server:', error);
         }
     }
 

@@ -1,5 +1,7 @@
 import crypto from 'crypto';
 
+import { Log } from './SovereignLogger.js';
+
 /**
  * PH EVO STUDIO — DRIFTGUARD (FORBIDDEN DRIFT PROTOCOL)
  * ═══════════════════════════════════════════════════════════════
@@ -19,7 +21,7 @@ export class DriftGuard {
   registerIntent(methodId, logicString) {
     const hash = crypto.createHash('sha256').update(logicString).digest('hex');
     this.identityHashes.set(methodId, hash);
-    console.log(`🛡️ [DriftGuard] Identity Locked for: ${methodId} [${hash.slice(0, 8)}]`);
+    Log.info(`🛡️ [DriftGuard] Identity Locked for: ${methodId} [${hash.slice(0, 8)}]`);
   }
 
   /**
@@ -30,12 +32,12 @@ export class DriftGuard {
     const currentHash = crypto.createHash('sha256').update(currentLogic).digest('hex');
 
     if (lockedHash && lockedHash !== currentHash) {
-      console.error(`🚨 [DriftGuard] LOGIC DRIFT DETECTED in ${methodId}!`);
-      console.error(`🚨 [DriftGuard] FORBIDDEN STATE REACHED. Terminating Execution.`);
+      Log.error(`🚨 [DriftGuard] LOGIC DRIFT DETECTED in ${methodId}!`);
+      Log.error(`🚨 [DriftGuard] FORBIDDEN STATE REACHED. Terminating Execution.`);
       throw new Error('DRIFT_FORBIDDEN_BREACH');
     }
 
-    console.log(`🛡️ [DriftGuard] Truth Verified for: ${methodId}. Zero Drift.`);
+    Log.info(`🛡️ [DriftGuard] Truth Verified for: ${methodId}. Zero Drift.`);
     return true;
   }
 }

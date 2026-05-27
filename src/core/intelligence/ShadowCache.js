@@ -2,6 +2,8 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 /**
  * SHADOW CACHE LEDGER
  * ═══════════════════════════════════════════════════════════════
@@ -30,7 +32,7 @@ export class ShadowCache {
         const parsed = JSON.parse(data);
         return parsed.response;
       } catch (err) {
-        console.error('[SHADOW_CACHE] Failed to read cache file:', err);
+        Log.error('[SHADOW_CACHE] Failed to read cache file:', err);
         return null;
       }
     }
@@ -48,7 +50,7 @@ export class ShadowCache {
       };
       fs.writeFileSync(cacheFile, JSON.stringify(payload, null, 2), 'utf8');
     } catch (err) {
-      console.error('[SHADOW_CACHE] Failed to write cache file:', err);
+      Log.error('[SHADOW_CACHE] Failed to write cache file:', err);
     }
   }
 }

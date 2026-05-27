@@ -4,6 +4,8 @@ import TruthBadge from './TruthBadge.jsx';
 import OwnerApprovalPanel from './OwnerApprovalPanel.jsx';
 import { getVercelPreviewStatus, requestVercelPreviewDeploy, getLatestPreviewDeploymentReceipt } from '../services/vercel-preview-client.js';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 export default function VercelPreviewDeployPanel() {
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,7 +24,7 @@ export default function VercelPreviewDeployPanel() {
       if (statusRes.ok) setStatus(statusRes.data);
       if (receiptRes.ok) setLatestReceipt(receiptRes.data);
     } catch (err) {
-      console.error('Failed to fetch Vercel status:', err);
+      Log.error('Failed to fetch Vercel status:', err);
     } finally {
       setLoading(false);
     }

@@ -1,3 +1,4 @@
+import { Log } from '../autonomy/SovereignLogger.js';
 /**
  * EVOGENAGE — EVOLUTION BRIDGE (STUDIO CORE)
  * ═══════════════════════════════════════════════════════════════
@@ -14,8 +15,8 @@ export class EvolutionBridge {
    * Request an autonomous UI Evolution Mission.
    */
   async requestEvolution(targetArea, reasoning) {
-    console.log(`🌀 [EvolutionBridge] Requesting Evolution Mission for: ${targetArea}`);
-    console.log(`   - Reasoning: ${reasoning}`);
+    Log.info(`🌀 [EvolutionBridge] Requesting Evolution Mission for: ${targetArea}`);
+    Log.info(`   - Reasoning: ${reasoning}`);
 
     try {
       const response = await fetch(`${this.apiBaseUrl}/api/evolution/missions`, {
@@ -30,10 +31,10 @@ export class EvolutionBridge {
       });
 
       const data = await response.json();
-      console.log(`✅ [EvolutionBridge] Mission Manifested: ${data.missionId}`);
+      Log.info(`✅ [EvolutionBridge] Mission Manifested: ${data.missionId}`);
       return data.missionId;
     } catch (error) {
-      console.error(`❌ [EvolutionBridge] Failed to dispatch mission: ${error.message}`);
+      Log.error(`❌ [EvolutionBridge] Failed to dispatch mission: ${error.message}`);
       return null;
     }
   }
@@ -42,7 +43,7 @@ export class EvolutionBridge {
    * Sync Visual DNA from Studio Knowledge.
    */
   async syncDesignSignature(dnaProfile) {
-    console.log(`🧬 [EvolutionBridge] Syncing Design Signature to EVOGENAGE...`);
+    Log.info(`🧬 [EvolutionBridge] Syncing Design Signature to EVOGENAGE...`);
     // Logic to push Knowledge Shards to DNA Engine...
   }
 }

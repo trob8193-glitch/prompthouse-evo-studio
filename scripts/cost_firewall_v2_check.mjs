@@ -1,22 +1,24 @@
 import { evaluateCostedRequest, summarizeCostSavings, listCostSavingsReceipts, listCertifiedSavingsClaims, getSemanticCacheStats } from '../src/core/gateway/index.js';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 const args = process.argv.slice(2);
 const summary = args.includes('--summary');
 const claims = args.includes('--claims');
 const cache = args.includes('--cache');
 
 if (summary) {
-  console.log(JSON.stringify(summarizeCostSavings(), null, 2));
+  Log.info(JSON.stringify(summarizeCostSavings(), null, 2));
   process.exit(0);
 }
 
 if (claims) {
-  console.log(JSON.stringify(listCertifiedSavingsClaims(), null, 2));
+  Log.info(JSON.stringify(listCertifiedSavingsClaims(), null, 2));
   process.exit(0);
 }
 
 if (cache) {
-  console.log(JSON.stringify(getSemanticCacheStats(), null, 2));
+  Log.info(JSON.stringify(getSemanticCacheStats(), null, 2));
   process.exit(0);
 }
 
@@ -33,5 +35,5 @@ const result = evaluateCostedRequest({
   expectedOutputTokens: 1200
 });
 
-console.log(JSON.stringify(result, null, 2));
+Log.info(JSON.stringify(result, null, 2));
 process.exit(result.allowed ? 0 : 1);

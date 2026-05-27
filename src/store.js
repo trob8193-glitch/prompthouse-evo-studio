@@ -384,10 +384,10 @@ export const useSovereignStore = create((set, get) => ({
     if (state.syncInterval) return;
 
     const poll = () => {
-      get().fetchBridgeStatus().catch(() => {});
-      get().fetchMetrics().catch(() => {});
-      get().fetchRiftStatus().catch(() => {});
-      get().fetchGridMesh().catch(() => {});
+      get().fetchBridgeStatus().catch((err) => { console.warn('[Store Sync] Bridge Status poll dropped:', err.message); });
+      get().fetchMetrics().catch((err) => { console.warn('[Store Sync] Metrics poll dropped:', err.message); });
+      get().fetchRiftStatus().catch((err) => { console.warn('[Store Sync] Rift Status poll dropped:', err.message); });
+      get().fetchGridMesh().catch((err) => { console.warn('[Store Sync] Grid Mesh poll dropped:', err.message); });
     };
     poll(); 
     const interval = setInterval(poll, 8000);

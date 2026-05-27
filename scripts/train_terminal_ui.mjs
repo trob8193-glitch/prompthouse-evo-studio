@@ -5,13 +5,15 @@ import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 import crypto from 'crypto';
 
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
+
 dotenv.config({ override: true });
 
 const BRIDGE_URL = 'http://127.0.0.1:3001';
 
 async function train() {
   if (!process.env.OPENAI_API_KEY) {
-    console.log('❌ OPENAI_API_KEY is not set.');
+    Log.info('❌ OPENAI_API_KEY is not set.');
     process.exit(1);
   }
 
@@ -36,14 +38,14 @@ Generate training examples in JSON format:
 }
 Ensure the examples are technical, precise, and adhere to the project's premium design standards.`;
 
-  console.log('📡 [Train_Terminal_UI] Generating training data using OpenAI...');
+  Log.info('📡 [Train_Terminal_UI] Generating training data using OpenAI...');
 
   // Run for about 2 minutes by doing multiple iterations with a delay
   const iterations = 3;
   const delayMs = 30000; // 30 seconds delay between iterations
 
   for (let i = 0; i < iterations; i++) {
-    console.log(`▶ Iteration ${i + 1}/${iterations}...`);
+    Log.info(`▶ Iteration ${i + 1}/${iterations}...`);
     
     try {
       const response = await client.chat.completions.create({
@@ -63,7 +65,7 @@ Ensure the examples are technical, precise, and adhere to the project's premium 
         throw new Error('Invalid response format from OpenAI');
       }
 
-      console.log(`✅ Generated ${data.examples.length} examples.`);
+      Log.info(`✅ Generated ${data.examples.length} examples.`);
 
       // Ingest into bridge
       const ingestRes = await fetch(`${BRIDGE_URL}/api/training/ingest`, {
@@ -80,7 +82,7 @@ Ensure the examples are technical, precise, and adhere to the project's premium 
       }
 
       const ingestData = await ingestRes.json();
-      console.log(`✅ Ingested ${ingestData.ingested} examples.`);
+      Log.info(`✅ Ingested ${ingestData.ingested} examples.`);
 
       // Log to ledger
       await fetch(`${BRIDGE_URL}/api/sovereign-ledger/log`, {
@@ -96,16 +98,16 @@ Ensure the examples are technical, precise, and adhere to the project's premium 
       });
 
     } catch (err) {
-      console.error('❌ Error:', err.message);
+      Log.error('❌ Error:', err.message);
     }
 
     if (i < iterations - 1) {
-      console.log(`⏳ Waiting ${delayMs / 1000}s for next iteration...`);
+      Log.info(`⏳ Waiting ${delayMs / 1000}s for next iteration...`);
       await new Promise(resolve => setTimeout(resolve, delayMs));
     }
   }
 
-  console.log('✅ [Train_Terminal_UI] Training completed.');
+  Log.info('✅ [Train_Terminal_UI] Training completed.');
 }
 
 train();

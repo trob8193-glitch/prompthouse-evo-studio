@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 export class RealitySynthesisLogic {
   constructor() {
     this.status = 'ACTIVE';
@@ -92,7 +94,7 @@ export class RealitySynthesisLogic {
     try {
       fs.appendFileSync(this.logFilePath, JSON.stringify(logData) + '\n', { encoding: 'utf8' });
     } catch (err) {
-      console.error('Error logging training data', err);
+      Log.error('Error logging training data', err);
     }
   }
 }

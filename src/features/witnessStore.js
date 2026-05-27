@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+import { Log } from '../core/autonomy/SovereignLogger.js';
+
 /**
  * PH EVO STUDIO — SOVEREIGN WITNESS STORE
  * ═══════════════════════════════════════════════════════════════
@@ -70,7 +72,7 @@ export const useWitnessStore = create((set, get) => ({
       }
       return data;
     } catch (err) {
-      console.error('[WitnessStore] Scan failed:', err);
+      Log.error('[WitnessStore] Scan failed:', err);
       return { success: false };
     }
   },
