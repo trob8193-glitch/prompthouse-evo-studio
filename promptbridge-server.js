@@ -22,6 +22,7 @@ import { SelfMaintenance } from './src/core/automation/self_maintenance.js';
 import { StripeAdaptor } from './lib/commerce/StripeAdaptor.js';
 import { FoundryOrchestrator } from './lib/foundry/FoundryOrchestrator.js';
 import { TruthGate } from './src/core/truth/TruthGate.js';
+import { EnterpriseLicenseManager } from './src/core/security/EnterpriseLicenseManager.js';
 
 // Hybrid Quad System Imports
 import { ModelRouter } from './src/core/gateway/modelRouter.js';
@@ -74,6 +75,15 @@ registerPlatformSentinelRoutes(app);
 registerAiModelRoutes(app);
 registerEvoDiffuserRoutes(app);
 registerEvoTerminalRoutes(app);
+
+const licenseManager = new EnterpriseLicenseManager(process.cwd());
+app.get('/api/license/status', (req, res) => {
+    res.json({
+        enterprise: licenseManager.isEnterprise(),
+        tier: licenseManager.isEnterprise() ? 'Unlimited' : 'Free Core'
+    });
+});
+
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
 
 // ─── INITIALIZATION ──────────────────────────────────────────────────────────

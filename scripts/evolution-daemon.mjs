@@ -3,12 +3,23 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { Log } from '../src/core/autonomy/SovereignLogger.js';
-
-async function generateSpatialMap() { throw new Error("Spatial mapper not available"); }
+import { EnterpriseLicenseManager } from '../src/core/security/EnterpriseLicenseManager.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
+
+// --- ENTERPRISE GATE ---
+const licenseManager = new EnterpriseLicenseManager(rootDir);
+try {
+  licenseManager.enforceEnterprise('The Autonomous Evolution Engine (Daemon)');
+} catch (e) {
+  console.error('\n' + e.message + '\n');
+  process.exit(1);
+}
+// -----------------------
+
+async function generateSpatialMap() { throw new Error("Spatial mapper not available"); }
 
 // Load .env
 function loadEnv() {
