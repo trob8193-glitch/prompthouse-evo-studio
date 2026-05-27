@@ -41,8 +41,9 @@ setInterval(async () => {
         
         const tasks = [
           { botId: 1, task: 'Audit build stability & routing integrity', status: 'PENDING' },
-          { botId: 4, task: 'Synchronize Tunnel UI with Theme Evolution', status: 'PENDING' },
-          { botId: 12, task: 'Scan for hull fragments & dead surfaces', status: 'PENDING' }
+          { botId: 12, task: 'Scan for hull fragments & dead surfaces', status: 'PENDING' },
+          { botId: 21, task: 'Cross-Daemon Audit: Force Singularity Core to inspect Crucible Engine', status: 'PENDING' },
+          { botId: 3, task: 'Cross-Daemon Repair: Optimize Watchdog memory consumption', status: 'PENDING' }
         ];
 
         console.log(`🚀 [Orchestrator] Launching ${tasks.length} autonomous missions across the grid...`);
