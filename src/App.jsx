@@ -30,6 +30,7 @@ import SingularityEngineOverlay from './components/SingularityEngineOverlay.jsx'
 
 import ProofCenterView from './features/ProofCenterView.jsx';
 import DeploymentCenterView from './features/DeploymentCenterView.jsx';
+import TriBrainControlPanel from './features/TriBrainControlPanel.jsx';
 
 // Existing feature screens from features/index.jsx
 import {
@@ -52,6 +53,7 @@ export const PAGE_MAP = {
   'duel-arena': EvoDuelArena,
   'ai-generator': AIGeneratorHub,
   'evopulse-grid': EvoPulseGridView,
+  'tribrain': TriBrainControlPanel,
   'execution-queue': ExecutionQueue,
   'proof-console': ProofConsole,
   'proof-center': ProofCenterView,
@@ -108,16 +110,12 @@ function NotificationToasts() {
 
 export default function App() {
   const evolutionClientIdRef = React.useRef(null);
-  const startGlobalSync = useSovereignStore((s) => s.startGlobalSync);
-  const stopGlobalSync = useSovereignStore((s) => s.stopGlobalSync);
   const activePage = useSovereignStore((s) => s.activePage);
   const terminalOpen = useSovereignStore((s) => s.terminalOpen);
   const setEvolutionProfile = useSovereignStore((s) => s.setEvolutionProfile);
   const applyEvolutionRuntime = useSovereignStore((s) => s.applyEvolutionRuntime);
   const singularityActive = useSovereignStore((s) => s.singularityActive);
   const setSingularityActive = useSovereignStore((s) => s.setSingularityActive);
-  const checkAuth = useSovereignStore((s) => s.checkAuth);
-  const isAuthenticated = useSovereignStore((s) => s.isAuthenticated);
 
   React.useEffect(() => {
     const clientId = getEvolutionClientId();
@@ -182,13 +180,10 @@ export default function App() {
           background: '#0a0e1a', color: '#e2e8f0', fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
           overflow: 'hidden',
         }}>
-          
           {singularityActive && <WitnessConsole />}
           <SingularityEngineOverlay />
           <TopBar />
 
-          
-          {/* Toggle Singularity Engine - The Unified HUD */}
           <button 
             onClick={() => setSingularityActive(true)} 
             className="absolute top-16 right-4 z-50 bg-indigo-900/40 text-indigo-400 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg border border-indigo-500/50 hover:bg-indigo-800/50 shadow-lg shadow-indigo-500/10 flex items-center gap-2 group transition-all"
@@ -209,7 +204,6 @@ export default function App() {
               <Toolbar />
               
               <div style={{ padding: 28, position: 'relative', zIndex: 1, height: '100%' }}>
-                {/* Ambient Background Asset */}
                 <div style={{
                   position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
                   backgroundImage: 'url(/assets/generated_bg.png)', backgroundSize: 'cover', backgroundPosition: 'center',
