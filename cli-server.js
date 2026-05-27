@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import { rateLimit } from 'express-rate-limit';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import { OpenAIConnectedAgent } from '@openai/agents';
@@ -7,6 +9,18 @@ import { OpenAIConnectedAgent } from '@openai/agents';
 dotenv.config();
 
 const app = express();
+
+// ─── SECURITY ARMOR ─────────────────────────────────────────────────────────
+app.use(helmet({ crossOriginResourcePolicy: false }));
+const globalLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 200, // Stricter for CLI
+  standardHeaders: true, 
+  legacyHeaders: false, 
+  message: { error: 'Too many CLI requests, please slow down.' }
+});
+app.use(globalLimiter);
+
 app.use(cors());
 app.use(express.json());
 

@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import { rateLimit } from 'express-rate-limit';
 import dotenv from 'dotenv';
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
@@ -16,6 +18,18 @@ import { createCapabilityManifest } from './src/core/capabilities/EvoCapabilityC
 dotenv.config({ override: true });
 
 const app = express();
+
+// ─── SECURITY ARMOR ─────────────────────────────────────────────────────────
+app.use(helmet({ crossOriginResourcePolicy: false }));
+const globalLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 500,
+  standardHeaders: true, 
+  legacyHeaders: false, 
+  message: { error: 'Too many requests, please slow down.' }
+});
+app.use(globalLimiter);
+
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
 const DATA_DIR = join(process.cwd(), '.prompthouse-data');
 if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });

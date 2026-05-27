@@ -5,6 +5,8 @@
  */
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import { rateLimit } from 'express-rate-limit';
 import dotenv from 'dotenv';
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import path, { join, relative, dirname, resolve, extname } from 'path';
@@ -69,6 +71,23 @@ import registerEvoCapabilityRoutes from './generated_apis/evo_capability_routes.
 ensureEvolutionSchema();
 
 const app = express();
+
+// ─── SECURITY ARMOR ─────────────────────────────────────────────────────────
+// Helmet masks the server signature and enforces strict HTTP headers
+app.use(helmet({
+  crossOriginResourcePolicy: false, // Allow cross-origin for local dev extensions
+}));
+
+// Rate Limiting to prevent daemon DDoS and token exhaustion
+const globalLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 500, // Limit each IP to 500 requests per `window`
+  standardHeaders: true, 
+  legacyHeaders: false, 
+  message: { error: 'Too many requests, please slow down.' }
+});
+app.use(globalLimiter);
+
 registerEmulatorRoutes(app);
 registerEvoBridgeRoutes(app);
 registerPlatformSentinelRoutes(app);

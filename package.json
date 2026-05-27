@@ -92,7 +92,8 @@
     "mobile:build": "node scripts/mobile-architect-cli.mjs",
     "daemons:all": "concurrently \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run antigravity\"",
     "omni:orchestrator": "node src/core/daemons/omni/OmniOrchestrator.mjs",
-    "antigravity": "node scripts/antigravity-daemon.mjs"
+    "antigravity": "node scripts/antigravity-daemon.mjs",
+    "release:commercial": "node scripts/release-guardian.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -106,7 +107,9 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^7.1.5",
     "framer-motion": "^11.0.0",
+    "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.344.0",
     "node-fetch": "^3.3.2",
