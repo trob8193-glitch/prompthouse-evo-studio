@@ -141,7 +141,7 @@ export async function universalSend(messages, systemPrompt = '', options = {}) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      }, 30000);
+      }, 180000); // 3 minutes timeout to allow heavy local Ollama models to cold-boot into VRAM
       return {
         message: data?.message ?? '',
         transport: data?.transport ?? t.transport,
