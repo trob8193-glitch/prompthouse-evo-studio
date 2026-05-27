@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
   Activity, Eye, Swords, Sparkles, BarChart3, FolderOpen, Gauge, Zap, ChevronRight,
-  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette
+  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, Globe
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -20,6 +20,7 @@ export const NAV_GROUPS = [
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
       { id: 'saas-builder', label: 'SaaS Builder', icon: Rocket },
+      { id: 'portfolio', label: 'App Market', icon: Globe },
       { id: 'chat', label: 'AI Chat', icon: MessageSquare },
       { id: 'workspace', label: 'Workspace', icon: FolderOpen },
       { id: 'ghost-editor', label: 'Ghost Editor', icon: Sparkles },

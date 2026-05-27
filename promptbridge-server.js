@@ -65,6 +65,7 @@ import registerPlatformSentinelRoutes from './generated_apis/platform_sentinel_r
 import registerAiModelRoutes from './generated_apis/ai_model_routes.js';
 import registerEvoDiffuserRoutes from './generated_apis/evo_diffuser_routes.js';
 import registerEvoTerminalRoutes from './generated_apis/evo_terminal_routes.js';
+import registerPortfolioRoutes from './generated_apis/portfolio_routes.js';
 
 ensureEvolutionSchema();
 
@@ -75,6 +76,7 @@ registerPlatformSentinelRoutes(app);
 registerAiModelRoutes(app);
 registerEvoDiffuserRoutes(app);
 registerEvoTerminalRoutes(app);
+registerPortfolioRoutes(app);
 
 const licenseManager = new EnterpriseLicenseManager(process.cwd());
 app.get('/api/license/status', (req, res) => {

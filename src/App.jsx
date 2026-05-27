@@ -30,6 +30,7 @@ import SingularityEngineOverlay from './components/SingularityEngineOverlay.jsx'
 
 import ProofCenterView from './features/ProofCenterView.jsx';
 import DeploymentCenterView from './features/DeploymentCenterView.jsx';
+import AppMarket from './components/AppMarket.jsx';
 
 // Existing feature screens from features/index.jsx
 import {
@@ -61,6 +62,7 @@ export const PAGE_MAP = {
   'evo-pixelator': EvoPixelatorDashboard,
   'evo-layout': EvoLayoutDashboard,
   'theme-evolution': ThemeEvolutionDashboard,
+  'portfolio': AppMarket,
   'metrics': MetricsView,
   'settings': GlobalAPISettingsView,
   'connections': ConnectionManager,
