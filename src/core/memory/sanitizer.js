@@ -3,7 +3,7 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
 
-const LOCAL_BRIDGE_URL = 'http://localhost:3001';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 const SANITIZATION_PATTERN = {
     email: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
     phone: /\+?[1-9]\d{1,14}/g,

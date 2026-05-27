@@ -83,14 +83,14 @@
   overflow: hidden;
   border-radius: 24%;
   background:
-    radial-gradient(circle at 28% 20%, color-mix(in srgb, var(--bot-accent) 44%, transparent), transparent 34%),
-    radial-gradient(circle at 72% 76%, color-mix(in srgb, var(--bot-primary) 38%, transparent), transparent 36%),
+    radial-gradient(circle at 28% 20%, rgba(245, 200, 66, 0.4), transparent 34%),
+    radial-gradient(circle at 72% 76%, rgba(34, 211, 238, 0.3), transparent 36%),
     linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.02)),
     #05060d;
-  border: 1px solid color-mix(in srgb, var(--bot-accent) 52%, rgba(255,255,255,0.12));
+  border: 1px solid var(--border-dim);
   box-shadow:
     inset 0 0 34px rgba(255,255,255,0.04),
-    0 0 32px color-mix(in srgb, var(--bot-accent) 32%, transparent);
+    0 0 32px rgba(245, 200, 66, 0.32);
   color: var(--text-primary);
   animation: sigil-avatar-float 4.8s ease-in-out infinite;
 }
@@ -108,14 +108,16 @@
     linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
   background-size: 20px 20px;
   opacity: 0.22;
-  mask-image: radial-gradient(circle, black 20%, transparent 78%);
+  -webkit-mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
+  mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
   animation: live-grid-drift 14s linear infinite;
 }
 
 .bot-sigil-ring {
   inset: 16%;
   border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--bot-accent) 62%, transparent);
+  border: 1px solid var(--accent-gold); /* Fallback */
+  border: 1px solid rgba(245, 200, 66, 0.6); /* Fallback */
   opacity: 0.6;
   animation: live-ring-spin 10s linear infinite;
 }
@@ -137,8 +139,7 @@
   letter-spacing: 0;
   color: var(--text-primary);
   text-shadow:
-    0 0 12px color-mix(in srgb, var(--bot-accent) 76%, transparent),
-    0 0 28px color-mix(in srgb, var(--bot-accent) 42%, transparent);
+    0 0 12px rgba(245, 200, 66, 0.7); /* Fallback */
 }
 
 .bot-sigil-name {
@@ -148,7 +149,7 @@
   bottom: 9%;
   z-index: 2;
   overflow: hidden;
-  color: color-mix(in srgb, var(--bot-accent) 82%, white);
+  color: var(--accent-gold); /* Fallback */
   font-size: clamp(8px, calc(var(--char-size) * 0.042), 14px);
   font-weight: 800;
   text-align: center;
@@ -318,7 +319,8 @@
   align-items: center;
   gap: 8px;
   z-index: 10;
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .live-dot {

@@ -7,7 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 const QUEUE_PATH = path.join(__dirname, 'master_build_queue.json');
 
 const DOMAIN_MAP = {
@@ -68,7 +68,7 @@ function build6LayerStack(feature) {
     constraints: `Rules:
 1. Export all public API.
 2. No placeholders or TODOs.
-3. Handle persistence via http://localhost:3001 or local file system.
+3. Handle persistence via http://127.0.0.1:3001 or local file system.
 4. Min 60 lines of functional code.`,
     variables: `ID: ${feature.id}, Name: ${feature.name}, Desc: ${feature.description}`,
     format: `Output raw JavaScript code only.`

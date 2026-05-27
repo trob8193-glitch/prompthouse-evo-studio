@@ -3,7 +3,20 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    host: true,
+    port: 5173,
+    strictPort: true,
+    clearScreen: false,
+    watch: {
+      ignored: ['**/.ai/**', '**/.sovereign-shards/**', '**/.prompthouse-data/**', '**/.prompt-garden/**', '**/scratch/**'],
+    },
+  },
   build: {
+    target: "esnext",
+    minify: "esbuild",
+    sourcemap: true,
+    reportCompressedSize: true,
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -33,5 +46,18 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './tests/setup.js',
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.prompthouse-data/**',
+      '**/buildkit_import/**',
+      '**/generated_apps/**',
+      '**/prompthouse-evo-studio/**',
+      '**/temp_zip/**',
+      '**/zip_temp/**',
+      '**/zip_temp_chunk/**',
+      '**/zip_temp_v1_2/**',
+      '**/scripts/**',
+    ],
   },
 })

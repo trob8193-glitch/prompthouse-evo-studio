@@ -1,169 +1,157 @@
 /**
- * PromptHouse Evo Studio — PromptBase & Saved Missions Store
- * Step 3 of Build Packet: Wire PromptBase and Saved Missions
- * Owner: Memory Bot | Truth State: built
+ * PH EVO STUDIO — PROMPT BASE (ENTERPRISE PRODUCTION)
+ * ═══════════════════════════════════════════════════════════════
+ * Central data layer for missions, proof receipts, gate scores,
+ * commerce specs, and patch proposals. All state is persisted to
+ * localStorage so data survives page reloads.
  */
 
-import { createMission, createProofReceipt } from './models.js';
+const STORAGE_KEYS = {
+  MISSIONS:        'ph_evo_missions',
+  RECEIPTS:        'ph_evo_receipts',
+  POLICY:          'ph_evo_sovereignty_policy',
+  COMMERCE_SPECS:  'ph_evo_commerce_specs',
+  PATCH_PROPOSALS: 'ph_evo_patch_proposals',
+};
 
-const MISSIONS_KEY = 'ph_evo_missions';
-const RECEIPTS_KEY = 'ph_evo_receipts';
-const VECTORPACKS_KEY = 'ph_evo_vectorpacks';
-const COMMERCE_KEY = 'ph_evo_commerce';
-const NIGHTFORGE_KEY = 'ph_evo_nightforge';
-const SOVEREIGNTY_POLICY_KEY = 'ph_evo_sovereignty_policy'; // 'manual' | 'unbound'
-
-// ─── Persistence Bridge ───────────────────────────────────────────────────────
-async function bridgeFetch(endpoint, method = 'GET', body = null) {
+// ─── Helpers ───────────────────────────────────────────────────
+function load(key, fallback = []) {
   try {
-    const options = { method, headers: { 'Content-Type': 'application/json' } };
-    if (body) options.body = JSON.stringify(body);
-    const res = await fetch(`http://localhost:3001/api/browser-bridge/${endpoint}`, options);
-    if (!res.ok) throw new Error(`Bridge Error: ${res.status}`);
-    return await res.json();
-  } catch (e) {
-    // Fallback to localStorage if bridge offline
-    return null;
-  }
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch { return fallback; }
 }
 
-// ─── Sovereignty Policy ────────────────────────────────────────────────────────
+function save(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* quota exceeded */ }
+}
+
+function uid() {
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+}
+
+// ─── Sovereignty Policy ────────────────────────────────────────
 export function getSovereigntyPolicy() {
-  if (typeof localStorage === 'undefined') return 'manual';
-  return localStorage.getItem(SOVEREIGNTY_POLICY_KEY) || 'manual';
+  return localStorage.getItem(STORAGE_KEYS.POLICY) || 'sovereign';
 }
 
 export function setSovereigntyPolicy(policy) {
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem(SOVEREIGNTY_POLICY_KEY, policy === 'unbound' ? 'unbound' : 'manual');
-  }
+  localStorage.setItem(STORAGE_KEYS.POLICY, policy);
 }
 
-// ─── Shared Sync Logic ─────────────────────────────────────────────────────────
-export async function syncTruthFromBridge() {
-  const bridgeReceipts = await bridgeFetch('proof');
-  if (bridgeReceipts && Array.isArray(bridgeReceipts)) {
-    localStorage.setItem(RECEIPTS_KEY, JSON.stringify(bridgeReceipts));
-  }
-  const bridgeMissions = await bridgeFetch('promptbase');
-  if (bridgeMissions && Array.isArray(bridgeMissions)) {
-    localStorage.setItem(MISSIONS_KEY, JSON.stringify(bridgeMissions));
-  }
-}
-
-// ─── Missions ──────────────────────────────────────────────────────────────────
+// ─── Missions ─────────────────────────────────────────────────
 export function getAllMissions() {
-  try { return JSON.parse(localStorage.getItem(MISSIONS_KEY) || '[]'); }
-  catch { return []; }
+  return load(STORAGE_KEYS.MISSIONS, []);
 }
 
-export async function saveMission(mission) {
-  const all = getAllMissions();
-  const idx = all.findIndex(m => m.id === mission.id);
+export function createAndSaveMission({ title = 'Untitled', intent = '' } = {}) {
+  const missions = getAllMissions();
+  const mission = {
+    id: `mission_${uid()}`,
+    title,
+    intent,
+    status: 'active',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  missions.unshift(mission);
+  save(STORAGE_KEYS.MISSIONS, missions);
+  return mission;
+}
+
+export function saveMission(mission) {
+  const missions = getAllMissions();
+  const idx = missions.findIndex(m => m.id === mission.id);
   const updated = { ...mission, updatedAt: new Date().toISOString() };
-  if (idx >= 0) { all[idx] = updated; } else { all.unshift(updated); }
-  localStorage.setItem(MISSIONS_KEY, JSON.stringify(all));
-  
-  // Push to bridge
-  await bridgeFetch('promptbase', 'POST', updated); 
+  if (idx >= 0) {
+    missions[idx] = updated;
+  } else {
+    missions.unshift(updated);
+  }
+  save(STORAGE_KEYS.MISSIONS, missions);
   return updated;
 }
 
-export function deleteMission(id) {
-  const all = getAllMissions().filter(m => m.id !== id);
-  localStorage.setItem(MISSIONS_KEY, JSON.stringify(all));
+export function deleteMission(missionId) {
+  const missions = getAllMissions().filter(m => m.id !== missionId);
+  save(STORAGE_KEYS.MISSIONS, missions);
 }
 
-export function createAndSaveMission(fields = {}) {
-  const m = createMission(fields);
-  return saveMission(m);
-}
-
-// ─── Proof Receipts ────────────────────────────────────────────────────────────
+// ─── Proof Receipts ────────────────────────────────────────────
 export function getAllReceipts() {
-  try { return JSON.parse(localStorage.getItem(RECEIPTS_KEY) || '[]'); }
-  catch { return []; }
+  return load(STORAGE_KEYS.RECEIPTS, []);
 }
 
-export async function saveReceipt(receipt) {
-  const all = getAllReceipts();
-  all.unshift(receipt);
-  localStorage.setItem(RECEIPTS_KEY, JSON.stringify(all.slice(0, 500)));
-  
-  // Push to bridge
-  await bridgeFetch('proof', 'POST', receipt);
+export function addProofReceipt(missionId, action, status, meta = {}) {
+  const receipts = getAllReceipts();
+  const receipt = {
+    id: `receipt_${uid()}`,
+    missionId,
+    action,
+    status, // 'verified' | 'broken' | 'built' | 'blocked'
+    meta,
+    timestamp: new Date().toISOString(),
+  };
+  receipts.unshift(receipt);
+  // Keep last 500 receipts
+  save(STORAGE_KEYS.RECEIPTS, receipts.slice(0, 500));
   return receipt;
 }
 
-export function getReceiptsForMission(missionId) {
-  return getAllReceipts().filter(r => r.missionId === missionId);
+// ─── Gate Scores ──────────────────────────────────────────────
+export function computeAllGateScores(gateDefinitions = []) {
+  const receipts = getAllReceipts();
+  return gateDefinitions.map(gate => {
+    const gateReceipts = receipts.filter(r => r.action?.startsWith(gate.id));
+    const latest = gateReceipts[0];
+    const score = latest
+      ? (latest.status === 'verified' ? 100 : latest.status === 'built' ? 60 : 0)
+      : 0;
+    return { ...gate, score, lastRun: latest?.timestamp || null };
+  });
 }
 
-export function addProofReceipt(missionId, action, status, extras = {}) {
-  const r = createProofReceipt(missionId, action, status, extras);
-  return saveReceipt(r);
-}
-
-// ─── VectorPacks ───────────────────────────────────────────────────────────────
-export function getVectorPack(missionId) {
-  try {
-    const all = JSON.parse(localStorage.getItem(VECTORPACKS_KEY) || '{}');
-    return all[missionId] || null;
-  } catch { return null; }
-}
-
-export function saveVectorPack(pack) {
-  try {
-    const all = JSON.parse(localStorage.getItem(VECTORPACKS_KEY) || '{}');
-    all[pack.missionId] = pack;
-    localStorage.setItem(VECTORPACKS_KEY, JSON.stringify(all));
-  } catch {}
-  return pack;
-}
-
-// ─── Commerce Specs ────────────────────────────────────────────────────────────
+// ─── Commerce Specs ───────────────────────────────────────────
 export function getAllCommerceSpecs() {
-  try { return JSON.parse(localStorage.getItem(COMMERCE_KEY) || '[]'); }
-  catch { return []; }
+  return load(STORAGE_KEYS.COMMERCE_SPECS, []);
 }
 
 export function saveCommerceSpec(spec) {
-  const all = getAllCommerceSpecs();
-  const idx = all.findIndex(s => s.id === spec.id);
-  if (idx >= 0) { all[idx] = spec; } else { all.unshift(spec); }
-  localStorage.setItem(COMMERCE_KEY, JSON.stringify(all));
-  
-  // Push to bridge
-  bridgeFetch('forgecapsule', 'POST', { type: 'commerce_spec', content: spec });
+  const specs = getAllCommerceSpecs();
+  const idx = specs.findIndex(s => s.id === spec.id);
+  if (idx >= 0) specs[idx] = spec;
+  else specs.unshift(spec);
+  save(STORAGE_KEYS.COMMERCE_SPECS, specs);
   return spec;
 }
 
-// ─── NightForge Proposals ──────────────────────────────────────────────────────
+// ─── Patch Proposals ──────────────────────────────────────────
 export function getAllPatchProposals() {
-  try { return JSON.parse(localStorage.getItem(NIGHTFORGE_KEY) || '[]'); }
-  catch { return []; }
+  return load(STORAGE_KEYS.PATCH_PROPOSALS, []);
 }
 
-export function savePatchProposal(proposal) {
-  const all = getAllPatchProposals();
-  all.unshift(proposal);
-  localStorage.setItem(NIGHTFORGE_KEY, JSON.stringify(all.slice(0, 100)));
-  return proposal;
+export function addPatchProposal(proposal) {
+  const proposals = getAllPatchProposals();
+  const entry = {
+    id: `patch_${uid()}`,
+    ...proposal,
+    createdAt: new Date().toISOString(),
+    approved: false,
+  };
+  proposals.unshift(entry);
+  save(STORAGE_KEYS.PATCH_PROPOSALS, proposals.slice(0, 100));
+  return entry;
 }
 
-// ─── Gate Score Summary ────────────────────────────────────────────────────────
-export function computeAllGateScores(gateDefinitions) {
-  const receipts = getAllReceipts();
-  return gateDefinitions.map(gate => {
-    const relevant = receipts.filter(r => r.action && (r.action.includes(gate.id) || r.action.includes(gate.label.toLowerCase().replace(/ /g, '_'))));
-    if (!relevant.length) return { ...gate, score: 0, status: 'blocked' };
-    
-    // Use ONLY the latest receipt for the gate score, enabling true 100% recovery
-    const latest = relevant[0];
-    let score = 0;
-    if (latest.status === 'verified') score = 100;
-    else if (latest.status === 'built') score = 50;
-    
-    return { ...gate, score, status: latest.status };
-  });
+// ─── Bridge Sync ──────────────────────────────────────────────
+const BRIDGE_URL = 'http://127.0.0.1:3001';
+
+export async function syncTruthFromBridge() {
+  try {
+    const res = await fetch(`${BRIDGE_URL}/status`);
+    if (!res.ok) throw new Error(`Bridge status ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    return { connected: false, error: err.message };
+  }
 }

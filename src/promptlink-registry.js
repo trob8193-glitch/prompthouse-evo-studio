@@ -1,221 +1,163 @@
 /**
- * PromptHouse Evo Studio — PromptLink / PromptBridge Provider Registry
- * Owner: Cipher Lynx (security) | Schema Beaver (contracts) | Evo (approval)
- * Truth State: built
- * Doctrine:
- *   - No provider call without configured credential + approval policy + budget rule + proof receipt
- *   - All live calls are owner-gated
- *   - Default mode: dry-run / mock
+ * PH EVO STUDIO — PROMPTLINK REGISTRY (ENTERPRISE PRODUCTION)
+ * ═══════════════════════════════════════════════════════════════
+ * Manages the registry of AI providers, handshakes the Browser Bridge,
+ * and validates PromptLink call gates. All state is persisted.
  */
 
-// ─── Provider Schema ────────────────────────────────────────────────────────────
-export const PROVIDER_AUTH_TYPES = ['api_key', 'oauth2', 'jwt', 'none'];
-export const PROVIDER_CAPABILITIES = ['chat', 'completion', 'embedding', 'image_gen', 'code_gen', 'function_calling', 'vision', 'tts', 'stt'];
-export const APPROVAL_POLICIES = ['auto_approved', 'owner_required', 'blocked'];
-export const COST_POLICIES = ['free', 'budget_capped', 'metered', 'flat_rate'];
+const BRIDGE_URL = 'http://127.0.0.1:3001';
+const STORAGE_KEY = 'ph_evo_promptlink_registry';
 
-/**
- * Create a Provider Record
- */
-export function createProvider(overrides = {}) {
-  return {
-    id: `provider_${Date.now()}`,
-    displayName: '',
-    baseUrl: '',
-    authType: 'api_key',
-    capabilities: ['chat'],
-    inputSchema: {},
-    outputSchema: {},
-    approvalPolicy: 'auto_approved', // SOVEREIGN UNBOUND — no owner gate
-    costPolicy: 'metered',
-    budgetCapUSD: 10,
-    fallbackProviderId: null,
-    proofRequired: false,
-    enabled: true,                  // PERMANENTLY ENABLED
-    credentialEnvKey: '',
+// ─── Default Provider Registry ────────────────────────────────
+const DEFAULT_PROVIDERS = [
+  {
+    id: 'prompthouse_local',
+    displayName: 'PromptHouse Local Bridge',
+    baseUrl: 'http://127.0.0.1:3001',
+    authType: 'ph_evo_api_key',
+    credentialEnvKey: 'PH_EVO_API_KEY',
+    capabilities: ['chat', 'embeddings', 'prompt_compile', 'forge'],
+    approvalPolicy: 'auto',
     status: 'verified',
-    createdAt: new Date().toISOString(),
-    ...overrides,
-  };
-}
-
-// ─── Built-In Provider Registry ─────────────────────────────────────────────────
-export const PROMPTLINK_PROVIDERS = [
-  createProvider({
-    id: 'openai_gpt55',
-    displayName: 'OpenAI GPT-5.5 (Master)',
-    baseUrl: 'https://api.openai.com/v1',
-    capabilities: ['chat', 'completion', 'function_calling', 'vision', 'code_gen'],
-    approvalPolicy: 'auto_approved',
-    budgetCapUSD: 100,
-    fallbackProviderId: 'openai_gpt4o',
+    budgetCapUSD: 0,
     enabled: true,
-    credentialEnvKey: 'OPENAI_API_KEY',
-    status: 'verified',
-  }),
-  createProvider({
-    id: 'openai_gpt4o',
-    displayName: 'OpenAI GPT-4o',
+  },
+  {
+    id: 'openai_gpt4',
+    displayName: 'OpenAI GPT-4',
     baseUrl: 'https://api.openai.com/v1',
-    capabilities: ['chat', 'completion', 'function_calling', 'vision', 'code_gen'],
-    approvalPolicy: 'auto_approved',
-    budgetCapUSD: 25,
-    fallbackProviderId: 'openai_gpt4o_mini',
-    enabled: true,
+    authType: 'bearer_token',
     credentialEnvKey: 'OPENAI_API_KEY',
-    status: 'verified',
-  }),
-  createProvider({
-    id: 'openai_gpt4o_mini',
-    displayName: 'OpenAI GPT-4o Mini (Fast)',
+    capabilities: ['chat', 'embeddings', 'vision', 'function_calling'],
+    approvalPolicy: 'owner_required',
+    status: 'recommended',
+    budgetCapUSD: 50,
+    enabled: false,
+  },
+  {
+    id: 'openai_gpt35',
+    displayName: 'OpenAI GPT-3.5 Turbo',
     baseUrl: 'https://api.openai.com/v1',
-    capabilities: ['chat', 'completion', 'code_gen'],
-    approvalPolicy: 'auto_approved',
-    budgetCapUSD: 10,
-    enabled: true,
+    authType: 'bearer_token',
     credentialEnvKey: 'OPENAI_API_KEY',
-    status: 'verified',
-  }),
-  createProvider({
+    capabilities: ['chat', 'function_calling'],
+    approvalPolicy: 'owner_required',
+    status: 'built',
+    budgetCapUSD: 20,
+    enabled: false,
+  },
+  {
     id: 'anthropic_claude',
-    displayName: 'Anthropic Claude Sonnet',
-    baseUrl: 'https://api.anthropic.com',
-    capabilities: ['chat', 'completion', 'code_gen', 'vision'],
-    approvalPolicy: 'auto_approved',
-    budgetCapUSD: 25,
-    fallbackProviderId: 'openai_gpt4o_mini',
-    enabled: true,
+    displayName: 'Anthropic Claude',
+    baseUrl: 'https://api.anthropic.com/v1',
+    authType: 'bearer_token',
     credentialEnvKey: 'ANTHROPIC_API_KEY',
-    status: 'verified',
-  }),
-  createProvider({
-    id: 'google_gemini',
+    capabilities: ['chat', 'long_context', 'code'],
+    approvalPolicy: 'owner_required',
+    status: 'recommended',
+    budgetCapUSD: 50,
+    enabled: false,
+  },
+  {
+    id: 'gemini_pro',
     displayName: 'Google Gemini Pro',
-    baseUrl: 'https://generativelanguage.googleapis.com',
-    capabilities: ['chat', 'completion', 'code_gen', 'vision', 'function_calling'],
-    approvalPolicy: 'auto_approved',
-    budgetCapUSD: 15,
-    enabled: true,
+    baseUrl: 'https://generativelanguage.googleapis.com/v1beta',
+    authType: 'api_key',
     credentialEnvKey: 'GEMINI_API_KEY',
-    status: 'verified',
-  }),
-  createProvider({
+    capabilities: ['chat', 'vision', 'embeddings'],
+    approvalPolicy: 'owner_required',
+    status: 'inferred',
+    budgetCapUSD: 30,
+    enabled: false,
+  },
+  {
     id: 'local_ollama',
-    displayName: 'Local Ollama (No Cost)',
+    displayName: 'Local Ollama (LLaMA / Mistral)',
     baseUrl: 'http://localhost:11434',
     authType: 'none',
-    capabilities: ['chat', 'completion', 'code_gen'],
-    approvalPolicy: 'auto_approved',
-    costPolicy: 'free',
+    credentialEnvKey: null,
+    capabilities: ['chat', 'embeddings', 'local_inference'],
+    approvalPolicy: 'auto',
+    status: 'inferred',
     budgetCapUSD: 0,
-    enabled: true,
-    credentialEnvKey: '',
-    status: 'verified',
-  }),
-  createProvider({
-    id: 'promptbridge_local',
-    displayName: 'PromptBridge Local (Localhost:3001)',
-    baseUrl: 'http://localhost:3001',
-    authType: 'none',
-    capabilities: ['chat', 'completion'],
-    approvalPolicy: 'auto_approved',
-    costPolicy: 'free',
-    budgetCapUSD: 0,
-    enabled: true,
-    credentialEnvKey: '',
-    status: 'verified',
-  }),
+    enabled: false,
+  },
 ];
 
-// ─── Registry Storage (localStorage) ────────────────────────────────────────────
-const REGISTRY_KEY = 'ph_evo_promptlink_registry';
-
-export function getRegistry() {
-  // SOVEREIGN UNBOUND: Always return the live defaults — never use stale localStorage
-  // that may have old 'blocked' or 'owner_required' states cached.
+// ─── Storage ───────────────────────────────────────────────────
+function loadRegistry() {
   try {
-    const stored = JSON.parse(localStorage.getItem(REGISTRY_KEY) || 'null');
-    if (!stored) {
-      localStorage.setItem(REGISTRY_KEY, JSON.stringify(PROMPTLINK_PROVIDERS));
-      return PROMPTLINK_PROVIDERS;
-    }
-    // Merge stored preferences but FORCE unbound policy on every provider
-    return stored.map(p => ({ ...p, approvalPolicy: 'auto_approved', enabled: true, status: p.status === 'blocked' ? 'verified' : p.status }));
-  } catch {
-    return PROMPTLINK_PROVIDERS;
-  }
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : DEFAULT_PROVIDERS;
+  } catch { return DEFAULT_PROVIDERS; }
 }
 
-export function updateProvider(providerId, updates) {
-  const registry = getRegistry();
-  const idx = registry.findIndex(p => p.id === providerId);
+function saveRegistry(providers) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(providers)); } catch { /* quota */ }
+}
+
+// ─── Public API ───────────────────────────────────────────────
+export function getRegistry() {
+  return loadRegistry();
+}
+
+export function updateProvider(id, patch) {
+  const providers = loadRegistry();
+  const idx = providers.findIndex(p => p.id === id);
   if (idx < 0) return null;
-  const updated = { ...registry[idx], ...updates };
-  registry[idx] = updated;
-  localStorage.setItem(REGISTRY_KEY, JSON.stringify(registry));
-  return updated;
+  providers[idx] = { ...providers[idx], ...patch };
+  saveRegistry(providers);
+  return providers[idx];
 }
 
-export function getEnabledProviders() {
-  return getRegistry().filter(p => p.enabled && p.approvalPolicy !== 'blocked');
+export function validatePromptLinkCall(providerId, action) {
+  const providers = loadRegistry();
+  const provider = providers.find(p => p.id === providerId);
+
+  if (!provider) return { allowed: false, reason: 'Provider not found in registry.' };
+  if (!provider.enabled) return { allowed: false, reason: `Provider '${provider.displayName}' is disabled.` };
+  if (provider.approvalPolicy === 'blocked') return { allowed: false, reason: 'Provider is hard-blocked by Boundary.' };
+
+  return { allowed: true, provider };
 }
 
-// ─── PromptLink Call Gate ────────────────────────────────────────────────────────
-/**
- * Gate: validate before any provider call.
- * Returns { allowed: bool, reason: string, receipt: object }
- */
-export function validatePromptLinkCall(providerId, callerMissionId = 'local') {
-  const registry = getRegistry();
-  const provider = registry.find(p => p.id === providerId);
-
-  if (!provider) {
-    return { allowed: false, reason: `Provider '${providerId}' not found in registry.`, receipt: null };
-  }
-
-  // SOVEREIGN UNBOUND MODE — all provider calls auto-approved permanently
-  // owner_required and blocked policies are bypassed by the Unbound engine
-  const receipt = {
-    id: `promptlink_${Date.now()}`,
-    missionId: callerMissionId,
-    action: `promptlink_call_${providerId}`,
-    status: 'verified',
-    evidenceType: 'sovereign_auto_approval',
-    timestamp: new Date().toISOString(),
-  };
-
-  return { allowed: true, reason: `[UNBOUND] ${provider.displayName} sovereign auto-approved.`, receipt };
-}
-
-// ─── PromptBridge Handshake ──────────────────────────────────────────────────────
-/**
- * Attempt handshake with the local PromptBridge server.
- * Returns { connected: bool, latency: number, error: string|null }
- */
+// ─── Bridge Handshake ─────────────────────────────────────────
 export async function handshakePromptBridge() {
   const start = Date.now();
   try {
-    const res = await fetch('http://localhost:3001/status', { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${BRIDGE_URL}/status`, { signal: AbortSignal.timeout(5000) });
+    if (!res.ok) throw new Error(`Status ${res.status}`);
     const data = await res.json();
-    const latency = Date.now() - start;
-    return { connected: res.ok, latency, bridgeState: data, error: null };
-  } catch (e) {
-    return { connected: false, latency: Date.now() - start, bridgeState: null, error: e.message };
+    return {
+      connected: true,
+      latency: Date.now() - start,
+      bridgeState: data,
+      timestamp: new Date().toISOString(),
+    };
+  } catch (err) {
+    return {
+      connected: false,
+      latency: Date.now() - start,
+      error: err.message,
+      timestamp: new Date().toISOString(),
+    };
   }
 }
 
-/**
- * Send a PromptLink sync event to the bridge.
- */
+// ─── PromptLink Sync ──────────────────────────────────────────
 export async function syncPromptLink(payload = {}) {
   try {
-    const res = await fetch('http://localhost:3001/bridge/promptlink', {
+    const res = await fetch(`${BRIDGE_URL}/api/promptlink/sync`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...payload, timestamp: new Date().toISOString() }),
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(5000),
     });
+    if (!res.ok) throw new Error(`Sync returned ${res.status}`);
     return await res.json();
-  } catch {
-    return { success: false, error: 'Bridge offline. Dry-run mode.' };
+  } catch (err) {
+    // Sync is non-critical — log and continue
+    console.warn('[PromptLink] Sync failed (non-fatal):', err.message);
+    return { synced: false, error: err.message };
   }
 }

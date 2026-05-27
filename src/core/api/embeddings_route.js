@@ -21,7 +21,7 @@ db.serialize(() => {
 });
 
 const generateEmbedding = async (text) => {
-    const response = await fetch('http://localhost:3001/generate-embedding', {
+    const response = await fetch('http://127.0.0.1:3001/generate-embedding', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text })

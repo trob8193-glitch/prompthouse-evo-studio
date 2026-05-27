@@ -1,0 +1,8 @@
+{
+    "workbench.editorAssociations": {
+        "*.copilotmd": "vscode.markdown.preview.editor",
+        "*.svg": "default",
+        "*.sprite": "d2rmodding.spriteViewer"
+    },
+    "cmake.sourceDirectory": "C:/Users/Noname/Documents/Codex/2026-05-03/prompthouse-evo-studio-files-in-my/.prompt-garden/mobile_app_sprout/windows"
+}

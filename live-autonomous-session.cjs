@@ -7,7 +7,7 @@
 const { exec } = require('child_process');
 const path = require('path');
 
-const BRIDGE_URL = 'http://localhost:3001';
+const BRIDGE_URL = 'http://127.0.0.1:3001';
 const DURATION_MS = 15 * 60 * 1000; // 15 minutes
 const INTERVAL_MS = 60 * 1000; // Every 1 minute
 

@@ -89,12 +89,7 @@ export function runForgeFriction(missionId, userPrompt, sovereigntyOverride = fa
     repairPrompt = `Rewrite your prompt to address these issues:\n${reasons.map((r, i) => `${i+1}. ${r}`).join('\n')}`;
   }
 
-  const report = createFrictionReport(missionId, {
-    score: totalScore,
-    blocked,
-    reasons,
-    repairPrompt,
-  });
+  const report = createFrictionReport(missionId, totalScore, reasons, blocked);
 
   // Write proof receipt
   addProofReceipt(missionId, 'forge_friction:check', blocked ? 'blocked' : warned ? 'built' : 'verified', {

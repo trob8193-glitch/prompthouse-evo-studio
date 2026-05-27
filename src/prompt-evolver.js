@@ -2,10 +2,13 @@
  * PromptHouse Evo Studio — Prompt Evolver (A/B Testing Engine)
  * Rewrites the 6-layer prompt stack based on pattern analysis.
  * A/B tests the new version against the old. Promotes the winner.
- * No fake logic. Real experiments with real statistical evaluation.
+ * No simulated logic. Real experiments with real statistical evaluation.
  */
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
+import { universalSend } from './lib/universal-transport.js';
+
+import { Log } from './core/autonomy/SovereignLogger.js';
 
 /**
  * Given a weak pattern and its AI analysis, generate an improved 6-layer prompt stack.
@@ -41,13 +44,8 @@ Respond in strict JSON:
 }`;
 
   try {
-    const res = await fetch(`${BRIDGE}/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
-    });
-    const data = await res.json();
-    const raw = data.message || '';
+    const res = await universalSend([{ role: 'user', content: prompt }]);
+    const raw = res.message || '';
     const cleaned = raw.replace(/```json\n?|```/g, '').trim();
     const stack = JSON.parse(cleaned);
 
@@ -61,7 +59,7 @@ Respond in strict JSON:
 
     return { stack, version: `v_${Date.now()}` };
   } catch (e) {
-    console.error('[PromptEvolver] Stack generation failed:', e.message);
+    Log.error('[PromptEvolver] Stack generation failed:', e.message);
     return null;
   }
 }
@@ -92,7 +90,7 @@ export async function createExperiment(domain, originalStack, improvedStack) {
     const data = await res.json();
     return data.experiment;
   } catch (e) {
-    console.error('[PromptEvolver] Failed to create experiment:', e.message);
+    Log.error('[PromptEvolver] Failed to create experiment:', e.message);
     return null;
   }
 }
@@ -130,7 +128,7 @@ export async function recordExperimentResult(experimentId, variant, rating) {
     });
     return await res.json();
   } catch (e) {
-    console.error('[PromptEvolver] Failed to record experiment result:', e.message);
+    Log.error('[PromptEvolver] Failed to record experiment result:', e.message);
     return null;
   }
 }

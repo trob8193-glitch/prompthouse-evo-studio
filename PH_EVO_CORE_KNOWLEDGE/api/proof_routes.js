@@ -1,0 +1,2 @@
+/** Fixed Feature: Proof routes (api14) **/
+export function validateProof(receipt) { if (!receipt.id || !receipt.evidenceType) return { valid: false, error: 'Malformed receipt' }; return { valid: true, timestamp: new Date().toISOString() }; }

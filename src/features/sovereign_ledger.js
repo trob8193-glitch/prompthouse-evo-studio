@@ -1,172 +1,75 @@
-/**
- * Sovereign Ledger — Immutable record of all agent-generated artifacts.
- * Module: Proof OS | ID: f20
- * Status: MASTER GRADE | Truth State: Built
- */
-
-import { create } from 'zustand';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import { Log } from '../core/autonomy/SovereignLogger.js';
 
 /**
- * Global State for Sovereign Ledger
+ * PH EVO STUDIO — SOVEREIGN LEDGER (Physical Edition)
+ * ═══════════════════════════════════════════════════════════════
+ * The immutable record of all production missions and logic 
+ * transitions. Ensures 100% auditability for the Truth Chain.
+ * ABSOLUTE REALITY: Every entry is physically persisted to disk.
  */
-export const useSovereignLedgerStore = create((set, get) => ({
-  records: [],
-  metrics: {
-    invocations: 0,
-    lastExecution: null,
-    integrityScore: 100
-  },
-  status: 'IDLE',
-  
-  logActivity: (payload) => set((state) => ({
-    records: [{ ...payload, timestamp: Date.now() }, ...state.records].slice(0, 100),
-    metrics: { ...state.metrics, invocations: state.metrics.invocations + 1, lastExecution: Date.now() }
-  })),
-  
-  updateStatus: (newStatus) => set({ status: newStatus }),
-  
-  reportViolation: () => set((state) => ({
-    metrics: { ...state.metrics, integrityScore: Math.max(0, state.metrics.integrityScore - 10) }
-  }))
-}));
 
-/**
- * SovereignLedger Controller
- * Implements Sovereign-grade logic for Immutable record of all agent-generated artifacts.
- */
 export class SovereignLedger {
-  constructor(config = {}) {
-    this.bridgeUrl = config.bridgeUrl || 'http://localhost:3001';
-    this.featureId = 'f20';
-    this.initialized = false;
-    this.operationalMode = 'SOVEREIGN';
+  ledgerPath;
+
+  constructor(rootDir = process.cwd()) {
+    this.ledgerPath = path.join(rootDir, 'proof_receipts', 'SOVEREIGN_TRUTH_LEDGER.jsonl');
+    this.ensureLedgerExists();
   }
 
-  /**
-   * Initializes the Sovereign Ledger engine and connects to the studio bridge.
-   */
-  async initialize() {
-    if (this.initialized) return;
-    console.log('[' + this.featureId + '] Initializing Sovereign Ledger...');
+  ensureLedgerExists() {
+    const dir = path.dirname(this.ledgerPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    if (!fs.existsSync(this.ledgerPath)) {
+      fs.writeFileSync(this.ledgerPath, '');
+      Log.info('📜 [Ledger] Initialized Physical Truth Ledger.');
+    }
+  }
+
+  async recordEntry(missionId, outcome, signature) {
+    Log.info(`📜 [Ledger] Signing mission outcome: ${missionId}`);
     
-    try {
-      const res = await fetch(this.bridgeUrl + '/status');
-      if (res.ok) {
-        useSovereignLedgerStore.getState().logActivity({ action: 'INITIALIZE', status: 'SUCCESS' });
-        this.initialized = true;
-      }
-    } catch (e) {
-      console.warn('[' + this.featureId + '] Bridge sync deferred. Running in isolated mode.');
-      this.initialized = true;
-    }
-  }
-
-  /**
-   * Primary execution logic for Sovereign Ledger.
-   * Handles multi-step verification and complex state transitions.
-   */
-  async execute(context = {}) {
-    if (!this.initialized) await this.initialize();
+    // Generate a reality hash for the entry
+    const entryData = JSON.stringify({ missionId, outcome, signature, timestamp: Date.now() });
+    const realityHash = crypto.createHash('sha256').update(entryData).digest('hex');
     
-    useSovereignLedgerStore.getState().updateStatus('EXECUTING');
-    console.log('[' + this.featureId + '] Executing mission logic for Sovereign Ledger...');
-
-    try {
-      // Step 1: Context Analysis
-      const analysis = this.analyzeContext(context);
-      
-      // Step 2: Recursive Verification
-      const verified = this.verifyLogicPath(analysis);
-      
-      if (!verified) {
-        useSovereignLedgerStore.getState().reportViolation();
-        throw new Error('Logic Path Integrity Failure');
-      }
-
-      // Step 3: Materialization
-      const result = await this.materializeOutput(analysis);
-
-      // Step 4: Bridge Proof Handshake
-      await this.emitProofReceipt(result);
-
-      useSovereignLedgerStore.getState().logActivity({ action: 'EXECUTE', status: 'COMPLETED', resultId: result.id });
-      useSovereignLedgerStore.getState().updateStatus('IDLE');
-
-      return result;
-
-    } catch (e) {
-      console.error('[' + this.featureId + '] Execution Failed: ' + e.message);
-      useSovereignLedgerStore.getState().updateStatus('ERROR');
-      useSovereignLedgerStore.getState().logActivity({ action: 'EXECUTE', status: 'FAILED', error: e.message });
-      throw e;
-    }
-  }
-
-  /**
-   * Internal Context Analyzer
-   */
-  analyzeContext(context) {
-    return {
-      id: 'ctx_' + Date.now(),
-      tokens: Object.keys(context).length,
-      depth: 4,
-      complexity: Math.random() > 0.5 ? 'HIGH' : 'STABLE'
+    const entry = {
+      missionId,
+      outcome,
+      signature,
+      realityHash,
+      timestamp: new Date().toISOString(),
+      truthState: 'SIGNED_PHYSICAL'
     };
+
+    // PHYSICAL APPEND - NO MEMORY SHELLS
+    fs.appendFileSync(this.ledgerPath, JSON.stringify(entry) + '\n');
+    
+    return entry;
   }
 
-  /**
-   * Recursive Logic Path Verification
-   */
-  verifyLogicPath(analysis) {
-    return analysis.depth > 2 && analysis.tokens >= 0;
+  getRecentEntries(limit = 100) {
+    if (!fs.existsSync(this.ledgerPath)) return [];
+    const content = fs.readFileSync(this.ledgerPath, 'utf8');
+    return content.split('\n')
+      .filter(Boolean)
+      .map(line => JSON.parse(line))
+      .slice(-limit);
   }
 
-  /**
-   * Output Materialization Engine
-   */
-  async materializeOutput(analysis) {
+  getLedgerStats() {
+    if (!fs.existsSync(this.ledgerPath)) return { size: 0, entries: 0 };
+    const stats = fs.statSync(this.ledgerPath);
+    const content = fs.readFileSync(this.ledgerPath, 'utf8');
+    const entries = content.split('\n').filter(Boolean).length;
     return {
-      id: 'res_' + Math.random().toString(36).substr(2, 9),
-      source: this.featureId,
-      content: 'Sovereign output for Sovereign Ledger',
-      timestamp: Date.now()
-    };
-  }
-
-  /**
-   * Emits a cryptographic proof receipt to the studio bridge.
-   */
-  async emitProofReceipt(result) {
-    try {
-      await fetch(this.bridgeUrl + '/api/browser-bridge/proof', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'master_grade_proof',
-          feature: 'Sovereign Ledger',
-          evidence: result.id
-        })
-      });
-    } catch (e) {
-      // Local preservation
-    }
-  }
-
-  /**
-   * Returns a report.
-   */
-  getDiagnostics() {
-    const state = useSovereignLedgerStore.getState();
-    return {
-      id: this.featureId,
-      name: 'Sovereign Ledger',
-      status: state.status,
-      metrics: state.metrics,
-      historyCount: state.records.length,
-      isHealthy: state.metrics.integrityScore > 80
+      size_bytes: stats.size,
+      entries,
+      path: this.ledgerPath
     };
   }
 }
-
-export const sovereignLedgerInstance = new SovereignLedger();
-export default sovereignLedgerInstance;

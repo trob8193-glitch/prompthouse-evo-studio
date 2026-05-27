@@ -1,10 +1,11 @@
+import { Log } from './core/autonomy/SovereignLogger.js';
 /**
  * PromptHouse Evo Studio — Feedback Collection Engine
- * Logs every AI interaction with user rating. No fake data.
+ * Logs every AI interaction with user rating. No simulated data.
  * Powers: Pattern Analysis, Prompt Evolution, Fine-Tuning Pipeline.
  */
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 
 /**
  * Log an AI interaction for later analysis and rating.
@@ -21,7 +22,7 @@ export async function logInteraction({ prompt, output, domain, stackVersion = 'v
     const data = await res.json();
     return data.record;
   } catch (e) {
-    console.error('[Feedback] Failed to log interaction:', e.message);
+    Log.error('[Feedback] Failed to log interaction:', e.message);
     return { id: interactionId, prompt, output, domain, stackVersion, rating: 'unrated' };
   }
 }
@@ -41,7 +42,7 @@ export async function rateInteraction(interactionId, rating, reason = '') {
     });
     return await res.json();
   } catch (e) {
-    console.error('[Feedback] Failed to rate interaction:', e.message);
+    Log.error('[Feedback] Failed to rate interaction:', e.message);
     return null;
   }
 }
@@ -54,7 +55,7 @@ export async function getInteractionsByRating(rating, limit = 200) {
     const res = await fetch(`${BRIDGE}/api/feedback?rating=${rating}&limit=${limit}`);
     return await res.json();
   } catch (e) {
-    console.error('[Feedback] Failed to fetch interactions:', e.message);
+    Log.error('[Feedback] Failed to fetch interactions:', e.message);
     return [];
   }
 }
@@ -67,7 +68,7 @@ export async function getFeedbackStats() {
     const res = await fetch(`${BRIDGE}/api/feedback/stats`);
     return await res.json();
   } catch (e) {
-    console.error('[Feedback] Failed to fetch stats:', e.message);
+    Log.error('[Feedback] Failed to fetch stats:', e.message);
     return { total: 0, good: 0, bad: 0, neutral: 0, goodRate: 0, badRate: 0, worstDomain: null };
   }
 }
@@ -93,7 +94,7 @@ export async function exportFineTuningData() {
     const res = await fetch(`${BRIDGE}/api/finetune/export`, { method: 'POST' });
     return await res.json();
   } catch (e) {
-    console.error('[FineTune] Export failed:', e.message);
+    Log.error('[FineTune] Export failed:', e.message);
     return { success: false, error: e.message };
   }
 }

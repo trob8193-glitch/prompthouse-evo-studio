@@ -1,0 +1,15 @@
+.ph-evo-selection-badge {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(34, 211, 238, 0.75);
+  border-radius: 999px;
+  z-index: 2147483647;
+  background: radial-gradient(circle at 30% 20%, #22d3ee, #8b5cf6 42%, #050507 78%);
+  color: white;
+  font: 800 12px system-ui, sans-serif;
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.6), 0 0 42px rgba(139, 92, 246, 0.3);
+  cursor: pointer;
+}

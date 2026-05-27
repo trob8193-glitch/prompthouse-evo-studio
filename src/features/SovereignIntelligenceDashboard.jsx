@@ -1,318 +1,330 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Cpu, Zap, Shield, GitBranch, Terminal, 
-  Activity, Database, Brain, CheckCircle, 
-  AlertTriangle, RefreshCw, Layers 
-} from 'lucide-react';
+import { Activity, Cpu, HardDrive, Clock, Zap, MessageSquare, ArrowRight, RefreshCw, Wifi, WifiOff } from 'lucide-react';
+import { useSovereignStore } from '../store.js';
+import { motion } from 'framer-motion';
 
-const BRIDGE = 'http://localhost:3001';
+/**
+ * PH EVO STUDIO — DASHBOARD (ENTERPRISE GRADE)
+ * ═══════════════════════════════════════════════════════════════
+ * Live metrics from backend, bridge health, quick actions.
+ */
 
-export const SovereignIntelligenceDashboard = () => {
-  const [brain, setBrain] = useState(null);
-  const [metrics, setMetrics] = useState(null);
-  const [logs, setLogs] = useState([]);
-  const [activeTab, setActiveTab] = useState('brain');
-  const [isBuilding, setIsBuilding] = useState(false);
+function MetricCard({ icon: Icon, label, value, sub, color = '#6366f1', pulse = false }) {
+  return (
+    <div style={{
+      background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: '20px 24px',
+      display: 'flex', alignItems: 'flex-start', gap: 14,
+    }}>
+      <div style={{
+        width: 40, height: 40, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: `${color}14`, flexShrink: 0,
+      }}>
+        <Icon size={18} color={color} />
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+          {label}
+        </div>
+        <div style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.03em', lineHeight: 1 }}>
+          {value}
+        </div>
+        {sub && <div style={{ fontSize: 11, color: '#475569', marginTop: 4 }}>{sub}</div>}
+      </div>
+      {pulse && <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, boxShadow: `0 0 8px ${color}60`, animation: 'pulse 2s infinite', marginTop: 4 }} />}
+    </div>
+  );
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch metrics from the enhanced bridge
-        const mRes = await fetch(`${BRIDGE}/metrics`);
-        const mData = await mRes.json();
-        setMetrics(mData);
-
-        // Fetch Sovereign Brain state (simulated file read or via bridge if endpoint added)
-        // For now, we'll try to fetch a known log or state file if the bridge exposes it
-        // Since we just ran the script, let's assume we can get it from a status endpoint
-        const sRes = await fetch(`${BRIDGE}/status`);
-        const sData = await sRes.json();
-        
-        // If the bridge doesn't have the brain, we'll use the manifest we know
-        setBrain(sData.sovereign_brain || {
-          version: '1.0.0',
-          evolution_cycles: 2,
-          internalized_patterns: 120,
-          health: 'operational',
-          status: 'Internalized'
-        });
-      } catch (err) {
-        console.error('Fetch error:', err);
-      }
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const runMasterBuild = async () => {
-    setIsBuilding(true);
-    // Trigger build via bridge
-    await fetch(`${BRIDGE}/bridge/invoke`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ command: 'master-selfbuild', args: { mode: 'recursive-autonomy' } })
-    });
-    setTimeout(() => setIsBuilding(false), 5000);
-  };
-
-  const TabButton = ({ id, label, icon: Icon }) => (
-    <button 
-      onClick={() => setActiveTab(id)}
-      className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-        activeTab === id 
-          ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' 
-          : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700'
-      }`}
+function QuickAction({ icon: Icon, label, sub, onClick, color = '#6366f1' }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: '16px 20px',
+        display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', width: '100%',
+        transition: 'all 0.2s ease', textAlign: 'left',
+      }}
+      onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${color}44`; e.currentTarget.style.background = `${color}08`; }}
+      onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#1e293b'; e.currentTarget.style.background = '#111827'; }}
     >
-      <Icon size={16} />
-      <span className="text-sm font-bold uppercase tracking-wider">{label}</span>
+      <div style={{
+        width: 36, height: 36, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: `${color}14`, flexShrink: 0,
+      }}>
+        <Icon size={16} color={color} />
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: '#e2e8f0' }}>{label}</div>
+        <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>{sub}</div>
+      </div>
+      <ArrowRight size={14} color="#334155" />
     </button>
   );
+}
+
+export function SovereignIntelligenceDashboard() {
+  const metrics = useSovereignStore((s) => s.metrics);
+  const fetchMetrics = useSovereignStore((s) => s.fetchMetrics);
+  const bridgeStatus = useSovereignStore((s) => s.bridgeStatus);
+  const bridgeData = useSovereignStore((s) => s.bridgeData);
+  const setActivePage = useSovereignStore((s) => s.setActivePage);
+  const runMaintenance = useSovereignStore((s) => s.runMaintenance);
+  const chatMessages = useSovereignStore((s) => s.chatMessages);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    fetchMetrics();
+  }, [fetchMetrics]);
+
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchMetrics();
+    setTimeout(() => setRefreshing(false), 600);
+  };
+
+  const formatUptime = (seconds) => {
+    if (!seconds) return '—';
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    return h > 0 ? `${h}h ${m}m` : `${m}m`;
+  };
 
   return (
-    <div className="space-y-6">
-      {/* Header with Stats */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        <StatCard 
-          title="Evolution Cycle" 
-          value={brain?.evolution_cycles || 2} 
-          icon={RefreshCw} 
-          color="text-indigo-400" 
-          detail="Recursive Autonomy active"
+    <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 28 }}>
+        <div>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.03em', margin: 0 }}>
+            Studio Dashboard
+          </h1>
+          <p style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>
+            System overview, live metrics, and quick actions.
+          </p>
+        </div>
+        <button
+          onClick={handleRefresh}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8,
+            background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer',
+            fontSize: 11, fontWeight: 600,
+          }}
+        >
+          <RefreshCw size={13} style={{ transition: 'transform 0.6s', transform: refreshing ? 'rotate(360deg)' : 'none' }} />
+          Refresh
+        </button>
+      </div>
+
+      {/* Metric Cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20, marginBottom: 28 }}>
+        <MetricCard
+          icon={bridgeStatus === 'connected' ? Wifi : WifiOff}
+          label="Bridge Status"
+          value={bridgeStatus === 'connected' ? 'Online' : 'Offline'}
+          sub={bridgeData?.version || 'Not connected'}
+          color={bridgeStatus === 'connected' ? '#22c55e' : '#ef4444'}
+          pulse={bridgeStatus === 'connected'}
         />
-        <StatCard 
-          title="Internalized Patterns" 
-          value={brain?.internalized_patterns || 120} 
-          icon={Brain} 
-          color="text-emerald-400" 
-          detail="Sovereign Intelligence State"
+        <MetricCard
+          icon={Clock}
+          label="Uptime"
+          value={formatUptime(metrics?.uptime)}
+          sub="Server process"
+          color="#f59e0b"
         />
-        <StatCard 
-          title="Cache Hit Rate" 
-          value={`${metrics?.cache?.hitRate.toFixed(1) || 0}%`} 
-          icon={Zap} 
-          color="text-yellow-400" 
-          detail="In-Memory Optimization"
+        <MetricCard
+          icon={Cpu}
+          label="CPU Usage"
+          value={metrics?.cpu_usage?.user ? `${(metrics.cpu_usage.user / 1000000).toFixed(1)}s` : '—'}
+          sub="User time"
+          color="#8b5cf6"
         />
-        <StatCard 
-          title="Request Latency" 
-          value={`${metrics?.latency.toFixed(1) || 0}ms`} 
-          icon={Activity} 
-          color="text-rose-400" 
-          detail="Bridge Performance"
+        <MetricCard
+          icon={HardDrive}
+          label="Heap Memory"
+          value={metrics?.memory?.heapUsed ? `${(metrics.memory.heapUsed / 1024 / 1024).toFixed(1)} MB` : '—'}
+          sub={metrics?.memory?.rss ? `RSS: ${(metrics.memory.rss / 1024 / 1024).toFixed(1)} MB` : ''}
+          color="#06b6d4"
+        />
+        <MetricCard
+          icon={Activity}
+          label="Avg Latency"
+          value={metrics?.latency ? `${parseFloat(metrics.latency).toFixed(1)}ms` : '—'}
+          sub="Request average"
+          color="#f43f5e"
+        />
+        <MetricCard
+          icon={Zap}
+          label="Cache Hit Rate"
+          value={metrics?.cache?.hitRate !== undefined ? `${metrics.cache.hitRate.toFixed(0)}%` : '—'}
+          sub={metrics?.cache ? `${metrics.cache.hits} hits / ${metrics.cache.misses} misses` : ''}
+          color="#10b981"
+        />
+        <MetricCard
+          icon={RefreshCw}
+          label="Evolution Cycles"
+          value={bridgeData?.evolution_cycles || '0'}
+          sub="Self-evolution passes"
+          color="#6366f1"
+        />
+        <MetricCard
+          icon={Activity}
+          label="Sovereign IQ"
+          value={metrics?.logic?.iq ? metrics.logic.iq.toLocaleString() : '—'}
+          sub={`Baseline: ${metrics?.logic?.total_lines || 0} LOC`}
+          color="#10b981"
         />
       </div>
 
-      {/* Main Content Area */}
-      <div className="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl">
-        <div className="flex items-center justify-between p-4 border-b border-slate-800">
-          <div className="flex gap-2">
-            <TabButton id="brain" label="Internalized Brain" icon={Cpu} />
-            <TabButton id="evo" label="Evo Tree" icon={GitBranch} />
-            <TabButton id="perf" label="Performance Profile" icon={Activity} />
-            <TabButton id="logs" label="Autonomy Logs" icon={Terminal} />
-          </div>
-          <button 
-            onClick={runMasterBuild}
-            disabled={isBuilding}
-            className={`flex items-center gap-2 px-6 py-2 rounded-xl font-black transition-all ${
-              isBuilding 
-                ? 'bg-slate-800 text-slate-500 cursor-not-allowed' 
-                : 'bg-gradient-to-r from-indigo-500 to-emerald-500 text-white hover:scale-105 active:scale-95'
-            }`}
-          >
-            {isBuilding ? <RefreshCw className="animate-spin" size={18} /> : <Zap size={18} />}
-            {isBuilding ? 'EXECUTING BUILD...' : 'RUN MASTER SELF-BUILD'}
-          </button>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {[
+            { label: 'Sovereign IQ', value: metrics?.logic?.iq ? metrics.logic.iq.toLocaleString() : 'N/A', trend: 'LIVE', icon: Zap, color: 'text-indigo-400' },
+            { label: 'Logic Density', value: metrics?.logic?.density || 'N/A', trend: 'PHYSICAL', icon: Cpu, color: 'text-emerald-400' },
+            { label: 'Sync Latency', value: metrics?.latency ? `${metrics.latency}ms` : '0ms', trend: 'ZERO-D', icon: Clock, color: 'text-amber-400' },
+            { label: 'Foundry Load', value: metrics?.memory?.heapUsed ? (metrics.memory.heapUsed / 1024 / 1024).toFixed(1) + 'MB' : 'N/A', trend: 'STABLE', icon: Activity, color: 'text-rose-400' },
+          ].map((stat, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ y: -5, scale: 1.02 }}
+              className="p-6 bg-black/40 border border-slate-800 rounded-2xl relative overflow-hidden group"
+            >
+              <div className={`absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity ${stat.color}`}>
+                <stat.icon size={48} />
+              </div>
+              <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">{stat.label}</div>
+              <div className="text-2xl font-black text-white tracking-tighter mb-1">{stat.value}</div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] text-emerald-500 font-black uppercase">{stat.trend}</span>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
-        <div className="p-6 min-h-[400px]">
-          <AnimatePresence mode="wait">
-            {activeTab === 'brain' && (
-              <motion.div 
-                key="brain"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-8"
-              >
-                <div>
-                  <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                    <Brain className="text-indigo-400" /> Architecture Status
-                  </h3>
-                  <div className="space-y-3">
-                    <StatusItem label="API Gateway (PromptBridge)" status="Verified" health="100%" />
-                    <StatusItem label="Local Memory Box" status="Optimized" health="98%" />
-                    <StatusItem label="Evo LM Model Foundry" status="Internalized" health="100%" />
-                    <StatusItem label="Recursive Build Loop" status="Active" health="100%" />
-                    <StatusItem label="Self-Healing Workflow" status="Standby" health="100%" />
-                    <StatusItem label="Revenue Autopilot" status="Live" health="94%" />
-                  </div>
+        {/* API Truth Status */}
+        <div className="p-6 bg-black/40 border border-slate-800 rounded-3xl mt-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Sovereign API Mesh</div>
+            <button 
+              onClick={() => useSovereignStore.getState().runTruthProbe()}
+              className="text-[9px] text-indigo-400 font-black uppercase tracking-widest hover:text-indigo-300"
+            >
+              Run Truth Probe
+            </button>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            {Object.entries(bridgeData?.probes || { 
+              openai: { status: 'UNKNOWN' }, 
+              gemini: { status: 'UNKNOWN' }, 
+              stripe: { status: 'UNKNOWN' } 
+            }).map(([name, info]) => (
+              <div key={name} className="p-3 bg-slate-900/50 border border-slate-800 rounded-xl flex items-center justify-between">
+                <span className="text-[10px] text-slate-400 font-bold uppercase">{name}</span>
+                <div className="flex items-center gap-2">
+                  <div className={`w-1.5 h-1.5 rounded-full ${info.status === 'VERIFIED' ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : info.status === 'MISSING' ? 'bg-slate-600' : 'bg-rose-500'}`} />
+                  <span className={`text-[9px] font-black uppercase ${info.status === 'VERIFIED' ? 'text-emerald-500' : info.status === 'MISSING' ? 'text-slate-600' : 'text-rose-500'}`}>
+                    {info.status}
+                  </span>
                 </div>
-                <div className="bg-black/40 rounded-xl p-4 border border-slate-800 font-mono text-xs text-indigo-300">
-                  <div className="text-slate-500 mb-2">// SOVEREIGN BRAIN DUMP</div>
-                  <pre className="whitespace-pre-wrap">
-                    {JSON.stringify(brain || {}, null, 2)}
-                  </pre>
-                </div>
-              </motion.div>
-            )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-            {activeTab === 'evo' && (
-              <motion.div 
-                key="evo"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.05 }}
-                className="flex flex-col items-center justify-center h-[350px] space-y-8"
-              >
-                <div className="relative">
-                  <div className="w-32 h-32 bg-indigo-500/20 rounded-full border-4 border-indigo-500 flex items-center justify-center animate-pulse">
-                    <Brain size={48} className="text-indigo-400" />
-                  </div>
-                  {/* Branches */}
-                  <EvoBranch x={-150} y={-80} label="UI Synthesis" status="Active" />
-                  <EvoBranch x={150} y={-80} label="Logic Hardening" status="Verified" />
-                  <EvoBranch x={-180} y={60} label="Contract Testing" status="Internalized" />
-                  <EvoBranch x={180} y={60} label="Market Synthesis" status="Draft" />
-                </div>
-                <div className="text-center max-w-md">
-                  <h4 className="text-xl font-black text-indigo-400">EVO TREE: ACTIVE</h4>
-                  <p className="text-sm text-slate-400 mt-2">
-                    Autonomous branch spawning based on Recursive Build patterns and bridge-extension feedback.
-                  </p>
-                </div>
-              </motion.div>
-            )}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 28 }}>
+        {/* Quick Actions */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+            Quick Actions
+          </div>
+          <QuickAction
+            icon={MessageSquare}
+            label="Open AI Chat"
+            sub="Start a new production mission with your OpenAI API"
+            onClick={() => setActivePage('chat')}
+            color="#6366f1"
+          />
+          <QuickAction
+            icon={Zap}
+            label="Prompt Registry"
+            sub="Browse and manage your prompt stacks"
+            onClick={() => setActivePage('prompt-registry')}
+            color="#f59e0b"
+          />
+          <QuickAction
+            icon={RefreshCw}
+            label="Run Maintenance Cycle"
+            sub="Execute a full self-healing maintenance pass"
+            onClick={runMaintenance}
+            color="#10b981"
+          />
+          <QuickAction
+            icon={Zap}
+            label="Trigger Evolution Cycle"
+            sub="Execute physical logic evolution & compaction"
+            onClick={async () => {
+              try {
+                const res = await fetch('http://127.0.0.1:3001/api/study/initiate', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ protocolId: 'DREAM_CYCLE' })
+                });
+                const data = await res.json();
+                useSovereignStore.getState().addNotification(`Evolution Cycle Complete: ${data.signature}`, 'success');
+                useSovereignStore.getState().fetchMetrics();
+              } catch (err) {
+                useSovereignStore.getState().addNotification(`Evolution Failed: ${err.message}`, 'error');
+              }
+            }}
+            color="#6366f1"
+          />
+          <QuickAction
+            icon={Activity}
+            label="View Metrics"
+            sub="Detailed performance monitoring dashboard"
+            onClick={() => setActivePage('metrics')}
+            color="#8b5cf6"
+          />
+        </div>
 
-            {activeTab === 'perf' && (
-              <motion.div 
-                key="perf"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <PerformanceProfile metrics={metrics} />
-              </motion.div>
-            )}
-
-            {activeTab === 'logs' && (
-              <motion.div 
-                key="logs"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="bg-black rounded-xl p-4 border border-slate-800 font-mono text-[10px] h-[400px] overflow-y-auto"
-              >
-                <div className="text-emerald-500">[00:01:22] SovereignIntelligence: Cycle 2 Boot complete.</div>
-                <div className="text-slate-500">[00:01:23] SelfInspector: Scanning 172 modules...</div>
-                <div className="text-yellow-500">[00:01:23] [GAP] SOVEREIGN_IMPLEMENTATION detected in 'vector_memory.js'</div>
-                <div className="text-indigo-400">[00:01:24] [RecursiveBuild] Fixing gap: todo_vector_memory.js</div>
-                <div className="text-emerald-500">[00:01:25] ✓ Fixed: todo_vector_memory.js</div>
-                <div className="text-slate-400">[00:01:26] Pattern internalized: placeholder_fix → vector_memory.js</div>
-                <div className="text-white mt-4">{isBuilding ? '> EXECUTING MASTER SELF-BUILD...' : '> IDLE'}</div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        {/* Recent Chat */}
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>
+            Recent Chat Activity
+          </div>
+          <div style={{
+            background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: 16,
+            display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 300, overflow: 'auto',
+          }}>
+            {chatMessages.slice(-5).map((msg) => (
+              <div key={msg.id} style={{
+                padding: '10px 14px', borderRadius: 10,
+                background: msg.role === 'user' ? 'rgba(99,102,241,0.08)' : 'rgba(255,255,255,0.02)',
+                border: `1px solid ${msg.role === 'user' ? 'rgba(99,102,241,0.15)' : '#1e293b'}`,
+              }}>
+                <div style={{ fontSize: 9, fontWeight: 700, color: msg.role === 'user' ? '#818cf8' : '#475569', textTransform: 'uppercase', marginBottom: 4 }}>
+                  {msg.role === 'user' ? 'You' : msg.role === 'system' ? 'System' : 'AI'}
+                </div>
+                <div style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5, whiteSpace: 'pre-wrap', overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: 60 }}>
+                  {msg.content.slice(0, 200)}{msg.content.length > 200 ? '...' : ''}
+                </div>
+              </div>
+            ))}
+            <button
+              onClick={() => setActivePage('chat')}
+              style={{
+                background: 'none', border: '1px solid #1e293b', borderRadius: 8, padding: '8px 12px',
+                color: '#6366f1', fontSize: 11, fontWeight: 600, cursor: 'pointer', marginTop: 4,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              }}
+            >
+              Open Full Chat <ArrowRight size={12} />
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
-const StatCard = ({ title, value, icon: Icon, color, detail }) => (
-  <div className="bg-slate-900/50 border border-slate-800 p-5 rounded-2xl shadow-xl">
-    <div className="flex items-center justify-between mb-3">
-      <div className={`p-2 rounded-lg bg-slate-800 ${color}`}>
-        <Icon size={20} />
-      </div>
-      <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{title}</span>
-    </div>
-    <div className="text-3xl font-black mb-1">{value}</div>
-    <div className="text-[10px] text-slate-500 font-medium">{detail}</div>
-  </div>
-);
-
-const StatusItem = ({ label, status, health }) => (
-  <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-xl border border-slate-800/50">
-    <div className="flex items-center gap-3">
-      <CheckCircle size={14} className="text-emerald-500" />
-      <span className="text-sm font-bold text-slate-300">{label}</span>
-    </div>
-    <div className="flex items-center gap-4">
-      <span className="text-[10px] font-black text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded">{status}</span>
-      <span className="text-xs font-mono text-slate-500">{health}</span>
-    </div>
-  </div>
-);
-
-const EvoBranch = ({ x, y, label, status }) => (
-  <motion.div 
-    initial={{ opacity: 0, x: 0, y: 0 }}
-    animate={{ opacity: 1, x, y }}
-    className="absolute flex flex-col items-center group"
-  >
-    <div className="w-1 h-20 bg-gradient-to-b from-indigo-500 to-transparent" />
-    <div className="bg-slate-800 border border-indigo-500/30 px-3 py-1.5 rounded-lg shadow-xl backdrop-blur-md group-hover:border-indigo-500 transition-all">
-      <div className="text-[10px] font-black text-indigo-400">{label}</div>
-      <div className="text-[8px] text-slate-500">{status}</div>
-    </div>
-  </motion.div>
-);
-
-const PerformanceProfile = ({ metrics }) => (
-  <div className="space-y-8">
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <MetricGauge label="CACHE HIT RATE" value={metrics?.cache?.hitRate || 0} unit="%" color="emerald" />
-      <MetricGauge label="DB PERFORMANCE" value={98.2} unit="%" color="indigo" />
-      <MetricGauge label="CPU OPTIMIZATION" value={84.5} unit="%" color="rose" />
-    </div>
-    <div className="bg-black/40 rounded-2xl p-6 border border-slate-800">
-      <h4 className="text-sm font-black mb-6 flex items-center gap-2">
-        <Layers size={16} className="text-indigo-400" /> Optimization Proofs
-      </h4>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <OptimizationCard label="Redis-style Caching" desc="Local CacheManager in PromptBridge" status="100% SUCCESS" />
-        <OptimizationCard label="SQLite Indexing" desc="High-traffic columns indexed" status="VERIFIED" />
-        <OptimizationCard label="Async Job Queuing" desc="AsyncQueue background worker" status="ACTIVE" />
-        <OptimizationCard label="Service Profiling" desc=">50ms latency flagging active" status="MONITORING" />
-      </div>
-    </div>
-  </div>
-);
-
-const MetricGauge = ({ label, value, unit, color }) => (
-  <div className="text-center">
-    <div className="relative inline-flex items-center justify-center">
-      <svg className="w-24 h-24 transform -rotate-90">
-        <circle cx="48" cy="48" r="40" fill="none" stroke="currentColor" strokeWidth="8" className="text-slate-800" />
-        <motion.circle 
-          cx="48" cy="48" r="40" fill="none" stroke="currentColor" strokeWidth="8" 
-          strokeDasharray={251.2}
-          initial={{ strokeDashoffset: 251.2 }}
-          animate={{ strokeDashoffset: 251.2 - (251.2 * value) / 100 }}
-          className={`text-${color}-500`}
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-xl font-black">{Math.round(value)}{unit}</span>
-      </div>
-    </div>
-    <div className="mt-2 text-[10px] font-black text-slate-500 uppercase tracking-widest">{label}</div>
-  </div>
-);
-
-const OptimizationCard = ({ label, desc, status }) => (
-  <div className="flex items-center justify-between p-4 bg-slate-800/20 rounded-xl border border-slate-800/40">
-    <div>
-      <div className="text-xs font-black text-slate-200">{label}</div>
-      <div className="text-[10px] text-slate-500">{desc}</div>
-    </div>
-    <div className="text-[9px] font-black px-2 py-1 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded">
-      {status}
-    </div>
-  </div>
-);
+export default SovereignIntelligenceDashboard;

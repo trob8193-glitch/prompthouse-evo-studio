@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PromptHouse Evo</title>
+    <link rel="stylesheet" href="ui.css" />
+  </head>
+  <body>
+    <main class="shell popup-shell">
+      <section class="hero">
+        <div class="mark">PH</div>
+        <div>
+          <h1>PromptHouse Evo</h1>
+          <p>S+++++ autonomous capture deck</p>
+        </div>
+      </section>
+      <div class="status-row">
+        <span id="bridge-dot" class="dot pending"></span>
+        <span id="bridge-status">Checking local bridge...</span>
+      </div>
+      <label>
+        Mission
+        <textarea id="mission" placeholder="What should PromptHouse build from this page?"></textarea>
+      </label>
+      <div class="button-row">
+        <button id="capture-page">Capture Page</button>
+        <button id="capture-selection" class="secondary">Use Selection</button>
+      </div>
+      <button id="open-side-panel" class="wide">Open Side Panel</button>
+      <pre id="output">Ready.</pre>
+    </main>
+    <script src="popup.js" type="module"></script>
+  </body>
+</html>

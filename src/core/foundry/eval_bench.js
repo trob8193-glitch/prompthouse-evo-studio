@@ -1,79 +1,34 @@
-/** Eval Bench - mod04 **/
+// src/core/foundry/eval_bench.js
+// Minimal evaluation bench utilities (no synthetic scoring).
 
-import fs from 'fs';
-import fetch from 'node-fetch';
-import path from 'path';
+export async function benchmarkChat({
+  bridgeUrl = 'http://127.0.0.1:3001',
+  messages = [{ role: 'user', content: 'ping' }],
+  systemPrompt = '',
+}) {
+  const startedAt = Date.now();
+  const res = await fetch(`${bridgeUrl}/api/evo-lm/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages, systemPrompt }),
+  });
+  const data = await res.json().catch(() => ({}));
+  const endedAt = Date.now();
 
-const BASE_URL = 'http://localhost:3001';
-const DATA_FILE = path.resolve('eval_bench_results.json');
+  if (!res.ok) {
+    const msg = data?.error || res.statusText || 'chat failed';
+    const err = new Error(msg);
+    err.status = res.status;
+    throw err;
+  }
 
-class EvalBench {
-    constructor() {
-        this.results = [];
-    }
-
-    async fetchModelData(modelId) {
-        const response = await fetch(`${BASE_URL}/models/${modelId}`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch model data: ${response.statusText}`);
-        }
-        return await response.json();
-    }
-
-    async benchmarkModel(modelId) {
-        const modelData = await this.fetchModelData(modelId);
-        const startTime = Date.now();
-
-        // Simulate evaluation logic
-        const accuracy = this.evaluateModel(modelData);
-        const endTime = Date.now();
-        const duration = endTime - startTime;
-
-        const result = {
-            modelId,
-            accuracy,
-            duration,
-            timestamp: new Date().toISOString(),
-        };
-
-        this.results.push(result);
-        await this.saveResults();
-        return result;
-    }
-
-    evaluateModel(modelData) {
-        // Simulated evaluation logic
-        const randomAccuracy = Math.random(); // Simulating accuracy between 0 and 1
-        return parseFloat(randomAccuracy.toFixed(2));
-    }
-
-    async saveResults() {
-        try {
-            fs.writeFileSync(DATA_FILE, JSON.stringify(this.results, null, 2));
-        } catch (error) {
-            console.error('Error saving results:', error);
-        }
-    }
-
-    loadResults() {
-        if (fs.existsSync(DATA_FILE)) {
-            const data = fs.readFileSync(DATA_FILE, 'utf-8');
-            this.results = JSON.parse(data);
-        }
-    }
-
-    getResults() {
-        return this.results;
-    }
+  return {
+    ok: true,
+    transport: data.transport || 'unknown',
+    model: data.model || null,
+    latency_ms: endedAt - startedAt,
+    message_len: String(data.message || '').length,
+    at: new Date(startedAt).toISOString(),
+  };
 }
 
-const evalBench = new EvalBench();
-evalBench.loadResults();
-
-export const benchmarkModel = async (modelId) => {
-    return await evalBench.benchmarkModel(modelId);
-};
-
-export const getResults = () => {
-    return evalBench.getResults();
-};

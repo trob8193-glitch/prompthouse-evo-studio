@@ -3,7 +3,9 @@
 import fs from 'fs';
 import path from 'path';
 
-const LOCAL_API_URL = 'http://localhost:3001';
+import { Log } from '../autonomy/SovereignLogger.js';
+
+const LOCAL_API_URL = 'http://127.0.0.1:3001';
 const DATASET_FILE = path.join(__dirname, 'training_dataset.json');
 
 class ResponseCapture {
@@ -53,10 +55,10 @@ class ResponseCapture {
                 body: JSON.stringify(entry)
             });
             if (!response.ok) {
-                console.error('Failed to send to local bridge:', response.statusText);
+                Log.error('Failed to send to local bridge:', response.statusText);
             }
         } catch (error) {
-            console.error('Error sending to local bridge:', error);
+            Log.error('Error sending to local bridge:', error);
         }
     }
 }

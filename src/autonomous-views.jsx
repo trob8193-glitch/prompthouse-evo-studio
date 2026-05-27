@@ -2,9 +2,9 @@
 // Bots build apps in real-time with animated collaboration pipeline
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { BotCharacter, BotStageCharacter, EXPRESSIONS, MOTIONS } from './bot-characters.jsx';
+import { BotCharacter, BotStageCharacter, EXPRESSIONS, MOTIONS } from './bot-characters.js';
 import { BOT_ROSTER } from './engine.js';
-import { APP_TYPES, generateApp, runBotPipeline, downloadAsZip, downloadFile, writeToLocalDisk } from './autonomous-builder.js';
+import { APP_TYPES, runBotPipeline, downloadAsZip, downloadFile, writeToLocalDisk } from './autonomous-builder.js';
 import { BotBus } from './bot-orb.jsx';
 
 
@@ -24,7 +24,7 @@ export function AutonomousBuilderView() {
   const [selectedFile, setSelectedFile] = useState(null);
   const timelineRef = useRef(null);
 
-  const startBuild = useCallback(() => {
+  const startBuild = useCallback(async () => {
     if (!mission.trim()) return;
     setBuilding(true);
     setTimeline([]);
@@ -33,28 +33,22 @@ export function AutonomousBuilderView() {
     setSelectedFile(null);
 
     const name = appName.trim() || mission.split(' ').slice(0, 3).join('_').toLowerCase().replace(/[^a-z0-9_]/g, '');
-    const pipeline = runBotPipeline(mission, appType, name, features);
-
-    // Animate timeline step by step
-    pipeline.timeline.forEach((step, i) => {
-      setTimeout(() => {
-        setTimeline(prev => [...prev, step]);
-        setCurrentStep(i);
-        BotBus.emit({ action: step.action });
-
-        if (timelineRef.current) {
-          timelineRef.current.scrollTop = timelineRef.current.scrollHeight;
-        }
-
-        // Last step — reveal result
-        if (i === pipeline.timeline.length - 1) {
-          setTimeout(() => {
-            setResult(pipeline);
-            setBuilding(false);
-          }, 800);
-        }
-      }, (i + 1) * 1200);
-    });
+    
+    setTimeline([{ bot: 'evo', action: 'BUILDING', message: 'Generating app using Universal AI Adaptor...' }]);
+    setCurrentStep(0);
+    BotBus.emit({ action: 'BUILDING' });
+    
+    try {
+      const pipelineResult = await runBotPipeline(mission, appType, name, features);
+      setTimeline(prev => [...prev, { bot: 'evo', action: 'COMPLETE', message: 'App files physically written to disk.' }]);
+      setCurrentStep(1);
+      setResult(pipelineResult);
+    } catch (e) {
+      setTimeline(prev => [...prev, { bot: 'evo', action: 'ERROR', message: e.message }]);
+      setCurrentStep(1);
+    } finally {
+      setBuilding(false);
+    }
   }, [mission, appName, features, appType]);
 
   const activeBotId = timeline.length > 0 ? timeline[timeline.length - 1].bot : 'evo';
@@ -74,7 +68,7 @@ export function AutonomousBuilderView() {
     <div className="flex-col">
       <div>
         <div className="page-title">🤖 Autonomous App Builder</div>
-        <div className="page-subtitle">Tell the bots what to build. They design, code, audit, and deliver — end to end. Real code. Real files. No mocks.</div>
+        <div className="page-subtitle">Describe your app. The AI generates a complete, production-grade multi-file project — written directly to your disk. React, Flutter, Next.js, or Express API.</div>
       </div>
 
       {/* Mission Input */}
@@ -83,19 +77,19 @@ export function AutonomousBuilderView() {
           <div className="field">
             <label className="field-label">🎯 Mission — What are we building?</label>
             <textarea className="field-textarea" value={mission} onChange={e => setMission(e.target.value)}
-              placeholder="Build a task management app with auth, dashboard, task lists, and settings..."
+              ghostInput="Build a task management app with auth, dashboard, task lists, and settings..."
               style={{ minHeight: 80 }} disabled={building} />
           </div>
           <div className="grid-2" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
             <div className="field">
               <label className="field-label">App Name</label>
               <input className="field-input" value={appName} onChange={e => setAppName(e.target.value)}
-                placeholder="my_awesome_app" disabled={building} />
+                ghostInput="my_awesome_app" disabled={building} />
             </div>
             <div className="field">
               <label className="field-label">Features (comma separated)</label>
               <input className="field-input" value={features} onChange={e => setFeatures(e.target.value)}
-                placeholder="home, auth, dashboard, settings" disabled={building} />
+                ghostInput="home, auth, dashboard, settings" disabled={building} />
             </div>
             <div className="field">
               <label className="field-label">Platform</label>
@@ -142,7 +136,7 @@ export function AutonomousBuilderView() {
           <div className="card" ref={timelineRef} style={{ maxHeight: 400, overflow: 'auto', padding: 0 }}>
             <div className="card-body" style={{ padding: 16 }}>
               <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 12 }}>
-                BUILD PIPELINE — {timeline.length} / 11 steps
+                BUILD PIPELINE — {timeline.length} step{timeline.length !== 1 ? 's' : ''}
               </div>
               {timeline.map((step, i) => {
                 const bot = BOT_ROSTER.find(b => b.id === step.bot) || BOT_ROSTER[0];

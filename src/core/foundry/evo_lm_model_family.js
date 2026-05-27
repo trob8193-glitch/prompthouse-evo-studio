@@ -1,10 +1,13 @@
-/** Evo LM model family - mod01 **/
-
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MODEL_DEFINITIONS_PATH = path.join(__dirname, 'model_definitions.json');
-const LOCAL_BRIDGE_URL = 'http://localhost:3001/models';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001/models';
+const IS_TEST_ENV = process.env.NODE_ENV === 'test' || Boolean(process.env.VITEST);
 
 class EvoLMModelFamily {
     constructor() {
@@ -20,6 +23,7 @@ class EvoLMModelFamily {
     }
 
     saveModels() {
+        if (IS_TEST_ENV) return;
         fs.writeFileSync(MODEL_DEFINITIONS_PATH, JSON.stringify(this.models, null, 2));
     }
 
@@ -27,11 +31,11 @@ class EvoLMModelFamily {
         try {
             const response = await fetch(LOCAL_BRIDGE_URL);
             if (!response.ok) throw new Error('Network response was not ok');
-            const models = await response.json();
-            this.models = models;
+            const data = await response.json();
+            this.models = Array.isArray(data) ? data : data.models || [];
             this.saveModels();
         } catch (error) {
-            console.error('Failed to fetch models from server:', error);
+            Log.error('Failed to fetch models from server:', error);
         }
     }
 

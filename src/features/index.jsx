@@ -3,27 +3,25 @@ import { SovereignTabs } from '../components/SovereignTabs.jsx';
 
 import { CodeForgeView, MobileArchView, MissionControlView, ChainBuilderView, ExportLabView } from '../views.jsx';
 import { IntentAnalyzerView, PromptDNAView, TemplateLibraryView, AutoRepairView, LiveChatView } from '../ai-views.jsx';
-import { BotStageView, AgentCtlView, selectLead, MasterPromptVaultView } from '../v3-views.jsx';
+import { BotStageView, AgentCtlView, MasterPromptVaultView } from '../v3-views.jsx';
 import { ProofLedgerView, CanonMemoryView, WitnessConsoleView, DeadSurfaceHunterView, MaturityScoreView, ForgePipelineView } from '../proof-os-views.jsx';
 import { AutonomousBuilderView } from '../autonomous-views.jsx';
 import { AutonomousSelfBuildCommandCenter } from '../autonomous-command-center.jsx';
 import { EvoCopilotSidebar } from "../evo-copilot-sidebar.jsx";
 import { RealExecutionView } from '../real-execution-views.jsx';
-import { SelfBuildForgeView } from '../self-build-forge-view.jsx';
 import { VectorMemoryView, TemporalForesightView, RecursiveSwarmView, EntropyLockView, RealitySynthesisView, TruthAuditorView, CommandDeckView, MergeCourtView, PatternMirrorView, PromptGenomeView, DeadHunterView, SingularityCoreView, ProofVaultView, OmegaRealityView, SovereignFinalityView } from '../new-features-views.jsx';
 import { AgentBridgeView } from '../agent-bridge-views.jsx';
 import { PerformanceMonitor } from '../components/PerformanceMonitor.jsx';
 import { BotAutomationDeck } from '../components/BotAutomationDeck.jsx';
 import { EvoExchangeView } from '../evo-exchange-view.jsx';
 import { EvoLiveForgePreview } from '../components/liveforge/EvoLiveForgePreview.jsx';
-import { ForgeRenderConsoleView } from '../forge-render-views.jsx';
+import { EvoMobileController } from '../components/liveforge/EvoMobileController.jsx';
 import { ForgeLabView } from '../forge-views.jsx';
 import { ForgeTermView } from '../forge-term-view.jsx';
 import { NightForgeView } from '../nightforge-view.jsx';
 import { ToolAutogenView } from '../tool-autogen-view.jsx';
 import { PatternMinerView } from '../pattern-miner-view.jsx';
 import { PromptLinkView } from '../promptlink-views.jsx';
-import { ProofToValueView } from '../proof-to-value-view.jsx';
 import { RareCapabilitiesView } from '../rare-capabilities-view.jsx';
 import { WorkTwinVaultView } from '../worktwin-view.jsx';
 import PastMVPConsole from '../past-mvp-console.jsx';
@@ -38,6 +36,18 @@ import { BotRosterView } from '../v3-views.jsx';
 import { SovereignIntelligenceDashboard } from './SovereignIntelligenceDashboard.jsx';
 import { ExtensionCockpitView } from './ExtensionCockpitView.jsx';
 import { GlobalAPISettingsView } from './GlobalAPISettingsView.jsx';
+import { EvoEyesView } from './EvoEyesView.jsx';
+import { AutonomousSelfView } from './AutonomousSelfView.jsx';
+import { FeatureFoundryView } from './FeatureFoundryView.jsx';
+import EmojiGallery from './EmojiGallery.jsx';
+import SelfEvolutionDashboard from './SelfEvolutionDashboard.jsx';
+import CostFirewallDashboard from './CostFirewallDashboard.jsx';
+import ThemeEvolutionDashboard from './ThemeEvolutionDashboard.jsx';
+import ModuleMaturityDashboard from './ModuleMaturityDashboard.jsx';
+import EvoLlmTrainingDashboard from './EvoLlmTrainingDashboard.jsx';
+import { SelfBuildForgeView } from '../self-build-forge-view.jsx';
+import { ForgeRenderConsoleView } from '../forge-render-views.jsx';
+import { ProofToValueView } from '../proof-to-value-view.jsx';
 
 
 // ─── SCREEN TEMPLATES ────────────────────────────────────────────────────────
@@ -104,6 +114,14 @@ export function EvoCastRouter() {
   );
 }
 
+export function FeatureFoundry() {
+  return (
+    <ScreenTemplate title="Feature Foundry" subtitle="Autonomous SaaS Genesis Loop.">
+      <FeatureFoundryView />
+    </ScreenTemplate>
+  );
+}
+
 export function PromptRegistry() {
   return (
     <ScreenTemplate title="Prompt Engineering & Registry" subtitle="Manage 300+ prompts like versioned product assets.">
@@ -137,12 +155,37 @@ export function ExecutionQueue() {
 
 export function ProofConsole() {
   return (
-    <ScreenTemplate title="Proof Console" subtitle="Multi-layer truth verification and immutable memory auditing.">
+    <ScreenTemplate title="Proof Console" subtitle="Multi-layer truth verification, Evo LLM training, self-evolution, cost firewall, theme evolution, module maturity, and immutable memory auditing.">
       <SovereignTabs tabs={[
         { id: 'ledger', label: 'Ledger & Memory', component: (
           <div className="space-y-6">
             <ProofLedgerView />
             <CanonMemoryView />
+          </div>
+        )},
+        { id: 'module-maturity', label: 'Module Maturity', component: (
+          <div className="space-y-6">
+            <ModuleMaturityDashboard />
+          </div>
+        )},
+        { id: 'evo-llm', label: 'Evo LLM Training', component: (
+          <div className="space-y-6">
+            <EvoLlmTrainingDashboard />
+          </div>
+        )},
+        { id: 'self-evolution', label: 'Self-Evolution', component: (
+          <div className="space-y-6">
+            <SelfEvolutionDashboard />
+          </div>
+        )},
+        { id: 'cost-firewall', label: 'Cost Firewall', component: (
+          <div className="space-y-6">
+            <CostFirewallDashboard />
+          </div>
+        )},
+        { id: 'theme-evolution', label: 'Theme Evolution', component: (
+          <div className="space-y-6">
+            <ThemeEvolutionDashboard />
           </div>
         )},
         { id: 'auditor', label: 'Truth Auditor', component: (
@@ -166,7 +209,8 @@ export function ProofConsole() {
 export function LiveInspector() {
   return (
     <ScreenTemplate title="Live Surface Inspector" subtitle="Live routes, state, requests, runtime events, and traces.">
-      <AgentCtlView />
+      <EvoEyesView />
+      <div className="mt-6"><AgentCtlView /></div>
       <div className="mt-6"><PatternMirrorView /></div>
       <div className="mt-6"><IntentAnalyzerView /></div>
     </ScreenTemplate>
@@ -254,6 +298,11 @@ export function ForgeLabs() {
             <ForgeRenderConsoleView />
           </div>
         )},
+        { id: 'emulator', label: 'Mobile Simulator Hub', component: (
+          <div className="space-y-6">
+            <EvoMobileController />
+          </div>
+        )},
         { id: 'autonomy', label: 'NightForge & Repair', component: (
           <div className="space-y-6">
             <NightForgeView />
@@ -317,6 +366,8 @@ export function SovereignControl() {
       <SovereignTabs tabs={[
         { id: 'intel', label: 'Intelligence Deck', component: (
           <div className="space-y-6">
+            <AutonomousSelfView />
+            <EmojiGallery />
             <SovereignIntelligenceDashboard />
             <CommandDeckView />
           </div>
@@ -338,3 +389,4 @@ export function SovereignControl() {
     </ScreenTemplate>
   );
 }
+export { EvoEyesView, SovereignIntelligenceDashboard, ExtensionCockpitView, GlobalAPISettingsView, SelfBuildForgeView, ForgeRenderConsoleView, ProofToValueView };

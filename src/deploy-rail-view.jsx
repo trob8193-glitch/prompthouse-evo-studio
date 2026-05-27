@@ -10,7 +10,7 @@ export function DeployRailView() {
   const [status, setStatus] = useState('idle'); // idle | deploying | blocked | success
   const [log, setLog] = useState([]);
   const [receipt, setReceipt] = useState(null);
-  const [config, setConfig] = useState({ provider: 'vercel', dryRun: true, ownerApproved: false });
+  const [config, setConfig] = useState({ provider: 'vercel', liveRun: true, ownerApproved: false });
 
   const startDeploy = useCallback(async () => {
     setStatus('deploying');
@@ -38,8 +38,8 @@ export function DeployRailView() {
           <div className="page-title">🛤️ DeployRail</div>
           <div className="page-subtitle">Sovereign deployment pipeline. Test → Build → Secret Check → Preview → Production.</div>
         </div>
-        <div className={`badge ${config.dryRun ? 'badge-dim' : 'badge-gold'}`}>
-          {config.dryRun ? 'DRY-RUN MODE' : 'LIVE PRODUCTION'}
+        <div className="badge badge-gold">
+          LIVE-RUN MODE
         </div>
       </div>
 
@@ -59,30 +59,21 @@ export function DeployRailView() {
               </div>
               <div className="field">
                 <label className="field-label">Mode</label>
-                <div className="flex-row gap-8">
-                  <button 
-                    className={`btn btn-sm ${config.dryRun ? 'btn-primary' : 'btn-secondary'}`}
-                    onClick={() => setConfig(c => ({...c, dryRun: true}))}
-                  >
-                    Dry-Run
-                  </button>
-                  <button 
-                    className={`btn btn-sm ${!config.dryRun ? 'btn-danger' : 'btn-secondary'}`}
-                    onClick={() => setConfig(c => ({...c, dryRun: false}))}
-                  >
-                    Live
-                  </button>
+                <div style={{ fontSize: 11, color: '#f5c842', padding: 8, background: 'rgba(245,200,66,0.08)', border: '1px solid rgba(245,200,66,0.25)', borderRadius: 4 }}>
+                  Live-run execution is always enabled.
                 </div>
               </div>
-              {config.dryRun ? (
-                <div style={{ fontSize: 11, color: 'var(--text-dim)', padding: 8, background: 'var(--bg-void)', borderRadius: 4 }}>
-                  💡 Dry-run simulates all gates without making network requests.
-                </div>
-              ) : (
-                <div style={{ fontSize: 11, color: '#f87171', padding: 8, background: 'rgba(248,113,113,0.1)', border: '1px solid #f87171', borderRadius: 4 }}>
-                  ⚠️ Live production requires provider tokens in .env and manual owner approval.
-                </div>
-              )}
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--text-secondary)', marginTop: 6 }}>
+                <input
+                  type="checkbox"
+                  checked={config.ownerApproved}
+                  onChange={e => setConfig(c => ({ ...c, ownerApproved: e.target.checked }))}
+                />
+                Owner approval granted for this live-run attempt
+              </label>
+              <div style={{ fontSize: 11, color: '#f87171', padding: 8, background: 'rgba(248,113,113,0.1)', border: '1px solid #f87171', borderRadius: 4 }}>
+                ⚠️ Live production requires provider tokens in .env and owner approval.
+              </div>
               <button 
                 className="btn btn-primary" 
                 style={{ marginTop: 12 }}

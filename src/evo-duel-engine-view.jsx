@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ALL_BOT_ROSTER, CORE_CAST, SENIOR_CAST, DOMAIN_PACKS, scorePrompt, getGrade, getBarColor } from './engine.js';
 
-const BRIDGE = 'http://localhost:3001';
+const BRIDGE = 'http://127.0.0.1:3001';
 
 // ── Map every bot to its domain specialty (prompt assignment system) ──
 const BOT_DOMAIN_MAP = {
@@ -28,17 +28,14 @@ const BOT_DOMAIN_MAP = {
   forge_rhino:      { domain: 'development',specialty: 'Release Hardener',        icon: 'FR' },
 };
 
+import { universalSend } from './lib/universal-transport.js';
+
 async function callBridge(prompt, systemPrompt = '') {
   try {
-    const res = await fetch(`${BRIDGE}/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: prompt }], systemPrompt }),
-    });
-    const data = await res.json();
-    return data.message || '[No response]';
-  } catch {
-    return '[BRIDGE OFFLINE] Connect PromptBridge on :3001 to run live duels.';
+    const res = await universalSend([{ role: 'user', content: prompt }], systemPrompt);
+    return res.message;
+  } catch (err) {
+    return `[TRANSPORT OFFLINE] ${err.message}`;
   }
 }
 
@@ -227,7 +224,7 @@ export function EvoDuelEngineView() {
           <textarea
             value={prompt}
             onChange={e => setPrompt(e.target.value)}
-            placeholder="Enter a duel prompt... Both bots respond in their unique voice and specialty. The highest scorer wins."
+            ghostInput="Enter a duel prompt... Both bots respond in their unique voice and specialty. The highest scorer wins."
             style={{ width: '100%', minHeight: 80, background: '#0a0a18', border: '1px solid #2a2a4a', borderRadius: 8, padding: '10px 14px', color: '#e0e0ff', fontSize: 13, resize: 'vertical', boxSizing: 'border-box', marginBottom: 12 }}
           />
 

@@ -3,8 +3,10 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 const LOCAL_STORAGE_PATH = path.join(process.cwd(), 'chat_sessions.json');
-const LOCAL_BRIDGE_URL = 'http://localhost:3001/capture';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001/capture';
 
 async function saveToLocalFile(data) {
     try {
@@ -14,7 +16,7 @@ async function saveToLocalFile(data) {
         existingData.push(data);
         fs.writeFileSync(LOCAL_STORAGE_PATH, JSON.stringify(existingData, null, 2));
     } catch (error) {
-        console.error('Error saving to local file:', error);
+        Log.error('Error saving to local file:', error);
     }
 }
 
@@ -32,7 +34,7 @@ async function sendToLocalBridge(data) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
     } catch (error) {
-        console.error('Error sending data to local bridge:', error);
+        Log.error('Error sending data to local bridge:', error);
     }
 }
 
@@ -54,7 +56,7 @@ export function getChatSessions() {
         }
         return [];
     } catch (error) {
-        console.error('Error reading chat sessions:', error);
+        Log.error('Error reading chat sessions:', error);
         return [];
     }
 }
@@ -63,7 +65,7 @@ export async function clearChatSessions() {
     try {
         fs.writeFileSync(LOCAL_STORAGE_PATH, JSON.stringify([], null, 2));
     } catch (error) {
-        console.error('Error clearing chat sessions:', error);
+        Log.error('Error clearing chat sessions:', error);
     }
 }
 

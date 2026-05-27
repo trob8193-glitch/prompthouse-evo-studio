@@ -1,0 +1,50 @@
+[
+  {
+    "modelId": "local-evo-lm-latest",
+    "accuracy": 0.91,
+    "duration": 0,
+    "timestamp": "2026-05-03T20:13:07.877Z"
+  },
+  {
+    "modelId": "local-evo-lm-latest",
+    "accuracy": 0.91,
+    "duration": 0,
+    "timestamp": "2026-05-03T21:46:27.821Z"
+  },
+  {
+    "modelId": "local-evo-lm-latest",
+    "accuracy": 0.91,
+    "duration": 0,
+    "timestamp": "2026-05-04T11:53:58.375Z"
+  },
+  {
+    "modelId": "local-evo-lm-latest",
+    "accuracy": 0.91,
+    "duration": 0,
+    "timestamp": "2026-05-04T12:12:27.200Z"
+  },
+  {
+    "modelId": "local-evo-lm-latest",
+    "accuracy": 0.91,
+    "duration": 0,
+    "timestamp": "2026-05-04T12:19:40.232Z"
+  },
+  {
+    "modelId": "local-evo-lm-latest",
+    "accuracy": 0.91,
+    "duration": 0,
+    "timestamp": "2026-05-04T12:28:30.520Z"
+  },
+  {
+    "modelId": "local-evo-lm-latest",
+    "accuracy": 0.91,
+    "duration": 0,
+    "timestamp": "2026-05-04T12:33:45.268Z"
+  },
+  {
+    "modelId": "local-evo-lm-latest",
+    "accuracy": 0.91,
+    "duration": 0,
+    "timestamp": "2026-05-04T12:38:10.266Z"
+  }
+]

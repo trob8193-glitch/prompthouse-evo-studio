@@ -1,0 +1,985 @@
+{
+  "id": "nuclear_truth_audit",
+  "generatedAt": "2026-05-12T07:20:01.950Z",
+  "truthState": "verified",
+  "score": 100,
+  "summary": {
+    "modulesScanned": 374,
+    "uiFiles": 84,
+    "functions": 722,
+    "buttons": 208,
+    "tabs": 55,
+    "hudPanels": 30,
+    "nodeMentions": 111,
+    "apiRoutes": 88,
+    "apiCalls": 47,
+    "brokenWires": 0,
+    "findings": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 24
+    }
+  },
+  "brokenWires": [],
+  "findings": [
+    {
+      "severity": "low",
+      "file": "src/agent-bridge-views.jsx",
+      "line": 70,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/chrome-extension-views.jsx",
+      "line": 78,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/chrome-extension-views.jsx",
+      "line": 79,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/chrome-extension-views.jsx",
+      "line": 81,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/chrome-extension-views.jsx",
+      "line": 251,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/chrome-extension-views.jsx",
+      "line": 286,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/evo-exchange-view.jsx",
+      "line": 73,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/forge-views.jsx",
+      "line": 193,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/lib/liveforge/liveForgeTemplates.js",
+      "line": 8,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/lib/liveforge/liveForgeTemplates.js",
+      "line": 18,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/lib/liveforge/liveForgeTemplates.js",
+      "line": 18,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/lib/liveforge/liveForgeTemplates.js",
+      "line": 18,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/lib/liveforge/liveForgeTemplates.js",
+      "line": 18,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/lib/liveforge/liveForgeTemplates.js",
+      "line": 18,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/lib/liveforge/liveForgeTemplates.js",
+      "line": 38,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/lib/liveforge/liveForgeTemplates.js",
+      "line": 38,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/features/AutonomousSelfView.jsx",
+      "line": 256,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/features/ConnectionManager.jsx",
+      "line": 160,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/features/reality_synthesis_logic.js",
+      "line": 63,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/core/audit/NuclearTruthAudit.js",
+      "line": 219,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/core/audit/NuclearTruthAudit.js",
+      "line": 268,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/components/BotAutomationDeck.jsx",
+      "line": 120,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/components/TimeSlipLedger.jsx",
+      "line": 66,
+      "message": "Button without onClick handler (verify intentional static control)."
+    },
+    {
+      "severity": "low",
+      "file": "src/components/TopBar.jsx",
+      "line": 92,
+      "message": "Button without onClick handler (verify intentional static control)."
+    }
+  ],
+  "routesSample": [
+    {
+      "method": "GET",
+      "path": "/status",
+      "file": "promptbridge-server.js",
+      "line": 1860
+    },
+    {
+      "method": "GET",
+      "path": "/healthz",
+      "file": "promptbridge-server.js",
+      "line": 1897
+    },
+    {
+      "method": "GET",
+      "path": "/api/generated-artifact-registry",
+      "file": "promptbridge-server.js",
+      "line": 1905
+    },
+    {
+      "method": "GET",
+      "path": "/api/bridge-contract-ledger",
+      "file": "promptbridge-server.js",
+      "line": 1919
+    },
+    {
+      "method": "GET",
+      "path": "/api/self-implementation/status",
+      "file": "promptbridge-server.js",
+      "line": 1932
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/nuclear-truth",
+      "file": "promptbridge-server.js",
+      "line": 1957
+    },
+    {
+      "method": "GET",
+      "path": "/api/browser-bridge/list",
+      "file": "promptbridge-server.js",
+      "line": 1969
+    },
+    {
+      "method": "GET",
+      "path": "/api/browser-bridge/forgecapsule",
+      "file": "promptbridge-server.js",
+      "line": 1986
+    },
+    {
+      "method": "GET",
+      "path": "/api/browser-bridge/proof",
+      "file": "promptbridge-server.js",
+      "line": 2003
+    },
+    {
+      "method": "GET",
+      "path": "/api/reports/kpi",
+      "file": "promptbridge-server.js",
+      "line": 2020
+    },
+    {
+      "method": "POST",
+      "path": "/bridge/invoke",
+      "file": "promptbridge-server.js",
+      "line": 2029
+    },
+    {
+      "method": "GET",
+      "path": "/api/prompt-os/packet",
+      "file": "promptbridge-server.js",
+      "line": 2053
+    },
+    {
+      "method": "GET",
+      "path": "/api/connectors",
+      "file": "promptbridge-server.js",
+      "line": 2063
+    },
+    {
+      "method": "POST",
+      "path": "/api/connectors",
+      "file": "promptbridge-server.js",
+      "line": 2079
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/connectors/:id",
+      "file": "promptbridge-server.js",
+      "line": 2101
+    },
+    {
+      "method": "GET",
+      "path": "/api/release-spine/status",
+      "file": "promptbridge-server.js",
+      "line": 2111
+    },
+    {
+      "method": "GET",
+      "path": "/api/studio-os/inspector",
+      "file": "promptbridge-server.js",
+      "line": 2145
+    },
+    {
+      "method": "GET",
+      "path": "/api/connections",
+      "file": "promptbridge-server.js",
+      "line": 2165
+    },
+    {
+      "method": "POST",
+      "path": "/api/terminal/bond",
+      "file": "promptbridge-server.js",
+      "line": 2181
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "file": "promptbridge-server.js",
+      "line": 2215
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "file": "promptbridge-server.js",
+      "line": 2243
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "file": "promptbridge-server.js",
+      "line": 2266
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/logout",
+      "file": "promptbridge-server.js",
+      "line": 2279
+    },
+    {
+      "method": "GET",
+      "path": "/api/evolution/profile",
+      "file": "promptbridge-server.js",
+      "line": 2292
+    },
+    {
+      "method": "POST",
+      "path": "/api/evolution/signal",
+      "file": "promptbridge-server.js",
+      "line": 2340
+    },
+    {
+      "method": "POST",
+      "path": "/api/evolution/cycle",
+      "file": "promptbridge-server.js",
+      "line": 2379
+    },
+    {
+      "method": "POST",
+      "path": "/api/evolution/ui/pipeline",
+      "file": "promptbridge-server.js",
+      "line": 2412
+    },
+    {
+      "method": "GET",
+      "path": "/api/evolution/ui/receipts",
+      "file": "promptbridge-server.js",
+      "line": 2871
+    },
+    {
+      "method": "GET",
+      "path": "/api/evolution/autonomous/status",
+      "file": "promptbridge-server.js",
+      "line": 2881
+    },
+    {
+      "method": "POST",
+      "path": "/api/evolution/autonomous/boss-fights",
+      "file": "promptbridge-server.js",
+      "line": 2945
+    },
+    {
+      "method": "GET",
+      "path": "/api/evolution/status",
+      "file": "promptbridge-server.js",
+      "line": 2973
+    },
+    {
+      "method": "POST",
+      "path": "/api/evolution/activate",
+      "file": "promptbridge-server.js",
+      "line": 2977
+    },
+    {
+      "method": "POST",
+      "path": "/api/commerce/checkout",
+      "file": "promptbridge-server.js",
+      "line": 3032
+    },
+    {
+      "method": "POST",
+      "path": "/api/studio-os/proof/intercept",
+      "file": "promptbridge-server.js",
+      "line": 3057
+    },
+    {
+      "method": "GET",
+      "path": "/api/commits",
+      "file": "promptbridge-server.js",
+      "line": 3069
+    },
+    {
+      "method": "GET",
+      "path": "/api/queue/master",
+      "file": "promptbridge-server.js",
+      "line": 3082
+    },
+    {
+      "method": "GET",
+      "path": "/api/proof/count",
+      "file": "promptbridge-server.js",
+      "line": 3091
+    },
+    {
+      "method": "GET",
+      "path": "/api/proof/receipts",
+      "file": "promptbridge-server.js",
+      "line": 3104
+    },
+    {
+      "method": "POST",
+      "path": "/chat",
+      "file": "promptbridge-server.js",
+      "line": 3169
+    },
+    {
+      "method": "POST",
+      "path": "/api/files/write",
+      "file": "promptbridge-server.js",
+      "line": 3179
+    },
+    {
+      "method": "POST",
+      "path": "/api/evo-lm/compressed-chat",
+      "file": "promptbridge-server.js",
+      "line": 3191
+    },
+    {
+      "method": "POST",
+      "path": "/api/truth/nuclear-audit",
+      "file": "promptbridge-server.js",
+      "line": 3219
+    },
+    {
+      "method": "POST",
+      "path": "/api/study/initiate",
+      "file": "promptbridge-server.js",
+      "line": 3241
+    },
+    {
+      "method": "GET",
+      "path": "/api/witness/latest-packet",
+      "file": "promptbridge-server.js",
+      "line": 3259
+    },
+    {
+      "method": "POST",
+      "path": "/api/witness/report-truth",
+      "file": "promptbridge-server.js",
+      "line": 3268
+    },
+    {
+      "method": "POST",
+      "path": "/api/memory/recall",
+      "file": "promptbridge-server.js",
+      "line": 3281
+    },
+    {
+      "method": "POST",
+      "path": "/api/antigravity/synthesize-wisdom",
+      "file": "promptbridge-server.js",
+      "line": 3320
+    },
+    {
+      "method": "POST",
+      "path": "/api/foundry/initiate-self-mutation",
+      "file": "promptbridge-server.js",
+      "line": 3359
+    },
+    {
+      "method": "POST",
+      "path": "/api/foundry/harvest",
+      "file": "promptbridge-server.js",
+      "line": 3379
+    },
+    {
+      "method": "POST",
+      "path": "/api/foundry/initiate",
+      "file": "promptbridge-server.js",
+      "line": 3389
+    },
+    {
+      "method": "POST",
+      "path": "/api/foundry/orchestrate",
+      "file": "promptbridge-server.js",
+      "line": 3400
+    },
+    {
+      "method": "POST",
+      "path": "/api/intelligence/execute",
+      "file": "promptbridge-server.js",
+      "line": 3412
+    },
+    {
+      "method": "POST",
+      "path": "/api/evo-eyes/team-run",
+      "file": "promptbridge-server.js",
+      "line": 3432
+    },
+    {
+      "method": "GET",
+      "path": "/api/evo-eyes/team-last",
+      "file": "promptbridge-server.js",
+      "line": 3585
+    },
+    {
+      "method": "POST",
+      "path": "/api/terminal/execute",
+      "file": "promptbridge-server.js",
+      "line": 3603
+    },
+    {
+      "method": "POST",
+      "path": "/api/deploy/vercel",
+      "file": "promptbridge-server.js",
+      "line": 3614
+    },
+    {
+      "method": "GET",
+      "path": "/api/metrics",
+      "file": "promptbridge-server.js",
+      "line": 3631
+    },
+    {
+      "method": "GET",
+      "path": "/api/studio/diagnostics",
+      "file": "promptbridge-server.js",
+      "line": 3673
+    },
+    {
+      "method": "GET",
+      "path": "/api/studio/scan",
+      "file": "promptbridge-server.js",
+      "line": 3684
+    },
+    {
+      "method": "GET",
+      "path": "/api/nightforge/status",
+      "file": "promptbridge-server.js",
+      "line": 3700
+    },
+    {
+      "method": "GET",
+      "path": "/api/nightforge/metrics",
+      "file": "promptbridge-server.js",
+      "line": 3710
+    },
+    {
+      "method": "GET",
+      "path": "/api/nightforge/settings",
+      "file": "promptbridge-server.js",
+      "line": 3719
+    },
+    {
+      "method": "POST",
+      "path": "/api/nightforge/settings",
+      "file": "promptbridge-server.js",
+      "line": 3733
+    },
+    {
+      "method": "POST",
+      "path": "/api/nightforge/cycle",
+      "file": "promptbridge-server.js",
+      "line": 3768
+    },
+    {
+      "method": "POST",
+      "path": "/api/nightforge/daemon/start",
+      "file": "promptbridge-server.js",
+      "line": 3797
+    },
+    {
+      "method": "POST",
+      "path": "/api/nightforge/daemon/stop",
+      "file": "promptbridge-server.js",
+      "line": 3855
+    },
+    {
+      "method": "POST",
+      "path": "/api/maintenance/run",
+      "file": "promptbridge-server.js",
+      "line": 3873
+    },
+    {
+      "method": "POST",
+      "path": "/api/ide/bond",
+      "file": "promptbridge-server.js",
+      "line": 3884
+    },
+    {
+      "method": "POST",
+      "path": "/api/ide/sync",
+      "file": "promptbridge-server.js",
+      "line": 3898
+    },
+    {
+      "method": "POST",
+      "path": "/api/training-capture",
+      "file": "promptbridge-server.js",
+      "line": 3917
+    },
+    {
+      "method": "POST",
+      "path": "/api/evo-runtime/activate",
+      "file": "promptbridge-server.js",
+      "line": 3928
+    },
+    {
+      "method": "POST",
+      "path": "/api/self-implementation/cycle",
+      "file": "promptbridge-server.js",
+      "line": 3937
+    },
+    {
+      "method": "POST",
+      "path": "/api/forge/save",
+      "file": "promptbridge-server.js",
+      "line": 3964
+    },
+    {
+      "method": "POST",
+      "path": "/api/config/keys",
+      "file": "promptbridge-server.js",
+      "line": 3984
+    },
+    {
+      "method": "GET",
+      "path": "/api/truth/probe",
+      "file": "promptbridge-server.js",
+      "line": 3995
+    },
+    {
+      "method": "POST",
+      "path": "/api/keys/create",
+      "file": "promptbridge-server.js",
+      "line": 4057
+    },
+    {
+      "method": "POST",
+      "path": "/v1/prompts/compile",
+      "file": "promptbridge-server.js",
+      "line": 4103
+    },
+    {
+      "method": "POST",
+      "path": "/v1/apps/blueprint",
+      "file": "promptbridge-server.js",
+      "line": 4149
+    },
+    {
+      "method": "POST",
+      "path": "/v1/themes/evolve",
+      "file": "promptbridge-server.js",
+      "line": 4161
+    },
+    {
+      "method": "POST",
+      "path": "/v1/code/audit",
+      "file": "promptbridge-server.js",
+      "line": 4173
+    },
+    {
+      "method": "POST",
+      "path": "/api/foundry/generate-api",
+      "file": "promptbridge-server.js",
+      "line": 4212
+    },
+    {
+      "method": "POST",
+      "path": "/api/evo-lm/chat",
+      "file": "promptbridge-server.js",
+      "line": 4293
+    },
+    {
+      "method": "POST",
+      "path": "/api/training/ingest",
+      "file": "promptbridge-server.js",
+      "line": 4352
+    },
+    {
+      "method": "POST",
+      "path": "/api/sovereign-ledger/log",
+      "file": "promptbridge-server.js",
+      "line": 4380
+    },
+    {
+      "method": "GET",
+      "path": "/api/training/stats",
+      "file": "promptbridge-server.js",
+      "line": 4396
+    },
+    {
+      "method": "GET",
+      "path": "/api/training/export",
+      "file": "promptbridge-server.js",
+      "line": 4408
+    },
+    {
+      "method": "POST",
+      "path": "/api/capture",
+      "file": "promptbridge-server.js",
+      "line": 4418
+    },
+    {
+      "method": "POST",
+      "path": "/api/promptlink/sync",
+      "file": "promptbridge-server.js",
+      "line": 4432
+    }
+  ],
+  "callsSample": [
+    {
+      "method": "GET",
+      "path": "/api/browser-bridge/list",
+      "file": "src/agent-bridge-views.jsx",
+      "line": 11
+    },
+    {
+      "method": "POST",
+      "path": "/api/intelligence/execute",
+      "file": "src/ai-views.jsx",
+      "line": 54
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/nuclear-truth",
+      "file": "src/autonomous-command-center.jsx",
+      "line": 111
+    },
+    {
+      "method": "GET",
+      "path": "/api/self-implementation/status",
+      "file": "src/autonomous-command-center.jsx",
+      "line": 112
+    },
+    {
+      "method": "GET",
+      "path": "/api/evolution/autonomous/status",
+      "file": "src/autonomous-command-center.jsx",
+      "line": 113
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/nuclear-truth",
+      "file": "src/autonomous-command-center.jsx",
+      "line": 129
+    },
+    {
+      "method": "GET",
+      "path": "/api/evolution/autonomous/status",
+      "file": "src/autonomous-command-center.jsx",
+      "line": 130
+    },
+    {
+      "method": "POST",
+      "path": "/api/self-implementation/cycle",
+      "file": "src/autonomous-command-center.jsx",
+      "line": 164
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/nuclear-truth",
+      "file": "src/autonomous-command-center.jsx",
+      "line": 173
+    },
+    {
+      "method": "GET",
+      "path": "/src/prompthouse_50_master_build_prompts.json",
+      "file": "src/evo-duel-engine-view.jsx",
+      "line": 136
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "file": "src/forge-term-view.jsx",
+      "line": 73
+    },
+    {
+      "method": "POST",
+      "path": "/bridge/invoke",
+      "file": "src/forge-term-view.jsx",
+      "line": 100
+    },
+    {
+      "method": "POST",
+      "path": "/api/files/write",
+      "file": "src/forge-views.jsx",
+      "line": 59
+    },
+    {
+      "method": "POST",
+      "path": "${endpoint}",
+      "file": "src/forge-views.jsx",
+      "line": 142
+    },
+    {
+      "method": "POST",
+      "path": "${endpoint}",
+      "file": "src/forge-views.jsx",
+      "line": 146
+    },
+    {
+      "method": "GET",
+      "path": "/api/browser-bridge/forgecapsule",
+      "file": "src/promptlink-views.jsx",
+      "line": 59
+    },
+    {
+      "method": "GET",
+      "path": "/api/browser-bridge/proof",
+      "file": "src/promptlink-views.jsx",
+      "line": 60
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "file": "src/tool-autogen-view.jsx",
+      "line": 40
+    },
+    {
+      "method": "GET",
+      "path": "/src/prompthouse_50_master_build_prompts.json",
+      "file": "src/v3-views.jsx",
+      "line": 85
+    },
+    {
+      "method": "POST",
+      "path": "/api/evolution/activate",
+      "file": "src/features/AutonomousSelfView.jsx",
+      "line": 38
+    },
+    {
+      "method": "GET",
+      "path": "/api/evolution/status",
+      "file": "src/features/AutonomousSelfView.jsx",
+      "line": 49
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/nuclear-truth",
+      "file": "src/features/AutonomousSelfView.jsx",
+      "line": 67
+    },
+    {
+      "method": "GET",
+      "path": "/api/self-implementation/status",
+      "file": "src/features/AutonomousSelfView.jsx",
+      "line": 68
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/nuclear-truth",
+      "file": "src/features/RareCapabilities.jsx",
+      "line": 38
+    },
+    {
+      "method": "GET",
+      "path": "/api/proof/count",
+      "file": "src/features/RareCapabilities.jsx",
+      "line": 39
+    },
+    {
+      "method": "GET",
+      "path": "/api/studio/diagnostics?limit=25",
+      "file": "src/features/RareCapabilities.jsx",
+      "line": 40
+    },
+    {
+      "method": "POST",
+      "path": "/api/study/initiate",
+      "file": "src/features/SovereignIntelligenceDashboard.jsx",
+      "line": 267
+    },
+    {
+      "method": "POST",
+      "path": "/save",
+      "file": "src/core/memory/private_device_memory.js",
+      "line": 47
+    },
+    {
+      "method": "GET",
+      "path": "/load/${key}",
+      "file": "src/core/memory/private_device_memory.js",
+      "line": 59
+    },
+    {
+      "method": "POST",
+      "path": "/api/files/write",
+      "file": "src/core/memory/SovereignSharder.js",
+      "line": 21
+    },
+    {
+      "method": "POST",
+      "path": "/api/memory/recall",
+      "file": "src/core/memory/SovereignSharder.js",
+      "line": 49
+    },
+    {
+      "method": "GET",
+      "path": "/api/connectors",
+      "file": "src/core/extension/api.js",
+      "line": 2
+    },
+    {
+      "method": "POST",
+      "path": "/api/connectors",
+      "file": "src/core/extension/api.js",
+      "line": 8
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/connectors/${id}",
+      "file": "src/core/extension/api.js",
+      "line": 18
+    },
+    {
+      "method": "POST",
+      "path": "/generate-embedding",
+      "file": "src/core/api/embeddings_route.js",
+      "line": 24
+    },
+    {
+      "method": "POST",
+      "path": "/train",
+      "file": "src/core/api/training_job_queue.js",
+      "line": 42
+    },
+    {
+      "method": "GET",
+      "path": "/api/reports/kpi",
+      "file": "src/components/BotAutomationDeck.jsx",
+      "line": 11
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "file": "src/components/Dashboard.jsx",
+      "line": 19
+    },
+    {
+      "method": "GET",
+      "path": "/api/metrics",
+      "file": "src/components/Dashboard.jsx",
+      "line": 20
+    },
+    {
+      "method": "GET",
+      "path": "/api/queue/master",
+      "file": "src/components/Dashboard.jsx",
+      "line": 21
+    },
+    {
+      "method": "GET",
+      "path": "/api/nightforge/status",
+      "file": "src/components/Dashboard.jsx",
+      "line": 22
+    },
+    {
+      "method": "GET",
+      "path": "/api/studio/diagnostics?limit=70",
+      "file": "src/components/GodsEyeMap.jsx",
+      "line": 39
+    },
+    {
+      "method": "GET",
+      "path": "/api/metrics",
+      "file": "src/components/PulseResourceBar.jsx",
+      "line": 16
+    },
+    {
+      "method": "GET",
+      "path": "/api/studio/diagnostics?limit=40",
+      "file": "src/components/SwarmCouncil.jsx",
+      "line": 15
+    },
+    {
+      "method": "GET",
+      "path": "/api/commits",
+      "file": "src/components/TimeSlipLedger.jsx",
+      "line": 10
+    },
+    {
+      "method": "POST",
+      "path": "/api/intelligence/execute",
+      "file": "src/components/Toolbar.jsx",
+      "line": 35
+    },
+    {
+      "method": "POST",
+      "path": "/api/intelligence/execute",
+      "file": "src/components/Toolbar.jsx",
+      "line": 60
+    }
+  ]
+}

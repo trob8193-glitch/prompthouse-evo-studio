@@ -4,7 +4,9 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
 
-const LOCAL_API_URL = 'http://localhost:3001';
+import { Log } from '../autonomy/SovereignLogger.js';
+
+const LOCAL_API_URL = 'http://127.0.0.1:3001';
 const MODEL_PROVIDERS = {
     OPENAI: 'OpenAI',
     ANTHROPIC: 'Anthropic',
@@ -89,14 +91,14 @@ function logRequest(provider, prompt, response) {
 
     fs.readFile(logPath, 'utf8', (err, data) => {
         if (err) {
-            console.error('Could not read log file', err);
+            Log.error('Could not read log file', err);
             return;
         }
         const logs = JSON.parse(data || '[]');
         logs.push(logEntry);
         fs.writeFile(logPath, JSON.stringify(logs, null, 2), (err) => {
             if (err) {
-                console.error('Could not write log file', err);
+                Log.error('Could not write log file', err);
             }
         });
     });

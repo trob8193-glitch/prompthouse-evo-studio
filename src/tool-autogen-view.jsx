@@ -15,16 +15,13 @@ const TOOL_TYPES = [
   { id: 'app', label: '📱 App Scaffold', desc: 'React/Flutter app scaffold' },
 ];
 
+import { universalSend } from './lib/universal-transport.js';
+
 async function callBridge(prompt) {
   try {
-    const res = await fetch('http://localhost:3001/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
-    });
-    const data = await res.json();
-    return data.message || '[Bridge returned empty]';
-  } catch {
+    const res = await universalSend([{ role: 'user', content: prompt }]);
+    return res.message;
+  } catch (err) {
     return null;
   }
 }
@@ -39,8 +36,8 @@ export function ToolAutogenView() {
   const [activeTab, setActiveTab] = useState('generate');
 
   useEffect(() => {
-    setRecipes(getAllRecipes());
-    fetch('http://localhost:3001/status', { signal: AbortSignal.timeout(2000) })
+    getAllRecipes().then(setRecipes);
+    fetch('http://127.0.0.1:3001/status', { signal: AbortSignal.timeout(2000) })
       .then(r => setBridgeLive(r.ok)).catch(() => setBridgeLive(false));
   }, []);
 
@@ -56,7 +53,8 @@ export function ToolAutogenView() {
         callBridge: bridgeLive ? callBridge : null,
       });
       setResult(res);
-      setRecipes(getAllRecipes());
+      const updated = await getAllRecipes();
+      setRecipes(updated);
       addProofReceipt('tool_autogen', 'tool_autogen:generate', 'built', { type: selectedType, intent: intent.slice(0,80) });
     } catch (e) {
       setResult({ error: e.message });
@@ -75,7 +73,7 @@ export function ToolAutogenView() {
           background: bridgeLive ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)',
           border: `1px solid ${bridgeLive ? '#4ade80' : '#f87171'}`,
           color: bridgeLive ? '#4ade80' : '#f87171' }}>
-          {bridgeLive ? '🟢 AI Bridge Live' : '🔴 Dry-Run Mode'}
+          {bridgeLive ? '🟢 AI Bridge Live' : '🔴 Live-Run Blocked (Bridge Offline)'}
         </div>
       </div>
 
@@ -111,14 +109,14 @@ export function ToolAutogenView() {
               <div className="field">
                 <label className="field-label">What should this tool do? (be specific)</label>
                 <textarea className="field-textarea" rows={5}
-                  placeholder="e.g. Create a PromptLink adapter that routes any Flutter code-generation request to a local Ollama model with fallback to GPT-4o-mini..."
+                  ghostInput="e.g. Create a PromptLink adapter that routes any Flutter code-generation request to a local Ollama model with fallback to GPT-4o-mini..."
                   value={intent} onChange={e => setIntent(e.target.value)} />
               </div>
               <div style={{ padding: '10px 14px', background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.2)', borderRadius: 8, fontSize: 11, color: '#fb923c', marginBottom: 12 }}>
                 ⚠️ All generated tools are marked <strong>draft/template</strong>. Owner approval required before publishing or deploying.
               </div>
               <button className="btn btn-primary" onClick={generate} disabled={generating || !intent.trim()}>
-                {generating ? '⏳ Generating...' : `🪄 Generate ${TOOL_TYPES.find(t => t.id === selectedType)?.label}`}
+                {generating ? '⏳ Generating...' : `🪄 Generate ${TOOL_TYPES.find(t => t.id === selectedType)?.label || 'Tool'}`}
               </button>
 
               {result && (

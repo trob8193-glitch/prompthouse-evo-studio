@@ -9,7 +9,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  PROMPTLINK_PROVIDERS,
   getRegistry,
   updateProvider,
   validatePromptLinkCall,
@@ -57,13 +56,13 @@ export function PromptLinkView() {
       addProofReceipt('browser_bridge', 'promptlink_handshake', 'verified', { latency: result.latency });
       // Load bridge data
       try {
-        const caps = await fetch('http://localhost:3001/api/browser-bridge/forgecapsule').then(r => r.json());
-        const receipts = await fetch('http://localhost:3001/api/browser-bridge/proof').then(r => r.json());
+        const caps = await fetch('http://127.0.0.1:3001/api/browser-bridge/forgecapsule').then(r => r.json());
+        const receipts = await fetch('http://127.0.0.1:3001/api/browser-bridge/proof').then(r => r.json());
         setBridgeCapsules(Array.isArray(caps) ? caps.slice(0, 20) : []);
         setProofReceipts(Array.isArray(receipts) ? receipts.slice(0, 20) : []);
       } catch { /* Bridge may not have data yet */ }
     } else {
-      log(`🔴 Bridge offline: ${result.error}. Dry-run mode active.`, 'warn');
+      log(`🔴 Bridge offline: ${result.error}. Live-run mode active.`, 'warn');
     }
     setHandshaking(false);
   }, [log]);

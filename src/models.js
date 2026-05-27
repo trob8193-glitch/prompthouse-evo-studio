@@ -1,177 +1,94 @@
 /**
- * PromptHouse Evo Studio — Core Data Models
- * Source: PromptHouse_Evo_Max_Execution_Past_MVP_Build_Packet_v1_0.docx
- * Owner: Evo | Verifier gates | Boundary enforces
- *
- * Truth States: known | inferred | blocked | broken | built | verified | recommended
+ * PH EVO STUDIO — MODELS (ENTERPRISE PRODUCTION)
+ * ═══════════════════════════════════════════════════════════════
+ * Factory functions for all core data models. Every model is a
+ * plain object with deterministic shape — no classes, no ORM.
  */
 
-// ─── Truth State ───────────────────────────────────────────────────────────────
-export const TRUTH_STATES = ['known','inferred','blocked','broken','built','verified','recommended'];
+function uid() {
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+}
 
-// ─── Studio Mission ────────────────────────────────────────────────────────────
-export function createMission(overrides = {}) {
+export function createMission({ title }) {
   return {
-    id: `mission_${Date.now()}`,
-    ownerUserId: 'local_owner',
-    title: '',
-    intent: '',
-    activeBot: 'evo',
+    id: `mission_${uid()}`,
+    title,
     truthStates: ['known'],
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    ...overrides,
   };
 }
 
-// ─── Fission Candidate ─────────────────────────────────────────────────────────
-export function createFissionCandidate(missionId, lane, overrides = {}) {
+// ─── Gate Definitions (used by computeAllGateScores) ──────────
+export const GATE_DEFINITIONS = [
+  { id: 'forge_friction',    label: 'Forge Friction',      owner: 'forge_rhino' },
+  { id: 'swarm_fission',     label: 'Swarm Fission',       owner: 'swarm_falcon' },
+  { id: 'vector_pack',       label: 'Vector Pack',         owner: 'vector_wolf' },
+  { id: 'temporal_stack',    label: 'Temporal Stackchain', owner: 'temporal_raven' },
+  { id: 'deploy_rail',       label: 'Deploy Rail',         owner: 'blueprint_orca' },
+  { id: 'commerce_rail',     label: 'Commerce Rail',       owner: 'compiler_bearcat' },
+  { id: 'nightforge',        label: 'NightForge',          owner: 'nightforge_daemon' },
+  { id: 'browser_bridge',    label: 'Browser Bridge',      owner: 'evo' },
+  { id: 'self_build',        label: 'Self Build',          owner: 'evo' },
+  { id: 'security_audit',    label: 'Security Audit',      owner: 'cipher_lynx' },
+  { id: 'promptlink',        label: 'PromptLink',          owner: 'conductor' },
+  { id: 'worktwin',          label: 'WorkTwin',            owner: 'ledger' },
+  { id: 'proof_ledger',      label: 'Proof Ledger',        owner: 'verifier' },
+];
+
+// ─── Fission Candidate ────────────────────────────────────────
+export function createFissionCandidate(missionId, lane) {
   return {
-    id: `fission_${Date.now()}_${lane}`,
+    id: `candidate_${uid()}_${lane}`,
     missionId,
-    lane, // conservative | fast | scalable | premium_ui | low_cost
-    filesChanged: [],
+    lane,
+    status: 'pending',
     testScore: 0,
     securityScore: 0,
     uxScore: 0,
     costScore: 0,
     maintainabilityScore: 0,
-    status: 'inferred',
-    ...overrides,
+    response: '',
+    filesChanged: [],
+    errorMessage: null,
+    createdAt: new Date().toISOString(),
   };
 }
 
-// ─── Friction Report ───────────────────────────────────────────────────────────
-export function createFrictionReport(missionId, overrides = {}) {
+// ─── Proof Receipt ────────────────────────────────────────────
+export function createProofReceipt(missionId, action, status, meta = {}) {
   return {
-    id: `friction_${Date.now()}`,
-    missionId,
-    score: 0,
-    blocked: false,
-    reasons: [],
-    repairPrompt: '',
-    ...overrides,
-  };
-}
-
-// ─── Temporal Stack ────────────────────────────────────────────────────────────
-export function createTemporalStack(missionId, overrides = {}) {
-  return {
-    missionId,
-    nowPlan: '',
-    sixMonthRefactor: '',
-    twelveMonthDeprecationPath: '',
-    riskNotes: [],
-    ...overrides,
-  };
-}
-
-// ─── VectorPack ────────────────────────────────────────────────────────────────
-export function createVectorPack(missionId, overrides = {}) {
-  return {
-    missionId,
-    fileMap: {},
-    decisionLog: [],
-    contextSummary: '',
-    retrievalHints: [],
-    redactions: [],
-    ...overrides,
-  };
-}
-
-// ─── Proof Receipt ─────────────────────────────────────────────────────────────
-export function createProofReceipt(missionId, action, status, overrides = {}) {
-  return {
-    id: `receipt_${Date.now()}`,
+    id: `receipt_${uid()}`,
     missionId,
     action,
-    status, // TruthState
-    evidenceType: 'log',
-    evidenceUri: null,
+    status,
+    meta,
     timestamp: new Date().toISOString(),
-    rollback: null,
-    ...overrides,
   };
 }
 
-// ─── Commerce Spec ─────────────────────────────────────────────────────────────
-export function createCommerceSpec(missionId, overrides = {}) {
+// ─── Temporal Stack ───────────────────────────────────────────
+export function createTemporalStack(missionId, params = {}) {
   return {
-    id: `commerce_${Date.now()}`,
+    id: `temporal_${uid()}`,
     missionId,
-    mode: 'mock', // mock | test | live
-    productName: '',
-    price: 0,
-    currency: 'usd',
-    stripePaymentLinkUrl: null,
-    approvalRequired: true,
-    status: 'inferred',
-    receipt: null,
-    ...overrides,
+    title: params.title || '',
+    nowPlan: params.nowPlan || '',
+    sixMonthRefactor: params.sixMonthRefactor || '',
+    twelveMonthDeprecationPath: params.twelveMonthDeprecationPath || '',
+    techStack: params.techStack || [],
+    createdAt: new Date().toISOString(),
   };
 }
 
-// ─── Deploy Receipt ────────────────────────────────────────────────────────────
-export function createDeployReceipt(missionId, overrides = {}) {
+// ─── Friction Report ──────────────────────────────────────────
+export function createFrictionReport(missionId, score, reasons, blocked) {
   return {
-    id: `deploy_${Date.now()}`,
+    id: `friction_${uid()}`,
     missionId,
-    stage: 'dry_run', // test|build|secret_check|preview|owner_approval|production|rollback
-    provider: null, // vercel|netlify|firebase|aws
-    deployUrl: null,
-    approvalRequired: true,
-    status: 'inferred',
-    log: [],
-    ...overrides,
+    score,
+    reasons,
+    blocked,
+    repairPrompt: blocked ? `Fix friction issues: ${reasons.join('; ')}` : null,
+    timestamp: new Date().toISOString(),
   };
-}
-
-// ─── NightForge Patch Proposal ─────────────────────────────────────────────────
-export function createPatchProposal(overrides = {}) {
-  return {
-    id: `patch_${Date.now()}`,
-    triggeredAt: new Date().toISOString(),
-    scannedItems: [],
-    proposedActions: [],
-    testResults: [],
-    status: 'inferred',
-    prUrl: null,
-    cannot: ['silent_production_deploy','delete_data','expose_secrets'],
-    circuitBreaks: 0, // NEW: Track failed attempts to prevent runaway loops
-    ...overrides,
-  };
-}
-
-// ─── Neural Dream State (Offline Cache) ────────────────────────────────────────
-export function createDreamCache(overrides = {}) {
-  return {
-    id: `dream_${Date.now()}`,
-    events: [], // [{ type: 'friction', component: 'DeployRail', message: 'Blocked by config', timestamp: '...' }]
-    synced: false,
-    ...overrides,
-  };
-}
-
-// ─── Gate Score ────────────────────────────────────────────────────────────────
-export const GATE_DEFINITIONS = [
-  { id: 'fission_arena',    label: 'Swarm Fission Arena',     owner: 'swarm_falcon' },
-  { id: 'forge_friction',   label: 'ForgeFriction Gate',      owner: 'forge_rhino' },
-  { id: 'temporal_stack',   label: 'Temporal Stackchain',     owner: 'temporal_raven' },
-  { id: 'vector_pack',      label: 'VectorPack Compression',  owner: 'vector_wolf' },
-  { id: 'deploy_rail',      label: 'Sovereign DeployRail',    owner: 'blueprint_orca' },
-  { id: 'commerce_rail',    label: 'Commerce Rail',           owner: 'compiler_bearcat' },
-  { id: 'nightforge',       label: 'NightForge Daemon',       owner: 'temporal_raven' },
-  { id: 'proof_deck',       label: 'Proof Deck',              owner: 'verifier' },
-  { id: 'browser_bridge',   label: 'Browser Agent Bridge',    owner: 'cipher_lynx' },
-  { id: 'prompt_base',      label: 'PromptBase & Missions',   owner: 'memory' },
-  { id: 'live_forge',       label: 'LiveForge Preview',       owner: 'forge_rhino' },
-  { id: 'forge_render',     label: 'ForgeRender Pipeline',    owner: 'builder' },
-  { id: 'self_build',       label: 'Self-Build Cycle',        owner: 'sovereignty' },
-];
-
-export function scoreGate(gateId, proofReceipts = []) {
-  const relevant = proofReceipts.filter(r => r.action && r.action.includes(gateId));
-  if (relevant.length === 0) return 0;
-  const verified = relevant.filter(r => r.status === 'verified').length;
-  return Math.round((verified / relevant.length) * 100);
 }

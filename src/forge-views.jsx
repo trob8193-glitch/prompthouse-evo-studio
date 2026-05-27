@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useEvoStore } from './store.js';
 
 // ── SOVEREIGN FORGE: THE INVENTION LAYER ───────────────────
@@ -33,7 +33,16 @@ function AgentArchitect() {
   const [name, setName] = useState('');
   const [role, setRole] = useState('Architect');
   const [dna, setDna] = useState('');
+  const [logs, setLogs] = useState([
+    '[SYS] Neural lattice initialized.',
+    '[SYS] Awaiting DNA input...'
+  ]);
   const { addToVault } = useEvoStore();
+
+  useEffect(() => {
+    if (!dna) return;
+    setLogs(prev => [...prev, `[DNA] Updated (${dna.length} chars).`].slice(-10));
+  }, [dna]);
 
   const spawnAgent = () => {
     if (!name || !dna) return;
@@ -46,9 +55,25 @@ function AgentArchitect() {
       saved: new Date().toLocaleDateString(),
       status: 'verified'
     };
-    addToVault(newAgent);
-    alert(`🦁 Intelligence Spawned: ${name} is now in your Vault.`);
-    setName(''); setDna('');
+    
+    fetch('http://127.0.0.1:3001/api/files/write', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        path: `.sovereign-vault/agents/${newAgent.id}.json`,
+        content: JSON.stringify(newAgent, null, 2)
+      })
+    }).then(res => {
+      if (res.ok) {
+        alert(`🦁 Intelligence Spawned: ${name} is now in your Vault.`);
+        setName(''); setDna('');
+        setLogs(['[SYS] Neural lattice initialized.', '[SYS] Awaiting DNA input...']);
+      } else {
+        alert(`❌ Failed to save intelligence.`);
+      }
+    }).catch(err => {
+      alert(`❌ Error connecting to bridge.`);
+    });
   };
 
   return (
@@ -58,7 +83,7 @@ function AgentArchitect() {
         <div className="card-body flex-col">
           <div className="field">
             <label className="field-label">Agent Name</label>
-            <input className="field-input" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Sovereign Auditor" />
+            <input className="field-input" value={name} onChange={e => setName(e.target.value)} ghostInput="e.g. Sovereign Auditor" />
           </div>
           <div className="field">
             <label className="field-label">Primary Role</label>
@@ -72,7 +97,7 @@ function AgentArchitect() {
           </div>
           <div className="field">
             <label className="field-label">Intelligence DNA (System Instructions)</label>
-            <textarea className="field-textarea" value={dna} onChange={e => setDna(e.target.value)} placeholder="Define the constraints, truth-logic, and goals of this intelligence..." style={{ minHeight: 200 }} />
+            <textarea className="field-textarea" value={dna} onChange={e => setDna(e.target.value)} ghostInput="Define the constraints, truth-logic, and goals of this intelligence..." style={{ minHeight: 200 }} />
           </div>
           <button className="btn btn-primary" onClick={spawnAgent}>🧬 Spawn Intelligence</button>
         </div>
@@ -81,11 +106,14 @@ function AgentArchitect() {
         <div className="card" style={{ background: 'var(--bg-void)', border: '1px solid var(--accent-gold)' }}>
           <div className="card-header"><div className="card-title">Neural Lattice Preview</div></div>
           <div className="card-body">
-             <div className="empty-state">
-                <div className="pulse" style={{ fontSize: 40, marginBottom: 20 }}>🧠</div>
-                <div style={{ color: 'var(--accent-gold)', fontWeight: 800 }}>{name || 'New Intelligence'}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 10 }}>Ready for neural anchoring.</div>
+             <div className="font-mono text-xs text-emerald-400 bg-black p-4 rounded-lg h-48 overflow-y-auto space-y-1">
+                {logs.map((log, i) => (
+                  <div key={i}>\u003E {log}</div>
+                ))}
+                <div className="pulse inline-block w-2 h-4 bg-emerald-400" />
              </div>
+             <div style={{ color: 'var(--accent-gold)', fontWeight: 800, marginTop: 12 }}>{name || 'New Intelligence'}</div>
+             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 4 }}>Role: {role}</div>
           </div>
         </div>
       </div>
@@ -104,16 +132,35 @@ function BridgeInventionLab() {
         <div className="card-body flex-col">
           <div className="field">
              <label className="field-label">Integration Name</label>
-             <input className="field-input" value={bridgeName} onChange={e => setBridgeName(e.target.value)} placeholder="e.g. Midjourney Sync" />
+             <input className="field-input" value={bridgeName} onChange={e => setBridgeName(e.target.value)} ghostInput="e.g. Midjourney Sync" />
           </div>
           <div className="field">
              <label className="field-label">Bridge Endpoint</label>
              <input className="field-input" value={endpoint} onChange={e => setEndpoint(e.target.value)} />
           </div>
           <div className="prompt-block">
-             {`// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\nexport async function ${bridgeName.replace(/\s+/g, '')}Bridge(payload) {\n  const response = await fetch('http://localhost:3001${endpoint}', {\n    method: 'POST',\n    body: JSON.stringify(payload)\n  });\n  return response.json();\n}`}
+             {`// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\nexport async function ${bridgeName.replace(/\s+/g, '')}Bridge(payload) {\n  const response = await fetch('http://127.0.0.1:3001${endpoint}', {\n    method: 'POST',\n    body: JSON.stringify(payload)\n  });\n  return response.json();\n}`}
           </div>
-          <button className="btn btn-secondary">🚀 Forge Bridge</button>
+          <button className="btn btn-secondary" onClick={() => {
+            if (!bridgeName) return;
+            const code = `// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\nexport async function ${bridgeName.replace(/\s+/g, '')}Bridge(payload) {\n  const response = await fetch('http://127.0.0.1:3001${endpoint}', {\n    method: 'POST',\n    body: JSON.stringify(payload)\n  });\n  return response.json();\n}`;
+            fetch('http://127.0.0.1:3001/api/files/write', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                path: `src/generated/bridges/${bridgeName.replace(/\s+/g, '')}Bridge.js`,
+                content: code
+              })
+            }).then(res => {
+              if (res.ok) {
+                alert(`🚀 Bridge Forged: ${bridgeName} saved to src/generated/bridges/`);
+              } else {
+                alert(`❌ Failed to forge bridge.`);
+              }
+            }).catch(err => {
+              alert(`❌ Error connecting to bridge.`);
+            });
+          }}>🚀 Forge Bridge</button>
         </div>
       </div>
     </div>

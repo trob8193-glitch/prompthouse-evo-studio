@@ -2,9 +2,12 @@
 
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
+
+import { Log } from '../autonomy/SovereignLogger.js';
 
 const LOCAL_STORAGE_PATH = path.resolve('proof_console_data.json');
-const LOCAL_BRIDGE_URL = 'http://localhost:3001';
+const LOCAL_BRIDGE_URL = 'http://127.0.0.1:3001';
 
 class ProofConsole {
     constructor() {
@@ -31,7 +34,7 @@ class ProofConsole {
             this.proofs = data;
             this.saveProofs();
         } catch (error) {
-            console.error('Error fetching proofs:', error);
+            Log.error('Error fetching proofs:', error);
         }
     }
 
@@ -43,12 +46,21 @@ class ProofConsole {
     verifyProof(proofId) {
         const proof = this.proofs.find(p => p.id === proofId);
         if (!proof) {
-            console.error('Proof not found');
+            Log.error('Proof not found');
             return false;
         }
 
-        // Simulate verification logic
-        const isVerified = proof.receipt.includes('valid');
+        // Real cryptographic verification logic
+        let isVerified = false;
+        try {
+            if (proof.data && proof.hash) {
+                const computedHash = crypto.createHash('sha256').update(typeof proof.data === 'string' ? proof.data : JSON.stringify(proof.data)).digest('hex');
+                isVerified = (computedHash === proof.hash);
+            }
+        } catch (err) {
+            Log.error('Cryptographic verification failed:', err.message);
+        }
+
         proof.verified = isVerified;
         this.saveProofs();
         return isVerified;

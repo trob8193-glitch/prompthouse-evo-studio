@@ -1,0 +1,31 @@
+{
+  "last_update": "2026-05-05T16:21:23Z",
+  "current_phase": 16,
+  "studio_grade": "OMNIPOTENT",
+  "taxonomy": {
+    "evo_dev_team": "21 Sentients (Surface-level Production)",
+    "webwevos": "Background Weavers (Knowledge & Infrastructure)",
+    "landscape": ["Evo Tree", "Seeds", "Leaves", "Evo Garden", "Evo Woods"]
+  },
+  "restored_features": [
+    "SovereignEngine",
+    "SovereignSharder",
+    "SovereignChat",
+    "RareCapabilities",
+    "SingularityCore",
+    "OmegaReality",
+    "CommandDeck",
+    "DeadHunterPro",
+    "EntropyLockV2",
+    "SovereignLedger",
+    "FranchiseEngine",
+    "TemporalForesight",
+    "TruthAuditor",
+    "WebWevoWeaver",
+    "ForestSwinger",
+    "HolographicStorage",
+    "ShadowProtocol",
+    "BlendedIntelligence"
+  ],
+  "omega_prohibition": "STRICT_ACTIVE"
+}

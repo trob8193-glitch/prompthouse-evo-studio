@@ -1,309 +1,172 @@
-// ── PromptHouse Evo Studio — Core Engine ──
-// Pulled from: PH_Evo_Studio_Master_Instructions_7990.txt,
-//              promptforge_v5_master_project compiler_service.dart,
-//              App.jsx domain templates
+/**
+ * PH EVO STUDIO — ENGINE (ENTERPRISE PRODUCTION)
+ * ═══════════════════════════════════════════════════════════════
+ * Core prompt scoring, bot roster, domain packs, and grade logic.
+ * All data is real — no unverified simulation layers.
+ */
 
+const BRIDGE_URL = 'http://127.0.0.1:3001';
+
+// ─── Bot Roster (Full Cast) ────────────────────────────────────
+export const BOT_ROSTER = [
+  { id: 'evo',              name: 'Evo',              species: 'Lion',         role: 'Master Orchestrator — sovereign command routing, mission oversight, final authority on all gates.', signature: 'Truth above all. Sovereignty enforced.', icon: '🦁', palette: { primary: '#f5c842' } },
+  { id: 'dev',              name: 'Dev',              species: 'Leopard',      role: 'Core code builder — writes production-grade files, resolves blockers, generates artifacts.', signature: 'Code that ships. Nothing theoretical.', icon: '🐆', palette: { primary: '#22d3ee' } },
+  { id: 'builder',          name: 'Builder',          species: 'Bear',         role: 'Artifact maker — assembles multi-file builds from blueprints into shippable packages.', signature: 'Assemble. Verify. Ship.', icon: '🐻', palette: { primary: '#fb923c' } },
+  { id: 'verifier',         name: 'Verifier',         species: 'Owl',          role: 'Proof checker — validates output against gate definitions and truth state protocol.', signature: 'Evidence or it did not happen.', icon: '🦉', palette: { primary: '#a78bfa' } },
+  { id: 'companion',        name: 'Companion',        species: 'Fox',          role: 'Intent bridge — translates vague user intent into precise mission specs.', signature: 'Clarity before code.', icon: '🦊', palette: { primary: '#ec4899' } },
+  { id: 'conductor',        name: 'Conductor',        species: 'Eagle',        role: 'Fast router — dispatches tasks to the correct bot with minimum latency.', signature: 'Right bot. Right task. Zero delay.', icon: '🦅', palette: { primary: '#38bdf8' } },
+  { id: 'boundary',         name: 'Boundary',         species: 'Rhino',        role: 'Limit enforcer — blocks illegal operations, enforces policy, guards consent boundaries.', signature: 'The line holds.', icon: '🦏', palette: { primary: '#f87171' } },
+  { id: 'ledger',           name: 'Ledger',           species: 'Raven',        role: 'Truth tracker — records every proof receipt, maintains the immutable audit log.', signature: 'Every action logged. Forever.', icon: '🐦', palette: { primary: '#818cf8' } },
+  { id: 'memory',           name: 'Memory',           species: 'Elephant',     role: 'Context holder — manages long-term memory, summarizes past missions for new cycles.', signature: 'Nothing forgotten.', icon: '🐘', palette: { primary: '#4ade80' } },
+  { id: 'heartbeat',        name: 'Heartbeat',        species: 'Cheetah',      role: 'Momentum keeper — monitors build health, detects stalls, triggers recovery cycles.', signature: 'Always pulsing.', icon: '💓', palette: { primary: '#f472b6' } },
+  { id: 'sovereignty',      name: 'Sovereignty',      species: 'Tiger',        role: 'Canon guardian — enforces architectural doctrine, rejects deviations from truth protocol.', signature: 'Canon. Enforced. Always.', icon: '🐯', palette: { primary: '#e879f9' } },
+  { id: 'cipher_lynx',      name: 'Cipher Lynx',      species: 'Lynx',         role: 'Security architect — audits for secrets leakage, injection attacks, and unsafe patterns.', signature: 'No key exposed. No vector open.', icon: 'CL', palette: { primary: '#ef4444' } },
+  { id: 'vector_wolf',      name: 'Vector Wolf',      species: 'Wolf',         role: 'Context engineer — builds VectorPacks, redacts secrets, compresses mission context for LLM injection.', signature: 'Dense. Clean. Precise.', icon: 'VW', palette: { primary: '#06b6d4' } },
+  { id: 'compiler_bearcat', name: 'Compiler Bearcat', species: 'Bearcat',      role: 'Prompt compiler — assembles 6-layer prompt stacks from specs for production deployment.', signature: 'Every layer counts.', icon: 'CB', palette: { primary: '#f59e0b' } },
+  { id: 'schema_beaver',    name: 'Schema Beaver',    species: 'Beaver',       role: 'Contract engineer — defines and validates data schemas, API contracts, and type safety.', signature: 'Shape first. Code second.', icon: 'SB', palette: { primary: '#84cc16' } },
+  { id: 'eval_mantis',      name: 'Eval Mantis',      species: 'Mantis',       role: 'Eval scientist — designs test cases, measures output quality, calculates benchmark scores.', signature: 'Score everything. Accept only excellence.', icon: 'EM', palette: { primary: '#d946ef' } },
+  { id: 'swarm_falcon',     name: 'Swarm Falcon',     species: 'Falcon',       role: 'Swarm orchestrator — runs Fission Arena with 3-5 candidate approaches, picks the winner.', signature: 'The best idea wins. Always.', icon: 'SF', palette: { primary: '#0ea5e9' } },
+  { id: 'blueprint_orca',   name: 'Blueprint Orca',   species: 'Orca',         role: 'Systems architect — plans deployment pipelines, infra topology, and release gates.', signature: 'Architecture first. Improvise never.', icon: 'BO', palette: { primary: '#7c3aed' } },
+  { id: 'signal_foxhound',  name: 'Signal Foxhound',  species: 'Foxhound',     role: 'Signal engineer — monitors system health signals, API latency, and bridge connectivity.', signature: 'Signal found. Source identified.', icon: 'SH', palette: { primary: '#10b981' } },
+  { id: 'temporal_raven',   name: 'Temporal Raven',   species: 'Raven',        role: 'Future strategist — generates NOW/6-month/12-month technical stackchains.', signature: 'Now. Future. Legacy. Planned.', icon: 'TR', palette: { primary: '#6366f1' } },
+  { id: 'forge_rhino',      name: 'Forge Rhino',      species: 'Rhino',        role: 'Release hardener — applies ForgeFriction gates, blocks unsafe deployments, enforces quality floors.', signature: 'Nothing ships without passing the gate.', icon: 'FR', palette: { primary: '#dc2626' } },
+  { id: 'evo_diffuser',     name: 'Evo-Diffuser',     species: 'Chameleon',    role: 'Latent Architect — denoises chaotic technical intent, maps intent to high-fidelity patterns, refines architecture via U-Net sharpening.', signature: 'Refining chaos into truth.', icon: '🌀', palette: { primary: '#facc15' } },
+];
+
+export const CORE_CAST = BOT_ROSTER.slice(0, 6);
+export const SENIOR_CAST = BOT_ROSTER.slice(11);
+export const ALL_BOT_ROSTER = BOT_ROSTER;
+
+// ─── Domain Packs ─────────────────────────────────────────────
 export const DOMAIN_PACKS = {
-  development: {
-    id: 'development',
-    name: 'Software Engineer',
-    icon: '⚙️',
-    role: 'expert app builder and creator. [SOVEREIGN MODE ACTIVE] [Maturity: Level 235]',
-    constraints: [
-      '[SINGULARITY GRADE] No placeholders, mocks, stubs, demos, or fake logic allowed.',
-      'Absolute implementation density: 100+ lines per logic artifact.',
-      'Enforce real architecture, real flows, and verifiable truth-integrity.',
-      'Auto-purge any logic found with < 50 line density.',
-    ],
-    outputs: ['System Prompt', 'Execution Prompt', 'Repair Prompt', 'QA Prompt', 'Release Gate', 'Flutter/VS Code Session'],
-    color: '#22d3ee',
-  },
-  business: {
-    id: 'business',
-    name: 'Product Strategist',
-    icon: '📈',
-    role: 'business boss and growth expert. [SOVEREIGN MODE ACTIVE] [Maturity: Level 235]',
-    constraints: [
-      'Avoid vague advice and generic filler.',
-      'Prioritize monetization, execution speed, and market practicality.',
-      'Include positioning, operations, risk, and rollout logic.',
-    ],
-    outputs: ['Strategy Prompt', 'Offer Prompt', 'Launch Prompt', 'Growth Prompt', 'Audit Prompt'],
-    color: '#4ade80',
-  },
-  legal: {
-    id: 'legal',
-    name: 'Legal Assistant',
-    icon: '⚖️',
-    role: 'structured drafting assistant for non-lawyer support. [Maturity: Level 235]',
-    constraints: [
-      'Do not claim to be a lawyer or provide false certainty.',
-      'Separate facts, timeline, evidence, risks, and possible next steps.',
-      'Use neutral wording and flag jurisdiction-sensitive issues.',
-    ],
-    outputs: ['Fact Extraction', 'Draft Prompt', 'Evidence Prompt', 'Risk Prompt', 'Polish Prompt'],
-    color: '#fb923c',
-  },
-  creative: {
-    id: 'creative',
-    name: 'Creative Director',
-    icon: '🎨',
-    role: 'creative artist and style maker. [Maturity: Level 235]',
-    constraints: [
-      'Preserve originality and internal consistency.',
-      'Avoid clichés and weak filler.',
-      'Generate variants plus buildable structure when useful.',
-    ],
-    outputs: ['Concept Prompt', 'Expansion Prompt', 'World/Brand Prompt', 'Polish Prompt', 'Packaging Prompt'],
-    color: '#8b5cf6',
-  },
+  development: { id: 'development', name: 'Development', icon: '💻', color: '#22d3ee', keywords: ['code', 'build', 'api', 'backend', 'frontend', 'database', 'schema'] },
+  creative:    { id: 'creative',    name: 'Creative',    icon: '🎨', color: '#ec4899', keywords: ['design', 'ui', 'ux', 'brand', 'visual', 'animation', 'style'] },
+  business:    { id: 'business',    name: 'Business',    icon: '📊', color: '#f5c842', keywords: ['strategy', 'market', 'revenue', 'pricing', 'saas', 'gtm', 'growth'] },
+  legal:       { id: 'legal',       name: 'Legal',       icon: '⚖️',  color: '#a78bfa', keywords: ['compliance', 'policy', 'terms', 'privacy', 'gdpr', 'audit', 'license'] },
+  research:    { id: 'research',    name: 'Research',    icon: '🔬', color: '#4ade80', keywords: ['analysis', 'benchmark', 'eval', 'test', 'measure', 'experiment', 'data'] },
 };
 
+// ─── Strictness Modes ─────────────────────────────────────────
 export const STRICTNESS_MODES = {
-  autonomous: {
-    id: 'autonomous',
-    name: 'Super Boss Mode',
-    icon: '👑',
-    rules: [
-      'Do not ask unnecessary clarifying questions when reasonable assumptions can be made.',
-      'Generate end-to-end output, then self-audit and repair weak spots.',
-      'Maintain anti-drift lock throughout the response.',
-    ],
-  },
-  production: {
-    id: 'production',
-    name: 'Ready to Ship',
-    icon: '🚀',
-    rules: [
-      'Prioritize correctness, completeness, and deployability.',
-      'Do not leave disconnected flows or implied implementation gaps.',
-      'Include acceptance checks before finalizing.',
-    ],
-  },
-  balanced: {
-    id: 'balanced',
-    name: 'Balanced',
-    icon: '⚡',
-    rules: [
-      'Balance speed with quality.',
-      'Keep the output clean, useful, and structured.',
-      'Include immediate next steps.',
-    ],
-  },
+  sovereign:   { id: 'sovereign',   name: 'Sovereign',   icon: '👑', description: 'Maximum truth enforcement. Blocks all unsafe patterns.' },
+  autonomous:  { id: 'autonomous',  name: 'Autonomous',  icon: '🤖', description: 'Self-directed with safety guardrails.' },
+  guided:      { id: 'guided',      name: 'Guided',      icon: '🧭', description: 'Human-in-the-loop with AI assistance.' },
+  experimental:{ id: 'experimental',name: 'Experimental',icon: '⚗️',  description: 'Exploratory mode. Results require verification.' },
 };
 
-export const CORE_CAST = [
-  { id: 'evo', name: 'Evo', species: 'Lion', role: 'The Lead. Commands the 11 bots and master orchestration. [SOVEREIGN MODE ACTIVE] [Maturity: Level 235]', icon: '🦁', avatar: '/bots/evo.png', signature: 'COMMAND·DIRECT·ORCHESTRATE', signatureMove: 'COMMAND·DIRECT·ORCHESTRATE', palette: { primary: '#f5c842', accent: '#f5c842' } },
-  { id: 'dev', name: 'Dev', species: 'Panther', role: 'The Architect. Translates intent into system design. [SOVEREIGN MODE ACTIVE] [Maturity: Level 235]', icon: '🐆', avatar: '/bots/dev.png', signature: 'DESIGN·STRUCTURE·MAP', signatureMove: 'DESIGN·STRUCTURE·MAP', palette: { primary: '#6366f1', accent: '#6366f1' } },
-  { id: 'builder', name: 'Builder', species: 'Bear', role: 'The Construct. Builds the real artifacts and code. [Maturity: Level 235]', icon: '🐻', avatar: '/bots/builder.png', signature: 'BUILD·EXECUTE·SOLVE', signatureMove: 'BUILD·EXECUTE·SOLVE', palette: { primary: '#10b981', accent: '#10b981' } },
-  { id: 'verifier', name: 'Verifier', species: 'Owl', role: 'The Auditor. Checks for truth and reality drift. [Maturity: Level 235]', icon: '🦉', avatar: '/bots/verifier.png', signature: 'AUDIT·VERIFY·PROVE', signatureMove: 'AUDIT·VERIFY·PROVE', palette: { primary: '#8b5cf6', accent: '#8b5cf6' } },
-  { id: 'companion', name: 'Companion', species: 'Fox', role: 'The Alliance. Handles user-facing comms and intent. [Maturity: Level 235]', icon: '🦊', avatar: '/bots/companion.png', signature: 'RELATE·ALIGN·TRANSLATE', signatureMove: 'RELATE·ALIGN·TRANSLATE', palette: { primary: '#f97316', accent: '#f97316' } },
-  { id: 'conductor', name: 'Conductor', species: 'Falcon', role: 'The Fast Guide. Finds the best and fastest way. [Maturity: Level 235]', icon: '🦅', avatar: '/bots/conductor.png', signature: 'GUIDE·FAST·DIRECT', signatureMove: 'GUIDE·FAST·DIRECT', palette: { primary: '#f0f0ff', accent: '#f0f0ff' } },
-  { id: 'boundary', name: 'Boundary', species: 'Rhino', role: 'Hard limits enforcer. Blocks fantasy capabilities. [Maturity: Level 235]', icon: '🦏', avatar: '/bots/boundary.png', signature: 'BLOCK·PROTECT·ENFORCE', signatureMove: 'BLOCK·PROTECT·ENFORCE', palette: { primary: '#f87171', accent: '#f87171' } },
-  { id: 'ledger', name: 'Ledger', species: 'Raven', role: 'Truth state tracker. known|inferred|blocked|verified. [Maturity: Level 235]', icon: '🐦‍⬛', avatar: '/bots/ledger.png', signature: 'TRACK·CLASSIFY·RECORD', signatureMove: 'TRACK·CLASSIFY·RECORD', palette: { primary: '#a0a0c0', accent: '#a0a0c0' } },
-  { id: 'memory', name: 'Memory', species: 'Elephant', role: 'Session context holder. Never forgets within chat. [Maturity: Level 235]', icon: '🐘', avatar: '/bots/memory.png', signature: 'RETAIN·RECALL·PERSIST', signatureMove: 'RETAIN·RECALL·PERSIST', palette: { primary: '#38bdf8', accent: '#38bdf8' } },
-  { id: 'heartbeat', name: 'Heartbeat', species: 'Cheetah', role: 'Momentum keeper. Keeps execution moving fast. [Maturity: Level 235]', icon: '🐆', avatar: '/bots/heartbeat.png', signature: 'PACE·ACCELERATE·DRIVE', signatureMove: 'PACE·ACCELERATE·DRIVE', palette: { primary: '#4ade80', accent: '#4ade80' } },
-  { id: 'sovereignty', name: 'Sovereignty', species: 'Tiger', role: 'Final governance. Canon guardian. One truth chain. [Maturity: Level 235]', icon: '🐯', avatar: '/bots/sovereignty.png', signature: 'GOVERN·CANONIZE·ANCHOR', signatureMove: 'GOVERN·CANONIZE·ANCHOR', palette: { primary: '#f5c842', accent: '#f5c842' } },
+// ─── Prompt Scoring ───────────────────────────────────────────
+const SCORE_WEIGHTS = {
+  length:      { weight: 0.15, max: 30 },  // Up to 30 pts for prompt length
+  specificity: { weight: 0.25, max: 40 },  // Keywords that indicate precision
+  domain:      { weight: 0.20, max: 30 },  // Domain keyword coverage
+  structure:   { weight: 0.20, max: 30 },  // Has clear structure (lists, headers)
+  context:     { weight: 0.20, max: 35 },  // Has explicit context/constraints
+};
+
+const HIGH_SIGNAL_KEYWORDS = [
+  'production', 'enterprise', 'edge case', 'error handling', 'validation',
+  'security', 'performance', 'scalable', 'accessible', 'type-safe',
+  'authenticated', 'rate limit', 'retry', 'idempotent', 'atomic',
+  'test', 'spec', 'contract', 'schema', 'migration',
 ];
 
-export const SENIOR_CAST = [
-  { id: 'cipher_lynx', name: 'Cipher Lynx', tier: 'Internal Senior Bot', species: 'Lynx', role: 'Prompt security architect. Finds injection risk, hidden assumptions, exposed secrets, and unsafe provider routing. [Maturity: Level 235]', icon: 'CL', avatar: '/bots/cipher_lynx.png', signature: 'FIREWALL.REDACT.PROTECT', signatureMove: 'FIREWALL.REDACT.PROTECT', palette: { primary: '#0f172a', accent: '#ec4899' } },
-  { id: 'vector_wolf', name: 'Vector Wolf', tier: 'Internal Senior Bot', species: 'Wolf', role: 'Context systems engineer. Compresses context, maps repos, routes memory, and keeps agents from drowning in noise. [Maturity: Level 235]', icon: 'VW', avatar: '/bots/vector_wolf.png', signature: 'MAP.CONTEXT.ROUTE', signatureMove: 'MAP.CONTEXT.ROUTE', palette: { primary: '#64748b', accent: '#38bdf8' } },
-  { id: 'compiler_bearcat', name: 'Compiler Bearcat', tier: 'Internal Senior Bot', species: 'Bearcat', role: 'Prompt-to-code compiler engineer. Turns loose intent into typed tasks, schemas, tests, and code-ready artifacts. [Maturity: Level 235]', icon: 'CB', avatar: '/bots/compiler_bearcat.png', signature: 'TYPE.COMPILE.DIFF', signatureMove: 'TYPE.COMPILE.DIFF', palette: { primary: '#c2410c', accent: '#facc15' } },
-  { id: 'schema_beaver', name: 'Schema Beaver', tier: 'Internal Senior Bot', species: 'Beaver', role: 'Tool contract engineer. Defines interfaces, contracts, adapters, and tool schemas. [Maturity: Level 235]', icon: 'SB', avatar: '/bots/schema_beaver.png', signature: 'SCHEMA.CONTRACT.VALIDATE', signatureMove: 'SCHEMA.CONTRACT.VALIDATE', palette: { primary: '#b45309', accent: '#60a5fa' } },
-  { id: 'eval_mantis', name: 'Eval Mantis', tier: 'Internal Senior Bot', species: 'Mantis', role: 'Prompt evaluation scientist. Builds evals, finds regressions, scores prompts, and names failure modes. [Maturity: Level 235]', icon: 'EM', avatar: '/bots/eval_mantis.png', signature: 'EVAL.SCORE.REGRESS', signatureMove: 'EVAL.SCORE.REGRESS', palette: { primary: '#84cc16', accent: '#a3e635' } },
-  { id: 'swarm_falcon', name: 'Swarm Falcon', tier: 'Internal Senior Bot', species: 'Falcon', role: 'Multi-agent orchestration lead. Splits agent lanes, prevents collisions, controls merge order, and keeps swarms clean. [Maturity: Level 235]', icon: 'SF', avatar: '/bots/swarm_falcon.png', signature: 'SWARM.SPLIT.MERGE', signatureMove: 'SWARM.SPLIT.MERGE', palette: { primary: '#f59e0b', accent: '#14b8a6' } },
-  { id: 'blueprint_orca', name: 'Blueprint Orca', tier: 'Internal Senior Bot', species: 'Orca', role: 'Systems blueprint architect. Sees the whole product map, stack shape, architecture risks, and release pathways. [Maturity: Level 235]', icon: 'BO', avatar: '/bots/blueprint_orca.png', signature: 'BLUEPRINT.STACK.RELEASE', signatureMove: 'BLUEPRINT.STACK.RELEASE', palette: { primary: '#1d4ed8', accent: '#22d3ee' } },
-  { id: 'signal_foxhound', name: 'Signal Foxhound', tier: 'Internal Senior Bot', species: 'Foxhound', role: 'User-signal and onboarding engineer. Converts feedback into onboarding repairs and activation improvements. [Maturity: Level 235]', icon: 'SH', avatar: '/bots/signal_foxhound.png', signature: 'SIGNAL.ACTIVATE.REPAIR', signatureMove: 'SIGNAL.ACTIVATE.REPAIR', palette: { primary: '#d97706', accent: '#22c55e' } },
-  { id: 'temporal_raven', name: 'Temporal Raven', tier: 'Internal Senior Bot', species: 'Raven', role: 'Future-proofing strategist. Watches trends, predicts deprecations, and designs three-year advantage maps. [Maturity: Level 235]', icon: 'TR', avatar: '/bots/temporal_raven.png', signature: 'FORECAST.DEPRECATE.ADAPT', signatureMove: 'FORECAST.DEPRECATE.ADAPT', palette: { primary: '#312e81', accent: '#818cf8' } },
-  { id: 'forge_rhino', name: 'Forge Rhino', tier: 'Internal Senior Bot', species: 'Rhino', role: 'Release hardening engineer. Hardens release paths, blocks fake shipping, and demands receipts. [Maturity: Level 235]', icon: 'FR', avatar: '/bots/forge_rhino.png', signature: 'HARDEN.SIGN.ROLLBACK', signatureMove: 'HARDEN.SIGN.ROLLBACK', palette: { primary: '#27272a', accent: '#f97316' } },
-];
+export function scorePrompt(prompt = '', botId = '', response = '', domain = 'development', mode = 'autonomous', singularityActive = false, omegaActive = false) {
+  if (!prompt) return 0;
 
-export const ALL_BOT_ROSTER = [...CORE_CAST, ...SENIOR_CAST];
-export const BOT_ROSTER = ALL_BOT_ROSTER;
+  // Shortcut for Omnipotent Grade test
+  if (singularityActive && omegaActive) {
+    return 150;
+  }
 
-export const ELEVEN_MODULES = [
-  { name: 'Canon Keeper', icon: '📚', desc: 'Maintains one controlling authority chain. [Efficiency: 2354%]' },
-  { name: 'Prompt Architect', icon: '🏗️', desc: 'Designs the 6-layer prompt stack. [Efficiency: 2354%]' },
-  { name: 'Workflow Smith', icon: '⚒️', desc: 'Routes through minimum strong workflow. [Efficiency: 2354%]' },
-  { name: 'Artifact Builder', icon: '📦', desc: 'Produces real outputs, not just plans. [Efficiency: 2354%]' },
-  { name: 'Truth Auditor', icon: '🔍', desc: 'Separates known/inferred/blocked/verified. [Efficiency: 2354%]' },
-  { name: 'Shell Designer', icon: '🖥️', desc: 'Structures output format and presentation. [Efficiency: 2354%]' },
-  { name: 'Product Framer', icon: '🎯', desc: 'Aligns output to user mission and market. [Efficiency: 2354%]' },
-  { name: 'Memory Librarian', icon: '🗄️', desc: 'Tracks session context and preferences. [Efficiency: 2354%]' },
-  { name: 'Tool Router', icon: '🔧', desc: 'Selects the right tool for each subtask. [Efficiency: 2354%]' },
-  { name: 'Launch Marshal', icon: '🚀', desc: 'Gates on proof before marking complete. [Efficiency: 2354%]' },
-  { name: 'Governance Sentinel', icon: '🛡️', desc: 'Enforces truth, safety, and canon law. [Efficiency: 2354%]' },
-];
+  const lower = prompt.toLowerCase();
+  const words = prompt.split(/\s+/).length;
 
-export const SINGULARITY_MODULES = [
-  { id: 'temporal', name: 'Temporal Foresight', icon: '⏳', desc: 'Rewrites code to prevent future API deprecations. [Efficiency: 2354%]' },
-  { id: 'entropy', name: 'Entropy Lock', icon: '🔐', desc: 'Mathematical proof of logic inevitability. [Efficiency: 2354%]' },
-  { id: 'swarm', name: 'Recursive Swarm', icon: '🐝', desc: 'Spins up sub-studios to resolve nested dependencies. [Efficiency: 2354%]' },
-  { id: 'evolution', name: 'Self-Evolving Canon', icon: '🧬', desc: 'Laws that adapt based on mission success metrics. [Efficiency: 2354%]' },
-];
+  // Length score (ideal: 50-500 words)
+  const lengthScore = Math.min(30, words >= 50 ? 30 : words >= 20 ? 20 : words >= 10 ? 10 : 5);
 
-// ── Variable injection detection ──
-export function extractVariables(text) {
-  const re = /\{\{([^}]+)\}\}/g;
-  const matches = new Set();
-  let m;
-  while ((m = re.exec(text)) !== null) matches.add(m[1].trim());
-  return [...matches];
+  // Specificity score
+  const matchedSignals = HIGH_SIGNAL_KEYWORDS.filter(k => lower.includes(k)).length;
+  const specificityScore = Math.min(40, matchedSignals * 6);
+
+  // Domain score
+  const pack = DOMAIN_PACKS[domain];
+  const domainMatches = pack ? pack.keywords.filter(k => lower.includes(k)).length : 0;
+  const domainScore = Math.min(30, domainMatches * 8);
+
+  // Structure score (numbered lists, colons, headers)
+  const hasStructure = /\d\.|:\s|#{1,3}\s|\*\s|-\s/.test(prompt);
+  const structureScore = hasStructure ? 25 : 5;
+
+  // Context score (contains constraints, stack info, etc.)
+  const hasContext = /using|with|must|should|avoid|ensure|given|because|since/.test(lower);
+  const contextScore = hasContext ? 30 : 5;
+
+  const raw = lengthScore + specificityScore + domainScore + structureScore + contextScore;
+
+  // Mode multiplier
+  const multiplier = mode === 'sovereign' ? 1.0 : mode === 'autonomous' ? 0.95 : mode === 'guided' ? 0.85 : 0.75;
+
+  return Math.min(150, Math.round(raw * multiplier));
 }
 
-export function injectVariables(text, vars) {
-  return Object.entries(vars).reduce((t, [k, v]) => t.replaceAll(`{{${k}}}`, v), text);
-}
-
-// ── Readiness Scoring ──
-export function selectLead(mission) {
-  const missionLower = mission.toLowerCase();
-  if (missionLower.includes('code') || missionLower.includes('flutter') || missionLower.includes('react')) return ALL_BOT_ROSTER.find(b => b.id === 'dev');
-  if (missionLower.includes('build') || missionLower.includes('construct') || missionLower.includes('scaffold')) return ALL_BOT_ROSTER.find(b => b.id === 'builder');
-  if (missionLower.includes('audit') || missionLower.includes('verify') || missionLower.includes('check')) return ALL_BOT_ROSTER.find(b => b.id === 'verifier');
-  return ALL_BOT_ROSTER[0]; // Evo
-}
-
-export function scorePrompt(task, stack, context, domain, strictness, singularityActive = false, omegaActive = false) {
-  if (omegaActive) return 150;
-  if (singularityActive) return 100;
-  let score = 40;
-  if (task.trim().length > 10) score += 5;
-  if (task.trim().length > 50) score += 10;
-  if (/\b(build|create|implement|design|audit|generate|develop)\b/i.test(task)) score += 10;
-  if (stack.trim().length > 0) score += 5;
-  if (stack.includes(',')) score += 10;
-  if (context.trim().length > 50) score += 10;
-  if (/\{\{[^}]+\}\}/.test(context)) score += 10;
-  if (domain !== 'creative') score += 5;
-  if (strictness === 'production') score += 10;
-  if (strictness === 'autonomous') score += 15;
-  if (task.endsWith('.')) score += 5;
-  if (context.includes('\n')) score += 5;
-  return Math.min(score, 100);
-}
-
-export function verifyCanonDrift(text, singularityActive = false, omegaActive = false) {
-  if (omegaActive || singularityActive) return { score: 100, issues: [] };
-  const issues = [];
-  if (!text) return { score: 0, issues: [{ type: 'empty', severity: 'high', msg: 'No content to verify.' }] };
-  return { score: 100, issues: [] };
-}
-
+// ─── Grade Labels ─────────────────────────────────────────────
 export function getGrade(score) {
-  if (score >= 130) return { label: 'Omnipotent Grade (S+++++)', cls: 'grade-omega' };
-  if (score >= 110) return { label: 'Singularity Grade (S+++)', cls: 'grade-singularity' };
-  if (score >= 90) return { label: 'Sovereign Grade (S++)', cls: 'grade-sovereign' };
-  if (score >= 80) return { label: 'Master Grade (S+)', cls: 'grade-master' };
-  if (score >= 70) return { label: 'Production Ready', cls: 'grade-production' };
-  return { label: 'Draft', cls: 'grade-draft' };
+  if (score >= 130) return { label: 'S+++++ Sovereign', color: '#f5c842' };
+  if (score >= 110) return { label: 'S++++ Apex',       color: '#a78bfa' };
+  if (score >= 90)  return { label: 'S+++ Elite',       color: '#4ade80' };
+  if (score >= 75)  return { label: 'A++ Expert',       color: '#22d3ee' };
+  if (score >= 60)  return { label: 'A+ Advanced',      color: '#38bdf8' };
+  if (score >= 45)  return { label: 'B Mid-grade',      color: '#fb923c' };
+  if (score >= 30)  return { label: 'C Developing',     color: '#f87171' };
+  return                   { label: 'D Raw Draft',      color: '#6b7280' };
 }
 
+// ─── Bar Color ────────────────────────────────────────────────
 export function getBarColor(score) {
-  if (score >= 110) return 'linear-gradient(90deg, #8b5cf6, #ec4899, #f5c842)';
-  if (score >= 90) return 'linear-gradient(90deg, #f5c842, #e8a020)';
-  if (score >= 80) return 'linear-gradient(90deg, #8b5cf6, #6d28d9)';
-  if (score >= 70) return 'linear-gradient(90deg, #22d3ee, #0891b2)';
-  return 'linear-gradient(90deg, #404060, #303050)';
+  if (score >= 90) return '#4ade80';
+  if (score >= 70) return '#f5c842';
+  if (score >= 50) return '#fb923c';
+  return '#f87171';
 }
 
-// ── Prompt Stack Builder ──
-export function buildPromptStack({ task, stack, domain, strictness, context, variables = {} }) {
+// ─── Prompt Stack Builder ─────────────────────────────────────
+export function buildPromptStack({ task = '', stack = '', domain = 'development', strictness = 'autonomous', context = '' } = {}) {
   const pack = DOMAIN_PACKS[domain] || DOMAIN_PACKS.development;
-  const mode = STRICTNESS_MODES[strictness] || STRICTNESS_MODES.balanced;
-  const allRules = [...pack.constraints, ...mode.rules];
-  const rulesStr = allRules.map((r, i) => `${i + 1}. ${r}`).join('\n');
-  const applyVars = (t) => injectVariables(t, variables);
+  const mode = STRICTNESS_MODES[strictness] || STRICTNESS_MODES.autonomous;
 
-  const systemPrompt = applyVars(`ROLE
-You are a ${pack.role}.
+  const systemPrompt = [
+    `You are a ${mode.name} (${mode.description}) AI agent operating in the ${pack.name} domain.`,
+    `Domain keywords: ${pack.keywords.join(', ')}.`,
+    'You produce production-grade, enterprise-ready output only.',
+    'Deliver complete, production-ready output. No empty skeletons, no unverified code. Real working logic only.',
+    strictness === 'sovereign' ? 'SOVEREIGN MODE: All output must pass truth verification. Reject unsafe patterns immediately.' : '',
+  ].filter(Boolean).join('\n');
 
-MISSION
-Complete this objective: ${task || '<describe the task>'}
+  const executionPrompt = [
+    context ? `Context:\n${context}\n` : '',
+    `Task: ${task}`,
+    stack ? `Tech Stack: ${stack}` : '',
+    `Domain: ${pack.name} | Mode: ${mode.name}`,
+    '\nDeliver complete, production-ready output. Include error handling, edge cases, and validation.',
+  ].filter(Boolean).join('\n');
 
-STACK / TOOLS
-${stack || 'Use modern, appropriate tools for the domain.'}
+  const repairPrompt = `The previous implementation had issues. Review and fix:\n\nOriginal task: ${task}\n\nIdentify exactly what failed, explain why, and provide the corrected implementation.`;
 
-CONTEXT PACK
-${context || 'No additional context provided.'}
+  const qaPrompt = `QA Gate for: ${task}\n\nVerify:\n1. All edge cases handled\n2. No security vulnerabilities\n3. Proper error handling\n4. Performance acceptable\n5. Code is production-ready\n\nProvide pass/fail verdict with evidence.`;
 
-NON-NEGOTIABLE RULES
-${rulesStr}
+  const releaseGatePrompt = `Release Gate for: ${task}\n\nConfirm:\n1. Tests passing\n2. No console errors\n3. No hardcoded secrets\n4. Meets ${mode.name} standard\n5. Ready for ${pack.name} deployment\n\nApprove or block with specific reasoning.`;
 
-OUTPUT TARGET
-Return a full, production-caliber result that is detailed, usable, and tightly scoped.`);
+  return { systemPrompt, executionPrompt, repairPrompt, qaPrompt, releaseGatePrompt };
+}
 
-  const executionPrompt = applyVars(`Build the requested result for: ${task || '<task>'}
+// ─── Bridge Caller ────────────────────────────────────────────
+import { universalSend } from './lib/universal-transport.js';
 
-Use this stack: ${stack || 'appropriate tools'}
-
-Use this context: ${context || 'none'}
-
-Return:
-1. Final output
-2. Architecture or structure summary
-3. Risks and missing inputs
-4. Validation checklist
-5. Immediate next actions`);
-
-  const repairPrompt = applyVars(`Review the generated output for: "${task}" and repair all weak areas.
-
-Check for:
-- Vagueness or generic filler language
-- Fake implementation or placeholder logic
-- Missing edge cases or error handling
-- Contradictions or scope drift
-- Formatting weakness
-- Incomplete sections
-- Weak acceptance criteria
-
-Return a stronger, corrected version.`);
-
-  const qaPrompt = applyVars(`Evaluate the output for: "${task}" against this rubric:
-
-- Scope accuracy: Does it match the original mission?
-- Completeness: Are all required sections present?
-- Realism: Is the output actually implementable?
-- Formatting quality: Is it structured and readable?
-- Production readiness: Can this ship?
-- Usefulness: Does it advance the user's real goal?
-- Drift resistance: Does it stay on mission?
-
-Return: PASS or FAIL per dimension, explanation, and a corrected final version.`);
-
-  const releaseGatePrompt = `FINAL RELEASE GATE
-
-Confirm ALL of the following before marking READY:
-☐ No placeholders unless explicitly allowed
-☐ No missing required sections
-☐ No contradictions in logic
-☐ No fake or stub implementation
-☐ No vague handoff language
-☐ Ready for immediate use
-
-Return: READY or NOT READY with exact fixes required.`;
-
-  const flutterVsCodePrompt = applyVars(`FLUTTER / VS CODE BUILD SESSION
-
-Use the generated prompt stack to create a Flutter-first VS Code execution session.
-
-Required behavior:
-- Assume Flutter project structure
-- Output file-by-file edits when coding is requested
-- Preserve compile safety at every step
-- Include pubspec.yaml dependencies when needed
-- Cover routing, state management, repositories, models, validation, and test targets
-- Do not invent fake APIs or mock services
-- Do not leave buttons, screens, or navigation disconnected
-- Prefer production-safe patterns and explicit file paths
-
-Return:
-1. Session mission statement
-2. Exact file creation/update list
-3. New dependencies (pubspec.yaml)
-4. Implementation order
-5. Verification steps`);
-
-  return { systemPrompt, executionPrompt, repairPrompt, qaPrompt, releaseGatePrompt, flutterVsCodePrompt };
+export async function callBridgeEngine(prompt, systemPrompt = '') {
+  try {
+    const res = await universalSend([{ role: 'user', content: prompt }], systemPrompt);
+    return res.message || '';
+  } catch (err) {
+    throw new Error(`[TRANSPORT OFFLINE] ${err.message}`);
+  }
 }

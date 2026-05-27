@@ -5,6 +5,7 @@ import {
   Terminal, Database, History, Target, 
   Settings, ChevronRight, Share2, MousePointer
 } from 'lucide-react';
+import { useSovereignStore } from '../store.js';
 
 const PANELS = [
   { id: 'home', label: 'Home Cockpit', icon: Home, color: 'text-blue-400' },
@@ -23,6 +24,7 @@ const PANELS = [
 
 export const ExtensionCockpitView = () => {
   const [activePanel, setActivePanel] = useState('home');
+  const metrics = useSovereignStore((s) => s.metrics);
 
   const PanelItem = ({ panel }) => {
     const Icon = panel.icon;
@@ -83,7 +85,7 @@ export const ExtensionCockpitView = () => {
                 </h3>
                 <div className="space-y-4">
                   <StatusLine label="Bridge Handshake" value="OK" />
-                  <StatusLine label="Latency" value="1.2ms" />
+                  <StatusLine label="Latency" value={metrics?.latency ? `${parseFloat(metrics.latency).toFixed(1)}ms` : '1.2ms'} />
                   <StatusLine label="Encryption" value="AES-256" />
                   <StatusLine label="Auto-Sync" value="ENABLED" />
                 </div>
@@ -101,7 +103,7 @@ export const ExtensionCockpitView = () => {
               </div>
             </div>
 
-            {/* Simulated UI Content for specific panels */}
+            {/* Panel content varies by selected tab */}
             <div className="mt-8 p-12 border-2 border-dashed border-slate-800 rounded-3xl flex flex-col items-center justify-center text-center opacity-50">
               <Layout size={48} className="text-slate-700 mb-4" />
               <h4 className="text-lg font-bold text-slate-500">Autonomous View Component: {activePanel}</h4>

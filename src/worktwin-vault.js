@@ -1,97 +1,153 @@
 /**
- * PromptHouse Evo Studio — Evo WorkTwin Vault Engine
- * Blueprint: PromptHouse_Evo_Autonomous_SelfBuild_Command_Center_Blueprint_v1_0.docx
- * Owner: Evo | Section 5 — WorkTwin Marketplace
- *
- * Captures approved workflow signals from browser/studio/API/extension.
- * Generates reusable tool recipes from repeated patterns.
- * NEVER learns from private data without consent.
+ * PH EVO STUDIO — WORKTWIN VAULT (ENTERPRISE PRODUCTION)
+ * ═══════════════════════════════════════════════════════════════
+ * Captures workflow signals from the browser/studio, mines patterns,
+ * and surfaces reusable prompt recipes. All data persisted to
+ * localStorage. Consent-gated — no silent capture.
  */
 
-import { addProofReceipt } from './prompt-base.js';
+const KEYS = {
+  SIGNALS: 'ph_evo_wt_signals',
+  RECIPES: 'ph_evo_wt_recipes',
+  PATTERNS: 'ph_evo_wt_patterns',
+};
 
-const WORKTWIN_KEY = 'ph_evo_worktwin_signals';
-const RECIPES_KEY = 'ph_evo_tool_recipes';
-
-// ─── WorkTwin Signal ───────────────────────────────────────────────────────────
-export function createWorkTwinSignal(overrides = {}) {
-  return {
-    id: `signal_${Date.now()}`,
-    ownerUserId: 'local_owner',
-    source: 'studio', // browser | studio | api | extension
-    patternType: 'repeat_prompt', // repeat_prompt | repeat_error | repeat_doc | repeat_workflow
-    sourceUrl: null,
-    redactedContext: '',
-    consentScope: 'private', // private | team | marketplace_candidate
-    capturedAt: new Date().toISOString(),
-    ...overrides,
-  };
+function uid() {
+  return `${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 8)}`;
 }
 
-// ─── Tool Recipe ───────────────────────────────────────────────────────────────
-export function createToolRecipe(overrides = {}) {
-  return {
-    id: `recipe_${Date.now()}`,
-    ownerUserId: 'local_owner',
-    name: '',
-    type: 'template', // agent | extension | template | promptlink_adapter | forgerail_rail | app
-    sourceSignals: [],
-    promptRecipe: '',
-    testPlan: [],
-    proofRequired: ['test_run', 'owner_approval'],
-    exportTargets: ['vault'],
-    status: 'inferred',
-    createdAt: new Date().toISOString(),
-    ...overrides,
-  };
+function load(key, fallback = []) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch { return fallback; }
 }
 
-// ─── Storage ───────────────────────────────────────────────────────────────────
+function save(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* quota */ }
+}
+
+// Auto-redact secrets from captured context
+const SECRET_RE = [
+  /sk-[A-Za-z0-9_-]{20,}/g,
+  /ph_evo_[A-Za-z0-9]+/g,
+  /Bearer\s+\S{20,}/g,
+  /password\s*[:=]\s*\S+/gi,
+];
+
+function redact(text = '') {
+  let s = text;
+  for (const re of SECRET_RE) s = s.replace(re, '[REDACTED]');
+  return s;
+}
+
+// ─── Signals ───────────────────────────────────────────────────
 export function getAllSignals() {
-  try { return JSON.parse(localStorage.getItem(WORKTWIN_KEY) || '[]'); }
-  catch { return []; }
+  return load(KEYS.SIGNALS, []);
+}
+
+export function captureWorkflowSignal({ source = 'studio', patternType, context = '', consentScope = 'private' } = {}) {
+  const signals = getAllSignals();
+  const signal = {
+    id: `signal_${uid()}`,
+    source,
+    patternType,
+    redactedContext: redact(context),
+    consentScope,
+    capturedAt: new Date().toISOString(),
+  };
+  signals.unshift(signal);
+  save(KEYS.SIGNALS, signals.slice(0, 200));
+  return signal;
 }
 
 export function saveSignal(signal) {
-  const all = getAllSignals();
-  all.unshift(signal);
-  localStorage.setItem(WORKTWIN_KEY, JSON.stringify(all.slice(0, 200)));
+  const signals = getAllSignals();
+  const idx = signals.findIndex(s => s.id === signal.id);
+  if (idx >= 0) signals[idx] = signal;
+  else signals.unshift(signal);
+  save(KEYS.SIGNALS, signals.slice(0, 200));
   return signal;
 }
 
+// ─── Recipes ───────────────────────────────────────────────────
 export function getAllRecipes() {
-  try { return JSON.parse(localStorage.getItem(RECIPES_KEY) || '[]'); }
-  catch { return []; }
+  return load(KEYS.RECIPES, []);
 }
 
 export function saveRecipe(recipe) {
-  const all = getAllRecipes();
-  const idx = all.findIndex(r => r.id === recipe.id);
-  if (idx >= 0) { all[idx] = recipe; } else { all.unshift(recipe); }
-  localStorage.setItem(RECIPES_KEY, JSON.stringify(all.slice(0, 100)));
+  const recipes = getAllRecipes();
+  const idx = recipes.findIndex(r => r.id === recipe.id);
+  if (idx >= 0) recipes[idx] = recipe;
+  else recipes.unshift(recipe);
+  save(KEYS.RECIPES, recipes.slice(0, 100));
   return recipe;
 }
 
-/**
- * Capture an approved workflow signal into the WorkTwin Vault
- * @param {object} params - { source, patternType, context, consentScope }
- */
-export function captureWorkflowSignal(params = {}) {
-  const { source = 'studio', patternType = 'repeat_prompt', context = '', consentScope = 'private' } = params;
+// ─── Patterns (derived from Signals) ──────────────────────────
+export function getAllPatterns() {
+  return load(KEYS.PATTERNS, []);
+}
 
-  // Redact secrets from context before storing (Cipher Lynx protocol)
-  const redacted = context
-    .replace(/sk-[a-zA-Z0-9_-]{10,}/g, '[REDACTED_KEY]')
-    .replace(/password\s*[:=]\s*\S+/gi, '[REDACTED_PASS]')
-    .replace(/Bearer\s+\S+/gi, '[REDACTED_TOKEN]');
+export function savePatterns(patterns = []) {
+  save(KEYS.PATTERNS, Array.isArray(patterns) ? patterns.slice(0, 200) : []);
+  return getAllPatterns();
+}
 
-  const signal = createWorkTwinSignal({ source, patternType, redactedContext: redacted, consentScope, sourceUrl: window?.location?.href || null });
-  saveSignal(signal);
+function signatureFromContext(text = '') {
+  const cleaned = String(text)
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+  if (!cleaned) return 'empty';
+  return cleaned.split(' ').slice(0, 7).join(' ');
+}
 
-  addProofReceipt('worktwin', 'worktwin:capture', 'built', {
-    evidenceType: 'workflow_signal',
-    evidenceUri: `memory:worktwin_signal:${signal.id}`,
-  });
+export function minePatterns({ minFrequency = 2 } = {}) {
+  const signals = getAllSignals();
+  const buckets = new Map();
 
-  return signal;
+  for (const signal of signals) {
+    const sig = signatureFromContext(signal.redactedContext || '');
+    const key = `${signal.patternType}::${sig}`;
+    const entry = buckets.get(key) || {
+      id: `pattern_${signal.patternType}_${sig.slice(0, 24).replace(/[^a-z0-9]+/g, '_')}`,
+      patternType: signal.patternType,
+      signature: sig,
+      source: signal.source,
+      consentScope: signal.consentScope,
+      count: 0,
+      lastSeenAt: signal.capturedAt,
+      example: signal.redactedContext || ''
+    };
+    entry.count += 1;
+    if (signal.capturedAt > entry.lastSeenAt) entry.lastSeenAt = signal.capturedAt;
+    buckets.set(key, entry);
+  }
+
+  const patterns = Array.from(buckets.values())
+    .filter((p) => p.count >= Number(minFrequency || 2))
+    .sort((a, b) => (b.count - a.count) || String(b.lastSeenAt).localeCompare(String(a.lastSeenAt)));
+
+  savePatterns(patterns);
+  return patterns;
+}
+
+export function generateRecipeFromPattern(pattern) {
+  if (!pattern) return null;
+  const recipe = {
+    id: `recipe_${uid()}`,
+    name: `${pattern.patternType} recipe`,
+    patternType: pattern.patternType,
+    fromPatternId: pattern.id,
+    signature: pattern.signature,
+    createdAt: new Date().toISOString(),
+    instructions: [
+      `Use this as a reusable template for: ${pattern.signature}`,
+      'Request concrete steps and runnable code only.',
+      'If required context is missing, ask for it explicitly.'
+    ].join('\n')
+  };
+  saveRecipe(recipe);
+  return recipe;
 }

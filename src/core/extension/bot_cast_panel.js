@@ -3,8 +3,10 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Log } from '../autonomy/SovereignLogger.js';
+
 const LOCAL_STORAGE_PATH = path.join(__dirname, 'botRoster.json');
-const API_URL = 'http://localhost:3001/bots';
+const API_URL = 'http://127.0.0.1:3001/bots';
 
 class BotCastPanel {
     constructor() {
@@ -19,7 +21,7 @@ class BotCastPanel {
             this.bots = await response.json();
             this.saveBotsToFile();
         } catch (error) {
-            console.error('Error loading bots:', error);
+            Log.error('Error loading bots:', error);
             this.loadBotsFromFile();
         }
     }
@@ -29,7 +31,7 @@ class BotCastPanel {
             const data = fs.readFileSync(LOCAL_STORAGE_PATH, 'utf-8');
             this.bots = JSON.parse(data);
         } catch (error) {
-            console.error('Error loading bots from file:', error);
+            Log.error('Error loading bots from file:', error);
             this.bots = [];
         }
     }

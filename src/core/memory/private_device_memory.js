@@ -44,7 +44,7 @@ const loadFromLocal = async (key) => {
 
 const saveToServer = async (key, value) => {
     const encryptedValue = encrypt(value);
-    const response = await fetch('http://localhost:3001/save', {
+    const response = await fetch('http://127.0.0.1:3001/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key, data: encryptedValue })
@@ -56,7 +56,7 @@ const saveToServer = async (key, value) => {
 };
 
 const loadFromServer = async (key) => {
-    const response = await fetch(`http://localhost:3001/load/${key}`);
+    const response = await fetch(`http://127.0.0.1:3001/load/${key}`);
     
     if (!response.ok) {
         throw new Error('Data not found on server.');

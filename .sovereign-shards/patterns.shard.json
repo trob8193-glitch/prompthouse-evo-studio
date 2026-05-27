@@ -1,0 +1,18 @@
+{
+  "dna_version": "1.1.0-HARDENED",
+  "agent_type": "WEBWEVO_SWARM",
+  "learned_patterns": [
+    "PASCAL_CASE_CLASS_ENFORCEMENT",
+    "RECURSIVE_IMPORT_RESOLUTION",
+    "VITE_BUILD_SEALING",
+    "OPENAI_BRIDGE_COLLABORATION",
+    "LOCAL_ARCHITECTURAL_AUDITING"
+  ],
+  "resonance_patterns": {
+    "weaving": "STABLE_PRODUCTION",
+    "hunting": "SYNTAX_PRECISION",
+    "growing": "ARCHITECTURAL_ALIGNMENT"
+  },
+  "omega_prohibition_active": true,
+  "training_state": "SYNCHRONIZED_WITH_AI_BRIDGE"
+}

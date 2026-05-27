@@ -1,0 +1,1 @@
+// UI Scaffold for Prompt-to-Product Compiler\nimport React from 'react';\n\nexport default function Prompt-to-Product CompilerScreen() {\n  return <div><h1>Prompt-to-Product Compiler</h1><p>Turns a product goal into prompt packs, feature specs, file trees, UI screens, API contracts, data models, tests, launch checklist, and proof cards.</p></div>;\n}

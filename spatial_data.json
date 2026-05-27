@@ -1,0 +1,101 @@
+[
+  {
+    "id": "node-0",
+    "tag": "div",
+    "classes": "",
+    "x": 8,
+    "y": 112,
+    "width": 1264,
+    "height": 414
+  },
+  {
+    "id": "node-1",
+    "tag": "div",
+    "classes": "interstitial-wrapper ",
+    "x": 340,
+    "y": 122,
+    "width": 600,
+    "height": 414
+  },
+  {
+    "id": "node-2",
+    "tag": "div",
+    "classes": "",
+    "x": 342,
+    "y": 124,
+    "width": 596,
+    "height": 314
+  },
+  {
+    "id": "node-3",
+    "tag": "div",
+    "classes": "icon icon-generic",
+    "x": 344,
+    "y": 126,
+    "width": 72,
+    "height": 72
+  },
+  {
+    "id": "node-4",
+    "tag": "div",
+    "classes": "",
+    "x": 344,
+    "y": 244,
+    "width": 592,
+    "height": 196
+  },
+  {
+    "id": "node-5",
+    "tag": "div",
+    "classes": "",
+    "x": 346,
+    "y": 331,
+    "width": 588,
+    "height": 72
+  },
+  {
+    "id": "node-6",
+    "tag": "div",
+    "classes": "error-code",
+    "x": 346,
+    "y": 434,
+    "width": 588,
+    "height": 24
+  },
+  {
+    "id": "node-7",
+    "tag": "div",
+    "classes": "nav-wrapper suggested-left",
+    "x": 342,
+    "y": 517,
+    "width": 596,
+    "height": 49
+  },
+  {
+    "id": "node-8",
+    "tag": "div",
+    "classes": "",
+    "x": 344,
+    "y": 519,
+    "width": 74,
+    "height": 31
+  },
+  {
+    "id": "node-9",
+    "tag": "button",
+    "classes": "blue-button text-button",
+    "x": 346,
+    "y": 521,
+    "width": 74,
+    "height": 31
+  },
+  {
+    "id": "node-10",
+    "tag": "button",
+    "classes": "secondary-button text-button\n              small-link ",
+    "x": 862,
+    "y": 519,
+    "width": 74,
+    "height": 33
+  }
+]
