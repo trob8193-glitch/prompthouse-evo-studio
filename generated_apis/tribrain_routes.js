@@ -1,3 +1,4 @@
+import express from 'express';
 import {
   TRIBRAIN_BRAINS,
   TRIBRAIN_ABILITY_CLASSES,
@@ -7,6 +8,7 @@ import {
 
 const ok = (res, payload = {}) => res.json({ success: true, ...payload });
 const fail = (res, error, status = 500) => res.status(status).json({ success: false, error: error?.message || String(error) });
+const jsonBody = express.json({ limit: '1mb' });
 
 function roleFromRequest(req) {
   return String(req.user?.role || req.headers['x-tribrain-role'] || 'viewer').toLowerCase();
@@ -48,6 +50,17 @@ function permissionContext(req) {
   };
 }
 
+function defaultCommand(intent = 'RUN_PLATFORM_AUDIT') {
+  return {
+    intent,
+    sourceBrain: TRIBRAIN_BRAINS.STUDIO,
+    targetBrain: 'auto',
+    abilityClass: TRIBRAIN_ABILITY_CLASSES.AUDIT,
+    riskLevel: TRIBRAIN_RISK_LEVELS.LOW,
+    payload: { projectId: 'studio-core' },
+  };
+}
+
 export default function registerTriBrainRoutes(app) {
   app.get('/api/tribrain/status', (req, res) => {
     try { ok(res, { status: createSystem(req).status() }); } catch (error) { fail(res, error); }
@@ -63,14 +76,15 @@ export default function registerTriBrainRoutes(app) {
     } catch (error) { fail(res, error); }
   });
 
-  app.post('/api/tribrain/route', (req, res) => {
+  app.post('/api/tribrain/route', jsonBody, (req, res) => {
     try {
-      const plan = createSystem(req).plan(req.body?.command || {}, permissionContext(req));
+      const command = req.body?.command || defaultCommand(req.body?.intent);
+      const plan = createSystem(req).plan(command, permissionContext(req));
       ok(res, { plan });
     } catch (error) { fail(res, error); }
   });
 
-  app.post('/api/tribrain/final-response', (req, res) => {
+  app.post('/api/tribrain/final-response', jsonBody, (req, res) => {
     try {
       const system = createSystem(req);
       const finalResponse = system.arbiter.arbitrate({
