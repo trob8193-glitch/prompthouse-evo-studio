@@ -43,6 +43,7 @@ import EvoDiffuserDashboard from './features/EvoDiffuserDashboard.jsx';
 import EvoPixelatorDashboard from './features/EvoPixelatorDashboard.jsx';
 import EvoLayoutDashboard from './features/EvoLayoutDashboard.jsx';
 import ThemeEvolutionDashboard from './features/ThemeEvolutionDashboard.jsx';
+import ChatGPTCommunicatorView from './features/ChatGPTCommunicatorView.jsx';
 
 export const PAGE_MAP = {
   'dashboard': SovereignIntelligenceDashboard,
@@ -71,6 +72,7 @@ export const PAGE_MAP = {
   'foundry': FeatureFoundry,
   'saas-builder': SaasBuilderView,
   'ghost-editor': GhostEditor,
+  'chatgpt-communicator': ChatGPTCommunicatorView,
 };
 
 function PageRenderer() {

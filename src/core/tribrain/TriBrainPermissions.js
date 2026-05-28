@@ -82,8 +82,14 @@ export function roleMeetsMinimum(role, requiredRole) {
 
 export function hasApproval(context, command) {
   if (!command?.requiresApproval) return true;
+  
+  // Secure token binding flow for high-risk commands
+  const REQUIRED_APPROVAL_TOKEN = process.env.TRIBRAIN_APPROVAL_TOKEN || 'studio-admin-approved-123';
+  
   return context.approvals.some(approval => {
-    return approval?.commandId === command.id && approval?.status === 'approved';
+    return approval?.commandId === command.id && 
+           approval?.status === 'approved' &&
+           approval?.approvalToken === REQUIRED_APPROVAL_TOKEN;
   });
 }
 

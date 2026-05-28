@@ -1,0 +1,1063 @@
+openapi: 3.1.0
+info:
+  title: PH Evo Studio Gateway
+  version: 1.0.0
+  description: Governed Gateway actions for Evo Layer routing, repo verification, Git commit/push, Proof Ledger receipts, and Studio Memory management.
+
+servers:
+  - url: https://canopener-unfixable-citric.ngrok-free.dev
+
+paths:
+  /evo-layer/status:
+    get:
+      operationId: getEvoLayerStatus
+      summary: Get Evo Layer readiness and routing status.
+      description: Returns Evo Layer availability, enabled adapters, policy status, and proof system readiness.
+      security:
+        - StudioGatewayOAuth: []
+        - StudioGatewayApiKey: []
+      responses:
+        "200":
+          description: Evo Layer status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvoLayerStatusResponse"
+
+  /evo-layer/inbox:
+    get:
+      operationId: checkEvoLayerInbox
+      summary: Check for new commands or approvals pushed by the Studio.
+      description: Polls the Studio Gateway outbox. If the Studio wants ChatGPT to do something or has pushed an approval, it will be returned here.
+      security:
+        - StudioGatewayApiKey: []
+      responses:
+        "200":
+          description: Pending messages from the Studio.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvoLayerInboxResponse"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Blocked due to missing approval. Use the returned requestId to poll for dynamic approval.
+        "500":
+          description: Push failed.
+
+  /evo-layer/push:
+    post:
+      operationId: pushToEvoLayer
+      summary: Push work packages or patches to Evo Layer.
+      description: Queues a governed payload for Evo bots. Requires a valid approvalRef or OAuth session if risk is medium/high.
+      security:
+        - StudioGatewayOAuth: []
+        - StudioGatewayApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EvoLayerPushRequest"
+      responses:
+        "200":
+          description: Evo Layer accepted, blocked, failed, queued, or completed the package.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvoLayerPushResponse"
+
+  /evo-layer/approval-status/{id}:
+    get:
+      operationId: getApprovalStatus
+      summary: Poll for dynamic approval status.
+      description: Returns the status of a governed action that required approval (pending, approved, denied).
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The request ID returned when the action was blocked with a needs_approval status.
+      security:
+        - StudioGatewayOAuth: []
+        - StudioGatewayApiKey: []
+      responses:
+        "200":
+          description: Status retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalStatusResponse'
+        "401":
+          description: Unauthorized
+        "500":
+          description: Server Error
+
+  /repo/execute-verification:
+    post:
+      operationId: executeRepoVerification
+      summary: Execute pre-flight verification checks.
+      description: Runs specified verification commands on the repo. High-risk commands require a valid approvalRef or OAuth session.
+      security:
+        - StudioGatewayOAuth: []
+        - StudioGatewayApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RepoVerificationRequest"
+      responses:
+        "200":
+          description: Repo verification result with proof.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RepoVerificationResponse"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Blocked due to missing approval. Use the returned requestId to poll for dynamic approval.
+        "500":
+          description: Verification failed or execution error.
+
+  /git/commit-and-push:
+    post:
+      operationId: commitAndPushApprovedChanges
+      summary: Commit and push changes to Git.
+      description: Commits and pushes the current tree to the specified branch. Requires a valid approvalRef or OAuth session.
+      security:
+        - StudioGatewayOAuth: []
+        - StudioGatewayApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GitCommitPushRequest"
+      responses:
+        "200":
+          description: Git commit and push result with proof.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GitCommitPushResponse"
+
+  /proof/receipt/{receiptId}:
+    get:
+      operationId: getProofReceipt
+      summary: Retrieve a Proof Ledger receipt by ID.
+      description: Returns proof receipt metadata and verification state.
+      security:
+        - StudioGatewayApiKey: []
+      parameters:
+        - name: receiptId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Proof receipt.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProofReceiptResponse"
+
+  /memory/search:
+    post:
+      operationId: searchStudioMemory
+      summary: Search governed Studio Memory.
+      description: Searches Studio Memory across boundaries.
+      security:
+        - StudioGatewayApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemorySearchRequest"
+      responses:
+        "200":
+          description: Memory search results.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemorySearchResponse"
+
+  /memory/propose:
+    post:
+      operationId: proposeMemoryUpdate
+      summary: Propose a memory update without saving it.
+      description: Creates a draft memory update for review. Does not modify Studio Memory.
+      security:
+        - StudioGatewayApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemoryProposeRequest"
+      responses:
+        "200":
+          description: Proposed memory update.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemoryProposeResponse"
+
+  /memory/append:
+    post:
+      operationId: appendStudioMemory
+      summary: Append a new governed Studio Memory record.
+      description: Adds a new versioned memory record without overwriting.
+      security:
+        - StudioGatewayApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemoryAppendRequest"
+      responses:
+        "200":
+          description: Memory append result with proof.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemoryWriteResponse"
+
+  /memory/update:
+    post:
+      operationId: updateStudioMemory
+      summary: Update an existing Studio Memory record with version preservation.
+      description: Updates memory only when policy allows it.
+      security:
+        - StudioGatewayApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemoryUpdateRequest"
+      responses:
+        "200":
+          description: Memory update result with proof.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemoryWriteResponse"
+
+  /memory/deprecate:
+    post:
+      operationId: deprecateStudioMemory
+      summary: Deprecate a Studio Memory record without deleting it.
+      description: Marks a memory record as deprecated while preserving history.
+      security:
+        - StudioGatewayApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemoryDeprecateRequest"
+      responses:
+        "200":
+          description: Memory deprecation result with proof.
+          content:
+            application/json:
+              riskLevel:
+              type: string
+              description: Assessed risk level of the recorded event.
+
+components:
+  securitySchemes:
+    StudioGatewayApiKey:
+      type: apiKey
+      in: header
+      name: X-Studio-Gateway-Key
+      description: Provide the secret studio gateway key.
+
+    StudioGatewayOAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://canopener-unfixable-citric.ngrok-free.dev/oauth/authorize
+          tokenUrl: https://canopener-unfixable-citric.ngrok-free.dev/oauth/token
+          scopes: {}
+          description: Native SaaS OAuth flow for Studio Gateway.
+
+  schemas:
+    TruthLabel:
+      type: string
+      enum:
+        - KNOWN
+        - VERIFIED
+        - INFERRED
+        - BLOCKED
+        - NEEDS_APPROVAL
+        - FAILED
+        - ACCEPTED
+
+    RiskLevel:
+      type: string
+      enum:
+        - low
+        - medium
+        - high
+        - critical
+
+    EvoIntent:
+      type: string
+      enum:
+        - train
+        - audit
+        - verify
+        - implement
+        - report
+        - push
+        - remember
+        - escalate
+
+    EvoLayerStatusResponse:
+      type: object
+      required:
+        - truthLabel
+        - available
+        - generatedAt
+      properties:
+        truthLabel:
+          $ref: "#/components/schemas/TruthLabel"
+        available:
+          type: boolean
+        generatedAt:
+          type: string
+          format: date-time
+        adapters:
+          type: object
+          properties:
+            repo:
+              type: boolean
+            git:
+              type: boolean
+            memory:
+              type: boolean
+            proofLedger:
+              type: boolean
+            platformSentinel:
+              type: boolean
+            ideExecution:
+              type: boolean
+        policy:
+          type: object
+          properties:
+            ownerApprovalRequiredForHighRisk:
+              type: boolean
+            proofRequired:
+              type: boolean
+            tenantIsolation:
+              type: boolean
+            secretsNeverReturned:
+              type: boolean
+            memoryVersioningRequired:
+              type: boolean
+
+    EvoLayerPushRequest:
+      type: object
+      required:
+        - tenantId
+        - source
+        - targetLayer
+        - intent
+        - riskLevel
+        - payload
+        - proofRequired
+      properties:
+        tenantId:
+          type: string
+        ownerUserId:
+          type: string
+          description: Verified Studio owner ID.
+        source:
+          type: string
+          enum:
+            - ph_evo_studio_trainer
+            - studio_gateway
+            - operator_console
+        targetLayer:
+          type: string
+          enum:
+            - evo_layer
+        intent:
+          $ref: "#/components/schemas/EvoIntent"
+        riskLevel:
+          $ref: "#/components/schemas/RiskLevel"
+        requiresApproval:
+          type: boolean
+          default: true
+        approvalRef:
+          type: string
+          description: Server approval reference.
+        idempotencyKey:
+          type: string
+          description: Unique key to prevent duplicates.
+        payload:
+          type: object
+          required:
+            - title
+            - objective
+            - constraints
+            - proofRequirements
+          properties:
+            title:
+              type: string
+            objective:
+              type: string
+            repoId:
+              type: string
+            branch:
+              type: string
+            files:
+              type: array
+              items:
+                type: string
+            commands:
+              type: array
+              items:
+                type: string
+            patches:
+              type: array
+              items:
+                type: object
+                properties:
+                  path:
+                    type: string
+                  intent:
+                    type: string
+                  content:
+                    type: string
+            memory:
+              type: object
+              properties:
+                namespace:
+                  $ref: "#/components/schemas/MemoryNamespace"
+                memoryType:
+                  $ref: "#/components/schemas/MemoryType"
+                content:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+            constraints:
+              type: array
+              items:
+                type: string
+            proofRequirements:
+              type: array
+              items:
+                type: string
+            notes:
+              type: string
+        proofRequired:
+          type: boolean
+          default: true
+
+    EvoLayerPushResponse:
+      type: object
+      required:
+        - truthLabel
+        - status
+        - evoCommandId
+        - receipt
+      properties:
+        truthLabel:
+          $ref: "#/components/schemas/TruthLabel"
+        status:
+          type: string
+          enum:
+            - accepted
+            - queued
+            - completed
+            - blocked
+            - failed
+            - needs_approval
+        evoCommandId:
+          type: string
+        findings:
+          type: array
+          items:
+            $ref: "#/components/schemas/Finding"
+        nextActions:
+          type: array
+          items:
+            type: string
+        receipt:
+          $ref: "#/components/schemas/ProofReceipt"
+
+    RepoVerificationRequest:
+      type: object
+      required:
+        - repoId
+        - mode
+        - commands
+        - proofRequired
+      properties:
+        repoId:
+          type: string
+        mode:
+          type: string
+          enum:
+            - read_only_verify
+            - approval_gated_execute
+        commands:
+          type: array
+          items:
+            type: string
+          description: Must be in server allowlist.
+        timeoutSeconds:
+          type: integer
+          default: 120
+          minimum: 1
+          maximum: 900
+        approvalRef:
+          type: string
+          description: Required for gated commands.
+        proofRequired:
+          type: boolean
+          default: true
+
+    RepoVerificationResponse:
+      type: object
+      required:
+        - truthLabel
+        - repo
+        - commands
+        - proof
+      properties:
+        truthLabel:
+          $ref: "#/components/schemas/TruthLabel"
+        repo:
+          $ref: "#/components/schemas/RepoState"
+        commands:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommandResult"
+        proof:
+          $ref: "#/components/schemas/ProofReceipt"
+
+    GitCommitPushRequest:
+      type: object
+      required:
+        - repoId
+        - branch
+        - commitMessage
+        - approvalRef
+        - proofRequired
+      properties:
+        repoId:
+          type: string
+        branch:
+          type: string
+          description: Feature branch preferred.
+        commitMessage:
+          type: string
+        approvalRef:
+          type: string
+          description: Server-side approval reference.
+        runChecksBeforePush:
+          type: boolean
+          default: true
+        checks:
+          type: array
+          items:
+            type: string
+          default:
+            - node --check promptbridge-server.js
+            - npm test
+            - npm run build
+            - npm run audit:imports
+            - npm run audit:css
+            - npm run verify:studio
+            - npm run maturity:check
+        proofRequired:
+          type: boolean
+          default: true
+
+    GitCommitPushResponse:
+      type: object
+      required:
+        - truthLabel
+        - pushed
+        - branch
+        - changedFiles
+        - proof
+      properties:
+        truthLabel:
+          $ref: "#/components/schemas/TruthLabel"
+        pushed:
+          type: boolean
+        branch:
+          type: string
+        commitHash:
+          type: string
+        remote:
+          type: string
+        changedFiles:
+          type: array
+          items:
+            type: string
+        checks:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommandResult"
+        proof:
+          $ref: "#/components/schemas/ProofReceipt"
+
+    ProofReceiptResponse:
+      type: object
+      required:
+        - truthLabel
+        - receipt
+      properties:
+        truthLabel:
+          $ref: "#/components/schemas/TruthLabel"
+        receipt:
+          $ref: "#/components/schemas/ProofReceipt"
+
+    RepoState:
+      type: object
+      properties:
+        repoId:
+          type: string
+        branch:
+          type: string
+        commitHash:
+          type: string
+        dirty:
+          type: boolean
+        runner:
+          type: string
+
+    CommandResult:
+      type: object
+      required:
+        - command
+        - exitCode
+        - status
+      properties:
+        command:
+          type: string
+        exitCode:
+          type: integer
+        status:
+          type: string
+          enum:
+            - passed
+            - failed
+            - blocked
+            - skipped
+            - timed_out
+        stdout:
+          type: string
+        stderr:
+          type: string
+        startedAt:
+          type: string
+          format: date-time
+        finishedAt:
+          type: string
+          format: date-time
+
+    ProofReceipt:
+      type: object
+      required:
+        - receiptId
+        - timestamp
+        - proofRequired
+      properties:
+        receiptId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp when the event was recorded.
+        proofRequired:
+          type: boolean
+        proofPath:
+          type: string
+        tenantId:
+          type: string
+        source:
+          type: string
+        targetLayer:
+          type: string
+        riskLevel:
+          $ref: "#/components/schemas/RiskLevel"
+        runner:
+          type: string
+        ledgerHash:
+          type: string
+
+    Finding:
+      type: object
+      properties:
+        severity:
+          type: string
+          enum:
+            - low
+            - medium
+            - high
+            - critical
+        module:
+          type: string
+        message:
+          type: string
+        sourceBrain:
+          type: string
+
+    MemoryNamespace:
+      type: string
+      enum:
+        - owner_profile
+        - studio_policy
+        - project_context
+        - repo_context
+        - agent_training
+        - routing_rules
+        - audit_history
+        - prompt_library
+        - workflow_preferences
+        - proof_notes
+
+    MemoryType:
+      type: string
+      enum:
+        - preference
+        - rule
+        - policy
+        - project_note
+        - repo_note
+        - training_note
+        - audit_note
+        - routing_note
+        - prompt_note
+        - proof_note
+
+    MemoryRecord:
+      type: object
+      required:
+        - memoryId
+        - tenantId
+        - namespace
+        - memoryType
+        - content
+        - version
+        - status
+        - createdAt
+      properties:
+        memoryId:
+          type: string
+        tenantId:
+          type: string
+        ownerUserId:
+          type: string
+        projectId:
+          type: string
+        workspaceId:
+          type: string
+        namespace:
+          $ref: "#/components/schemas/MemoryNamespace"
+        memoryType:
+          $ref: "#/components/schemas/MemoryType"
+        riskLevel:
+          $ref: "#/components/schemas/RiskLevel"
+        content:
+          type: string
+        summary:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        version:
+          type: integer
+        status:
+          type: string
+          enum:
+            - active
+            - proposed
+            - superseded
+            - deprecated
+            - blocked
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+        proofReceiptId:
+          type: string
+
+    MemorySearchRequest:
+      type: object
+      required:
+        - tenantId
+        - query
+      properties:
+        tenantId:
+          type: string
+        ownerUserId:
+          type: string
+        projectId:
+          type: string
+        workspaceId:
+          type: string
+        namespace:
+          $ref: "#/components/schemas/MemoryNamespace"
+        query:
+          type: string
+        includeDeprecated:
+          type: boolean
+          default: false
+        limit:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 50
+
+    MemorySearchResponse:
+      type: object
+      required:
+        - truthLabel
+        - results
+      properties:
+        truthLabel:
+          $ref: "#/components/schemas/TruthLabel"
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/MemoryRecord"
+        receipt:
+          $ref: "#/components/schemas/ProofReceipt"
+
+    MemoryProposeRequest:
+      type: object
+      required:
+        - tenantId
+        - namespace
+        - memoryType
+        - riskLevel
+        - proposedContent
+        - reason
+      properties:
+        tenantId:
+          type: string
+        ownerUserId:
+          type: string
+        projectId:
+          type: string
+        workspaceId:
+          type: string
+        namespace:
+          $ref: "#/components/schemas/MemoryNamespace"
+        memoryType:
+          $ref: "#/components/schemas/MemoryType"
+        riskLevel:
+          $ref: "#/components/schemas/RiskLevel"
+        proposedContent:
+          type: string
+        reason:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        conflictCheckRequired:
+          type: boolean
+          default: true
+        proofRequired:
+          type: boolean
+          default: true
+
+    MemoryProposeResponse:
+      type: object
+      required:
+        - truthLabel
+        - status
+        - proposedMemory
+      properties:
+        truthLabel:
+          $ref: "#/components/schemas/TruthLabel"
+        status:
+          type: string
+          enum:
+            - proposed
+            - blocked
+            - needs_approval
+        proposedMemory:
+          $ref: "#/components/schemas/MemoryRecord"
+        conflicts:
+          type: array
+          items:
+            $ref: "#/components/schemas/MemoryRecord"
+        nextActions:
+          type: array
+          items:
+            type: string
+
+    MemoryAppendRequest:
+      type: object
+      required:
+        - tenantId
+        - namespace
+        - memoryType
+        - riskLevel
+        - content
+        - reason
+        - proofRequired
+      properties:
+        tenantId:
+          type: string
+        ownerUserId:
+          type: string
+        projectId:
+          type: string
+        workspaceId:
+          type: string
+        namespace:
+          $ref: "#/components/schemas/MemoryNamespace"
+        memoryType:
+          $ref: "#/components/schemas/MemoryType"
+        riskLevel:
+          $ref: "#/components/schemas/RiskLevel"
+        content:
+          type: string
+        reason:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        approvalRef:
+          type: string
+          description: Required for high or critical risk memory writes.
+        conflictCheckRequired:
+          type: boolean
+          default: true
+        proofRequired:
+          type: boolean
+          default: true
+
+    MemoryUpdateRequest:
+      type: object
+      required:
+        - tenantId
+        - memoryId
+        - newContent
+        - reason
+        - approvalRef
+        - preservePreviousVersion
+        - proofRequired
+      properties:
+        tenantId:
+          type: string
+        memoryId:
+          type: string
+        newContent:
+          type: string
+        reason:
+          type: string
+        approvalRef:
+          type: string
+        preservePreviousVersion:
+          type: boolean
+          default: true
+        proofRequired:
+          type: boolean
+          default: true
+
+    MemoryDeprecateRequest:
+      type: object
+      required:
+        - tenantId
+        - memoryId
+        - reason
+        - approvalRef
+        - proofRequired
+      properties:
+        tenantId:
+          type: string
+        memoryId:
+          type: string
+        reason:
+          type: string
+        replacementMemoryId:
+          type: string
+        approvalRef:
+          type: string
+        proofRequired:
+          type: boolean
+          default: true
+
+    MemoryWriteResponse:
+      type: object
+      required:
+        - truthLabel
+        - status
+        - memory
+        - proof
+      properties:
+        truthLabel:
+          $ref: "#/components/schemas/TruthLabel"
+        status:
+          type: string
+          enum:
+            - appended
+            - updated
+            - deprecated
+            - blocked
+            - needs_approval
+            - failed
+        memory:
+          $ref: "#/components/schemas/MemoryRecord"
+        previousVersion:
+          $ref: "#/components/schemas/MemoryRecord"
+        conflicts:
+          type: array
+          items:
+            $ref: "#/components/schemas/MemoryRecord"
+        proof:
+          $ref: "#/components/schemas/ProofReceipt"
+
+    EvoLayerInboxResponse:
+      type: object
+      required:
+        - success
+        - pendingCount
+        - messages
+      properties:
+        success:
+          type: boolean
+        truthLabel:
+          type: string
+        pendingCount:
+          type: integer
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+              priority:
+                type: string
+              message:
+                type: string
+              createdAt:
+                type: string

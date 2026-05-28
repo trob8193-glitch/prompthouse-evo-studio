@@ -7,8 +7,8 @@
   },
   "servers": [
     {
-      "url": "YOUR_NGROK_URL",
-      "description": "Public HTTPS URL for the PH Evo Studio PromptBridge server"
+      "url": "https://halloween-import-bufing-nevertheless.trycloudflare.com",
+      "description": "Local PromptBridge (Via Cloudflare Tunnel)"
     }
   ],
   "paths": {
@@ -39,14 +39,6 @@
       "get": {
         "operationId": "getTriBrainStatus",
         "summary": "Get PH Evo Studio TriBrain status, enabled brains, capability state, and fallback policy.",
-        "parameters": [
-          { "name": "x-tribrain-role", "in": "header", "schema": { "type": "string", "default": "viewer" }, "required": false },
-          { "name": "x-user-id", "in": "header", "schema": { "type": "string" }, "required": false },
-          { "name": "x-tenant-id", "in": "header", "schema": { "type": "string" }, "required": false },
-          { "name": "x-project-ids", "in": "header", "schema": { "type": "string" }, "required": false },
-          { "name": "x-chatgpt-online", "in": "header", "schema": { "type": "string", "enum": ["true", "false"] }, "required": false },
-          { "name": "x-ide-online", "in": "header", "schema": { "type": "string", "enum": ["true", "false"] }, "required": false }
-        ],
         "responses": {
           "200": {
             "description": "TriBrain status returned",
@@ -79,14 +71,6 @@
       "post": {
         "operationId": "routeTriBrainCommand",
         "summary": "Route a command through the TriBrain router and permission policy.",
-        "parameters": [
-          { "name": "x-tribrain-role", "in": "header", "schema": { "type": "string", "default": "builder" }, "required": false },
-          { "name": "x-user-id", "in": "header", "schema": { "type": "string" }, "required": false },
-          { "name": "x-tenant-id", "in": "header", "schema": { "type": "string" }, "required": false },
-          { "name": "x-project-ids", "in": "header", "schema": { "type": "string" }, "required": false },
-          { "name": "x-chatgpt-online", "in": "header", "schema": { "type": "string", "enum": ["true", "false"], "default": "true" }, "required": false },
-          { "name": "x-ide-online", "in": "header", "schema": { "type": "string", "enum": ["true", "false"] }, "required": false }
-        ],
         "requestBody": {
           "required": false,
           "content": {
@@ -121,12 +105,6 @@
       "post": {
         "operationId": "formTriBrainFinalResponse",
         "summary": "Form a proof-aware final response from one or more brain outputs.",
-        "parameters": [
-          { "name": "x-tribrain-role", "in": "header", "schema": { "type": "string", "default": "builder" }, "required": false },
-          { "name": "x-user-id", "in": "header", "schema": { "type": "string" }, "required": false },
-          { "name": "x-tenant-id", "in": "header", "schema": { "type": "string" }, "required": false },
-          { "name": "x-project-ids", "in": "header", "schema": { "type": "string" }, "required": false }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -155,6 +133,107 @@
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/GenericResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tribrain/execute-verification": {
+      "post": {
+        "operationId": "executeRepoVerification",
+        "summary": "Execute allowlisted verification commands (read-only) inside the Studio securely.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "command": { "type": "string" },
+                  "approvals": {
+                    "type": "array",
+                    "items": { "type": "object" }
+                  }
+                },
+                "required": ["command"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Proof Ledger receipt containing stdout, stderr, and execution metadata.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GenericResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tribrain/evo-layer/push": {
+      "post": {
+        "operationId": "pushToEvoLayer",
+        "summary": "Push an approved command package to the Evo Layer.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "tenantId",
+                  "source",
+                  "targetLayer",
+                  "intent",
+                  "riskLevel",
+                  "payload",
+                  "proofRequired"
+                ],
+                "properties": {
+                  "tenantId": { "type": "string" },
+                  "ownerUserId": { "type": "string" },
+                  "source": { "type": "string", "enum": ["ph_evo_studio_trainer", "studio_gateway", "operator_console"] },
+                  "targetLayer": { "type": "string", "enum": ["evo_layer"] },
+                  "intent": { "type": "string", "enum": ["implement", "verify", "audit", "train", "report", "push"] },
+                  "riskLevel": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+                  "requiresApproval": { "type": "boolean", "default": true },
+                  "approvalRef": { "type": "string", "description": "Server-side approval reference. Never expose raw secrets." },
+                  "payload": { "type": "object", "additionalProperties": true },
+                  "proofRequired": { "type": "boolean", "default": true }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Evo Layer accepted, rejected, or completed the command package.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["truthLabel", "status", "receipt"],
+                  "properties": {
+                    "truthLabel": { "type": "string", "enum": ["VERIFIED", "ACCEPTED", "BLOCKED", "FAILED", "NEEDS_APPROVAL"] },
+                    "status": { "type": "string" },
+                    "evoCommandId": { "type": "string" },
+                    "receipt": {
+                      "type": "object",
+                      "properties": {
+                        "receiptId": { "type": "string" },
+                        "timestamp": { "type": "string" },
+                        "tenantId": { "type": "string" },
+                        "source": { "type": "string" },
+                        "targetLayer": { "type": "string" },
+                        "riskLevel": { "type": "string" },
+                        "proofPath": { "type": "string" }
+                      }
+                    }
+                  }
+                }
               }
             }
           }

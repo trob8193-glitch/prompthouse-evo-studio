@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-05-19T23:50:20.647Z",
+  "generatedAt": "2026-05-28T01:59:18.126Z",
   "truthState": "DATASET_READY",
-  "totalExamples": 5,
-  "validExamples": 5,
+  "totalExamples": 7,
+  "validExamples": 7,
   "invalidExamples": [],
-  "trainCount": 4,
-  "evalCount": 1,
+  "trainCount": 5,
+  "evalCount": 2,
   "files": {
     "trainJsonl": ".evo-llm\\training-data\\evo-train.jsonl",
     "evalJsonl": ".evo-llm\\training-data\\evo-eval.jsonl"

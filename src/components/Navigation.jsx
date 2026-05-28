@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
   Activity, Eye, Swords, Sparkles, BarChart3, FolderOpen, Gauge, Zap, ChevronRight,
-  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, BrainCircuit
+  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, BrainCircuit, Radio
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -36,6 +36,7 @@ export const NAV_GROUPS = [
       { id: 'evo-layout', label: 'Evo Layout', icon: LayoutTemplate },
       { id: 'theme-evolution', label: 'Theme Evolution', icon: Palette },
       { id: 'evopulse-grid', label: 'EvoPulse Grid', icon: Share2 },
+      { id: 'chatgpt-communicator', label: 'ChatGPT Comm-Link', icon: Radio },
     ],
   },
   {

@@ -94,7 +94,7 @@ export function createTriBrainCommandEnvelope(input = {}) {
   const abilityClass = input.abilityClass || TRIBRAIN_ABILITY_CLASSES.PLAN;
   const intent = String(input.intent || 'PLAN_STUDIO_WORK').trim();
   const riskLevel = input.riskLevel || inferRiskLevel(intent, input.payload);
-  const requiresApproval = Boolean(input.requiresApproval ?? isDangerousIntent(intent) || riskLevel === TRIBRAIN_RISK_LEVELS.HIGH || riskLevel === TRIBRAIN_RISK_LEVELS.CRITICAL);
+  const requiresApproval = Boolean((input.requiresApproval ?? isDangerousIntent(intent)) || riskLevel === TRIBRAIN_RISK_LEVELS.HIGH || riskLevel === TRIBRAIN_RISK_LEVELS.CRITICAL);
 
   return {
     id: input.id || `tribrain_cmd_${Date.now()}`,
