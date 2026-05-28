@@ -1,7 +1,10 @@
 import express from 'express';
 import { UniversalImageAdaptor } from '../lib/ai/UniversalImageAdaptor.js';
+import registerQuadBrainCreativeRoutes from './quadbrain_creative_routes.js';
 
 export default function registerEvoDiffuserRoutes(app) {
+  registerQuadBrainCreativeRoutes(app);
+
   app.post('/api/diffuser/generate', async (req, res) => {
     try {
       const { prompt, steps = 30, cfg = 7, engine = 'dalle' } = req.body;
