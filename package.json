@@ -61,6 +61,7 @@
     "tribrain:status": "node scripts/tribrain_check.mjs",
     "tribrain:strict": "node scripts/tribrain_check.mjs --strict",
     "tribrain:danger-check": "node scripts/tribrain_check.mjs --dangerous",
+    "quadbrain:creative": "node scripts/quadbrain_creative_check.mjs --create-only",
     "sentinel:daemon": "node src/core/daemons/sentinel/PlatformSentinelDaemon.mjs",
     "singularity": "node src/core/daemons/singularity/SingularityCore.mjs",
     "crucible": "node src/core/daemons/crucible/CrucibleDaemon.mjs",
