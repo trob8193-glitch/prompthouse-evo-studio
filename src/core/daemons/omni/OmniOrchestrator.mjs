@@ -10,6 +10,7 @@ CrashProofEngine.initialize('OmniOrchestrator');
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '../../../..');
+
 const receiptDir = path.join(rootDir, '.prompthouse-data', 'omni', 'receipts');
 const inboxDir = path.join(rootDir, '.prompthouse-data', 'evo-layer', 'inbox');
 

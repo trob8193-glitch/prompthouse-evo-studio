@@ -1,7 +1,14 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js';
 import { OpenAI } from "openai";
 import readline from "readline";
 import dotenv from "dotenv";
 
+CrashProofEngine.initialize('HeadlessGptWorker');
+
+const __filename = fileURLToPath(import.meta.url);
 dotenv.config();
 
 const apiKey = process.env.OPENAI_API_KEY;

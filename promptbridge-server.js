@@ -23,6 +23,8 @@ const __filename = fileURLToPath(import.meta.url);
 import crypto from 'crypto';
 import Stripe from 'stripe';
 
+const EVONET_VERSION = 'v1.0.0-rc2';
+
 // Import our core engines
 import { UniversalAIAdaptor } from './lib/ai/UniversalAIAdaptor.js';
 import { SelfMaintenance } from './src/core/automation/self_maintenance.js';

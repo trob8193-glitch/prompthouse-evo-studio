@@ -2,7 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
+import { CrashProofEngine } from '../../autonomy/CrashProofEngine.js';
 import { EvoCoreConvergenceAmplifier } from '../../convergence-amplifier/index.js';
+
+CrashProofEngine.initialize('ConvergenceDaemon');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

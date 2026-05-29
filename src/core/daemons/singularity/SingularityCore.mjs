@@ -2,8 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
+import { CrashProofEngine } from '../../autonomy/CrashProofEngine.js';
 import { deepAuditFile, deepAuditDirectory } from '../../../../scripts/deep-audit.mjs';
 import { repairFile } from '../../../../scripts/gemini-repair.mjs';
+
+CrashProofEngine.initialize('SingularityCore');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

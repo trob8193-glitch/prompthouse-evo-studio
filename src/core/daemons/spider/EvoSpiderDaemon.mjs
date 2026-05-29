@@ -1,7 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { CrashProofEngine } from '../../autonomy/CrashProofEngine.js';
 import { TetherEngine } from '../../autonomy/TetherEngine.js';
+
+CrashProofEngine.initialize('EvoSpiderDaemon');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

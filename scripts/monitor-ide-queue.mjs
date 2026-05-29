@@ -1,6 +1,11 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js';
 
+CrashProofEngine.initialize('MonitorIdeQueue');
+
+const __filename = fileURLToPath(import.meta.url);
 const queueFile = path.join(process.cwd(), '.prompthouse-data', 'evo-layer', 'ide_queue.json');
 
 console.log("🚀 [IDE Agent] Monitoring ide_queue.json for Brain 2 & 4 delegations...");

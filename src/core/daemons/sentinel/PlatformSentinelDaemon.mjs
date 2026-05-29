@@ -1,7 +1,15 @@
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { CrashProofEngine } from '../../autonomy/CrashProofEngine.js';
 
 import { Log } from '../../autonomy/SovereignLogger.js';
+
+CrashProofEngine.initialize('PlatformSentinelDaemon');
+
+const __filename = fileURLToPath(import.meta.url);
 
 const execAsync = promisify(exec);
 

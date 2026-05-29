@@ -2,6 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
+import { CrashProofEngine } from '../../autonomy/CrashProofEngine.js';
+
+CrashProofEngine.initialize('CrucibleDaemon');
 
 import { Log } from '../../autonomy/SovereignLogger.js';
 
