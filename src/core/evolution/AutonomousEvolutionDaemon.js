@@ -1,4 +1,8 @@
 import { loadEvolutionDaemonSettings, saveEvolutionDaemonSettings } from './EvolutionDaemonSettings.js';
+import { CrashProofEngine } from '../autonomy/CrashProofEngine.js';
+
+CrashProofEngine.initialize('AutonomousEvolutionDaemon');
+
 import { selectAutonomousObjective } from './AutonomousObjectiveSelector.js';
 import { loadEvolutionMemory } from './EvolutionMemory.js';
 import { runEvolutionCycle, getEvolutionStatus } from './EvolutionOrchestrator.js';

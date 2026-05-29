@@ -1,4 +1,7 @@
 import { runEvolutionCycle, getEvolutionStatus, listEvolutionRuns } from '../src/core/evolution/index.js';
+import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js';
+
+CrashProofEngine.initialize('SelfEvolutionCycleScript');
 
 import { Log } from '../src/core/autonomy/SovereignLogger.js';
 

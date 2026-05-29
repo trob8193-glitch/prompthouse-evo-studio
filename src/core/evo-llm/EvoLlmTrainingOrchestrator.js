@@ -1,5 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import { CrashProofEngine } from '../autonomy/CrashProofEngine.js';
+
+CrashProofEngine.initialize('EvoLlmTrainingOrchestrator');
+
 import { getEvoLlmPaths } from './EvoLlmPaths.js';
 import { buildEvoLlmDataset } from './EvoLlmDataset.js';
 import { evaluateEvoLlmDataset, writeEvoLlmTrainingReceipt } from './EvoLlmEvaluation.js';

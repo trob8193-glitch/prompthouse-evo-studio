@@ -1,5 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import { CrashProofEngine } from '../autonomy/CrashProofEngine.js';
+
+CrashProofEngine.initialize('EvolutionOrchestrator');
+
 import { DEFAULT_EVOLUTION_POLICY, TRUTH_STATES, normalizeEvolutionPolicy } from './EvolutionPolicy.js';
 import { createRepoSnapshot, writeSnapshot } from './RepoSnapshot.js';
 import { createEvolutionWorkspace } from './EvolutionWorkspace.js';

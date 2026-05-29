@@ -1,6 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js';
+
+CrashProofEngine.initialize('EvolutionDaemonScript');
 
 import { Log } from '../src/core/autonomy/SovereignLogger.js';
 
