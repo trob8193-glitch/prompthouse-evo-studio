@@ -2,8 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
-import { deepAuditFile, deepAuditDirectory } from './deep-audit.mjs';
-import { repairFile } from './gemini-repair.mjs';
+import { deepAuditFile, deepAuditDirectory } from '../../../../scripts/deep-audit.mjs';
+import { repairFile } from '../../../../scripts/gemini-repair.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

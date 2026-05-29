@@ -286,3 +286,9 @@ export function AgentBridgeView() {
     </div>
   );
 }
+
+/* [EVO-DAEMON] Add micro-animations to buttons for a more premium feel and improved user interaction feedback. */
+.button { transition: transform 0.2s ease-in-out; } .button:hover { transform: scale(1.05); }
+
+/* [EVO-DAEMON] Add a subtle hover effect to buttons to enhance user interaction feedback and provide a more premium feel. */
+.button:hover { transform: scale(1.05); transition: transform 0.2s ease-in-out; }

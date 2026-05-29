@@ -194,6 +194,32 @@ export function AutonomousSelfBuildCommandCenter() {
     }
   }
 
+  async function runScaffold() {
+    setLog((items) => [
+      `Scaffold: Triggering local physical scaffolding...`,
+      ...items,
+    ]);
+
+    try {
+      const res = await fetch('http://127.0.0.1:3001/api/autonomous-build/scaffold', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectName: 'evo_generated_app_' + Date.now() })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setLog((items) => [
+          `Scaffold: Successfully generated app at ${data.result.path}`,
+          ...items,
+        ]);
+      } else {
+        setLog((items) => [`Scaffold: Failed. Error: ${data.error || 'Unknown failure'}`, ...items]);
+      }
+    } catch (e) {
+      setLog((items) => [`Scaffold: Bridge offline. Could not reach scaffolding engine.`, ...items]);
+    }
+  }
+
   const cardStyle = { background: 'rgba(15,15,25,0.9)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: 14, marginBottom: 12 };
   const badgeStyle = (status) => {
     const tone = getTone(status);
@@ -262,6 +288,12 @@ export function AutonomousSelfBuildCommandCenter() {
                 style={{ background: '#facc15', color: 'black', border: 'none', padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 900, cursor: 'pointer' }}
               >
                 🔄 Self-Build
+              </button>
+              <button 
+                onClick={runScaffold}
+                style={{ background: '#4f46e5', color: 'white', border: 'none', padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 900, cursor: 'pointer', boxShadow: '0 0 10px rgba(79, 70, 229, 0.5)' }}
+              >
+                🏗️ Scaffold Physical App
               </button>
             </div>
             
@@ -542,3 +574,7 @@ export function AutonomousSelfBuildCommandCenter() {
     </div>
   );
 }
+
+
+/* [EVO-DAEMON] Add a micro-animation to buttons for a more premium feel and improved user interaction feedback. */
+.button-class { transition: transform 0.2s ease-in-out; } .button-class:hover { transform: scale(1.05); }

@@ -77,11 +77,15 @@
     "self:invent": "node scripts/self-invention-daemon.mjs",
     "self:build": "npm run build && npm run platform:audit",
     "mobile:build": "node scripts/mobile-architect-cli.mjs",
-    "daemons:all": "concurrently \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run master:status\" \"npm run antigravity\"",
+    "daemons:all": "concurrently \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run master:status\" \"npm run antigravity\" \"npm run ide:monitor\" \"node src/core/daemons/spider/EvoSpiderDaemon.mjs\"",
     "omni:orchestrator": "node src/core/daemons/omni/OmniOrchestrator.mjs",
-    "antigravity": "node scripts/antigravity-daemon.mjs"
+    "antigravity": "node scripts/antigravity-daemon.mjs",
+    "ide:monitor": "node scripts/monitor-ide-queue.mjs",
+    "mcp:quadbrain": "node scripts/quadbrain-mcp-server.mjs",
+    "gpt:terminal": "node scripts/headless-gpt-worker.mjs"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@openai/agents": "^0.8.5",
     "@rive-app/react-canvas": "^4.28.3",
@@ -112,6 +116,8 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@vitejs/plugin-react": "^4.2.0",
+    "acorn": "^8.16.0",
+    "acorn-walk": "^8.3.5",
     "autoprefixer": "^10.5.0",
     "jsdom": "^29.1.1",
     "postcss": "^8.5.13",

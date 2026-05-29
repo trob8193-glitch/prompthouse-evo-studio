@@ -3,7 +3,7 @@ import path from 'path';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 
-import { Log } from '../src/core/autonomy/SovereignLogger.js';
+import { Log } from '../../autonomy/SovereignLogger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

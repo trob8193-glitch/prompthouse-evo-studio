@@ -321,6 +321,9 @@ export function ForgeLabs() {
   );
 }
 
+export { ApiHarvesterView } from './ApiHarvesterView.jsx';
+export { QuadBrainAppCockpit } from './QuadBrainAppCockpit.jsx';
+
 // ─── ADDITIONAL RECOVERED MODULES ──────────────────────────────────────────
 
 export function EvoDuelArena() {

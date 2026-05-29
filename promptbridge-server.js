@@ -9,9 +9,16 @@ import dotenv from 'dotenv';
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import path, { join, relative, dirname, resolve, extname } from 'path';
 import OpenAI from 'openai';
-import { execSync } from 'child_process';
+import { execSync, exec } from 'child_process';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import net from 'net';
+import { fileURLToPath } from 'url';
+import { CrashProofEngine } from './src/core/autonomy/CrashProofEngine.js';
+
+CrashProofEngine.initialize('PromptBridgeServer');
+
+const __filename = fileURLToPath(import.meta.url);
 
 import crypto from 'crypto';
 import Stripe from 'stripe';
@@ -64,6 +71,7 @@ import registerPlatformSentinelRoutes from './generated_apis/platform_sentinel_r
 import registerAiModelRoutes from './generated_apis/ai_model_routes.js';
 import registerEvoDiffuserRoutes from './generated_apis/evo_diffuser_routes.js';
 import registerTribrainRoutes from './generated_apis/tribrain_routes.js';
+import registerQuadBrainRoutes from './generated_apis/quadbrain_routes.js';
 
 ensureEvolutionSchema();
 
@@ -74,6 +82,7 @@ registerPlatformSentinelRoutes(app);
 registerAiModelRoutes(app);
 registerEvoDiffuserRoutes(app);
 registerTribrainRoutes(app);
+registerQuadBrainRoutes(app);
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
 
 // ─── INITIALIZATION ──────────────────────────────────────────────────────────

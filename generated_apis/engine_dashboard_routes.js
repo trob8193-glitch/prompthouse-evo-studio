@@ -40,6 +40,9 @@ import {
   listThemeProfiles,
 } from '../src/core/theme-evolution/index.js';
 
+import { LocalScaffolder } from '../src/core/builder/LocalScaffolder.js';
+import { ApiHarvester } from '../src/core/signals/ApiHarvester.js';
+
 const ok = (res, payload = {}) => res.json({ success: true, ...payload });
 const fail = (res, error, status = 500) => res.status(status).json({ success: false, error: error?.message || String(error) });
 const asyncRoute = (handler) => async (req, res) => {
@@ -248,4 +251,35 @@ export default function registerEngineDashboardRoutes(app) {
   app.post('/api/theme-evolution/rollback', (req, res) => {
     ok(res, { receipt: rollbackThemeEvolution({ actor: req.body?.actor || 'studio_owner' }) });
   });
+
+  // ─── AUTONOMOUS BUILDER ROUTES ─────────────────────────────────────────────
+
+  app.post('/api/autonomous-build/scaffold', asyncRoute(async (req, res) => {
+    const projectName = req.body?.projectName || 'auto_scaffolded_app';
+    const scaffolder = new LocalScaffolder('./generated_apps');
+    
+    try {
+      const result = await scaffolder.scaffoldReactApp(projectName);
+      ok(res, { result });
+    } catch (e) {
+      fail(res, e);
+    }
+  }));
+
+  // ─── SIGNALS ROUTES ────────────────────────────────────────────────────────
+
+  app.post('/api/signals/harvest', asyncRoute(async (req, res) => {
+    const targetUrl = req.body?.url;
+    if (!targetUrl) {
+      return fail(res, new Error("URL is required"));
+    }
+    
+    const harvester = new ApiHarvester();
+    try {
+      const result = await harvester.harvest(targetUrl, req.body?.name);
+      ok(res, { result });
+    } catch (e) {
+      fail(res, e);
+    }
+  }));
 }

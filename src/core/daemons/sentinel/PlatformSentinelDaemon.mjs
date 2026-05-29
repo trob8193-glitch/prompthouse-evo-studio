@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
-import { Log } from '../src/core/autonomy/SovereignLogger.js';
+import { Log } from '../../autonomy/SovereignLogger.js';
 
 const execAsync = promisify(exec);
 

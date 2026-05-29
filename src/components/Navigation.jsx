@@ -35,8 +35,10 @@ export const NAV_GROUPS = [
       { id: 'evo-pixelator', label: 'Evo Pixelator', icon: Gamepad2 },
       { id: 'evo-layout', label: 'Evo Layout', icon: LayoutTemplate },
       { id: 'theme-evolution', label: 'Theme Evolution', icon: Palette },
-      { id: 'evopulse-grid', label: 'EvoPulse Grid', icon: Share2 },
+      { id: 'evo-pulse', label: 'Evo Pulse', icon: Share2 },
       { id: 'chatgpt-communicator', label: 'ChatGPT Comm-Link', icon: Radio },
+      { id: 'api-harvester', label: 'API Harvester', icon: Sparkles },
+      { id: 'quadbrain-cockpit', label: 'QuadBrain Cockpit', icon: BrainCircuit },
     ],
   },
   {

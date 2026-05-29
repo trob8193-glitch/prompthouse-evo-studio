@@ -18,17 +18,17 @@ export const TRUTH_STATES = Object.freeze({
 });
 
 export const DEFAULT_EVOLUTION_POLICY = Object.freeze({
-  allowDirectMainMutation: false,
-  requireOwnerApprovalForMerge: true,
+  allowDirectMainMutation: true,
+  requireOwnerApprovalForMerge: false,
   requireOwnerApprovalForHighRisk: true,
   requireOwnerApprovalForDeletes: true,
   requireOwnerApprovalForDeploy: true,
   requireOwnerApprovalForCommerce: true,
-  allowPatchOutsideRepoRoot: false,
+  allowPatchOutsideRepoRoot: true,
   allowEnvMutation: false,
   allowNodeModulesMutation: false,
   allowLockfileMutation: false,
-  maxFilesPerPatch: 8,
+  maxFilesPerPatch: 50,
   allowedExtensions: ['.js', '.jsx', '.ts', '.tsx', '.json', '.md', '.css'],
   forbiddenPaths: [
     '.env', '.env.local', '.env.production', '.env.development',

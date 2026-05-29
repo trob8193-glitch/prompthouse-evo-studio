@@ -37,6 +37,8 @@ import {
   WorkspaceShell, PromptRegistry, ExecutionQueue,
   ProofConsole, ForgeLabs, EvoDuelArena, AIGeneratorHub,
   GradingAndRelease, CommerceCore, FeatureFoundry,
+  ApiHarvesterView,
+  QuadBrainAppCockpit,
 } from './features/index.jsx';
 
 import EvoDiffuserDashboard from './features/EvoDiffuserDashboard.jsx';
@@ -73,6 +75,8 @@ export const PAGE_MAP = {
   'saas-builder': SaasBuilderView,
   'ghost-editor': GhostEditor,
   'chatgpt-communicator': ChatGPTCommunicatorView,
+  'api-harvester': ApiHarvesterView,
+  'quadbrain-cockpit': QuadBrainAppCockpit,
 };
 
 function PageRenderer() {
