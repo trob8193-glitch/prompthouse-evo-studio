@@ -509,5 +509,3 @@ export function ChromeExtensionView() {
   );
 }
 
-/* [EVO-DAEMON] Increase the visual hierarchy by adding a subtle box-shadow to card elements to elevate them and provide a premium feel. */
-.card { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }

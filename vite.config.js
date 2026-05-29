@@ -1,47 +1,89 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   plugins: [react()],
+
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@core': path.resolve(__dirname, './src/core'),
+      '@features': path.resolve(__dirname, './src/features'),
+      '@components': path.resolve(__dirname, './src/components'),
+    },
+  },
+
+  // Scoped to src/main.jsx so esbuild never crawls JSX files
+  // that contain raw CSS strings at module top-level.
+  optimizeDeps: {
+    entries: ['src/main.jsx'],
+    include: [
+      'react',
+      'react-dom',
+      'react-dom/client',
+      'react-router-dom',
+      'zustand',
+      'framer-motion',
+      'lucide-react',
+      'clsx',
+      'openai',
+    ],
+    exclude: ['@rive-app/react-canvas'],
+  },
+
   server: {
     host: true,
     port: 5173,
     strictPort: true,
     clearScreen: false,
     watch: {
-      ignored: ['**/.ai/**', '**/.sovereign-shards/**', '**/.prompthouse-data/**', '**/.prompt-garden/**', '**/scratch/**'],
+      ignored: [
+        '**/.ai/**',
+        '**/.sovereign-shards/**',
+        '**/.prompthouse-data/**',
+        '**/.prompt-garden/**',
+        '**/scratch/**',
+      ],
     },
   },
+
   build: {
-    target: "esnext",
-    minify: "esbuild",
+    target: 'esnext',
+    minify: 'esbuild',
     sourcemap: true,
     reportCompressedSize: true,
     rollupOptions: {
+      input: path.resolve(__dirname, 'index.html'),
       output: {
         manualChunks(id) {
-          const normalized = id.replace(/\\/g, '/')
+          const n = id.replace(/\\/g, '/')
 
-          if (normalized.includes('/node_modules/')) {
-            if (/\/(react|react-dom|react-router|react-router-dom|scheduler)\//.test(normalized)) return 'react-vendor'
-            if (/\/(framer-motion|lucide-react|zustand|clsx|tailwind-merge|@rive-app)\//.test(normalized)) return 'ui-vendor'
-            if (/\/(@openai\/agents|@openai\/agents-core|@openai\/agents-openai|openai)\//.test(normalized)) return 'ai-vendor'
+          if (n.includes('/node_modules/')) {
+            if (n.includes('/react/') || n.includes('/react-dom/') || n.includes('/react-router')) return 'react-vendor'
+            if (n.includes('/framer-motion/') || n.includes('/lucide-react/') || n.includes('/zustand/') || n.includes('/clsx/') || n.includes('/@rive-app/')) return 'ui-vendor'
+            if (n.includes('/@openai/') || n.includes('/openai/')) return 'ai-vendor'
             return 'vendor'
           }
 
-          if (normalized.endsWith('/src/engine.js')) return 'engine-core'
-          if (normalized.endsWith('/src/mobile-engine.js')) return 'mobile-engine'
-          if (/(\/src\/features\/|\/src\/app\/AppShell\.jsx$)/.test(normalized)) return 'studio-shell'
-          if (/(\/src\/proof-|\/src\/new-features-views\.jsx$|\/src\/release-spine-panels\.jsx$|\/src\/studio-complement-views\.jsx$)/.test(normalized)) return 'truth-surfaces'
-          if (/(\/src\/forge-|\/src\/nightforge|\/src\/tool-autogen|\/src\/pattern-miner|\/src\/real-execution)/.test(normalized)) return 'forge-surfaces'
-          if (/(\/src\/autonomous-|\/src\/self-build-|\/src\/worktwin-|\/src\/past-mvp-console)/.test(normalized)) return 'autonomy-surfaces'
-          if (/(\/src\/promptlink-|\/src\/agent-bridge-|\/src\/chrome-extension-|\/src\/evo-copilot-sidebar)/.test(normalized)) return 'bridge-surfaces'
-          if (/(\/src\/ai-|\/src\/v3-views\.jsx$|\/src\/views\.jsx$|\/src\/bot-|\/src\/evo-duel-engine-|\/src\/commerce-rail-view\.jsx$|\/src\/deploy-rail-view\.jsx$)/.test(normalized)) return 'creative-surfaces'
+          if (n.endsWith('/src/engine.js')) return 'engine-core'
+          if (n.endsWith('/src/mobile-engine.js')) return 'mobile-engine'
+          if (n.includes('/src/features/') || n.endsWith('/src/app/AppShell.jsx')) return 'studio-shell'
+          if (n.includes('/src/proof-') || n.endsWith('/src/new-features-views.jsx') || n.endsWith('/src/release-spine-panels.jsx') || n.endsWith('/src/studio-complement-views.jsx')) return 'truth-surfaces'
+          if (n.includes('/src/forge-') || n.includes('/src/nightforge') || n.includes('/src/tool-autogen') || n.includes('/src/pattern-miner') || n.includes('/src/real-execution')) return 'forge-surfaces'
+          if (n.includes('/src/autonomous-') || n.includes('/src/self-build-') || n.includes('/src/worktwin-') || n.includes('/src/past-mvp-console')) return 'autonomy-surfaces'
+          if (n.includes('/src/promptlink-') || n.includes('/src/agent-bridge-') || n.includes('/src/chrome-extension-') || n.includes('/src/evo-copilot-sidebar')) return 'bridge-surfaces'
+          if (n.includes('/src/ai-') || n.endsWith('/src/v3-views.jsx') || n.endsWith('/src/views.jsx') || n.includes('/src/bot-') || n.includes('/src/evo-duel-engine-') || n.endsWith('/src/commerce-rail-view.jsx') || n.endsWith('/src/deploy-rail-view.jsx')) return 'creative-surfaces'
+
           return undefined
         },
       },
     },
   },
+
   test: {
     globals: true,
     environment: 'jsdom',
