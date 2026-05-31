@@ -10,11 +10,13 @@ CrashProofEngine.initialize('SingularityCore');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, '..');
+// __dirname = src/core/daemons/singularity — go 4 levels up to project root
+const rootDir = path.resolve(__dirname, '../../../../');
 const srcDir = path.join(rootDir, 'src');
 const logDir = path.join(rootDir, 'proof_receipts', 'singularity_logs');
 
 if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+
 
 // ═══════════════════════════════════════════════════════════════
 //  SINGULARITY CORE v2 — REAL AI-POWERED SELF-EVOLUTION

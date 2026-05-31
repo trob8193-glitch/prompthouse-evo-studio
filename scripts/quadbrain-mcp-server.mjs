@@ -15,6 +15,14 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import fs from "fs/promises";
 import path from "path";
+import { fileURLToPath } from "url";
+import { CrashProofEngine } from "../src/core/autonomy/CrashProofEngine.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Tether the MCP server to the CrashProofEngine — if it dies, ChatGPT loses all 20 tools.
+CrashProofEngine.initialize('QuadBrainMcpServer');
 
 const execAsync = promisify(exec);
 
@@ -475,22 +483,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
      }
 
      if (name === "trigger_singularity_cycle") {
-       // Start singularity script manually
-       const { execAsync } = await import('./headless-gpt-worker.mjs'); // we can just rely on standard child_process but let's just use standard exec
-       const { exec } = await import('child_process');
-       const util = await import('util');
-       const execPromise = util.promisify(exec);
-       
-       execPromise('npm run singularity', { cwd: process.cwd() }).catch(e => console.error("Singularity error:", e));
+       // exec is already imported at the top — no dynamic import needed
+       execAsync('npm run singularity', { cwd: path.resolve(__dirname, '..') })
+         .catch(e => console.error("[MCP] Singularity error:", e.message));
        return { content: [{ type: "text", text: "Singularity repair cycle initiated asynchronously." }] };
      }
 
      if (name === "trigger_crucible_sweep") {
-       const { exec } = await import('child_process');
-       const util = await import('util');
-       const execPromise = util.promisify(exec);
-       
-       execPromise('npm run crucible:sweep', { cwd: process.cwd() }).catch(e => console.error("Crucible error:", e));
+       execAsync('npm run crucible:sweep', { cwd: path.resolve(__dirname, '..') })
+         .catch(e => console.error("[MCP] Crucible error:", e.message));
        return { content: [{ type: "text", text: "Crucible full sweep initiated asynchronously." }] };
      }
 

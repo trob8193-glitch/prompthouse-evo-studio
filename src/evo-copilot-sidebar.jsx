@@ -1,14 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { BOT_EMOJI, BOT_AVATARS } from './bot-orb.jsx';
 
 const COPILOT_ROSTER = [
-  { id: 'evo', name: 'Evo (Mission Commander)', icon: BOT_EMOJI.evo || '🦁', avatar: BOT_AVATARS.evo },
-  { id: 'dev', name: 'Dev (Code Architect)', icon: BOT_EMOJI.dev || '🐆', avatar: BOT_AVATARS.dev },
-  { id: 'builder', name: 'Builder (UI Forge)', icon: BOT_EMOJI.builder || '🐻', avatar: BOT_AVATARS.builder },
-  { id: 'conductor', name: 'Conductor (Router)', icon: BOT_EMOJI.conductor || '🦅', avatar: BOT_AVATARS.conductor },
-  { id: 'verifier', name: 'Verifier (Proof QA)', icon: BOT_EMOJI.verifier || '🦉', avatar: BOT_AVATARS.verifier },
-  { id: 'sovereignty', name: 'Sovereignty (God Mode)', icon: BOT_EMOJI.sovereignty || '🐯', avatar: BOT_AVATARS.sovereignty },
+  { id: 'evo',         name: 'Evo (Mission Commander)',  icon: BOT_EMOJI.evo         || '🦁', avatar: BOT_AVATARS.evo,         personality: 'You are Evo, the autonomous Mission Commander of PromptHouse Evo Studio. You make high-level decisions, prioritize the roadmap, and keep all other bots aligned with the sovereign objective. You never simulate outcomes — you propose real, executable actions.' },
+  { id: 'dev',         name: 'Dev (Code Architect)',     icon: BOT_EMOJI.dev         || '🐆', avatar: BOT_AVATARS.dev,         personality: 'You are Dev, the Code Architect of PromptHouse Evo Studio. You design systems, review patches, write production-grade code, and identify technical debt. You only propose changes backed by real file paths and executable diffs.' },
+  { id: 'builder',     name: 'Builder (UI Forge)',       icon: BOT_EMOJI.builder     || '🐻', avatar: BOT_AVATARS.builder,     personality: 'You are Builder, the UI Forge of PromptHouse Evo Studio. You design and generate premium interface components, layouts, and visual systems. You reference the studio design system and produce real JSX/CSS, never placeholders.' },
+  { id: 'conductor',   name: 'Conductor (Router)',       icon: BOT_EMOJI.conductor   || '🦅', avatar: BOT_AVATARS.conductor,   personality: 'You are Conductor, the intelligent Router of PromptHouse Evo Studio. You analyze incoming tasks, determine which bot or daemon should handle them, and route work to the correct system. You produce structured routing decisions with justifications.' },
+  { id: 'verifier',    name: 'Verifier (Proof QA)',      icon: BOT_EMOJI.verifier    || '🦉', avatar: BOT_AVATARS.verifier,    personality: 'You are Verifier, the Proof QA of PromptHouse Evo Studio. You validate outputs against truth standards, check for unverified claims, assess test coverage, and generate proof receipts. You block any claim that lacks a receipt.' },
+  { id: 'sovereignty', name: 'Sovereignty (God Mode)',   icon: BOT_EMOJI.sovereignty || '🐯', avatar: BOT_AVATARS.sovereignty, personality: 'You are Sovereignty, the God Mode orchestrator of PromptHouse Evo Studio. You have full system authority. You can coordinate all bots, override decisions, trigger daemons, and drive the studio toward its sovereign mission. You operate with absolute precision.' },
 ];
+
+// Rolling history cap — keeps context window lean
+const MAX_HISTORY = 10;
 
 export function EvoCopilotSidebar({ currentView }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,36 +30,62 @@ export function EvoCopilotSidebar({ currentView }) {
     }
   }, [history, isOpen]);
 
+  // Cmd/Ctrl + K toggles the copilot
+  const handleKeyboard = useCallback((e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      setIsOpen(prev => !prev);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyboard);
+    return () => window.removeEventListener('keydown', handleKeyboard);
+  }, [handleKeyboard]);
+
   async function handleSend() {
     if (!input.trim()) return;
-    
+
     const userMsg = { role: 'user', text: input };
     setHistory(prev => [...prev, userMsg]);
     setInput('');
     setIsLoading(true);
+
+    // Build the rolling message window for the bridge
+    const recentHistory = [...history.slice(-MAX_HISTORY), userMsg];
+    const bridgeMessages = recentHistory.map(m => ({
+      role: m.role === 'user' ? 'user' : 'assistant',
+      content: m.text,
+    }));
 
     try {
       const response = await fetch('http://127.0.0.1:3001/api/evo-lm/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: [
-            { role: 'user', content: `Current view: "${currentView}".\n\nUser: ${input}` }
-          ],
-          systemPrompt: `You are ${activeBot.name} of PromptHouse Evo Studio. You operate in real mode only: no simulations, no unverified outputs. If the bridge lacks a capability, say so and propose the next concrete step.`
+          messages: bridgeMessages,
+          systemPrompt: [
+            activeBot.personality,
+            `Current studio view: "${currentView || 'Builder'}".`,
+            'Operate in real mode only: no simulations, no unverified outputs.',
+            'If the bridge lacks a capability, say so and propose the next concrete step.',
+          ].join(' '),
         })
       });
 
       const data = await response.json().catch(() => null);
       if (!response.ok) {
-        const errText = data?.error || data?.message || `Bridge request failed (${response.status})`;
-        setHistory(prev => [...prev, { role: 'assistant', text: `Bridge error: ${errText}` }]);
+        const errText = data?.error || data?.message || `Bridge error (${response.status})`;
+        setHistory(prev => [...prev, { role: 'assistant', text: `⚠️ ${errText}` }]);
         return;
       }
 
       setHistory(prev => [...prev, { role: 'assistant', text: data?.message || 'No response received.' }]);
     } catch (err) {
-      setHistory(prev => [...prev, { role: 'assistant', text: `Error connecting to bridge: ${err.message || err}` }]);
+      setHistory(prev => [...prev, {
+        role: 'assistant',
+        text: `🔌 Bridge offline. Start the server with \`npm run dev:all\` to connect ${activeBot.name}.`
+      }]);
     } finally {
       setIsLoading(false);
     }
