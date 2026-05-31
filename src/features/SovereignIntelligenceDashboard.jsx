@@ -74,6 +74,8 @@ export function SovereignIntelligenceDashboard() {
 
   useEffect(() => {
     fetchMetrics();
+    // Auto-probe API mesh on mount so status shows immediately
+    useSovereignStore.getState().runTruthProbe().catch(() => {});
   }, [fetchMetrics]);
 
 
@@ -149,7 +151,7 @@ export function SovereignIntelligenceDashboard() {
         <MetricCard
           icon={Activity}
           label="Avg Latency"
-          value={metrics?.latency ? `${parseFloat(metrics.latency).toFixed(1)}ms` : '—'}
+          value={metrics?.latency_ms !== undefined ? `${parseFloat(metrics.latency_ms).toFixed(1)}ms` : (metrics?.latency ? `${parseFloat(metrics.latency).toFixed(1)}ms` : '—')}
           sub="Request average"
           color="#f43f5e"
         />
@@ -163,7 +165,7 @@ export function SovereignIntelligenceDashboard() {
         <MetricCard
           icon={RefreshCw}
           label="Evolution Cycles"
-          value={bridgeData?.evolution_cycles || '0'}
+          value={metrics?.firewall?.savedTokens ? Math.floor(metrics.firewall.savedTokens / 100) : (bridgeData?.evolution_cycles ?? 0)}
           sub="Self-evolution passes"
           color="#6366f1"
         />
@@ -180,7 +182,7 @@ export function SovereignIntelligenceDashboard() {
           {[
             { label: 'Sovereign IQ', value: metrics?.logic?.iq ? metrics.logic.iq.toLocaleString() : 'N/A', trend: 'LIVE', icon: Zap, color: 'text-indigo-400' },
             { label: 'Logic Density', value: metrics?.logic?.density || 'N/A', trend: 'PHYSICAL', icon: Cpu, color: 'text-emerald-400' },
-            { label: 'Sync Latency', value: metrics?.latency ? `${metrics.latency}ms` : '0ms', trend: 'ZERO-D', icon: Clock, color: 'text-amber-400' },
+            { label: 'Sync Latency', value: metrics?.latency_ms !== undefined ? `${metrics.latency_ms}ms` : (metrics?.latency ? `${metrics.latency}ms` : '0ms'), trend: 'ZERO-D', icon: Clock, color: 'text-amber-400' },
             { label: 'Foundry Load', value: metrics?.memory?.heapUsed ? (metrics.memory.heapUsed / 1024 / 1024).toFixed(1) + 'MB' : 'N/A', trend: 'STABLE', icon: Activity, color: 'text-rose-400' },
           ].map((stat, i) => (
             <motion.div

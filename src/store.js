@@ -264,10 +264,12 @@ export const useSovereignStore = create((set, get) => ({
 
   // ─── API Configuration ─────────────────────────────────────
   apiConfig: {
-    openaiKey: '',
-    vercelToken: '',
-    model: 'gpt-3.5-turbo',
-    bridgeUrl: BRIDGE_URL,
+    openaiKey:    '',
+    geminiKey:    '',
+    anthropicKey: '',
+    vercelToken:  '',
+    model:        'gpt-3.5-turbo',
+    bridgeUrl:    BRIDGE_URL,
   },
   apiConfigSaving: false,
   apiConfigError: null,
@@ -282,7 +284,14 @@ export const useSovereignStore = create((set, get) => ({
     try {
       const result = await safeFetchBridge('/api/config/keys', {
         method: 'POST',
-        body: JSON.stringify({ keys: { openai: state.apiConfig.openaiKey, vercel: state.apiConfig.vercelToken } }),
+        body: JSON.stringify({
+          keys: {
+            openai:    state.apiConfig.openaiKey,
+            gemini:    state.apiConfig.geminiKey,
+            anthropic: state.apiConfig.anthropicKey,
+            vercel:    state.apiConfig.vercelToken,
+          }
+        }),
       });
       if (!result.ok) throw new Error(result.error || 'Failed to save config');
       set({ apiConfigSaving: false });
@@ -371,8 +380,10 @@ export const useSovereignStore = create((set, get) => ({
       const result = await safeFetchBridge('/api/truth/probe');
       if (!result.ok) throw new Error(result.error || 'Probe failed');
       const data = result.data;
-      set({ bridgeData: { ...get().bridgeData, probes: data.results } });
-      return data.results;
+      // Server returns { results: { openai, gemini, stripe } } — store under bridgeData.probes
+      const probes = data.results || data.probes || {};
+      set({ bridgeData: { ...get().bridgeData, probes } });
+      return probes;
     } catch (err) {
       console.warn('[Store] Truth probe failed:', err.message);
       return null;

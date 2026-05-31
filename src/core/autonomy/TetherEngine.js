@@ -2,11 +2,13 @@ import { OpenAI } from 'openai';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { evaluateCostedRequest } from '../gateway/costFirewallV2.js';
 import { getSemanticCacheKey, getSemanticCacheEntry, setSemanticCacheEntry } from '../gateway/semanticCache.js';
+import { routeTask, reportRateLimit } from '../quadbrain/QuadBrainModelRouter.js';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { execSync } from 'child_process';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -79,13 +81,19 @@ Execute your mission, fix the codebase using the tags above, and provide a conci
         return `[BLOCKED BY FIREWALL] ${reason}`;
       }
 
-      console.log(`🧠 [TETHER-ENGINE] Firewall approved! Estimated Cost: $${firewall.selectedCost.estimatedCost || 0}. Routing to ${preferredBrain.toUpperCase()}...`);
+      // 3. Dynamic Model Routing via QuadBrainModelRouter
+      const route = routeTask(taskDescription, preferredBrain);
+      console.log(`🧠 [TETHER-ENGINE] Firewall approved! Routing to ${route.provider.toUpperCase()} / ${route.model}...`);
 
-      if (preferredBrain === "local") {
+      if (route.provider === 'offline') {
+        return `[OFFLINE] No AI providers available. Task "${taskDescription}" queued for retry when a provider comes online.`;
+      }
+
+      if (route.provider === 'local') {
         console.log(`🔌 [TETHER-ENGINE] Executing 100% OFFLINE on Local Engine...`);
         try {
           const completion = await localOpenai.chat.completions.create({
-            model: process.env.LOCAL_AI_MODEL || "evo-lm",
+            model: route.model,
             messages: [{ role: "system", content: prompt }],
           });
           finalText = completion.choices[0].message.content;
@@ -93,42 +101,47 @@ Execute your mission, fix the codebase using the tags above, and provide a conci
           console.log(`⚠️ [TETHER-ENGINE] Local engine unavailable (${localErr.message}). Generating offline analysis...`);
           finalText = `[OFFLINE ANALYSIS] Local engine is not running. Task "${taskDescription}" queued for next available brain cycle.`;
         }
-      } else if (preferredBrain === "gemini") {
+      } else if (route.provider === 'gemini') {
         try {
-          const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+          const model = genAI.getGenerativeModel({ model: route.model });
           const result = await model.generateContent(prompt);
           finalText = result.response.text();
         } catch (geminiErr) {
-          console.log(`⚠️ [TETHER-ENGINE] Gemini failed (${geminiErr.message}). Falling back to OpenAI...`);
+          if (/429|quota|rate/i.test(geminiErr.message)) reportRateLimit('gemini', 90);
+          console.log(`⚠️ [TETHER-ENGINE] Gemini failed (${geminiErr.message}). Falling back via router...`);
+          // Retry with router excluding gemini
           try {
             const completion = await openai.chat.completions.create({
-              model: process.env.OPENAI_MODEL || "gpt-4o",
+              model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
               messages: [{ role: "system", content: prompt }],
             });
             finalText = completion.choices[0].message.content;
           } catch (openaiErr) {
-            console.log(`⚠️ [TETHER-ENGINE] OpenAI also failed. Generating offline stub.`);
+            if (/429|quota|rate/i.test(openaiErr.message)) reportRateLimit('openai', 90);
             finalText = `[FALLBACK] All cloud brains rate-limited. Task "${taskDescription}" logged for retry.`;
           }
         }
-      } else {
+      } else if (route.provider === 'openai') {
         try {
           const completion = await openai.chat.completions.create({
-            model: process.env.OPENAI_MODEL || "gpt-4o",
+            model: route.model,
             messages: [{ role: "system", content: prompt }],
           });
           finalText = completion.choices[0].message.content;
         } catch (openaiErr) {
+          if (/429|quota|rate/i.test(openaiErr.message)) reportRateLimit('openai', 90);
           console.log(`⚠️ [TETHER-ENGINE] OpenAI failed (${openaiErr.message}). Falling back to Gemini...`);
           try {
-            const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+            const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
             const result = await model.generateContent(prompt);
             finalText = result.response.text();
           } catch (geminiFallbackErr) {
-            console.log(`⚠️ [TETHER-ENGINE] All brains failed. Generating offline stub.`);
+            if (/429|quota|rate/i.test(geminiFallbackErr.message)) reportRateLimit('gemini', 90);
             finalText = `[FALLBACK] All cloud brains unavailable. Task "${taskDescription}" logged for retry.`;
           }
         }
+      } else {
+        finalText = `[UNROUTED] Unknown provider: ${route.provider}. Task logged.`;
       }
 
       // 3. Autonomous Execution Parser

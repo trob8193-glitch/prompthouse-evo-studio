@@ -102,25 +102,50 @@ export function GlobalAPISettingsView() {
 
         <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>OpenAI API Key</label>
-          <input type="password" value={apiConfig.openaiKey} onChange={(e) => updateApiConfig({ openaiKey: e.target.value })} ghostInput="sk-proj-..." style={fieldStyle}
+          <input type="password" value={apiConfig.openaiKey} onChange={(e) => updateApiConfig({ openaiKey: e.target.value })} placeholder="sk-proj-..." style={fieldStyle}
             onFocus={(e) => e.target.style.borderColor = '#4f46e580'} onBlur={(e) => e.target.style.borderColor = '#1e293b'} />
           <div style={{ fontSize: 10, color: '#475569', marginTop: 4 }}>Your key is sent to the local bridge server only — never to external services directly.</div>
         </div>
 
         <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Gemini API Key <span style={{ color: '#6366f1' }}>⚡ Powers Evo Spider + TetherEngine</span></label>
+          <input type="password" value={apiConfig.geminiKey || ''} onChange={(e) => updateApiConfig({ geminiKey: e.target.value })} placeholder="AIza..." style={fieldStyle}
+            onFocus={(e) => e.target.style.borderColor = '#4f46e580'} onBlur={(e) => e.target.style.borderColor = '#1e293b'} />
+          <div style={{ fontSize: 10, color: '#475569', marginTop: 4 }}>Used by QuadBrain router for fast/cheap tasks. Free tier available at aistudio.google.com.</div>
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Anthropic API Key <span style={{ color: '#8b5cf6' }}>✓ Claude 3.5 Sonnet</span></label>
+          <input type="password" value={apiConfig.anthropicKey || ''} onChange={(e) => updateApiConfig({ anthropicKey: e.target.value })} placeholder="sk-ant-..." style={fieldStyle}
+            onFocus={(e) => e.target.style.borderColor = '#4f46e580'} onBlur={(e) => e.target.style.borderColor = '#1e293b'} />
+          <div style={{ fontSize: 10, color: '#475569', marginTop: 4 }}>Optional. Enables Claude routing for architecture reasoning tasks in QuadBrain.</div>
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>Vercel API Token (For Deployments)</label>
-          <input type="password" value={apiConfig.vercelToken || ''} onChange={(e) => updateApiConfig({ vercelToken: e.target.value })} ghostInput="vA123..." style={fieldStyle}
+          <input type="password" value={apiConfig.vercelToken || ''} onChange={(e) => updateApiConfig({ vercelToken: e.target.value })} placeholder="vA123..." style={fieldStyle}
             onFocus={(e) => e.target.style.borderColor = '#4f46e580'} onBlur={(e) => e.target.style.borderColor = '#1e293b'} />
           <div style={{ fontSize: 10, color: '#475569', marginTop: 4 }}>Used by the SaaS Orchestrator to autonomously deploy your generated apps.</div>
         </div>
 
         <div style={{ marginBottom: 20 }}>
-          <label style={labelStyle}>Model</label>
+          <label style={labelStyle}>Default Model</label>
           <select value={apiConfig.model} onChange={(e) => updateApiConfig({ model: e.target.value })} style={{ ...fieldStyle, cursor: 'pointer' }}>
-            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-            <option value="gpt-4o">GPT-4o</option>
-            <option value="gpt-4o-mini">GPT-4o Mini</option>
-            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+            <optgroup label="OpenAI">
+              <option value="gpt-4o">GPT-4o (Best quality)</option>
+              <option value="gpt-4o-mini">GPT-4o Mini (Fast/cheap)</option>
+              <option value="gpt-4-turbo">GPT-4 Turbo</option>
+              <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Legacy)</option>
+            </optgroup>
+            <optgroup label="Gemini">
+              <option value="gemini-2.0-flash">Gemini 2.0 Flash (Free tier)</option>
+              <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+              <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+            </optgroup>
+            <optgroup label="Anthropic">
+              <option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet (Best reasoning)</option>
+              <option value="claude-3-haiku-20240307">Claude 3 Haiku (Fast)</option>
+            </optgroup>
           </select>
         </div>
 
