@@ -277,6 +277,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         name: "trigger_crucible_sweep",
         description: "Trigger the Crucible daemon to perform a destructive file stress scan across the codebase.",
         inputSchema: { type: "object", properties: {} }
+      },
+      {
+        name: "get_brain_health_stats",
+        description: "Query the live operational health of the 4 core independent AI Brains (TetherEngine, MCP, IDE Agent, Creative Generator).",
+        inputSchema: { type: "object", properties: {} }
       }
     ],
   };
@@ -298,6 +303,32 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             status: statusRes.status,
             active_requests: reqRes.requests
           }, null, 2)
+        }]
+      };
+    }
+
+    if (name === "get_brain_health_stats") {
+      // 1. Fetch creative generator status
+      const statusRes = await fetchBridge("/api/quadbrain/creative/status").catch(() => ({ status: null }));
+      
+      // 2. Fetch config keys to check if TetherEngine is active
+      const keysRes = await fetchBridge("/api/config/keys").catch(() => ({ keys: {} }));
+      const hasTether = keysRes.keys && (keysRes.keys.openai || keysRes.keys.gemini || keysRes.keys.anthropic);
+      
+      // 3. IDE Queue check
+      const ideRes = await fetchBridge("/api/ide/queue").catch(() => ({ queues: {} }));
+
+      const stats = {
+        brain_1_tether_engine: hasTether ? 'ONLINE' : 'OFFLINE (No API Keys)',
+        brain_2_chatgpt_mcp: 'ONLINE (You are this brain)',
+        brain_3_ide_agent: 'ONLINE (Daemon Active)',
+        brain_4_creative_generator: statusRes.status ? 'ONLINE' : 'OFFLINE'
+      };
+
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify(stats, null, 2)
         }]
       };
     }

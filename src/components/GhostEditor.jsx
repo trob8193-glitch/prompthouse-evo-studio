@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSovereignStore } from '../store.js';
 import { Button, Card, StatusBadge } from './primitives.jsx';
 import { Sparkles, FileCode, Check, RefreshCw, X } from 'lucide-react';
+import * as Diff from 'diff';
 
 const BRIDGE_URL = 'http://127.0.0.1:3001';
 
@@ -107,15 +108,31 @@ export function GhostEditor() {
       </div>
 
       <div className="relative flex-1 overflow-auto p-6 bg-[rgba(2,6,23,0.5)]">
-        {/* Original Code Layer */}
-        <pre className={`text-slate-600 transition-opacity duration-500 ${isGhostActive ? 'opacity-30' : 'opacity-100'}`}>
-          <code>{originalCode}</code>
-        </pre>
-
-        {/* Holographic Ghost Layer */}
-        {isGhostActive && !loading && (
-          <pre className="absolute top-6 left-6 text-indigo-300 drop-shadow-[0_0_8px_rgba(99,102,241,0.6)] animate-in fade-in slide-in-from-top-1 duration-500 pointer-events-none">
-            <code>{ghostCode}</code>
+        {/* Diff View / Original Code Layer */}
+        {isGhostActive && !loading && originalCode && ghostCode ? (
+          <pre className="font-mono text-xs whitespace-pre-wrap break-all leading-relaxed">
+            {Diff.diffLines(originalCode, ghostCode).map((part, index) => {
+              const bgClass = part.added ? 'bg-emerald-900/30' : part.removed ? 'bg-rose-900/30' : 'bg-transparent';
+              const textClass = part.added ? 'text-emerald-400' : part.removed ? 'text-rose-400' : 'text-slate-400';
+              const prefix = part.added ? '+ ' : part.removed ? '- ' : '  ';
+              
+              // Ensure lines render properly by splitting the block if it contains multiple lines
+              const lines = part.value.replace(/\n$/, '').split('\n');
+              return (
+                <span key={index} className={`${bgClass} ${textClass} block w-full`}>
+                  {lines.map((line, i) => (
+                    <div key={i}>
+                      <span className="opacity-50 mr-2 select-none">{prefix}</span>
+                      {line}
+                    </div>
+                  ))}
+                </span>
+              );
+            })}
+          </pre>
+        ) : (
+          <pre className="text-slate-400">
+            <code>{originalCode}</code>
           </pre>
         )}
         
