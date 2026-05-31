@@ -282,6 +282,35 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         name: "get_brain_health_stats",
         description: "Query the live operational health of the 4 core independent AI Brains (TetherEngine, MCP, IDE Agent, Creative Generator).",
         inputSchema: { type: "object", properties: {} }
+      },
+      {
+        name: "get_db_stats",
+        description: "Query the Sovereign SQLite database health: table count, row counts, and engine info.",
+        inputSchema: { type: "object", properties: {} }
+      },
+      {
+        name: "store_agent_memory",
+        description: "Persist a key-value memory shard for a named agent (e.g. ChatGPT, NightForge) into the Sovereign DB.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            agent: { type: "string", description: "Agent name, e.g. 'ChatGPT', 'NightForge', 'Singularity'." },
+            key: { type: "string", description: "Memory key." },
+            memory: { type: "string", description: "JSON or plain text to persist." }
+          },
+          required: ["agent", "key", "memory"]
+        }
+      },
+      {
+        name: "recall_agent_memory",
+        description: "Recall all persisted memories for a named agent from the Sovereign DB.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            agent: { type: "string", description: "Agent name to recall memories for." }
+          },
+          required: ["agent"]
+        }
       }
     ],
   };
@@ -329,6 +358,40 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         content: [{
           type: "text",
           text: JSON.stringify(stats, null, 2)
+        }]
+      };
+    }
+
+    if (name === "get_db_stats") {
+      const res = await fetchBridge("/api/db/stats");
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify(res, null, 2)
+        }]
+      };
+    }
+
+    if (name === "store_agent_memory") {
+      const res = await fetchBridge("/api/db/memory", "POST", {
+        agent: args.agent,
+        key: args.key,
+        memory: args.memory
+      });
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({ stored: true, agent: args.agent, key: args.key }, null, 2)
+        }]
+      };
+    }
+
+    if (name === "recall_agent_memory") {
+      const res = await fetchBridge(`/api/db/memory/${encodeURIComponent(args.agent)}`);
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify(res, null, 2)
         }]
       };
     }

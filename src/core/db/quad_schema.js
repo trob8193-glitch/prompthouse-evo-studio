@@ -252,11 +252,104 @@ CREATE TABLE IF NOT EXISTS sovereign_ledger (
   iq_gain INTEGER DEFAULT 0,
   timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS kv_config (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS proof_receipts (
+  id TEXT PRIMARY KEY,
+  mission TEXT NOT NULL,
+  status TEXT NOT NULL,
+  details TEXT,
+  files_changed INTEGER DEFAULT 0,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS sovereign_memory (
+  id TEXT PRIMARY KEY,
+  agent TEXT NOT NULL,
+  key TEXT NOT NULL,
+  memory TEXT,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(agent, key)
+);
+
+CREATE TABLE IF NOT EXISTS nightforge_state (
+  id TEXT PRIMARY KEY DEFAULT 'nightforge_singleton',
+  state_data TEXT,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 `;
 
 export function initDatabase() {
   db.exec(SCHEMA);
-  
+}
+
+// ─── KV CONFIG OPERATIONS ─────────────────────────────────────
+export function getConfigValue(key) {
+  const row = db.prepare('SELECT value FROM kv_config WHERE key = ?').get(key);
+  if (!row) return null;
+  try { return JSON.parse(row.value); } catch { return row.value; }
+}
+
+export function setConfigValue(key, value) {
+  const serialized = typeof value === 'string' ? value : JSON.stringify(value);
+  db.prepare('INSERT INTO kv_config (key, value, updated_at) VALUES (?, ?, datetime("now")) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at').run(key, serialized);
+}
+
+export function getAllConfigValues() {
+  const rows = db.prepare('SELECT key, value FROM kv_config').all();
+  const result = {};
+  for (const row of rows) {
+    try { result[row.key] = JSON.parse(row.value); } catch { result[row.key] = row.value; }
+  }
+  return result;
+}
+
+// ─── PROOF RECEIPT OPERATIONS ─────────────────────────────────
+export function createProofReceipt({ mission, status, details, filesChanged }) {
+  const id = `pr_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const serialized = typeof details === 'string' ? details : JSON.stringify(details);
+  db.prepare('INSERT INTO proof_receipts (id, mission, status, details, files_changed) VALUES (?, ?, ?, ?, ?)').run(id, mission, status, serialized, filesChanged || 0);
+  return { id, mission, status };
+}
+
+export function getRecentProofReceipts(limit = 20) {
+  return db.prepare('SELECT * FROM proof_receipts ORDER BY timestamp DESC LIMIT ?').all(limit);
+}
+
+// ─── SOVEREIGN MEMORY OPERATIONS ──────────────────────────────
+export function setMemory(agent, key, memory) {
+  const id = `mem_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const serialized = typeof memory === 'string' ? memory : JSON.stringify(memory);
+  db.prepare('INSERT INTO sovereign_memory (id, agent, key, memory, timestamp) VALUES (?, ?, ?, ?, datetime("now")) ON CONFLICT(agent, key) DO UPDATE SET memory = excluded.memory, timestamp = excluded.timestamp').run(id, agent, key, serialized);
+}
+
+export function getMemory(agent, key) {
+  const row = db.prepare('SELECT memory FROM sovereign_memory WHERE agent = ? AND key = ?').get(agent, key);
+  if (!row) return null;
+  try { return JSON.parse(row.memory); } catch { return row.memory; }
+}
+
+export function getAgentMemories(agent) {
+  return db.prepare('SELECT key, memory, timestamp FROM sovereign_memory WHERE agent = ? ORDER BY timestamp DESC').all(agent).map(r => {
+    try { return { key: r.key, memory: JSON.parse(r.memory), timestamp: r.timestamp }; } catch { return r; }
+  });
+}
+
+// ─── NIGHTFORGE STATE ─────────────────────────────────────────
+export function getNightForgeDBState() {
+  const row = db.prepare('SELECT state_data FROM nightforge_state WHERE id = ?').get('nightforge_singleton');
+  if (!row) return null;
+  try { return JSON.parse(row.state_data); } catch { return row.state_data; }
+}
+
+export function setNightForgeDBState(state) {
+  const serialized = typeof state === 'string' ? state : JSON.stringify(state);
+  db.prepare('INSERT INTO nightforge_state (id, state_data, updated_at) VALUES (?, ?, datetime("now")) ON CONFLICT(id) DO UPDATE SET state_data = excluded.state_data, updated_at = excluded.updated_at').run('nightforge_singleton', serialized);
 }
 
 export default db;

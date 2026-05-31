@@ -90,6 +90,7 @@
     "@google/generative-ai": "^0.24.1",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@openai/agents": "^0.8.5",
+    "@prisma/client": "^7.8.0",
     "@rive-app/react-canvas": "^4.28.3",
     "adm-zip": "^0.5.17",
     "bcryptjs": "^3.0.3",
@@ -110,7 +111,8 @@
     "react-router-dom": "^7.14.2",
     "stripe": "^22.1.0",
     "tailwind-merge": "^3.5.0",
-    "zustand": "^5.0.12"
+    "zustand": "^5.0.12",
+    "@prisma/client": "latest"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.4",
@@ -126,6 +128,7 @@
     "postcss": "^8.5.13",
     "tailwindcss": "^4.2.4",
     "vite": "^5.1.0",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.5",
+    "prisma": "latest"
   }
 }

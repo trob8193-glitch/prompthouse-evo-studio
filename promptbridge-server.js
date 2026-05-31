@@ -46,7 +46,7 @@ import { ExecutionSandbox } from './lib/terminal/ExecutionSandbox.js';
 import { VercelAdapter } from './lib/deployment/VercelAdapter.js';
 import { IntelligenceCore } from './src/core/engines/IntelligenceCore.js';
 import { PromptCompressor } from './lib/ai/PromptCompressor.js';
-import db, { initDatabase } from './src/core/db/quad_schema.js';
+import db, { initDatabase, getConfigValue, setConfigValue, getAllConfigValues, createProofReceipt, getRecentProofReceipts, setMemory, getMemory, getAgentMemories, getNightForgeDBState, setNightForgeDBState } from './src/core/db/quad_schema.js';
 import { buildGeneratedArtifactRegistry } from './src/generated-artifact-registry.js';
 import { buildBridgeContractLedger } from './src/bridge-contract-ledger.js';
 import {
@@ -3342,8 +3342,92 @@ app.use((err, req, res, next) => {
   }
   return res.status(500).json({ error: err?.message || 'Unhandled server error.' });
 });
+// ─── SOVEREIGN DB API ────────────────────────────────────────────────────────
+
+// Proof Receipts
+app.get('/api/db/proof-receipts', (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 20;
+    res.json({ receipts: getRecentProofReceipts(limit) });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/db/proof-receipts', (req, res) => {
+  try {
+    const receipt = createProofReceipt(req.body);
+    res.json({ ok: true, receipt });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Agent Memory
+app.get('/api/db/memory/:agent', (req, res) => {
+  try {
+    res.json({ memories: getAgentMemories(req.params.agent) });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/db/memory/:agent/:key', (req, res) => {
+  try {
+    const memory = getMemory(req.params.agent, req.params.key);
+    res.json({ memory });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/db/memory', (req, res) => {
+  try {
+    const { agent, key, memory } = req.body;
+    setMemory(agent, key, memory);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// KV Config
+app.get('/api/db/config', (req, res) => {
+  try { res.json({ config: getAllConfigValues() }); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/db/config/:key', (req, res) => {
+  try { res.json({ value: getConfigValue(req.params.key) }); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/db/config', (req, res) => {
+  try {
+    const { key, value } = req.body;
+    setConfigValue(key, value);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// NightForge State (DB-backed)
+app.get('/api/db/nightforge-state', (req, res) => {
+  try { res.json({ state: getNightForgeDBState() }); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/db/nightforge-state', (req, res) => {
+  try {
+    setNightForgeDBState(req.body);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// DB Health Stats
+app.get('/api/db/stats', (req, res) => {
+  try {
+    const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'").all();
+    const stats = {};
+    for (const t of tables) {
+      const count = db.prepare(`SELECT COUNT(*) as count FROM ${t.name}`).get();
+      stats[t.name] = count.count;
+    }
+    res.json({ tables: tables.length, rows: stats, engine: 'better-sqlite3' });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
 
 // ─── STARTUP ─────────────────────────────────────────────────────────────────
+
 
 if (nightforgeState.active) {
   scheduleNightforgeDaemon();

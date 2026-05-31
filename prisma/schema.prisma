@@ -1,0 +1,39 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Config {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   // Store JSON stringified values for flexibility
+  updatedAt DateTime @updatedAt
+}
+
+model ProofReceipt {
+  id           String   @id @default(cuid())
+  mission      String
+  status       String
+  details      String   // JSON payload of changes
+  filesChanged Int
+  timestamp    DateTime @default(now())
+}
+
+model SovereignMemory {
+  id        String   @id @default(cuid())
+  agent     String   // e.g. 'NightForge', 'Singularity'
+  key       String
+  memory    String   // JSON payload
+  timestamp DateTime @default(now())
+
+  @@unique([agent, key])
+}
+
+model NightForgeState {
+  id        String   @id @default("nightforge_singleton")
+  stateData String   // JSON stringified state
+  updatedAt DateTime @updatedAt
+}
