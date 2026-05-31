@@ -133,6 +133,29 @@ export function QuadBrainAppCockpit() {
             <span className="text-sm font-mono text-white">{status?.queues?.receipts || 0} Receipts</span>
           </div>
         </div>
+
+        {/* QuadBrain Health Panel */}
+        <div className="grid grid-cols-4 gap-4 mt-8">
+          {[
+            { id: 1, name: 'TetherEngine (Gemini)', status: 'ONLINE', color: 'emerald' },
+            { id: 2, name: 'ChatGPT MCP', status: 'ONLINE', color: 'emerald' },
+            { id: 3, name: 'IDE Agent', status: 'ONLINE', color: 'emerald' },
+            { id: 4, name: 'Creative Generator', status: status ? 'ONLINE' : 'OFFLINE', color: status ? 'emerald' : 'slate' }
+          ].map(brain => {
+            const isOnline = brain.status === 'ONLINE';
+            const bgClass = isOnline ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-slate-600';
+            const textClass = isOnline ? 'text-emerald-400' : 'text-slate-400';
+            return (
+              <div key={brain.id} className="p-4 bg-[#030712] border border-indigo-900/30 rounded-xl flex items-center gap-4">
+                <div className={`w-2 h-2 rounded-full ${bgClass} ${isOnline ? 'animate-pulse' : ''}`} />
+                <div>
+                  <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Brain 0{brain.id}</div>
+                  <div className={`text-xs font-bold ${textClass}`}>{brain.name}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Main Content */}

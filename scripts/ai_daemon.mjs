@@ -2,6 +2,9 @@ import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 
 import { Log } from '../src/core/autonomy/SovereignLogger.js';
+import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js';
+
+CrashProofEngine.initialize('NightForgeDaemon');
 
 dotenv.config({ override: true });
 

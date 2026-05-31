@@ -4,6 +4,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { Log } from '../src/core/autonomy/SovereignLogger.js';
+import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js';
+
+CrashProofEngine.initialize('SelfInventionDaemon');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
