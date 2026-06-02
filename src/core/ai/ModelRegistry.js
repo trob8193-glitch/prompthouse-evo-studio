@@ -49,7 +49,7 @@ export const MODEL_REGISTRY = [
     tier: MODEL_TIERS.FAST,
     contextWindow: 1048576,
     capabilities: ['code', 'reasoning', 'fast-inference'],
-    apiModel: 'gemini-2.5-flash-preview-05-20',
+    apiModel: 'gemini-2.5-flash',
     costPer1kTokens: 0.00015,
     online: true,
   },
@@ -84,7 +84,7 @@ export const MODEL_REGISTRY = [
     tier: MODEL_TIERS.FAST,
     contextWindow: 128000,
     capabilities: ['code', 'fast-inference'],
-    apiModel: 'gpt-4o-mini',
+    apiModel: 'gpt-4.1-mini',
     costPer1kTokens: 0.00015,
     online: true,
   },
@@ -150,7 +150,7 @@ export function registerDynamicModel(modelConfig) {
 //  ACTIVE MODEL STATE
 // ═══════════════════════════════════════════════════════════════
 
-let _activeModelId = 'gemini-2.0-flash'; // Default: fast + free-tier friendly
+let _activeModelId = 'gemini-2.5-flash'; // Default: fast + free-tier friendly
 
 /**
  * Get the currently selected model for the entire studio.

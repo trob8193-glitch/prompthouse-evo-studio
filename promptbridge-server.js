@@ -70,6 +70,8 @@ import registerEvoCapabilityRoutes from './generated_apis/evo_capability_routes.
 ensureEvolutionSchema();
 
 const app = express();
+app.use(express.json());
+app.use(cors());
 registerEmulatorRoutes(app);
 registerEvoBridgeRoutes(app);
 registerPlatformSentinelRoutes(app);
@@ -78,8 +80,75 @@ registerEvoDiffuserRoutes(app);
 registerEvoTerminalRoutes(app);
 registerEvoCapabilityRoutes(app);
 app.use('/api/launch-pilot', launchPilotRoutes);
-app.get('/api/status', (req, res) => res.json({ success: true, status: 'PromptBridge Operational', launch_ready: true }));
-app.get('/api/metrics', (req, res) => res.json({ success: true, uptime: process.uptime(), truth_score: 98.5 }));
+app.get('/api/status', (req, res) => {
+  const ledgerStats = db.prepare('SELECT SUM(iq_gain) as total_gain FROM sovereign_ledger').get();
+  const gain = ledgerStats.total_gain || 0;
+  res.json({ 
+    success: true, 
+    status: 'PromptBridge Operational', 
+    launch_ready: true,
+    iq_metrics: {
+      baseline: 165000000,
+      sovereign_gain: gain
+    }
+  });
+});
+
+// Alias for dashboard compatibility
+app.get('/status', (req, res) => {
+  const ledgerStats = db.prepare('SELECT SUM(iq_gain) as total_gain FROM sovereign_ledger').get();
+  const gain = ledgerStats.total_gain || 0;
+  res.json({ 
+    success: true, 
+    status: 'PromptBridge Operational', 
+    launch_ready: true,
+    iq_metrics: {
+      baseline: 165000000,
+      sovereign_gain: gain
+    }
+  });
+});
+app.post('/api/intelligence/execute', async (req, res) => {
+  try {
+    const { module, action, payload } = req.body;
+    const result = await intelligenceCore.executeAction(module, action, payload);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/metrics', (req, res) => {
+  const ledgerStats = db.prepare('SELECT SUM(iq_gain) as total_gain, COUNT(*) as action_count FROM sovereign_ledger').get();
+  const iq_gain = ledgerStats.total_gain || 0;
+  const baseline = 165000000; // 165M baseline
+  
+  res.json({ 
+    success: true, 
+    uptime: process.uptime(), 
+    truth_score: 98.5,
+    logic: {
+      density: ((baseline + iq_gain) / 1000000).toFixed(2),
+      iq: baseline + iq_gain,
+      action_count: ledgerStats.action_count
+    }
+  });
+});
+
+app.post('/api/sovereign-ledger/log', (req, res) => {
+  try {
+    const { feature_id, action, proof_hash, truth_state, iq_gain } = req.body;
+    const id = crypto.randomUUID();
+    db.prepare(`
+      INSERT INTO sovereign_ledger (id, feature_id, action, proof_hash, truth_state, iq_gain)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(id, feature_id, action, proof_hash || id, truth_state || 'UNVERIFIED', iq_gain || 0);
+    
+    res.json({ success: true, id, iq_gain: iq_gain || 0 });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
 
 // ─── INITIALIZATION ──────────────────────────────────────────────────────────
