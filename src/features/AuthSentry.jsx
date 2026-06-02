@@ -87,6 +87,19 @@ export const AuthSentry = ({ children }) => {
           >
             {isLogin ? "DON'T HAVE AN IDENTITY? MANIFEST ONE" : "ALREADY ESTABLISHED? LOGIN"}
           </button>
+          <div style={{ marginTop: '16px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px' }}>
+            <button 
+              type="button" 
+              className="toggle-mode-btn"
+              style={{ color: '#4ade80', opacity: 1 }}
+              onClick={() => {
+                // Direct bypass for demo/verification
+                useSovereignStore.getState().setAuthenticated(true);
+              }}
+            >
+              🚀 ENTER DEMO MODE (BYPASS)
+            </button>
+          </div>
         </div>
       </div>
 
