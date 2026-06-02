@@ -419,8 +419,6 @@ function persistEvolutionProfile(profile) {
     profile.last_signal_at || null
   );
 }
-
-<<<<<<< HEAD
 function loadOrCreateEvolutionProfile(subjectKey, userId = null) {
   const row = db.prepare(`
     SELECT * FROM user_evolution_profiles WHERE subject_key = ?
@@ -3483,8 +3481,3 @@ const server = app.listen(port, '0.0.0.0', () => {
 });
 
 attachWebSocketServer(server);
-=======
-app.listen(port, '127.0.0.1', () => {
-  console.log(`PromptBridge Server listening on http://127.0.0.1:${port}`);
-});
->>>>>>> origin/main

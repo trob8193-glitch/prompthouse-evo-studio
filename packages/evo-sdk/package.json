@@ -1,10 +1,15 @@
 {
   "name": "@prompthouse/evo-sdk",
   "version": "1.0.0",
-  "description": "SDK for creating custom external bots for PromptHouse Evo Studio",
+  "description": "SDK for creating autonomous bots and agents for PromptHouse Evo Studio",
   "main": "index.js",
   "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
-    "ws": "^8.18.0"
-  }
+    "ws": "^8.16.0"
+  },
+  "author": "PromptHouse",
+  "license": "MIT"
 }
