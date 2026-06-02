@@ -4,22 +4,31 @@ import { checkApiAdapters } from '../egit/EvoGitApiAdapters.js';
 import { summarizeToolReadiness } from '../egit/EvoGitRegistry.js';
 import { listDaemonReceipts } from '../egit/EvoGitDaemonReceipts.js';
 import { createEvoLayerManifest } from './EvoLayerManifest.js';
+import { getAdapterStatus } from './adapters/AdapterBus.js';
+import { listHandshakes } from './handshakes/HandshakeRegistry.js';
+import { listDaemonEvents } from './daemons/DaemonBus.js';
 
 export function runEvoLayerStatus({ rootDir = process.cwd(), includeManifest = true } = {}) {
   const local = checkLocalToolAdapters({ rootDir });
   const api = checkApiAdapters({ rootDir });
   const manifest = includeManifest ? createEvoLayerManifest({ rootDir, label: 'status_manifest' }) : null;
+
   return {
     success: true,
     name: 'Evo Layer',
     truthState: 'EVO_LAYER_STATUS_RECORDED',
     manifest,
     adapterReceipts: {
-      local: local.map(item => item.id),
-      api: api.map(item => item.id)
+      legacyLocal: local.map(item => item.id),
+      legacyApi: api.map(item => item.id),
+      evoLayerAdapters: getAdapterStatus({ rootDir })
     },
     readiness: summarizeToolReadiness({ rootDir }),
     daemonReceipts: listDaemonReceipts({ rootDir, limit: 25 }),
+    evoLayer: {
+      handshakes: listHandshakes({ rootDir }),
+      daemonEvents: listDaemonEvents({ rootDir })
+    },
     checkedAt: new Date().toISOString()
   };
 }
@@ -48,11 +57,11 @@ export function runEvoLayerX10({ rootDir = process.cwd() } = {}) {
     status,
     snapshot,
     rules: [
-      'Do not replace Git; supervise Git with studio receipts.',
-      'Do not claim daemon work without daemon receipts.',
-      'Do not claim API execution without provider or credential receipts.',
-      'Preserve egit commands as backward-compatible aliases.',
-      'Use Evo Layer as the public product name.'
+      'AdapterBus introduces real adapter registry.',
+      'HandshakeRegistry introduces inter-system negotiation layer.',
+      'DaemonBus introduces event-level daemon communication.',
+      'Evo Layer now sits above Evo Git as a control plane.',
+      'No subsystem may claim execution without emitting receipts or events.'
     ],
     createdAt: new Date().toISOString()
   };
