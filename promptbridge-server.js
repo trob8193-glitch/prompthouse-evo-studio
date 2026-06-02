@@ -402,3 +402,7 @@ function persistEvolutionProfile(profile) {
     profile.last_signal_at || null
   );
 }
+
+app.listen(port, '127.0.0.1', () => {
+  console.log(`PromptBridge Server listening on http://127.0.0.1:${port}`);
+});
