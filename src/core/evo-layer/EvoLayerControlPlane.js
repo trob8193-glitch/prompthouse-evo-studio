@@ -7,6 +7,7 @@ import { createEvoLayerManifest } from './EvoLayerManifest.js';
 import { getAdapterStatus } from './adapters/AdapterBus.js';
 import { listHandshakes } from './handshakes/HandshakeRegistry.js';
 import { listDaemonEvents } from './daemons/DaemonBus.js';
+import { runExecutionKernelStatus } from './execution/ExecutionKernel.js';
 
 export function runEvoLayerStatus({ rootDir = process.cwd(), includeManifest = true } = {}) {
   const local = checkLocalToolAdapters({ rootDir });
@@ -29,6 +30,7 @@ export function runEvoLayerStatus({ rootDir = process.cwd(), includeManifest = t
       handshakes: listHandshakes({ rootDir }),
       daemonEvents: listDaemonEvents({ rootDir })
     },
+    execution: runExecutionKernelStatus({ rootDir }),
     checkedAt: new Date().toISOString()
   };
 }
@@ -60,6 +62,7 @@ export function runEvoLayerX10({ rootDir = process.cwd() } = {}) {
       'AdapterBus introduces real adapter registry.',
       'HandshakeRegistry introduces inter-system negotiation layer.',
       'DaemonBus introduces event-level daemon communication.',
+      'ExecutionKernel introduces task routing and decision layer.',
       'Evo Layer now sits above Evo Git as a control plane.',
       'No subsystem may claim execution without emitting receipts or events.'
     ],
