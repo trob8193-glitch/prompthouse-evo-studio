@@ -4,13 +4,25 @@ PromptHouse Evo Studio is a local-first React/Vite studio shell plus an Express 
 
 The target term for this repo is `proof-gated launch ready`, not `market ready`. Local proof can be verified here. External production actions stay gated until credentials, owner approval, and provider receipts exist.
 
-## Runtime
+## Launch Readiness & Verification
+This repository is currently in **Launch Readiness** mode. You can verify the system's integrity using the automated proof script:
 
+```bash
+npm run launch:proof
+```
+
+### Key Documentation
+- [Launch Readiness Guide](./docs/LAUNCH_READINESS_GUIDE.md) — Setup and verification path.
+- [Five-Minute Demo Workflow](./docs/DEMO_WORKFLOW.md) — Flagship demo loop.
+- [Pilot Roadmap](./docs/PILOT_ROADMAP.md) — Future milestones and criteria.
+
+## Runtime
 - Frontend: `npm run dev`
 - Bridge: `npm run bridge`
 - Both: `npm run dev:all`
 - Build: `npm run build`
 - Tests: `npm test`
+- **Launch Proof:** `npm run launch:proof` (verification command)
 
 Bridge default URL: `http://localhost:3001`  
 Frontend default URL: `http://localhost:5173`
