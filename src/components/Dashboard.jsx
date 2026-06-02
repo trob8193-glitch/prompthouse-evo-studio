@@ -2,6 +2,7 @@ import React from 'react';
 import { PerformanceMonitor } from './PerformanceMonitor';
 import { Activity, Shield, Zap, TrendingUp, Cpu, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { safeFetchBridge } from '../config/bridge-config.js';
 
 export const StudioDashboard = () => {
   const [iq, setIq] = React.useState(null);
@@ -16,16 +17,16 @@ export const StudioDashboard = () => {
     async function fetchLive() {
       try {
         const [statusRes, metricsRes, queueRes, nfRes] = await Promise.all([
-          fetch('http://127.0.0.1:3001/status'),
-          fetch('http://127.0.0.1:3001/api/metrics'),
-          fetch('http://127.0.0.1:3001/api/queue/master'),
-          fetch('http://127.0.0.1:3001/api/nightforge/status'),
+          safeFetchBridge('/status'),
+          safeFetchBridge('/api/metrics'),
+          safeFetchBridge('/api/queue/master'),
+          safeFetchBridge('/api/nightforge/status'),
         ]);
 
-        const status = statusRes.ok ? await statusRes.json() : null;
-        const metrics = metricsRes.ok ? await metricsRes.json() : null;
-        const queue = queueRes.ok ? await queueRes.json() : null;
-        const nightforge = nfRes.ok ? await nfRes.json() : null;
+        const status = statusRes.ok ? statusRes.data : null;
+        const metrics = metricsRes.ok ? metricsRes.data : null;
+        const queue = queueRes.ok ? queueRes.data : null;
+        const nightforge = nfRes.ok ? nfRes.data : null;
 
         if (!mounted) return;
 

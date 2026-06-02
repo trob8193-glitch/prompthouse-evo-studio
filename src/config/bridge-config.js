@@ -67,3 +67,43 @@ export async function safeFetchBridge(path, options = {}) {
     };
   }
 }
+
+/**
+ * Real-time WebSocket connection to the Bridge.
+ */
+export function connectWebSocket(onMessageCallback) {
+  if (typeof window === 'undefined') return null;
+
+  // Convert http:// to ws://
+  const wsUrl = BRIDGE_URL.replace(/^http/, 'ws');
+  const ws = new window.WebSocket(wsUrl);
+
+  ws.onopen = () => {
+    console.log('[WS] Connected to Bridge real-time engine');
+    // Attempt authentication if token exists
+    const token = localStorage.getItem('ph_evo_token');
+    if (token) {
+      ws.send(JSON.stringify({ type: 'auth', token }));
+    }
+  };
+
+  ws.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data);
+      if (onMessageCallback) onMessageCallback(data);
+    } catch (e) {
+      console.warn('[WS] Failed to parse message', e);
+    }
+  };
+
+  ws.onerror = (err) => {
+    console.error('[WS] Connection error', err);
+  };
+
+  ws.onclose = () => {
+    console.log('[WS] Disconnected. Reconnecting in 5s...');
+    setTimeout(() => connectWebSocket(onMessageCallback), 5000);
+  };
+
+  return ws;
+}

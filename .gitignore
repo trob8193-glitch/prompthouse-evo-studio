@@ -1,64 +1,60 @@
+# Dependencies
 node_modules/
-.env
-# local OpenAI and bridge secrets, do not commit
-.DS_Store
+.pnp
+.pnp.js
+
+# Build output
 dist/
-proof_receipts/
-.prompthouse-data/
-.sovereign-brain.json
+build/
+*.tgz
+
+# Environment variables (NEVER commit real keys)
+.env
+.env.local
+.env.production
+.env.staging
+
+# Database files
 *.db
-browser_bridge_receipts/
-build_queues/
-zip_temp*/
-*.log
-data/
+*.db-journal
+prisma/migrations/
 
-# AI Bridge
-.env.*
-!.env.example
-.env.agent
-*.key
-*.pem
-*.p12
-*.jks
-*.keystore
-serviceAccount*.json
-firebase-adminsdk*.json
-google-services-private.json
-google-services.json
-GoogleService-Info.plist
-android/key.properties
-android/app/*.jks
-android/app/*.keystore
-ios/Runner/*.mobileprovision
-.ai/secrets/
-.ai/snapshots/context-pack.json
-coverage/
-.dart_tool/
-android/.gradle/
-ios/Pods/
-ios/.symlinks/
-macos/Pods/
+# IDE & Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 
-# Scratch and temporary files
-scratch/
-temp_zip/
-temp_mobile_engine.js
-test-output.txt
-vitest-output.txt
-.sovereign-cache/
-.sovereign-shards/
-src/store.js.restored
-docs/knowledge/
-extracted_images/
-evo-extension/
-.firebase/
-.firebaserc
-PH_EVO_CORE_KNOWLEDGE/extension/
-buildkit_import/
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Studio runtime data
+.prompthouse-data/
 .prompt-garden/
+.sovereign-shards/
+.ai/
+scratch/
+deployed_apps/
 
-# Binaries and Archives
-*.exe
-*.zip
-tunnel_url.txt
+# Temp/build artifacts
+temp_zip/
+zip_temp/
+zip_temp_chunk/
+zip_temp_v1_2/
+buildkit_import/
+generated_apps/
+engine.js.tmp
+
+# Logs
+*.log
+npm-debug.log*
+
+# Coverage
+coverage/
+
+# Cache
+.eslintcache
+.cache/

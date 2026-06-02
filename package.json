@@ -111,8 +111,8 @@
     "react-router-dom": "^7.14.2",
     "stripe": "^22.1.0",
     "tailwind-merge": "^3.5.0",
-    "zustand": "^5.0.12",
-    "@prisma/client": "latest"
+    "ws": "^8.21.0",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.4",
@@ -126,9 +126,9 @@
     "autoprefixer": "^10.5.0",
     "jsdom": "^29.1.1",
     "postcss": "^8.5.13",
+    "prisma": "latest",
     "tailwindcss": "^4.2.4",
     "vite": "^5.1.0",
-    "vitest": "^4.1.5",
-    "prisma": "latest"
+    "vitest": "^4.1.5"
   }
 }

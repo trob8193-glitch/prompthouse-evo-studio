@@ -78,7 +78,24 @@ export class IntelligenceCore {
       // Fallback to AI prompts if no real logic file exists
       const { systemPrompt, userPrompt } = this.buildPrompt(moduleName, action, payload);
       
-      const fwResult = await SovereignFirewall.intercept(userPrompt, JSON.stringify(payload), {
+      let ragContext = '';
+      if (payload.useRag) {
+        try {
+          const { LocalVectorStore } = await import('../knowledge/LocalVectorStore.js');
+          const vectorStore = new LocalVectorStore(join(process.cwd(), '.prompthouse-data', 'vectors.json'));
+          const embedRes = await this.ai.embed(userPrompt);
+          if (embedRes.success) {
+            const results = vectorStore.query(embedRes.embedding, 3);
+            if (results.length > 0) {
+              ragContext = '\n\n[RAG Context Retrieved]:\n' + results.map(r => `--- ${r.id} ---\n${r.content}`).join('\n\n');
+            }
+          }
+        } catch(e) {
+          Log.warn('[RAG] Failed to retrieve context', e.message);
+        }
+      }
+
+      const fwResult = await SovereignFirewall.intercept(userPrompt + ragContext, JSON.stringify(payload), {
         aiAdaptor: this.ai,
         systemPrompt: systemPrompt
       });

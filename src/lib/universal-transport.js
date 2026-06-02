@@ -134,7 +134,7 @@ export async function universalSend(messages, systemPrompt = '', options = {}) {
   });
 
   // preferTransport is currently informational; calls always go through a bridge.
-  const payload = { messages, systemPrompt, preferTransport };
+  const payload = { messages, systemPrompt, preferTransport, useRag: options.useRag || false };
   for (const t of uniqueTargets) {
     try {
       const data = await fetchJson(`${t.url}/api/evo-lm/chat`, {

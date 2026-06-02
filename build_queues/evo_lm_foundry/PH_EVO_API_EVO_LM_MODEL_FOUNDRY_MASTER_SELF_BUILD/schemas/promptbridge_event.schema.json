@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PH Evo PromptBridge Event",
+  "type": "object",
+  "required": [
+    "eventId",
+    "source",
+    "eventType",
+    "payload",
+    "createdAt"
+  ],
+  "properties": {
+    "eventId": {
+      "type": "string"
+    },
+    "source": {
+      "enum": [
+        "bridge_extension",
+        "memory_box",
+        "vscode_promptbridge",
+        "flutter_sdk",
+        "studio_dashboard",
+        "external_client"
+      ]
+    },
+    "eventType": {
+      "enum": [
+        "capture",
+        "infer_request",
+        "infer_response",
+        "memory_write",
+        "memory_query",
+        "training_candidate",
+        "user_feedback",
+        "safe_action_request",
+        "safe_action_result",
+        "proof_evidence",
+        "reality_claim"
+      ]
+    },
+    "workspaceId": {
+      "type": "string"
+    },
+    "projectId": {
+      "type": "string"
+    },
+    "userId": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "training": {
+      "type": "object"
+    },
+    "createdAt": {
+      "type": "string"
+    }
+  }
+}

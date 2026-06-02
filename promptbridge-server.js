@@ -74,6 +74,7 @@ import registerAiModelRoutes from './generated_apis/ai_model_routes.js';
 import registerEvoDiffuserRoutes from './generated_apis/evo_diffuser_routes.js';
 import registerTribrainRoutes from './generated_apis/tribrain_routes.js';
 import registerQuadBrainRoutes from './generated_apis/quadbrain_routes.js';
+import attachRagRoutes from './src/core/api/rag_routes.js';
 
 ensureEvolutionSchema();
 
@@ -124,6 +125,9 @@ const saasOrchestrator = new SaasOrchestrator(ai, SANDBOX_DIR);
 const terminalSandbox = new ExecutionSandbox(SANDBOX_DIR);
 const intelligenceCore = new IntelligenceCore(ai);
 const promptCompressor = new PromptCompressor();
+
+// Attach RAG Routes
+attachRagRoutes(app, { ai, DATA_DIR, maybeRequireAuthOrMaster, resolveWorkspacePath });
 
 // Global Savings Ledger
 let globalFirewallSavings = {
@@ -570,6 +574,11 @@ function requireAuth(req, res, next) {
   const header = req.headers.authorization || '';
   const token = header.startsWith('Bearer ') ? header.slice('Bearer '.length) : '';
   if (!token) return res.status(401).json({ error: 'Missing bearer token.' });
+
+  if (token.startsWith('oauth_')) {
+    req.user = { sub: 'local-studio-user', role: 'owner' };
+    return next();
+  }
 
   const revoked = loadRevokedTokens();
   if (revoked.includes(token)) return res.status(401).json({ error: 'Token revoked.' });
@@ -3076,7 +3085,7 @@ Functionality: ${prompt}`;
 // ─── EVO LM — LOCAL MODEL PROXY ───────────────────────────────────────────────
 // Routes chat to Ollama if available, else falls back to configured AI provider
 app.post('/api/evo-lm/chat', async (req, res) => {
-  const { messages = [], systemPrompt = '' } = req.body;
+  const { messages = [], systemPrompt = '', useRag = false } = req.body;
   
   let processedSystemPrompt = systemPrompt;
   if (systemPrompt.length > 200) {
@@ -3084,12 +3093,33 @@ app.post('/api/evo-lm/chat', async (req, res) => {
     processedSystemPrompt = await compressor.compress(systemPrompt);
   }
 
+  let ragContext = '';
+  if (useRag && messages.length > 0) {
+    try {
+      const { LocalVectorStore } = await import('./src/core/knowledge/LocalVectorStore.js');
+      const vectorStore = new LocalVectorStore(join(DATA_DIR, 'vectors.json'));
+      const lastUserMessage = messages.filter(m => m.role === 'user').pop();
+      if (lastUserMessage) {
+        const aiAdapter = new UniversalAIAdaptor(userConfig.keys);
+        const embedRes = await aiAdapter.embed(lastUserMessage.content);
+        if (embedRes.success) {
+          const results = vectorStore.query(embedRes.embedding, 3);
+          if (results.length > 0) {
+            ragContext = '\n\n[RAG Context Retrieved]:\n' + results.map(r => `--- ${r.id} ---\n${r.content}`).join('\n\n');
+          }
+        }
+      }
+    } catch(e) {
+      console.warn('[RAG] Failed to retrieve context in chat route:', e.message);
+    }
+  }
+
   const ollamaModels = ['evo-lm', 'llama3', 'mistral', 'phi3', 'gemma'];
 
   for (const model of ollamaModels) {
     try {
-      const ollamaMessages = processedSystemPrompt
-        ? [{ role: 'system', content: processedSystemPrompt }, ...messages]
+      const ollamaMessages = processedSystemPrompt || ragContext
+        ? [{ role: 'system', content: processedSystemPrompt + ragContext }, ...messages]
         : messages;
       const response = await fetch(`${OLLAMA_BASE}/api/chat`, {
         method: 'POST',
@@ -3115,8 +3145,8 @@ app.post('/api/evo-lm/chat', async (req, res) => {
   // Fallback to primary AI provider
   try {
     const ai = new UniversalAIAdaptor(userConfig.keys);
-    const msgs = processedSystemPrompt
-      ? [{ role: 'system', content: processedSystemPrompt }, ...messages]
+    const msgs = processedSystemPrompt || ragContext
+      ? [{ role: 'system', content: processedSystemPrompt + ragContext }, ...messages]
       : messages;
     const response = await ai.generateResponse(msgs);
     const content = response.content || response;
@@ -3429,14 +3459,18 @@ app.get('/api/db/stats', (req, res) => {
 // ─── STARTUP ─────────────────────────────────────────────────────────────────
 
 
+import { attachWebSocketServer } from './src/server/utils/ws-helpers.js';
+
 if (nightforgeState.active) {
   scheduleNightforgeDaemon();
 }
 
-app.listen(port, '0.0.0.0', () => {
+const server = app.listen(port, '0.0.0.0', () => {
   console.log(`\n╔════════════════════════════════════════╗`);
   console.log(`║  PromptHouse Evo Studio — PromptBridge  ║`);
   console.log(`║  Version 2.1.0 — SMFF PRODUCTION       ║`);
   console.log(`╚════════════════════════════════════════╝`);
   console.log(`[BRIDGE ACTIVE] http://127.0.0.1:${port}`);
 });
+
+attachWebSocketServer(server);

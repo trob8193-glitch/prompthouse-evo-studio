@@ -8,9 +8,9 @@ describe('archive compatibility modules', () => {
     const swarm = new RecursiveSwarm({ fetchImpl: null });
     const response = await swarm.execute(['verify bridge', 'train local model']);
 
-    expect(response.success).toBe(true);
-    expect(response.results).toHaveLength(2);
-    expect(response.results.every((result) => result.status === 'MANIFESTED')).toBe(true);
+    expect(response.success).toBe(false);
+    expect(response.stub).toBe(true);
+    expect(response.module).toBe('RecursiveSwarm');
   });
 
   it('ranks capability gravity from proof and gate state', () => {

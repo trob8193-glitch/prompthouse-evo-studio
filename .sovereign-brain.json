@@ -1,0 +1,10 @@
+{
+  "evolution_cycles": 11,
+  "iq_metrics": {
+    "baseline": 2000000,
+    "sovereign_gain": 12857.899999999998
+  },
+  "gap_registry": [],
+  "last_activation": "2026-05-26T07:46:53.339Z",
+  "active_run": "training_1779781613292"
+}

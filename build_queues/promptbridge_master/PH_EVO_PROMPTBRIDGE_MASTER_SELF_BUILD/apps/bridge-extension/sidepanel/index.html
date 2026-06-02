@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>PH Evo Bridge</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <div class="brand">PH Evo PromptBridge</div>
+        <div class="status"><span id="gatewayOrb" class="orb idle"></span><span id="gatewayText">Gateway: unknown</span></div>
+      </header>
+      <main class="layout">
+        <nav class="rail">
+          <button data-screen="home" class="active">Home</button>
+          <button data-screen="graph">Graph</button>
+          <button data-screen="capture">Capture</button>
+          <button data-screen="memory">Memory</button>
+          <button data-screen="training">Training</button>
+          <button data-screen="proof">Proof</button>
+          <button data-screen="reality">Reality</button>
+          <button data-screen="settings">Settings</button>
+        </nav>
+        <section class="surface">
+          <section id="screen-home" class="screen active">
+            <h1>Home Command Deck</h1>
+            <div class="cards">
+              <div class="card"><h3>API</h3><p id="apiStatus">Checking local gateway.</p></div>
+              <div class="card"><h3>Memory</h3><p>Local-first. Private by default.</p></div>
+              <div class="card"><h3>Training</h3><p>Off by default. Consent required.</p></div>
+              <div class="card"><h3>Automation</h3><p>Manual approval required.</p></div>
+            </div>
+          </section>
+          <section id="screen-graph" class="screen">
+            <h1>Live Command Graph</h1>
+            <div class="graph">
+              <div class="node">User</div><div class="edge"></div><div class="node">PromptBridge</div><div class="edge"></div><div class="node">Memory</div><div class="edge"></div><div class="node">Proof</div>
+            </div>
+          </section>
+          <section id="screen-capture" class="screen">
+            <h1>Chat Capture</h1>
+            <button id="captureChat">Capture Current Chat</button>
+            <pre id="captureResult"></pre>
+          </section>
+          <section id="screen-memory" class="screen"><h1>Memory Box</h1><p>Private Device · User Sync · Workspace · Global Candidate · Training Candidate</p></section>
+          <section id="screen-training" class="screen"><h1>Training Vein</h1><p>Memory Only · SFT · Preference Pairs · Eval Cases · Blocked</p></section>
+          <section id="screen-proof" class="screen"><h1>Proof Console</h1><p>No green state without evidence.</p></section>
+          <section id="screen-reality" class="screen"><h1>Reality Twin</h1><p>planned · implemented · running · tested · verified · blocked · human_required</p></section>
+          <section id="screen-settings" class="screen"><h1>Settings</h1><p>Gateway URL: http://127.0.0.1:4317</p></section>
+        </section>
+        <aside class="inspector">
+          <h2>Live Inspector</h2>
+          <p id="inspectorText">No event selected.</p>
+          <div class="timeline" id="timeline"></div>
+        </aside>
+      </main>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

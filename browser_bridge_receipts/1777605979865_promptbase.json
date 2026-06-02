@@ -1,0 +1,5 @@
+{
+  "url": "https://github.com/openai/openai-python",
+  "title": "OpenAI Python SDK",
+  "selection": "import openai"
+}

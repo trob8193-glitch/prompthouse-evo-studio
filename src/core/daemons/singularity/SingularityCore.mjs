@@ -151,23 +151,53 @@ async function singularityCycle() {
     }
   }
 
-  // Phase 3: Test after repairs
+  // Phase 3: Test-Repair Loop (up to MAX_RETRY_ROUNDS)
+  const MAX_RETRY_ROUNDS = 3;
   if (repairsThisCycle > 0) {
-    log('SCAN', `Applied ${repairsThisCycle} AI repairs. Running verification tests...`);
-    const testResult = await selfTest();
+    let testPassed = false;
+    for (let round = 1; round <= MAX_RETRY_ROUNDS; round++) {
+      log('SCAN', `Running verification tests (round ${round}/${MAX_RETRY_ROUNDS})...`);
+      const testResult = await selfTest();
 
-    if (testResult.passed) {
-      // Phase 4: Commit
-      await selfCommit(`AI-repaired ${repairsThisCycle} critical file(s) — Cycle #${cycleCount}`);
-    } else {
-      log('ERROR', `Tests failed after repair: ${testResult.output.slice(-100)}`);
+      if (testResult.passed) {
+        testPassed = true;
+        log('FIX', `✅ All tests passed on round ${round}. Committing...`);
+        await selfCommit(`AI-repaired ${repairsThisCycle} critical file(s) — Cycle #${cycleCount} (round ${round})`);
+        break;
+      }
+
+      // Extract failure context and re-repair
+      if (round < MAX_RETRY_ROUNDS) {
+        log('WARN', `Tests failed (round ${round}). Extracting error for AI re-repair...`);
+        const errorSnippet = testResult.output.slice(-500);
+        
+        // Find files that likely caused the failure from the error output
+        for (const fileResult of criticalFiles) {
+          const filePath = path.resolve(rootDir, fileResult.file);
+          if (!fs.existsSync(filePath)) continue;
+
+          const reRepairContext = `Previous AI repair caused test failures. Error output:\n${errorSnippet}\n\nFix the issues in this file while preserving the original repair intent.`;
+          try {
+            const result = await repairFile(filePath, reRepairContext);
+            if (result.success) {
+              log('FIX', `🔄 Re-repair applied to ${fileResult.file} (round ${round})`);
+            }
+          } catch (e) {
+            log('ERROR', `Re-repair crashed for ${fileResult.file}: ${e.message}`);
+          }
+        }
+      }
+    }
+
+    if (!testPassed) {
+      log('ERROR', `Tests still failing after ${MAX_RETRY_ROUNDS} rounds. Rolling back.`);
       await selfRollback();
     }
   }
 
-  // Phase 5: Sealed Receipt
+  // Phase 5: Sealed Receipt (persisted to Sovereign DB)
   const receipt = {
-    version: 2,
+    version: 3,
     cycle: cycleCount,
     timestamp: new Date().toISOString(),
     audit: {
@@ -177,9 +207,18 @@ async function singularityCycle() {
       warnings: auditReport.warnings.length,
     },
     repairs: repairsThisCycle,
-    repairMethod: 'gemini-2.0-flash',
+    repairMethod: 'gemini-2.0-flash + retry-loop',
   };
-  fs.writeFileSync(path.join(logDir, `cycle_v2_${cycleCount}.json`), JSON.stringify(receipt, null, 2));
+  fs.writeFileSync(path.join(logDir, `cycle_v3_${cycleCount}.json`), JSON.stringify(receipt, null, 2));
+
+  // Persist to DB if bridge is running
+  try {
+    const res = await fetch('http://127.0.0.1:3001/api/db/proof-receipts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Studio-Gateway-Key': process.env.STUDIO_GATEWAY_KEY || '' },
+      body: JSON.stringify({ mission: `Singularity Cycle #${cycleCount}`, status: repairsThisCycle > 0 ? 'REPAIRED' : 'CLEAN', details: receipt, filesChanged: repairsThisCycle }),
+    });
+  } catch { /* bridge offline — not fatal */ }
 
   log('SINGULARITY', `═══ CYCLE ${cycleCount} COMPLETE — Score: ${auditReport.averageScore}/100 | Repairs: ${repairsThisCycle} ═══\n`);
 }
@@ -189,12 +228,12 @@ async function singularityCycle() {
 // ═══════════════════════════════════════════════════════════════
 log('SINGULARITY', '');
 log('SINGULARITY', '╔═══════════════════════════════════════════════════════════════╗');
-log('SINGULARITY', '║   S I N G U L A R I T Y   C O R E   v 2                     ║');
-log('SINGULARITY', '║   AST Deep Audit • Gemini AI Repair • Real Tests • Auto-Git  ║');
-log('SINGULARITY', '║   No regex. No string replacement. Real intelligence.        ║');
+log('SINGULARITY', '║   S I N G U L A R I T Y   C O R E   v 3                     ║');
+log('SINGULARITY', '║   AST Audit • AI Repair • Self-Healing Retry • Auto-Git     ║');
+log('SINGULARITY', '║   DB-Persisted Proof Receipts • CrashProofEngine Wrapped    ║');
 log('SINGULARITY', '╚═══════════════════════════════════════════════════════════════╝');
 log('SINGULARITY', '');
-log('SINGULARITY', `Cycle interval: ${CYCLE_INTERVAL_MS / 1000}s | Max repairs/cycle: ${MAX_REPAIRS_PER_CYCLE}`);
+log('SINGULARITY', `Cycle interval: ${CYCLE_INTERVAL_MS / 1000}s | Max repairs/cycle: ${MAX_REPAIRS_PER_CYCLE} | Retry rounds: 3`);
 log('SINGULARITY', 'Beginning first cycle...\n');
 
 singularityCycle();

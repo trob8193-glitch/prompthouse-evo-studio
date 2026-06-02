@@ -9,6 +9,7 @@ import {
   sendEvolutionSignal,
   applyEvolutionVariables
 } from './evolution-runtime.js';
+import { connectWebSocket } from './config/bridge-config.js';
 
 // ─── Page Components (lazy-safe imports) ─────────────────────
 import SovereignIntelligenceDashboard from './features/SovereignIntelligenceDashboard.jsx';
@@ -55,7 +56,7 @@ export const PAGE_MAP = {
   'forge-labs': ForgeLabs,
   'duel-arena': EvoDuelArena,
   'ai-generator': AIGeneratorHub,
-  'evopulse-grid': EvoPulseGridView,
+  'evo-pulse': EvoPulseGridView,
   'tribrain': TriBrainControlPanel,
   'execution-queue': ExecutionQueue,
   'proof-console': ProofConsole,
@@ -143,7 +144,21 @@ export default function App() {
     };
 
     bootstrap();
-    return () => { active = false; };
+    
+    // Initialize real-time WebSockets
+    const ws = connectWebSocket((message) => {
+      if (message.type === 'nightforge_cycle_complete') {
+        useSovereignStore.getState().addNotification('NightForge background cycle completed.', 'success');
+        useSovereignStore.getState().fetchMetrics();
+      } else if (message.type === 'rag_ingestion_complete') {
+        useSovereignStore.getState().addNotification(`RAG Ingested ${message.payload.ingestedChunks} chunks from ${message.payload.filepath}`, 'success');
+      }
+    });
+
+    return () => { 
+      active = false; 
+      if (ws) ws.close();
+    };
   }, [setEvolutionProfile, applyEvolutionRuntime]);
 
   React.useEffect(() => {

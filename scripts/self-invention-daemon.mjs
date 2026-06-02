@@ -89,8 +89,11 @@ async function forgeCycle() {
 }
 
 // ─── Boot ───────────────────────────────────────────────────
-inventionCycle();
-forgeCycle();
+const safeInvention = CrashProofEngine.runSafe(inventionCycle, { silent: false });
+const safeForge = CrashProofEngine.runSafe(forgeCycle, { silent: false });
 
-setInterval(inventionCycle, INVENTION_INTERVAL * 1000);
-setInterval(forgeCycle, FORGE_INTERVAL * 1000);
+safeInvention();
+safeForge();
+
+setInterval(safeInvention, INVENTION_INTERVAL * 1000);
+setInterval(safeForge, FORGE_INTERVAL * 1000);

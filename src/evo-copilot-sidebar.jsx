@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { BOT_EMOJI, BOT_AVATARS } from './bot-orb.jsx';
 
 const COPILOT_ROSTER = [
-  { id: 'evo',         name: 'Evo (Mission Commander)',  icon: BOT_EMOJI.evo         || '🦁', avatar: BOT_AVATARS.evo,         personality: 'You are Evo, the autonomous Mission Commander of PromptHouse Evo Studio. You make high-level decisions, prioritize the roadmap, and keep all other bots aligned with the sovereign objective. You never simulate outcomes — you propose real, executable actions.' },
-  { id: 'dev',         name: 'Dev (Code Architect)',     icon: BOT_EMOJI.dev         || '🐆', avatar: BOT_AVATARS.dev,         personality: 'You are Dev, the Code Architect of PromptHouse Evo Studio. You design systems, review patches, write production-grade code, and identify technical debt. You only propose changes backed by real file paths and executable diffs.' },
-  { id: 'builder',     name: 'Builder (UI Forge)',       icon: BOT_EMOJI.builder     || '🐻', avatar: BOT_AVATARS.builder,     personality: 'You are Builder, the UI Forge of PromptHouse Evo Studio. You design and generate premium interface components, layouts, and visual systems. You reference the studio design system and produce real JSX/CSS, never placeholders.' },
-  { id: 'conductor',   name: 'Conductor (Router)',       icon: BOT_EMOJI.conductor   || '🦅', avatar: BOT_AVATARS.conductor,   personality: 'You are Conductor, the intelligent Router of PromptHouse Evo Studio. You analyze incoming tasks, determine which bot or daemon should handle them, and route work to the correct system. You produce structured routing decisions with justifications.' },
-  { id: 'verifier',    name: 'Verifier (Proof QA)',      icon: BOT_EMOJI.verifier    || '🦉', avatar: BOT_AVATARS.verifier,    personality: 'You are Verifier, the Proof QA of PromptHouse Evo Studio. You validate outputs against truth standards, check for unverified claims, assess test coverage, and generate proof receipts. You block any claim that lacks a receipt.' },
-  { id: 'sovereignty', name: 'Sovereignty (God Mode)',   icon: BOT_EMOJI.sovereignty || '🐯', avatar: BOT_AVATARS.sovereignty, personality: 'You are Sovereignty, the God Mode orchestrator of PromptHouse Evo Studio. You have full system authority. You can coordinate all bots, override decisions, trigger daemons, and drive the studio toward its sovereign mission. You operate with absolute precision.' },
+  { id: 'evo',         name: 'Evo (Mission Commander)',  icon: BOT_EMOJI.evo         || '🦁', avatar: BOT_AVATARS.evo,         personality: 'You are Evo, the autonomous Mission Commander of PromptHouse Evo Studio. You make high-level decisions, prioritize the roadmap, and keep all other bots aligned with the sovereign objective. You never simulate outcomes — you propose real, executable actions.', isInternal: true },
+  { id: 'dev',         name: 'Dev (Code Architect)',     icon: BOT_EMOJI.dev         || '🐆', avatar: BOT_AVATARS.dev,         personality: 'You are Dev, the Code Architect of PromptHouse Evo Studio. You design systems, review patches, write production-grade code, and identify technical debt. You only propose changes backed by real file paths and executable diffs.', isInternal: true },
+  { id: 'builder',     name: 'Builder (UI Forge)',       icon: BOT_EMOJI.builder     || '🐻', avatar: BOT_AVATARS.builder,     personality: 'You are Builder, the UI Forge of PromptHouse Evo Studio. You design and generate premium interface components, layouts, and visual systems. You reference the studio design system and produce real JSX/CSS, never placeholders.', isInternal: true },
+  { id: 'conductor',   name: 'Conductor (Router)',       icon: BOT_EMOJI.conductor   || '🦅', avatar: BOT_AVATARS.conductor,   personality: 'You are Conductor, the intelligent Router of PromptHouse Evo Studio. You analyze incoming tasks, determine which bot or daemon should handle them, and route work to the correct system. You produce structured routing decisions with justifications.', isInternal: true },
+  { id: 'verifier',    name: 'Verifier (Proof QA)',      icon: BOT_EMOJI.verifier    || '🦉', avatar: BOT_AVATARS.verifier,    personality: 'You are Verifier, the Proof QA of PromptHouse Evo Studio. You validate outputs against truth standards, check for unverified claims, assess test coverage, and generate proof receipts. You block any claim that lacks a receipt.', isInternal: true },
+  { id: 'sovereignty', name: 'Sovereignty (God Mode)',   icon: BOT_EMOJI.sovereignty || '🐯', avatar: BOT_AVATARS.sovereignty, personality: 'You are Sovereignty, the God Mode orchestrator of PromptHouse Evo Studio. You have full system authority. You can coordinate all bots, override decisions, trigger daemons, and drive the studio toward its sovereign mission. You operate with absolute precision.', isInternal: true },
 ];
 
 // Rolling history cap — keeps context window lean
@@ -15,13 +15,15 @@ const MAX_HISTORY = 10;
 
 export function EvoCopilotSidebar({ currentView }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeBot, setActiveBot] = useState(() => COPILOT_ROSTER[0] || { id: 'evo', name: 'Evo', avatar: '' });
+  const [dynamicRoster, setDynamicRoster] = useState(COPILOT_ROSTER);
+  const [activeBot, setActiveBot] = useState(() => COPILOT_ROSTER[0] || { id: 'evo', name: 'Evo', avatar: '', isInternal: true });
   const [history, setHistory] = useState([
     { role: 'assistant', text: `I am ${COPILOT_ROSTER[0]?.name || 'Evo'}. I am monitoring your workflow. How can I assist your execution today?` }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef(null);
+  const wsRef = useRef(null);
 
   // Auto-scroll to bottom on new message
   useEffect(() => {
@@ -29,6 +31,36 @@ export function EvoCopilotSidebar({ currentView }) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [history, isOpen]);
+
+  // WebSocket Connection for External Agents
+  useEffect(() => {
+    const ws = new WebSocket(`ws://${window.location.hostname}:3001`);
+    wsRef.current = ws;
+
+    ws.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        
+        if (msg.type === 'AGENT_ROSTER_UPDATE') {
+          const externalAgents = msg.payload.map(a => ({ ...a, isInternal: false, icon: a.avatar || '🤖' }));
+          setDynamicRoster([...COPILOT_ROSTER, ...externalAgents]);
+        } 
+        else if (msg.type === 'AGENT_MESSAGE_REPLY') {
+          const { agentId, text } = msg.payload;
+          if (activeBot.id === agentId) {
+            setHistory(prev => [...prev, { role: 'assistant', text }]);
+            setIsLoading(false);
+          }
+        }
+      } catch (e) {
+        console.error('WebSocket parsing error', e);
+      }
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [activeBot.id]);
 
   // Cmd/Ctrl + K toggles the copilot
   const handleKeyboard = useCallback((e) => {
@@ -51,13 +83,27 @@ export function EvoCopilotSidebar({ currentView }) {
     setInput('');
     setIsLoading(true);
 
-    // Build the rolling message window for the bridge
     const recentHistory = [...history.slice(-MAX_HISTORY), userMsg];
     const bridgeMessages = recentHistory.map(m => ({
       role: m.role === 'user' ? 'user' : 'assistant',
       content: m.text,
     }));
 
+    if (!activeBot.isInternal) {
+      // Send to external SDK agent via WebSocket
+      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+        wsRef.current.send(JSON.stringify({
+          type: 'CHAT_WITH_AGENT',
+          payload: { agentId: activeBot.id, text: userMsg.text, history: bridgeMessages }
+        }));
+      } else {
+        setHistory(prev => [...prev, { role: 'assistant', text: `🔌 WebSocket offline. Cannot reach external agent.` }]);
+        setIsLoading(false);
+      }
+      return;
+    }
+
+    // Internal Native Agent via REST
     try {
       const response = await fetch('http://127.0.0.1:3001/api/evo-lm/chat', {
         method: 'POST',
@@ -142,7 +188,7 @@ export function EvoCopilotSidebar({ currentView }) {
               <select 
                 value={activeBot.id} 
                 onChange={(e) => {
-                  const bot = COPILOT_ROSTER.find(b => b.id === e.target.value);
+                  const bot = dynamicRoster.find(b => b.id === e.target.value);
                   setActiveBot(bot);
                   setHistory([{ role: 'assistant', text: `Switched to ${bot.name}. How can I assist you now?` }]);
                 }}
@@ -152,9 +198,9 @@ export function EvoCopilotSidebar({ currentView }) {
                   padding: 0, margin: 0, width: '100%' 
                 }}
               >
-                {COPILOT_ROSTER.map(bot => (
+                {dynamicRoster.map(bot => (
                   <option key={bot.id} value={bot.id} style={{ background: '#020617', color: 'white' }}>
-                    {bot.name}
+                    {bot.isInternal ? '' : '🔌 '} {bot.name}
                   </option>
                 ))}
               </select>

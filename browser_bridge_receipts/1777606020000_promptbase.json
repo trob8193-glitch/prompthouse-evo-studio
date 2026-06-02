@@ -1,0 +1,10 @@
+{
+  "type": "promptbase",
+  "url": "https://github.com/prompthouse/sovereign-tasks",
+  "title": "Sovereign Task Orchestrator v1.0",
+  "selectedText": "Requirements: 1. Truth Auditor verification for all tasks. 2. Dead Hunter pruning for inactive tasks. 3. Omega Reality UI synthesis.",
+  "metaDescription": "The definitive sovereign task management stack.",
+  "headings": ["Overview", "Architecture", "Sovereign Rules"],
+  "capturedAt": "2026-05-01T03:57:00Z",
+  "status": "BUILT"
+}

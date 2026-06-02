@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-05-28T10:25:43.720Z",
+  "cycle": 833,
+  "target": {
+    "id": "buyer-proof-pack",
+    "title": "Generate buyer-ready proof pack",
+    "score": 82,
+    "reason": "Platform value rises when receipts, architecture maps, and release verdicts are easy to inspect."
+  },
+  "releaseGate": {
+    "status": "CHECKED",
+    "output": "\n> prompthouse-evo-studio@1.0.0 platform:release-verdict\n> node scripts/platform_ready_check.mjs --release-verdict\n\n[INFO] PLATFORM_RELEASE_VERDICT=BLOCKED\n[INFO] TRUTH_LABEL=NEEDS_REPAIR\n[INFO] SCORE=83\n[INFO] REASON=Critical platform readiness blockers remain.\n"
+  },
+  "canonicalAuthorities": [
+    {
+      "authority": "Platform Sentinel",
+      "owns": [
+        "readiness verdicts",
+        "truth labels",
+        "repair queue"
+      ]
+    },
+    {
+      "authority": "Module Maturity",
+      "owns": [
+        "module scoring",
+        "route completeness",
+        "script completeness"
+      ]
+    },
+    {
+      "authority": "Self-Evolution",
+      "owns": [
+        "repair proposals",
+        "sandbox proof cycles"
+      ]
+    },
+    {
+      "authority": "Convergence Amplifier",
+      "owns": [
+        "compaction plans",
+        "duplicate maps",
+        "value amplification"
+      ]
+    },
+    {
+      "authority": "Cost Firewall",
+      "owns": [
+        "provider cost review",
+        "savings receipts"
+      ]
+    }
+  ],
+  "requiredProof": [
+    "npm run platform:strict",
+    "npm run maturity:check",
+    "npm run audit:imports",
+    "npm run audit:css"
+  ],
+  "rule": "Convergence records proposals only. Release claims require platform proof."
+}

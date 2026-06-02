@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-05-27T08:42:53.624Z",
+  "status": "PLATFORM_READY",
+  "canonicalAuthorities": [
+    {
+      "authority": "Platform Sentinel",
+      "owns": [
+        "readiness verdicts",
+        "truth labels",
+        "repair queue"
+      ]
+    },
+    {
+      "authority": "Module Maturity",
+      "owns": [
+        "module scoring",
+        "route completeness",
+        "script completeness"
+      ]
+    },
+    {
+      "authority": "Self-Evolution",
+      "owns": [
+        "repair proposals",
+        "sandbox proof cycles"
+      ]
+    },
+    {
+      "authority": "Convergence Amplifier",
+      "owns": [
+        "compaction plans",
+        "duplicate maps",
+        "value amplification"
+      ]
+    },
+    {
+      "authority": "Cost Firewall",
+      "owns": [
+        "provider cost review",
+        "savings receipts"
+      ]
+    }
+  ],
+  "signature": "EvoCore Convergence Amplifier",
+  "verified": true
+}

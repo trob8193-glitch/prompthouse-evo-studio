@@ -82,12 +82,14 @@ Log.info('🌌 [AI_Daemon] Starting NightForge real-time evolution daemon...');
 Log.info(`🌉 Bridge: ${BRIDGE_URL}`);
 Log.info(`⏱️ Interval: ${INTERVAL_MINUTES} minute(s)`);
 
-runCycle().catch((err) => {
+const safeRunCycle = CrashProofEngine.runSafe(runCycle, { silent: false });
+
+safeRunCycle().catch((err) => {
   Log.error(`❌ [AI_Daemon] Initial cycle failed: ${err.message}`);
 });
 
 setInterval(() => {
-  runCycle().catch((err) => {
+  safeRunCycle().catch((err) => {
     Log.error(`❌ [AI_Daemon] Cycle failed: ${err.message}`);
   });
 }, INTERVAL_MS);

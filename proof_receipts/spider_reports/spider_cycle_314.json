@@ -1,0 +1,647 @@
+{
+  "cycle": 314,
+  "timestamp": "2026-06-02T00:21:30.153Z",
+  "summary": {
+    "total": 92,
+    "critical": 9,
+    "warnings": 38,
+    "info": 45
+  },
+  "issues": [
+    {
+      "file": "scripts\\train_terminal_ui.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('train_terminal_ui');"
+    },
+    {
+      "file": "scripts\\safe-bridge.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('safe-bridge');"
+    },
+    {
+      "file": "scripts\\run_apis_5_mins.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('run_apis_5_mins');"
+    },
+    {
+      "file": "scripts\\middleend-watchdog-daemon.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('middleend-watchdog-daemon');"
+    },
+    {
+      "file": "scripts\\frontend-watchdog-daemon.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('frontend-watchdog-daemon');"
+    },
+    {
+      "file": "scripts\\bridgeend-watchdog-daemon.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('bridgeend-watchdog-daemon');"
+    },
+    {
+      "file": "scripts\\audit-platform-readiness.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('audit-platform-readiness');"
+    },
+    {
+      "file": "scripts\\audit-platform-daemon.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('audit-platform-daemon');"
+    },
+    {
+      "file": "scripts\\antigravity-daemon.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('antigravity-daemon');"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-2.5-pro",
+      "fix": "Replace hardcoded model string \"gemini-2.5-pro\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-2.5-flash",
+      "fix": "Replace hardcoded model string \"gemini-2.5-flash\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-2.0-flash",
+      "fix": "Replace hardcoded model string \"gemini-2.0-flash\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-2.0-flash",
+      "fix": "Replace hardcoded model string \"gemini-2.0-flash\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-2.0-flash",
+      "fix": "Replace hardcoded model string \"gemini-2.0-flash\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o",
+      "fix": "Replace hardcoded model string \"gpt-4o\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o",
+      "fix": "Replace hardcoded model string \"gpt-4o\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o-mini",
+      "fix": "Replace hardcoded model string \"gpt-4o-mini\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o-mini",
+      "fix": "Replace hardcoded model string \"gpt-4o-mini\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "claude-sonnet-4",
+      "fix": "Replace hardcoded model string \"claude-sonnet-4\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "claude-sonnet-4-20250514",
+      "fix": "Replace hardcoded model string \"claude-sonnet-4-20250514\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "claude-opus-4",
+      "fix": "Replace hardcoded model string \"claude-opus-4\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\ai\\ModelRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "claude-opus-4-20250514",
+      "fix": "Replace hardcoded model string \"claude-opus-4-20250514\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\api\\external_ai_provider_router.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o",
+      "fix": "Replace hardcoded model string \"gpt-4o\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\autonomy\\AgentSchema.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-1.5-pro",
+      "fix": "Replace hardcoded model string \"gemini-1.5-pro\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\evolution\\PromptForge.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o",
+      "fix": "Replace hardcoded model string \"gpt-4o\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\gateway\\costFirewallV2.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o-mini",
+      "fix": "Replace hardcoded model string \"gpt-4o-mini\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\gateway\\modelRouterV2.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-1.5-flash",
+      "fix": "Replace hardcoded model string \"gemini-1.5-flash\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\gateway\\modelRouterV2.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-1.5-pro",
+      "fix": "Replace hardcoded model string \"gemini-1.5-pro\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\gateway\\modelRouterV2.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o-mini",
+      "fix": "Replace hardcoded model string \"gpt-4o-mini\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\gateway\\modelRouterV2.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o",
+      "fix": "Replace hardcoded model string \"gpt-4o\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\gateway\\providerPriceRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-1.5-flash",
+      "fix": "Replace hardcoded model string \"gemini-1.5-flash\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\gateway\\providerPriceRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-1.5-pro",
+      "fix": "Replace hardcoded model string \"gemini-1.5-pro\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\gateway\\providerPriceRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o-mini",
+      "fix": "Replace hardcoded model string \"gpt-4o-mini\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\gateway\\providerPriceRegistry.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o",
+      "fix": "Replace hardcoded model string \"gpt-4o\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\intelligence\\SemanticRouter.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o",
+      "fix": "Replace hardcoded model string \"gpt-4o\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\core\\intelligence\\SemanticRouter.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o-mini",
+      "fix": "Replace hardcoded model string \"gpt-4o-mini\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\features\\terminal_logic.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o",
+      "fix": "Replace hardcoded model string \"gpt-4o\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\server\\routes\\evo_eyes.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-1.5-pro",
+      "fix": "Replace hardcoded model string \"gemini-1.5-pro\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\server\\routes\\evo_eyes.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-1.5-pro",
+      "fix": "Replace hardcoded model string \"gemini-1.5-pro\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\server\\routes\\evo_eyes.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o-mini",
+      "fix": "Replace hardcoded model string \"gpt-4o-mini\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\server\\routes\\evo_eyes.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o-mini",
+      "fix": "Replace hardcoded model string \"gpt-4o-mini\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\server\\utils\\nightforge-helpers.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-1.5-pro",
+      "fix": "Replace hardcoded model string \"gemini-1.5-pro\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\server\\utils\\nightforge-helpers.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-1.5-pro",
+      "fix": "Replace hardcoded model string \"gemini-1.5-pro\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\server\\utils\\nightforge-helpers.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gemini-1.5-pro",
+      "fix": "Replace hardcoded model string \"gemini-1.5-pro\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\server\\utils\\nightforge-helpers.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o-mini",
+      "fix": "Replace hardcoded model string \"gpt-4o-mini\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\server\\utils\\nightforge-helpers.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o-mini",
+      "fix": "Replace hardcoded model string \"gpt-4o-mini\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "src\\server\\utils\\nightforge-helpers.js",
+      "rule": "HARDCODED_MODEL",
+      "severity": "warning",
+      "detail": "gpt-4o-mini",
+      "fix": "Replace hardcoded model string \"gpt-4o-mini\" with QuadBrainModelRouter.routeTask()"
+    },
+    {
+      "file": "quadbrain_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /audit/trigger",
+      "fix": "Add MCP tool \"spider_audit_trigger\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/audit/trigger\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /local/outbox",
+      "fix": "Add MCP tool \"spider_local_outbox\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/local/outbox\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /local/approvals/:id/approve",
+      "fix": "Add MCP tool \"spider_local_approvals_id_approve\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/local/approvals/:id/approve\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /local/approvals/:id/deny",
+      "fix": "Add MCP tool \"spider_local_approvals_id_deny\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/local/approvals/:id/deny\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /oauth/token",
+      "fix": "Add MCP tool \"spider_oauth_token\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/oauth/token\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /evo-layer/push",
+      "fix": "Add MCP tool \"spider_evo_layer_push\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/evo-layer/push\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /repo/execute-verification",
+      "fix": "Add MCP tool \"spider_repo_execute_verification\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/repo/execute-verification\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /git/commit-and-push",
+      "fix": "Add MCP tool \"spider_git_commit_and_push\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/git/commit-and-push\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /memory/search",
+      "fix": "Add MCP tool \"spider_memory_search\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/memory/search\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /memory/propose",
+      "fix": "Add MCP tool \"spider_memory_propose\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/memory/propose\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /memory/append",
+      "fix": "Add MCP tool \"spider_memory_append\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/memory/append\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /memory/update",
+      "fix": "Add MCP tool \"spider_memory_update\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/memory/update\")"
+    },
+    {
+      "file": "studio_gateway_routes.js",
+      "rule": "UNTETHERED_ROUTE",
+      "severity": "info",
+      "detail": "POST /memory/deprecate",
+      "fix": "Add MCP tool \"spider_memory_deprecate\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/memory/deprecate\")"
+    },
+    {
+      "file": "scripts/ai_review_gemini.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/ai_review_local.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/bridgeend-watchdog-daemon.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/build_code_executor.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/convert-stubs.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/deep-audit.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/enterprise_audit.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/frontend-watchdog-daemon.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/gemini-repair.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/generate-handover-report.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/ingest_promptbase.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/middleend-watchdog-daemon.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/nuclear_audit.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/perfect-studio-wiring.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/run_apis_5_mins.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/run_load_test.js",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/singularity_ascension.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/spinecore_status.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/team_repair.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_advanced_evolution.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_autonomy.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_blueprint.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_brain_structure.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_creative_autonomy.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_llm_model_training.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_patterns_and_awareness.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_possibilities.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_precise_cutting.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_terminal_ui.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_ui_generation.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_visuals_and_evolution.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/train_vite_and_connections.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    }
+  ]
+}

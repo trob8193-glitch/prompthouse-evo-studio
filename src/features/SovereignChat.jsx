@@ -102,6 +102,7 @@ export default function SovereignChat() {
   const [customEndpoints, setCustomEndpoints] = useState(getCustomEndpoints());
   const [trainingEnabled, setTrainingEnabled] = useState(isTrainingEnabled());
   const [trainingStats, setTrainingStats] = useState(null);
+  const [useRag, setUseRag] = useState(false);
   const [lastTransport, setLastTransport] = useState(null);
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
@@ -169,6 +170,7 @@ export default function SovereignChat() {
         customUrl: transport !== 'auto' && transport !== 'bluetooth' && transport !== 'evo_lm' ? transport : null,
         allowBluetooth: transport === 'bluetooth' || transport === 'auto',
         captureTraining: trainingEnabled,
+        useRag: useRag,
       });
 
       setLastTransport(result.transport);
@@ -441,9 +443,15 @@ export default function SovereignChat() {
             <Send size={16} />
           </button>
         </div>
-        <div style={{ fontSize: 9, color: '#334155', marginTop: 6, textAlign: 'right' }}>
-          Transport: <span style={{ color: '#475569', fontWeight: 700 }}>{transport.toUpperCase()}</span>
-          {trainingEnabled && <span style={{ marginLeft: 8, color: '#f5c84280' }}>· 🧠 Training ON</span>}
+        <div style={{ fontSize: 9, color: '#334155', marginTop: 6, textAlign: 'right', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 12 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer', color: useRag ? '#4ade80' : '#475569', fontWeight: useRag ? 700 : 400 }}>
+            <input type="checkbox" checked={useRag} onChange={e => setUseRag(e.target.checked)} style={{ accentColor: '#4ade80' }} />
+            USE RAG
+          </label>
+          <span>
+            Transport: <span style={{ color: '#475569', fontWeight: 700 }}>{transport.toUpperCase()}</span>
+            {trainingEnabled && <span style={{ marginLeft: 8, color: '#f5c84280' }}>· 🧠 Training ON</span>}
+          </span>
         </div>
       </div>
     </div>

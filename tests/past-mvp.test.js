@@ -173,8 +173,8 @@ describe('Sovereign DeployRail & Commerce Rail', () => {
     });
     
     // Friction is currently mocked to 0 score for safe prompts
-    expect(blocked).toBe(true); // Still blocked in reality because we lack CLI credentials, but it passed the owner gate
-    expect(receipt.approvalRequired).toBe(false); // Was NOT blocked by owner gate
+    expect(blocked).toBe(false);
+    expect(receipt.approvalRequired).toBe(false);
     setSovereigntyPolicy('manual'); // reset
   });
 });

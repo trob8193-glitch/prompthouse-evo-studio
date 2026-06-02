@@ -1,5 +1,5 @@
 import { Log } from './core/autonomy/SovereignLogger.js';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 
 /**
@@ -114,8 +114,17 @@ function discoverImplementedRoutes(rootDir) {
     join(rootDir, 'generated_apis', 'emoji_library.js'),
     join(rootDir, 'generated_apis', 'test_api.js'),
   ];
+  
+  const routesDir = join(rootDir, 'src', 'server', 'routes');
+  if (existsSync(routesDir)) {
+    const files = readdirSync(routesDir).filter(f => f.endsWith('.js'));
+    for (const f of files) {
+      candidates.push(join(routesDir, f));
+    }
+  }
+  
   const routes = new Set();
-  const routeRegex = /app\.(get|post|put|patch|delete)\(\s*['"`]([^'"`]+)['"`]/g;
+  const routeRegex = /(?:app|router)\.(get|post|put|patch|delete)\(\s*['"`]([^'"`]+)['"`]/g;
 
   for (const filePath of candidates) {
     if (!existsSync(filePath)) continue;

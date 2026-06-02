@@ -11,7 +11,7 @@ const ROOT = process.cwd();
 
 describe('Route Contract', () => {
   it('extracts endpoints from Express source', () => {
-    const serverPath = join(ROOT, 'promptbridge-server.js');
+    const serverPath = join(ROOT, 'src/server/routes/legacy_core.js');
     const serverSource = readFileSync(serverPath, 'utf8');
     const routes = extractExpressRoutes(serverSource);
     expect(routes.length).toBeGreaterThan(0);
@@ -48,8 +48,15 @@ describe('Route Contract', () => {
     }
 
     // Collect all route definitions
-    const serverSource = readFileSync(join(ROOT, 'promptbridge-server.js'), 'utf8');
-    let allRoutes = extractExpressRoutes(serverSource);
+    let allRoutes = [];
+    const routesDir = join(ROOT, 'src/server/routes');
+    if (existsSync(routesDir)) {
+      const files = readdirSync(routesDir).filter((f) => f.endsWith('.js'));
+      for (const file of files) {
+        const source = readFileSync(join(routesDir, file), 'utf8');
+        allRoutes = allRoutes.concat(extractExpressRoutes(source));
+      }
+    }
 
     const generatedDir = join(ROOT, 'generated_apis');
     if (existsSync(generatedDir)) {

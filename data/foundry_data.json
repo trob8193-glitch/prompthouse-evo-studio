@@ -1,0 +1,25 @@
+{
+  "modelId": "local-evo-lm-latest",
+  "mode": "local_foundry",
+  "datasetSize": 3,
+  "examples": [
+    {
+      "id": "id_1777898290218_13",
+      "featureA": 1,
+      "featureB": 9,
+      "label": "accept"
+    },
+    {
+      "id": "id_1777898290219_733",
+      "featureA": 4,
+      "featureB": 10,
+      "label": "accept"
+    },
+    {
+      "id": "id_1777898290219_443",
+      "featureA": 10,
+      "featureB": 7,
+      "label": "accept"
+    }
+  ]
+}

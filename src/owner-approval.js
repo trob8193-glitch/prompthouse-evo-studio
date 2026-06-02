@@ -1,51 +1,25 @@
-
-import { Log } from './core/autonomy/SovereignLogger.js';
-
 /**
- * PH EVO STUDIO — OWNER-APPROVAL (PRODUCTION GRADE)
- * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * Operational status is determined by live audits and proof receipts.
+ * Owner Approval Logic
+ * Used to verify the human has authorized irreversible actions.
  */
 
-
-export class OwnerApproval {
-  constructor() {
-    this.status = 'OMNIPOTENT';
-    this.iq_baseline = 165.0;
-  }
-
-  async execute(params = {}) {
-    Log.info('🚀 [Owner-approval] Executing production logic...');
-    // Absolute production logic implementation
-    return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
-  }
-
-  getStatus() {
-    return { 
-      id: 'owner-approval', 
-      grade: 'S+++++', 
-      state: 'VERIFIED',
-      resonance: 0.99 
-    };
-  }
-}
-
-export function createOwnerApprovalEnvelope(params = {}) {
+export function createOwnerApprovalEnvelope(data) {
   return {
-    granted: false,
-    actor: '',
-    scope: '',
-    receiptId: '',
-    grantedAt: '',
-    ...params
+    granted: data.granted || false,
+    actor: data.actor || null,
+    scope: data.scope || null,
+    receiptId: data.receiptId || null,
+    grantedAt: data.grantedAt || null,
   };
 }
 
-export function hasExplicitOwnerApproval(approval = {}, scope = '') {
-  return approval.granted === true && approval.scope === scope;
+export function hasExplicitOwnerApproval(envelope, expectedScope) {
+  if (!envelope || !envelope.granted) return false;
+  if (envelope.actor !== 'studio_owner') return false;
+  if (envelope.scope !== expectedScope) return false;
+  return true;
 }
 
-export function getApprovalBlockReason(scope = '') {
+export function getApprovalBlockReason(scope) {
   return `Missing explicit owner approval for scope: ${scope}`;
 }
