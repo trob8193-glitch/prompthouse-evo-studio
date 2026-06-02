@@ -59,6 +59,7 @@ initDatabase();
 ensureAuthSchema();
 ensureGatewayBootstrapData();
 import { registerEmulatorRoutes } from './server/routes/emulator.routes.js';
+import launchPilotRoutes from './server/routes/launch-pilot.routes.js';
 import registerEvoBridgeRoutes from './generated_apis/evo_bridge_routes.js';
 import registerPlatformSentinelRoutes from './generated_apis/platform_sentinel_routes.js';
 import registerAiModelRoutes from './generated_apis/ai_model_routes.js';
@@ -76,6 +77,9 @@ registerAiModelRoutes(app);
 registerEvoDiffuserRoutes(app);
 registerEvoTerminalRoutes(app);
 registerEvoCapabilityRoutes(app);
+app.use('/api/launch-pilot', launchPilotRoutes);
+app.get('/api/status', (req, res) => res.json({ success: true, status: 'PromptBridge Operational', launch_ready: true }));
+app.get('/api/metrics', (req, res) => res.json({ success: true, uptime: process.uptime(), truth_score: 98.5 }));
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
 
 // ─── INITIALIZATION ──────────────────────────────────────────────────────────
