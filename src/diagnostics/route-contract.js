@@ -32,7 +32,9 @@ export function extractReadmeEndpoints(readmeText) {
  */
 export function extractExpressRoutes(sourceText) {
   if (typeof sourceText !== 'string') return [];
-  const pattern = /(?:app|router)\.(get|post|put|patch|delete)\(\s*['"`]([^'"`]+)['"`]/gi;
+  // Enhanced pattern to match app.get('/path'), router.post("/path"), 
+  // and bracket-style registrations like app['get']('/path')
+  const pattern = /(?:app|router|route|express)\.?(?:\[['"`])?(get|post|put|patch|delete)(?:['"`]\])?\(\s*['"`]([^'"`]+)['"`]/gi;
   const routes = [];
   let match;
   while ((match = pattern.exec(sourceText)) !== null) {

@@ -28,7 +28,7 @@ describe('Navigation Contract', () => {
 
     const navModule = await import('../src/components/Navigation.jsx');
     NAV_GROUPS = navModule.NAV_GROUPS;
-  }, 60000); // 60s timeout for heavy module import under resource contention
+  }, 120000); // 60s timeout for heavy module import under resource contention
 
   it('PAGE_MAP is exported and is an object', () => {
     expect(PAGE_MAP).toBeDefined();

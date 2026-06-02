@@ -32,6 +32,7 @@ import SingularityEngineOverlay from './components/SingularityEngineOverlay.jsx'
 import ProofCenterView from './features/ProofCenterView.jsx';
 import DeploymentCenterView from './features/DeploymentCenterView.jsx';
 import TriBrainControlPanel from './features/TriBrainControlPanel.jsx';
+import LaunchProofView from './features/LaunchProofView.jsx';
 
 // Existing feature screens from features/index.jsx
 import {
@@ -78,6 +79,7 @@ export const PAGE_MAP = {
   'chatgpt-communicator': ChatGPTCommunicatorView,
   'api-harvester': ApiHarvesterView,
   'quadbrain-cockpit': QuadBrainAppCockpit,
+  'launch-proof': LaunchProofView,
 };
 
 function PageRenderer() {

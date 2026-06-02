@@ -19,7 +19,16 @@ export class TerminalLogic {
       anthropic: process.env.ANTHROPIC_API_KEY || '',
       gemini: process.env.GEMINI_API_KEY || ''
     };
-    this.aiAdaptor = new UniversalAIAdaptor(userConfig);
+    // AI Adaptor is lazily initialized to avoid side effects during tests/imports
+    this._aiAdaptor = null;
+    this._userConfig = userConfig;
+  }
+
+  get aiAdaptor() {
+    if (!this._aiAdaptor) {
+      this._aiAdaptor = new UniversalAIAdaptor(this._userConfig);
+    }
+    return this._aiAdaptor;
   }
   async execute(payload) {
     const { action, command, session } = payload;

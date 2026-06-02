@@ -5,12 +5,63 @@ This repository contains the studio user interface, the bridge server, and the a
 
 ## Getting Started
 
+## Launch Readiness & Verification
+This repository is currently in **Launch Readiness** mode. You can verify the system's integrity using the automated proof script:
+
+```bash
+npm run launch:proof
+```
+
+### Key Documentation
+- [Launch Readiness Guide](./docs/LAUNCH_READINESS_GUIDE.md) — Setup and verification path.
+- [Five-Minute Demo Workflow](./docs/DEMO_WORKFLOW.md) — Flagship demo loop.
+- [Pilot Roadmap](./docs/PILOT_ROADMAP.md) — Future milestones and criteria.
+
+## Truth Spine Surfaces
+
+Operator and release status live here:
+
+- `/api/generated-artifact-registry`
+- `/api/bridge-contract-ledger`
+- `/api/build-review-gate`
+- `/api/release-spine/status`
+- `/api/project-handshake`
+- `/api/project-handshake/coverage`
+- `/api/prompt-os/packet`
+- `/api/self-implementation/status`
+- `/api/self-implementation/cycle`
+- `/api/studio-os/inspector`
+
+These surfaces distinguish:
+
+- `promised`
+- `built`
+- `blocked`
+- `proven`
+
+## Owner Approval Rail
+
+Live deploy and live commerce are blocked by default. They require an explicit approval envelope plus real provider credentials.
+
+Approval shape:
+
+```json
+{
+  "ownerApproval": {
+    "granted": true,
+    "grantedAt": "2026-05-03T15:44:00.000Z",
+    "actor": "studio_owner",
+    "scope": "deploy",
+    "receiptId": "deploy_receipt_001"
+  }
+}
+```
+
 ### 1. Environment
 Copy `.env.example` to `.env` and fill in your keys. Do not commit `.env`!
 
 ```bash
 cp .env.example .env
-```
 
 ### 2. Install Dependencies
 ```bash
