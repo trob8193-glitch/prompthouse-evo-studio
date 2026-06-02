@@ -30,6 +30,7 @@ import SingularityEngineOverlay from './components/SingularityEngineOverlay.jsx'
 
 import ProofCenterView from './features/ProofCenterView.jsx';
 import DeploymentCenterView from './features/DeploymentCenterView.jsx';
+import LaunchProofView from './features/LaunchProofView.jsx';
 
 // Existing feature screens from features/index.jsx
 import {
@@ -69,6 +70,7 @@ export const PAGE_MAP = {
   'foundry': FeatureFoundry,
   'saas-builder': SaasBuilderView,
   'ghost-editor': GhostEditor,
+  'launch-proof': LaunchProofView,
 };
 
 function PageRenderer() {
