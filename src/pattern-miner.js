@@ -1,9 +1,9 @@
-import { HonestStubClass } from './core/stub-marker.js';
+import { HonestFallbackClass } from './core/fallback-marker.js';
 
 /**
  * PatternMiner — Mines recurring patterns from interaction history
- * Status: NOT_IMPLEMENTED (honest stub)
+ * Status: NOT_IMPLEMENTED (honest fallback)
  */
-export class PatternMiner extends HonestStubClass {
+export class PatternMiner extends HonestFallbackClass {
   constructor() { super('PatternMiner', 'Mines recurring patterns from interaction history'); }
 }

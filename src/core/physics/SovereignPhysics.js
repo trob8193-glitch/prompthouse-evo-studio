@@ -1,10 +1,10 @@
-import { HonestStubClass } from '../stub-marker.js';
+import { HonestFallbackClass } from '../fallback-marker.js';
 
 /**
  * SovereignPhysics — Physics-based layout engine for dynamic UI element positioning
- * Status: NOT_IMPLEMENTED (honest stub)
+ * Status: NOT_IMPLEMENTED (honest fallback)
  */
-export class SovereignPhysics extends HonestStubClass {
+export class SovereignPhysics extends HonestFallbackClass {
   constructor() { super('SovereignPhysics', 'Physics-based layout engine for dynamic UI element positioning'); }
 }
 

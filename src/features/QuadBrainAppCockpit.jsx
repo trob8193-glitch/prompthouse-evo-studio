@@ -11,7 +11,7 @@ export function QuadBrainAppCockpit() {
   const [receipts, setReceipts] = useState([]);
   
   // Form State
-  const [assetType, setAssetType] = useState('ui_mockup');
+  const [assetType, setAssetType] = useState('ui_wireframe');
   const [prompt, setPrompt] = useState('');
   const [engine, setEngine] = useState('evo_diffuser');
   
@@ -197,7 +197,7 @@ export function QuadBrainAppCockpit() {
                   <div>
                     <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Asset Type</label>
                     <select value={assetType} onChange={e=>setAssetType(e.target.value)} className="w-full bg-[#030712] border border-indigo-900 p-3 rounded text-white">
-                      <option value="ui_mockup">UI Mockup</option>
+                      <option value="ui_wireframe">UI Wireframe</option>
                       <option value="platform_demo_banner">Platform Demo Banner</option>
                       <option value="logo">Application Logo</option>
                       <option value="icon">Iconography</option>

@@ -8,13 +8,27 @@ import { getEvoLlmPaths } from './EvoLlmPaths.js';
 import { buildEvoLlmDataset } from './EvoLlmDataset.js';
 import { evaluateEvoLlmDataset, writeEvoLlmTrainingReceipt } from './EvoLlmEvaluation.js';
 import { evaluateCostedRequest } from '../gateway/index.js';
+import { Log } from '../autonomy/SovereignLogger.js';
 
 const TRAINING_STATE_FILE = 'training-state.json';
 const APPROVALS_FILE = 'training-approvals.json';
 
-function ensureDir(dir) { fs.mkdirSync(dir, { recursive: true }); }
-function readJsonSafe(file, fallback = null) { try { return fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : fallback; } catch { return fallback; } }
-function writeJson(file, value) { ensureDir(path.dirname(file)); fs.writeFileSync(file, JSON.stringify(value, null, 2), 'utf8'); }
+function ensureDir(dir) { 
+  try { fs.mkdirSync(dir, { recursive: true }); }
+  catch (e) { Log.error(`Failed to create directory ${dir}: ${e.message}`); }
+}
+function readJsonSafe(file, fallback = null) { 
+  try { return fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : fallback; } 
+  catch (e) { Log.error(`Failed to read JSON from ${file}: ${e.message}`); return fallback; } 
+}
+function writeJson(file, value) { 
+  try {
+    ensureDir(path.dirname(file)); 
+    fs.writeFileSync(file, JSON.stringify(value, null, 2), 'utf8'); 
+  } catch (e) {
+    Log.error(`Failed to write JSON to ${file}: ${e.message}`);
+  }
+}
 
 function statePath(rootDir) { return path.join(getEvoLlmPaths({ rootDir }).base, TRAINING_STATE_FILE); }
 function approvalsPath(rootDir) { return path.join(getEvoLlmPaths({ rootDir }).base, APPROVALS_FILE); }
@@ -99,7 +113,8 @@ export function planEvoLlmTraining({
 }
 
 export function approveEvoTrainingPlan({ rootDir = process.cwd(), planId, actor = 'studio_owner', note = '' } = {}) {
-  if (!planId) throw new Error('planId is required.');
+  if (!planId || typeof planId !== 'string') throw new Error('planId is required and must be a string.');
+  if (!actor) throw new Error('actor is required for audit trail.');
   const state = getEvoTrainingState({ rootDir });
   const plan = state.runs.find((run) => run.id === planId);
   if (!plan) throw new Error(`Unknown training plan: ${planId}`);
@@ -119,7 +134,7 @@ export function approveEvoTrainingPlan({ rootDir = process.cwd(), planId, actor 
 }
 
 export function runEvoTrainingJob({ rootDir = process.cwd(), planId, provider = 'local-dataset-only' } = {}) {
-  if (!planId) throw new Error('planId is required.');
+  if (!planId || typeof planId !== 'string') throw new Error('planId is required and must be a string.');
   const approvals = loadApprovals(rootDir);
   const approved = approvals.find((approval) => approval.planId === planId);
   if (!approved) {
@@ -139,14 +154,20 @@ export function runEvoTrainingJob({ rootDir = process.cwd(), planId, provider = 
   let executed = false;
 
   if (isExternal) {
-    if (process.env.OPENAI_API_KEY) {
-      truthState = 'PROVIDER_FINE_TUNE_JOB_QUEUED';
-      message = `Successfully dispatched fine-tuning job to ${provider} API.`;
-      executed = true;
-    } else {
+    if (provider.includes('openai') && !process.env.OPENAI_API_KEY) {
       truthState = 'PROVIDER_FINE_TUNE_FAILED';
       message = `FATAL: OPENAI_API_KEY is missing. Real execution failed.`;
       executed = false;
+      Log.error(message);
+    } else if (provider.includes('gemini') && !process.env.GEMINI_API_KEY) {
+      truthState = 'PROVIDER_FINE_TUNE_FAILED';
+      message = `FATAL: GEMINI_API_KEY is missing. Real execution failed.`;
+      executed = false;
+      Log.error(message);
+    } else {
+      truthState = 'PROVIDER_FINE_TUNE_JOB_QUEUED';
+      message = `Successfully dispatched fine-tuning job to ${provider} API.`;
+      executed = true;
     }
   }
 
@@ -170,7 +191,8 @@ export function runEvoTrainingJob({ rootDir = process.cwd(), planId, provider = 
 }
 
 export function promoteEvoModel({ rootDir = process.cwd(), modelId, actor = 'studio_owner' } = {}) {
-  if (!modelId) throw new Error('modelId is required.');
+  if (!modelId || typeof modelId !== 'string') throw new Error('modelId is required and must be a valid string.');
+  if (!actor) throw new Error('actor is required.');
   const state = getEvoTrainingState({ rootDir });
   const promotion = {
     modelId,

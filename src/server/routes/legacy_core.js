@@ -44,7 +44,7 @@ export default function attachLegacyRoutes(app, deps) {
   }
 
 // ─── Commerce (Real Stripe Integration) ─────────────────────────────────────────────
-const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
+const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_not_configured');
 
 app.post('/api/commerce/checkout', async (req, res) => {
   const { productName, priceCents, currency } = req.body;

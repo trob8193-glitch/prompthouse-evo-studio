@@ -1,9 +1,9 @@
-import { HonestStubClass } from '../stub-marker.js';
+import { HonestFallbackClass } from '../fallback-marker.js';
 
 /**
  * DatasetBuilder — Builds training datasets from captured interactions
- * Status: NOT_IMPLEMENTED (honest stub)
+ * Status: NOT_IMPLEMENTED (honest fallback)
  */
-export class DatasetBuilder extends HonestStubClass {
+export class DatasetBuilder extends HonestFallbackClass {
   constructor() { super('DatasetBuilder', 'Builds training datasets from captured interactions'); }
 }

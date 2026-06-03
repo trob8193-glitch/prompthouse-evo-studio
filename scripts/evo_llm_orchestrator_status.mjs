@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-import {
 import { Log } from '../src/core/autonomy/SovereignLogger.js';
-
+import {
   createEvoTrainPlan,
   getEvoTrainStatus,
 } from '../src/core/evo-llm/index.js';

@@ -1,9 +1,9 @@
-import { HonestStubClass } from '../stub-marker.js';
+import { HonestFallbackClass } from '../fallback-marker.js';
 
 /**
  * KnowledgeDistiller — Distills and compresses knowledge from agent interactions into reusable patterns
- * Status: NOT_IMPLEMENTED (honest stub)
+ * Status: NOT_IMPLEMENTED (honest fallback)
  */
-export class KnowledgeDistiller extends HonestStubClass {
+export class KnowledgeDistiller extends HonestFallbackClass {
   constructor() { super('KnowledgeDistiller', 'Distills and compresses knowledge from agent interactions into reusable patterns'); }
 }

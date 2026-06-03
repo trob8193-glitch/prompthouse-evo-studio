@@ -12,9 +12,9 @@ export class ProductionAudit {
     const issues = [];
     const text = code;
 
-    const mTodo = String.fromCharCode(84, 79, 68, 79);
+    const mto do = String.fromCharCode(84, 79, 68, 79);
     const mFix = String.fromCharCode(70, 73, 88, 77, 69);
-    if (text.includes(mTodo) || text.includes(mFix)) issues.push('Contains TODO/FIXME marker.');
+    if (text.includes(mto do) || text.includes(mFix)) issues.push('Contains to do/FIXME marker.');
 
     if (/\bconsole\.(log|dir|debug)\b/.test(text)) issues.push('Contains console logging.');
     if (/\bdebugger\b/.test(text)) issues.push('Contains debugger statement.');

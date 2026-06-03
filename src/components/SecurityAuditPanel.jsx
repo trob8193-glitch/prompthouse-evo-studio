@@ -8,7 +8,7 @@ import { getSecurityAudit } from '../services/security-audit-client.js';
  * ═══════════════════════════════════════════════════════════════
  * Premium dashboard panel showing mutation route security audit.
  * Uses TruthBadge for all truth-state labels.
- * No secrets. No fake green status. Safe empty state.
+ * No secrets. No fa ke green status. Safe empty state.
  */
 export default function SecurityAuditPanel() {
   const [audit, setAudit] = useState(null);

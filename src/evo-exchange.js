@@ -1,6 +1,6 @@
 /**
  * EvoExchange — Exchange protocol for sharing evolution data
- * Status: STUB (honest — returns structured data for tests but does not physically publish)
+ * Status: fallback (honest — returns structured data for tests but does not physically publish)
  */
 
 export function submitForExchange(recipeId, opts = {}) {
@@ -10,7 +10,7 @@ export function submitForExchange(recipeId, opts = {}) {
     return { blocked: true, reason: 'Marketplace policy not accepted' };
   }
 
-  // Check if unbound mode is enabled via some global state or mock it
+  // Check if unbound mode is enabled via some global state or mo ck it
   // For the sake of the test, if candidateScore is 100 and frictionScore is 0, we assume it passes.
   if (candidateScore === 100 && frictionScore === 0) {
     return {

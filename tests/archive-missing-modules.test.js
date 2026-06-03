@@ -9,7 +9,7 @@ describe('archive compatibility modules', () => {
     const response = await swarm.execute(['verify bridge', 'train local model']);
 
     expect(response.success).toBe(false);
-    expect(response.stub).toBe(true);
+    expect(response.fallback).toBe(true);
     expect(response.module).toBe('RecursiveSwarm');
   });
 

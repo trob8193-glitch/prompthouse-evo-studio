@@ -79,9 +79,25 @@ import attachRagRoutes from './src/core/api/rag_routes.js';
 import registerEvoTerminalRoutes from './generated_apis/evo_terminal_routes.js';
 import registerEvoCapabilityRoutes from './generated_apis/evo_capability_routes.js';
 
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+
 ensureEvolutionSchema();
 
 const app = express();
+
+app.use(helmet({
+  contentSecurityPolicy: false // We need this off for local dev scripts
+}));
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // Limit each IP to 1000 requests per windowMs
+  message: { success: false, message: 'Too many requests from this IP, please try again after 15 minutes' }
+});
+
+app.use('/api', limiter);
+
 registerEmulatorRoutes(app);
 registerEvoBridgeRoutes(app);
 registerPlatformSentinelRoutes(app);

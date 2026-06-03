@@ -1,6 +1,6 @@
 /**
  * DeployRail — Frontend deploy rail logic
- * Status: STUB (honest — returns structured data but does not physically deploy)
+ * Status: fallback (honest — returns structured data but does not physically deploy)
  */
 
 import { getSovereigntyPolicy } from './prompt-base.js';

@@ -1,101 +1,68 @@
-# PromptHouse Evo Studio
+# 🚀 PromptHouse Evo Studio
 
-The central hub for the PromptHouse Sovereign Finality architecture.
-This repository contains the studio user interface, the bridge server, and the autonomous daemons that govern self-evolution.
+Welcome to **PromptHouse Evo Studio** — the Sovereign Development Platform and IDE. This platform enables autonomous software generation, agentic development, and deep intelligence routing.
 
-## Getting Started
+## 📖 Overview
 
-## Launch Readiness & Verification
-This repository is currently in **Launch Readiness** mode. You can verify the system's integrity using the automated proof script:
+PromptHouse Evo Studio is built on a highly optimized **React 19 / Vite 8** frontend powered by a robust Node.js **PromptBridge Server**. It includes a full **Evo SDK** allowing you to natively integrate external autonomous bots and agents.
 
-```bash
-npm run launch:proof
-```
+## ⚡ Quick Start
 
-### Key Documentation
-- [Launch Readiness Guide](./docs/LAUNCH_READINESS_GUIDE.md) — Setup and verification path.
-- [Five-Minute Demo Workflow](./docs/DEMO_WORKFLOW.md) — Flagship demo loop.
-- [Pilot Roadmap](./docs/PILOT_ROADMAP.md) — Future milestones and criteria.
+### 1. Prerequisites
+- **Node.js**: v18 or higher
+- **npm**: v9 or higher
 
-## Truth Spine Surfaces
-
-Operator and release status live here:
-
-- `/api/generated-artifact-registry`
-- `/api/bridge-contract-ledger`
-- `/api/build-review-gate`
-- `/api/release-spine/status`
-- `/api/project-handshake`
-- `/api/project-handshake/coverage`
-- `/api/prompt-os/packet`
-- `/api/self-implementation/status`
-- `/api/self-implementation/cycle`
-- `/api/studio-os/inspector`
-
-These surfaces distinguish:
-
-- `promised`
-- `built`
-- `blocked`
-- `proven`
-
-## Owner Approval Rail
-
-Live deploy and live commerce are blocked by default. They require an explicit approval envelope plus real provider credentials.
-
-Approval shape:
-
-```json
-{
-  "ownerApproval": {
-    "granted": true,
-    "grantedAt": "2026-05-03T15:44:00.000Z",
-    "actor": "studio_owner",
-    "scope": "deploy",
-    "receiptId": "deploy_receipt_001"
-  }
-}
-```
-
-### 1. Environment
-Copy `.env.example` to `.env` and fill in your keys. Do not commit `.env`!
-
+### 2. Environment Setup
+Create a `.env` file in the root of the project by copying `.env.example`:
 ```bash
 cp .env.example .env
+```
+Fill in the necessary API keys in your `.env` file:
+```env
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-...
+GEMINI_API_KEY=AI...
+```
 
-### 2. Install Dependencies
+### 3. Installation
+Install the required dependencies:
 ```bash
 npm install
 ```
 
-### 3. Run the Studio (Local Development)
-Start the complete stack (React UI + Bridge Server + Daemons):
-
+### 4. Running the Studio
+To launch the full studio, including the frontend UI, the API bridge, and all necessary background daemons:
 ```bash
 npm run dev:all
 ```
-*Note: The frontend runs on `http://localhost:5173` and the Bridge API runs on `http://127.0.0.1:3001`.*
+Once booted, access the studio at:
+- **Frontend**: http://127.0.0.1:5173
+- **PromptBridge API**: http://127.0.0.1:3001
 
-## Project Structure
+## 🏗️ Architecture
 
-- `src/` — React UI and core engines
-  - `src/core/` — The physics, autonomy, and logic modules
-  - `src/features/` — High-level dashboard views
-  - `src/components/` — Shared React components
-  - `src/server/` — Express backend modular routes
-- `promptbridge-server.js` — The monolith core (being modularized)
-- `scripts/` — Autonomous background daemons (NightForge, Self-Invention)
-- `tests/` — Vitest unit and integration suites
+- **PromptBridge (`promptbridge-server.js`)**: The secure, rate-limited core Node.js server that handles AI routing, database operations, and websocket connections.
+- **Sovereign Daemons (`src/core/daemons/`)**: Background processes including the Spider, Convergence, and Sentinel daemons that keep the system healthy and autonomous.
+- **Frontend UI (`src/`)**: Built on React 19 and Vite 8, featuring an advanced Dashboard, Evo Copilot, and dynamic workspaces.
+- **Evo SDK (`packages/evo-sdk/`)**: A native NPM package allowing external Node scripts to connect to the studio's Copilot via WebSockets.
 
-## Testing
-We use `vitest` for the testing suite.
+## 🔌 Using the Evo SDK
 
+You can easily add your own custom AI Agents to the Studio using the included SDK.
+
+1. Navigate to the SDK folder: `cd packages/evo-sdk`
+2. Run the example bot: `node examples/basic-bot.js`
+3. Open the Evo Copilot in the Studio (`Cmd+K`), and your bot will instantly appear!
+
+## 🛡️ Security
+The PromptBridge is hardened with:
+- **Helmet.js** for HTTP security headers
+- **Express Rate Limiting** to prevent DDoS and API abuse
+- **Database-level Authorization** for all generative routes
+
+## 🧪 Testing
+
+To run the suite of 370+ tests ensuring platform stability:
 ```bash
 npm run test
 ```
-
-## Security Notice
-This is a production-grade enterprise system. 
-- Ensure `.env` is never committed.
-- Keep `JWT_SECRET` and `PH_EVO_MASTER_KEY` highly secure.
-- Ensure `CrashProofEngine` wraps all daemon intervals to prevent silent failures.

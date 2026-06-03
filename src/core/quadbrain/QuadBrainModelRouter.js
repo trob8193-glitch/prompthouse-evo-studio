@@ -124,7 +124,7 @@ export function reportRateLimit(provider, retryAfterSeconds = 60) {
 export function detectTaskClass(taskDescription = '') {
   const lower = taskDescription.toLowerCase();
   if (/\b(patch|css|fix|lint|format|style|typo|rename)\b/.test(lower)) return TASK_CLASS.PATCH;
-  if (/\b(image|creative|visual|mockup|banner|logo|design|ui)\b/.test(lower)) return TASK_CLASS.CREATIVE;
+  if (/\b(image|creative|visual|mo ckup|banner|logo|design|ui)\b/.test(lower)) return TASK_CLASS.CREATIVE;
   if (/\b(architect|system|design|roadmap|plan|strategy|structure)\b/.test(lower)) return TASK_CLASS.ARCHITECTURE;
   if (/\b(audit|scan|drift|semantic|review|analyze|check)\b/.test(lower)) return TASK_CLASS.AUDIT;
   if (/\b(emergency|crash|fatal|urgent|hotfix)\b/.test(lower)) return TASK_CLASS.EMERGENCY;
@@ -175,8 +175,8 @@ export function routeTask(taskDescription = '', preferredBrain = null) {
   const profile = selectModel(taskClass);
 
   if (!profile) {
-    // Total fallback — return offline stub profile
-    console.warn(`⚠️ [MODEL-ROUTER] No models available for class ${taskClass}. Using offline stub.`);
+    // Total fallback — return offline fallback profile
+    console.warn(`⚠️ [MODEL-ROUTER] No models available for class ${taskClass}. Using offline fallback.`);
     return {
       provider: 'offline',
       model: 'none',

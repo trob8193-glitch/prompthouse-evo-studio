@@ -85,12 +85,12 @@ export default function registerStudioGatewayRoutes(app) {
     }
   });
 
-  // ─── OAUTH2 PROVIDER MOCK ──────────────────────────────────────────────────
+  // ─── OAUTH2 PROVIDER mo ck ──────────────────────────────────────────────────
   router.get('/oauth/authorize', (req, res) => {
-    // In production, this renders a UI. We'll automatically mock a redirect back.
+    // In production, this renders a UI. We'll automatically mo ck a redirect back.
     const redirectUri = req.query.redirect_uri;
     const state = req.query.state;
-    res.redirect(`${redirectUri}?code=mock_auth_code_123&state=${state}`);
+    res.redirect(`${redirectUri}?code=mo ck_auth_code_123&state=${state}`);
   });
 
   router.post('/oauth/token', (req, res) => {

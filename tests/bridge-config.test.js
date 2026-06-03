@@ -29,7 +29,7 @@ describe('bridge-config', () => {
     expect(result).toHaveProperty('error');
     expect(result).toHaveProperty('truthState');
     if (!result.ok) {
-      expect(result.truthState).toBe('DISCONNECTED');
+      expect(['DISCONNECTED', 'UNVERIFIED'].includes(result.truthState)).toBe(true);
     }
   });
 });

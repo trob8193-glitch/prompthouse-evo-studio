@@ -3,13 +3,14 @@ import { PerformanceMonitor } from './PerformanceMonitor';
 import { Activity, Shield, Zap, TrendingUp, Cpu, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { safeFetchBridge } from '../config/bridge-config.js';
+import { SkeletonBox, SkeletonOpCard } from './SkeletonLoader';
 
 export const StudioDashboard = () => {
   const [iq, setIq] = React.useState(null);
 
   const [ops, setOps] = React.useState([
-    { id: 'bridge', type: 'Bridge', desc: 'Awaiting bridge telemetry...', status: 'PENDING' },
-    { id: 'queue', type: 'Execution Queue', desc: 'Awaiting queue telemetry...', status: 'PENDING' }
+    { id: 'bridge', type: 'Bridge', status: 'PENDING' },
+    { id: 'queue', type: 'Execution Queue', status: 'PENDING' }
   ]);
 
   React.useEffect(() => {
@@ -33,7 +34,7 @@ export const StudioDashboard = () => {
         if (status?.iq_metrics) {
           setIq(status.iq_metrics.baseline + status.iq_metrics.sovereign_gain);
         } else {
-          setIq(null);
+          setIq(0);
         }
 
         const queueCount = Array.isArray(queue) ? queue.length : 0;
@@ -69,7 +70,7 @@ export const StudioDashboard = () => {
         ]);
       } catch (e) {
         if (!mounted) return;
-        setIq(null);
+        setIq(0);
         setOps([
           { id: 'bridge', type: 'Bridge', desc: 'OFFLINE', status: 'OFFLINE' },
           { id: 'queue', type: 'Execution Queue', desc: 'Unavailable', status: 'OFFLINE' }
@@ -81,6 +82,13 @@ export const StudioDashboard = () => {
     const interval = setInterval(fetchLive, 5000);
     return () => { mounted = false; clearInterval(interval); };
   }, []);
+
+  const StatusBadge = ({ status, label }) => (
+    <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border ${status === 'verified' ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400' : 'border-indigo-500/30 bg-indigo-500/10 text-indigo-400'}`}>
+      <div className={`w-1.5 h-1.5 rounded-full ${status === 'verified' ? 'bg-emerald-400' : 'bg-indigo-400 animate-pulse'}`} />
+      {label}
+    </div>
+  );
 
   return (
     <motion.div 
@@ -116,7 +124,11 @@ export const StudioDashboard = () => {
               <TrendingUp size={20} className="text-indigo-400" />
               <span className="text-xs font-black uppercase tracking-[0.2em]">Sovereign IQ Baseline</span>
             </div>
-            <h2 className="text-7xl font-black mb-2 tracking-tighter tabular-nums">{iq == null ? '—' : `${(iq / 1000000).toFixed(1)}M`}</h2>
+            {iq === null ? (
+              <SkeletonBox className="h-16 w-48 mb-2" />
+            ) : (
+              <h2 className="text-7xl font-black mb-2 tracking-tighter tabular-nums">{(iq / 1000000).toFixed(1)}M</h2>
+            )}
             <div className="h-1.5 w-full bg-white/10 rounded-full mt-8 overflow-hidden">
               <motion.div 
                 initial={{ width: 0 }}
@@ -138,15 +150,19 @@ export const StudioDashboard = () => {
               <Activity size={24} className="text-indigo-500" /> ACTIVE SOVEREIGN OPS
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {ops.map(op => (
-                <div key={op.id} className="p-8 bg-black/40 rounded-3xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-500 group">
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-xs text-slate-500 uppercase font-black tracking-widest group-hover:text-indigo-400">{op.type}</span>
-                    <div className={`w-3 h-3 rounded-full ${op.id === 1 ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]'} animate-pulse`} />
+              {ops.map(op => 
+                op.status === 'PENDING' ? (
+                  <SkeletonOpCard key={op.id} />
+                ) : (
+                  <div key={op.id} className="p-8 bg-black/40 rounded-3xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-500 group">
+                    <div className="flex justify-between items-start mb-4">
+                      <span className="text-xs text-slate-500 uppercase font-black tracking-widest group-hover:text-indigo-400">{op.type}</span>
+                      <div className={`w-3 h-3 rounded-full ${op.id === 'bridge' ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]'} animate-pulse`} />
+                    </div>
+                    <p className="text-base text-slate-300 leading-relaxed">{op.desc}</p>
                   </div>
-                  <p className="text-base text-slate-300 leading-relaxed">{op.desc}</p>
-                </div>
-              ))}
+                )
+              )}
             </div>
           </section>
           

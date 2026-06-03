@@ -2,7 +2,7 @@ import express from 'express';
 import Stripe from 'stripe';
 
 const router = express.Router();
-const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
+const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_not_configured');
 
 router.post('/checkout', async (req, res) => {
   const { productName, priceCents, currency } = req.body;

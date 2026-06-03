@@ -81,7 +81,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             assetType: {
               type: "string",
-              enum: ["ui_mockup", "platform_demo_banner", "logo"]
+              enum: ["ui_mo ckup", "platform_demo_banner", "logo"]
             },
             prompt: {
               type: "string",

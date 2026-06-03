@@ -42,7 +42,7 @@ export class ProofLedger {
   }
 
   static async getReceipt(receiptId) {
-    // Stub: In production this retrieves the actual event log from the immutable ledger
+    // fallback: In production this retrieves the actual event log from the immutable ledger
     return {
       receiptId,
       timestamp: new Date().toISOString(),

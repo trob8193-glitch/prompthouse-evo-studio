@@ -177,12 +177,7 @@ export class TerminalLogic {
       case 'repair':
         try {
           if (!args[0]) return { success: false, output: 'Usage: evo repair <file_path> "[issue_description]"' };
-          const { repairFile } = await import('../../scripts/gemini-repair.mjs');
-          const issue = args.slice(1).join(' ') || 'Fix any syntax errors or critical bugs.';
-          if (!global.EVOSHELL_CWD_STATE) global.EVOSHELL_CWD_STATE = {};
-          const currentCwd = global.EVOSHELL_CWD_STATE[session] || process.cwd();
-          const filePath = path.resolve(currentCwd, args[0]);
-          return { success: true, output: `Dispatched AI Repair for ${filePath}... Please check the terminal running the daemons or look at the file.` };
+          return { success: false, output: `[DEPRECATED] Gemini-repair script was removed in Studio cleanup.` };
         } catch (e) {
           return { success: false, output: `Repair Error: ${e.message}` };
         }

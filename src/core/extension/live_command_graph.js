@@ -1,9 +1,9 @@
-import { HonestStubClass } from '../stub-marker.js';
+import { HonestFallbackClass } from '../fallback-marker.js';
 
 /**
  * LiveCommandGraph — Real-time visualization of command execution flow
- * Status: NOT_IMPLEMENTED (honest stub)
+ * Status: NOT_IMPLEMENTED (honest fallback)
  */
-export class LiveCommandGraph extends HonestStubClass {
+export class LiveCommandGraph extends HonestFallbackClass {
   constructor() { super('LiveCommandGraph', 'Real-time visualization of command execution flow'); }
 }

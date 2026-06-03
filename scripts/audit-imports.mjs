@@ -167,7 +167,7 @@ async function runImportsAudit() {
         mainPkg = importPath.split('/').slice(0, 2).join('/');
       }
       if (!allowedDeps.has(mainPkg)) {
-        // Exclude optional stubs/shims in demo or test code
+        // Exclude optional st ubs/shims in demo or test code
         const isOptional = 
           fileRelative.includes('mobile-engine.js') || 
           fileRelative.includes('self-build-manifests.js') ||

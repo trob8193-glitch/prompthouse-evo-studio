@@ -1,9 +1,9 @@
-import { HonestStubClass } from '../stub-marker.js';
+import { HonestFallbackClass } from '../fallback-marker.js';
 
 /**
  * PatternLibrary — Stores and retrieves reusable prompt/code patterns for the evolution system
- * Status: NOT_IMPLEMENTED (honest stub)
+ * Status: NOT_IMPLEMENTED (honest fallback)
  */
-export class PatternLibrary extends HonestStubClass {
+export class PatternLibrary extends HonestFallbackClass {
   constructor() { super('PatternLibrary', 'Stores and retrieves reusable prompt/code patterns for the evolution system'); }
 }

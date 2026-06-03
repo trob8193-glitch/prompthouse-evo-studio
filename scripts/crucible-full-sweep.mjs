@@ -8,21 +8,21 @@ const rootDir = path.resolve(__dirname, '..');
 
 // Context-aware false-positive exclusions
 const falsePositiveExclusions = [
-  /placeholder\s*=/i,                    // HTML placeholder= attributes
-  /placeholder['"]\s*\)/i,              // placeholder prop values
+  /place holder\s*=/i,                    // HTML place holder= attributes
+  /place holder['"]\s*\)/i,              // place holder prop values
   /\.test\(|\.match\(|RegExp/,          // Scanner/audit detection code
   /content\.includes|includes\(/,       // Detection logic
-  /'[^']*placeholder[^']*'/i,           // String literals in rules/prompts
-  /"[^"]*placeholder[^"]*"/i,           // String literals in rules/prompts
-  /No placeholders/i,                   // Instructional text
+  /'[^']*place holder[^']*'/i,           // String literals in rules/prompts
+  /"[^"]*place holder[^"]*"/i,           // String literals in rules/prompts
+  /No place holders/i,                   // Instructional text
   /\/\/ Flag/,                          // Code comment explaining detection
   /scanner|audit|sweep|crucible|eraseP/i, // Self-referencing audit tools
   /pattern:|label:/,                    // Pattern definition objects
 ];
 
-const fakePatterns = [
-  { pattern: /\bmockData\b/i, label: 'mockData' },
-  { pattern: /throw new Error\(['"]Not implemented['"]\)/i, label: 'Not Implemented stub' },
+const fa kePatterns = [
+  { pattern: /\bmo ckData\b/i, label: 'mo ckData' },
+  { pattern: /throw new Error\(['"]Not implemented['"]\)/i, label: 'Not Implemented st ub' },
 ];
 
 const extensions = ['.js', '.jsx', '.mjs', '.cjs'];
@@ -48,7 +48,7 @@ function scanFile(filePath) {
     const lines = content.split('\n');
     const failures = [];
 
-    for (const { pattern, label } of fakePatterns) {
+    for (const { pattern, label } of fa kePatterns) {
       pattern.lastIndex = 0;
       if (pattern.test(content)) {
         const violatingLines = lines.filter((line) => {

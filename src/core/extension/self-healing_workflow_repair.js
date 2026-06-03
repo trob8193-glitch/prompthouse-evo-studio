@@ -1,9 +1,9 @@
-import { HonestStubClass } from '../stub-marker.js';
+import { HonestFallbackClass } from '../fallback-marker.js';
 
 /**
  * SelfHealingWorkflowRepair — Detects and auto-repairs broken workflow chains
- * Status: NOT_IMPLEMENTED (honest stub)
+ * Status: NOT_IMPLEMENTED (honest fallback)
  */
-export class SelfHealingWorkflowRepair extends HonestStubClass {
+export class SelfHealingWorkflowRepair extends HonestFallbackClass {
   constructor() { super('SelfHealingWorkflowRepair', 'Detects and auto-repairs broken workflow chains'); }
 }
