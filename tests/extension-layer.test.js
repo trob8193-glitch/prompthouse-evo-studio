@@ -4,8 +4,8 @@ import { FiringOrdersPanel } from '../src/core/extension/firing_orders_panel.js'
 import { LiveCommandGraph } from '../src/core/extension/live_command_graph.js';
 import { PromptLibrary } from '../src/core/extension/prompt_library.js';
 import { RealityTwinWidget } from '../src/core/extension/reality_twin.js';
-import { RevenueAutopilotWidget } from '../src/core/extension/revenue_autopilot_widget.js';
-import { SelfHealingWorkflow } from '../src/core/extension/self-healing_workflow.js';
+import { RevenueAutopilotWithProofGates } from '../src/core/extension/revenue_autopilot_with_proof_gates.js';
+import { SelfHealingWorkflowRepair } from '../src/core/extension/self-healing_workflow_repair.js';
 import { SidePanelCockpit } from '../src/core/extension/side-panel_cockpit.js';
 import { TrainingGoldMinerWidget } from '../src/core/extension/training_gold_miner.js';
 
@@ -54,17 +54,17 @@ describe('RealityTwinWidget', () => {
   });
 });
 
-describe('RevenueAutopilotWidget', () => {
+describe('RevenueAutopilotWithProofGates', () => {
   it('toggles visibility', () => {
-    const raw = new RevenueAutopilotWidget();
+    const raw = new RevenueAutopilotWithProofGates();
     expect(raw.toggle()).toBe(true);
     expect(raw.getStatus().grade).toBe('A');
   });
 });
 
-describe('SelfHealingWorkflow', () => {
+describe('SelfHealingWorkflowRepair', () => {
   it('tracks incidents', () => {
-    const shw = new SelfHealingWorkflow();
+    const shw = new SelfHealingWorkflowRepair();
     shw.track('err1');
     expect(shw.getStatus().grade).toBe('A');
   });
