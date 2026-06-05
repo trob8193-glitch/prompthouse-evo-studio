@@ -8,3 +8,4 @@ export * from './costApprovalQueue.js';
 export * from './savingsClaimCertifier.js';
 export * from './modelRouterV2.js';
 export * from './costFirewallV2.js';
+export * from './CostVelocityMonitor.js';
