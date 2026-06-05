@@ -1,3 +1,5 @@
+import { verifyProofManifest } from '../proof/ProofManifest.js';
+
 export function runAuditorReview({ module = null, manifest = null } = {}) {
   const issues = [];
   const warnings = [];
@@ -17,9 +19,15 @@ export function runAuditorReview({ module = null, manifest = null } = {}) {
     warnings.push(`Missing maturity checks: ${module.missing.map(item => item.label || item.key).join('; ')}`);
   }
 
+  const signature = manifest ? verifyProofManifest(manifest) : null;
+  if (manifest && !signature.valid) {
+    issues.push(`Proof signature check did not pass: ${signature.truthState}`);
+  }
+
   return {
     truthState: issues.length ? 'AUDITOR_REVIEW_REQUIRED' : 'AUDITOR_PASS',
     approved: issues.length === 0,
+    signature,
     issues,
     warnings,
     reviewedAt: new Date().toISOString()
