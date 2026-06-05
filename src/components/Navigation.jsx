@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
   Activity, Eye, Swords, Sparkles, BarChart3, FolderOpen, Gauge, Zap, ChevronRight,
-  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette
+  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, Lock, ScrollText
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -24,6 +24,16 @@ export const NAV_GROUPS = [
       { id: 'chat', label: 'AI Chat', icon: MessageSquare },
       { id: 'workspace', label: 'Workspace', icon: FolderOpen },
       { id: 'ghost-editor', label: 'Ghost Editor', icon: Sparkles },
+    ],
+  },
+  {
+    id: 'governance',
+    label: 'Governance',
+    items: [
+      { id: 'self-evolution', label: 'Self-Evolution', icon: Zap },
+      { id: 'cost-firewall', label: 'Cost Firewall', icon: Lock },
+      { id: 'review-ledger', label: 'Review Ledger', icon: ScrollText },
+      { id: 'proof-docs', label: 'Proof Docs', icon: Shield },
     ],
   },
   {
@@ -89,7 +99,6 @@ export function Navigation() {
       <div style={{ padding: collapsed ? '12px 6px' : '12px 10px', flex: 1 }}>
         {NAV_GROUPS.map((group) => (
           <div key={group.id} style={{ marginBottom: 20 }}>
-            {/* Group Label */}
             {!collapsed && (
               <div style={{
                 fontSize: 9, fontWeight: 800, color: '#475569', textTransform: 'uppercase',
@@ -99,7 +108,6 @@ export function Navigation() {
               </div>
             )}
 
-            {/* Nav Items */}
             {group.items.map((item) => {
               const isActive = activePage === item.id;
               const Icon = item.icon;
@@ -152,7 +160,6 @@ export function Navigation() {
         ))}
       </div>
 
-      {/* Footer */}
       {!collapsed && (
         <div style={{
           padding: '12px 16px', borderTop: '1px solid #1e293b',
