@@ -31,6 +31,12 @@ import SingularityEngineOverlay from './components/SingularityEngineOverlay.jsx'
 import ProofCenterView from './features/ProofCenterView.jsx';
 import DeploymentCenterView from './features/DeploymentCenterView.jsx';
 import LaunchProofView from './features/LaunchProofView.jsx';
+import {
+  SelfEvolutionDashboard,
+  CostFirewallDashboard,
+  ReviewLedgerView,
+  ProofDocsView
+} from './features/GovernanceCockpit.jsx';
 
 // Existing feature screens from features/index.jsx
 import {
@@ -62,6 +68,10 @@ export const PAGE_MAP = {
   'evo-pixelator': EvoPixelatorDashboard,
   'evo-layout': EvoLayoutDashboard,
   'theme-evolution': ThemeEvolutionDashboard,
+  'self-evolution': SelfEvolutionDashboard,
+  'cost-firewall': CostFirewallDashboard,
+  'review-ledger': ReviewLedgerView,
+  'proof-docs': ProofDocsView,
   'metrics': MetricsView,
   'settings': GlobalAPISettingsView,
   'connections': ConnectionManager,
@@ -189,8 +199,6 @@ export default function App() {
           <SingularityEngineOverlay />
           <TopBar />
 
-          
-          {/* Toggle Singularity Engine - The Unified HUD */}
           <button 
             onClick={() => setSingularityActive(true)} 
             className="absolute top-16 right-4 z-50 bg-indigo-900/40 text-indigo-400 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg border border-indigo-500/50 hover:bg-indigo-800/50 shadow-lg shadow-indigo-500/10 flex items-center gap-2 group transition-all"
@@ -211,7 +219,6 @@ export default function App() {
               <Toolbar />
               
               <div style={{ padding: 28, position: 'relative', zIndex: 1, height: '100%' }}>
-                {/* Ambient Background Asset */}
                 <div style={{
                   position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
                   backgroundImage: 'url(/assets/generated_bg.png)', backgroundSize: 'cover', backgroundPosition: 'center',
