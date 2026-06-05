@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import fetch from 'node-fetch';
 import { runModuleMaturityAudit, writeModuleMaturityReceipt } from '../../src/core/maturity/index.js';
 import { listReviews } from '../../src/core/proof/ReviewStore.js';
 import { evaluateCostVelocity } from '../../src/core/gateway/CostVelocityMonitor.js';
@@ -9,6 +10,7 @@ const DATA_DIR = () => path.join(process.cwd(), '.prompthouse-data');
 const USERS_FILE = () => path.join(DATA_DIR(), 'users.json');
 const CONFIG_FILE = () => path.join(DATA_DIR(), 'config.json');
 const LEDGER_FILE = () => path.join(DATA_DIR(), 'sovereign-ledger.jsonl');
+const RIFT_URL = process.env.RIFT_URL || 'http://127.0.0.1:3002';
 
 function ensureDataDir() {
   fs.mkdirSync(DATA_DIR(), { recursive: true });
@@ -40,6 +42,18 @@ function readDoc(relPath) {
   const full = path.join(process.cwd(), relPath);
   if (!fs.existsSync(full)) return null;
   return fs.readFileSync(full, 'utf8');
+}
+
+async function fetchRiftJson(pathname) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 2500);
+  try {
+    const response = await fetch(`${RIFT_URL}${pathname}`, { signal: controller.signal });
+    const data = await response.json();
+    return { ok: response.ok, status: response.status, data };
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 export function registerStudioCoreRoutes(app) {
@@ -133,6 +147,33 @@ export function registerStudioCoreRoutes(app) {
         selfEvolution: readDoc('docs/self-evolution-readiness.md')
       }
     });
+  });
+
+  app.get('/api/rift/status', async (_req, res) => {
+    try {
+      const rift = await fetchRiftJson('/status');
+      res.status(rift.ok ? 200 : 502).json({ success: rift.ok, truthState: rift.ok ? 'RIFT_PROXY_READY' : 'RIFT_PROXY_UPSTREAM_ERROR', data: rift.data });
+    } catch (error) {
+      res.status(503).json({ success: false, truthState: 'RIFT_PROXY_OFFLINE', error: error.message, data: null });
+    }
+  });
+
+  app.get('/api/evopulse/nodes', async (_req, res) => {
+    try {
+      const rift = await fetchRiftJson('/api/evopulse/nodes');
+      res.status(rift.ok ? 200 : 502).json(rift.data);
+    } catch (error) {
+      res.status(503).json({ success: false, truthState: 'EVOPULSE_NODES_OFFLINE', error: error.message, data: { nodes: [] } });
+    }
+  });
+
+  app.get('/api/evopulse/routes', async (_req, res) => {
+    try {
+      const rift = await fetchRiftJson('/api/evopulse/routes');
+      res.status(rift.ok ? 200 : 502).json(rift.data);
+    } catch (error) {
+      res.status(503).json({ success: false, truthState: 'EVOPULSE_ROUTES_OFFLINE', error: error.message, data: { routes: [] } });
+    }
   });
 }
 
