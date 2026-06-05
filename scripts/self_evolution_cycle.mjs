@@ -11,7 +11,7 @@ const status = args.includes('--status');
 const mode = modeArg ? modeArg.split('=').slice(1).join('=').trim() : 'proposal';
 const objective = objectiveArg
   ? objectiveArg.split('=').slice(1).join('=').trim()
-  : 'Remove fake self-evolution language and improve local bridge URL environment readiness';
+  : 'Remove non-production self-evolution language and improve local bridge URL environment readiness';
 
 try {
   if (status) {
