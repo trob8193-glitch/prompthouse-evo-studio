@@ -1,7 +1,10 @@
 import { runModuleMaturityAudit, writeModuleMaturityReceipt } from '../maturity/index.js';
+import { evaluateCostVelocity } from '../gateway/CostVelocityMonitor.js';
+import { runAuditorReview } from '../agents/AuditorBot.js';
 import { Log } from '../autonomy/SovereignLogger.js';
 import { createProofManifest, signProofManifest } from './ProofManifest.js';
 import { evaluatePromotionPolicy } from './PromotionPolicy.js';
+import { saveReview } from './ReviewStore.js';
 
 export class Gatekeeper {
   static findModule(report, moduleId) {
@@ -20,28 +23,46 @@ export class Gatekeeper {
     const module = Gatekeeper.findModule(maturityReport, moduleId);
     const policy = evaluatePromotionPolicy({ module, targetStage, rollbackRef });
     const maturityReceipt = writeModuleMaturityReceipt({ rootDir, report: maturityReport });
+    const costVelocity = evaluateCostVelocity({ rootDir, orgId: 'studio_owner' });
 
-    const manifest = signProofManifest(createProofManifest({
+    const issues = [...policy.issues];
+    if (!costVelocity.allowed) issues.push(...costVelocity.issues);
+
+    const draftManifest = createProofManifest({
       moduleId,
       targetStage: policy.stage,
       maturity: module,
       maturityReceipt: maturityReceipt.file,
+      costVelocity,
       rollbackRef,
-      issues: policy.issues,
+      issues,
       evidence: {
         requiredScore: policy.requiredScore,
         moduleCount: maturityReport.moduleCount,
         averageScore: maturityReport.averageScore,
         truthState: maturityReport.truthState
       }
-    }));
+    });
+
+    const signedManifest = signProofManifest(draftManifest);
+    const auditor = runAuditorReview({ module, manifest: signedManifest });
+    const finalIssues = [...issues, ...auditor.issues];
+
+    const manifest = finalIssues.length === issues.length
+      ? { ...signedManifest, auditor }
+      : signProofManifest({ ...draftManifest, auditor, issues: finalIssues });
+
+    const stored = saveReview({ rootDir, review: manifest });
 
     return {
-      approved: policy.approved,
-      truthState: policy.approved ? 'PROMOTION_APPROVED' : 'PROMOTION_REVIEW_REQUIRED',
+      approved: finalIssues.length === 0,
+      truthState: finalIssues.length ? 'PROMOTION_REVIEW_REQUIRED' : 'PROMOTION_APPROVED',
       module,
       policy,
-      issues: policy.issues,
+      costVelocity,
+      auditor,
+      issues: finalIssues,
+      reviewFile: stored.file,
       manifest
     };
   }
