@@ -5,6 +5,7 @@ import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 import { registerEmulatorRoutes } from './server/routes/emulator.routes.js';
+import registerStudioCoreRoutes from './server/routes/studio-core.routes.js';
 import registerEvoBridgeRoutes from './generated_apis/evo_bridge_routes.js';
 import registerPlatformSentinelRoutes from './generated_apis/platform_sentinel_routes.js';
 import registerAiModelRoutes from './generated_apis/ai_model_routes.js';
@@ -48,6 +49,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 const registrars = [
+  registerStudioCoreRoutes,
   registerEmulatorRoutes,
   registerEvoBridgeRoutes,
   registerPlatformSentinelRoutes,
