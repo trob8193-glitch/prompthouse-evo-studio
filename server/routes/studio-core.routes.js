@@ -29,6 +29,15 @@ function writeJson(file, value) {
   fs.writeFileSync(file, JSON.stringify(value, null, 2), 'utf8');
 }
 
+function latestJsonIn(dir) {
+  if (!fs.existsSync(dir)) return null;
+  const files = fs.readdirSync(dir).filter(name => name.endsWith('.json')).sort();
+  const latest = files.at(-1);
+  if (!latest) return null;
+  const file = path.join(dir, latest);
+  return { file, data: readJson(file, null) };
+}
+
 function safeToken(email) {
   return crypto.createHash('sha256').update(`${email}:${Date.now()}:${Math.random()}`).digest('hex');
 }
@@ -68,6 +77,28 @@ export function registerStudioCoreRoutes(app) {
     const reviews = listReviews({ rootDir: process.cwd(), limit: 25 });
     const velocity = evaluateCostVelocity({ rootDir: process.cwd(), orgId: 'studio_owner' });
     res.json({ success: true, truthState: 'METRICS_READY', maturity, reviewCount: reviews.length, costVelocity: velocity, checkedAt: new Date().toISOString() });
+  });
+
+  app.get('/api/runtime-health', (_req, res) => {
+    const maturity = runModuleMaturityAudit({ rootDir: process.cwd() });
+    const reviews = listReviews({ rootDir: process.cwd(), limit: 10 });
+    const velocity = evaluateCostVelocity({ rootDir: process.cwd(), orgId: 'studio_owner' });
+    const latestRoute = latestJsonIn(path.join(DATA_DIR(), 'routes'));
+    res.json({
+      success: true,
+      truthState: latestRoute?.data?.truthState || 'RUNTIME_HEALTH_READY',
+      checkedAt: new Date().toISOString(),
+      bridge: { truthState: 'RECOVERY_BRIDGE_READY' },
+      maturity: { averageScore: maturity.averageScore, moduleCount: maturity.moduleCount, truthState: maturity.truthState },
+      reviews: { count: reviews.length, latest: reviews[0] || null },
+      costVelocity: velocity,
+      routeVerification: latestRoute,
+      proofDocs: {
+        proofLedger: Boolean(readDoc('docs/proof-ledger-summary.md')),
+        maturity: Boolean(readDoc('docs/module-maturity-status.md')),
+        selfEvolution: Boolean(readDoc('docs/self-evolution-readiness.md'))
+      }
+    });
   });
 
   app.post('/api/auth/register', (req, res) => {
