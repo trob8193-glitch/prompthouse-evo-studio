@@ -74,6 +74,8 @@
     "maturity:json": "node scripts/module_maturity_check.mjs --json",
     "maturity:receipt": "node scripts/module_maturity_check.mjs --summary --receipt",
     "maturity:strict": "node scripts/module_maturity_check.mjs --summary --strict",
+    "review:module": "node scripts/review-module.mjs",
+    "review:cost-firewall": "node scripts/review-module.mjs --module=cost-firewall --stage=production --rollbackRef=main",
     "evo:seed": "node scripts/evo_llm_pipeline.mjs --seed",
     "evo:dataset": "node scripts/evo_llm_pipeline.mjs --dataset",
     "evo:eval": "node scripts/evo_llm_pipeline.mjs --eval",
