@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Send, Terminal, Loader2, Cpu, FileCode, Check, Play, Settings2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useSovereignStore } from '../store.js';
 import { universalSend } from '../lib/universal-transport.js';
 
@@ -116,15 +114,9 @@ export default function SovereignChat() {
               )}
             </div>
           </div>
-          <SyntaxHighlighter
-            style={vscDarkPlus}
-            language={language}
-            PreTag="div"
-            customStyle={{ margin: 0, padding: '16px', background: '#0d0d12', fontSize: '13px' }}
-            {...props}
-          >
-            {code}
-          </SyntaxHighlighter>
+          <pre className="m-0 overflow-x-auto bg-[#0d0d12] p-4 text-[13px] leading-6 text-slate-200" {...props}>
+            <code className={`language-${language}`}>{code}</code>
+          </pre>
         </div>
       );
     }

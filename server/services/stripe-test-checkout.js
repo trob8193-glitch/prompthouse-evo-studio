@@ -4,6 +4,7 @@
 
 import Stripe from 'stripe';
 import { TRUTH_STATES } from './truth-labels.js';
+import { createProviderReceipt } from './provider-receipts.js';
 
 export function classifyStripeCheckoutReadiness() {
   const key = process.env.STRIPE_SECRET_KEY || '';
@@ -14,8 +15,31 @@ export function classifyStripeCheckoutReadiness() {
 }
 
 export async function createStripeTestCheckoutSession({ amount, currency = 'usd', productName = 'PH Evo Test', ownerApproval } = {}) {
+  if (ownerApproval?.granted !== true) {
+    const receipt = createProviderReceipt({
+      provider: 'stripe',
+      action: 'test_checkout_session',
+      status: 'blocked',
+      truthState: TRUTH_STATES.NEEDS_OWNER_APPROVAL,
+      message: 'Commerce owner approval required.',
+      requestPayload: { amount, currency, productName }
+    });
+    return { ok: false, truthState: TRUTH_STATES.NEEDS_OWNER_APPROVAL, blockedReason: 'Commerce owner approval required', receipt, receiptId: receipt.id };
+  }
+
   const readiness = classifyStripeCheckoutReadiness();
-  if (!readiness.ready) return { ok: false, ...readiness };
+  if (!readiness.ready) {
+    const receipt = createProviderReceipt({
+      provider: 'stripe',
+      action: 'test_checkout_session',
+      status: 'blocked',
+      truthState: readiness.truthState,
+      message: readiness.truthState === TRUTH_STATES.NEEDS_CREDENTIALS ? 'STRIPE_SECRET_KEY not configured.' : 'Stripe key is not safe for test checkout.',
+      requestPayload: { amount, currency, productName, approvalReceiptId: ownerApproval?.receiptId || null },
+      responsePayload: readiness
+    });
+    return { ok: false, ...readiness, receipt, receiptId: receipt.id };
+  }
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const session = await stripe.checkout.sessions.create({
@@ -26,5 +50,15 @@ export async function createStripeTestCheckoutSession({ amount, currency = 'usd'
     cancel_url: 'http://localhost:5173/cancel',
   });
 
-  return { ok: true, id: session.id, url: session.url, mode: session.mode };
+  const receipt = createProviderReceipt({
+    provider: 'stripe',
+    action: 'test_checkout_session',
+    status: 'success',
+    truthState: TRUTH_STATES.PROVEN,
+    message: 'Stripe test checkout session created.',
+    requestPayload: { amount, currency, productName, approvalReceiptId: ownerApproval?.receiptId || null },
+    responsePayload: { id: session.id, url: session.url, mode: session.mode }
+  });
+
+  return { ok: true, id: session.id, url: session.url, mode: session.mode, receipt, receiptId: receipt.id, truthState: TRUTH_STATES.PROVEN };
 }

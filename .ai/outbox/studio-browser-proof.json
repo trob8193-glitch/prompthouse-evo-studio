@@ -1,0 +1,31 @@
+{
+  "success": true,
+  "truthState": "BROWSER_E2E_PROOF_CLEAR",
+  "checkedAt": "2026-06-06T17:10:19.581Z",
+  "previewUrl": "http://127.0.0.1:4173",
+  "bridgeUrl": "http://127.0.0.1:3001",
+  "clickedPages": [
+    "Settings & API",
+    "Deployment Center",
+    "Cost Firewall",
+    "Theme Evolution",
+    "Launch Proof"
+  ],
+  "apiTruthStates": {
+    "studio": "STUDIO_SCAN_CLEAR",
+    "security": "SECURITY_AUDIT_CLEAR",
+    "providers": "PROVIDER_GATED"
+  },
+  "domSummary": {
+    "title": "PromptHouse Evo Studio",
+    "buttons": 96,
+    "links": 3,
+    "inputs": 2,
+    "rootTextLength": 4680,
+    "visibleTextSample": "PromptHouse Evo\nSTUDIO\nLOGIC DENSITY:\n0.00M IQ\nSTUDIO IQ:\n0\n⚡\nGemini 2.0 Flash\nFAST\n▼\nCOUNCIL:\nDeadHunter\nTruthAuditor\nMaturityScore\nBRIDGE ERROR\nMANIFEST SINGULARITY ENGINE\nSTUDIO\nCommand Center\nSingularity Studio\nApp Market\nLaunch Proof\nEvo Copilot\nWorkspace Explorer\nGhost Editor\nGOVERNANCE\nSelf-Evolution\nCost Firewall\nReview Ledger\nProof Docs\nINTELLIGENCE\nPrompt Registry\nEvo Diffuser\nEvo Pixelator\nEvo Layout\nTheme Evolution\nEvoPulse Grid\nOPERATIONS\nExecution Queue\nProof Console\nProof Center\nE"
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failures": [],
+  "screenshot": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.ai\\outbox\\studio-browser-proof.png"
+}

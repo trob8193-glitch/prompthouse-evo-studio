@@ -11,6 +11,32 @@ import { UniversalBridge } from '../interop/UniversalBridge.js';
 import fs from 'fs';
 import path from 'path';
 
+function normalizeSeedId(id = 'live_seed') {
+  const normalized = String(id || 'live_seed')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  const safeId = normalized || 'live_seed';
+  return /^[a-z_]/.test(safeId) ? safeId : `seed_${safeId}`;
+}
+
+function toDartClassName(id) {
+  return normalizeSeedId(id)
+    .split('_')
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('') || 'LiveSeed';
+}
+
+function dartString(value) {
+  return String(value ?? '')
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/\$/g, '\\$')
+    .replace(/\r?\n/g, '\\n');
+}
+
 export class FlutterBridge {
   constructor(projectPath = './.prompt-garden/flutter_app') {
     this.projectPath = projectPath;
@@ -21,32 +47,45 @@ export class FlutterBridge {
    * Sync a UI Seed from the Evo Tree to the Flutter project.
    */
   async syncSeed(seed) {
-    Log.info(`🐦 [FlutterBridge] Syncing UI Seed: ${seed.name}`);
+    const normalizedSeed = {
+      ...seed,
+      id: normalizeSeedId(seed?.id),
+      name: seed?.name || seed?.id || 'Live Seed'
+    };
+    Log.info(`🐦 [FlutterBridge] Syncing UI Seed: ${normalizedSeed.name}`);
     
-    const dartCode = this.translateToDart(seed);
-    const targetFile = path.join(this.projectPath, 'lib', `${seed.id}.dart`);
+    const dartCode = this.translateToDart(normalizedSeed);
+    const targetFile = path.join(this.projectPath, 'lib', `${normalizedSeed.id}.dart`);
     
     if (!fs.existsSync(path.dirname(targetFile))) {
       fs.mkdirSync(path.dirname(targetFile), { recursive: true });
     }
 
     fs.writeFileSync(targetFile, dartCode, 'utf8');
-    Log.success(`🐦 [FlutterBridge] Seed materialized in lib/${seed.id}.dart`);
+    Log.success(`🐦 [FlutterBridge] Seed materialized in lib/${normalizedSeed.id}.dart`);
 
-    // Trigger Hot-Reload via Universal Bridge
-    await this.bridge.dispatch('flutter', 'hot-reload');
+    const reload = await this.bridge.dispatch('flutter', 'hot-reload');
+    return {
+      artifactPath: targetFile,
+      relativeArtifactPath: path.relative(process.cwd(), targetFile),
+      status: reload?.success === false ? 'HOT_RELOAD_BLOCKED' : 'HOT_RELOAD_TRIGGERED',
+      reload
+    };
   }
 
   translateToDart(seed) {
-    // [OMEGA DIRECTIVE] Translating studio logic to Flutter widgets
+    const className = toDartClassName(seed.id);
+    const label = dartString(`${seed.name} - Synthesized by PromptHouse`);
     return `
-import 'package:flutter/material.react';
+import 'package:flutter/material.dart';
 
-class ${seed.id.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('')} extends StatelessWidget {
+class ${className} extends StatelessWidget {
+  const ${className}({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('${seed.name} - Synthesized by PromptHouse'),
+    return const Center(
+      child: Text('${label}'),
     );
   }
 }

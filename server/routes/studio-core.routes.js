@@ -20,6 +20,7 @@ import {
 import { hasExplicitOwnerApproval, getApprovalBlockReason } from '../../src/owner-approval.js';
 import { getProviderGateStatus } from '../services/provider-gates.js';
 import { listProviderReceipts } from '../services/provider-receipts.js';
+import { buildProviderActivationProof, writeProviderActivationProof } from '../services/provider-activation-proof.js';
 import { getProviderCredentialChecklist } from '../services/provider-credential-checklist.js';
 import { getDeploymentReadinessStatus } from '../services/deployment-readiness.js';
 import { createDeploymentReceipt, listDeploymentReceipts } from '../services/deployment-receipts.js';
@@ -816,6 +817,24 @@ export function registerStudioCoreRoutes(app) {
 
   app.get('/api/provider-gates/status', (_req, res) => {
     res.json({ ok: true, success: true, gates: getProviderGateStatus(), truthState: TRUTH_STATES.LOCAL_ONLY, checkedAt: new Date().toISOString() });
+  });
+
+  app.get('/api/provider-activation/status', (_req, res) => {
+    res.json(buildProviderActivationProof({ live: false, writeReceipts: false }));
+  });
+
+  app.post('/api/provider-activation/proof', (req, res) => {
+    const live = req.body?.live === true;
+    const ownerApproval = req.body?.ownerApproval || {};
+    if (live && !ownerApproval.granted) {
+      return res.status(403).json({
+        ok: false,
+        success: false,
+        truthState: TRUTH_STATES.NEEDS_OWNER_APPROVAL,
+        error: 'Provider activation proof with live action intent requires owner approval.'
+      });
+    }
+    res.json(writeProviderActivationProof({ rootDir: process.cwd(), live, ownerApproval }));
   });
 
   app.get('/api/provider-receipts', (req, res) => {

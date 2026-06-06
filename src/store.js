@@ -24,6 +24,22 @@ export const useSovereignStore = create((set, get) => ({
   authLoading: false,
   authError: null,
 
+  setAuthenticated: (value, user = null) => {
+    const isAuthenticated = value === true;
+    const token = isAuthenticated ? 'ph_evo_local_dev_session' : null;
+    if (typeof localStorage !== 'undefined') {
+      if (isAuthenticated) localStorage.setItem('ph_evo_token', token);
+      else localStorage.removeItem('ph_evo_token');
+    }
+    set({
+      isAuthenticated,
+      token,
+      user: isAuthenticated ? (user || { id: 'local-dev', email: 'local@prompthouse.dev', displayName: 'Local Developer' }) : null,
+      authLoading: false,
+      authError: null
+    });
+  },
+
   login: async (email, password) => {
     set({ authLoading: true, authError: null });
     try {

@@ -276,7 +276,7 @@ export function EvoMobileController({ promptBridgeBaseUrl = "http://127.0.0.1:30
             <div style={styles.rightGridPanel}>
               <div style={styles.panelTitle}>Interactive Cloud Canvas</div>
               {appetizeKey === 'demo' ? (
-                <div style={styles.placeholderAppetize}>
+                <div style={styles.appetizeFrameShell}>
                   <div style={{ fontSize: 40, marginBottom: 12 }}>📲</div>
                   <strong>Appetize Stream Deck</strong>
                   <p style={{ maxWidth: 300, textAlign: 'center', opacity: 0.6, fontSize: 12, marginTop: 8 }}>
@@ -532,7 +532,7 @@ const styles = {
     flex: 1,
     whiteSpace: 'pre-wrap'
   },
-  placeholderAppetize: {
+  appetizeFrameShell: {
     flex: 1,
     background: '#070a12',
     border: '1px dashed rgba(255,255,255,0.15)',

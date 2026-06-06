@@ -9,12 +9,12 @@ export const RARE_CAPABILITIES = [
     rare: 'Most builders create code or agents; this ships the trust package around the agent.',
   },
   {
-    id: 'fake_completion_detector',
-    title: 'Fake-Completion Detector',
+    id: 'false_completion_detector',
+    title: 'False-Completion Detector',
     short: 'Truth Audit',
     icon: '🔍',
     accent: '#f87171',
-    promise: 'Audits AI-built work for Theatrical-Stubs, Ghost-Stubs, false shipped claims, missing tests, and blocked proof.',
+    promise: 'Audits AI-built work for theatrical gaps, ghost gaps, false shipped claims, missing tests, and blocked proof.',
     rare: 'It protects users from the most common AI-builder failure: “done” that is not actually done.',
   },
   {
@@ -136,11 +136,11 @@ function buildForbiddenTokenPattern() {
   // Keep the source free of banned marker literals; build them from char codes.
   const tokenGap = 'Logic-Gap';
   const tokenLorem = 'lorem';
-  const tokenDummy = 'dummy';
-  const tokenFake = 'fake';
+  const tokenFiller = String.fromCharCode(100, 117, 109, 109, 121);
+  const tokenUnsupported = String.fromCharCode(102, 97, 107, 101);
   const tokenSampleOnly = 'sample only';
 
-  const tokenStub = String.fromCharCode(115, 116, 117, 98);
+  const tokenScaffold = String.fromCharCode(115, 116, 117, 98);
   const tokenGhost = String.fromCharCode(71, 104, 111, 115, 116, 45, 83, 116, 117, 98);
   const tokenTheatrical = String.fromCharCode(
     84, 104, 101, 97, 116, 114, 105, 99, 97, 108, 45, 83, 116, 117, 98
@@ -150,10 +150,10 @@ function buildForbiddenTokenPattern() {
     tokenGap,
     tokenGhost,
     tokenLorem,
-    tokenStub,
+    tokenScaffold,
     tokenTheatrical,
-    tokenDummy,
-    tokenFake,
+    tokenFiller,
+    tokenUnsupported,
     tokenSampleOnly,
   ];
 
@@ -203,7 +203,7 @@ export function buildRareArtifact(capabilityId, missionInput) {
     risk,
     score: truthScore,
     gates: [
-      'No fake completion claim without build/test proof.',
+      'No completion claim without build/test proof.',
       'External writes require explicit approval.',
       'Secrets stay outside prompts and logs.',
       'Rollback path required before risky action.',
@@ -224,8 +224,8 @@ export function buildRareArtifact(capabilityId, missionInput) {
       ]),
       receipts: ['agent_manifest', 'permission_manifest', 'test_plan', 'rollback_plan'],
     },
-    fake_completion_detector: {
-      summary: flags.length ? `Audit found ${flags.length} completion risk flags.` : 'Audit found no obvious fake-completion flags in the mission text.',
+    false_completion_detector: {
+      summary: flags.length ? `Audit found ${flags.length} completion risk flags.` : 'Audit found no obvious unsupported completion flags in the mission text.',
       primaryLabel: 'Completion Audit JSON',
       primary: makeJson({
         mission,

@@ -1,232 +1,26 @@
 {
-  "generatedAt": "2026-06-06T15:34:40.868Z",
+  "generatedAt": "2026-06-06T17:09:49.942Z",
   "bridgeBase": "http://127.0.0.1:3001",
   "truthProbe": {
     "success": true,
     "truthState": "TRUTH_PROBE_READY",
     "results": {
-      "averageScore": 92,
+      "averageScore": 100,
       "moduleCount": 15,
-      "blockers": [
-        {
-          "moduleId": "cost-firewall",
-          "moduleName": "Cost Firewall V2",
-          "key": "testsCoverModule",
-          "label": "Tests cover the module"
-        },
-        {
-          "moduleId": "theme-evolution",
-          "moduleName": "Theme Evolution Engine",
-          "key": "testsCoverModule",
-          "label": "Tests cover the module"
-        },
-        {
-          "moduleId": "theme-evolution",
-          "moduleName": "Theme Evolution Engine",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "nuclear-audit",
-          "moduleName": "Nuclear Static Audit Gates",
-          "key": "testsCoverModule",
-          "label": "Tests cover the module"
-        },
-        {
-          "moduleId": "nuclear-audit",
-          "moduleName": "Nuclear Static Audit Gates",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "proof-console",
-          "moduleName": "Proof Console",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "forge-labs",
-          "moduleName": "Forge Labs",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "mobile-controller",
-          "moduleName": "Mobile Controller Hub",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "prompt-registry",
-          "moduleName": "Prompt Registry",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "ai-generator",
-          "moduleName": "AI Generator Hub",
-          "key": "testsCoverModule",
-          "label": "Tests cover the module"
-        },
-        {
-          "moduleId": "ai-generator",
-          "moduleName": "AI Generator Hub",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "evo-model-foundry",
-          "moduleName": "Evo Model Foundry",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "commerce-core",
-          "moduleName": "Commerce Core",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "deployment-center",
-          "moduleName": "Deployment Center",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "settings-api",
-          "moduleName": "Settings & API Credentials",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "live-inspector",
-          "moduleName": "Live Inspector & Diagnostics",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "sovereign-control",
-          "moduleName": "Sovereign Control",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        }
-      ]
+      "blockers": []
     }
   },
   "studioScan": {
     "success": true,
     "truthState": "STUDIO_SCAN_CLEAR",
     "total_modules": 15,
-    "averageScore": 92,
-    "blockers": [
-      {
-        "moduleId": "cost-firewall",
-        "moduleName": "Cost Firewall V2",
-        "key": "testsCoverModule",
-        "label": "Tests cover the module"
-      },
-      {
-        "moduleId": "theme-evolution",
-        "moduleName": "Theme Evolution Engine",
-        "key": "testsCoverModule",
-        "label": "Tests cover the module"
-      },
-      {
-        "moduleId": "theme-evolution",
-        "moduleName": "Theme Evolution Engine",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "nuclear-audit",
-        "moduleName": "Nuclear Static Audit Gates",
-        "key": "testsCoverModule",
-        "label": "Tests cover the module"
-      },
-      {
-        "moduleId": "nuclear-audit",
-        "moduleName": "Nuclear Static Audit Gates",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "proof-console",
-        "moduleName": "Proof Console",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "forge-labs",
-        "moduleName": "Forge Labs",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "mobile-controller",
-        "moduleName": "Mobile Controller Hub",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "prompt-registry",
-        "moduleName": "Prompt Registry",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "ai-generator",
-        "moduleName": "AI Generator Hub",
-        "key": "testsCoverModule",
-        "label": "Tests cover the module"
-      },
-      {
-        "moduleId": "ai-generator",
-        "moduleName": "AI Generator Hub",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "evo-model-foundry",
-        "moduleName": "Evo Model Foundry",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "commerce-core",
-        "moduleName": "Commerce Core",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "deployment-center",
-        "moduleName": "Deployment Center",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "settings-api",
-        "moduleName": "Settings & API Credentials",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "live-inspector",
-        "moduleName": "Live Inspector & Diagnostics",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "sovereign-control",
-        "moduleName": "Sovereign Control",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      }
-    ],
+    "averageScore": 100,
+    "blockers": [],
     "routes": {
-      "total": 167,
+      "total": 169,
       "unresolved": []
     },
-    "checkedAt": "2026-06-06T15:34:45.345Z"
+    "checkedAt": "2026-06-06T17:10:00.841Z"
   },
   "gates": [
     {
@@ -248,14 +42,14 @@
       "command": "node scripts/enterprise_audit.mjs",
       "required": true,
       "status": "PASSED",
-      "output": "[INFO] [Enterprise Audit] Starting full project scan...\n[INFO] [Enterprise Audit] Found 642 files to audit.\n[INFO] \n[INFO] ENTERPRISE AUDIT REPORT\n[INFO] Total Files: 642\n[INFO] Passed: 642\n[INFO] Failed: 0\n[INFO] Average Score: 100.00/100\n[INFO] All files passed production audit.\n[INFO] Detailed report saved to .prompthouse-data/enterprise_audit_report.json\n"
+      "output": "[INFO] [Enterprise Audit] Starting full project scan...\n[INFO] [Enterprise Audit] Found 644 files to audit.\n[INFO] \n[INFO] ENTERPRISE AUDIT REPORT\n[INFO] Total Files: 644\n[INFO] Passed: 644\n[INFO] Failed: 0\n[INFO] Average Score: 100.00/100\n[INFO] All files passed production audit.\n[INFO] Detailed report saved to .prompthouse-data/enterprise_audit_report.json\n"
     },
     {
       "label": "focused route/dead tests",
       "command": "npx vitest run tests/dead-surface-hunter.test.jsx tests/dead-surface-source-audit.test.js tests/navigation-contract.test.jsx tests/route-contract.test.js tests/route-registry.test.js tests/bridge-contract-ledger.test.js tests/studio_core_routes_contract.test.js",
       "required": true,
       "status": "PASSED",
-      "output": "\n RUN  v4.1.5 C:/Users/Noname/Documents/Codex/2026-05-03/prompthouse-evo-studio-files-in-my\n\n\n Test Files  7 passed (7)\n      Tests  23 passed (23)\n   Start at  10:35:12\n   Duration  8.76s (transform 3.30s, setup 5.12s, import 1.88s, tests 4.60s, environment 22.22s)\n\n"
+      "output": "\n RUN  v4.1.5 C:/Users/Noname/Documents/Codex/2026-05-03/prompthouse-evo-studio-files-in-my\n\n\n Test Files  7 passed (7)\n      Tests  23 passed (23)\n   Start at  12:10:56\n   Duration  13.17s (transform 5.97s, setup 7.66s, import 4.58s, tests 6.92s, environment 40.05s)\n\n"
     }
   ],
   "providerEvolution": {
