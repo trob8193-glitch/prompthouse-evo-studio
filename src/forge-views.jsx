@@ -168,6 +168,9 @@ function BridgeInventionLab() {
 }
 
 function HandshakeComposer() {
+  const [signedAt, setSignedAt] = useState(new Date().toISOString());
+  const signature = `LOCAL_HANDSHAKE_${signedAt.replace(/[-:.TZ]/g, '').slice(0, 14)}`;
+
   return (
     <div className="flex-col">
        <div className="card">
@@ -186,11 +189,18 @@ function HandshakeComposer() {
   "handshake": "GLOBAL_SOVEREIGN_V1",
   "origin": "PROMPTHOUSE_EVO_STUDIO",
   "truth_state": "VERIFIED",
-  "timestamp": "${new Date().toISOString()}",
-  "signature": "SHA256_PROOF_NATIVE_..."
+  "timestamp": "${signedAt}",
+  "signature": "${signature}"
 }`}
                 </div>
-                <button className="btn btn-primary btn-sm" style={{ width: 'fit-content' }}>Sign New Handshake</button>
+                <button
+                  type="button"
+                  onClick={() => setSignedAt(new Date().toISOString())}
+                  className="btn btn-primary btn-sm"
+                  style={{ width: 'fit-content' }}
+                >
+                  Sign New Handshake
+                </button>
              </div>
           </div>
        </div>

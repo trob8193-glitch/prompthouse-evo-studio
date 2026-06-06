@@ -62,6 +62,7 @@
     "egit:checks": "node scripts/evo-git.mjs checks",
     "egit:daemons": "node scripts/evo-git.mjs daemons",
     "audit:imports": "node scripts/audit-imports.mjs",
+    "audit:dead-surfaces": "node scripts/dead-surface-audit.mjs",
     "audit:css": "node scripts/audit-css-vars.mjs",
     "verify:studio": "node scripts/verify-studio.mjs",
     "cost": "npm run cost:check && npm run cost:summary",

@@ -94,6 +94,7 @@ export default function TopBar() {
 
         {/* Notifications */}
         <button
+          onClick={() => setActivePage('proof-console')}
           style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', padding: 6, display: 'flex', position: 'relative' }}
           aria-label="Notifications"
         >

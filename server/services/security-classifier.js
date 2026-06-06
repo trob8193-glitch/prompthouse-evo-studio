@@ -11,6 +11,7 @@ export const SECURITY_ACTION_TYPES = {
   CONFIG_WRITE: 'CONFIG_WRITE',
   FILE_WRITE: 'FILE_WRITE',
   PROVIDER_ACTION: 'PROVIDER_ACTION',
+  READ_ONLY_PROBE: 'READ_ONLY_PROBE',
   SELF_IMPLEMENTATION_MUTATION: 'SELF_IMPLEMENTATION_MUTATION',
   AUTH_REQUIRED: 'AUTH_REQUIRED',
   OWNER_APPROVAL_REQUIRED: 'OWNER_APPROVAL_REQUIRED',
@@ -21,7 +22,7 @@ export function isMutationMethod(method) {
 }
 
 export function isDeployAction(path) {
-  return /\/(deploy|vercel-deploy|hosting)/i.test(path);
+  return /(deploy|vercel|hosting)/i.test(path);
 }
 
 export function isCommerceAction(path) {
@@ -37,7 +38,11 @@ export function isFileWriteAction(path) {
 }
 
 export function isProviderAction(path) {
-  return /\/(chat|evo-lm\/chat|agents\/invoke|ai\/)/i.test(path);
+  return /\/(chat|evo-lm\/chat|agents\/invoke|ai\/|ai-providers\/|provider)/i.test(path);
+}
+
+export function isReadOnlyProbe(path) {
+  return /\/api\/audit\/probe$/i.test(path);
 }
 
 export function isSelfImplementationMutation(path, body = {}) {
@@ -59,6 +64,10 @@ export function classifyRouteSecurity(method, path, context = {}) {
   }
 
   classifications.push('MUTATION');
+
+  if (isReadOnlyProbe(path)) {
+    classifications.push('READ_ONLY_PROBE');
+  }
 
   if (isDeployAction(path)) {
     classifications.push('DEPLOY_ACTION');

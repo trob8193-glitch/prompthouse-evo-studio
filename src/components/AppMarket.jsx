@@ -112,7 +112,13 @@ export default function AppMarket() {
                                             </>
                                         )}
                                     </button>
-                                    <button className="bg-gray-800 hover:bg-gray-700 text-white p-2.5 rounded-xl transition-colors flex items-center justify-center">
+                                    <button
+                                        type="button"
+                                        onClick={() => launchApp(project.id)}
+                                        disabled={launching === project.id}
+                                        aria-label={`Open ${project.name}`}
+                                        className="bg-gray-800 hover:bg-gray-700 text-white p-2.5 rounded-xl transition-colors flex items-center justify-center disabled:opacity-50"
+                                    >
                                         <ArrowRight className="w-5 h-5" />
                                     </button>
                                 </div>

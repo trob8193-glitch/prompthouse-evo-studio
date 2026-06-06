@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSovereignStore } from '../store.js';
+import { safeFetchBridge } from '../config/bridge-config.js';
 import { 
   Globe, 
   Link2, 
@@ -13,8 +14,6 @@ import {
   ArrowRight
 } from 'lucide-react';
 
-const BRIDGE_URL = 'http://127.0.0.1:3001';
-
 export default function ConnectionManager() {
   const { bondedNodes, addBondedNode } = useSovereignStore();
   const [connections, setConnections] = useState(null);
@@ -26,9 +25,9 @@ export default function ConnectionManager() {
   const fetchConnections = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/connections`);
-      const data = await res.json();
-      setConnections(data);
+      const result = await safeFetchBridge('/api/connections');
+      if (!result.ok) throw new Error(result.error || 'Connection inventory unavailable');
+      setConnections(result.data);
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -47,12 +46,11 @@ export default function ConnectionManager() {
 
     setBonding(true);
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/terminal/bond`, {
+      const result = await safeFetchBridge('/api/terminal/bond', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ target: targetIp }),
       });
-      const data = await res.json();
+      const data = result.data || {};
       if (data.success) {
         addBondedNode(data.node);
         setTargetIp('');
@@ -157,7 +155,11 @@ export default function ConnectionManager() {
                         <Shield size={10} className="text-emerald-500" />
                         <span className="text-[9px] text-emerald-500/70 font-black uppercase tracking-widest">Secured</span>
                       </div>
-                      <button className="text-[9px] font-black uppercase tracking-widest text-slate-600 hover:text-white transition-colors">
+                      <button
+                        type="button"
+                        onClick={() => setTargetIp(item.url || item.target || item.ip || '')}
+                        className="text-[9px] font-black uppercase tracking-widest text-slate-600 hover:text-white transition-colors"
+                      >
                         Configure
                       </button>
                     </div>

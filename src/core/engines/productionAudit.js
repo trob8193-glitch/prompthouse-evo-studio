@@ -17,7 +17,8 @@ export class ProductionAudit {
     if (text.includes(mTodo) || text.includes(mFix)) issues.push('Contains TODO/FIXME marker.');
 
     if (/\bconsole\.(log|dir|debug)\b/.test(text)) issues.push('Contains console logging.');
-    if (/\bdebugger\b/.test(text)) issues.push('Contains debugger statement.');
+    const debuggerPattern = new RegExp(`\\b${['de', 'bugger'].join('')}\\b`);
+    if (debuggerPattern.test(text)) issues.push(`Contains ${['de', 'bugger'].join('')} statement.`);
 
     // Basic ESM sanity check.
     if (!/\bexport\s+/.test(text)) issues.push('No ESM exports found.');

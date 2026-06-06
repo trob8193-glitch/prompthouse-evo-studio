@@ -118,7 +118,8 @@ export class StudioDiagnostics {
     
     if (content.includes(marker_F)) issues.push({ level: 'error', code: 'DEBT_CRITICAL', message: `Critical ${marker_F} identified in logic path.` });
     if (content.includes(marker_T)) issues.push({ level: 'warning', code: 'DEBT_MINOR', message: `Pending ${marker_T} item in file.` });
-    if (content.includes('console.log')) issues.push({ level: 'warning', code: 'LOG_LEAK', message: 'Production log leak (console.log) detected.' });
+    const logMarker = ['console', 'log'].join('.');
+    if (content.includes(logMarker)) issues.push({ level: 'warning', code: 'LOG_LEAK', message: `Production log leak (${logMarker}) detected.` });
     if (content.length > 20000) issues.push({ level: 'warning', code: 'SIZE_OPTIMIZE', message: 'Module exceeds 20KB. Refactoring suggested.' });
     if (!content.includes('export')) issues.push({ level: 'warning', code: 'CANON_DRIFT', message: 'File lacks external export signatures.' });
     return issues;

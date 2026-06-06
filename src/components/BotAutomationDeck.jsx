@@ -6,6 +6,7 @@ export const BotAutomationDeck = () => {
   const [phase, setPhase] = useState(1);
   const [syncing, setSyncing] = useState({ trello: false, slack: false });
   const [kpis, setKpis] = useState(null);
+  const [permissionsVisible, setPermissionsVisible] = useState(false);
 
   useEffect(() => {
     fetch('http://127.0.0.1:3001/api/reports/kpi')
@@ -117,10 +118,21 @@ export const BotAutomationDeck = () => {
             <p className="text-xs text-slate-500">Only Team Leads can modify automation settings.</p>
           </div>
         </div>
-        <button className="flex items-center gap-2 text-indigo-400 text-xs font-bold hover:text-indigo-300 transition-colors">
+        <button
+          type="button"
+          onClick={() => setPermissionsVisible((value) => !value)}
+          aria-expanded={permissionsVisible}
+          className="flex items-center gap-2 text-indigo-400 text-xs font-bold hover:text-indigo-300 transition-colors"
+        >
           MANAGE PERMISSIONS <ChevronRight size={14} />
         </button>
       </footer>
+      {permissionsVisible && (
+        <section className="bg-slate-950 border border-indigo-500/20 rounded-2xl p-5">
+          <div className="text-[10px] font-black uppercase tracking-widest text-indigo-300">Permission Gate</div>
+          <div className="mt-2 text-sm text-slate-300">Automation changes require a team lead approval receipt before connector settings can be changed.</div>
+        </section>
+      )}
     </div>
   );
 };

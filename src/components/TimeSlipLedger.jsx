@@ -65,9 +65,13 @@ export function TimeSlipLedger() {
                 <span>•</span>
                 <span>{commit.time}</span>
               </div>
-              <button style={{
+              <button
+                type="button"
+                disabled
+                title="Git revert requires an explicit owner-approved mutation route."
+                style={{
                 marginTop: 8, background: '#1e293b', border: '1px solid #334155', borderRadius: 4,
-                padding: '4px 8px', fontSize: 10, color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer',
+                padding: '4px 8px', fontSize: 10, color: '#64748b', display: 'flex', alignItems: 'center', gap: 4, cursor: 'not-allowed',
               }}>
                 <Rewind size={10} /> Revert to {commit.id}
               </button>

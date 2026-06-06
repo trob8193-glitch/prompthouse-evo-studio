@@ -1,4 +1,3 @@
-```javascript
 /** Shadow Run Executor - pb19 **/
 
 import fs from 'fs';
@@ -54,8 +53,7 @@ class ShadowRunExecutor {
             const context = vm.createContext(sandbox);
             const script = new vm.Script(workflow.code || 'result = { success: true, timestamp: Date.now() };');
             
-            // Fix: Add a return statement to the function body
-            return script.runInThisContext(context, { timeout: 5000 });
+            return script.runInContext(context, { timeout: 5000 });
         } catch (err) {
             return {
                 id: workflowId,
@@ -71,4 +69,3 @@ const executor = new ShadowRunExecutor();
 
 export const addWorkflow = (workflow) => executor.addWorkflow(workflow);
 export const runExecution = (workflowId) => executor.runExecution(workflowId);
-```

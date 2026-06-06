@@ -1,29 +1,25 @@
-# ☢️ Sovereign Nuclear Audit Report
-Generated: 2026-05-08T02:56:57.188Z
+# Singularity Edge Enterprise Audit
+Generated: 2026-06-06T15:34:40.868Z
 
-## 📡 Truth Integrity
-- **OpenAI**: FAILED
-- **Gemini**: VERIFIED
-- **Stripe**: MISSING
+## Truth Probe
+- State: TRUTH_PROBE_READY
+- Modules: 15
+- Average Score: 92
 
-## 🔍 Logic Density
-- **Total Modules**: 535
-- **Canon State**: VERIFIED
+## Studio Scan
+- State: STUDIO_SCAN_CLEAR
+- Total Modules: 15
+- Unresolved Routes: 0
 
-## 🚀 Evolution Missions (10/10)
-- Mission 1: FAILED
-- Mission 2: FAILED
-- Mission 3: FAILED
-- Mission 4: FAILED
-- Mission 5: FAILED
-- Mission 6: FAILED
-- Mission 7: FAILED
-- Mission 8: FAILED
-- Mission 9: FAILED
-- Mission 10: FAILED
+## Local Gates
+- PASSED: route drift audit
+- PASSED: dead surface audit
+- PASSED: enterprise static audit
+- PASSED: focused route/dead tests
 
-## 🧪 System Health
-- **Unit Tests**: WARNING: Tests failed or not found.
+## Provider Evolution
+- Status: SKIPPED
+- Detail: Provider-backed evolution missions require PH_ALLOW_NUCLEAR_EVOLUTION=true.
 
-## 🏁 Conclusion
-**Sovereign Grade**: A-TIER (EVOLVING)
+## Final
+- Status: LOCAL_SINGULARITY_EDGE_CLEAR

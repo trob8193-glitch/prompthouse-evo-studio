@@ -1,3 +1,5 @@
+import { Log } from '../autonomy/SovereignLogger.js';
+
 /**
  * PH EVO STUDIO — MODEL REGISTRY
  * ═══════════════════════════════════════════════════════════════
@@ -172,7 +174,7 @@ export function setActiveModel(modelId) {
     throw new Error(`Model '${modelId}' not found in registry. Available: ${MODEL_REGISTRY.map(m => m.id).join(', ')}`);
   }
   _activeModelId = modelId;
-  console.log(`🧠 [ModelRegistry] Active model switched to: ${model.displayName} (${model.provider}/${model.tier})`);
+  Log.info(`[ModelRegistry] Active model switched to: ${model.displayName} (${model.provider}/${model.tier})`);
   return model;
 }
 

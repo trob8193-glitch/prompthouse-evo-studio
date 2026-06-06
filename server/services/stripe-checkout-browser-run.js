@@ -25,6 +25,10 @@ export function classifyStripeCheckoutBrowserReadiness() {
   return { ok: false, truthState: TRUTH_STATES.BLOCKED, mode: 'UNKNOWN_MODE' };
 }
 
+export function getStripeCheckoutBrowserRunStatus() {
+  return classifyStripeCheckoutBrowserReadiness();
+}
+
 export function createStripeBrowserRunRecord({ checkoutSessionId, checkoutUrl }) {
   const record = {
     id: `SBR-${Date.now()}`,

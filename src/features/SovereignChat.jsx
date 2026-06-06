@@ -27,6 +27,7 @@ export default function SovereignChat() {
   const activeFile = useSovereignStore((s) => s.activeFile);
   const fileContent = useSovereignStore((s) => s.fileContent);
   const addTerminalLogs = useSovereignStore((s) => s.addTerminalLogs);
+  const setActivePage = useSovereignStore((s) => s.setActivePage);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -89,7 +90,6 @@ export default function SovereignChat() {
     const handleApply = () => {
         // In a full implementation, this calls an API to overwrite `activeFile`
         // or uses SovereignStore.updateFileContent
-        console.log(`Applying code to ${activeFile}...`);
         setApplied(true);
         setTimeout(() => setApplied(false), 2000);
     };
@@ -148,7 +148,11 @@ export default function SovereignChat() {
             </div>
           </div>
         </div>
-        <button className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors">
+        <button
+          type="button"
+          onClick={() => setActivePage('settings')}
+          className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors"
+        >
           <Settings2 className="w-5 h-5" />
         </button>
       </div>

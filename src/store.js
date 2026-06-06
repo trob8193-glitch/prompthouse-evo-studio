@@ -341,9 +341,9 @@ export const useSovereignStore = create((set, get) => ({
 
   fetchRiftStatus: async () => {
     try {
-      const res = await fetch('http://127.0.0.1:3002/status', { signal: AbortSignal.timeout(3000) });
-      if (!res.ok) throw new Error(`Rift returned ${res.status}`);
-      const data = await res.json();
+      const result = await safeFetchBridge('/api/rift/status', { timeout: 4000 });
+      if (!result.ok) throw new Error(result.error || `Rift returned ${result.status}`);
+      const data = result.data?.data || result.data;
       set({ riftStatus: 'connected', riftData: data });
       return data;
     } catch {
@@ -354,12 +354,12 @@ export const useSovereignStore = create((set, get) => ({
 
   fetchGridMesh: async () => {
     try {
-      const [nodesRes, routesRes] = await Promise.all([
-        fetch('http://127.0.0.1:3002/api/evopulse/nodes'),
-        fetch('http://127.0.0.1:3002/api/evopulse/routes')
+      const [nodesResult, routesResult] = await Promise.all([
+        safeFetchBridge('/api/evopulse/nodes', { timeout: 4000 }),
+        safeFetchBridge('/api/evopulse/routes', { timeout: 4000 })
       ]);
-      const nodes = await nodesRes.json();
-      const routes = await routesRes.json();
+      const nodes = nodesResult.data || {};
+      const routes = routesResult.data || {};
       set({ gridNodes: nodes.data?.nodes || [], gridRoutes: routes.data?.routes || [] });
     } catch {
       // Stay silent on mesh failure

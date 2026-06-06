@@ -9,6 +9,7 @@ export default function EvoLayoutDashboard() {
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState(null);
   const [framework, setFramework] = useState('react-tailwind');
+  const [previewExpanded, setPreviewExpanded] = useState(false);
 
   const handleGenerate = async () => {
     if (!prompt) return;
@@ -73,7 +74,7 @@ export default function EvoLayoutDashboard() {
           </Card>
         </div>
 
-        <Card className="xl:col-span-8 bg-black/40 p-0 overflow-hidden min-h-[500px] flex flex-col relative border border-slate-800">
+        <Card className={`${previewExpanded ? 'xl:col-span-12' : 'xl:col-span-8'} bg-black/40 p-0 overflow-hidden min-h-[500px] flex flex-col relative border border-slate-800`}>
           <div className="p-6 border-b border-slate-800 bg-slate-900/30 flex justify-between items-center z-10">
             <h3 className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-widest flex items-center gap-2"><Code2 size={14} /> Structural Blueprint</h3>
             {result && <StatusBadge status="verified" label="SCAFFOLD READY" />}
@@ -92,7 +93,14 @@ export default function EvoLayoutDashboard() {
                 <div className="p-4 bg-slate-900 border-b border-slate-800 flex justify-between">
                   <span className="text-[10px] font-mono text-slate-500">component.jsx</span>
                   <div className="flex gap-2">
-                    <button className="text-slate-400 hover:text-white"><Maximize size={14}/></button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewExpanded((value) => !value)}
+                      aria-pressed={previewExpanded}
+                      className="text-slate-400 hover:text-white"
+                    >
+                      <Maximize size={14}/>
+                    </button>
                   </div>
                 </div>
                 <div className="prompt-block !bg-transparent !border-none !p-6 !m-0 !max-h-full">

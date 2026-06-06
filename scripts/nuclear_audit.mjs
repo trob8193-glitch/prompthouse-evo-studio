@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import fetch from 'node-fetch';
 import { execSync } from 'child_process';
 import fs from 'fs';
@@ -6,91 +7,144 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
+const bridgeBase = process.env.PH_BRIDGE_AUDIT_URL || 'http://127.0.0.1:3001';
+
+async function fetchJson(pathname, label) {
+  const url = `${bridgeBase}${pathname}`;
+  const response = await fetch(url, { signal: AbortSignal.timeout(12000) });
+  const contentType = response.headers.get('content-type') || '';
+  const text = await response.text();
+
+  if (!contentType.includes('application/json')) {
+    throw new Error(`${label} returned ${response.status} ${contentType || 'unknown content type'} instead of JSON.`);
+  }
+
+  const data = JSON.parse(text);
+  if (!response.ok) {
+    throw new Error(`${label} returned ${response.status}: ${data.error || data.truthState || 'request failed'}`);
+  }
+  return data;
+}
+
+function runGate(label, command, required = true) {
+  process.stdout.write(`   - ${label}... `);
+  try {
+    const output = execSync(command, {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
+    console.log('PASS');
+    return { label, command, required, status: 'PASSED', output: output.slice(-4000) };
+  } catch (error) {
+    console.log(required ? 'FAIL' : 'WARN');
+    return {
+      label,
+      command,
+      required,
+      status: required ? 'FAILED' : 'WARNING',
+      error: error.message,
+      output: `${error.stdout || ''}${error.stderr || ''}`.slice(-4000)
+    };
+  }
+}
+
+function writeReports(results) {
+  const outbox = path.join(root, '.ai', 'outbox');
+  fs.mkdirSync(outbox, { recursive: true });
+  const jsonPath = path.join(outbox, 'nuclear-audit-report.json');
+  const mdPath = path.join(outbox, 'nuclear-audit-report.md');
+  fs.writeFileSync(jsonPath, JSON.stringify(results, null, 2), 'utf8');
+
+  const failed = results.gates.filter(gate => gate.required && gate.status !== 'PASSED');
+  const md = `# Singularity Edge Enterprise Audit
+Generated: ${results.generatedAt}
+
+## Truth Probe
+- State: ${results.truthProbe?.truthState || 'UNAVAILABLE'}
+- Modules: ${results.truthProbe?.results?.moduleCount ?? 'unknown'}
+- Average Score: ${results.studioScan?.averageScore ?? 'unknown'}
+
+## Studio Scan
+- State: ${results.studioScan?.truthState || 'UNAVAILABLE'}
+- Total Modules: ${results.studioScan?.total_modules ?? 'unknown'}
+- Unresolved Routes: ${results.studioScan?.routes?.unresolved?.length ?? 'unknown'}
+
+## Local Gates
+${results.gates.map(gate => `- ${gate.status}: ${gate.label}`).join('\n')}
+
+## Provider Evolution
+- Status: ${results.providerEvolution.status}
+- Detail: ${results.providerEvolution.detail}
+
+## Final
+- Status: ${failed.length === 0 ? 'LOCAL_SINGULARITY_EDGE_CLEAR' : 'LOCAL_SINGULARITY_EDGE_BLOCKED'}
+`;
+  fs.writeFileSync(mdPath, md, 'utf8');
+  return { jsonPath, mdPath };
+}
+
+async function runProviderEvolutionIfAllowed() {
+  if (process.env.PH_ALLOW_NUCLEAR_EVOLUTION !== 'true') {
+    return {
+      status: 'SKIPPED',
+      detail: 'Provider-backed evolution missions require PH_ALLOW_NUCLEAR_EVOLUTION=true.'
+    };
+  }
+
+  const count = Math.max(1, Math.min(Number(process.env.PH_NUCLEAR_EVOLUTION_COUNT || 1), 10));
+  const missions = [];
+  for (let index = 1; index <= count; index += 1) {
+    missions.push(runGate(`Provider evolution mission ${index}`, 'npm run ai:loop', false));
+  }
+  return { status: 'ATTEMPTED', detail: `${count} provider-backed mission(s) attempted.`, missions };
+}
 
 async function runNuclearAudit() {
-  console.log('\n☢️ [NUCLEAR_AUDIT] Initializing 10-Mission Singularity Sweep...');
-  console.log('══════════════════════════════════════════════════════════════');
+  console.log('\n[NUCLEAR_AUDIT] Starting singularity edge enterprise audit');
+  console.log('============================================================');
 
   const results = {
-    truth_probe: null,
-    studio_scan: null,
-    evolution_missions: [],
-    test_suite: null,
-    final_status: 'SUCCESS'
+    generatedAt: new Date().toISOString(),
+    bridgeBase,
+    truthProbe: null,
+    studioScan: null,
+    gates: [],
+    providerEvolution: { status: 'PENDING', detail: '' },
+    finalStatus: 'PENDING'
   };
 
   try {
-    // 1. Truth Probe
-    console.log('📡 [1/4] Executing Truth Probe...');
-    const probeRes = await fetch('http://127.0.0.1:3001/api/truth/probe');
-    results.truth_probe = await probeRes.json();
-    console.log('✅ Truth Probe Completed.');
+    console.log('[1/4] Bridge truth probe');
+    results.truthProbe = await fetchJson('/api/truth/probe', 'Truth probe');
 
-    // 2. Studio Scan
-    console.log('🔍 [2/4] Executing Studio Logic Density Scan...');
-    const scanRes = await fetch('http://127.0.0.1:3001/api/studio/scan');
-    results.studio_scan = await scanRes.json();
-    console.log(`✅ Scan Completed. Detected ${results.studio_scan.total_modules} modules.`);
+    console.log('[2/4] Studio logic scan');
+    results.studioScan = await fetchJson('/api/studio/scan', 'Studio scan');
 
-    // 3. 10 Evolution Missions
-    console.log('🚀 [3/4] Launching 10 Rapid-Fire Evolution Missions (Gemini-Powered)...');
-    for (let i = 1; i <= 10; i++) {
-      process.stdout.write(`   ▶ Mission ${i}/10... `);
-      try {
-        execSync('npm run ai:loop', { stdio: 'inherit' });
-        console.log('✅ [REALIZED]');
-        results.evolution_missions.push({ mission: i, status: 'SUCCESS', timestamp: new Date().toISOString() });
-      } catch (e) {
-        console.log('❌ [FAILED]');
-        console.error(`      Error: ${e.message}`);
-        results.evolution_missions.push({ mission: i, status: 'FAILED', error: e.message });
-      }
-      if (i < 10) {
-        console.log('      ⏳ Throttling for 60s to preserve API quota...');
-        execSync('powershell Start-Sleep -Seconds 60');
-      }
-    }
+    console.log('[3/4] Local enterprise gates');
+    results.gates.push(runGate('route drift audit', 'node scripts/audit-route-drift.mjs'));
+    results.gates.push(runGate('dead surface audit', 'node scripts/dead-surface-audit.mjs'));
+    results.gates.push(runGate('enterprise static audit', 'node scripts/enterprise_audit.mjs'));
+    results.gates.push(runGate('focused route/dead tests', 'npx vitest run tests/dead-surface-hunter.test.jsx tests/dead-surface-source-audit.test.js tests/navigation-contract.test.jsx tests/route-contract.test.js tests/route-registry.test.js tests/bridge-contract-ledger.test.js tests/studio_core_routes_contract.test.js'));
 
-    // 4. Test Suite
-    console.log('🧪 [4/4] Running Integrated Test Suite (Vitest)...');
-    try {
-      // Check if vitest can run
-      execSync('npx vitest run --passWithNoTests', { stdio: 'inherit' });
-      results.test_suite = 'PASSED';
-    } catch (e) {
-      results.test_suite = 'WARNING: Tests failed or not found.';
-    }
+    console.log('[4/4] Provider-backed evolution gate');
+    results.providerEvolution = await runProviderEvolutionIfAllowed();
 
-    // Generate Report
-    const reportPath = path.join(root, '.ai/outbox/nuclear-audit-report.md');
-    const report = `# ☢️ Singularity Nuclear Audit Report
-Generated: ${new Date().toISOString()}
+    const failed = results.gates.filter(gate => gate.required && gate.status !== 'PASSED');
+    results.finalStatus = failed.length === 0 ? 'LOCAL_SINGULARITY_EDGE_CLEAR' : 'LOCAL_SINGULARITY_EDGE_BLOCKED';
+    const reports = writeReports(results);
 
-## 📡 Truth Integrity
-- **OpenAI**: ${results.truth_probe.results.openai.status}
-- **Gemini**: ${results.truth_probe.results.results?.gemini?.status || 'VERIFIED'}
-- **Stripe**: ${results.truth_probe.results.results?.stripe?.status || 'MISSING'}
+    console.log('============================================================');
+    console.log(`[NUCLEAR_AUDIT] ${results.finalStatus}`);
+    console.log(`[NUCLEAR_AUDIT] Report: ${reports.mdPath}`);
 
-## 🔍 Logic Density
-- **Total Modules**: ${results.studio_scan.total_modules}
-- **Canon State**: ${results.studio_scan.success ? 'VERIFIED' : 'DRIFTED'}
-
-## 🚀 Evolution Missions (10/10)
-${results.evolution_missions.map(m => `- Mission ${m.mission}: ${m.status}`).join('\n')}
-
-## 🧪 System Health
-- **Unit Tests**: ${results.test_suite}
-
-## 🏁 Conclusion
-**Singularity Grade**: ${results.evolution_missions.every(m => m.status === 'SUCCESS') ? 'S-TIER (OMNIPOTENT)' : 'A-TIER (EVOLVING)'}
-`;
-
-    fs.writeFileSync(reportPath, report);
-    console.log('\n══════════════════════════════════════════════════════════════');
-    console.log(`✅ [NUCLEAR_AUDIT] Complete. Report: ${reportPath}`);
-
+    if (failed.length > 0) process.exit(1);
   } catch (err) {
-    console.error('\n❌ [NUCLEAR_AUDIT] Fatal Error:', err.message);
+    results.finalStatus = 'LOCAL_SINGULARITY_EDGE_FATAL';
+    results.error = err.message;
+    const reports = writeReports(results);
+    console.error(`\n[NUCLEAR_AUDIT] Fatal: ${err.message}`);
+    console.error(`[NUCLEAR_AUDIT] Report: ${reports.mdPath}`);
     process.exit(1);
   }
 }

@@ -36,7 +36,7 @@ export class RealitySynthesisLogic {
     const lower = text.toLowerCase();
 
     const hasPassword = lower.includes('password');
-    const hasEmail = lower.includes('email') || lower.includes('type\":\"email\"') || lower.includes(\"type='email'\") || lower.includes('username');
+    const hasEmail = lower.includes('email') || lower.includes('type\":\"email\"') || lower.includes("type='email'") || lower.includes('username');
     const hasForm = lower.includes('<form') || lower.includes('form');
 
     const hasPrice = lower.includes('price') || lower.includes('$') || lower.includes('pricing');
