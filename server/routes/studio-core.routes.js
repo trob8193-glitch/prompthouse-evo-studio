@@ -5,6 +5,11 @@ import fetch from 'node-fetch';
 import { runModuleMaturityAudit, writeModuleMaturityReceipt } from '../../src/core/maturity/index.js';
 import { listReviews } from '../../src/core/proof/ReviewStore.js';
 import { evaluateCostVelocity } from '../../src/core/gateway/CostVelocityMonitor.js';
+import { UniversalAIAdaptor } from '../../lib/ai/UniversalAIAdaptor.js';
+import { PromptCompressor } from '../../lib/ai/PromptCompressor.js';
+import { TruthGate } from '../../src/core/truth/TruthGate.js';
+
+const OLLAMA_BASE = 'http://localhost:11434';
 
 const DATA_DIR = () => path.join(process.cwd(), '.prompthouse-data');
 const USERS_FILE = () => path.join(DATA_DIR(), 'users.json');
@@ -158,10 +163,60 @@ export function registerStudioCoreRoutes(app) {
     res.json({ success: true, truthState: 'TRUTH_PROBE_READY', results: { averageScore: maturity.averageScore, moduleCount: maturity.moduleCount, blockers: maturity.blockers.slice(0, 25) } });
   });
 
-  app.post('/api/evo-lm/chat', (req, res) => {
-    const messages = Array.isArray(req.body?.messages) ? req.body.messages : [];
-    const last = messages.at(-1)?.content || '';
-    res.json({ success: true, truth_state: 'LOCAL_CHAT_FALLBACK_READY', message: `Local bridge fallback received: ${last.slice(0, 600)}` });
+  app.post('/api/evo-lm/chat', async (req, res) => {
+    const { messages = [], systemPrompt = '' } = req.body;
+    
+    let processedSystemPrompt = systemPrompt;
+    if (systemPrompt.length > 200) {
+      const compressor = new PromptCompressor();
+      processedSystemPrompt = await compressor.compress(systemPrompt);
+    }
+  
+    const ollamaModels = ['evo-lm', 'llama3', 'mistral', 'phi3', 'gemma'];
+  
+    for (const model of ollamaModels) {
+      try {
+        const ollamaMessages = processedSystemPrompt
+          ? [{ role: 'system', content: processedSystemPrompt }, ...messages]
+          : messages;
+        const response = await fetch(`${OLLAMA_BASE}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model, messages: ollamaMessages, stream: false }),
+          signal: AbortSignal.timeout(30000),
+        });
+        if (!response.ok) continue;
+        const data = await response.json();
+        const content = data.message?.content || data.response || '';
+        
+        // Activate Guardrails
+        const truthGate = new TruthGate();
+        truthGate.enforce(content, 'Evo LM Chat');
+  
+        if (content) return res.json({ message: content, model, transport: 'evo_lm_ollama' });
+      } catch (err) { 
+        console.warn(`⚠️ [Ollama] Failed for model ${model}:`, err.message);
+        continue; 
+      }
+    }
+  
+    // Fallback to primary AI provider
+    try {
+      const config = readJson(CONFIG_FILE(), {});
+      const keys = config.keys || {};
+      const ai = new UniversalAIAdaptor(keys);
+      const msgs = processedSystemPrompt
+        ? [{ role: 'system', content: processedSystemPrompt }, ...messages]
+        : messages;
+      
+      const response = await ai.generate(msgs, 'auto');
+      const truthGate = new TruthGate();
+      truthGate.enforce(response.text, 'Evo LM Cloud Fallback');
+      
+      res.json({ message: response.text, model: response.model, transport: 'universal_ai_adaptor' });
+    } catch (fallbackErr) {
+      res.status(500).json({ error: 'All AI bridges failed', details: fallbackErr.message });
+    }
   });
 
   app.get('/api/reviews', (_req, res) => {

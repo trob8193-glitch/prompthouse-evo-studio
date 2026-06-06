@@ -60,6 +60,7 @@ ensureAuthSchema();
 ensureGatewayBootstrapData();
 import { registerEmulatorRoutes } from './server/routes/emulator.routes.js';
 import launchPilotRoutes from './server/routes/launch-pilot.routes.js';
+import { registerStudioCoreRoutes } from './server/routes/studio-core.routes.js';
 import registerEvoBridgeRoutes from './generated_apis/evo_bridge_routes.js';
 import registerPlatformSentinelRoutes from './generated_apis/platform_sentinel_routes.js';
 import registerAiModelRoutes from './generated_apis/ai_model_routes.js';
@@ -79,6 +80,7 @@ registerAiModelRoutes(app);
 registerEvoDiffuserRoutes(app);
 registerEvoTerminalRoutes(app);
 registerEvoCapabilityRoutes(app);
+registerStudioCoreRoutes(app);
 app.use('/api/launch-pilot', launchPilotRoutes);
 app.get('/api/status', (req, res) => {
   const ledgerStats = db.prepare('SELECT SUM(iq_gain) as total_gain FROM sovereign_ledger').get();

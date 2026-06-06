@@ -45,7 +45,7 @@ export function buildAmplificationTargets() {
     {
       id: 'cost-firewall-product',
       title: 'Package Cost Firewall',
-      score: 88,
+      score: 92,
       reason: 'Cost governance is valuable as both internal control and external developer tooling.'
     },
     {
