@@ -67,6 +67,7 @@ import registerAiModelRoutes from './generated_apis/ai_model_routes.js';
 import registerEvoDiffuserRoutes from './generated_apis/evo_diffuser_routes.js';
 import registerEvoTerminalRoutes from './generated_apis/evo_terminal_routes.js';
 import registerEvoCapabilityRoutes from './generated_apis/evo_capability_routes.js';
+import registerPortfolioRoutes from './generated_apis/portfolio_routes.js';
 
 ensureEvolutionSchema();
 
@@ -80,6 +81,7 @@ registerAiModelRoutes(app);
 registerEvoDiffuserRoutes(app);
 registerEvoTerminalRoutes(app);
 registerEvoCapabilityRoutes(app);
+registerPortfolioRoutes(app);
 registerStudioCoreRoutes(app);
 app.use('/api/launch-pilot', launchPilotRoutes);
 app.get('/api/status', (req, res) => {
@@ -219,15 +221,11 @@ function readGitStatusLines() {
 }
 
 function discoverAvailableEndpoints() {
-  const files = [join(process.cwd(), 'promptbridge-server.js')];
-  const generatedApiDir = join(process.cwd(), 'generated_apis');
-
-  if (existsSync(generatedApiDir)) {
-    const generatedFiles = readdirSync(generatedApiDir)
-      .filter(name => name.endsWith('.js'))
-      .map(name => join(generatedApiDir, name));
-    files.push(...generatedFiles);
-  }
+  const files = collectEndpointSourceFiles([
+    join(process.cwd(), 'promptbridge-server.js'),
+    join(process.cwd(), 'generated_apis'),
+    join(process.cwd(), 'server', 'routes'),
+  ]);
 
   const endpoints = new Set();
   const routeRegex = /app\.(get|post|put|patch|delete)\(\s*['"`]([^'"`]+)['"`]/g;
@@ -242,6 +240,28 @@ function discoverAvailableEndpoints() {
   }
 
   return Array.from(endpoints);
+}
+
+function collectEndpointSourceFiles(paths) {
+  const files = [];
+
+  for (const candidate of paths) {
+    if (!existsSync(candidate)) continue;
+    const stat = statSync(candidate);
+
+    if (stat.isFile() && /\.(js|mjs|cjs)$/.test(candidate)) {
+      files.push(candidate);
+      continue;
+    }
+
+    if (stat.isDirectory()) {
+      for (const entry of readdirSync(candidate)) {
+        files.push(...collectEndpointSourceFiles([join(candidate, entry)]));
+      }
+    }
+  }
+
+  return files;
 }
 
 function readAvailableFiles() {

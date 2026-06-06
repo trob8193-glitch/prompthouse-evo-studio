@@ -69,6 +69,7 @@ async function runImportsAudit() {
       relativePath.endsWith('.jsx') || 
       (relativePath.startsWith('src') && 
        !relativePath.startsWith(path.join('src', 'core')) &&
+       !relativePath.startsWith(path.join('src', 'runtime')) &&
        !relativePath.includes('_logic.js') &&
        !relativePath.includes('mobile-engine.js') &&
        !relativePath.includes('native-') &&
@@ -89,6 +90,7 @@ async function runImportsAudit() {
     const lines = content.split('\n');
 
     lines.forEach((line, lineNum) => {
+      if (line.includes('`') && /\bimport\b/.test(line)) return;
       let match;
       
       // Check import

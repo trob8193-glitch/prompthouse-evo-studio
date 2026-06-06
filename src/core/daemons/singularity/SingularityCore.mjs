@@ -2,12 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
-import { deepAuditFile, deepAuditDirectory } from './deep-audit.mjs';
-import { repairFile } from './gemini-repair.mjs';
+import { deepAuditFile, deepAuditDirectory } from '../../../../scripts/deep-audit.mjs';
+import { repairFile } from '../../../../scripts/gemini-repair.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, '..');
+const rootDir = path.resolve(__dirname, '../../../..');
 const srcDir = path.join(rootDir, 'src');
 const logDir = path.join(rootDir, 'proof_receipts', 'singularity_logs');
 
@@ -25,6 +25,7 @@ if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
 const CYCLE_INTERVAL_MS = 120 * 1000; // Every 2 minutes (respect API rate limits)
 const MAX_REPAIRS_PER_CYCLE = 3; // Don't burn through API quota
 let cycleCount = 0;
+const allowAutonomousRepair = process.env.PH_ALLOW_SELF_REPAIR === 'true';
 
 function log(level, msg) {
   const ts = new Date().toISOString();
@@ -68,6 +69,12 @@ function selfTest() {
 // ─── PHASE 4: SELF-COMMIT ──────────────────────────────────────
 function selfCommit(message) {
   return new Promise((resolve) => {
+    if (process.env.PH_ALLOW_SELF_GIT_COMMIT !== 'true') {
+      log('WARN', 'Self-commit skipped. Set PH_ALLOW_SELF_GIT_COMMIT=true to allow autonomous commits.');
+      resolve(false);
+      return;
+    }
+
     const gitAdd = spawn('git', ['add', '-A'], { cwd: rootDir, shell: true, stdio: 'pipe' });
     gitAdd.on('close', () => {
       const gitCommit = spawn('git', ['commit', '-m', `[SINGULARITY-v2] ${message}`, '--no-verify'], {
@@ -85,6 +92,12 @@ function selfCommit(message) {
 
 function selfRollback() {
   return new Promise((resolve) => {
+    if (process.env.PH_ALLOW_SELF_GIT_ROLLBACK !== 'true') {
+      log('WARN', 'Self-rollback skipped. Set PH_ALLOW_SELF_GIT_ROLLBACK=true to allow autonomous rollback.');
+      resolve();
+      return;
+    }
+
     const proc = spawn('git', ['checkout', '--', '.'], { cwd: rootDir, shell: true, stdio: 'pipe' });
     proc.on('close', () => {
       log('WARN', 'Rolled back all uncommitted changes.');
@@ -130,6 +143,11 @@ async function singularityCycle() {
     log('FIX', `Repairing ${fileResult.file}: ${issuesSummary}`);
 
     try {
+      if (!allowAutonomousRepair) {
+        log('WARN', 'Autonomous file repair blocked. Set PH_ALLOW_SELF_REPAIR=true to allow provider-backed rewrites.');
+        break;
+      }
+
       const result = await repairFile(filePath, issuesSummary);
       if (result.success) {
         repairsThisCycle++;

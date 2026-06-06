@@ -20,7 +20,7 @@ import StripeCheckoutBrowserVerificationPanel from '../components/StripeCheckout
  * ═══════════════════════════════════════════════════════════════
  * Centralized dashboard for deployment readiness, receipts,
  * and owner-approved deploy actions.
- * No unverified deployment. No market-ready claim.
+ * No unverified deployment. No release claim without receipts.
  */
 export default function DeploymentCenterView() {
   return (

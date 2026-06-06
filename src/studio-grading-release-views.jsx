@@ -29,7 +29,7 @@ export function StudioGradingSystemView() {
   };
 
   const gradeColor = (s) => s >= 80 ? '#22c55e' : s >= 50 ? '#f59e0b' : '#ef4444';
-  const gradeLabel = (s) => s >= 80 ? 'Production Ready' : s >= 50 ? 'Needs Refinement' : 'Draft Quality';
+  const gradeLabel = (s) => s >= 80 ? 'Proof Ready' : s >= 50 ? 'Needs Refinement' : 'Draft Quality';
 
   return (
     <div style={{ background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: 24 }}>

@@ -1,5 +1,3 @@
-import fs from 'fs/promises';
-import path from 'path';
 import { Log } from './core/autonomy/SovereignLogger.js';
 
 // ── Mobile & Code Generation Engine ──
@@ -555,6 +553,14 @@ ${sourceCode}`;
     
     const feature = params.feature || 'Home';
     const arch = params.arch || 'clean_riverpod';
+    if (typeof process === 'undefined' || typeof process.cwd !== 'function') {
+      return {
+        success: false,
+        truthState: 'NODE_RUNTIME_REQUIRED',
+        error: 'MobileEngine file export requires the Node CLI runtime.'
+      };
+    }
+    const { fs, path } = await loadNodeFileTools();
     const outputDir = path.join(process.cwd(), 'dist', 'mobile_export', feature.toLowerCase());
 
     try {
@@ -584,4 +590,12 @@ ${sourceCode}`;
   getStatus() {
     return { id: 'mobile-engine', grade: 'S+++++', state: 'VERIFIED', resonance: 0.99 };
   }
+}
+
+async function loadNodeFileTools() {
+  const [fsModule, pathModule] = await Promise.all([
+    import(/* @vite-ignore */ 'node:fs/promises'),
+    import(/* @vite-ignore */ 'node:path')
+  ]);
+  return { fs: fsModule, path: pathModule.default || pathModule };
 }

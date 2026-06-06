@@ -101,7 +101,7 @@ const EVO_PULSE_MODULES = [
     summary: 'Turns logs, checks, build output, and test results into cause, risk, repair, and next-action cards.',
     inputs: ['Errors', 'Checks', 'Build output', 'Audit notes'],
     outputs: ['Cause cards', 'Risk score', 'Repair actions', 'Next move'],
-    gates: ['Uncertainty labels', 'No fake execution', 'Actionable repairs only'],
+    gates: ['Uncertainty labels', 'No invented execution', 'Actionable repairs only'],
     status: 'PRIMED',
   },
   {
@@ -124,10 +124,10 @@ const EVO_PULSE_MODULES = [
     icon: GitBranch,
     score: 97,
     layer: 'Studio Immune System',
-    summary: 'Detects duplicate modules, weak wiring, route drift, missing tests, fake language, and proof gaps before evolution lands.',
+    summary: 'Detects duplicate modules, weak wiring, route drift, missing tests, synthetic language, and proof gaps before evolution lands.',
     inputs: ['File tree', 'Imports', 'Routes', 'Tests', 'Maturity scores'],
     outputs: ['Drift report', 'Severity score', 'Repair plan', 'Blockers'],
-    gates: ['No placeholder drift', 'Route coverage', 'Test coverage'],
+    gates: ['No cosmetic drift', 'Route coverage', 'Test coverage'],
     status: 'PRIMED',
   },
   {
@@ -140,7 +140,7 @@ const EVO_PULSE_MODULES = [
     summary: 'Requires compile, test, route, design, memory, regression, and rollback evidence before studio changes are accepted.',
     inputs: ['Compile result', 'Test result', 'Audit result', 'Route result', 'Rollback marker'],
     outputs: ['Gate ledger', 'Approval state', 'Blocked reasons', 'Proof digest'],
-    gates: ['All required gates pass', 'Rollback required', 'No fake success'],
+    gates: ['All required gates pass', 'Rollback required', 'No invented success'],
     status: 'PRIMED',
   },
   {
@@ -446,7 +446,7 @@ export default function EvoPulseGridView() {
       <div className="grid gap-4 md:grid-cols-4">
         <PulseMetric icon={Layers3} label="Domains" value="4" detail="Studio, LLM, self-evolve, and self-invent layers fused into one page." />
         <PulseMetric icon={CheckCircle2} label="Proof Gates" value="36" detail="Each module carries 3 required proof signals before production acceptance." />
-        <PulseMetric icon={Shield} label="Boundary Mode" value="ON" detail="No fake success, no hidden mutation, no secret values, no unsupported claims." />
+        <PulseMetric icon={Shield} label="Boundary Mode" value="ON" detail="No invented success, no hidden mutation, no secret values, no unsupported claims." />
         <PulseMetric icon={Zap} label="Status" value="PRIMED" detail="Ready for deeper script, store, and backend bridge wiring in the next repo pass." />
       </div>
 

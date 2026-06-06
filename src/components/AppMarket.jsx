@@ -59,7 +59,7 @@ export default function AppMarket() {
                     </div>
                     <div className="flex items-center space-x-2 text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/20">
                         <Globe className="w-5 h-5" />
-                        <span className="font-semibold text-sm tracking-wide uppercase">Market Ready</span>
+                        <span className="font-semibold text-sm tracking-wide uppercase">Proof Gated</span>
                     </div>
                 </div>
 

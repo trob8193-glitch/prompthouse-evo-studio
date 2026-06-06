@@ -3,7 +3,7 @@
 import fs from 'fs/promises';
 import { execSync } from 'child_process';
 
-import { Log } from '../src/core/autonomy/SovereignLogger.js';
+import { Log } from '../../autonomy/SovereignLogger.js';
 
 const TARGET_PATH = `C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\src\\views.jsx`;
 const DAEMON_ID = 'frontend';

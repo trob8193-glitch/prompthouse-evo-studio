@@ -1,5 +1,5 @@
 import { Log } from './core/autonomy/SovereignLogger.js';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
 
 /**
@@ -109,11 +109,11 @@ export function resolveRouteContract(route, routes) {
 }
 
 function discoverImplementedRoutes(rootDir) {
-  const candidates = [
+  const candidates = collectRouteFiles([
     join(rootDir, 'promptbridge-server.js'),
-    join(rootDir, 'generated_apis', 'emoji_library.js'),
-    join(rootDir, 'generated_apis', 'test_api.js'),
-  ];
+    join(rootDir, 'generated_apis'),
+    join(rootDir, 'server', 'routes'),
+  ]);
   const routes = new Set();
   const routeRegex = /app\.(get|post|put|patch|delete)\(\s*['"`]([^'"`]+)['"`]/g;
 
@@ -127,4 +127,26 @@ function discoverImplementedRoutes(rootDir) {
   }
 
   return routes;
+}
+
+function collectRouteFiles(paths) {
+  const files = [];
+
+  for (const candidate of paths) {
+    if (!existsSync(candidate)) continue;
+    const stat = statSync(candidate);
+
+    if (stat.isFile() && /\.(js|mjs|cjs)$/.test(candidate)) {
+      files.push(candidate);
+      continue;
+    }
+
+    if (stat.isDirectory()) {
+      for (const entry of readdirSync(candidate)) {
+        files.push(...collectRouteFiles([join(candidate, entry)]));
+      }
+    }
+  }
+
+  return files;
 }

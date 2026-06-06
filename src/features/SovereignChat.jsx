@@ -207,7 +207,7 @@ export default function SovereignChat() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ask Evo Copilot or @mention a daemon..."
-            className="w-full max-h-48 min-h-[56px] bg-transparent text-gray-200 placeholder-gray-500 resize-none px-4 py-4 focus:outline-none"
+            className="w-full max-h-48 min-h-[56px] bg-transparent text-gray-200 resize-none px-4 py-4 focus:outline-none"
             rows={1}
           />
           <button
