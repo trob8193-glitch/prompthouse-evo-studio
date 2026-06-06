@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: prompthouse-evo-api
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    disk:
+      name: prompthouse-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /data
+      - key: PORT
+        value: 3001
