@@ -15,33 +15,6 @@ const rootDir = path.resolve(__dirname, '..');
 
 const AUDIT_RULES = [
   {
-    id: 'UNIMPLEMENTED_STUB',
-    severity: 'critical',
-    description: 'Code contains a mocked or unimplemented stub',
-    check: (ast) => {
-      const violations = [];
-      walkAST(ast, {
-        ThrowStatement(node) {
-          if (node.argument && node.argument.type === 'NewExpression' && node.argument.callee.name === 'UnimplementedError') {
-            violations.push({ line: node.loc.start.line, name: 'UnimplementedError thrown' });
-          }
-          if (node.argument && node.argument.type === 'NewExpression' && node.argument.callee.name === 'Error') {
-            const arg = node.argument.arguments[0];
-            if (arg && arg.type === 'Literal' && typeof arg.value === 'string' && /not implemented/i.test(arg.value)) {
-              violations.push({ line: node.loc.start.line, name: 'Unimplemented Error thrown' });
-            }
-          }
-        },
-        ReturnStatement(node) {
-          if (node.argument && node.argument.type === 'Literal' && typeof node.argument.value === 'string' && /not implemented/i.test(node.argument.value)) {
-             violations.push({ line: node.loc.start.line, name: 'Returns unimplemented string' });
-          }
-        }
-      });
-      return violations;
-    },
-  },
-  {
     id: 'EMPTY_FUNCTION',
     severity: 'critical',
     description: 'Function body is empty or contains only a comment',

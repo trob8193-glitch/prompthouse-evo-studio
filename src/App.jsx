@@ -27,6 +27,7 @@ import { Zap } from 'lucide-react';
 import { AuthSentry } from './features/AuthSentry.jsx';
 import EvoPulseGridView from './features/EvoPulseGridView.jsx';
 import SingularityEngineOverlay from './components/SingularityEngineOverlay.jsx';
+import AppMarket from './components/AppMarket.jsx';
 
 import ProofCenterView from './features/ProofCenterView.jsx';
 import DeploymentCenterView from './features/DeploymentCenterView.jsx';
@@ -68,6 +69,7 @@ export const PAGE_MAP = {
   'evo-pixelator': EvoPixelatorDashboard,
   'evo-layout': EvoLayoutDashboard,
   'theme-evolution': ThemeEvolutionDashboard,
+  'portfolio': AppMarket,
   'self-evolution': SelfEvolutionDashboard,
   'cost-firewall': CostFirewallDashboard,
   'review-ledger': ReviewLedgerView,
