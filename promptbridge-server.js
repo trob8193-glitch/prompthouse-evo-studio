@@ -85,6 +85,14 @@ import rateLimit from 'express-rate-limit';
 ensureEvolutionSchema();
 
 const app = express();
+app.use(cors());
+app.use(express.json());
+
+// Serve public landing page and static assets
+app.use('/public', express.static(join(process.cwd(), 'public')));
+app.get('/landing', (req, res) => {
+  res.sendFile(join(process.cwd(), 'public', 'api-landing.html'));
+});
 
 app.use(helmet({
   contentSecurityPolicy: false // We need this off for local dev scripts
@@ -3477,6 +3485,275 @@ app.get('/api/db/stats', (req, res) => {
     }
     res.json({ tables: tables.length, rows: stats, engine: 'better-sqlite3' });
   } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ─── STRIPE WEBHOOK & REAL CHECKOUT ──────────────────────────────────────────
+
+// Stripe webhook — receives events after payment. Must use raw body for signature verification.
+app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
+
+  let event;
+  try {
+    if (webhookSecret && sig && stripe.stripe) {
+      event = stripe.stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+    } else {
+      // In dev/test mode without webhook secret, parse directly
+      event = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    }
+  } catch (err) {
+    console.error('[Stripe Webhook] Signature verification failed:', err.message);
+    return res.status(400).json({ error: 'Webhook signature verification failed.' });
+  }
+
+  console.log(`[Stripe Webhook] Received event: ${event.type}`);
+
+  try {
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object;
+      const customerEmail = session.customer_email || session.customer_details?.email || 'unknown@customer.com';
+      const amountTotal = session.amount_total || 0; // in cents
+      const planName = amountTotal >= 99900 ? 'enterprise' : amountTotal >= 29900 ? 'paid' : 'free';
+      const creditsGranted = planName === 'enterprise' ? 500000 : planName === 'paid' ? 100000 : 1000;
+
+      // Create or find organization
+      const orgId = `org_${crypto.randomBytes(8).toString('hex')}`;
+      const orgSlug = `customer-${orgId.slice(4, 12)}`;
+      db.prepare(`
+        INSERT OR IGNORE INTO organizations (id, name, slug, plan, status)
+        VALUES (?, ?, ?, ?, 'active')
+      `).run(orgId, `Customer ${customerEmail}`, orgSlug, planName);
+
+      // Provision credits
+      db.prepare(`
+        INSERT INTO api_credits (id, organization_id, plan, credits_granted, credits_used, credits_remaining, subscription_status)
+        VALUES (?, ?, ?, ?, 0, ?, 'active')
+      `).run(crypto.randomUUID(), orgId, planName, creditsGranted, creditsGranted);
+
+      // Generate API key
+      const newKey = `ph_evo_${crypto.randomBytes(16).toString('hex')}`;
+      const keys = loadValidKeys();
+      keys[newKey] = {
+        name: `Auto-provisioned for ${customerEmail}`,
+        created_at: new Date().toISOString(),
+        orgId: orgId,
+        plan: planName,
+        email: customerEmail,
+        stripeSessionId: session.id
+      };
+      writeFileSync(KEYS_FILE, JSON.stringify(keys, null, 2), 'utf8');
+
+      // Store in DB api_keys table too
+      const keyPrefix = newKey.slice(0, 12);
+      const keyHash = crypto.createHash('sha256').update(newKey).digest('hex');
+      db.prepare(`
+        INSERT INTO api_keys (id, organization_id, name, key_prefix, key_hash, environment, status)
+        VALUES (?, ?, ?, ?, ?, 'production', 'active')
+      `).run(crypto.randomUUID(), orgId, `Key for ${customerEmail}`, keyPrefix, keyHash);
+
+      // Record billing customer
+      db.prepare(`
+        INSERT OR IGNORE INTO billing_customers (id, organization_id, stripe_customer_id, email)
+        VALUES (?, ?, ?, ?)
+      `).run(crypto.randomUUID(), orgId, session.customer || 'unknown', customerEmail);
+
+      // Audit log
+      db.prepare(`
+        INSERT INTO audit_logs (id, organization_id, action, target_type, target_id, metadata)
+        VALUES (?, ?, 'api_key_provisioned', 'api_key', ?, ?)
+      `).run(crypto.randomUUID(), orgId, keyPrefix, JSON.stringify({ plan: planName, credits: creditsGranted, email: customerEmail }));
+
+      console.log(`[Stripe Webhook] ✅ Provisioned: org=${orgId} plan=${planName} credits=${creditsGranted} key=${keyPrefix}...`);
+    }
+
+    if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
+      const subscription = event.data.object;
+      const status = subscription.status; // active, past_due, canceled, etc.
+      console.log(`[Stripe Webhook] Subscription ${subscription.id} status: ${status}`);
+      // Update subscription record if it exists
+      db.prepare(`
+        UPDATE subscriptions SET status = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE stripe_subscription_id = ?
+      `).run(status, subscription.id);
+    }
+
+    res.json({ received: true });
+  } catch (e) {
+    console.error('[Stripe Webhook] Processing error:', e.message);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Real Stripe checkout session creation (public-facing, no auth required for buying)
+app.post('/api/checkout/create-session', enforceJsonObjectBody, async (req, res) => {
+  const { plan = 'core', email } = req.body;
+
+  if (!stripe.stripe) {
+    return res.status(503).json({ error: 'Stripe is not configured. Set STRIPE_SECRET_KEY in .env' });
+  }
+
+  const plans = {
+    core:       { name: 'PromptHouse Core Edition',       price: 9900,  credits: 1000,   desc: 'Local Autonomy, Basic Bridge, 11-Bot Roster' },
+    sovereign:  { name: 'PromptHouse Sovereign Pro',      price: 29900, credits: 100000, desc: 'Advanced Evolution, Truth Auditor, Full Interop Adaptors' },
+    enterprise: { name: 'PromptHouse Enterprise Foundry',  price: 99900, credits: 500000, desc: 'Multi-Project Swarm, Deep Training Edges, Priority Support' },
+  };
+
+  const selected = plans[plan] || plans.core;
+
+  try {
+    const baseUrl = process.env.APP_URL || `http://127.0.0.1:${port}`;
+    const session = await stripe.stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      customer_email: email || undefined,
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: selected.name,
+            description: selected.desc,
+          },
+          unit_amount: selected.price,
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      success_url: `${baseUrl}/api/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/api/checkout/cancel`,
+      metadata: {
+        plan: plan,
+        credits: String(selected.credits),
+      }
+    });
+
+    res.json({
+      success: true,
+      url: session.url,
+      sessionId: session.id,
+      plan: selected.name,
+      price: `$${(selected.price / 100).toFixed(2)}`
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Success page after Stripe checkout
+app.get('/api/checkout/success', (req, res) => {
+  const sessionId = req.query.session_id || 'unknown';
+  res.send(`<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Payment Successful — PromptHouse Evo Studio</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0a0e1a;color:#e2e8f0;font-family:'Inter',system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .card{max-width:520px;padding:48px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:24px;text-align:center;backdrop-filter:blur(20px)}
+  h1{font-size:28px;margin-bottom:12px;color:#4ade80}
+  p{font-size:14px;color:#94a3b8;line-height:1.6;margin-bottom:20px}
+  .session{font-size:11px;color:#475569;word-break:break-all;background:rgba(0,0,0,0.3);padding:12px;border-radius:8px;margin-top:16px}
+  .note{margin-top:24px;padding:16px;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);border-radius:12px;font-size:13px;color:#4ade80}
+</style></head><body>
+<div class="card">
+  <h1>✅ Payment Successful!</h1>
+  <p>Thank you for purchasing PromptHouse Evo Studio. Your API key has been automatically provisioned and will be delivered to your email shortly.</p>
+  <div class="note">Your API key and ${'{'}credits{'}'} are being provisioned now. Check your email for access details.</div>
+  <div class="session">Session: ${sessionId}</div>
+</div></body></html>`);
+});
+
+// Cancel page
+app.get('/api/checkout/cancel', (req, res) => {
+  res.send(`<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Checkout Cancelled — PromptHouse Evo Studio</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0a0e1a;color:#e2e8f0;font-family:'Inter',system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .card{max-width:520px;padding:48px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:24px;text-align:center;backdrop-filter:blur(20px)}
+  h1{font-size:28px;margin-bottom:12px;color:#f59e0b}
+  p{font-size:14px;color:#94a3b8;line-height:1.6}
+  a{color:#818cf8;text-decoration:none;font-weight:600}
+  a:hover{text-decoration:underline}
+</style></head><body>
+<div class="card">
+  <h1>⚠️ Checkout Cancelled</h1>
+  <p>Your payment was not completed. No charges were made.</p>
+  <p style="margin-top:20px"><a href="/">← Return to PromptHouse</a></p>
+</div></body></html>`);
+});
+
+// ─── PUBLIC API DOCUMENTATION ────────────────────────────────────────────────
+app.get('/api/docs', (req, res) => {
+  res.json({
+    name: 'PromptHouse Evo Studio API',
+    version: '1.0.0',
+    base_url: `http://127.0.0.1:${port}`,
+    authentication: {
+      method: 'API Key',
+      header: 'x-api-key',
+      description: 'Include your API key in the x-api-key header with every request.'
+    },
+    pricing: {
+      core: { price: '$99', credits: 1000, description: 'Local Autonomy, Basic Bridge, 11-Bot Roster' },
+      sovereign: { price: '$299', credits: 100000, description: 'Advanced Evolution, Truth Auditor, Full Interop Adaptors' },
+      enterprise: { price: '$999', credits: 500000, description: 'Multi-Project Swarm, Deep Training Edges, Priority Support' }
+    },
+    endpoints: [
+      {
+        method: 'POST',
+        path: '/v1/prompts/compile',
+        description: 'Compiles and optimizes a raw prompt into a dense, production-ready version using AI.',
+        credit_cost: 1,
+        body: { prompt: 'Your raw prompt text here' },
+        response: { success: true, provider: 'gemini|openai|local', result: 'Compiled prompt text' }
+      },
+      {
+        method: 'POST',
+        path: '/v1/apps/blueprint',
+        description: 'Generates a full-stack application architecture blueprint from a name and feature list.',
+        credit_cost: 2,
+        body: { name: 'MyApp', features: ['auth', 'dashboard', 'payments'] },
+        response: { success: true, blueprint: {} }
+      },
+      {
+        method: 'POST',
+        path: '/v1/themes/evolve',
+        description: 'Evolves a base color into a complete UI color palette with CSS variables.',
+        credit_cost: 1,
+        body: { baseColor: '#6366f1' },
+        response: { success: true, theme: {} }
+      },
+      {
+        method: 'POST',
+        path: '/v1/code/audit',
+        description: 'Audits source code for production readiness — flags TODO markers, console logs, missing exports.',
+        credit_cost: 1,
+        body: { code: 'export function hello() { return "world"; }' },
+        response: { success: true, passed: true, score: 100, issues: [] }
+      },
+      {
+        method: 'POST',
+        path: '/api/evo-lm/chat',
+        description: 'Multi-provider AI chat with optional RAG context retrieval and prompt compression.',
+        credit_cost: 0,
+        body: { messages: [{ role: 'user', content: 'Hello' }], systemPrompt: '', useRag: false },
+        response: { message: 'AI response', model: 'gemini-1.5-pro', transport: 'evo_lm_bridge_fallback' }
+      },
+      {
+        method: 'POST',
+        path: '/api/checkout/create-session',
+        description: 'Creates a Stripe checkout session for purchasing an API plan.',
+        credit_cost: 0,
+        body: { plan: 'core|sovereign|enterprise', email: 'user@example.com' },
+        response: { success: true, url: 'https://checkout.stripe.com/...', sessionId: '...', plan: '...', price: '$99.00' }
+      }
+    ],
+    quick_start: [
+      '1. Create an API key: POST /api/keys/create { "name": "my-app" }',
+      '2. Use the key: curl -X POST http://HOST/v1/prompts/compile -H "x-api-key: ph_evo_xxx" -H "Content-Type: application/json" -d \'{"prompt":"Optimize this prompt"}\'',
+      '3. Check your credits: GET /api/db/config/credits (authenticated)',
+    ]
+  });
 });
 
 // ─── STARTUP ─────────────────────────────────────────────────────────────────

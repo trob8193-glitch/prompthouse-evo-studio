@@ -21,6 +21,7 @@ export const useSovereignStore = create((set, get) => ({
   user: null,
   token: getInitialToken(),
   isAuthenticated: !!getInitialToken(),
+  setAuthenticated: (status) => set({ isAuthenticated: status }),
   authLoading: false,
   authError: null,
 

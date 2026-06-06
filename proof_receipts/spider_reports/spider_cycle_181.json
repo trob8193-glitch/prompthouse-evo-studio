@@ -1,30 +1,18 @@
 {
   "cycle": 181,
-  "timestamp": "2026-06-01T21:01:59.075Z",
+  "timestamp": "2026-06-04T12:30:05.085Z",
   "summary": {
-    "total": 92,
-    "critical": 9,
+    "total": 61,
+    "critical": 7,
     "warnings": 38,
-    "info": 45
+    "info": 16
   },
   "issues": [
-    {
-      "file": "scripts\\train_terminal_ui.mjs",
-      "rule": "UNPROTECTED_DAEMON",
-      "severity": "critical",
-      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('train_terminal_ui');"
-    },
     {
       "file": "scripts\\safe-bridge.mjs",
       "rule": "UNPROTECTED_DAEMON",
       "severity": "critical",
       "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('safe-bridge');"
-    },
-    {
-      "file": "scripts\\run_apis_5_mins.mjs",
-      "rule": "UNPROTECTED_DAEMON",
-      "severity": "critical",
-      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('run_apis_5_mins');"
     },
     {
       "file": "scripts\\middleend-watchdog-daemon.mjs",
@@ -420,49 +408,7 @@
       "fix": "Add MCP tool \"spider_memory_deprecate\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/memory/deprecate\")"
     },
     {
-      "file": "scripts/ai_review_gemini.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/ai_review_local.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
       "file": "scripts/bridgeend-watchdog-daemon.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/build_code_executor.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/convert-stubs.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/deep-audit.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/enterprise_audit.mjs",
       "rule": "DEAD_SCRIPT",
       "severity": "info",
       "detail": "Not referenced in package.json scripts",
@@ -476,168 +422,7 @@
       "fix": "Add a run script to package.json or delete if unused."
     },
     {
-      "file": "scripts/gemini-repair.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/generate-handover-report.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/ingest_promptbase.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
       "file": "scripts/middleend-watchdog-daemon.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/nuclear_audit.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/perfect-studio-wiring.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/run_apis_5_mins.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/run_load_test.js",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/singularity_ascension.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/spinecore_status.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/team_repair.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_advanced_evolution.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_autonomy.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_blueprint.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_brain_structure.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_creative_autonomy.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_llm_model_training.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_patterns_and_awareness.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_possibilities.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_precise_cutting.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_terminal_ui.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_ui_generation.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_visuals_and_evolution.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/train_vite_and_connections.mjs",
       "rule": "DEAD_SCRIPT",
       "severity": "info",
       "detail": "Not referenced in package.json scripts",

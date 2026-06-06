@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromptHouse Evo Studio — AI Development API</title>
+  <meta name="description" content="Production-grade AI APIs for prompt compilation, app blueprinting, theme evolution, and code auditing. Multi-provider AI with automatic fallback.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #06080f;
+      --bg-card: #0c1222;
+      --bg-surface: #111827;
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --text-faint: #475569;
+      --accent: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      --green: #4ade80;
+      --amber: #f59e0b;
+      --border: rgba(255,255,255,0.06);
+      --radius: 16px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── HERO ─────────────────────────────────── */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #a5b4fc;
+      margin-bottom: 32px;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      max-width: 780px;
+    }
+
+    h1 .gradient {
+      background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-dim);
+      max-width: 560px;
+      margin-bottom: 48px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: #fff;
+      color: #000;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(255,255,255,0.15);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ─── SECTION ──────────────────────────────── */
+    section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin-bottom: 48px;
+    }
+
+    /* ─── ENDPOINTS ────────────────────────────── */
+    .endpoints {
+      display: grid;
+      gap: 20px;
+    }
+
+    .endpoint {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.2s;
+    }
+    .endpoint:hover { border-color: rgba(99,102,241,0.3); }
+
+    .endpoint-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .method {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      background: rgba(99,102,241,0.15);
+      color: #a5b4fc;
+    }
+
+    .endpoint-path {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .endpoint-cost {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--amber);
+      background: rgba(245,158,11,0.1);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .endpoint-desc {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+
+    .endpoint-example {
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+      color: #94a3b8;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.5;
+    }
+
+    .endpoint-example .key { color: #818cf8; }
+    .endpoint-example .str { color: #4ade80; }
+    .endpoint-example .comment { color: #475569; }
+
+    /* ─── PRICING ──────────────────────────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .plan {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+      position: relative;
+    }
+
+    .plan.featured {
+      border-color: rgba(99,102,241,0.4);
+      box-shadow: 0 0 40px rgba(99,102,241,0.08);
+    }
+
+    .plan-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 14px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      border-radius: 100px;
+      text-transform: uppercase;
+    }
+
+    .plan-name {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .plan-price {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+    .plan-price span { font-size: 16px; color: var(--text-dim); font-weight: 500; }
+
+    .plan-credits {
+      font-size: 13px;
+      color: var(--green);
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .plan-features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+    .plan-features li {
+      font-size: 13px;
+      color: var(--text-dim);
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .plan-features li::before {
+      content: '✓ ';
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .plan .btn { width: 100%; justify-content: center; }
+
+    /* ─── QUICKSTART ───────────────────────────── */
+    .quickstart {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+    }
+
+    .quickstart h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-glow);
+      border: 1px solid rgba(99,102,241,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: #a5b4fc;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+
+    .step-content code {
+      display: block;
+      background: rgba(0,0,0,0.3);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      margin-top: 8px;
+      color: #94a3b8;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* ─── FOOTER ───────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 48px 24px;
+      font-size: 12px;
+      color: var(--text-faint);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    API v1.0 — Live
+  </div>
+  <h1>AI-Powered APIs for<br><span class="gradient">Developers Who Ship</span></h1>
+  <p class="hero-sub">
+    Prompt compilation, app blueprinting, theme evolution, and code auditing — 
+    powered by multi-provider AI with automatic fallback across OpenAI, Gemini, and Anthropic.
+  </p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn btn-primary">Get API Access →</a>
+    <a href="#endpoints" class="btn btn-secondary">View Endpoints</a>
+  </div>
+</div>
+
+<!-- ─── ENDPOINTS ──────────────────────────────── -->
+<section id="endpoints">
+  <div class="section-label">API Reference</div>
+  <h2>Four Production-Ready Endpoints</h2>
+  <p class="section-desc">Each endpoint is credit-gated, rate-limited, and fully documented. Pass your API key via the <code>x-api-key</code> header.</p>
+
+  <div class="endpoints">
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method">POST</span>
+        <span class="endpoint-path">/v1/prompts/compile</span>
+        <span class="endpoint-cost">1 credit</span>
+      </div>
+      <p class="endpoint-desc">Compiles and optimizes raw prompts into dense, production-ready versions using AI. Removes fluff, enforces imperative style, and compresses context.</p>
+      <div class="endpoint-example">curl -X POST https://api.prompthouse.dev/v1/prompts/compile \
+  -H <span class="str">"x-api-key: ph_evo_your_key"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"prompt": "Please help me write a function that sorts an array"}'</span></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method">POST</span>
+        <span class="endpoint-path">/v1/apps/blueprint</span>
+        <span class="endpoint-cost">2 credits</span>
+      </div>
+      <p class="endpoint-desc">Generates a full-stack application architecture blueprint from a name and feature list. Returns file structure, technology recommendations, and module hierarchy.</p>
+      <div class="endpoint-example">curl -X POST https://api.prompthouse.dev/v1/apps/blueprint \
+  -H <span class="str">"x-api-key: ph_evo_your_key"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"name": "TaskFlow", "features": ["auth", "dashboard", "payments"]}'</span></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method">POST</span>
+        <span class="endpoint-path">/v1/themes/evolve</span>
+        <span class="endpoint-cost">1 credit</span>
+      </div>
+      <p class="endpoint-desc">Evolves a base color into a complete UI color palette with CSS variables, semantic token names, and dark/light mode variants.</p>
+      <div class="endpoint-example">curl -X POST https://api.prompthouse.dev/v1/themes/evolve \
+  -H <span class="str">"x-api-key: ph_evo_your_key"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"baseColor": "#6366f1"}'</span></div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method">POST</span>
+        <span class="endpoint-path">/v1/code/audit</span>
+        <span class="endpoint-cost">1 credit</span>
+      </div>
+      <p class="endpoint-desc">Audits source code for production readiness. Flags TODO/FIXME markers, console logging, debugger statements, and missing ESM exports. Returns a 0–100 score.</p>
+      <div class="endpoint-example">curl -X POST https://api.prompthouse.dev/v1/code/audit \
+  -H <span class="str">"x-api-key: ph_evo_your_key"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"code": "export function greet() { return \"Hello\"; }"}'</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRICING ────────────────────────────────── -->
+<section id="pricing">
+  <div class="section-label">Pricing</div>
+  <h2>Simple, Credit-Based Pricing</h2>
+  <p class="section-desc">Buy credits once. Use them across all endpoints. No subscriptions, no hidden fees.</p>
+
+  <div class="pricing-grid">
+    <div class="plan">
+      <div class="plan-name">Core Edition</div>
+      <div class="plan-price">$99 <span>one-time</span></div>
+      <div class="plan-credits">1,000 API credits</div>
+      <ul class="plan-features">
+        <li>All 4 API endpoints</li>
+        <li>Multi-provider AI routing</li>
+        <li>Response caching</li>
+        <li>Standard rate limits</li>
+      </ul>
+      <button class="btn btn-secondary" onclick="checkout('core')">Get Core Access</button>
+    </div>
+
+    <div class="plan featured">
+      <div class="plan-badge">Most Popular</div>
+      <div class="plan-name">Sovereign Pro</div>
+      <div class="plan-price">$299 <span>one-time</span></div>
+      <div class="plan-credits">100,000 API credits</div>
+      <ul class="plan-features">
+        <li>All Core features</li>
+        <li>Priority AI routing</li>
+        <li>RAG context retrieval</li>
+        <li>Prompt compression</li>
+        <li>Higher rate limits</li>
+      </ul>
+      <button class="btn btn-primary" onclick="checkout('sovereign')">Get Sovereign Access</button>
+    </div>
+
+    <div class="plan">
+      <div class="plan-name">Enterprise Foundry</div>
+      <div class="plan-price">$999 <span>one-time</span></div>
+      <div class="plan-credits">500,000 API credits</div>
+      <ul class="plan-features">
+        <li>All Sovereign features</li>
+        <li>SaaS Builder API access</li>
+        <li>Custom model routing</li>
+        <li>Webhook integrations</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="btn btn-secondary" onclick="checkout('enterprise')">Get Enterprise Access</button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── QUICKSTART ─────────────────────────────── -->
+<section>
+  <div class="quickstart">
+    <h3>⚡ Quick Start</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        Purchase a plan above or create a free test key:
+        <code>curl -X POST http://localhost:3001/api/keys/create \
+  -H "Content-Type: application/json" \
+  -d '{"name": "my-test-key"}'</code>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        Make your first API call with the returned key:
+        <code>curl -X POST http://localhost:3001/v1/prompts/compile \
+  -H "x-api-key: ph_evo_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Please write a REST API for user management"}'</code>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        View full API documentation:
+        <code>curl http://localhost:3001/api/docs | python -m json.tool</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>PromptHouse Evo Studio — Sovereign AI Development Platform</p>
+  <p style="margin-top:8px">Built with ☣️ in the Foundry</p>
+</footer>
+
+<script>
+  const BRIDGE_URL = window.location.port === '5173' 
+    ? 'http://127.0.0.1:3001' 
+    : window.location.origin;
+
+  async function checkout(plan) {
+    const email = prompt('Enter your email for API key delivery:');
+    if (!email) return;
+
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/checkout/create-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan, email })
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || 'Failed to create checkout session. Make sure STRIPE_SECRET_KEY is configured.');
+      }
+    } catch (e) {
+      alert('Bridge server not reachable. Start it with: npm run bridge');
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,11 +1,11 @@
 {
   "cycle": 1,
-  "timestamp": "2026-06-02T07:40:29.023Z",
+  "timestamp": "2026-06-04T08:00:02.474Z",
   "summary": {
-    "total": 56,
-    "critical": 4,
+    "total": 61,
+    "critical": 7,
     "warnings": 38,
-    "info": 14
+    "info": 16
   },
   "issues": [
     {
@@ -13,6 +13,24 @@
       "rule": "UNPROTECTED_DAEMON",
       "severity": "critical",
       "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('safe-bridge');"
+    },
+    {
+      "file": "scripts\\middleend-watchdog-daemon.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('middleend-watchdog-daemon');"
+    },
+    {
+      "file": "scripts\\frontend-watchdog-daemon.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('frontend-watchdog-daemon');"
+    },
+    {
+      "file": "scripts\\bridgeend-watchdog-daemon.mjs",
+      "rule": "UNPROTECTED_DAEMON",
+      "severity": "critical",
+      "fix": "Add: import { CrashProofEngine } from '../src/core/autonomy/CrashProofEngine.js'; CrashProofEngine.initialize('bridgeend-watchdog-daemon');"
     },
     {
       "file": "scripts\\audit-platform-readiness.mjs",
@@ -390,7 +408,21 @@
       "fix": "Add MCP tool \"spider_memory_deprecate\" to quadbrain-mcp-server.mjs calling fetchBridge(\"/memory/deprecate\")"
     },
     {
-      "file": "scripts/verify-studio.mjs",
+      "file": "scripts/bridgeend-watchdog-daemon.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/frontend-watchdog-daemon.mjs",
+      "rule": "DEAD_SCRIPT",
+      "severity": "info",
+      "detail": "Not referenced in package.json scripts",
+      "fix": "Add a run script to package.json or delete if unused."
+    },
+    {
+      "file": "scripts/middleend-watchdog-daemon.mjs",
       "rule": "DEAD_SCRIPT",
       "severity": "info",
       "detail": "Not referenced in package.json scripts",

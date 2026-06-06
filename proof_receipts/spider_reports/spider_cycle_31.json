@@ -1,11 +1,11 @@
 {
   "cycle": 31,
-  "timestamp": "2026-06-02T08:22:54.120Z",
+  "timestamp": "2026-06-04T08:45:02.790Z",
   "summary": {
-    "total": 62,
+    "total": 61,
     "critical": 7,
     "warnings": 38,
-    "info": 17
+    "info": 16
   },
   "issues": [
     {
@@ -423,13 +423,6 @@
     },
     {
       "file": "scripts/middleend-watchdog-daemon.mjs",
-      "rule": "DEAD_SCRIPT",
-      "severity": "info",
-      "detail": "Not referenced in package.json scripts",
-      "fix": "Add a run script to package.json or delete if unused."
-    },
-    {
-      "file": "scripts/verify-studio.mjs",
       "rule": "DEAD_SCRIPT",
       "severity": "info",
       "detail": "Not referenced in package.json scripts",
