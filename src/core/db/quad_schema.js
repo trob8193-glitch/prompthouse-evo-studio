@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 
-const DB_PATH = path.resolve('./prompthouse.db');
+const DB_PATH = process.env.DATA_DIR ? path.join(process.env.DATA_DIR, 'prompthouse.db') : path.resolve('./prompthouse.db');
 const db = new Database(DB_PATH);
 
 const SCHEMA = `

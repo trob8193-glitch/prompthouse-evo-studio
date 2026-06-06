@@ -60,6 +60,7 @@ import {
 } from './src/native-prompt-packet.js';
 import { hasExplicitOwnerApproval, getApprovalBlockReason } from './src/owner-approval.js';
 import { runNuclearTruthAudit } from './src/core/audit/NuclearTruthAudit.js';
+import { RecoveryWaterfall } from './src/core/automation/recovery_waterfall.js';
 
 dotenv.config({ override: true });
 
@@ -255,6 +256,7 @@ function ensureGatewayBootstrapData() {
     { method: 'POST', path: '/v1/apps/blueprint', provider_allowed: 'any', required_plan: 'paid', credit_cost: 2 },
     { method: 'POST', path: '/v1/themes/evolve', provider_allowed: 'any', required_plan: 'paid', credit_cost: 1 },
     { method: 'POST', path: '/v1/code/audit', provider_allowed: 'any', required_plan: 'paid', credit_cost: 1 },
+    { method: 'POST', path: '/v1/code/recover', provider_allowed: 'any', required_plan: 'paid', credit_cost: 5 },
     { method: 'POST', path: '/api/evo-eyes/team-run', provider_allowed: 'any', required_plan: 'paid', credit_cost: 2 },
     { method: 'POST', path: '/api/nightforge/cycle', provider_allowed: 'any', required_plan: 'paid', credit_cost: 2 },
   ];
@@ -1574,6 +1576,7 @@ app.disable('x-powered-by');
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
+    if (origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1')) return callback(null, true);
     if (CORS_ORIGINS.length === 0) return callback(null, true);
     if (CORS_ORIGINS.includes(origin)) return callback(null, true);
     return callback(new Error('Origin not allowed by CORS policy.'));
@@ -3011,6 +3014,22 @@ app.post('/v1/code/audit', validateApiKey, async (req, res) => {
   }
 });
 
+app.post('/v1/code/recover', validateApiKey, async (req, res) => {
+  const { code } = req.body;
+  try {
+    await CostFirewall.authorize(req.orgId, '/v1/code/recover');
+    // Ensure we deduct the premium 5 credits
+    await CostFirewall.deduct(req.orgId, '/v1/code/recover', 5);
+    
+    const result = await RecoveryWaterfall.execute(code, ai);
+    res.json(result);
+  } catch (e) {
+    // Attempt refund if critical crash happens before response
+    try { await CostFirewall.deduct(req.orgId, '/v1/code/recover', -5); } catch (e2) {}
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ─── DYNAMIC API LOADER (Sovereign Genesis) ──────────────────────────────────
 
 const API_DIR = join(process.cwd(), 'generated_apis');
@@ -3034,9 +3053,7 @@ async function loadGeneratedApis() {
   }
 }
 
-await loadGeneratedApis();
-
-// ─── API GENERATOR (Sovereign Genesis) ──────────────────────────────────────
+// (API GENERATOR routes remain here)
 
 app.post('/api/foundry/generate-api', maybeRequireAuthOrMaster, writeRateLimit, enforceJsonObjectBody, async (req, res) => {
   const { name, description, prompt, type } = req.body;
@@ -3758,6 +3775,8 @@ app.get('/api/docs', (req, res) => {
 
 // ─── STARTUP ─────────────────────────────────────────────────────────────────
 
+// Load generated APIs last so their gateway middleware doesn't intercept public routes
+await loadGeneratedApis();
 
 import { attachWebSocketServer } from './src/server/utils/ws-helpers.js';
 

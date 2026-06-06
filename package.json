@@ -9,7 +9,7 @@
     "build": "vite build",
     "test": "vitest run",
     "launch:proof": "node scripts/launch-proof.mjs",
-    "start": "node promptbridge-server-recovery.js",
+    "start": "node promptbridge-server.js",
     "bridge": "node promptbridge-server.js",
     "bridge:legacy": "node promptbridge-server.js",
     "preview": "vite preview",

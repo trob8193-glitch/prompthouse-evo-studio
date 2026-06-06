@@ -411,7 +411,7 @@
 <!-- ─── ENDPOINTS ──────────────────────────────── -->
 <section id="endpoints">
   <div class="section-label">API Reference</div>
-  <h2>Four Production-Ready Endpoints</h2>
+  <h2>Five Production-Ready Endpoints</h2>
   <p class="section-desc">Each endpoint is credit-gated, rate-limited, and fully documented. Pass your API key via the <code>x-api-key</code> header.</p>
 
   <div class="endpoints">
@@ -465,6 +465,19 @@
   -H <span class="str">"x-api-key: ph_evo_your_key"</span> \
   -H <span class="str">"Content-Type: application/json"</span> \
   -d <span class="str">'{"code": "export function greet() { return \"Hello\"; }"}'</span></div>
+    </div>
+
+    <div class="endpoint" style="border-color: rgba(99,102,241,0.5); box-shadow: 0 0 20px rgba(99,102,241,0.1);">
+      <div class="endpoint-header">
+        <span class="method">POST</span>
+        <span class="endpoint-path">/v1/code/recover</span>
+        <span class="endpoint-cost" style="background: rgba(99,102,241,0.2); color: #a5b4fc;">5 credits</span>
+      </div>
+      <p class="endpoint-desc"><strong>Project Rescue API:</strong> The ultimate cure for AI hallucinatory drift. Sends broken code through a 3-step waterfall (Audit -> Repair Twin -> Verification) and returns proven, working code.</p>
+      <div class="endpoint-example">curl -X POST https://api.prompthouse.dev/v1/code/recover \
+  -H <span class="str">"x-api-key: ph_evo_your_key"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"code": "broken code string here"}'</span></div>
     </div>
   </div>
 </section>
