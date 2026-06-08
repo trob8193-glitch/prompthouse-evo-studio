@@ -11,8 +11,12 @@
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
 
+const runtimeBridgePort = process.env.BRIDGE_PORT;
 dotenv.config({ path: '.env.agent', override: true });
 dotenv.config({ override: true });
+if (runtimeBridgePort) {
+  process.env.BRIDGE_PORT = runtimeBridgePort;
+}
 
 export class EvoAgent {
   constructor(agentId = null) {

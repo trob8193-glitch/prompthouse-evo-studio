@@ -5,19 +5,20 @@ class PromptEndsApi {
   PromptEndsApi({http.Client? client}) : _client = client ?? http.Client();
 
   final http.Client _client;
-  static const baseUrl = String.fromEnvironment('PROMPTENDS_BASE_URL', defaultValue: 'http://localhost:8000');
+  // PHASE 2: Updated to connect to PromptBridge backend on port 3001
+  static const baseUrl = String.fromEnvironment('PROMPTENDS_BASE_URL', defaultValue: 'http://localhost:3001/api/promptshell');
 
   Future<Map<String, dynamic>> health() => _getMap('/health');
-  Future<List<dynamic>> connectors() => _getList('/link/connectors');
-  Future<List<dynamic>> proofCards() => _getList('/api/proof-cards');
-  Future<List<dynamic>> artifacts() => _getList('/api/artifacts');
+  Future<List<dynamic>> connectors() => _getEnvelopeList('/connectors', 'connectors');
+  Future<List<dynamic>> proofCards() => _getEnvelopeList('/proof-cards', 'proofCards');
+  Future<List<dynamic>> artifacts() => _getEnvelopeList('/artifacts', 'artifacts');
 
   Future<Map<String, dynamic>> handshake(String connectorId) {
-    return _postMap('/link/connectors/$connectorId/handshake', {});
+    return _postMap('/connectors/$connectorId/handshake', {});
   }
 
   Future<Map<String, dynamic>> manifest({required String seedIntent}) {
-    return _postMap('/api/manifest/run', {
+    return _postMap('/manifest/run', {
       'workspaceId': 'local-workspace',
       'projectId': 'local-project',
       'seedIntent': seedIntent,
@@ -31,11 +32,14 @@ class PromptEndsApi {
     return _decodeMap(response);
   }
 
-  Future<List<dynamic>> _getList(String path) async {
+  Future<List<dynamic>> _getEnvelopeList(String path, String key) async {
     final response = await _client.get(Uri.parse('$baseUrl$path'));
     final decoded = _decode(response);
     if (decoded is List) return decoded;
-    throw Exception('Expected list from $path but got ${decoded.runtimeType}');
+    if (decoded is Map<String, dynamic> && decoded[key] is List) {
+      return decoded[key] as List<dynamic>;
+    }
+    throw Exception('Expected list field "$key" from $path but got ${decoded.runtimeType}');
   }
 
   Future<Map<String, dynamic>> _postMap(String path, Map<String, dynamic> body) async {

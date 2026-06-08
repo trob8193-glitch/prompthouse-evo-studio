@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useSovereignStore } from '../store.js';
 import { universalSend } from '../lib/universal-transport.js';
+import AgentChatPanel from '../components/AgentChatPanel.jsx';
 
 /**
  * EVO COPILOT — AI IDE ASSISTANT (V3)
@@ -18,6 +19,7 @@ export default function SovereignChat() {
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const [activeModel, setActiveModel] = useState('Evo Omni-Router');
+  const [activeSurface, setActiveSurface] = useState('copilot');
   
   const messagesEndRef = useRef(null);
   
@@ -140,17 +142,42 @@ export default function SovereignChat() {
             </div>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => setActivePage('settings')}
-          className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors"
-        >
-          <Settings2 className="w-5 h-5" />
-        </button>
+        <div className="flex items-center gap-2">
+          <div className="flex rounded-lg border border-gray-800 bg-[#111116] p-1">
+            {[
+              ['copilot', 'Copilot'],
+              ['agent', 'Agent'],
+            ].map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setActiveSurface(id)}
+                className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${
+                  activeSurface === id ? 'bg-emerald-500 text-black' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => setActivePage('settings')}
+            className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors"
+          >
+            <Settings2 className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
-      {/* CHAT MESSAGES */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
+      {activeSurface === 'agent' ? (
+        <div className="flex-1 overflow-hidden p-4">
+          <AgentChatPanel />
+        </div>
+      ) : (
+      <>
+        {/* CHAT MESSAGES */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
         {messages.map((msg, idx) => (
           <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[85%] rounded-2xl p-4 shadow-xl ${
@@ -184,10 +211,10 @@ export default function SovereignChat() {
           </div>
         )}
         <div ref={messagesEndRef} />
-      </div>
+        </div>
 
-      {/* INPUT AREA */}
-      <div className="p-4 bg-[#0c0c0f] border-t border-gray-800/50">
+        {/* INPUT AREA */}
+        <div className="p-4 bg-[#0c0c0f] border-t border-gray-800/50">
         
         {/* Context Badge */}
         {activeFile && (
@@ -217,7 +244,9 @@ export default function SovereignChat() {
         <div className="text-center mt-3">
             <span className="text-[10px] font-medium text-gray-600 uppercase tracking-widest">Shift + Enter for new line • Local Bridge Active</span>
         </div>
-      </div>
+        </div>
+      </>
+      )}
     </div>
   );
 }

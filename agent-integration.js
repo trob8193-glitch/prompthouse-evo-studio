@@ -4,6 +4,7 @@
  */
 
 import { EvoAgent } from './agent-runtime.js';
+import { Router } from 'express';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.agent' });
@@ -13,7 +14,7 @@ let agentInstance = null;
 /**
  * Initialize the agent on first use
  */
-function getEvoAgent() {
+export function getEvoAgent() {
   if (!agentInstance) {
     try {
       agentInstance = new EvoAgent(process.env.AGENT_ID);
@@ -24,23 +25,44 @@ function getEvoAgent() {
   return agentInstance;
 }
 
+export function getAgentConfigStatus() {
+  return {
+    configured: Boolean(process.env.AGENT_ID && process.env.OPENAI_API_KEY),
+    hasAgentId: Boolean(process.env.AGENT_ID),
+    hasOpenAiKey: Boolean(process.env.OPENAI_API_KEY),
+  };
+}
+
 /**
- * Agent integration routes
- * Add these to your Express app in promptbridge-server.js:
+ * Agent integration routes using Express Router
+ * Add to promptbridge-server.js:
  * 
  * import { setupAgentRoutes } from './agent-integration.js';
  * setupAgentRoutes(app);
  */
-export function setupAgentRoutes(app) {
+export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
+  const router = Router();
+
   /**
    * Health check for agent
    */
-  app.get('/api/agent/health', (req, res) => {
+  router.get('/health', (req, res) => {
+    const configStatus = getAgentConfigStatus();
+    if (!configStatus.configured && agentFactory === getEvoAgent) {
+      return res.json({
+        success: true,
+        status: 'needs_configuration',
+        configured: false,
+        ...configStatus,
+      });
+    }
+
     try {
-      const agent = getEvoAgent();
+      const agent = agentFactory();
       res.json({
         success: true,
         status: 'ready',
+        configured: true,
         agentId: agent.agentId,
         threadId: agent.threadId,
       });
@@ -58,7 +80,7 @@ export function setupAgentRoutes(app) {
    * POST /api/agent/chat
    * Body: { "message": "your prompt here" }
    */
-  app.post('/api/agent/chat', async (req, res) => {
+  router.post('/chat', async (req, res) => {
     const { message } = req.body;
 
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
@@ -69,11 +91,12 @@ export function setupAgentRoutes(app) {
     }
 
     try {
-      const agent = getEvoAgent();
+      const agent = agentFactory();
       const response = await agent.chat(message, { verbose: false });
 
       res.json({
         success: true,
+        response,
         message: response,
         threadId: agent.threadId,
         timestamp: new Date().toISOString(),
@@ -92,9 +115,9 @@ export function setupAgentRoutes(app) {
    * Get current thread
    * GET /api/agent/thread
    */
-  app.get('/api/agent/thread', (req, res) => {
+  router.get('/thread', (req, res) => {
     try {
-      const agent = getEvoAgent();
+      const agent = agentFactory();
       res.json({
         success: true,
         threadId: agent.threadId,
@@ -113,9 +136,9 @@ export function setupAgentRoutes(app) {
    * Reset thread
    * POST /api/agent/reset
    */
-  app.post('/api/agent/reset', (req, res) => {
+  router.post('/reset', (req, res) => {
     try {
-      const agent = getEvoAgent();
+      const agent = agentFactory();
       agent.threadId = null;
       agent.conversationHistory = [];
       res.json({
@@ -134,9 +157,9 @@ export function setupAgentRoutes(app) {
    * Get conversation history
    * GET /api/agent/history
    */
-  app.get('/api/agent/history', (req, res) => {
+  router.get('/history', (req, res) => {
     try {
-      const agent = getEvoAgent();
+      const agent = agentFactory();
       const limit = parseInt(req.query.limit) || 50;
       res.json({
         success: true,
@@ -151,6 +174,7 @@ export function setupAgentRoutes(app) {
     }
   });
 
+  app.use('/api/agent', router);
   console.log('✅ Agent routes registered: /api/agent/*');
 }
 

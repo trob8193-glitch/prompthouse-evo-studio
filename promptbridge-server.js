@@ -52,7 +52,11 @@ import {
 import { hasExplicitOwnerApproval, getApprovalBlockReason } from './src/owner-approval.js';
 import { runNuclearTruthAudit } from './src/core/audit/NuclearTruthAudit.js';
 
+const runtimeBridgePort = process.env.BRIDGE_PORT;
 dotenv.config({ override: true });
+if (runtimeBridgePort) {
+  process.env.BRIDGE_PORT = runtimeBridgePort;
+}
 
 // Initialize database
 initDatabase();
@@ -79,12 +83,29 @@ import registerEngineDashboardRoutes from './generated_apis/engine_dashboard_rou
 import registerEvoLlmRoutes from './generated_apis/evo_llm_routes.js';
 import registerModuleMaturityRoutes from './generated_apis/module_maturity_routes.js';
 import registerSpineCoreRoutes from './generated_apis/spinecore_routes.js';
+import { setupAgentRoutes, getEvoAgent } from './agent-integration.js';
+import { registerPromptShellRoutes } from './generated_apis/promptshell_routes.js';
+import registerExecutionRoutes from './generated_apis/execution_routes.js';
+import { RealExecutionPipeline } from './lib/execution/pipeline.js';
 
 ensureEvolutionSchema();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+// Global logging middleware for /api/ requests
+app.use(/^\/api\//, (req, res, next) => {
+  console.log(`📍 [API Request] ${req.method} ${req.path}`);
+  next();
+});
+
+const evoAgent = {
+  chat: async (message, options = {}) => getEvoAgent().chat(message, options),
+};
+const executionPipeline = new RealExecutionPipeline({ evoAgent, db });
+
+setupAgentRoutes(app);
 registerEmulatorRoutes(app);
 registerEvoBridgeRoutes(app);
 registerPlatformSentinelRoutes(app);
@@ -105,6 +126,8 @@ registerStripeCheckoutBrowserRunRoutes(app);
 registerVercelPreviewDeployRoutes(app);
 registerHandoverRoutes(app);
 registerStudioCoreRoutes(app);
+registerPromptShellRoutes(app, { db, evoAgent });
+registerExecutionRoutes(app, { pipeline: executionPipeline });
 app.use('/api/launch-pilot', launchPilotRoutes);
 app.get('/api/status', (req, res) => {
   const ledgerStats = db.prepare('SELECT SUM(iq_gain) as total_gain FROM sovereign_ledger').get();

@@ -4,5 +4,11 @@
         "*.svg": "default",
         "*.sprite": "d2rmodding.spriteViewer"
     },
-    "python.terminal.useEnvFile": true
+    "python.terminal.useEnvFile": true,
+    "chat.tools.terminal.autoApprove": {
+        "/^npm install --legacy-peer-deps$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
 }

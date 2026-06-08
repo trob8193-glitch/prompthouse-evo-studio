@@ -25,7 +25,9 @@ const mountedRouteFiles = [
   'generated_apis/engine_dashboard_routes.js',
   'generated_apis/evo_llm_routes.js',
   'generated_apis/module_maturity_routes.js',
-  'generated_apis/spinecore_routes.js'
+  'generated_apis/spinecore_routes.js',
+  'generated_apis/promptshell_routes.js',
+  'generated_apis/execution_routes.js'
 ];
 
 function read(rel) {
