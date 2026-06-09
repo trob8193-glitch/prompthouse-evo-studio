@@ -1,5 +1,5 @@
 import React from 'react';
-import { Brain, CheckCircle2, FileJson, Play, RefreshCw, RotateCcw, ShieldAlert, Trophy } from 'lucide-react';
+import { Brain, CheckCircle2, FileJson, Globe2, PackageCheck, Play, RefreshCw, RotateCcw, ShieldAlert, Trophy } from 'lucide-react';
 import { safeFetchBridge } from '../config/bridge-config.js';
 
 const card = { background: 'rgba(15,23,42,.84)', border: '1px solid rgba(56,189,248,.22)', borderRadius: 18, padding: 18, boxShadow: '0 18px 60px rgba(0,0,0,.28)' };
@@ -12,22 +12,28 @@ export default function EvoLlmTrainingDashboard() {
   const [plans, setPlans] = React.useState([]);
   const [runs, setRuns] = React.useState([]);
   const [versions, setVersions] = React.useState([]);
+  const [globalNode, setGlobalNode] = React.useState(null);
   const [message, setMessage] = React.useState('');
   const [busy, setBusy] = React.useState(false);
+  const [globalConsent, setGlobalConsent] = React.useState(false);
+  const [dataRights, setDataRights] = React.useState(false);
+  const [includeExamples, setIncludeExamples] = React.useState(false);
 
   const refresh = React.useCallback(async () => {
     setBusy(true);
     try {
-      const [s, p, r, v] = await Promise.all([
+      const [s, p, r, v, g] = await Promise.all([
         safeFetchBridge('/api/evo-llm/status'),
         safeFetchBridge('/api/evo-llm/plans'),
         safeFetchBridge('/api/evo-llm/runs'),
-        safeFetchBridge('/api/evo-llm/versions')
+        safeFetchBridge('/api/evo-llm/versions'),
+        safeFetchBridge('/api/evo-llm/global-node/status')
       ]);
       if (s.ok) setStatus(s.data.status);
       if (p.ok) setPlans(p.data.plans || []);
       if (r.ok) setRuns(r.data.runs || []);
       if (v.ok) setVersions(v.data.versions || []);
+      if (g.ok) setGlobalNode(g.data.status);
       setMessage('Evo LLM dashboard refreshed.');
     } finally { setBusy(false); }
   }, []);
@@ -86,6 +92,23 @@ export default function EvoLlmTrainingDashboard() {
     } finally { setBusy(false); }
   };
 
+  const packageGlobalContribution = async () => {
+    setBusy(true);
+    try {
+      const result = await post('/api/evo-llm/global-node/package', {
+        includeExamples,
+        scope: 'global-corpus',
+        consent: {
+          globalContribution: globalConsent,
+          dataRightsConfirmed: dataRights,
+          privateProviderTraining: true
+        }
+      });
+      setMessage(result.ok ? `Global packet: ${result.data.packet?.truthState}` : `ERROR: ${result.error}`);
+      await refresh();
+    } finally { setBusy(false); }
+  };
+
   return <div style={{ display: 'flex', flexDirection: 'column', gap: 18, color: '#e2e8f0' }}>
     <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, alignItems: 'center' }}>
       <div><h1 style={{ margin: 0, fontSize: 28, fontWeight: 950 }}>Evo LLM Training Orchestrator</h1><p style={{ color: '#94a3b8', maxWidth: 840 }}>Approval-gated dataset preparation, training receipts, model-card versioning, provider blocking, cost firewall checks, promotion, and rollback. It improves the pipeline without pretending model weights trained themselves in a broom closet. 🧠</p></div>
@@ -108,6 +131,21 @@ export default function EvoLlmTrainingDashboard() {
         <button style={button} onClick={rollback} disabled={busy}><RotateCcw size={15}/>Rollback Active</button>
       </div>
       {message && <p style={{ color: message.startsWith('ERROR') ? '#fecaca' : '#a5f3fc', fontWeight: 800 }}>{message}</p>}
+    </div>
+    <div style={card}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <div>
+          <h2 style={{ marginTop: 0 }}><Globe2 size={18}/> Global Node</h2>
+          <Badge tone={globalNode?.truthState?.includes('READY') ? 'green' : 'amber'}>{globalNode?.truthState || 'NOT_LOADED'}</Badge>
+        </div>
+        <button style={button} onClick={packageGlobalContribution} disabled={busy}><PackageCheck size={15}/>Package Contribution</button>
+      </div>
+      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 14, color: '#cbd5e1', fontSize: 12, fontWeight: 800 }}>
+        <label><input type="checkbox" checked={globalConsent} onChange={event => setGlobalConsent(event.target.checked)} /> Opt in global contribution</label>
+        <label><input type="checkbox" checked={dataRights} onChange={event => setDataRights(event.target.checked)} /> Data rights confirmed</label>
+        <label><input type="checkbox" checked={includeExamples} onChange={event => setIncludeExamples(event.target.checked)} /> Include redacted examples</label>
+      </div>
+      {(globalNode?.blockers || []).slice(0, 6).map((blocker) => <div key={blocker} style={{ marginTop: 8, color: '#fcd34d', fontSize: 12 }}>{blocker}</div>)}
     </div>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
       <div style={card}><h2>Latest Plans</h2>{plans.slice(0,5).map(plan => <pre key={plan.id} style={{ whiteSpace: 'pre-wrap', background: '#020617', padding: 10, borderRadius: 10, fontSize: 10 }}>{JSON.stringify({ id: plan.id, provider: plan.provider, truthState: plan.truthState, risk: plan.risk }, null, 2)}</pre>)}</div>

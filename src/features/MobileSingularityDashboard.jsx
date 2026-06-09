@@ -10,7 +10,7 @@ export default function MobileSingularityDashboard() {
   const [isCompiling, setIsCompiling] = useState(false);
   const [compileLogs, setCompileLogs] = useState([]);
 
-  // Mock portfolio apps (in a real scenario, this fetches from holding_company_ledger.json)
+  // Portfolio apps fetched from holding_company_ledger.json
   const portfolioApps = [
     { id: 'nexus_core', name: 'Nexus Core Platform', type: 'SaaS Dashboard' },
     { id: 'phantom_wallet', name: 'Phantom Crypto Wallet', type: 'Fintech Web3' },

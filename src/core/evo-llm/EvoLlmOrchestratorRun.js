@@ -43,7 +43,14 @@ function providerBlockers({ plan, approval, providerGate, costGate }) {
   ].flat().filter(Boolean);
 }
 
-export async function runEvoTrainPlan({ rootDir = process.cwd(), planId, fetchImpl = globalThis.fetch } = {}) {
+export async function runEvoTrainPlan({
+  rootDir = process.cwd(),
+  planId,
+  providerApiKey = null,
+  maxTrainingBudgetUsd = null,
+  allowProviderTraining = null,
+  fetchImpl = globalThis.fetch
+} = {}) {
   if (!planId) throw new Error('planId is required to run a training plan.');
   const paths = getEvoLlmOrchestratorPaths({ rootDir });
   const plan = readJsonSafe(path.join(paths.plans, `${planId}.json`), null);
@@ -52,7 +59,13 @@ export async function runEvoTrainPlan({ rootDir = process.cwd(), planId, fetchIm
   ensureDir(paths.runs);
 
   if (plan.provider !== 'local-dataset') {
-    const providerGate = evaluateEvoProviderGate({ provider: plan.provider, model: plan.model });
+    const providerGate = evaluateEvoProviderGate({
+      provider: plan.provider,
+      model: plan.model,
+      providerApiKey,
+      maxTrainingBudgetUsd,
+      allowProviderTraining
+    });
     const costGate = evaluateEvoLlmTrainingCostGate({
       provider: plan.provider,
       examples: Number(plan.dataset?.trainCount || 0) + Number(plan.dataset?.evalCount || 0)
@@ -79,6 +92,7 @@ export async function runEvoTrainPlan({ rootDir = process.cwd(), planId, fetchIm
     try {
       const providerResult = await submitProviderFineTuneJob({
         provider: plan.provider,
+        apiKey: providerApiKey || process.env.OPENAI_API_KEY,
         model: plan.model || providerGate.model,
         trainJsonl: evoPaths.trainJsonl,
         evalJsonl: evoPaths.evalJsonl,

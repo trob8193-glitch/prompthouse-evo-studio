@@ -12,6 +12,7 @@ const CHECKS = [
   { id: 'test', label: 'Vitest suite', command: 'npm test', localRequired: true },
   { id: 'route_drift', label: 'Route drift audit', command: 'node scripts/audit-route-drift.mjs', localRequired: true },
   { id: 'dead_surfaces', label: 'Dead surface audit', command: 'npm run audit:dead-surfaces', localRequired: true },
+  { id: 'edge_io', label: 'Edge I/O audit', command: 'npm run audit:edge-io', localRequired: false },
   { id: 'platform_strict', label: 'Platform strict readiness', command: 'npm run platform:strict', localRequired: false },
   { id: 'provider_proof', label: 'Provider activation proof', command: 'npm run proof:providers', localRequired: false },
   { id: 'evo_train_status', label: 'Evo LLM training status', command: 'npm run evo:train-status', localRequired: false },

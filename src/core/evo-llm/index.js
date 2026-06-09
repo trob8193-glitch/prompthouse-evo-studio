@@ -7,3 +7,4 @@ export * from './EvoLlmOrchestratorRun.js';
 export * from './EvoLlmProviderAdapter.js';
 export * from './EvoLlmCostGate.js';
 export * from './EvoLlmRegistry.js';
+export * from './EvoLlmGlobalNode.js';

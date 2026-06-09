@@ -31,15 +31,34 @@ export function getEvoProviderConfig({ env = process.env } = {}) {
   };
 }
 
-export function evaluateEvoProviderGate({ provider = 'local-dataset', env = process.env, model = null } = {}) {
+export function evaluateEvoProviderGate({
+  provider = 'local-dataset',
+  env = process.env,
+  model = null,
+  providerApiKey = null,
+  providerKeyPresent = false,
+  maxTrainingBudgetUsd = null,
+  allowProviderTraining = null
+} = {}) {
   const config = getEvoProviderConfig({ env });
+  const transientCredentialPresent = Boolean(providerApiKey || providerKeyPresent);
+  const resolvedBudget = maxTrainingBudgetUsd === null || maxTrainingBudgetUsd === undefined
+    ? config.maxTrainingBudgetUsd
+    : Number(maxTrainingBudgetUsd);
+  const resolvedAllow = allowProviderTraining === null || allowProviderTraining === undefined
+    ? config.allowProviderTraining
+    : allowProviderTraining === true || allowProviderTraining === 'true';
   const external = !isLocalProvider(provider);
   const resolvedModel = model || config.model;
   const supportedOk = !external || provider === 'openai';
-  const credentialOk = provider === 'openai' ? config.hasOpenAiKey : provider === 'gemini' ? config.hasGeminiKey : !external;
+  const credentialOk = provider === 'openai'
+    ? (config.hasOpenAiKey || transientCredentialPresent)
+    : provider === 'gemini'
+      ? (config.hasGeminiKey || transientCredentialPresent)
+      : !external;
   const modelOk = !external || Boolean(resolvedModel);
-  const budgetOk = !external || config.maxTrainingBudgetUsd > 0;
-  const allowOk = !external || config.allowProviderTraining === true;
+  const budgetOk = !external || resolvedBudget > 0;
+  const allowOk = !external || resolvedAllow === true;
   const allowed = !external || (supportedOk && credentialOk && modelOk && budgetOk && allowOk);
   return {
     provider,
@@ -47,7 +66,19 @@ export function evaluateEvoProviderGate({ provider = 'local-dataset', env = proc
     allowed,
     truthState: allowed ? 'PROVIDER_GATE_ALLOWED' : 'PROVIDER_GATE_BLOCKED',
     model: external ? resolvedModel : null,
-    checks: { supportedOk, credentialOk, modelOk, budgetOk, allowOk },
+    checks: {
+      supportedOk,
+      credentialOk,
+      modelOk,
+      budgetOk,
+      allowOk,
+      credentialSource: transientCredentialPresent
+        ? 'user_provided_ephemeral'
+        : (provider === 'openai' && config.hasOpenAiKey) || (provider === 'gemini' && config.hasGeminiKey)
+          ? 'environment'
+          : 'missing',
+      maxTrainingBudgetUsd: external ? resolvedBudget : 0
+    },
     blockedReasons: allowed ? [] : [
       !supportedOk ? `Provider fine-tuning adapter is not implemented for ${provider}.` : null,
       !credentialOk ? `Missing credentials for ${provider}.` : null,

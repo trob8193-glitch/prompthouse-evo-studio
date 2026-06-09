@@ -1,8 +1,10 @@
 import {
   approveEvoTrainPlan,
+  buildGlobalContributionPacket,
   createEvoTrainPlan,
   evaluateEvoLlmTrainingCostGate,
   evaluateEvoProviderGate,
+  getGlobalNodeStatus,
   getEvoTrainRun,
   getEvoTrainStatus,
   listEvoModelVersions,
@@ -11,6 +13,7 @@ import {
   promoteEvoModelVersion,
   rollbackEvoModelVersion,
   runEvoTrainPlan,
+  submitGlobalContributionPacket,
   syncEvoTrainRun,
 } from '../src/core/evo-llm/index.js';
 
@@ -34,7 +37,18 @@ export default function registerEvoLlmRoutes(app) {
   });
 
   app.post('/api/evo-llm/plan', (req, res) => {
-    try { ok(res, createEvoTrainPlan({ provider: req.body?.provider || 'local-dataset', objective: req.body?.objective || undefined, model: req.body?.model || null })); } catch (error) { fail(res, error); }
+    try {
+      ok(res, createEvoTrainPlan({
+        provider: req.body?.provider || 'local-dataset',
+        objective: req.body?.objective || undefined,
+        model: req.body?.model || null,
+        providerApiKey: req.body?.providerApiKey || null,
+        providerKeyPresent: Boolean(req.body?.providerKeyPresent),
+        maxTrainingBudgetUsd: req.body?.maxTrainingBudgetUsd ?? null,
+        allowProviderTraining: req.body?.allowProviderTraining ?? null,
+        contributionMode: req.body?.contributionMode || 'private'
+      }));
+    } catch (error) { fail(res, error); }
   });
 
   app.post('/api/evo-llm/approve', (req, res) => {
@@ -42,7 +56,12 @@ export default function registerEvoLlmRoutes(app) {
   });
 
   app.post('/api/evo-llm/run', asyncRoute(async (req, res) => {
-    ok(res, await runEvoTrainPlan({ planId: req.body?.planId }));
+    ok(res, await runEvoTrainPlan({
+      planId: req.body?.planId,
+      providerApiKey: req.body?.providerApiKey || null,
+      maxTrainingBudgetUsd: req.body?.maxTrainingBudgetUsd ?? null,
+      allowProviderTraining: req.body?.allowProviderTraining ?? null
+    }));
   }));
 
   app.get('/api/evo-llm/runs', (req, res) => {
@@ -74,10 +93,42 @@ export default function registerEvoLlmRoutes(app) {
   });
 
   app.get('/api/evo-llm/provider-gate', (req, res) => {
-    try { ok(res, { gate: evaluateEvoProviderGate({ provider: req.query.provider || 'local-dataset' }) }); } catch (error) { fail(res, error); }
+    try {
+      ok(res, {
+        gate: evaluateEvoProviderGate({
+          provider: req.query.provider || 'local-dataset',
+          providerKeyPresent: req.query.providerKeyPresent === 'true',
+          maxTrainingBudgetUsd: req.query.maxTrainingBudgetUsd ?? null,
+          allowProviderTraining: req.query.allowProviderTraining ?? null
+        })
+      });
+    } catch (error) { fail(res, error); }
   });
 
   app.get('/api/evo-llm/cost-gate', (req, res) => {
     try { ok(res, { gate: evaluateEvoLlmTrainingCostGate({ provider: req.query.provider || 'local-dataset', examples: Number(req.query.examples || 0) }) }); } catch (error) { fail(res, error); }
   });
+
+  app.get('/api/evo-llm/global-node/status', (req, res) => {
+    try { ok(res, { status: getGlobalNodeStatus() }); } catch (error) { fail(res, error); }
+  });
+
+  app.post('/api/evo-llm/global-node/package', (req, res) => {
+    try {
+      ok(res, buildGlobalContributionPacket({
+        contributor: req.body?.contributor || 'local-copy',
+        scope: req.body?.scope || 'global-corpus',
+        includeExamples: req.body?.includeExamples === true,
+        consent: req.body?.consent || {}
+      }));
+    } catch (error) { fail(res, error); }
+  });
+
+  app.post('/api/evo-llm/global-node/submit', asyncRoute(async (req, res) => {
+    ok(res, await submitGlobalContributionPacket({
+      packetId: req.body?.packetId || null,
+      hubUrl: req.body?.hubUrl || process.env.GLOBAL_EVO_HUB_URL,
+      hubToken: req.body?.hubToken || process.env.GLOBAL_EVO_HUB_TOKEN
+    }));
+  }));
 }

@@ -46,6 +46,7 @@ import registerEvoCapabilityRoutes from './generated_apis/evo_capability_routes.
 import registerPortfolioRoutes from './generated_apis/portfolio_routes.js';
 import registerEngineDashboardRoutes from './generated_apis/engine_dashboard_routes.js';
 import registerEvoLlmRoutes from './generated_apis/evo_llm_routes.js';
+import registerEdgeIoRoutes from './generated_apis/edge_io_routes.js';
 import registerModuleMaturityRoutes from './generated_apis/module_maturity_routes.js';
 import registerSpineCoreRoutes from './generated_apis/spinecore_routes.js';
 import { setupAgentRoutes, getEvoAgent } from './agent-integration.js';
@@ -199,6 +200,7 @@ registerEvoCapabilityRoutes(app);
 registerPortfolioRoutes(app);
 registerEngineDashboardRoutes(app);
 registerEvoLlmRoutes(app);
+registerEdgeIoRoutes(app);
 registerModuleMaturityRoutes(app);
 registerSpineCoreRoutes(app);
 registerAiProviderStatusRoutes(app);

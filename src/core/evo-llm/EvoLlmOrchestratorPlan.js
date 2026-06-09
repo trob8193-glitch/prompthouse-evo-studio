@@ -28,14 +28,26 @@ export function createEvoTrainPlan({
   rootDir = process.cwd(),
   provider = 'local-dataset',
   objective = 'Improve Evo LLM studio reasoning from validated examples',
-  model = null
+  model = null,
+  providerApiKey = null,
+  providerKeyPresent = false,
+  maxTrainingBudgetUsd = null,
+  allowProviderTraining = null,
+  contributionMode = 'private'
 } = {}) {
   const paths = getEvoLlmOrchestratorPaths({ rootDir });
   ensureDir(paths.plans);
   const manifest = buildEvoLlmDataset({ rootDir });
   const evalReport = evaluateEvoLlmDataset({ rootDir });
   const providerTraining = provider !== 'local-dataset';
-  const providerGate = evaluateEvoProviderGate({ provider, model });
+  const providerGate = evaluateEvoProviderGate({
+    provider,
+    model,
+    providerApiKey,
+    providerKeyPresent,
+    maxTrainingBudgetUsd,
+    allowProviderTraining
+  });
   const costGate = evaluateEvoLlmTrainingCostGate({
     provider,
     examples: manifest.trainCount + manifest.evalCount
@@ -58,6 +70,14 @@ export function createEvoTrainPlan({
     provider,
     model: providerTraining ? providerGate.model : null,
     risk: providerTraining ? 'HIGH' : 'LOW',
+    contributionMode: contributionMode === 'global' ? 'global' : 'private',
+    credentialPolicy: providerTraining
+      ? {
+          source: providerGate.checks.credentialSource,
+          persisted: false,
+          note: 'Provider keys are evaluated for readiness but are not written into plan files.'
+        }
+      : null,
     truthState,
     dataset: manifest,
     evaluation: evalReport,
