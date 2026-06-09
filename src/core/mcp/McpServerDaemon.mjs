@@ -179,6 +179,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
           required: ["module"]
         },
+      },
+      {
+        name: "trigger_ai_review_local",
+        description: "Executes the Offline Heuristic Code Review daemon. Uses zero external APIs. Generates a Logic Density Score and Repair Checklist locally.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
       }
     ],
   };
@@ -384,6 +392,19 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         child.stderr.on("data", (data) => { output += data.toString(); });
         child.on("close", (code) => {
           resolve({ content: [{ type: "text", text: `Specialized Training (${args.module}) finished with code ${code}.\n\n${output}` }] });
+        });
+      });
+    }
+
+    if (name === "trigger_ai_review_local") {
+      const scriptPath = path.resolve(__dirname, "../../../scripts/ai_review_local.mjs");
+      return new Promise((resolve) => {
+        const child = spawn("node", [scriptPath]);
+        let output = "";
+        child.stdout.on("data", (data) => { output += data.toString(); });
+        child.stderr.on("data", (data) => { output += data.toString(); });
+        child.on("close", (code) => {
+          resolve({ content: [{ type: "text", text: `Local Offline Review finished with code ${code}.\n\n${output}` }] });
         });
       });
     }

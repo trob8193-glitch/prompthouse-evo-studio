@@ -3,7 +3,7 @@
   "success": true,
   "truthState": "PROVIDER_GATED",
   "liveRequested": false,
-  "checkedAt": "2026-06-09T22:17:36.284Z",
+  "checkedAt": "2026-06-09T23:24:26.192Z",
   "summary": {
     "totalActions": 4,
     "readyActions": 3,
@@ -131,7 +131,7 @@
   ],
   "receipts": [
     {
-      "id": "rcpt_1781043456279_t3fym",
+      "id": "rcpt_1781047466160_nhqrj",
       "provider": "openai",
       "action": "ai_provider_probe",
       "status": "armed_local_only",
@@ -139,10 +139,10 @@
       "message": "openai has credentials; live action was not requested.",
       "requestHash": "0228eba87335fbe8",
       "responseHash": "a1e78a38c0520ed4",
-      "createdAt": "2026-06-09T22:17:36.279Z"
+      "createdAt": "2026-06-09T23:24:26.164Z"
     },
     {
-      "id": "rcpt_1781043456281_okysi",
+      "id": "rcpt_1781047466167_fv0mx",
       "provider": "gemini",
       "action": "ai_provider_probe",
       "status": "armed_local_only",
@@ -150,10 +150,10 @@
       "message": "gemini has credentials; live action was not requested.",
       "requestHash": "0228eba87335fbe8",
       "responseHash": "a1e78a38c0520ed4",
-      "createdAt": "2026-06-09T22:17:36.281Z"
+      "createdAt": "2026-06-09T23:24:26.168Z"
     },
     {
-      "id": "rcpt_1781043456282_8ylzn",
+      "id": "rcpt_1781047466169_x5psq",
       "provider": "stripe",
       "action": "stripe_test_checkout",
       "status": "armed_local_only",
@@ -161,10 +161,10 @@
       "message": "stripe has credentials; live action was not requested.",
       "requestHash": "fc221f1271107d8e",
       "responseHash": "46bd5fd6f0460f0d",
-      "createdAt": "2026-06-09T22:17:36.282Z"
+      "createdAt": "2026-06-09T23:24:26.170Z"
     },
     {
-      "id": "rcpt_1781043456283_0yuiu",
+      "id": "rcpt_1781047466182_w8yn3",
       "provider": "vercel",
       "action": "vercel_preview_deploy",
       "status": "blocked",
@@ -172,7 +172,7 @@
       "message": "VERCEL_TOKEN is required before vercel_preview_deploy.",
       "requestHash": "1a9718757f640970",
       "responseHash": "2ccacd3a359aa336",
-      "createdAt": "2026-06-09T22:17:36.283Z"
+      "createdAt": "2026-06-09T23:24:26.183Z"
     }
   ]
 }
