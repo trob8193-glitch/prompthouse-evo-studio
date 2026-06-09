@@ -48,6 +48,7 @@ export const NAV_GROUPS = [
       { id: 'evo-layout', label: 'Evo Layout', icon: LayoutTemplate },
       { id: 'theme-evolution', label: 'Theme Evolution', icon: Palette },
       { id: 'evopulse-grid', label: 'EvoPulse Grid', icon: Share2 },
+      { id: 'ai-generator', label: 'AI Generator', icon: Sparkles },
     ],
   },
   {
@@ -71,7 +72,6 @@ export const NAV_GROUPS = [
       { id: 'connections', label: 'Connections', icon: ExternalLink },
       { id: 'grading', label: 'Grading & Release', icon: Gauge },
       { id: 'commerce', label: 'Commerce', icon: Activity },
-      { id: 'foundry', label: 'Foundry Labs', icon: Cpu },
     ],
   },
 ];

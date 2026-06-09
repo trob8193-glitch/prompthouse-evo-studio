@@ -16,6 +16,7 @@ data/
 # AI Bridge
 .env.*
 !.env.example
+!.env.production
 .env.agent
 *.key
 *.pem

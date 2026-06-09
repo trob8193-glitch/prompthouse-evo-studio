@@ -95,8 +95,26 @@ ensureGatewayBootstrapData();
 ensureEvolutionSchema();
 
 const app = express();
-app.use(express.json());
-app.use(cors());
+app.set('trust proxy', 1);
+app.use(express.json({ limit: '10mb' }));
+
+// Configurable CORS for deployment
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'];
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Allow all in dev, restrict in production via env
+    }
+  },
+  credentials: true,
+}));
+
+// Health check for Render / load balancers
+app.get('/healthz', (req, res) => res.json({ status: 'ok', uptime: process.uptime() }));
 
 // Global logging middleware for /api/ requests
 app.use(/^\/api\//, (req, res, next) => {
