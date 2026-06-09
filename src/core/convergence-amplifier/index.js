@@ -39,19 +39,19 @@ export function buildAmplificationTargets() {
     {
       id: 'platform-sentinel-product',
       title: 'Productize Platform Sentinel',
-      score: 96,
+      score: 100,
       reason: 'Platform readiness enforcement can become a standalone AI-built software trust product.'
     },
     {
       id: 'cost-firewall-product',
       title: 'Package Cost Firewall',
-      score: 92,
+      score: 96,
       reason: 'Cost governance is valuable as both internal control and external developer tooling.'
     },
     {
       id: 'buyer-proof-pack',
       title: 'Generate buyer-ready proof pack',
-      score: 90,
+      score: 98,
       reason: 'Platform value rises when receipts, architecture maps, and release verdicts are easy to inspect.'
     }
   ];

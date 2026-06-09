@@ -112,6 +112,7 @@
     "platform:repair-plan": "node scripts/platform_repair_plan.mjs",
     "platform:release-verdict": "node scripts/platform_ready_check.mjs --release-verdict",
     "platform:ready": "npm run platform:strict && npm run platform:receipt",
+    "reality:audit": "node scripts/reality-audit.mjs",
     "sentinel:daemon": "node src/core/daemons/sentinel/PlatformSentinelDaemon.mjs",
     "singularity": "node src/core/daemons/singularity/SingularityCore.mjs",
     "crucible": "node src/core/daemons/crucible/CrucibleDaemon.mjs",
@@ -128,6 +129,7 @@
     "self:build": "npm run build && npm run platform:audit",
     "mobile:build": "node scripts/mobile-architect-cli.mjs",
     "daemons:all": "concurrently \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run antigravity\" \"npm run marketing:daemon\"",
+    "launch:studio": "concurrently \"npm run dev\" \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run antigravity\" \"npm run marketing:daemon\"",
     "omni:orchestrator": "node src/core/daemons/omni/OmniOrchestrator.mjs",
     "antigravity": "node scripts/antigravity-daemon.mjs",
     "marketing:daemon": "node scripts/marketing-singularity-daemon.mjs",
@@ -135,6 +137,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8",
+    "@clerk/express": "^2.1.23",
     "@libsql/sqlite3": "^0.3.1",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@openai/agents": "^0.8.5",

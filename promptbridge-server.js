@@ -16,7 +16,7 @@ import jwt from 'jsonwebtoken';
 
 import crypto from 'crypto';
 import Stripe from 'stripe';
-import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
+import { clerkMiddleware, getAuth } from '@clerk/express';
 
 // Route module imports (hoisted — ESM requires all imports at top level)
 import { registerEmulatorRoutes } from './server/routes/emulator.routes.js';
@@ -132,13 +132,46 @@ app.use(/^\/api\//, (req, res, next) => {
 });
 
 // Multi-tenant Authentication Middleware
-app.use(/^\/api\//, ClerkExpressWithAuth({}), (req, res, next) => {
-  if (process.env.VITE_CLERK_PUBLISHABLE_KEY && !req.auth?.userId && process.env.REQUIRE_AUTH === 'true') {
-    return res.status(401).json({ error: 'Unauthorized. Please authenticate with Prompthouse via Clerk.' });
+const clerkConfigured = Boolean(
+  process.env.CLERK_SECRET_KEY &&
+  (process.env.CLERK_PUBLISHABLE_KEY || process.env.VITE_CLERK_PUBLISHABLE_KEY)
+);
+if (clerkConfigured) {
+  app.use(/^\/api\//, clerkMiddleware());
+}
+app.use(/^\/api\//, (req, res, next) => {
+  let auth = null;
+  if (clerkConfigured) {
+    try {
+      auth = getAuth(req);
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        truthState: 'CLERK_AUTH_CONTEXT_FAILED',
+        error: error.message
+      });
+    }
   }
-  // Inject the authenticated userId into the request body/query for database isolation if needed
-  if (req.auth?.userId) {
-    req.user_id = req.auth.userId;
+
+  if (process.env.REQUIRE_AUTH === 'true' && !auth?.userId) {
+    if (!clerkConfigured) {
+      return res.status(503).json({
+        success: false,
+        truthState: 'CLERK_PROVIDER_REQUIRED',
+        requiredEnvKeys: ['CLERK_SECRET_KEY', 'CLERK_PUBLISHABLE_KEY'],
+        error: 'Authentication is required, but Clerk server credentials are not configured.'
+      });
+    }
+    return res.status(401).json({
+      success: false,
+      truthState: 'AUTH_REQUIRED',
+      error: 'Unauthorized. Please authenticate with Prompthouse via Clerk.'
+    });
+  }
+
+  if (auth?.userId) {
+    req.user_id = auth.userId;
+    req.auth = auth;
   }
   next();
 });
@@ -241,12 +274,34 @@ app.post('/api/sovereign-ledger/log', (req, res) => {
 app.post('/api/evo-git/sync', (req, res) => {
   try {
     const { snapshot, apiKey } = req.body;
-    // In production, verify the apiKey against local allowed keys
     if (!apiKey) return res.status(401).json({ success: false, error: 'API Key required for Evo Git Sync' });
-    
-    // Simulate accepting an external commit into the local spine
-    const mockHash = "layer1_" + Date.now();
-    res.json({ success: true, message: 'External snapshot merged successfully', hash: mockHash });
+    if (!snapshot) {
+      return res.status(400).json({
+        success: false,
+        truthState: 'EXTERNAL_SNAPSHOT_REQUIRED',
+        error: 'snapshot is required for Evo Git Sync'
+      });
+    }
+
+    const payload = typeof snapshot === 'string' ? snapshot : JSON.stringify(snapshot);
+    const hash = crypto.createHash('sha256').update(payload).digest('hex');
+    const receiptDir = join(DATA_DIR, 'egit');
+    const receiptPath = join(receiptDir, 'external_snapshots.jsonl');
+    mkdirSync(receiptDir, { recursive: true });
+    writeFileSync(receiptPath, `${JSON.stringify({
+      id: `external_snapshot_${hash.slice(0, 12)}`,
+      hash,
+      truthState: 'EXTERNAL_SNAPSHOT_RECEIPTED',
+      receivedAt: new Date().toISOString()
+    })}\n`, { flag: 'a' });
+
+    res.json({
+      success: true,
+      truthState: 'EXTERNAL_SNAPSHOT_RECEIPTED',
+      message: 'External snapshot receipt recorded. No repository merge was performed.',
+      hash,
+      receiptPath
+    });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

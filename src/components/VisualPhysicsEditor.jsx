@@ -11,7 +11,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { Database, Shield, Zap, DollarSign, Brain, Network } from 'lucide-react';
 
-// Custom Node Style for the Unreal Engine / Sci-Fi look
+// Shared node styling for the editor graph.
 const nodeStyle = {
   background: '#121214',
   color: '#fff',
@@ -56,7 +56,7 @@ const initialNodes = [
   {
     id: 'stripe',
     type: 'output',
-    data: { label: <div className="flex items-center gap-2"><DollarSign className="w-5 h-5 text-green-400"/> Stripe Monetization</div> },
+    data: { label: <div className="flex items-center gap-2"><DollarSign className="w-5 h-5 text-green-400"/> Stripe Monetization Gate</div> },
     position: { x: 1050, y: 200 },
     style: { ...nodeStyle, border: '1px solid #22c55e' }
   }
@@ -80,7 +80,7 @@ export default function VisualPhysicsEditor() {
     <div className="flex flex-col h-full bg-[#09090b]">
       <div className="p-6 border-b border-gray-800">
         <h1 className="text-3xl font-black text-white">Visual Physics Editor</h1>
-        <p className="text-gray-400 mt-2">Unreal Engine style node graph representing the live internal AI architecture.</p>
+        <p className="text-gray-400 mt-2">Node graph for configured studio execution paths and provider-gated rails.</p>
       </div>
       
       <div className="flex-1 w-full relative">
