@@ -1,6 +1,7 @@
 import subprocess
 import sys
-import os
+import tempfile
+from pathlib import Path
 
 class LanguageMastery:
     def __init__(self):
@@ -15,24 +16,20 @@ class LanguageMastery:
     def execute(self, code_snippet, language):
         if language != 'python':
             return ExecutionResult(False, "", f"Unsupported language: {language}")
-        
-        # Save code to a temp file to execute
-        temp_file = "temp_snippet.py"
-        with open(temp_file, 'w', encoding='utf-8') as f:
-            f.write(code_snippet)
+
+        temp_path = None
         
         try:
-            # Run the python file and capture output
+            with tempfile.NamedTemporaryFile('w', encoding='utf-8', suffix='.py', delete=False) as temp_file:
+                temp_file.write(code_snippet)
+                temp_path = Path(temp_file.name)
+
             result = subprocess.run(
-                [sys.executable, temp_file],
+                [sys.executable, str(temp_path)],
                 capture_output=True,
                 text=True,
                 timeout=5 # Prevent infinite loops
             )
-            
-            # Clean up
-            if os.path.exists(temp_file):
-                os.remove(temp_file)
                 
             if result.returncode == 0:
                 return ExecutionResult(True, result.stdout, "")
@@ -40,13 +37,12 @@ class LanguageMastery:
                 return ExecutionResult(False, result.stdout, result.stderr)
                 
         except subprocess.TimeoutExpired:
-            if os.path.exists(temp_file):
-                os.remove(temp_file)
             return ExecutionResult(False, "", "Timeout: Code took too long to run.")
         except Exception as e:
-            if os.path.exists(temp_file):
-                os.remove(temp_file)
             return ExecutionResult(False, "", str(e))
+        finally:
+            if temp_path and temp_path.exists():
+                temp_path.unlink()
 
 class ExecutionResult:
     def __init__(self, success, stdout, stderr):
