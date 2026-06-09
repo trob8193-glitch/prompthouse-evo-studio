@@ -16,8 +16,22 @@ export class DeployRail {
 
   async execute(params = {}) {
     Log.info('🚀 [Deploy-rail] Executing production logic...');
-    // Absolute production logic implementation
-    return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
+    
+    try {
+      const res = await fetch('http://localhost:3001/api/deployment/vercel/preview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params)
+      });
+      const data = await res.json();
+      
+      if (!res.ok) throw new Error(data.error || 'Deployment failed');
+      
+      return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED', deploymentUrl: data.url };
+    } catch (e) {
+      Log.error(`[Deploy-rail] FATAL ERROR: ${e.message}`);
+      return { success: false, timestamp: new Date().toISOString(), result: 'FAILED', error: e.message };
+    }
   }
 
   getStatus() {
