@@ -187,17 +187,7 @@ registerExecutionRoutes(app, { pipeline: executionPipeline });
 registerExternalConnectorRoutes(app, { db });
 registerCommerceMarketplaceRoutes(app);
 app.use('/api/launch-pilot', launchPilotRoutes);
-  const gain = ledgerStats.total_gain || 0;
-  res.json({ 
-    success: true, 
-    status: 'PromptBridge Operational', 
-    launch_ready: true,
-    iq_metrics: {
-      baseline: 165000000,
-      sovereign_gain: gain
-    }
-  });
-});
+
 
 // Alias for dashboard compatibility
 app.get('/status', (req, res) => {

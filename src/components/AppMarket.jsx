@@ -160,6 +160,11 @@ export default function AppMarket() {
                                         <DollarSign className="w-4 h-4 mr-2" />
                                         Buy App ($9.00)
                                     </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
