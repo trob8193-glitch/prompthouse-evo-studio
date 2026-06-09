@@ -3,6 +3,10 @@
  * PromptHouse Evo Studio — PromptBridge Server (Sovereign Finality Build)
  * ════════════════════════════════════════════════════════════════════
  * The heart of the SMFF (Self-Monetizing Feature Foundry).
+/**
+ * PromptHouse Evo Studio — PromptBridge Server (Sovereign Finality Build)
+ * ════════════════════════════════════════════════════════════════════
+ * The heart of the SMFF (Self-Monetizing Feature Foundry).
  */
 import express from 'express';
 import cors from 'cors';
@@ -10,7 +14,7 @@ import dotenv from 'dotenv';
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import path, { join, relative, dirname, resolve, extname } from 'path';
 import OpenAI from 'openai';
-import { execSync } from 'child_process';
+import { execSync, spawn } from 'child_process';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -654,6 +658,42 @@ function persistEvolutionProfile(profile) {
     profile.last_signal_at || null
   );
 }
+
+// Mobile Singularity Engine - Real-time SSE Compilation Stream
+app.get('/api/mobile/compile-stream', (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive'
+  });
+
+  const { appId = 'nexus_core', architecture = 'clean_riverpod' } = req.query;
+  const scriptPath = path.resolve(process.cwd(), 'scripts', 'mobile-architect-cli.mjs');
+
+  console.log(`[MobileHub] Spawning compiler for ${appId} -> ${architecture}`);
+  const child = spawn('node', [scriptPath, appId, architecture]);
+
+  const sendEvent = (data) => {
+    const lines = data.toString().split('\n');
+    for (const line of lines) {
+      if (line.trim()) {
+        res.write(`data: ${line}\n\n`);
+      }
+    }
+  };
+
+  child.stdout.on('data', sendEvent);
+  child.stderr.on('data', sendEvent);
+
+  child.on('close', (code) => {
+    res.write(`data: [PROCESS_EXIT] Code ${code}\n\n`);
+    res.end();
+  });
+
+  req.on('close', () => {
+    child.kill();
+  });
+});
 
 const httpServer = createServer(app);
 const hiveMind = new HiveMindProtocol(httpServer);

@@ -17,26 +17,37 @@ export default function MobileSingularityDashboard() {
     { id: 'quantum_chat', name: 'Quantum Messaging', type: 'Social P2P' }
   ];
 
-  const handleCompile = async () => {
+  const handleCompile = () => {
+    if (isCompiling) return;
     setIsCompiling(true);
-    setCompileLogs(['[Mobile Singularity] Initiating Native Compilation Matrix...']);
+    setCompileLogs(['[Mobile Singularity] Initiating Native Compilation Matrix...', `Architecture: ${architecture}`, `Target: ${selectedApp}`, 'Connecting to compiler stream...']);
     
-    const steps = [
-      `Analyzing Web Core for ${selectedApp}...`,
-      `Translating React DOM elements to Native Primitives...`,
-      `Applying ${architecture} routing & state patterns...`,
-      'Generating native bundle...',
-      'Compilation Success. Mobile payload ready for App Store.'
-    ];
+    const eventSource = new EventSource(`http://127.0.0.1:3001/api/mobile/compile-stream?appId=${encodeURIComponent(selectedApp)}&architecture=${encodeURIComponent(architecture)}`);
 
-    for (let i = 0; i < steps.length; i++) {
-      await new Promise(r => setTimeout(r, 1200));
-      setCompileLogs(prev => [...prev, `> ${steps[i]}`]);
-    }
-    
-    setIsCompiling(false);
-    addNotification('Native App Successfully Compiled', 'success');
-    logToLedger('mobile_singularity', 'compile_success', { app: selectedApp, arch: architecture }, 'VERIFIED', 100);
+    eventSource.onmessage = (event) => {
+      const data = event.data;
+      if (data.startsWith('[PROCESS_EXIT]')) {
+        eventSource.close();
+        setIsCompiling(false);
+        const exitCode = data.split('Code ')[1];
+        if (exitCode === '0') {
+          addNotification('Native App Successfully Compiled', 'success');
+          logToLedger('mobile_singularity', 'compile_success', { app: selectedApp, arch: architecture }, 'VERIFIED', 100);
+        } else {
+          addNotification(`Compilation Failed (Exit Code ${exitCode})`, 'error');
+        }
+      } else {
+        setCompileLogs(prev => [...prev, data]);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      console.error('SSE Error:', err);
+      eventSource.close();
+      setIsCompiling(false);
+      setCompileLogs(prev => [...prev, '[ERROR] Lost connection to Mobile Architect daemon.']);
+      addNotification('Compilation stream disconnected.', 'error');
+    };
   };
 
   return (
