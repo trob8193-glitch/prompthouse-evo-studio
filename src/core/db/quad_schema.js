@@ -1,8 +1,23 @@
-import Database from 'better-sqlite3';
+import Database from '@libsql/sqlite3';
 import path from 'path';
 
 const DB_PATH = process.env.DATA_DIR ? path.join(process.env.DATA_DIR, 'prompthouse.db') : path.resolve('./prompthouse.db');
-const db = new Database(DB_PATH);
+
+const dbOptions = process.env.TURSO_DATABASE_URL ? {
+  syncUrl: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN
+} : {};
+
+const db = new Database(DB_PATH, dbOptions);
+
+if (process.env.TURSO_DATABASE_URL) {
+  try {
+    db.sync();
+    console.log('✅ Connected and synced with Turso Global Edge Database');
+  } catch (err) {
+    console.error('❌ Failed to sync with Turso:', err);
+  }
+}
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS organizations (
@@ -251,6 +266,19 @@ CREATE TABLE IF NOT EXISTS sovereign_ledger (
   truth_state TEXT DEFAULT 'UNVERIFIED',
   iq_gain INTEGER DEFAULT 0,
   timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS marketplace_listings (
+  id TEXT PRIMARY KEY,
+  author_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  type TEXT NOT NULL,
+  payload_json TEXT NOT NULL,
+  price_credits INTEGER DEFAULT 0,
+  downloads INTEGER DEFAULT 0,
+  status TEXT DEFAULT 'published',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 `;
 

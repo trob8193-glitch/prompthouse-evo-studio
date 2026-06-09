@@ -3,6 +3,8 @@ import path from 'path';
 import { getEvoLlmPaths } from './EvoLlmPaths.js';
 import { buildEvoLlmDataset } from './EvoLlmDataset.js';
 import { evaluateEvoLlmDataset } from './EvoLlmEvaluation.js';
+import { evaluateEvoProviderGate } from './EvoLlmProviderAdapter.js';
+import { evaluateEvoLlmTrainingCostGate } from './EvoLlmCostGate.js';
 
 function ensureDir(dir) { fs.mkdirSync(dir, { recursive: true }); }
 function writeJson(file, value) { ensureDir(path.dirname(file)); fs.writeFileSync(file, JSON.stringify(value, null, 2), 'utf8'); }
@@ -22,33 +24,58 @@ export function getEvoLlmOrchestratorPaths({ rootDir = process.cwd() } = {}) {
   };
 }
 
-export function createEvoTrainPlan({ rootDir = process.cwd(), provider = 'local-dataset', objective = 'Improve Evo LLM studio reasoning from validated examples' } = {}) {
+export function createEvoTrainPlan({
+  rootDir = process.cwd(),
+  provider = 'local-dataset',
+  objective = 'Improve Evo LLM studio reasoning from validated examples',
+  model = null
+} = {}) {
   const paths = getEvoLlmOrchestratorPaths({ rootDir });
   ensureDir(paths.plans);
   const manifest = buildEvoLlmDataset({ rootDir });
   const evalReport = evaluateEvoLlmDataset({ rootDir });
   const providerTraining = provider !== 'local-dataset';
+  const providerGate = evaluateEvoProviderGate({ provider, model });
+  const costGate = evaluateEvoLlmTrainingCostGate({
+    provider,
+    examples: manifest.trainCount + manifest.evalCount
+  });
+  const datasetReady = manifest.validExamples > 0 && manifest.invalidExamples.length === 0;
+  const evalReady = evalReport.datasetQualityScore >= 90;
+  const blockedReasons = [
+    !datasetReady ? 'Dataset must contain at least one valid example and no invalid examples.' : null,
+    !evalReady ? 'Dataset evaluation score must be at least 90 before training.' : null,
+    providerTraining && !providerGate.allowed ? providerGate.blockedReasons : null,
+    providerTraining && !costGate.allowed ? 'Cost firewall blocked provider training.' : null
+  ].flat().filter(Boolean);
+  const truthState = blockedReasons.length
+    ? (providerTraining ? 'PROVIDER_TRAINING_PLAN_BLOCKED' : 'LOCAL_PIPELINE_PLAN_BLOCKED')
+    : (providerTraining ? 'PROVIDER_TRAINING_PLAN_READY_FOR_APPROVAL' : 'LOCAL_PIPELINE_PLAN_READY');
   const plan = {
     id: `evo_train_plan_${Date.now()}`,
     createdAt: stamp(),
     objective,
     provider,
+    model: providerTraining ? providerGate.model : null,
     risk: providerTraining ? 'HIGH' : 'LOW',
-    truthState: providerTraining ? 'BLOCKED_PROVIDER_TRAINING_REQUIRES_APPROVAL_CREDENTIALS_BUDGET' : 'LOCAL_PIPELINE_PLAN_READY',
+    truthState,
     dataset: manifest,
     evaluation: evalReport,
     gates: {
-      datasetReady: manifest.validExamples > 0 && manifest.invalidExamples.length === 0,
-      evalReady: evalReport.datasetQualityScore >= 90,
+      datasetReady,
+      evalReady,
       ownerApprovalRequired: true,
       providerCredentialsRequired: providerTraining,
-      budgetApprovalRequired: providerTraining
+      budgetApprovalRequired: providerTraining,
+      providerGate,
+      costGate
     },
-    blockedReasons: providerTraining ? [
-      'Provider fine-tuning is disabled until real credentials exist.',
-      'Provider fine-tuning is disabled until budget policy is approved.',
-      'Provider fine-tuning is disabled until explicit owner approval exists.'
-    ] : []
+    blockedReasons,
+    nextActions: blockedReasons.length
+      ? ['Resolve blockedReasons before approval or provider execution.']
+      : providerTraining
+        ? ['Approve with scope=provider-training.', 'Run the provider fine-tune job.', 'Sync the provider run until fine_tuned_model exists.', 'Promote trained weights only after the provider reports completion.']
+        : ['Approve with scope=dataset-only.', 'Run the local dataset pipeline.', 'Promote the validated dataset/model-card package.']
   };
   const file = path.join(paths.plans, `${plan.id}.json`);
   writeJson(file, plan);

@@ -32,6 +32,13 @@ import {
 import { runVercelPreviewDeploy } from '../services/vercel-preview-runner.js';
 import { getRequiredSecurityForRoute } from '../services/security-classifier.js';
 import { TRUTH_STATES } from '../services/truth-labels.js';
+import {
+  activateEvoRuntime,
+  captureTrainingEvent,
+  getEvoRuntimeStatus,
+  getTrainingStats,
+  ingestTrainingExamples
+} from '../services/evo-training-runtime.js';
 
 const OLLAMA_BASE = 'http://localhost:11434';
 
@@ -612,6 +619,37 @@ export function registerStudioCoreRoutes(app) {
       pending: 0,
       checkedAt: new Date().toISOString()
     });
+  });
+
+  app.post('/api/training/ingest', (req, res) => {
+    const result = ingestTrainingExamples({
+      rootDir: process.cwd(),
+      examples: req.body?.examples || req.body?.example || req.body,
+      source: req.body?.source || 'bridge-training-ingest'
+    });
+    res.json(result);
+  });
+
+  app.post('/api/training-capture', (req, res) => {
+    const result = captureTrainingEvent({ rootDir: process.cwd(), capture: req.body || {} });
+    res.json(result);
+  });
+
+  app.get('/api/training/stats', (req, res) => {
+    res.json(getTrainingStats({ rootDir: process.cwd(), limit: Number(req.query.limit || 25) }));
+  });
+
+  app.get('/api/evo-runtime/status', (_req, res) => {
+    res.json(getEvoRuntimeStatus({ rootDir: process.cwd() }));
+  });
+
+  app.post('/api/evo-runtime/activate', (req, res) => {
+    const result = activateEvoRuntime({
+      rootDir: process.cwd(),
+      source: req.body?.source || 'bridge-runtime',
+      runId: req.body?.runId || `runtime_${Date.now()}`
+    });
+    res.json(result);
   });
 
   app.get('/api/proof/count', (_req, res) => {

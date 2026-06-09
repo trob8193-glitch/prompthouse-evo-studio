@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "main": "desktop/evo-desktop-host.js",
+  "bin": {
+    "prompthouse": "bin/prompthouse.js"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -125,12 +128,14 @@
     "antigravity": "node scripts/antigravity-daemon.mjs"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.61.8",
+    "@clerk/clerk-sdk-node": "^4.13.23",
+    "@libsql/sqlite3": "^0.3.1",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@openai/agents": "^0.8.5",
     "@rive-app/react-canvas": "^4.28.3",
     "adm-zip": "^0.5.17",
     "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^12.9.0",
     "clsx": "^2.1.1",
     "concurrently": "^9.2.1",
     "cors": "^2.8.6",

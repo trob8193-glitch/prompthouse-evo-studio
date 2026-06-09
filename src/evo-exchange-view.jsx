@@ -3,14 +3,25 @@
  * Owner: Evo | Truth State: built
  */
 import React, { useState, useEffect } from 'react';
-import { getAllRecipes } from './worktwin-vault.js';
 
 export function EvoExchangeView() {
   const [recipes, setRecipes] = useState([]);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setRecipes(getAllRecipes());
+    fetch('http://localhost:3001/api/exchange/listings')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.result) {
+          setRecipes(data.result);
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load listings', err);
+        setLoading(false);
+      });
   }, []);
 
   const categories = [

@@ -11,13 +11,29 @@ import path, { join, relative, dirname, resolve, extname } from 'path';
 import OpenAI from 'openai';
 import { execSync } from 'child_process';
 import bcrypt from 'bcryptjs';
+/**
+ * PromptHouse Evo Studio — PromptBridge Server (Sovereign Finality Build)
+ * ════════════════════════════════════════════════════════════════════
+ * The heart of the SMFF (Self-Monetizing Feature Foundry).
+ */
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
+import path, { join, relative, dirname, resolve, extname } from 'path';
+import OpenAI from 'openai';
+import { execSync } from 'child_process';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import crypto from 'crypto';
 import Stripe from 'stripe';
+import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 
 // Route module imports (hoisted — ESM requires all imports at top level)
 import { registerEmulatorRoutes } from './server/routes/emulator.routes.js';
+import { registerStoreRoutes } from './server/routes/store.routes.js';
+import registerEvoExchangeRoutes from './server/routes/evo-exchange.routes.js';
 import launchPilotRoutes from './server/routes/launch-pilot.routes.js';
 import { registerStudioCoreRoutes } from './server/routes/studio-core.routes.js';
 import { registerAiProviderStatusRoutes } from './server/routes/ai-provider-status.routes.js';
@@ -122,6 +138,19 @@ app.use(/^\/api\//, (req, res, next) => {
   next();
 });
 
+// Multi-tenant Authentication Middleware
+app.use(/^\/api\//, ClerkExpressWithAuth({}), (req, res, next) => {
+  if (process.env.VITE_CLERK_PUBLISHABLE_KEY && !req.auth?.userId && process.env.REQUIRE_AUTH === 'true') {
+    return res.status(401).json({ error: 'Unauthorized. Please authenticate with Prompthouse via Clerk.' });
+  }
+  // Inject the authenticated userId into the request body/query for database isolation if needed
+  if (req.auth?.userId) {
+    req.user_id = req.auth.userId;
+  }
+  next();
+});
+
+
 const evoAgent = {
   chat: async (message, options = {}) => getEvoAgent().chat(message, options),
 };
@@ -151,11 +180,11 @@ registerVercelPreviewDeployRoutes(app);
 registerHandoverRoutes(app);
 registerStudioCoreRoutes(app);
 registerPromptShellRoutes(app, { db, evoAgent });
+registerStoreRoutes(app, { stripe: stripeClient, db, getEvoAgent });
+registerEvoExchangeRoutes(app);
 registerExecutionRoutes(app, { pipeline: executionPipeline });
 registerExternalConnectorRoutes(app, { db });
 app.use('/api/launch-pilot', launchPilotRoutes);
-app.get('/api/status', (req, res) => {
-  const ledgerStats = db.prepare('SELECT SUM(iq_gain) as total_gain FROM sovereign_ledger').get();
   const gain = ledgerStats.total_gain || 0;
   res.json({ 
     success: true, 

@@ -46,6 +46,57 @@ function buildTruthLanguagePatch(rootDir) {
   };
 }
 
+function routeExists(rootDir, route) {
+  const files = [
+    'server/routes/studio-core.routes.js',
+    'promptbridge-server.js',
+    'generated_apis/evo_llm_routes.js',
+  ];
+  return files.some((relPath) => safeRead(rootDir, relPath).includes(route));
+}
+
+function buildBridgeContractExpectedRoutesPatch(rootDir) {
+  const relPath = 'src/bridge-contract-ledger.js';
+  const current = safeRead(rootDir, relPath);
+  if (!current) return null;
+  const required = [
+    '/api/training/ingest',
+    '/api/training-capture',
+    '/api/training/stats',
+    '/api/evo-runtime/status',
+    '/api/evo-runtime/activate',
+  ];
+  const missing = required.filter((route) => !current.includes(`'${route}'`));
+  if (missing.length === 0) return null;
+  const anchor = "    '/api/queue/master',";
+  if (!current.includes(anchor)) return null;
+  const proposedContent = current.replace(anchor, [
+    anchor,
+    ...missing.map((route) => `    '${route}',`)
+  ].join('\n'));
+  return {
+    path: relPath,
+    operation: 'update',
+    reason: 'Add self-training and Evo runtime routes to the bridge contract ledger.',
+    proposedContent,
+  };
+}
+
+function buildRouteProofPlanPatch(rootDir) {
+  const relPath = 'docs/self-evolution-readiness.md';
+  const current = safeRead(rootDir, relPath);
+  const content = current || '# Self-Evolution Readiness\n\n';
+  const marker = '## Autonomous Route Integrity';
+  if (content.includes(marker)) return null;
+  const proposedContent = `${content.trim()}\n\n${marker}\n\n- Run \`node scripts/audit-route-drift.mjs\` after route changes.\n- Run \`npm run audit:dead-surfaces\` after UI command changes.\n- Keep provider training in blocked, submitted, pending, or trained-weights states; never claim trained weights until the provider returns a fine-tuned model id.\n`;
+  return {
+    path: relPath,
+    operation: current ? 'update' : 'create',
+    reason: 'Document broader autonomous route/provider proof checks for future self-evolution cycles.',
+    proposedContent,
+  };
+}
+
 function buildVerificationOnlyProposal({ objective }) {
   return {
     reason: 'No deterministic source patch matched the objective; run proof gates and record a receipt-backed clean-state result.',
@@ -72,7 +123,18 @@ export function buildPatchProposal({ runId = `evo_${Date.now()}`, objective = ''
     if (patch) files.push(patch);
   }
 
+  if (objectiveText.includes('training') || objectiveText.includes('runtime') || objectiveText.includes('route') || objectiveText.includes('provider')) {
+    const contractPatch = buildBridgeContractExpectedRoutesPatch(rootDir);
+    if (contractPatch) files.push(contractPatch);
+    const proofPlanPatch = buildRouteProofPlanPatch(rootDir);
+    if (proofPlanPatch) files.push(proofPlanPatch);
+  }
+
   if (files.length === 0) {
+    if (!routeExists(rootDir, '/api/training-capture') || !routeExists(rootDir, '/api/evo-runtime/activate')) {
+      const contractPatch = buildBridgeContractExpectedRoutesPatch(rootDir);
+      if (contractPatch) files.push(contractPatch);
+    }
     const truthPatch = buildTruthLanguagePatch(rootDir);
     if (truthPatch) files.push(truthPatch);
   }

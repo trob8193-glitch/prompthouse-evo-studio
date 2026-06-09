@@ -1,9 +1,29 @@
 import fs from 'fs';
+import path from 'path';
+
+export const DEFAULT_OPENAI_FINE_TUNE_MODEL = 'gpt-4o-mini-2024-07-18';
+
+function isLocalProvider(provider) {
+  return provider === 'local-dataset' || provider === 'local-dataset-only';
+}
+
+function requireFetch(fetchImpl = globalThis.fetch) {
+  if (typeof fetchImpl !== 'function') {
+    throw new Error('A fetch implementation is required for provider training.');
+  }
+  return fetchImpl;
+}
+
+function assertOpenAiResponse(ok, status, payload, fallback) {
+  if (ok) return;
+  const message = payload?.error?.message || payload?.message || fallback || `OpenAI request failed with HTTP ${status}`;
+  throw new Error(message);
+}
 
 export function getEvoProviderConfig({ env = process.env } = {}) {
   return {
     provider: env.EVO_LLM_PROVIDER || 'local-dataset',
-    model: env.EVO_LLM_BASE_MODEL || '',
+    model: env.EVO_LLM_BASE_MODEL || DEFAULT_OPENAI_FINE_TUNE_MODEL,
     hasOpenAiKey: Boolean(env.OPENAI_API_KEY),
     hasGeminiKey: Boolean(env.GEMINI_API_KEY),
     maxTrainingBudgetUsd: Number(env.EVO_LLM_MAX_TRAINING_BUDGET_USD || 0),
@@ -11,21 +31,27 @@ export function getEvoProviderConfig({ env = process.env } = {}) {
   };
 }
 
-export function evaluateEvoProviderGate({ provider = 'local-dataset', env = process.env } = {}) {
+export function evaluateEvoProviderGate({ provider = 'local-dataset', env = process.env, model = null } = {}) {
   const config = getEvoProviderConfig({ env });
-  const external = provider !== 'local-dataset';
+  const external = !isLocalProvider(provider);
+  const resolvedModel = model || config.model;
+  const supportedOk = !external || provider === 'openai';
   const credentialOk = provider === 'openai' ? config.hasOpenAiKey : provider === 'gemini' ? config.hasGeminiKey : !external;
+  const modelOk = !external || Boolean(resolvedModel);
   const budgetOk = !external || config.maxTrainingBudgetUsd > 0;
   const allowOk = !external || config.allowProviderTraining === true;
-  const allowed = !external || (credentialOk && budgetOk && allowOk);
+  const allowed = !external || (supportedOk && credentialOk && modelOk && budgetOk && allowOk);
   return {
     provider,
     external,
     allowed,
     truthState: allowed ? 'PROVIDER_GATE_ALLOWED' : 'PROVIDER_GATE_BLOCKED',
-    checks: { credentialOk, budgetOk, allowOk },
+    model: external ? resolvedModel : null,
+    checks: { supportedOk, credentialOk, modelOk, budgetOk, allowOk },
     blockedReasons: allowed ? [] : [
+      !supportedOk ? `Provider fine-tuning adapter is not implemented for ${provider}.` : null,
       !credentialOk ? `Missing credentials for ${provider}.` : null,
+      !modelOk ? 'Missing EVO_LLM_BASE_MODEL for provider training.' : null,
       !budgetOk ? 'Missing positive EVO_LLM_MAX_TRAINING_BUDGET_USD.' : null,
       !allowOk ? 'EVO_LLM_ALLOW_PROVIDER_TRAINING is not true.' : null
     ].filter(Boolean)
@@ -53,4 +79,107 @@ export function assertDatasetFilesExist({ datasetFile, evalFile } = {}) {
     datasetExists: Boolean(datasetFile && fs.existsSync(datasetFile)),
     evalExists: Boolean(evalFile && fs.existsSync(evalFile))
   };
+}
+
+async function uploadOpenAiFineTuneFile({ apiKey, filePath, fetchImpl, purpose = 'fine-tune' } = {}) {
+  if (!apiKey) throw new Error('OPENAI_API_KEY is required to upload fine-tuning files.');
+  if (!filePath || !fs.existsSync(filePath)) throw new Error(`Fine-tuning file does not exist: ${filePath}`);
+  const fetcher = requireFetch(fetchImpl);
+  const form = new FormData();
+  form.append('purpose', purpose);
+  form.append('file', new Blob([fs.readFileSync(filePath)], { type: 'application/jsonl' }), path.basename(filePath));
+
+  const response = await fetcher('https://api.openai.com/v1/files', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}` },
+    body: form
+  });
+  const payload = await response.json().catch(() => null);
+  assertOpenAiResponse(response.ok, response.status, payload, 'OpenAI file upload failed.');
+  if (!payload?.id) throw new Error('OpenAI file upload response did not include a file id.');
+  return payload;
+}
+
+export async function submitOpenAiFineTuneJob({
+  apiKey = process.env.OPENAI_API_KEY,
+  model = process.env.EVO_LLM_BASE_MODEL || DEFAULT_OPENAI_FINE_TUNE_MODEL,
+  trainJsonl,
+  evalJsonl = null,
+  suffix = 'prompthouse-evo',
+  fetchImpl = globalThis.fetch
+} = {}) {
+  const files = assertDatasetFilesExist({ datasetFile: trainJsonl, evalFile: evalJsonl });
+  if (!files.datasetExists) throw new Error(`Training JSONL is required for OpenAI fine-tuning: ${trainJsonl}`);
+
+  const trainingFile = await uploadOpenAiFineTuneFile({ apiKey, filePath: trainJsonl, fetchImpl });
+  const validationFile = files.evalExists
+    ? await uploadOpenAiFineTuneFile({ apiKey, filePath: evalJsonl, fetchImpl })
+    : null;
+
+  const body = {
+    model,
+    training_file: trainingFile.id,
+    suffix
+  };
+  if (validationFile?.id) body.validation_file = validationFile.id;
+
+  const fetcher = requireFetch(fetchImpl);
+  const response = await fetcher('https://api.openai.com/v1/fine_tuning/jobs', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  const job = await response.json().catch(() => null);
+  assertOpenAiResponse(response.ok, response.status, job, 'OpenAI fine-tuning job creation failed.');
+  if (!job?.id) throw new Error('OpenAI fine-tuning job response did not include a job id.');
+
+  return {
+    provider: 'openai',
+    truthState: job.fine_tuned_model ? 'PROVIDER_FINE_TUNED_WEIGHTS_READY' : 'PROVIDER_FINE_TUNE_JOB_SUBMITTED',
+    providerJobId: job.id,
+    model,
+    fineTunedModel: job.fine_tuned_model || null,
+    status: job.status || 'unknown',
+    trainingFileId: trainingFile.id,
+    validationFileId: validationFile?.id || null,
+    submittedAt: new Date().toISOString(),
+    response: job
+  };
+}
+
+export async function fetchOpenAiFineTuneJob({
+  apiKey = process.env.OPENAI_API_KEY,
+  providerJobId,
+  fetchImpl = globalThis.fetch
+} = {}) {
+  if (!apiKey) throw new Error('OPENAI_API_KEY is required to fetch fine-tuning jobs.');
+  if (!providerJobId) throw new Error('providerJobId is required.');
+  const fetcher = requireFetch(fetchImpl);
+  const response = await fetcher(`https://api.openai.com/v1/fine_tuning/jobs/${encodeURIComponent(providerJobId)}`, {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${apiKey}` }
+  });
+  const job = await response.json().catch(() => null);
+  assertOpenAiResponse(response.ok, response.status, job, 'OpenAI fine-tuning job fetch failed.');
+  return {
+    provider: 'openai',
+    truthState: job?.fine_tuned_model ? 'PROVIDER_FINE_TUNED_WEIGHTS_READY' : 'PROVIDER_FINE_TUNE_JOB_PENDING',
+    providerJobId,
+    fineTunedModel: job?.fine_tuned_model || null,
+    status: job?.status || 'unknown',
+    response: job
+  };
+}
+
+export async function submitProviderFineTuneJob({ provider = 'local-dataset', ...options } = {}) {
+  if (provider === 'openai') return submitOpenAiFineTuneJob(options);
+  throw new Error(`Provider fine-tuning adapter is not implemented for ${provider}.`);
+}
+
+export async function fetchProviderFineTuneJob({ provider = 'local-dataset', ...options } = {}) {
+  if (provider === 'openai') return fetchOpenAiFineTuneJob(options);
+  throw new Error(`Provider fine-tuning status adapter is not implemented for ${provider}.`);
 }

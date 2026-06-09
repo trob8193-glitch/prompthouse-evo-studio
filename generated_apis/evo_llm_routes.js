@@ -11,10 +11,18 @@ import {
   promoteEvoModelVersion,
   rollbackEvoModelVersion,
   runEvoTrainPlan,
+  syncEvoTrainRun,
 } from '../src/core/evo-llm/index.js';
 
 const ok = (res, payload = {}) => res.json({ success: true, ...payload });
 const fail = (res, error, status = 500) => res.status(status).json({ success: false, error: error?.message || String(error) });
+const asyncRoute = (handler) => async (req, res) => {
+  try {
+    await handler(req, res);
+  } catch (error) {
+    fail(res, error);
+  }
+};
 
 export default function registerEvoLlmRoutes(app) {
   app.get('/api/evo-llm/status', (req, res) => {
@@ -26,16 +34,16 @@ export default function registerEvoLlmRoutes(app) {
   });
 
   app.post('/api/evo-llm/plan', (req, res) => {
-    try { ok(res, createEvoTrainPlan({ provider: req.body?.provider || 'local-dataset', objective: req.body?.objective || undefined })); } catch (error) { fail(res, error); }
+    try { ok(res, createEvoTrainPlan({ provider: req.body?.provider || 'local-dataset', objective: req.body?.objective || undefined, model: req.body?.model || null })); } catch (error) { fail(res, error); }
   });
 
   app.post('/api/evo-llm/approve', (req, res) => {
     try { ok(res, approveEvoTrainPlan({ planId: req.body?.planId, actor: req.body?.actor || 'studio_owner', scope: req.body?.scope || 'dataset-only' })); } catch (error) { fail(res, error); }
   });
 
-  app.post('/api/evo-llm/run', (req, res) => {
-    try { ok(res, runEvoTrainPlan({ planId: req.body?.planId })); } catch (error) { fail(res, error); }
-  });
+  app.post('/api/evo-llm/run', asyncRoute(async (req, res) => {
+    ok(res, await runEvoTrainPlan({ planId: req.body?.planId }));
+  }));
 
   app.get('/api/evo-llm/runs', (req, res) => {
     try { ok(res, { runs: listEvoTrainRuns({ limit: Number(req.query.limit || 50) }) }); } catch (error) { fail(res, error); }
@@ -48,6 +56,10 @@ export default function registerEvoLlmRoutes(app) {
       ok(res, { run });
     } catch (error) { fail(res, error); }
   });
+
+  app.post('/api/evo-llm/runs/:runId/sync', asyncRoute(async (req, res) => {
+    ok(res, await syncEvoTrainRun({ runId: req.params.runId }));
+  }));
 
   app.post('/api/evo-llm/promote', (req, res) => {
     try { ok(res, promoteEvoModelVersion({ runId: req.body?.runId, actor: req.body?.actor || 'studio_owner' })); } catch (error) { fail(res, error); }
