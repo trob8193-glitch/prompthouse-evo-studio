@@ -52,6 +52,7 @@ import EvoDiffuserDashboard from './features/EvoDiffuserDashboard.jsx';
 import EvoPixelatorDashboard from './features/EvoPixelatorDashboard.jsx';
 import EvoLayoutDashboard from './features/EvoLayoutDashboard.jsx';
 import ThemeEvolutionDashboard from './features/ThemeEvolutionDashboard.jsx';
+import VisualPhysicsEditor from './components/VisualPhysicsEditor.jsx';
 
 export const PAGE_MAP = {
   'dashboard': SovereignIntelligenceDashboard,
@@ -84,6 +85,7 @@ export const PAGE_MAP = {
   'saas-builder': SaasBuilderView,
   'ghost-editor': GhostEditor,
   'launch-proof': LaunchProofView,
+  'visual-physics': VisualPhysicsEditor,
 };
 
 function PageRenderer() {

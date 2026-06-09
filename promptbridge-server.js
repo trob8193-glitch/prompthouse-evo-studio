@@ -74,6 +74,8 @@ import { IntelligenceCore } from './src/core/engines/IntelligenceCore.js';
 import { LicenseManager } from './src/core/enterprise/LicenseManager.js';
 import { TelemetryLedger } from './src/core/enterprise/TelemetryLedger.js';
 import { PromptCompressor } from './lib/ai/PromptCompressor.js';
+import { createServer } from 'http';
+import { HiveMindProtocol } from './src/core/swarm/HiveMindProtocol.js';
 import db, { initDatabase } from './src/core/db/quad_schema.js';
 import { buildGeneratedArtifactRegistry } from './src/generated-artifact-registry.js';
 import { buildBridgeContractLedger } from './src/bridge-contract-ledger.js';
@@ -598,6 +600,9 @@ function persistEvolutionProfile(profile) {
   );
 }
 
-app.listen(port, '127.0.0.1', () => {
-  console.log(`PromptBridge Server listening on http://127.0.0.1:${port}`);
+const httpServer = createServer(app);
+const hiveMind = new HiveMindProtocol(httpServer);
+
+httpServer.listen(port, '127.0.0.1', () => {
+  console.log(`PromptBridge Server & Hive Mind Swarm Node listening on http://127.0.0.1:${port}`);
 });

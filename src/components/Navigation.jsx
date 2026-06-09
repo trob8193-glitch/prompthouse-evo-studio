@@ -72,6 +72,7 @@ export const NAV_GROUPS = [
       { id: 'connections', label: 'Connections', icon: ExternalLink },
       { id: 'grading', label: 'Grading & Release', icon: Gauge },
       { id: 'commerce', label: 'Commerce', icon: Activity },
+      { id: 'visual-physics', label: 'Visual Physics', icon: Zap },
     ],
   },
 ];
