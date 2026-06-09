@@ -5,6 +5,7 @@ node_modules/
 dist/
 proof_receipts/
 .prompthouse-data/
+.evo-llm/
 .sovereign-brain.json
 *.db
 browser_bridge_receipts/

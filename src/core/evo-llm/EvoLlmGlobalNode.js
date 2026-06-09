@@ -56,6 +56,7 @@ export function redactTrainingValue(value) {
   if (value && typeof value === 'object') {
     return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, redactTrainingValue(item)]));
   }
+  if (typeof value !== 'string') return value ?? '';
   return String(value ?? '')
     .replace(/sk-[A-Za-z0-9_-]{12,}/g, '[REDACTED_OPENAI_KEY]')
     .replace(/AIza[A-Za-z0-9_-]{20,}/g, '[REDACTED_GEMINI_KEY]')
@@ -78,6 +79,11 @@ export function getOrCreateGlobalNodeIdentity({ rootDir = process.cwd(), env = p
   };
   writeJson(paths.identity, identity);
   return identity;
+}
+
+export function readGlobalNodeIdentity({ rootDir = process.cwd() } = {}) {
+  const paths = getEvoGlobalNodePaths({ rootDir });
+  return readJsonSafe(paths.identity, null);
 }
 
 function readTrainingExamples(rootDir) {
@@ -179,10 +185,11 @@ function findPacket(paths, packetId) {
 
 export function getGlobalNodeStatus({ rootDir = process.cwd(), env = process.env } = {}) {
   const paths = getEvoGlobalNodePaths({ rootDir });
-  const identity = getOrCreateGlobalNodeIdentity({ rootDir, env });
+  const identity = readGlobalNodeIdentity({ rootDir });
   const packets = listJsonFiles(paths.outbox, 20);
   const receipts = listJsonFiles(paths.receipts, 20);
   const blockers = [
+    !identity?.nodeId ? 'Global node identity has not been initialized by a package or submit action.' : null,
     env.GLOBAL_EVO_CONTRIBUTION_OPT_IN !== 'true' ? 'GLOBAL_EVO_CONTRIBUTION_OPT_IN is not true.' : null,
     env.GLOBAL_EVO_DATA_RIGHTS_CONFIRMED !== 'true' ? 'GLOBAL_EVO_DATA_RIGHTS_CONFIRMED is not true.' : null,
     !env.GLOBAL_EVO_HUB_URL ? 'GLOBAL_EVO_HUB_URL missing.' : null,
