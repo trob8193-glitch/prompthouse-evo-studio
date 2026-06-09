@@ -3,13 +3,15 @@ import { Server } from 'socket.io';
 export class HiveMindProtocol {
   constructor(server, options = {}) {
     this.rewardSettlement = options.rewardSettlement || null;
+    this.networkMode = options.networkMode || 'MASTER_NODE'; // can be MASTER_NODE or PURE_P2P
+    
     this.io = new Server(server, {
       cors: { origin: '*' }
     });
-    
+
     this.connectedNodes = new Map();
     this.bounties = new Map();
-    
+
     this.io.on('connection', (socket) => {
       console.log(`\n🌐 [HiveMind] New Node Connected: ${socket.id}`);
       this.connectedNodes.set(socket.id, { computeLevel: 'idle', joinedAt: Date.now() });
@@ -17,8 +19,14 @@ export class HiveMindProtocol {
       socket.on('broadcast_bounty', (bounty) => {
         console.log(`🐝 [HiveMind] Swarm Bounty Received from ${socket.id}: ${bounty.taskType}`);
         this.bounties.set(bounty.id, bounty);
-        // Relay to all other nodes
-        socket.broadcast.emit('new_bounty', bounty);
+        
+        // In PURE_P2P mode, we relay the bounty. In MASTER_NODE mode, the master assigns it.
+        if (this.networkMode === 'PURE_P2P') {
+          socket.broadcast.emit('new_bounty', bounty);
+        } else {
+          // Master Node logic (basic assignment for now)
+          socket.broadcast.emit('new_bounty', { ...bounty, assignedByMaster: true });
+        }
       });
 
       socket.on('submit_bounty_solution', async (solution) => {
@@ -56,6 +64,7 @@ export class HiveMindProtocol {
 
   getSwarmStatus() {
     return {
+      networkMode: this.networkMode,
       activeNodes: this.connectedNodes.size,
       activeBounties: this.bounties.size,
       rewardSettlement: this.rewardSettlement ? 'configured' : 'provider_required'
