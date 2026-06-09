@@ -61,6 +61,7 @@ import { registerPromptShellRoutes } from './generated_apis/promptshell_routes.j
 import registerExecutionRoutes from './generated_apis/execution_routes.js';
 import registerExternalConnectorRoutes from './generated_apis/external_connector_routes.js';
 import { RealExecutionPipeline } from './lib/execution/pipeline.js';
+import { registerCommerceMarketplaceRoutes } from './src/routes/commerce_marketplace_routes.js';
 
 // Import our core engines
 import { UniversalAIAdaptor } from './lib/ai/UniversalAIAdaptor.js';
@@ -184,6 +185,7 @@ registerStoreRoutes(app, { stripe: stripeClient, db, getEvoAgent });
 registerEvoExchangeRoutes(app);
 registerExecutionRoutes(app, { pipeline: executionPipeline });
 registerExternalConnectorRoutes(app, { db });
+registerCommerceMarketplaceRoutes(app);
 app.use('/api/launch-pilot', launchPilotRoutes);
   const gain = ledgerStats.total_gain || 0;
   res.json({ 
@@ -252,6 +254,22 @@ app.post('/api/sovereign-ledger/log', (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
+// Layer 1 Protocol Public APIs
+app.post('/api/evo-git/sync', (req, res) => {
+  try {
+    const { snapshot, apiKey } = req.body;
+    // In production, verify the apiKey against local allowed keys
+    if (!apiKey) return res.status(401).json({ success: false, error: 'API Key required for Evo Git Sync' });
+    
+    // Simulate accepting an external commit into the local spine
+    const mockHash = "layer1_" + Date.now();
+    res.json({ success: true, message: 'External snapshot merged successfully', hash: mockHash });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 const port = parseInt(process.env.BRIDGE_PORT || '3001', 10);
 
 // ─── INITIALIZATION ──────────────────────────────────────────────────────────

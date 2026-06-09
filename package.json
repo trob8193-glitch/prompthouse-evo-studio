@@ -2,6 +2,10 @@
   "name": "prompthouse-evo-studio",
   "private": true,
   "version": "1.0.0",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "type": "module",
   "main": "desktop/evo-desktop-host.js",
   "bin": {
