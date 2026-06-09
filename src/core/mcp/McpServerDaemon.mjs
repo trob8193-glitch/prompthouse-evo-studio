@@ -150,6 +150,35 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
           required: ["targetFile", "issueDescription"]
         },
+      },
+      {
+        name: "trigger_evo_llm_pipeline",
+        description: "Executes the Evo LLM Pipeline to build and evaluate fine-tuning datasets.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            flag: { type: "string", description: "The pipeline flag to run (e.g., '--dataset', '--eval', '--model-card'). Default is '--dataset'." }
+          }
+        },
+      },
+      {
+        name: "trigger_ai_self_train",
+        description: "Executes the ai_self_train.mjs daemon to run a complete Self-Implementation Cycle.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
+      },
+      {
+        name: "trigger_specialized_training",
+        description: "Executes a specialized training module script.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            module: { type: "string", description: "The name of the module to train (e.g., 'autonomy', 'ui_generation', 'advanced_evolution')." }
+          },
+          required: ["module"]
+        },
       }
     ],
   };
@@ -311,6 +340,50 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         child.stderr.on("data", (data) => { output += data.toString(); });
         child.on("close", (code) => {
           resolve({ content: [{ type: "text", text: `Gemini Repair finished with code ${code}.\n\n${output}` }] });
+        });
+      });
+    }
+
+    if (name === "trigger_evo_llm_pipeline") {
+      const scriptPath = path.resolve(__dirname, "../../../scripts/evo_llm_pipeline.mjs");
+      const flag = args.flag || "--dataset";
+      return new Promise((resolve) => {
+        const child = spawn("node", [scriptPath, flag]);
+        let output = "";
+        child.stdout.on("data", (data) => { output += data.toString(); });
+        child.stderr.on("data", (data) => { output += data.toString(); });
+        child.on("close", (code) => {
+          resolve({ content: [{ type: "text", text: `Evo LLM Pipeline finished with code ${code}.\n\n${output}` }] });
+        });
+      });
+    }
+
+    if (name === "trigger_ai_self_train") {
+      const scriptPath = path.resolve(__dirname, "../../../scripts/ai_self_train.mjs");
+      return new Promise((resolve) => {
+        const child = spawn("node", [scriptPath]);
+        let output = "";
+        child.stdout.on("data", (data) => { output += data.toString(); });
+        child.stderr.on("data", (data) => { output += data.toString(); });
+        child.on("close", (code) => {
+          resolve({ content: [{ type: "text", text: `AI Self Train finished with code ${code}.\n\n${output}` }] });
+        });
+      });
+    }
+
+    if (name === "trigger_specialized_training") {
+      const scriptPath = path.resolve(__dirname, `../../../scripts/train_${args.module}.mjs`);
+      const fs = await import("fs");
+      if (!fs.existsSync(scriptPath)) {
+        return { content: [{ type: "text", text: `Training module ${args.module} not found at ${scriptPath}.` }] };
+      }
+      return new Promise((resolve) => {
+        const child = spawn("node", [scriptPath]);
+        let output = "";
+        child.stdout.on("data", (data) => { output += data.toString(); });
+        child.stderr.on("data", (data) => { output += data.toString(); });
+        child.on("close", (code) => {
+          resolve({ content: [{ type: "text", text: `Specialized Training (${args.module}) finished with code ${code}.\n\n${output}` }] });
         });
       });
     }
