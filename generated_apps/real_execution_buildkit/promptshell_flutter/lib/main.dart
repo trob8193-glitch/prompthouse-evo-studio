@@ -41,7 +41,9 @@ class _PromptShellAppState extends State<PromptShellApp> {
         useMaterial3: true,
         brightness: Brightness.dark,
         scaffoldBackgroundColor: _voidColor,
-        colorScheme: ColorScheme.fromSeed(seedColor: _pulseColor, brightness: Brightness.dark).copyWith(
+        colorScheme: ColorScheme.fromSeed(
+                seedColor: _pulseColor, brightness: Brightness.dark)
+            .copyWith(
           surface: _panelColor,
           primary: _pulseColor,
           secondary: _forgeColor,
@@ -66,11 +68,16 @@ class _PromptShellAppState extends State<PromptShellApp> {
                 selectedIndex: index,
                 onDestinationSelected: (value) => setState(() => index = value),
                 destinations: const [
-                  NavigationDestination(icon: Icon(Icons.dashboard), label: 'Deck'),
-                  NavigationDestination(icon: Icon(Icons.bolt), label: 'Manifest'),
-                  NavigationDestination(icon: Icon(Icons.hub), label: 'Connectors'),
-                  NavigationDestination(icon: Icon(Icons.verified), label: 'Proof'),
-                  NavigationDestination(icon: Icon(Icons.inventory_2), label: 'Artifacts'),
+                  NavigationDestination(
+                      icon: Icon(Icons.dashboard), label: 'Deck'),
+                  NavigationDestination(
+                      icon: Icon(Icons.bolt), label: 'Manifest'),
+                  NavigationDestination(
+                      icon: Icon(Icons.hub), label: 'Connectors'),
+                  NavigationDestination(
+                      icon: Icon(Icons.verified), label: 'Proof'),
+                  NavigationDestination(
+                      icon: Icon(Icons.inventory_2), label: 'Artifacts'),
                 ],
               ),
             );
@@ -81,14 +88,21 @@ class _PromptShellAppState extends State<PromptShellApp> {
                 NavigationRail(
                   backgroundColor: _panelColor,
                   selectedIndex: index,
-                  onDestinationSelected: (value) => setState(() => index = value),
+                  onDestinationSelected: (value) =>
+                      setState(() => index = value),
                   labelType: NavigationRailLabelType.all,
                   destinations: const [
-                    NavigationRailDestination(icon: Icon(Icons.dashboard), label: Text('Deck')),
-                    NavigationRailDestination(icon: Icon(Icons.bolt), label: Text('Manifest')),
-                    NavigationRailDestination(icon: Icon(Icons.hub), label: Text('Connectors')),
-                    NavigationRailDestination(icon: Icon(Icons.verified), label: Text('Proof')),
-                    NavigationRailDestination(icon: Icon(Icons.inventory_2), label: Text('Artifacts')),
+                    NavigationRailDestination(
+                        icon: Icon(Icons.dashboard), label: Text('Deck')),
+                    NavigationRailDestination(
+                        icon: Icon(Icons.bolt), label: Text('Manifest')),
+                    NavigationRailDestination(
+                        icon: Icon(Icons.hub), label: Text('Connectors')),
+                    NavigationRailDestination(
+                        icon: Icon(Icons.verified), label: Text('Proof')),
+                    NavigationRailDestination(
+                        icon: Icon(Icons.inventory_2),
+                        label: Text('Artifacts')),
                   ],
                 ),
                 Expanded(child: screens[index]),
@@ -126,14 +140,17 @@ class CommandDeck extends StatelessWidget {
         final health = snapshot.data![0];
         final envelope = snapshot.data![1];
         final capabilities = _asMap(envelope['capabilities']);
-        final brand = _asMap(capabilities['brand']).isNotEmpty ? _asMap(capabilities['brand']) : _asMap(health['brand']);
+        final brand = _asMap(capabilities['brand']).isNotEmpty
+            ? _asMap(capabilities['brand'])
+            : _asMap(health['brand']);
 
         return ScreenFrame(
           title: 'PromptShell Command Deck',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              EvoHeader(brand: brand, health: health, capabilities: capabilities),
+              EvoHeader(
+                  brand: brand, health: health, capabilities: capabilities),
               const SizedBox(height: 18),
               CapabilityMatrix(capabilities: capabilities),
               const SizedBox(height: 18),
@@ -147,7 +164,11 @@ class CommandDeck extends StatelessWidget {
 }
 
 class EvoHeader extends StatelessWidget {
-  const EvoHeader({required this.brand, required this.health, required this.capabilities, super.key});
+  const EvoHeader(
+      {required this.brand,
+      required this.health,
+      required this.capabilities,
+      super.key});
 
   final Map<String, dynamic> brand;
   final Map<String, dynamic> health;
@@ -173,7 +194,10 @@ class EvoHeader extends StatelessWidget {
         children: [
           Text(
             _text(brand['name'], 'PromptHouse Evo Studio'),
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 6),
           Text(_text(brand['runtime'], 'PromptShell Evo Runtime')),
@@ -182,10 +206,22 @@ class EvoHeader extends StatelessWidget {
             spacing: 8,
             runSpacing: 8,
             children: [
-              StatusChip(label: 'Bridge', value: _text(health['bridge'], 'PromptBridge'), color: _forgeColor),
-              StatusChip(label: 'Database', value: _text(health['database'], 'unknown'), color: _pulseColor),
-              StatusChip(label: 'Agent', value: _text(health['agent'], 'unknown'), color: _proofColor),
-              StatusChip(label: 'Mode', value: _text(runtime['providerMode'], 'local_contracts_only'), color: _forgeColor),
+              StatusChip(
+                  label: 'Bridge',
+                  value: _text(health['bridge'], 'PromptBridge'),
+                  color: _forgeColor),
+              StatusChip(
+                  label: 'Database',
+                  value: _text(health['database'], 'unknown'),
+                  color: _pulseColor),
+              StatusChip(
+                  label: 'Agent',
+                  value: _text(health['agent'], 'unknown'),
+                  color: _proofColor),
+              StatusChip(
+                  label: 'Mode',
+                  value: _text(runtime['providerMode'], 'local_contracts_only'),
+                  color: _forgeColor),
             ],
           ),
           const SizedBox(height: 12),
@@ -242,7 +278,12 @@ class CapabilityMatrix extends StatelessWidget {
 }
 
 class CapabilityCard extends StatelessWidget {
-  const CapabilityCard({required this.icon, required this.title, required this.surface, required this.accent, super.key});
+  const CapabilityCard(
+      {required this.icon,
+      required this.title,
+      required this.surface,
+      required this.accent,
+      super.key});
   final IconData icon;
   final String title;
   final Map<String, dynamic> surface;
@@ -261,7 +302,9 @@ class CapabilityCard extends StatelessWidget {
               children: [
                 Icon(icon, color: accent),
                 const SizedBox(width: 10),
-                Expanded(child: Text(title, style: Theme.of(context).textTheme.titleMedium)),
+                Expanded(
+                    child: Text(title,
+                        style: Theme.of(context).textTheme.titleMedium)),
               ],
             ),
             const SizedBox(height: 10),
@@ -299,7 +342,8 @@ class ProofRail extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Evo Proof Rail', style: Theme.of(context).textTheme.titleMedium),
+            Text('Evo Proof Rail',
+                style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             Wrap(
               spacing: 10,
@@ -397,10 +441,13 @@ class ConnectorsScreen extends StatelessWidget {
       child: FutureBuilder<List<dynamic>>(
         future: api.connectors(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) return SelectableText('Broken: ${snapshot.error}');
-          if (!snapshot.hasData) return const LoadingState(message: 'Loading connectors...');
+          if (snapshot.hasError)
+            return SelectableText('Broken: ${snapshot.error}');
+          if (!snapshot.hasData)
+            return const LoadingState(message: 'Loading connectors...');
           final connectors = snapshot.data!;
-          if (connectors.isEmpty) return const Text('No connectors registered.');
+          if (connectors.isEmpty)
+            return const Text('No connectors registered.');
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -409,12 +456,15 @@ class ConnectorsScreen extends StatelessWidget {
                   child: ListTile(
                     leading: const Icon(Icons.hub),
                     title: Text('${connector["name"]}'),
-                    subtitle: Text('${connector["connectorId"]} - risk ${connector["riskLevel"]}'),
+                    subtitle: Text(
+                        '${connector["connectorId"]} - risk ${connector["riskLevel"]}'),
                     trailing: FilledButton.icon(
                       onPressed: () async {
-                        final result = await api.handshake('${connector["connectorId"]}');
+                        final result =
+                            await api.handshake('${connector["connectorId"]}');
                         if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.toString())));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(result.toString())));
                         }
                       },
                       icon: const Icon(Icons.link),
@@ -462,9 +512,12 @@ class DataListScreen extends StatelessWidget {
       child: FutureBuilder<List<dynamic>>(
         future: loader(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) return SelectableText('Broken: ${snapshot.error}');
-          if (!snapshot.hasData) return const LoadingState(message: 'Loading...');
-          if (snapshot.data!.isEmpty) return const Text('No records yet. Run a real action first.');
+          if (snapshot.hasError)
+            return SelectableText('Broken: ${snapshot.error}');
+          if (!snapshot.hasData)
+            return const LoadingState(message: 'Loading...');
+          if (snapshot.data!.isEmpty)
+            return const Text('No records yet. Run a real action first.');
           return SelectableText(snapshot.data.toString());
         },
       ),
@@ -484,7 +537,11 @@ class ScreenFrame extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: ListView(
           children: [
-            Text(title, style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800)),
+            Text(title,
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.copyWith(fontWeight: FontWeight.w800)),
             const SizedBox(height: 18),
             child,
           ],
@@ -495,7 +552,11 @@ class ScreenFrame extends StatelessWidget {
 }
 
 class StatusChip extends StatelessWidget {
-  const StatusChip({required this.label, required this.value, required this.color, super.key});
+  const StatusChip(
+      {required this.label,
+      required this.value,
+      required this.color,
+      super.key});
   final String label;
   final String value;
   final Color color;
@@ -509,7 +570,8 @@ class StatusChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: color.withValues(alpha: 0.55)),
       ),
-      child: Text('$label: $value', style: TextStyle(color: color, fontWeight: FontWeight.w700)),
+      child: Text('$label: $value',
+          style: TextStyle(color: color, fontWeight: FontWeight.w700)),
     );
   }
 }
@@ -540,7 +602,10 @@ class LoadingState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
+        const SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(strokeWidth: 2)),
         const SizedBox(width: 12),
         Expanded(child: Text(message)),
       ],

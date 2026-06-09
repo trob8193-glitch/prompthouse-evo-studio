@@ -6,13 +6,18 @@ class PromptEndsApi {
 
   final http.Client _client;
   // PHASE 2: Updated to connect to PromptBridge backend on port 3001
-  static const baseUrl = String.fromEnvironment('PROMPTENDS_BASE_URL', defaultValue: 'http://localhost:3001/api/promptshell');
+  static const baseUrl = String.fromEnvironment('PROMPTENDS_BASE_URL',
+      defaultValue: 'http://localhost:3001/api/promptshell');
 
   Future<Map<String, dynamic>> health() => _getMap('/health');
-  Future<Map<String, dynamic>> evoCapabilities() => _getMap('/evo-capabilities');
-  Future<List<dynamic>> connectors() => _getEnvelopeList('/connectors', 'connectors');
-  Future<List<dynamic>> proofCards() => _getEnvelopeList('/proof-cards', 'proofCards');
-  Future<List<dynamic>> artifacts() => _getEnvelopeList('/artifacts', 'artifacts');
+  Future<Map<String, dynamic>> evoCapabilities() =>
+      _getMap('/evo-capabilities');
+  Future<List<dynamic>> connectors() =>
+      _getEnvelopeList('/connectors', 'connectors');
+  Future<List<dynamic>> proofCards() =>
+      _getEnvelopeList('/proof-cards', 'proofCards');
+  Future<List<dynamic>> artifacts() =>
+      _getEnvelopeList('/artifacts', 'artifacts');
 
   Future<Map<String, dynamic>> handshake(String connectorId) {
     return _postMap('/connectors/$connectorId/handshake', {});
@@ -40,10 +45,12 @@ class PromptEndsApi {
     if (decoded is Map<String, dynamic> && decoded[key] is List) {
       return decoded[key] as List<dynamic>;
     }
-    throw Exception('Expected list field "$key" from $path but got ${decoded.runtimeType}');
+    throw Exception(
+        'Expected list field "$key" from $path but got ${decoded.runtimeType}');
   }
 
-  Future<Map<String, dynamic>> _postMap(String path, Map<String, dynamic> body) async {
+  Future<Map<String, dynamic>> _postMap(
+      String path, Map<String, dynamic> body) async {
     final response = await _client.post(
       Uri.parse('$baseUrl$path'),
       headers: {'Content-Type': 'application/json'},
