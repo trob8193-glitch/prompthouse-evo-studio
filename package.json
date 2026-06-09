@@ -129,10 +129,11 @@
     "self:build": "npm run build && npm run platform:audit",
     "mobile:build": "node scripts/mobile-architect-cli.mjs",
     "daemons:all": "concurrently \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run antigravity\" \"npm run marketing:daemon\"",
-    "launch:studio": "concurrently \"npm run dev\" \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run antigravity\" \"npm run marketing:daemon\" \"npm run seed:daemon\"",
+    "launch:studio": "concurrently \"npm run dev\" \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run antigravity\" \"npm run marketing:daemon\" \"npm run seed:daemon\" \"npm run mobile:daemon\"",
     "omni:orchestrator": "node src/core/daemons/omni/OmniOrchestrator.mjs",
     "antigravity": "node scripts/antigravity-daemon.mjs",
     "marketing:daemon": "node scripts/marketing-singularity-daemon.mjs",
+    "mobile:daemon": "node scripts/mobile-singularity-daemon.mjs",
     "seed:daemon": "node scripts/seed-round-engineering-daemon.mjs",
     "test:enterprise-license": "node scripts/test-enterprise-license.mjs"
   },
