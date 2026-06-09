@@ -2,6 +2,7 @@ import React from 'react';
 import { PerformanceMonitor } from './PerformanceMonitor';
 import { Activity, Shield, Zap, TrendingUp, Cpu, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { StatusBadge } from './primitives.jsx';
 
 export const StudioDashboard = () => {
   const [iq, setIq] = React.useState(null);

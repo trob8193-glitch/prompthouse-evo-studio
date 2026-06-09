@@ -1,7 +1,7 @@
 {
   "success": true,
   "truthState": "BROWSER_E2E_PROOF_CLEAR",
-  "checkedAt": "2026-06-06T17:10:19.581Z",
+  "checkedAt": "2026-06-09T15:07:22.833Z",
   "previewUrl": "http://127.0.0.1:4173",
   "bridgeUrl": "http://127.0.0.1:3001",
   "clickedPages": [
@@ -18,11 +18,11 @@
   },
   "domSummary": {
     "title": "PromptHouse Evo Studio",
-    "buttons": 96,
+    "buttons": 98,
     "links": 3,
     "inputs": 2,
-    "rootTextLength": 4680,
-    "visibleTextSample": "PromptHouse Evo\nSTUDIO\nLOGIC DENSITY:\n0.00M IQ\nSTUDIO IQ:\n0\n⚡\nGemini 2.0 Flash\nFAST\n▼\nCOUNCIL:\nDeadHunter\nTruthAuditor\nMaturityScore\nBRIDGE ERROR\nMANIFEST SINGULARITY ENGINE\nSTUDIO\nCommand Center\nSingularity Studio\nApp Market\nLaunch Proof\nEvo Copilot\nWorkspace Explorer\nGhost Editor\nGOVERNANCE\nSelf-Evolution\nCost Firewall\nReview Ledger\nProof Docs\nINTELLIGENCE\nPrompt Registry\nEvo Diffuser\nEvo Pixelator\nEvo Layout\nTheme Evolution\nEvoPulse Grid\nOPERATIONS\nExecution Queue\nProof Console\nProof Center\nE"
+    "rootTextLength": 4711,
+    "visibleTextSample": "PromptHouse Evo\nSTUDIO\nLOGIC DENSITY:\n0.00M IQ\nSTUDIO IQ:\n0\n⚡\nGemini 2.0 Flash\nFAST\n▼\nCOUNCIL:\nDeadHunter\nTruthAuditor\nMaturityScore\nBRIDGE ONLINE\nMANIFEST SINGULARITY ENGINE\nSTUDIO\nCommand Center\nSingularity Studio\nApp Market\nLaunch Proof\nEvo Copilot\nEvo Agent Chat\nWorkspace Explorer\nGhost Editor\nGOVERNANCE\nSelf-Evolution\nCost Firewall\nReview Ledger\nProof Docs\nINTELLIGENCE\nPrompt Registry\nEvo Diffuser\nEvo Pixelator\nEvo Layout\nTheme Evolution\nEvoPulse Grid\nOPERATIONS\nExecution Queue\nBrain Surfac"
   },
   "consoleErrors": [],
   "pageErrors": [],

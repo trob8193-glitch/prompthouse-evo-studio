@@ -1,60 +1,13 @@
 {
-  "generatedAt": "2026-06-06T17:09:49.942Z",
+  "generatedAt": "2026-06-09T14:58:57.033Z",
   "bridgeBase": "http://127.0.0.1:3001",
-  "truthProbe": {
-    "success": true,
-    "truthState": "TRUTH_PROBE_READY",
-    "results": {
-      "averageScore": 100,
-      "moduleCount": 15,
-      "blockers": []
-    }
-  },
-  "studioScan": {
-    "success": true,
-    "truthState": "STUDIO_SCAN_CLEAR",
-    "total_modules": 15,
-    "averageScore": 100,
-    "blockers": [],
-    "routes": {
-      "total": 169,
-      "unresolved": []
-    },
-    "checkedAt": "2026-06-06T17:10:00.841Z"
-  },
-  "gates": [
-    {
-      "label": "route drift audit",
-      "command": "node scripts/audit-route-drift.mjs",
-      "required": true,
-      "status": "PASSED",
-      "output": "\",\n      \"path\": \"/api/status\",\n      \"file\": \"promptbridge-server.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/stripe/mode\",\n      \"file\": \"server/routes/stripe-health.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/stripe/status\",\n      \"file\": \"server/routes/stripe-health.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/stripe/test-checkout/browser-run/record\",\n      \"file\": \"server/routes/stripe-checkout-browser-run.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/stripe/test-checkout/browser-run/records\",\n      \"file\": \"server/routes/stripe-checkout-browser-run.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/stripe/test-checkout/browser-run/status\",\n      \"file\": \"server/routes/stripe-checkout-browser-run.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/stripe/test-checkout/browser-run/update\",\n      \"file\": \"server/routes/stripe-checkout-browser-run.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/stripe/test-checkout/readiness\",\n      \"file\": \"server/routes/stripe-test-checkout.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/stripe/test-checkout/session\",\n      \"file\": \"server/routes/stripe-test-checkout.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/stripe/test/account-probe\",\n      \"file\": \"server/routes/stripe-health.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/studio-os/proof/intercept\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/studio/diagnostics\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/studio/scan\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/terminal/bond\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/terminal/execute\",\n      \"file\": \"generated_apis/evo_terminal_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/theme-evolution/apply\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/theme-evolution/approve\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/theme-evolution/preview\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/theme-evolution/profiles\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/theme-evolution/rollback\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/theme-evolution/runtime\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/theme-evolution/status\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/theme-evolution/suggest\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/truth/probe\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/vercel/preview-deploy\",\n      \"file\": \"server/routes/vercel-preview-deploy.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/vercel/readiness\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/vercel/status\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/status\",\n      \"file\": \"promptbridge-server.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/status\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    }\n  ],\n  \"unresolvedClientRoutes\": [],\n  \"hardcodedStoreSidecar\": false\n}\n"
-    },
-    {
-      "label": "dead surface audit",
-      "command": "node scripts/dead-surface-audit.mjs",
-      "required": true,
-      "status": "PASSED",
-      "output": "{\n  \"success\": true,\n  \"truthState\": \"DEAD_SURFACES_CLEAR\",\n  \"scannedFiles\": 554,\n  \"violations\": []\n}\n"
-    },
-    {
-      "label": "enterprise static audit",
-      "command": "node scripts/enterprise_audit.mjs",
-      "required": true,
-      "status": "PASSED",
-      "output": "[INFO] [Enterprise Audit] Starting full project scan...\n[INFO] [Enterprise Audit] Found 644 files to audit.\n[INFO] \n[INFO] ENTERPRISE AUDIT REPORT\n[INFO] Total Files: 644\n[INFO] Passed: 644\n[INFO] Failed: 0\n[INFO] Average Score: 100.00/100\n[INFO] All files passed production audit.\n[INFO] Detailed report saved to .prompthouse-data/enterprise_audit_report.json\n"
-    },
-    {
-      "label": "focused route/dead tests",
-      "command": "npx vitest run tests/dead-surface-hunter.test.jsx tests/dead-surface-source-audit.test.js tests/navigation-contract.test.jsx tests/route-contract.test.js tests/route-registry.test.js tests/bridge-contract-ledger.test.js tests/studio_core_routes_contract.test.js",
-      "required": true,
-      "status": "PASSED",
-      "output": "\n RUN  v4.1.5 C:/Users/Noname/Documents/Codex/2026-05-03/prompthouse-evo-studio-files-in-my\n\n\n Test Files  7 passed (7)\n      Tests  23 passed (23)\n   Start at  12:10:56\n   Duration  13.17s (transform 5.97s, setup 7.66s, import 4.58s, tests 6.92s, environment 40.05s)\n\n"
-    }
-  ],
+  "truthProbe": null,
+  "studioScan": null,
+  "gates": [],
   "providerEvolution": {
-    "status": "SKIPPED",
-    "detail": "Provider-backed evolution missions require PH_ALLOW_NUCLEAR_EVOLUTION=true."
+    "status": "PENDING",
+    "detail": ""
   },
-  "finalStatus": "LOCAL_SINGULARITY_EDGE_CLEAR"
+  "finalStatus": "LOCAL_SINGULARITY_EDGE_FATAL",
+  "error": "The operation was aborted."
 }

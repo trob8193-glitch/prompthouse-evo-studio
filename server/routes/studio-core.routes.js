@@ -36,9 +36,44 @@ import { TRUTH_STATES } from '../services/truth-labels.js';
 const OLLAMA_BASE = 'http://localhost:11434';
 
 const DATA_DIR = () => path.join(process.cwd(), '.prompthouse-data');
+const STUDIO_IQ_BASELINE = 165000000;
+
+export function buildStudioIqMetrics(sovereignGain = 0, actionCount = 0) {
+  const iq = STUDIO_IQ_BASELINE + Number(sovereignGain || 0);
+  return {
+    iqMetrics: {
+      baseline: STUDIO_IQ_BASELINE,
+      sovereign_gain: Number(sovereignGain || 0),
+      truth_density: `${(iq / 1000000).toFixed(2)}M`
+    },
+    logic: {
+      density: (iq / 1000000).toFixed(2),
+      iq,
+      action_count: Number(actionCount || 0)
+    }
+  };
+}
 const USERS_FILE = () => path.join(DATA_DIR(), 'users.json');
 const CONFIG_FILE = () => path.join(DATA_DIR(), 'config.json');
 const LEDGER_FILE = () => path.join(DATA_DIR(), 'sovereign-ledger.jsonl');
+
+export function readStudioLedgerStats(ledgerPath = LEDGER_FILE()) {
+  if (!fs.existsSync(ledgerPath)) return { sovereignGain: 0, actionCount: 0 };
+
+  const lines = fs.readFileSync(ledgerPath, 'utf8').split(/\r?\n/).filter(Boolean);
+  return lines.reduce((stats, line) => {
+    try {
+      const entry = JSON.parse(line);
+      return {
+        sovereignGain: stats.sovereignGain + Number(entry.iq_gain || entry.iqGain || 0),
+        actionCount: stats.actionCount + 1
+      };
+    } catch {
+      return stats;
+    }
+  }, { sovereignGain: 0, actionCount: 0 });
+}
+
 const BONDED_NODES_FILE = () => path.join(DATA_DIR(), 'bonded-nodes.json');
 const EVOLUTION_PROFILE_FILE = () => path.join(DATA_DIR(), 'evolution-profile.json');
 const NIGHTFORGE_STATE_FILE = () => path.join(DATA_DIR(), 'nightforge_state.json');
@@ -498,14 +533,35 @@ export function registerStudioCoreRoutes(app) {
   ensureDataDir();
 
   app.get('/status', (_req, res) => {
-    res.json({ success: true, service: 'PromptBridge Recovery Runtime', truthState: 'RECOVERY_BRIDGE_READY', checkedAt: new Date().toISOString() });
+    const ledgerStats = readStudioLedgerStats();
+    const iq = buildStudioIqMetrics(ledgerStats.sovereignGain, ledgerStats.actionCount);
+    res.json({
+      success: true,
+      status: 'PromptBridge Operational',
+      service: 'PromptBridge Recovery Runtime',
+      truthState: 'RECOVERY_BRIDGE_READY',
+      launch_ready: true,
+      iq_metrics: iq.iqMetrics,
+      checkedAt: new Date().toISOString()
+    });
   });
 
   app.get('/api/metrics', (_req, res) => {
     const maturity = runModuleMaturityAudit({ rootDir: process.cwd() });
     const reviews = listReviews({ rootDir: process.cwd(), limit: 25 });
     const velocity = evaluateCostVelocity({ rootDir: process.cwd(), orgId: 'studio_owner' });
-    res.json({ success: true, truthState: 'METRICS_READY', maturity, reviewCount: reviews.length, costVelocity: velocity, checkedAt: new Date().toISOString() });
+    const ledgerStats = readStudioLedgerStats();
+    const iq = buildStudioIqMetrics(ledgerStats.sovereignGain, ledgerStats.actionCount);
+    res.json({
+      success: true,
+      truthState: 'METRICS_READY',
+      logic: iq.logic,
+      iq_metrics: iq.iqMetrics,
+      maturity,
+      reviewCount: reviews.length,
+      costVelocity: velocity,
+      checkedAt: new Date().toISOString()
+    });
   });
 
   app.get('/api/runtime-health', (_req, res) => {

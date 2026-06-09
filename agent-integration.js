@@ -6,6 +6,7 @@
 import { EvoAgent } from './agent-runtime.js';
 import { Router } from 'express';
 import dotenv from 'dotenv';
+import { Log } from './src/core/autonomy/SovereignLogger.js';
 
 dotenv.config({ path: '.env.agent', override: false });
 
@@ -67,6 +68,7 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
         threadId: agent.threadId,
       });
     } catch (err) {
+      Log.error(`[Agent] Health check initialization failed: ${err.message}`);
       res.status(503).json({
         success: false,
         status: 'not_initialized',
@@ -92,7 +94,10 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
 
     try {
       const agent = agentFactory();
-      const response = await agent.chat(message, { verbose: false });
+      const response = await agent.chat(message, { verbose: false }).catch(err => {
+        Log.error(`[Agent] Chat execution failed: ${err.message}`);
+        throw err;
+      });
 
       res.json({
         success: true,
@@ -102,7 +107,7 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
         timestamp: new Date().toISOString(),
       });
     } catch (err) {
-      console.error('[Agent] Error:', err.message);
+      Log.error(`[Agent] Error processing chat: ${err.message}`);
       res.status(500).json({
         success: false,
         error: err.message,
@@ -125,6 +130,7 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
         conversationLength: agent.conversationHistory.length,
       });
     } catch (err) {
+      Log.error(`[Agent] Error fetching thread: ${err.message}`);
       res.status(503).json({
         success: false,
         error: err.message,
@@ -175,7 +181,7 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
   });
 
   app.use('/api/agent', router);
-  console.log('✅ Agent routes registered: /api/agent/*');
+  Log.success('Agent routes registered: /api/agent/*');
 }
 
 export { EvoAgent };

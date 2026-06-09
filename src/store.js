@@ -190,7 +190,18 @@ export const useSovereignStore = create((set, get) => ({
       const result = await safeFetchBridge('/status', { timeout: 5000 });
       if (!result.ok) throw new Error(result.error || 'Bridge disconnected');
       const data = result.data;
-      set({ bridgeStatus: 'connected', bridgeData: data, bridgeError: null });
+      const iqMetrics = data?.iq_metrics;
+      const logicMetrics = iqMetrics ? {
+        density: ((Number(iqMetrics.baseline || 0) + Number(iqMetrics.sovereign_gain || 0)) / 1000000).toFixed(2),
+        iq: Number(iqMetrics.baseline || 0) + Number(iqMetrics.sovereign_gain || 0),
+        action_count: get().metrics?.logic?.action_count || 0
+      } : null;
+      set((state) => ({
+        bridgeStatus: 'connected',
+        bridgeData: data,
+        bridgeError: null,
+        metrics: logicMetrics ? { ...(state.metrics || {}), logic: logicMetrics } : state.metrics
+      }));
       return data;
     } catch (err) {
       set({ bridgeStatus: 'error', bridgeError: err.message });

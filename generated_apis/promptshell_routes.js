@@ -8,6 +8,7 @@
 import crypto from 'crypto';
 import { executeConnectorProbe } from '../lib/connectors/externalConnectorExecutor.js';
 import { createProviderReceipt } from '../server/services/provider-receipts.js';
+import { Log } from '../src/core/autonomy/SovereignLogger.js';
 
 const ok = (res, payload = {}) => res.json({ success: true, ...payload });
 const fail = (res, error, status = 500) => res.status(status).json({ success: false, error: error?.message || String(error) });
@@ -68,7 +69,8 @@ function addColumnIfMissing(db, tableName, columnName, definition) {
 export function ensurePromptShellSchema(db) {
   if (!hasDatabase(db)) return false;
 
-  db.exec(`
+  try {
+    db.exec(`
     CREATE TABLE IF NOT EXISTS sovereign_ledger (
       id TEXT PRIMARY KEY,
       feature_id TEXT,
@@ -136,6 +138,10 @@ export function ensurePromptShellSchema(db) {
   seedConnectors(db);
 
   return true;
+  } catch (error) {
+    Log.error(`[PromptShell] Database schema initialization failed: ${error.message}`);
+    return false;
+  }
 }
 
 function ensurePromptShellColumns(db) {
@@ -428,6 +434,9 @@ export function registerPromptShellRoutes(app, { db, evoAgent, connectorExecutor
 
     try {
       const manifest = await buildManifest(seedIntent.trim(), evoAgent);
+      if (!manifest || typeof manifest !== 'object') {
+        return fail(res, 'Agent returned an invalid or empty manifest.', 500);
+      }
       const manifestId = `mf_${crypto.randomUUID().slice(0, 12)}`;
       const now = new Date().toISOString();
 
@@ -516,7 +525,7 @@ export function registerPromptShellRoutes(app, { db, evoAgent, connectorExecutor
     }
   });
 
-  console.log('PromptShell routes registered: /api/promptshell/*');
+  Log.success('PromptShell routes registered: /api/promptshell/*');
 }
 
 export function buildEvoRuntimeCapabilities({ databaseReady = false, evoAgent } = {}) {
