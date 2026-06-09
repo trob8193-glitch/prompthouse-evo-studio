@@ -1,5 +1,5 @@
 import { Log } from './core/autonomy/SovereignLogger.js';
-import db from './core/db/quad_schema.js';
+import db, { initDatabase } from './core/db/quad_schema.js';
 
 /**
  * PH EVO STUDIO — EVO-EXCHANGE (GLOBAL MARKETPLACE)
@@ -15,6 +15,7 @@ export class EvoExchange {
 
   async execute(params = {}) {
     Log.info('🚀 [Evo-exchange] Fetching marketplace listings...');
+    initDatabase();
     const listings = db.prepare('SELECT * FROM marketplace_listings WHERE status = ? ORDER BY created_at DESC LIMIT 50').all('published');
     return { success: true, timestamp: new Date().toISOString(), result: listings };
   }
@@ -30,15 +31,23 @@ export class EvoExchange {
 }
 
 export function submitForExchange(recipeId, params = {}) {
-  const { authorId, title, description, type, payloadJson, priceCredits = 0 } = params;
+  const {
+    authorId = 'studio_owner',
+    title = params.name || `Recipe ${recipeId}`,
+    description = '',
+    type = 'recipe',
+    payloadJson = JSON.stringify({ recipeId, ...params }),
+    priceCredits = 0
+  } = params;
   
   try {
-    const id = \`mx_\${Date.now()}\`;
-    db.prepare(\`
+    initDatabase();
+    const id = `mx_${Date.now()}`;
+    db.prepare(`
       INSERT INTO marketplace_listings 
       (id, author_id, title, description, type, payload_json, price_credits, status)
       VALUES (?, ?, ?, ?, ?, ?, ?, 'published')
-    \`).run(id, authorId, title, description, type, payloadJson, priceCredits);
+    `).run(id, authorId, title, description, type, payloadJson, priceCredits);
 
     return {
       blocked: false,
@@ -56,6 +65,7 @@ export function submitForExchange(recipeId, params = {}) {
 
 export function downloadListing(listingId) {
   try {
+    initDatabase();
     const listing = db.prepare('SELECT * FROM marketplace_listings WHERE id = ?').get(listingId);
     if (!listing) throw new Error('Listing not found');
     

@@ -1,4 +1,4 @@
-import Database from '@libsql/sqlite3';
+import Database from 'better-sqlite3';
 import path from 'path';
 
 const DB_PATH = process.env.DATA_DIR ? path.join(process.env.DATA_DIR, 'prompthouse.db') : path.resolve('./prompthouse.db');

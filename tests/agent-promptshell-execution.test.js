@@ -1,5 +1,5 @@
 import express from 'express';
-import Database from '@libsql/sqlite3';
+import Database from 'better-sqlite3';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { setupAgentRoutes } from '../agent-integration.js';
