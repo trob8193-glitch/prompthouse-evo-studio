@@ -26,6 +26,22 @@ const EVO_BRAND = {
   badges: ['Evo Native Runtime', 'PromptBridge Powered', 'Proof-Gated'],
 };
 
+const LIVE_CORE_KEYS = [
+  { name: 'JWT Secret', envKey: 'JWT_SECRET' },
+  { name: 'PromptHouse Master Key', envKey: 'PH_EVO_MASTER_KEY' },
+];
+
+const LIVE_REQUIRED_PROVIDERS = [
+  { name: 'OpenAI', envKey: 'OPENAI_API_KEY', capability: 'agent execution and model-backed manifest work' },
+  { name: 'Stripe', envKey: 'STRIPE_SECRET_KEY', capability: 'checkout and commerce proof' },
+  { name: 'Vercel', envKey: 'VERCEL_TOKEN', capability: 'online preview/deployment proof' },
+];
+
+const LIVE_OPTIONAL_PROVIDERS = [
+  { name: 'GitHub', envKey: 'GITHUB_TOKEN', capability: 'repository connector probes' },
+  { name: 'Gemini', envKey: 'GEMINI_API_KEY', capability: 'secondary model provider coverage' },
+];
+
 function hasDatabase(db) {
   return Boolean(db?.prepare && db?.exec);
 }
@@ -321,12 +337,18 @@ export function registerPromptShellRoutes(app, { db, evoAgent, connectorExecutor
       database: databaseReady ? 'ready' : 'unavailable',
       agent: evoAgent?.chat ? 'available' : 'local_manifest_generator',
       capabilitiesPath: '/api/promptshell/evo-capabilities',
+      liveReadinessPath: '/api/promptshell/live-readiness',
       uptime: process.uptime(),
     });
   });
 
   app.get('/api/promptshell/evo-capabilities', (req, res) => {
     ok(res, { capabilities: buildEvoRuntimeCapabilities({ databaseReady, evoAgent }) });
+  });
+
+  app.get('/api/promptshell/live-readiness', (req, res) => {
+    const requestBaseUrl = req.get('host') ? `${req.protocol}://${req.get('host')}/api/promptshell` : '';
+    ok(res, { readiness: buildPromptShellLiveReadiness({ databaseReady, evoAgent, requestBaseUrl }) });
   });
 
   app.get('/api/promptshell/connectors', (req, res) => {
@@ -500,6 +522,7 @@ export function registerPromptShellRoutes(app, { db, evoAgent, connectorExecutor
 export function buildEvoRuntimeCapabilities({ databaseReady = false, evoAgent } = {}) {
   const providerKeys = ['OPENAI_API_KEY', 'GITHUB_TOKEN', 'STRIPE_SECRET_KEY', 'VERCEL_TOKEN'];
   const configuredProviders = providerKeys.filter((key) => Boolean(process.env[key]));
+  const liveReadiness = buildPromptShellLiveReadiness({ databaseReady, evoAgent });
 
   return {
     brand: EVO_BRAND,
@@ -519,6 +542,7 @@ export function buildEvoRuntimeCapabilities({ databaseReady = false, evoAgent } 
       agent: evoAgent?.chat ? 'available' : 'local_manifest_generator',
       configuredProviders,
       providerMode: configuredProviders.length ? 'partially_configured' : 'local_contracts_only',
+      liveReadinessPath: '/api/promptshell/live-readiness',
     },
     flutter: {
       truthState: 'FLUTTER_CLIENT_CONTRACT_READY',
@@ -554,6 +578,73 @@ export function buildEvoRuntimeCapabilities({ databaseReady = false, evoAgent } 
       { step: 'proof', route: '/api/promptshell/proof-cards', truthState: 'READABLE' },
       { step: 'artifact', route: '/api/promptshell/artifacts', truthState: 'PERSISTED' },
     ],
+    liveReadiness,
+  };
+}
+
+export function buildPromptShellLiveReadiness({ databaseReady = false, evoAgent, requestBaseUrl = '' } = {}) {
+  const bridgeBaseUrl = process.env.PROMPTENDS_BASE_URL ||
+    process.env.VITE_PROMPTENDS_BASE_URL ||
+    requestBaseUrl ||
+    'http://localhost:3001/api/promptshell';
+  const core = LIVE_CORE_KEYS.map(redactedEnvStatus);
+  const providers = LIVE_REQUIRED_PROVIDERS.map(redactedEnvStatus);
+  const optionalProviders = LIVE_OPTIONAL_PROVIDERS.map(redactedEnvStatus);
+  const coreBlockers = core.filter((item) => !item.configured).map((item) => `Missing core credential: ${item.envKey}`);
+  const providerBlockers = providers.filter((item) => !item.configured).map((item) => `Missing live provider credential: ${item.envKey}`);
+  const deviceIdConfigured = Boolean(process.env.PROMPTSHELL_DEVICE_ID || process.env.FLUTTER_DEVICE_ID);
+  const deviceProofConfigured = Boolean(process.env.PROMPTSHELL_DEVICE_PROOF || process.env.FLUTTER_DEVICE_PROOF);
+  const bridgeRouteActive = Boolean(requestBaseUrl);
+  const blockers = [
+    ...coreBlockers,
+    ...providerBlockers,
+    ...(databaseReady ? [] : ['PromptShell database is unavailable.']),
+    ...(deviceProofConfigured ? [] : ['Device runtime proof missing: run Flutter against a real browser/device and record the receipt.']),
+  ];
+
+  const warnings = [
+    ...optionalProviders.filter((item) => !item.configured).map((item) => `Optional provider not configured: ${item.envKey}`),
+    ...(bridgeRouteActive ? [] : ['Bridge route was not request-proven in this payload; call /api/promptshell/live-readiness from the running bridge.']),
+  ];
+
+  return {
+    truthState: blockers.length ? 'LIVE_BLOCKED' : 'LIVE_READY',
+    brand: EVO_BRAND,
+    bridge: {
+      truthState: bridgeRouteActive ? 'LIVE_BRIDGE_ROUTE_ACTIVE' : 'BRIDGE_URL_DECLARED',
+      baseUrl: bridgeBaseUrl,
+      healthUrl: `${bridgeBaseUrl}/health`,
+      capabilitiesUrl: `${bridgeBaseUrl}/evo-capabilities`,
+      liveReadinessUrl: `${bridgeBaseUrl}/live-readiness`,
+      agent: evoAgent?.chat ? 'available' : 'local_manifest_generator',
+      database: databaseReady ? 'ready' : 'unavailable',
+    },
+    core,
+    providers,
+    optionalProviders,
+    device: {
+      truthState: deviceProofConfigured ? 'DEVICE_RUNTIME_PROVEN' : 'DEVICE_RUNTIME_PROOF_REQUIRED',
+      deviceId: deviceIdConfigured ? 'configured' : '',
+      proofConfigured: deviceProofConfigured,
+      proofCommands: [
+        'flutter devices',
+        `flutter run -d chrome --dart-define=PROMPTENDS_BASE_URL=${bridgeBaseUrl}`,
+        `curl ${bridgeBaseUrl}/health`,
+        `curl ${bridgeBaseUrl}/live-readiness`,
+      ],
+      proofEnv: ['PROMPTSHELL_DEVICE_ID or FLUTTER_DEVICE_ID', 'PROMPTSHELL_DEVICE_PROOF or FLUTTER_DEVICE_PROOF'],
+    },
+    blockers,
+    warnings,
+    nextActions: blockers.length ? blockers : ['Run live provider probes and archive provider/device receipts.'],
+  };
+}
+
+function redactedEnvStatus(item) {
+  return {
+    ...item,
+    configured: Boolean(process.env[item.envKey]),
+    value: process.env[item.envKey] ? 'configured' : '',
   };
 }
 

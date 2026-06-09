@@ -12,6 +12,7 @@ class PromptEndsApi {
   Future<Map<String, dynamic>> health() => _getMap('/health');
   Future<Map<String, dynamic>> evoCapabilities() =>
       _getMap('/evo-capabilities');
+  Future<Map<String, dynamic>> liveReadiness() => _getMap('/live-readiness');
   Future<List<dynamic>> connectors() =>
       _getEnvelopeList('/connectors', 'connectors');
   Future<List<dynamic>> proofCards() =>

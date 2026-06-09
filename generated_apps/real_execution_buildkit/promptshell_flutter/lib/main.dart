@@ -122,7 +122,8 @@ class CommandDeck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Map<String, dynamic>>>(
-      future: Future.wait([api.health(), api.evoCapabilities()]),
+      future: Future.wait(
+          [api.health(), api.evoCapabilities(), api.liveReadiness()]),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return ScreenFrame(
@@ -139,7 +140,11 @@ class CommandDeck extends StatelessWidget {
 
         final health = snapshot.data![0];
         final envelope = snapshot.data![1];
+        final liveEnvelope = snapshot.data![2];
         final capabilities = _asMap(envelope['capabilities']);
+        final liveReadiness = _asMap(liveEnvelope['readiness']).isNotEmpty
+            ? _asMap(liveEnvelope['readiness'])
+            : _asMap(capabilities['liveReadiness']);
         final brand = _asMap(capabilities['brand']).isNotEmpty
             ? _asMap(capabilities['brand'])
             : _asMap(health['brand']);
@@ -153,6 +158,8 @@ class CommandDeck extends StatelessWidget {
                   brand: brand, health: health, capabilities: capabilities),
               const SizedBox(height: 18),
               CapabilityMatrix(capabilities: capabilities),
+              const SizedBox(height: 18),
+              LiveReadinessPanel(readiness: liveReadiness),
               const SizedBox(height: 18),
               ProofRail(steps: _asList(capabilities['proofRail'])),
             ],
@@ -324,6 +331,92 @@ class CapabilityCard extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class LiveReadinessPanel extends StatelessWidget {
+  const LiveReadinessPanel({required this.readiness, super.key});
+  final Map<String, dynamic> readiness;
+
+  @override
+  Widget build(BuildContext context) {
+    if (readiness.isEmpty) return const SizedBox.shrink();
+    final bridge = _asMap(readiness['bridge']);
+    final blockers = _asList(readiness['blockers']);
+    final warnings = _asList(readiness['warnings']);
+    final device = _asMap(readiness['device']);
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.public, color: _forgeColor),
+                const SizedBox(width: 10),
+                Expanded(
+                    child: Text('Live Bridge / Device / Provider Readiness',
+                        style: Theme.of(context).textTheme.titleMedium)),
+                EvoBadge(label: _text(readiness['truthState'], 'UNKNOWN')),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                StatusChip(
+                    label: 'Bridge',
+                    value: _text(bridge['truthState'], 'unknown'),
+                    color: _forgeColor),
+                StatusChip(
+                    label: 'Device',
+                    value: _text(device['truthState'], 'unknown'),
+                    color: _proofColor),
+              ],
+            ),
+            const SizedBox(height: 12),
+            SelectableText(_text(bridge['baseUrl'], 'No bridge URL declared')),
+            const SizedBox(height: 12),
+            if (blockers.isNotEmpty) ...[
+              Text('Blockers', style: Theme.of(context).textTheme.labelLarge),
+              const SizedBox(height: 8),
+              for (final blocker in blockers) BlockerRow(text: _text(blocker)),
+            ],
+            if (warnings.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text('Warnings', style: Theme.of(context).textTheme.labelLarge),
+              const SizedBox(height: 8),
+              for (final warning in warnings)
+                BlockerRow(text: _text(warning), color: _proofColor),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BlockerRow extends StatelessWidget {
+  const BlockerRow(
+      {required this.text, this.color = Colors.redAccent, super.key});
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.error_outline, color: color, size: 18),
+          const SizedBox(width: 8),
+          Expanded(child: Text(text)),
+        ],
       ),
     );
   }

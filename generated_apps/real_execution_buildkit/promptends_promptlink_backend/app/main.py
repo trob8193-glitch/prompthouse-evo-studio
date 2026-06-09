@@ -25,6 +25,22 @@ EVO_BRAND = {
     "badges": ["Evo Native Runtime", "PromptLink Powered", "Proof-Gated"],
 }
 
+LIVE_CORE_KEYS = [
+    {"name": "JWT Secret", "envKey": "JWT_SECRET"},
+    {"name": "PromptHouse Master Key", "envKey": "PH_EVO_MASTER_KEY"},
+]
+
+LIVE_REQUIRED_PROVIDERS = [
+    {"name": "OpenAI", "envKey": "OPENAI_API_KEY", "capability": "agent execution and model-backed manifest work"},
+    {"name": "Stripe", "envKey": "STRIPE_SECRET_KEY", "capability": "checkout and commerce proof"},
+    {"name": "Vercel", "envKey": "VERCEL_TOKEN", "capability": "online preview/deployment proof"},
+]
+
+LIVE_OPTIONAL_PROVIDERS = [
+    {"name": "GitHub", "envKey": "GITHUB_TOKEN", "capability": "repository connector probes"},
+    {"name": "Gemini", "envKey": "GEMINI_API_KEY", "capability": "secondary model provider coverage"},
+]
+
 
 def initialize_runtime():
     init_db()
@@ -47,6 +63,7 @@ async def health():
         "brand": EVO_BRAND,
         "promptLink": "enabled",
         "capabilitiesPath": "/api/evo-capabilities",
+        "liveReadinessPath": "/api/live-readiness",
     }
 
 
@@ -58,12 +75,18 @@ async def link_health():
         "brand": EVO_BRAND,
         "connectors": len(list_connectors()),
         "capabilitiesPath": "/api/evo-capabilities",
+        "liveReadinessPath": "/api/live-readiness",
     }
 
 
 @app.get("/api/evo-capabilities")
 async def evo_capabilities():
     return build_evo_capabilities()
+
+
+@app.get("/api/live-readiness")
+async def live_readiness():
+    return build_live_readiness()
 
 
 @app.post("/link/connectors/register")
@@ -226,4 +249,65 @@ def build_evo_capabilities():
             {"step": "proof", "route": "/api/proof-cards", "truthState": "READABLE"},
             {"step": "artifact", "route": "/api/artifacts", "truthState": "PERSISTED"},
         ],
+        "liveReadiness": build_live_readiness(),
+    }
+
+
+def build_live_readiness():
+    bridge_base_url = os.environ.get("PROMPTENDS_BASE_URL") or "http://localhost:8000"
+    core = [_redacted_env_status(item) for item in LIVE_CORE_KEYS]
+    providers = [_redacted_env_status(item) for item in LIVE_REQUIRED_PROVIDERS]
+    optional_providers = [_redacted_env_status(item) for item in LIVE_OPTIONAL_PROVIDERS]
+    device_id_configured = bool(os.environ.get("PROMPTSHELL_DEVICE_ID") or os.environ.get("FLUTTER_DEVICE_ID"))
+    device_proof_configured = bool(os.environ.get("PROMPTSHELL_DEVICE_PROOF") or os.environ.get("FLUTTER_DEVICE_PROOF"))
+    blockers = [
+        *[f"Missing core credential: {item['envKey']}" for item in core if not item["configured"]],
+        *[f"Missing live provider credential: {item['envKey']}" for item in providers if not item["configured"]],
+    ]
+    if not device_proof_configured:
+        blockers.append("Device runtime proof missing: run Flutter against a real browser/device and record the receipt.")
+    warnings = [
+        f"Optional provider not configured: {item['envKey']}"
+        for item in optional_providers
+        if not item["configured"]
+    ]
+
+    return {
+        "truthState": "LIVE_BLOCKED" if blockers else "LIVE_READY",
+        "brand": EVO_BRAND,
+        "bridge": {
+            "truthState": "BRIDGE_URL_DECLARED",
+            "baseUrl": bridge_base_url,
+            "healthUrl": f"{bridge_base_url}/health",
+            "capabilitiesUrl": f"{bridge_base_url}/api/evo-capabilities",
+            "liveReadinessUrl": f"{bridge_base_url}/api/live-readiness",
+            "backend": "FastAPI",
+            "connectors": len(list_connectors()),
+        },
+        "core": core,
+        "providers": providers,
+        "optionalProviders": optional_providers,
+        "device": {
+            "truthState": "DEVICE_RUNTIME_PROVEN" if device_proof_configured else "DEVICE_RUNTIME_PROOF_REQUIRED",
+            "deviceId": "configured" if device_id_configured else "",
+            "proofConfigured": device_proof_configured,
+            "proofCommands": [
+                "flutter devices",
+                f"flutter run -d chrome --dart-define=PROMPTENDS_BASE_URL={bridge_base_url}",
+                f"curl {bridge_base_url}/health",
+                f"curl {bridge_base_url}/api/live-readiness",
+            ],
+            "proofEnv": ["PROMPTSHELL_DEVICE_ID or FLUTTER_DEVICE_ID", "PROMPTSHELL_DEVICE_PROOF or FLUTTER_DEVICE_PROOF"],
+        },
+        "blockers": blockers,
+        "warnings": warnings,
+        "nextActions": blockers or ["Run live provider probes and archive provider/device receipts."],
+    }
+
+
+def _redacted_env_status(item):
+    return {
+        **item,
+        "configured": bool(os.environ.get(item["envKey"])),
+        "value": "configured" if os.environ.get(item["envKey"]) else "",
     }

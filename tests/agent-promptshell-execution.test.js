@@ -3,7 +3,11 @@ import Database from 'better-sqlite3';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { setupAgentRoutes } from '../agent-integration.js';
-import { registerPromptShellRoutes, ensurePromptShellSchema } from '../generated_apis/promptshell_routes.js';
+import {
+  buildPromptShellLiveReadiness,
+  ensurePromptShellSchema,
+  registerPromptShellRoutes,
+} from '../generated_apis/promptshell_routes.js';
 import { registerExternalConnectorRoutes } from '../generated_apis/external_connector_routes.js';
 import { RealExecutionPipeline } from '../lib/execution/pipeline.js';
 
@@ -69,6 +73,7 @@ afterEach(() => {
   while (openDbs.length) {
     openDbs.pop().close();
   }
+  vi.unstubAllEnvs();
 });
 
 describe('phase 1 agent integration routes', () => {
@@ -116,6 +121,14 @@ describe('phase 2 PromptShell backend APIs', () => {
     expect(capabilities.capabilities.truthState).toBe('LOCAL_EVO_RUNTIME_READY');
     expect(capabilities.capabilities.flutter.truthState).toBe('FLUTTER_CLIENT_CONTRACT_READY');
     expect(capabilities.capabilities.python.capabilities).toContain('Manifest-to-proof artifact chain');
+
+    const liveReadiness = await fetch(`${baseUrl}/api/promptshell/live-readiness`).then((res) => res.json());
+    expect(liveReadiness.success).toBe(true);
+    expect(liveReadiness.readiness.truthState).toBe('LIVE_BLOCKED');
+    expect(liveReadiness.readiness.bridge.healthUrl).toBe(`${baseUrl}/api/promptshell/health`);
+    expect(liveReadiness.readiness.blockers).toContain(
+      'Device runtime proof missing: run Flutter against a real browser/device and record the receipt.'
+    );
 
     const connectors = await fetch(`${baseUrl}/api/promptshell/connectors`).then((res) => res.json());
     expect(connectors.count).toBeGreaterThanOrEqual(3);
@@ -173,6 +186,30 @@ describe('phase 2 PromptShell backend APIs', () => {
     expect(probe.success).toBe(true);
     expect(probe.probe.status).toBe('connected');
     expect(probe.probe.truthState).toBe('PROVEN');
+  });
+
+  it('classifies configured live bridge, device, and provider readiness without leaking secrets', () => {
+    vi.stubEnv('JWT_SECRET', 'jwt-secret-that-must-not-leak');
+    vi.stubEnv('PH_EVO_MASTER_KEY', 'master-key-that-must-not-leak');
+    vi.stubEnv('OPENAI_API_KEY', 'sk-openai-that-must-not-leak');
+    vi.stubEnv('STRIPE_SECRET_KEY', 'sk_test_stripe_that_must_not_leak');
+    vi.stubEnv('VERCEL_TOKEN', 'vercel-token-that-must-not-leak');
+    vi.stubEnv('PROMPTSHELL_DEVICE_ID', 'chrome');
+    vi.stubEnv('PROMPTSHELL_DEVICE_PROOF', 'verified');
+
+    const readiness = buildPromptShellLiveReadiness({
+      databaseReady: true,
+      requestBaseUrl: 'http://127.0.0.1:3001/api/promptshell',
+    });
+
+    expect(readiness.truthState).toBe('LIVE_READY');
+    expect(readiness.providers.every((provider) => provider.configured)).toBe(true);
+    expect(readiness.device.truthState).toBe('DEVICE_RUNTIME_PROVEN');
+    const serialized = JSON.stringify(readiness);
+    expect(serialized).not.toContain('jwt-secret-that-must-not-leak');
+    expect(serialized).not.toContain('sk-openai-that-must-not-leak');
+    expect(serialized).not.toContain('sk_test_stripe_that_must_not_leak');
+    expect(serialized).not.toContain('vercel-token-that-must-not-leak');
   });
 });
 
