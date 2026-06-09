@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
   Activity, Eye, Sparkles, BarChart3, FolderOpen, Gauge, Zap,
-  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, Lock, ScrollText, Globe, Bot
+  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, Lock, ScrollText, Globe, Bot, Smartphone
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 

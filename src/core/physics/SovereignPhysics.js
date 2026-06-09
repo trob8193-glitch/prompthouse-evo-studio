@@ -46,7 +46,6 @@ export class SovereignPhysics {
       return { id: 'SovereignPhysics', grade: 'ERROR', state: 'BLOCKED', resonance: 0 };
     }
   }
-  }
 }
 
 export function calculateCapabilityGravity(capability = {}) {

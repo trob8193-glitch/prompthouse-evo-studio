@@ -98,6 +98,30 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           type: "object",
           properties: {},
         },
+      },
+      {
+        name: "read_quadbrain_contract",
+        description: "Reads the Studio's core QuadBrain agentic contract to understand internal AI routing logic.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
+      },
+      {
+        name: "trigger_self_invention_daemon",
+        description: "Fires the Self-Invention Daemon to autonomously invent new backend sub-systems.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
+      },
+      {
+        name: "trigger_evolution_daemon",
+        description: "Fires the master Evolution Daemon to continuously iterate and mutate the Studio's core codebase.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
       }
     ],
   };
@@ -187,6 +211,41 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       const lines = fs.readFileSync(savingsPath, "utf-8").trim().split('\n');
       return { content: [{ type: "text", text: JSON.stringify({ status: "ACTIVE", transactions: lines.length, latest: JSON.parse(lines[lines.length-1]) }, null, 2) }] };
+    }
+
+    if (name === "read_quadbrain_contract") {
+      const quadPath = path.resolve(__dirname, "../../quadbrain/QuadBrainContract.js");
+      const fs = await import("fs");
+      if (!fs.existsSync(quadPath)) {
+        return { content: [{ type: "text", text: "QuadBrain contract not found." }] };
+      }
+      return { content: [{ type: "text", text: fs.readFileSync(quadPath, "utf-8") }] };
+    }
+
+    if (name === "trigger_self_invention_daemon") {
+      const scriptPath = path.resolve(__dirname, "../../../scripts/self-invention-daemon.mjs");
+      return new Promise((resolve) => {
+        const child = spawn("node", [scriptPath]);
+        let output = "";
+        child.stdout.on("data", (data) => { output += data.toString(); });
+        child.stderr.on("data", (data) => { output += data.toString(); });
+        child.on("close", (code) => {
+          resolve({ content: [{ type: "text", text: `Self-Invention Daemon finished with code ${code}.\n\n${output}` }] });
+        });
+      });
+    }
+
+    if (name === "trigger_evolution_daemon") {
+      const scriptPath = path.resolve(__dirname, "../../../scripts/evolution-daemon.mjs");
+      return new Promise((resolve) => {
+        const child = spawn("node", [scriptPath]);
+        let output = "";
+        child.stdout.on("data", (data) => { output += data.toString(); });
+        child.stderr.on("data", (data) => { output += data.toString(); });
+        child.on("close", (code) => {
+          resolve({ content: [{ type: "text", text: `Evolution Daemon finished with code ${code}.\n\n${output}` }] });
+        });
+      });
     }
 
     throw new Error(`Unknown tool: ${name}`);
