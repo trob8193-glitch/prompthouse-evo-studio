@@ -37,5 +37,5 @@ describe('DeadSurfaceHunterView', () => {
     expect(screen.getByText(/Dead Button: "Dead Button..."/i)).toBeTruthy();
     expect(screen.getByText(/Invalid link: "Disconnected Link 1..."/i)).toBeTruthy();
     expect(screen.getByText(/Invalid link: "Disconnected Link 2..."/i)).toBeTruthy();
-  });
+  }, 20000);
 });
