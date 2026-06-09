@@ -12,12 +12,32 @@ import { Log } from '../autonomy/SovereignLogger.js';
  */
 
 export class IntelligenceCore {
-  constructor(aiAdaptor) {
+  constructor(aiAdaptor, licenseManager, telemetryLedger) {
     this.ai = aiAdaptor;
+    this.licenseManager = licenseManager;
+    this.telemetryLedger = telemetryLedger;
   }
 
   async executeAction(moduleName, action, payload = {}) {
     Log.info(`🧠 [IntelligenceCore] Executing: ${moduleName} -> ${action}`);
+    
+    // Enterprise Telemetry Tracking
+    if (this.telemetryLedger) {
+      this.telemetryLedger.logUsage({ tokens: JSON.stringify(payload).length * 2 });
+    }
+
+    // Enterprise Gate check for premium modules
+    const premiumModules = ['LocalFineTuner', 'MainframeConnector', 'MultiNodeCoordinator'];
+    if (premiumModules.includes(moduleName)) {
+      if (!this.licenseManager || !this.licenseManager.isEnterprise()) {
+        Log.warn(`🚫 [EnterpriseGate] Blocked access to premium module: ${moduleName}`);
+        return { 
+          success: false, 
+          error: `The module '${moduleName}' requires an active Enterprise License. You are currently in Community Mode.`,
+          enterpriseGate: true
+        };
+      }
+    }
     
     try {
       // Check for real logic files first!

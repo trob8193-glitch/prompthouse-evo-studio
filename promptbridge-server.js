@@ -71,6 +71,8 @@ import { SaasOrchestrator } from './src/core/engines/saasOrchestrator.js';
 import { ExecutionSandbox } from './lib/terminal/ExecutionSandbox.js';
 import { VercelAdapter } from './lib/deployment/VercelAdapter.js';
 import { IntelligenceCore } from './src/core/engines/IntelligenceCore.js';
+import { LicenseManager } from './src/core/enterprise/LicenseManager.js';
+import { TelemetryLedger } from './src/core/enterprise/TelemetryLedger.js';
 import { PromptCompressor } from './lib/ai/PromptCompressor.js';
 import db, { initDatabase } from './src/core/db/quad_schema.js';
 import { buildGeneratedArtifactRegistry } from './src/generated-artifact-registry.js';
@@ -285,7 +287,11 @@ const foundry = new FoundryOrchestrator(ai, stripe);
 const SANDBOX_DIR = join(DATA_DIR, 'sandbox');
 const saasOrchestrator = new SaasOrchestrator(ai, SANDBOX_DIR);
 const terminalSandbox = new ExecutionSandbox(SANDBOX_DIR);
-const intelligenceCore = new IntelligenceCore(ai);
+
+const licenseManager = new LicenseManager(DATA_DIR);
+const telemetryLedger = new TelemetryLedger(DATA_DIR);
+const intelligenceCore = new IntelligenceCore(ai, licenseManager, telemetryLedger);
+
 const promptCompressor = new PromptCompressor();
 
 // Global Savings Ledger
