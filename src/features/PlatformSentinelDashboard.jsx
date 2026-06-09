@@ -32,6 +32,8 @@ export default function PlatformSentinelDashboard() {
 
   const release = status?.release || { verdict: 'UNKNOWN', truthLabel: 'NEEDS_REPAIR', reason: 'No status loaded.' };
   const p0 = useMemo(() => (status?.repairQueue || []).filter(item => item.priority === 'P0'), [status]);
+  const onlineBlockers = status?.onlineBlockers || [];
+  const requiredOnline = onlineBlockers.filter(item => !item.optional);
 
   return (
     <div className="rounded-2xl border border-slate-700/70 bg-slate-950/70 p-6 shadow-xl">
@@ -50,7 +52,7 @@ export default function PlatformSentinelDashboard() {
 
       {error && <div className="mt-4 rounded-xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-200">{error}</div>}
 
-      <div className="mt-6 grid gap-4 md:grid-cols-4">
+      <div className="mt-6 grid gap-4 md:grid-cols-5">
         <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
           <p className="text-xs uppercase tracking-widest text-slate-400">Score</p>
           <p className="mt-2 text-3xl font-black text-white">{status?.score ?? '—'}</p>
@@ -64,6 +66,10 @@ export default function PlatformSentinelDashboard() {
           <p className="mt-2 text-3xl font-black text-white">{p0.length}</p>
         </div>
         <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
+          <p className="text-xs uppercase tracking-widest text-slate-400">Online Blockers</p>
+          <p className="mt-2 text-3xl font-black text-white">{requiredOnline.length}</p>
+        </div>
+        <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-4">
           <p className="text-xs uppercase tracking-widest text-slate-400">Truth Label</p>
           <p className="mt-2 text-sm font-bold text-cyan-100">{release.truthLabel}</p>
         </div>
@@ -71,7 +77,7 @@ export default function PlatformSentinelDashboard() {
 
       <div className="mt-4 rounded-xl border border-slate-700 bg-slate-900/60 p-4 text-sm text-slate-300">{release.reason}</div>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-2">
+      <div className="mt-6 grid gap-6 xl:grid-cols-3">
         <section className="rounded-xl border border-slate-700 bg-slate-900/50 p-4">
           <h3 className="text-lg font-bold text-white">Module Readiness</h3>
           <div className="mt-4 space-y-3">
@@ -97,6 +103,23 @@ export default function PlatformSentinelDashboard() {
               </div>
             ))}
             {status?.repairQueue?.length === 0 && <p className="text-sm text-emerald-300">No repairs detected in the current audit.</p>}
+          </div>
+        </section>
+
+        <section className="rounded-xl border border-slate-700 bg-slate-900/50 p-4">
+          <h3 className="text-lg font-bold text-white">Online Blockers</h3>
+          <div className="mt-4 space-y-3">
+            {onlineBlockers.slice(0, 10).map((item, index) => (
+              <div key={`${item.id}-${index}`} className="rounded-lg border border-slate-800 bg-slate-950/70 p-3">
+                <div className="flex items-start justify-between gap-3">
+                  <p className="text-sm font-semibold text-slate-100"><span className="text-amber-300">{item.severity}</span> {item.label}</p>
+                  <span className={item.optional ? 'text-slate-400' : 'text-amber-300'}>{item.optional ? 'OPTIONAL' : 'REQUIRED'}</span>
+                </div>
+                <p className="mt-1 text-xs text-slate-400">{(item.reasons || []).join('; ')}</p>
+                <p className="mt-2 text-xs text-cyan-200">{item.nextAction}</p>
+              </div>
+            ))}
+            {onlineBlockers.length === 0 && <p className="text-sm text-emerald-300">No online provider blockers detected.</p>}
           </div>
         </section>
       </div>

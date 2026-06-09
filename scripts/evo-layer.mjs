@@ -49,7 +49,7 @@ try {
   } else if (mode === 'worker') {
     print(await runSchedulerWorkerOnce({ lane: args[1] || null }));
   } else if (mode === 'memory') {
-    print({ graph: getMemoryGraph(), health: inferMemoryHealth() });
+    print({ graph: getMemoryGraph({ rootDir: process.cwd() }), health: inferMemoryHealth({ rootDir: process.cwd() }) });
   } else if (mode === 'heal') {
     print(runSelfHealingCycle({ apply: args.includes('--apply') }));
   } else if (mode === 'diagnose') {

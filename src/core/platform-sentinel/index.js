@@ -4,7 +4,7 @@ import { dirname, extname, join, relative } from 'path';
 
 export const PLATFORM_TRUTH_LABELS = Object.freeze([
   'BUILT', 'VERIFIED', 'PROVEN', 'BLOCKED', 'FAILED', 'PROVIDER_GATED',
-  'OWNER_APPROVAL_REQUIRED', 'NEEDS_REPAIR', 'READY_FOR_PILOT', 'PLATFORM_READY'
+  'OPTIONAL_PROVIDER_GATED', 'ONLINE_READY', 'OWNER_APPROVAL_REQUIRED', 'NEEDS_REPAIR', 'READY_FOR_PILOT', 'PLATFORM_READY'
 ]);
 
 export const PLATFORM_MODULES = Object.freeze([
@@ -25,6 +25,89 @@ export const PLATFORM_REQUIRED_COMMANDS = Object.freeze([
   { id: 'verify_studio', command: 'npm run verify:studio', critical: true },
   { id: 'maturity', command: 'npm run maturity:check', critical: true },
   { id: 'evolve_status', command: 'npm run evolve:status', critical: false }
+]);
+
+export const ONLINE_REQUIREMENTS = Object.freeze([
+  {
+    id: 'openai-live-connector',
+    label: 'OpenAI live connector proof',
+    provider: 'openai',
+    severity: 'P1',
+    envKey: 'OPENAI_API_KEY',
+    approvalScope: 'provider_probe',
+    route: 'POST /api/connectors/openai-1/probe',
+    proofCommand: 'npm run proof:connectors:live',
+    nextAction: 'Add OPENAI_API_KEY and run a provider_probe-approved live connector proof.',
+  },
+  {
+    id: 'stripe-test-commerce',
+    label: 'Stripe test commerce proof',
+    provider: 'stripe',
+    severity: 'P1',
+    envKey: 'STRIPE_SECRET_KEY',
+    approvalScope: 'commerce',
+    route: 'POST /api/connectors/stripe-1/probe',
+    proofCommand: 'npm run proof:connectors:live',
+    nextAction: 'Add STRIPE_SECRET_KEY and run a commerce-approved Stripe connector proof.',
+  },
+  {
+    id: 'stripe-live-revenue',
+    label: 'Stripe live revenue mode',
+    provider: 'stripe',
+    severity: 'P1',
+    envKey: 'STRIPE_SECRET_KEY',
+    requiredPrefix: 'sk_live_',
+    approvalScope: 'commerce',
+    route: 'POST /api/commerce/checkout',
+    proofCommand: 'npm run proof:providers:live',
+    nextAction: 'Use a live Stripe key only when ready for real customer payments and keep commerce owner approval required.',
+  },
+  {
+    id: 'vercel-live-connector',
+    label: 'Vercel live connector proof',
+    provider: 'vercel',
+    severity: 'P0',
+    envKey: 'VERCEL_TOKEN',
+    approvalScope: 'deploy',
+    route: 'POST /api/connectors/vercel-1/probe',
+    proofCommand: 'npm run proof:connectors:live',
+    nextAction: 'Add VERCEL_TOKEN and run a deploy-approved Vercel connector proof.',
+  },
+  {
+    id: 'vercel-preview-deploy',
+    label: 'Vercel preview deployment',
+    provider: 'vercel',
+    severity: 'P0',
+    envKey: 'VERCEL_TOKEN',
+    approvalScope: 'deploy',
+    route: 'POST /api/vercel/preview-deploy',
+    proofCommand: 'npm run proof:providers:live',
+    nextAction: 'Add VERCEL_TOKEN before requesting a preview deployment.',
+  },
+  {
+    id: 'vercel-production-deploy',
+    label: 'Vercel production deployment',
+    provider: 'vercel',
+    severity: 'P0',
+    envKey: 'VERCEL_TOKEN',
+    requiredFlag: { key: 'DEPLOY_ALLOW_PRODUCTION', value: 'true' },
+    approvalScope: 'deploy',
+    route: 'POST /api/deployment/vercel/preview',
+    proofCommand: 'npm run platform:strict',
+    nextAction: 'Add VERCEL_TOKEN and set DEPLOY_ALLOW_PRODUCTION=true only when production deploys are owner-approved.',
+  },
+  {
+    id: 'github-live-connector',
+    label: 'GitHub live connector proof',
+    provider: 'github',
+    severity: 'P2',
+    optional: true,
+    envKey: 'GITHUB_TOKEN',
+    approvalScope: 'provider_probe',
+    route: 'POST /api/connectors/github-1/probe',
+    proofCommand: 'npm run proof:connectors:live',
+    nextAction: 'Add GITHUB_TOKEN if you want GitHub provider proof instead of local Git contract checks.',
+  },
 ]);
 
 const SKIP_DIRS = new Set(['.git', 'node_modules', 'dist', '.next', '.prompthouse-data', 'coverage']);
@@ -141,16 +224,63 @@ export class PlatformReadinessEngine {
     if (!process.env.OPENAI_API_KEY) gates.push({ id: 'openai-key', truthLabel: 'PROVIDER_GATED', reason: 'OPENAI_API_KEY missing.' });
     return gates;
   }
+  onlineBlockers({ includeOptional = true } = {}) {
+    const blockers = [];
+    for (const requirement of ONLINE_REQUIREMENTS) {
+      if (requirement.optional && !includeOptional) continue;
+
+      const value = process.env[requirement.envKey] || '';
+      const missingCredential = !value.trim();
+      const wrongPrefix = requirement.requiredPrefix && value.trim() && !value.startsWith(requirement.requiredPrefix);
+      const flagBlocked = requirement.requiredFlag && process.env[requirement.requiredFlag.key] !== requirement.requiredFlag.value;
+
+      if (!missingCredential && !wrongPrefix && !flagBlocked) continue;
+
+      const reasons = [];
+      if (missingCredential) reasons.push(`${requirement.envKey} missing`);
+      if (wrongPrefix) reasons.push(`${requirement.envKey} must start with ${requirement.requiredPrefix}`);
+      if (flagBlocked) reasons.push(`${requirement.requiredFlag.key} must equal ${requirement.requiredFlag.value}`);
+
+      blockers.push({
+        id: requirement.id,
+        label: requirement.label,
+        provider: requirement.provider,
+        severity: requirement.severity,
+        optional: requirement.optional === true,
+        truthLabel: requirement.optional ? 'OPTIONAL_PROVIDER_GATED' : 'PROVIDER_GATED',
+        reasons,
+        requiredEnvKey: requirement.envKey,
+        requiredFlag: requirement.requiredFlag || null,
+        approvalScope: requirement.approvalScope,
+        route: requirement.route,
+        proofCommand: requirement.proofCommand,
+        nextAction: requirement.nextAction,
+      });
+    }
+    return blockers;
+  }
+  onlineSummary(onlineBlockers = this.onlineBlockers()) {
+    const required = onlineBlockers.filter(item => !item.optional);
+    const optional = onlineBlockers.filter(item => item.optional);
+    return {
+      truthLabel: required.length ? 'PROVIDER_GATED' : optional.length ? 'OPTIONAL_PROVIDER_GATED' : 'ONLINE_READY',
+      requiredBlockers: required.length,
+      optionalBlockers: optional.length,
+      totalBlockers: onlineBlockers.length,
+    };
+  }
   status({ runCommands = false, includeHeavy = false } = {}) {
     const modules = this.inspectModules();
     const issues = this.inspectStatic();
     const commands = runCommands ? new PlatformGateRunner({ cwd: this.rootDir }).run({ includeHeavy }) : PLATFORM_REQUIRED_COMMANDS.map(command => ({ ...command, status: 'NOT_RUN' }));
     const blockers = [...issues.filter(issue => issue.severity === 'error'), ...modules.filter(module => module.critical && module.status !== 'PASS'), ...commands.filter(command => command.critical && command.status === 'FAIL')];
+    const onlineBlockers = this.onlineBlockers();
+    const onlineSummary = this.onlineSummary(onlineBlockers);
     const score = blockers.length ? Math.max(0, 89 - blockers.length * 3) : (this.providerGates().length ? 95 : 100);
     const release = blockers.length ? { verdict: 'BLOCKED', truthLabel: 'NEEDS_REPAIR', reason: 'Critical platform readiness blockers remain.' } : (this.providerGates().length ? { verdict: 'PROVIDER_GATED', truthLabel: 'PROVIDER_GATED', reason: 'Local gates are not blocking, but provider credentials or approvals are still gated.' } : { verdict: 'PLATFORM_READY', truthLabel: 'PLATFORM_READY', reason: 'All critical platform readiness gates passed.' });
     const repairQueue = blockers.map(item => ({ priority: 'P0', title: item.message || `Complete module readiness: ${item.label || item.id}`, detail: item.file || item.missing?.join(', ') || item.command || item.reason || '' }));
-    return { generatedAt: new Date().toISOString(), score, release, issues, modules, commands, providerGates: this.providerGates(), repairQueue, routes: this.routes.listRoutes() };
+    return { generatedAt: new Date().toISOString(), score, release, issues, modules, commands, providerGates: this.providerGates(), onlineBlockers, onlineSummary, repairQueue, routes: this.routes.listRoutes() };
   }
-  receipt(options = {}) { const result = this.status(options); return this.ledger.append({ type: 'platform_readiness_receipt', score: result.score, release: result.release, blockers: result.repairQueue.length, result }); }
+  receipt(options = {}) { const result = this.status(options); return this.ledger.append({ type: 'platform_readiness_receipt', score: result.score, release: result.release, blockers: result.repairQueue.length, onlineBlockers: result.onlineBlockers.length, result }); }
   receipts(options = {}) { return this.ledger.list(options); }
 }

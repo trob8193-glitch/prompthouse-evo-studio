@@ -13,6 +13,18 @@ def test_health():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
+    assert response.json()["brand"]["name"] == "PromptHouse Evo Studio"
+
+
+def test_evo_capabilities_contract():
+    response = client.get("/api/evo-capabilities")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["brand"]["name"] == "PromptHouse Evo Studio"
+    assert body["truthState"] == "PYTHON_EVO_RUNTIME_READY"
+    assert body["flutter"]["truthState"] == "FLUTTER_CLIENT_CONTRACT_READY"
+    assert body["python"]["truthState"] == "PYTHON_PROMPTLINK_BACKEND_READY"
+    assert "Manifest-to-proof artifact chain" in body["python"]["capabilities"]
 
 
 def test_promptlink_health_and_connectors():

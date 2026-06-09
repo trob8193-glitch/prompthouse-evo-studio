@@ -16,6 +16,36 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import Stripe from 'stripe';
 
+// Route module imports (hoisted — ESM requires all imports at top level)
+import { registerEmulatorRoutes } from './server/routes/emulator.routes.js';
+import launchPilotRoutes from './server/routes/launch-pilot.routes.js';
+import { registerStudioCoreRoutes } from './server/routes/studio-core.routes.js';
+import { registerAiProviderStatusRoutes } from './server/routes/ai-provider-status.routes.js';
+import { registerAiProviderProbeRoutes } from './server/routes/ai-provider-probe.routes.js';
+import { registerStripeHealthRoutes } from './server/routes/stripe-health.routes.js';
+import { registerStripeTestCheckoutRoutes } from './server/routes/stripe-test-checkout.routes.js';
+import { registerStripeCheckoutBrowserRunRoutes } from './server/routes/stripe-checkout-browser-run.routes.js';
+import { registerVercelPreviewDeployRoutes } from './server/routes/vercel-preview-deploy.routes.js';
+import { registerHandoverRoutes } from './server/routes/handover.routes.js';
+import registerEvoBridgeRoutes from './generated_apis/evo_bridge_routes.js';
+import registerPlatformSentinelRoutes from './generated_apis/platform_sentinel_routes.js';
+import registerAiModelRoutes from './generated_apis/ai_model_routes.js';
+import registerEvoDiffuserRoutes from './generated_apis/evo_diffuser_routes.js';
+import registerTriBrainRoutes from './generated_apis/tribrain_routes.js';
+import registerQuadBrainRoutes from './generated_apis/quadbrain_routes.js';
+import registerEvoTerminalRoutes from './generated_apis/evo_terminal_routes.js';
+import registerEvoCapabilityRoutes from './generated_apis/evo_capability_routes.js';
+import registerPortfolioRoutes from './generated_apis/portfolio_routes.js';
+import registerEngineDashboardRoutes from './generated_apis/engine_dashboard_routes.js';
+import registerEvoLlmRoutes from './generated_apis/evo_llm_routes.js';
+import registerModuleMaturityRoutes from './generated_apis/module_maturity_routes.js';
+import registerSpineCoreRoutes from './generated_apis/spinecore_routes.js';
+import { setupAgentRoutes, getEvoAgent } from './agent-integration.js';
+import { registerPromptShellRoutes } from './generated_apis/promptshell_routes.js';
+import registerExecutionRoutes from './generated_apis/execution_routes.js';
+import registerExternalConnectorRoutes from './generated_apis/external_connector_routes.js';
+import { RealExecutionPipeline } from './lib/execution/pipeline.js';
+
 // Import our core engines
 import { UniversalAIAdaptor } from './lib/ai/UniversalAIAdaptor.js';
 import { SelfMaintenance } from './src/core/automation/self_maintenance.js';
@@ -62,32 +92,6 @@ if (runtimeBridgePort) {
 initDatabase();
 ensureAuthSchema();
 ensureGatewayBootstrapData();
-import { registerEmulatorRoutes } from './server/routes/emulator.routes.js';
-import launchPilotRoutes from './server/routes/launch-pilot.routes.js';
-import { registerStudioCoreRoutes } from './server/routes/studio-core.routes.js';
-import { registerAiProviderStatusRoutes } from './server/routes/ai-provider-status.routes.js';
-import { registerAiProviderProbeRoutes } from './server/routes/ai-provider-probe.routes.js';
-import { registerStripeHealthRoutes } from './server/routes/stripe-health.routes.js';
-import { registerStripeTestCheckoutRoutes } from './server/routes/stripe-test-checkout.routes.js';
-import { registerStripeCheckoutBrowserRunRoutes } from './server/routes/stripe-checkout-browser-run.routes.js';
-import { registerVercelPreviewDeployRoutes } from './server/routes/vercel-preview-deploy.routes.js';
-import { registerHandoverRoutes } from './server/routes/handover.routes.js';
-import registerEvoBridgeRoutes from './generated_apis/evo_bridge_routes.js';
-import registerPlatformSentinelRoutes from './generated_apis/platform_sentinel_routes.js';
-import registerAiModelRoutes from './generated_apis/ai_model_routes.js';
-import registerEvoDiffuserRoutes from './generated_apis/evo_diffuser_routes.js';
-import registerEvoTerminalRoutes from './generated_apis/evo_terminal_routes.js';
-import registerEvoCapabilityRoutes from './generated_apis/evo_capability_routes.js';
-import registerPortfolioRoutes from './generated_apis/portfolio_routes.js';
-import registerEngineDashboardRoutes from './generated_apis/engine_dashboard_routes.js';
-import registerEvoLlmRoutes from './generated_apis/evo_llm_routes.js';
-import registerModuleMaturityRoutes from './generated_apis/module_maturity_routes.js';
-import registerSpineCoreRoutes from './generated_apis/spinecore_routes.js';
-import { setupAgentRoutes, getEvoAgent } from './agent-integration.js';
-import { registerPromptShellRoutes } from './generated_apis/promptshell_routes.js';
-import registerExecutionRoutes from './generated_apis/execution_routes.js';
-import { RealExecutionPipeline } from './lib/execution/pipeline.js';
-
 ensureEvolutionSchema();
 
 const app = express();
@@ -111,6 +115,8 @@ registerEvoBridgeRoutes(app);
 registerPlatformSentinelRoutes(app);
 registerAiModelRoutes(app);
 registerEvoDiffuserRoutes(app);
+registerTriBrainRoutes(app);
+registerQuadBrainRoutes(app);
 registerEvoTerminalRoutes(app);
 registerEvoCapabilityRoutes(app);
 registerPortfolioRoutes(app);
@@ -128,6 +134,7 @@ registerHandoverRoutes(app);
 registerStudioCoreRoutes(app);
 registerPromptShellRoutes(app, { db, evoAgent });
 registerExecutionRoutes(app, { pipeline: executionPipeline });
+registerExternalConnectorRoutes(app, { db });
 app.use('/api/launch-pilot', launchPilotRoutes);
 app.get('/api/status', (req, res) => {
   const ledgerStats = db.prepare('SELECT SUM(iq_gain) as total_gain FROM sovereign_ledger').get();
@@ -392,9 +399,12 @@ function ensureEvolutionSchema() {
     CREATE TABLE IF NOT EXISTS connectors (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
+      connector_id TEXT,
       type TEXT,
-      config_json TEXT,
+      risk_level TEXT,
       status TEXT DEFAULT 'active',
+      config TEXT,
+      config_json TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );

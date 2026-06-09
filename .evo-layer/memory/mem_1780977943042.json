@@ -1,0 +1,160 @@
+{
+  "id": "mem_1780977943042",
+  "type": "coordination_report",
+  "data": {
+    "truthState": "COORDINATION_REPORT_CREATED",
+    "daemonCount": 12,
+    "daemons": [
+      {
+        "daemonId": "omni-orchestrator",
+        "role": "omni",
+        "capabilities": [
+          "coordinate",
+          "dispatch",
+          "summarize"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.924Z"
+      },
+      {
+        "daemonId": "platform-sentinel",
+        "role": "sentinel",
+        "capabilities": [
+          "audit",
+          "guard",
+          "health"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.928Z"
+      },
+      {
+        "daemonId": "crucible-daemon",
+        "role": "crucible",
+        "capabilities": [
+          "stress",
+          "optimize",
+          "validate"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.931Z"
+      },
+      {
+        "daemonId": "singularity-core",
+        "role": "singularity",
+        "capabilities": [
+          "strategy",
+          "planning",
+          "forecast"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.938Z"
+      },
+      {
+        "daemonId": "convergence-daemon",
+        "role": "convergence",
+        "capabilities": [
+          "resolve",
+          "merge",
+          "dedupe"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.941Z"
+      },
+      {
+        "daemonId": "frontend-watchdog",
+        "role": "watchdog",
+        "capabilities": [
+          "watch",
+          "recover",
+          "alert"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.943Z"
+      },
+      {
+        "daemonId": "middleend-watchdog",
+        "role": "watchdog",
+        "capabilities": [
+          "watch",
+          "recover",
+          "alert"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.946Z"
+      },
+      {
+        "daemonId": "bridgeend-watchdog",
+        "role": "watchdog",
+        "capabilities": [
+          "watch",
+          "recover",
+          "alert"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.948Z"
+      },
+      {
+        "daemonId": "backend-watchdog",
+        "role": "watchdog",
+        "capabilities": [
+          "watch",
+          "recover",
+          "alert"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.951Z"
+      },
+      {
+        "daemonId": "scheduler-worker",
+        "role": "executor",
+        "capabilities": [
+          "execute",
+          "report",
+          "handoff"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.953Z"
+      },
+      {
+        "daemonId": "adapter-health-engine",
+        "role": "sentinel",
+        "capabilities": [
+          "audit",
+          "guard",
+          "health"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.956Z"
+      },
+      {
+        "daemonId": "autonomous-tether-engine",
+        "role": "sentinel",
+        "capabilities": [
+          "audit",
+          "guard",
+          "health"
+        ],
+        "metadata": {},
+        "status": "AVAILABLE",
+        "updatedAt": "2026-06-09T04:02:22.960Z"
+      }
+    ],
+    "claimCount": 0,
+    "openClaims": 0,
+    "wonClaims": 0,
+    "health": "ACTIVE",
+    "generatedAt": "2026-06-09T04:05:43.040Z"
+  },
+  "createdAt": "2026-06-09T04:05:43.042Z"
+}

@@ -22,6 +22,13 @@ export default function registerPlatformSentinelRoutes(app) {
     try { ok(res, { repairQueue: engine().status({ runCommands: false }).repairQueue }); } catch (error) { fail(res, error); }
   });
 
+  app.get('/api/platform-sentinel/online-blockers', (req, res) => {
+    try {
+      const status = engine().status({ runCommands: false });
+      ok(res, { onlineBlockers: status.onlineBlockers, onlineSummary: status.onlineSummary });
+    } catch (error) { fail(res, error); }
+  });
+
   app.get('/api/platform-sentinel/release-verdict', (req, res) => {
     try { ok(res, { release: engine().status({ runCommands: false }).release }); } catch (error) { fail(res, error); }
   });

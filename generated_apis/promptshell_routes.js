@@ -6,9 +6,25 @@
  */
 
 import crypto from 'crypto';
+import { executeConnectorProbe } from '../lib/connectors/externalConnectorExecutor.js';
+import { createProviderReceipt } from '../server/services/provider-receipts.js';
 
 const ok = (res, payload = {}) => res.json({ success: true, ...payload });
 const fail = (res, error, status = 500) => res.status(status).json({ success: false, error: error?.message || String(error) });
+
+const EVO_BRAND = {
+  name: 'PromptHouse Evo Studio',
+  runtime: 'PromptShell Evo Runtime',
+  signature: 'Manifest -> Connector -> Proof -> Artifact',
+  tagline: 'Proof-native builds across Flutter, Python, PromptBridge, and external connectors.',
+  palette: {
+    void: '#050712',
+    pulse: '#18F27A',
+    forge: '#38BDF8',
+    proof: '#F8D66D',
+  },
+  badges: ['Evo Native Runtime', 'PromptBridge Powered', 'Proof-Gated'],
+};
 
 function hasDatabase(db) {
   return Boolean(db?.prepare && db?.exec);
@@ -292,49 +308,52 @@ function seedConnectors(db) {
   }
 }
 
-export function registerPromptShellRoutes(app, { db, evoAgent } = {}) {
+export function registerPromptShellRoutes(app, { db, evoAgent, connectorExecutor = executeConnectorProbe } = {}) {
   const databaseReady = ensurePromptShellSchema(db);
 
   app.get('/api/promptshell/health', (req, res) => {
     ok(res, {
       status: 'ready',
       service: 'PromptShell Backend',
+      brand: EVO_BRAND,
       timestamp: new Date().toISOString(),
       bridge: 'PromptBridge',
       database: databaseReady ? 'ready' : 'unavailable',
       agent: evoAgent?.chat ? 'available' : 'local_manifest_generator',
+      capabilitiesPath: '/api/promptshell/evo-capabilities',
       uptime: process.uptime(),
     });
   });
 
+  app.get('/api/promptshell/evo-capabilities', (req, res) => {
+    ok(res, { capabilities: buildEvoRuntimeCapabilities({ databaseReady, evoAgent }) });
+  });
+
   app.get('/api/promptshell/connectors', (req, res) => {
     try {
-      const connectors = listConnectors(db);
+      const connectors = listPromptShellConnectors(db);
       ok(res, { count: connectors.length, connectors });
     } catch (error) {
       fail(res, error);
     }
   });
 
-  app.post('/api/promptshell/connectors/:connectorId/handshake', (req, res) => {
+  app.post('/api/promptshell/connectors/:connectorId/handshake', async (req, res) => {
     try {
-      const connector = resolveConnector(db, req.params.connectorId);
+      const connector = resolvePromptShellConnector(db, req.params.connectorId);
       if (!connector) {
         return fail(res, `Unknown connector: ${req.params.connectorId}`, 404);
       }
 
       const now = new Date().toISOString();
-      const connected = connector.status === 'connected' || connector.status === 'configured';
-      const handshake = {
+      const mode = normalizeConnectorMode(req.body?.mode);
+      const handshake = await connectorExecutor(connector, {
         id: `hs_${crypto.randomUUID().slice(0, 12)}`,
-        connectorId: connector.connectorId,
-        connectorName: connector.name,
-        status: connected ? 'connected' : 'blocked',
-        truthState: connected ? 'SIGNED_LOCAL' : 'PROVIDER_GATED',
-        authenticated: connected,
-        reason: connected ? 'Local connector contract is reachable.' : 'Provider credentials or owner approval are required.',
-        timestamp: now,
-      };
+        mode,
+        ownerApproval: req.body?.ownerApproval,
+        ownerApprovals: req.body?.ownerApprovals,
+        receiptSink: mode === 'live' && req.body?.writeReceipt !== false ? createProviderReceipt : null,
+      });
 
       if (hasDatabase(db)) {
         db.prepare(`
@@ -344,6 +363,35 @@ export function registerPromptShellRoutes(app, { db, evoAgent } = {}) {
       }
 
       ok(res, { handshake });
+    } catch (error) {
+      fail(res, error);
+    }
+  });
+
+  app.post('/api/promptshell/connectors/:connectorId/probe', async (req, res) => {
+    try {
+      const connector = resolvePromptShellConnector(db, req.params.connectorId);
+      if (!connector) {
+        return fail(res, `Unknown connector: ${req.params.connectorId}`, 404);
+      }
+
+      const now = new Date().toISOString();
+      const probe = await connectorExecutor(connector, {
+        id: `probe_${crypto.randomUUID().slice(0, 12)}`,
+        mode: 'live',
+        ownerApproval: req.body?.ownerApproval,
+        ownerApprovals: req.body?.ownerApprovals,
+        receiptSink: req.body?.writeReceipt === false ? null : createProviderReceipt,
+      });
+
+      if (hasDatabase(db)) {
+        db.prepare(`
+          INSERT INTO handshakes (id, connector_id, status, result, timestamp)
+          VALUES (?, ?, ?, ?, ?)
+        `).run(probe.id, connector.connectorId, probe.status, JSON.stringify(probe), now);
+      }
+
+      ok(res, { probe });
     } catch (error) {
       fail(res, error);
     }
@@ -449,6 +497,66 @@ export function registerPromptShellRoutes(app, { db, evoAgent } = {}) {
   console.log('PromptShell routes registered: /api/promptshell/*');
 }
 
+export function buildEvoRuntimeCapabilities({ databaseReady = false, evoAgent } = {}) {
+  const providerKeys = ['OPENAI_API_KEY', 'GITHUB_TOKEN', 'STRIPE_SECRET_KEY', 'VERCEL_TOKEN'];
+  const configuredProviders = providerKeys.filter((key) => Boolean(process.env[key]));
+
+  return {
+    brand: EVO_BRAND,
+    truthState: 'LOCAL_EVO_RUNTIME_READY',
+    surfaces: [
+      'Studio',
+      'Flutter PromptShell',
+      'Python PromptEnds',
+      'PromptBridge API',
+      'PromptLink connectors',
+      'Proof ledger',
+      'Artifact vault',
+    ],
+    runtime: {
+      bridge: 'PromptBridge',
+      database: databaseReady ? 'ready' : 'unavailable',
+      agent: evoAgent?.chat ? 'available' : 'local_manifest_generator',
+      configuredProviders,
+      providerMode: configuredProviders.length ? 'partially_configured' : 'local_contracts_only',
+    },
+    flutter: {
+      truthState: 'FLUTTER_CLIENT_CONTRACT_READY',
+      capabilities: [
+        'Evo-branded PromptShell command deck',
+        'Manifest-to-proof generation over PromptBridge',
+        'PromptLink connector health and handshake actions',
+        'Proof ledger viewer',
+        'Artifact vault viewer',
+        'Runtime base URL override with PROMPTENDS_BASE_URL',
+      ],
+      proofCommands: ['flutter test', 'npm test -- tests/agent-promptshell-execution.test.js'],
+      blocked: ['Device/emulator runtime is not proven until flutter run targets a live bridge.'],
+    },
+    python: {
+      truthState: 'PYTHON_PROMPTLINK_BACKEND_READY',
+      capabilities: [
+        'FastAPI PromptEnds backend',
+        'PromptLink connector registry',
+        'Handshake and invoke policy gates',
+        'SQLite audit, proof, and artifact persistence',
+        'Manifest-to-proof artifact chain',
+      ],
+      proofCommands: [
+        'python -m pytest tests/test_real_logic.py',
+        'python -m pytest generated_apps/real_execution_buildkit/promptends_promptlink_backend/tests/test_real_logic.py',
+      ],
+      blocked: ['Production deployment and live provider secrets remain gated by external credentials and proofs.'],
+    },
+    proofRail: [
+      { step: 'manifest', route: '/api/promptshell/manifest/run', truthState: 'BUILT' },
+      { step: 'connector', route: '/api/promptshell/connectors/:connectorId/handshake', truthState: 'LOCAL_READY' },
+      { step: 'proof', route: '/api/promptshell/proof-cards', truthState: 'READABLE' },
+      { step: 'artifact', route: '/api/promptshell/artifacts', truthState: 'PERSISTED' },
+    ],
+  };
+}
+
 async function buildManifest(seedIntent, evoAgent) {
   if (evoAgent?.chat) {
     try {
@@ -505,17 +613,21 @@ function inferFeatures(seedIntent) {
   return base;
 }
 
-function listConnectors(db) {
+function normalizeConnectorMode(mode) {
+  return mode === 'live' ? 'live' : 'local';
+}
+
+export function listPromptShellConnectors(db) {
   if (!hasDatabase(db)) return localConnectorSeeds();
   const rows = db.prepare('SELECT * FROM connectors ORDER BY name ASC').all();
   return rows.map(normalizeConnector);
 }
 
-function resolveConnector(db, connectorId) {
+export function resolvePromptShellConnector(db, connectorId) {
   const normalized = String(connectorId || '').trim();
   if (!normalized) return null;
 
-  const connectors = listConnectors(db);
+  const connectors = listPromptShellConnectors(db);
   return connectors.find((connector) => {
     return connector.id === normalized ||
       connector.connectorId === normalized ||
@@ -598,6 +710,15 @@ function localConnectorSeeds() {
       riskLevel: 'MEDIUM',
       status: process.env.STRIPE_SECRET_KEY ? 'configured' : 'needs_credentials',
       config: { providerKey: 'STRIPE_SECRET_KEY' },
+    },
+    {
+      id: 'conn_vercel',
+      name: 'Vercel',
+      connectorId: 'vercel-1',
+      type: 'vercel',
+      riskLevel: 'MEDIUM',
+      status: process.env.VERCEL_TOKEN ? 'configured' : 'needs_credentials',
+      config: { providerKey: 'VERCEL_TOKEN' },
     },
   ];
 }

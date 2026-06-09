@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 
+import dotenv from 'dotenv';
 import { writeProviderActivationProof } from '../server/services/provider-activation-proof.js';
+
+dotenv.config({ path: '.env' });
+dotenv.config({ path: '.env.agent' });
+dotenv.config({ path: '.env.local' });
 
 const args = new Set(process.argv.slice(2));
 const live = args.has('--live');

@@ -40,7 +40,6 @@ ios/Pods/
 ios/.symlinks/
 macos/Pods/
 
-<<<<<<< HEAD
 # Scratch and temporary files
 scratch/
 temp_zip/
@@ -57,12 +56,7 @@ evo-extension/
 .firebaserc
 PH_EVO_CORE_KNOWLEDGE/extension/
 buildkit_import/
-=======
-# Sovereign Scratch & Temp
-scratch/
-temp_mobile_engine.js
-.sovereign-cache/
 .prompt-garden/
-.prompthouse-data/
-.sovereign-shards/
->>>>>>> main
+__pycache__/
+*.py[cod]
+.pytest_cache/

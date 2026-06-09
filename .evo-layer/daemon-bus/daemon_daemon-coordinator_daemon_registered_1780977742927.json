@@ -1,0 +1,18 @@
+{
+  "id": "daemon_daemon-coordinator_daemon_registered_1780977742927",
+  "daemonId": "daemon-coordinator",
+  "event": "daemon_registered",
+  "payload": {
+    "daemonId": "omni-orchestrator",
+    "role": "omni",
+    "capabilities": [
+      "coordinate",
+      "dispatch",
+      "summarize"
+    ],
+    "metadata": {},
+    "status": "AVAILABLE",
+    "updatedAt": "2026-06-09T04:02:22.924Z"
+  },
+  "createdAt": "2026-06-09T04:02:22.927Z"
+}

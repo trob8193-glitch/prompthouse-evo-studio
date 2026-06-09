@@ -28,10 +28,12 @@ import { AuthSentry } from './features/AuthSentry.jsx';
 import EvoPulseGridView from './features/EvoPulseGridView.jsx';
 import SingularityEngineOverlay from './components/SingularityEngineOverlay.jsx';
 import AppMarket from './components/AppMarket.jsx';
+import { AgentChatPanel } from './components/AgentChatPanel.jsx';
 
 import ProofCenterView from './features/ProofCenterView.jsx';
 import DeploymentCenterView from './features/DeploymentCenterView.jsx';
 import LaunchProofView from './features/LaunchProofView.jsx';
+import PromptBridgeSurfacesView from './features/PromptBridgeSurfacesView.jsx';
 import {
   SelfEvolutionDashboard,
   CostFirewallDashboard,
@@ -54,6 +56,7 @@ import ThemeEvolutionDashboard from './features/ThemeEvolutionDashboard.jsx';
 export const PAGE_MAP = {
   'dashboard': SovereignIntelligenceDashboard,
   'chat': SovereignChat,
+  'agent-chat': AgentChatPanel,
   'workspace': WorkspaceShell,
   'prompt-registry': PromptRegistry,
   'forge-labs': ForgeLabs,
@@ -61,6 +64,7 @@ export const PAGE_MAP = {
   'ai-generator': AIGeneratorHub,
   'evopulse-grid': EvoPulseGridView,
   'execution-queue': ExecutionQueue,
+  'brain-surfaces': PromptBridgeSurfacesView,
   'proof-console': ProofConsole,
   'proof-center': ProofCenterView,
   'deployment-center': DeploymentCenterView,

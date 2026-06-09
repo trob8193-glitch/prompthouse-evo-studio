@@ -34,6 +34,15 @@ function attachEvoLlmCapture({ rootDir, receipt, result }) {
   }
 }
 
+function selectProofCommands({ policy, proofProfile = 'full', runTests = true, runBuild = true } = {}) {
+  const profileCommands = policy.proofProfiles?.[proofProfile] || policy.proofCommands || [];
+  return profileCommands.filter(command => {
+    if (command === 'npm test') return Boolean(runTests);
+    if (command === 'npm run build') return Boolean(runBuild);
+    return true;
+  });
+}
+
 export async function runEvolutionCycle({
   rootDir = process.cwd(),
   objective = 'Autonomous self-evolution safe cleanup',
@@ -44,6 +53,8 @@ export async function runEvolutionCycle({
   allowRollback = true,
   ownerApproval = null,
   policy: policyInput = {},
+  proofProfile = 'full',
+  proofTimeoutMs = null,
 } = {}) {
   const policy = normalizeEvolutionPolicy(policyInput);
   const runId = `evo_${Date.now()}`;
@@ -71,26 +82,39 @@ export async function runEvolutionCycle({
     return { ...result, evoLlmCapture };
   }
 
-  const workspace = createEvolutionWorkspace({ rootDir, runId, strategy: 'copy' });
-  const patch = applyPatchProposal({ workspaceDir: workspace.workspaceDir, proposal, policy });
+  const workspace = proposal.verificationOnly
+    ? {
+        runId,
+        rootDir,
+        workspaceDir: rootDir,
+        strategy: 'proof_only_no_source_mutation',
+        createdAt: new Date().toISOString(),
+      }
+    : createEvolutionWorkspace({ rootDir, runId, strategy: 'copy' });
+  const patch = proposal.verificationOnly
+    ? { success: true, proposalId: proposal.id, changedFiles: [] }
+    : applyPatchProposal({ workspaceDir: workspace.workspaceDir, proposal, policy });
   receipt = updateEvolutionReceipt(runId, {
-    truthState: TRUTH_STATES.PATCHED_IN_SANDBOX,
+    truthState: proposal.verificationOnly ? TRUTH_STATES.VERIFICATION_ONLY_READY : TRUTH_STATES.PATCHED_IN_SANDBOX,
     workspace,
     changedFiles: patch.changedFiles,
   }, d.receiptRoot);
 
   if (mode === 'sandbox_apply') {
-    const result = { success: true, runId, objective, truthState: TRUTH_STATES.PATCHED_IN_SANDBOX, workspace, patch, receipt };
+    const truthState = proposal.verificationOnly ? TRUTH_STATES.VERIFICATION_ONLY_READY : TRUTH_STATES.PATCHED_IN_SANDBOX;
+    const result = { success: true, runId, objective, truthState, workspace, patch, receipt };
     const evoLlmCapture = attachEvoLlmCapture({ rootDir, receipt, result });
     return { ...result, evoLlmCapture };
   }
 
-  const commands = [];
-  if (policy.proofCommands?.includes('node --check promptbridge-server.js')) commands.push('node --check promptbridge-server.js');
-  if (runTests && policy.proofCommands?.includes('npm test')) commands.push('npm test');
-  if (runBuild && policy.proofCommands?.includes('npm run build')) commands.push('npm run build');
+  const commands = selectProofCommands({ policy, proofProfile, runTests, runBuild });
   receipt = updateEvolutionReceipt(runId, { truthState: TRUTH_STATES.PROOF_RUNNING }, d.receiptRoot);
-  const proof = await runProofCommands({ workspaceDir: workspace.workspaceDir, commands, receiptDir: d.proofRoot });
+  const proof = await runProofCommands({
+    workspaceDir: workspace.workspaceDir,
+    commands,
+    receiptDir: d.proofRoot,
+    timeoutMs: proofTimeoutMs || policy.proofTimeoutMs,
+  });
   const afterSnapshot = createRepoSnapshot({ rootDir: workspace.workspaceDir, label: `${runId}_after` });
   writeSnapshot(afterSnapshot, d.snapshotRoot);
   const comparison = compareEvolutionRun({ beforeSnapshot, afterSnapshot, proof, proposal });

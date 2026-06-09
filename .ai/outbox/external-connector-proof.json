@@ -1,0 +1,135 @@
+{
+  "success": true,
+  "truthState": "LOCAL_CONTRACTS_READY_PROVIDER_GATED",
+  "liveRequested": false,
+  "checkedAt": "2026-06-09T04:21:01.595Z",
+  "plans": [
+    {
+      "provider": "github",
+      "mode": "local",
+      "knownProvider": true,
+      "envKey": "GITHUB_TOKEN",
+      "approvalScope": "provider_probe",
+      "credentialConfigured": false,
+      "endpoint": "https://api.github.com/user"
+    },
+    {
+      "provider": "openai",
+      "mode": "local",
+      "knownProvider": true,
+      "envKey": "OPENAI_API_KEY",
+      "approvalScope": "provider_probe",
+      "credentialConfigured": true,
+      "endpoint": "https://api.openai.com/v1/models"
+    },
+    {
+      "provider": "stripe",
+      "mode": "local",
+      "knownProvider": true,
+      "envKey": "STRIPE_SECRET_KEY",
+      "approvalScope": "commerce",
+      "credentialConfigured": true,
+      "endpoint": "https://api.stripe.com/v1/account"
+    },
+    {
+      "provider": "vercel",
+      "mode": "local",
+      "knownProvider": true,
+      "envKey": "VERCEL_TOKEN",
+      "approvalScope": "deploy",
+      "credentialConfigured": false,
+      "endpoint": "https://api.vercel.com/v2/user"
+    }
+  ],
+  "probes": [
+    {
+      "id": "hs_6d2e06dd-4cd",
+      "connectorId": "github-1",
+      "connectorName": "GitHub",
+      "provider": "github",
+      "mode": "local",
+      "timestamp": "2026-06-09T04:21:01.592Z",
+      "status": "connected",
+      "truthState": "LOCAL_ONLY",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": true,
+      "reason": "Local connector contract is reachable; no external provider call was requested."
+    },
+    {
+      "id": "hs_9b0809b9-51d",
+      "connectorId": "openai-1",
+      "connectorName": "OpenAI",
+      "provider": "openai",
+      "mode": "local",
+      "timestamp": "2026-06-09T04:21:01.594Z",
+      "status": "connected",
+      "truthState": "LOCAL_ONLY",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": true,
+      "reason": "Local connector contract is reachable; no external provider call was requested."
+    },
+    {
+      "id": "hs_08624bdb-52f",
+      "connectorId": "stripe-1",
+      "connectorName": "Stripe",
+      "provider": "stripe",
+      "mode": "local",
+      "timestamp": "2026-06-09T04:21:01.594Z",
+      "status": "connected",
+      "truthState": "LOCAL_ONLY",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": true,
+      "reason": "Local connector contract is reachable; no external provider call was requested."
+    },
+    {
+      "id": "hs_d4bc9a90-9af",
+      "connectorId": "vercel-1",
+      "connectorName": "Vercel",
+      "provider": "vercel",
+      "mode": "local",
+      "timestamp": "2026-06-09T04:21:01.594Z",
+      "status": "blocked",
+      "truthState": "PROVIDER_GATED",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": false,
+      "reason": "Connector requires credentials or owner approval before use."
+    }
+  ],
+  "providerGates": [
+    {
+      "id": "hs_d4bc9a90-9af",
+      "connectorId": "vercel-1",
+      "connectorName": "Vercel",
+      "provider": "vercel",
+      "mode": "local",
+      "timestamp": "2026-06-09T04:21:01.594Z",
+      "status": "blocked",
+      "truthState": "PROVIDER_GATED",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": false,
+      "reason": "Connector requires credentials or owner approval before use."
+    }
+  ],
+  "liveBlockers": [
+    {
+      "id": "hs_d4bc9a90-9af",
+      "connectorId": "vercel-1",
+      "connectorName": "Vercel",
+      "provider": "vercel",
+      "mode": "local",
+      "timestamp": "2026-06-09T04:21:01.594Z",
+      "status": "blocked",
+      "truthState": "PROVIDER_GATED",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": false,
+      "reason": "Connector requires credentials or owner approval before use."
+    }
+  ],
+  "localFailures": []
+}

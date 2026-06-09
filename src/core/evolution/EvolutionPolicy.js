@@ -9,6 +9,7 @@ export const TRUTH_STATES = Object.freeze({
   PROOF_RUNNING: 'PROOF_RUNNING',
   PROOF_PASSED: 'PROOF_PASSED',
   PROOF_FAILED: 'PROOF_FAILED',
+  VERIFICATION_ONLY_READY: 'VERIFICATION_ONLY_READY',
   ROLLED_BACK: 'ROLLED_BACK',
   BLOCKED: 'BLOCKED',
   OWNER_APPROVAL_REQUIRED: 'OWNER_APPROVAL_REQUIRED',
@@ -39,6 +40,17 @@ export const DEFAULT_EVOLUTION_POLICY = Object.freeze({
     'npm test',
     'npm run build',
   ],
+  proofProfiles: {
+    quick: [
+      'node --check promptbridge-server.js',
+    ],
+    full: [
+      'node --check promptbridge-server.js',
+      'npm test',
+      'npm run build',
+    ],
+  },
+  proofTimeoutMs: 180000,
 });
 
 export function normalizeEvolutionPolicy(policy = {}) {
@@ -48,6 +60,8 @@ export function normalizeEvolutionPolicy(policy = {}) {
     allowedExtensions: policy.allowedExtensions || DEFAULT_EVOLUTION_POLICY.allowedExtensions,
     forbiddenPaths: policy.forbiddenPaths || DEFAULT_EVOLUTION_POLICY.forbiddenPaths,
     proofCommands: policy.proofCommands || DEFAULT_EVOLUTION_POLICY.proofCommands,
+    proofProfiles: policy.proofProfiles || DEFAULT_EVOLUTION_POLICY.proofProfiles,
+    proofTimeoutMs: policy.proofTimeoutMs || DEFAULT_EVOLUTION_POLICY.proofTimeoutMs,
   };
 }
 

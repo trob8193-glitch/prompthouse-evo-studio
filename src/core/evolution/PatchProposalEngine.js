@@ -46,6 +46,18 @@ function buildTruthLanguagePatch(rootDir) {
   };
 }
 
+function buildVerificationOnlyProposal({ objective }) {
+  return {
+    reason: 'No deterministic source patch matched the objective; run proof gates and record a receipt-backed clean-state result.',
+    verificationOnly: true,
+    expectedImprovement: [
+      'Confirm local proof gates still pass',
+      'Record that no source mutation was required for the requested objective'
+    ],
+    objective: objective || 'Autonomous self-evolution verification cycle'
+  };
+}
+
 export function buildPatchProposal({ runId = `evo_${Date.now()}`, objective = '', rootDir = process.cwd(), diagnostics = null, memory = null, policy = {} } = {}) {
   const objectiveText = String(objective || '').toLowerCase();
   const files = [];
@@ -65,14 +77,18 @@ export function buildPatchProposal({ runId = `evo_${Date.now()}`, objective = ''
     if (truthPatch) files.push(truthPatch);
   }
 
+  const verificationOnly = files.length === 0 ? buildVerificationOnlyProposal({ objective }) : null;
+
   const proposal = {
     id: `proposal_${Date.now()}`,
     runId,
     objective: objective || 'Autonomous self-evolution safe cleanup',
     risk: 'LOW',
     riskScore: null,
-    expectedImprovement: ['Reduce unverified completion language', 'Improve deployment environment readiness'],
+    expectedImprovement: verificationOnly?.expectedImprovement || ['Reduce unverified completion language', 'Improve deployment environment readiness'],
     files,
+    verificationOnly: Boolean(verificationOnly),
+    verificationReason: verificationOnly?.reason || null,
     diagnosticsSummary: diagnostics?.summary || null,
     memoryHints: memory || null,
     requiresOwnerApproval: false,
@@ -90,6 +106,9 @@ export function buildPatchProposal({ runId = `evo_${Date.now()}`, objective = ''
 export function validatePatchProposal(proposal, policy = {}) {
   if (!proposal || !Array.isArray(proposal.files)) throw new Error('Invalid patch proposal.');
   if (proposal.files.length === 0) {
+    if (proposal.verificationOnly) {
+      return { ...proposal, blockedReasons: [] };
+    }
     return { ...proposal, blockedReasons: ['No safe matching patch could be generated for the objective.'] };
   }
   const blockedReasons = [...(proposal.blockedReasons || [])];

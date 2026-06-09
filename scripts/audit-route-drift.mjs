@@ -19,6 +19,8 @@ const mountedRouteFiles = [
   'generated_apis/platform_sentinel_routes.js',
   'generated_apis/ai_model_routes.js',
   'generated_apis/evo_diffuser_routes.js',
+  'generated_apis/tribrain_routes.js',
+  'generated_apis/quadbrain_routes.js',
   'generated_apis/evo_terminal_routes.js',
   'generated_apis/evo_capability_routes.js',
   'generated_apis/portfolio_routes.js',
@@ -27,7 +29,8 @@ const mountedRouteFiles = [
   'generated_apis/module_maturity_routes.js',
   'generated_apis/spinecore_routes.js',
   'generated_apis/promptshell_routes.js',
-  'generated_apis/execution_routes.js'
+  'generated_apis/execution_routes.js',
+  'generated_apis/external_connector_routes.js'
 ];
 
 function read(rel) {

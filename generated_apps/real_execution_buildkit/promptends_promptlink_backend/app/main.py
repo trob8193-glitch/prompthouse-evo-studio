@@ -1,3 +1,4 @@
+import os
 from uuid import uuid4
 
 from fastapi import FastAPI
@@ -9,6 +10,20 @@ from .promptlink import bootstrap_default_connectors, get_connector, handshake, 
 from .proof import create_proof_card, list_proof_cards
 
 app = FastAPI(title="PromptEnds + PromptLink", version="0.1.0")
+
+EVO_BRAND = {
+    "name": "PromptHouse Evo Studio",
+    "runtime": "PromptEnds PromptLink Runtime",
+    "signature": "Manifest -> Connector -> Proof -> Artifact",
+    "tagline": "Proof-native builds across Flutter, Python, PromptBridge, and external connectors.",
+    "palette": {
+        "void": "#050712",
+        "pulse": "#18F27A",
+        "forge": "#38BDF8",
+        "proof": "#F8D66D",
+    },
+    "badges": ["Evo Native Runtime", "PromptLink Powered", "Proof-Gated"],
+}
 
 
 def initialize_runtime():
@@ -26,12 +41,29 @@ initialize_runtime()
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "service": "PromptEnds", "promptLink": "enabled"}
+    return {
+        "status": "ok",
+        "service": "PromptEnds",
+        "brand": EVO_BRAND,
+        "promptLink": "enabled",
+        "capabilitiesPath": "/api/evo-capabilities",
+    }
 
 
 @app.get("/link/health")
 async def link_health():
-    return {"status": "ok", "service": "PromptLink", "connectors": len(list_connectors())}
+    return {
+        "status": "ok",
+        "service": "PromptLink",
+        "brand": EVO_BRAND,
+        "connectors": len(list_connectors()),
+        "capabilitiesPath": "/api/evo-capabilities",
+    }
+
+
+@app.get("/api/evo-capabilities")
+async def evo_capabilities():
+    return build_evo_capabilities()
 
 
 @app.post("/link/connectors/register")
@@ -133,4 +165,65 @@ async def manifest_run(request: ManifestRunRequest):
         "artifacts": [brief.model_dump(), api_contract.model_dump(), test_plan.model_dump()],
         "proofCards": [proof.model_dump()],
         "launchCertificateId": f"launch-{uuid4()}",
+    }
+
+
+def build_evo_capabilities():
+    configured_providers = [
+        key
+        for key in ["OPENAI_API_KEY", "GITHUB_TOKEN", "STRIPE_SECRET_KEY", "VERCEL_TOKEN"]
+        if os.environ.get(key)
+    ]
+    return {
+        "brand": EVO_BRAND,
+        "truthState": "PYTHON_EVO_RUNTIME_READY",
+        "surfaces": [
+            "Python PromptEnds",
+            "PromptLink connectors",
+            "Manifest runner",
+            "Proof ledger",
+            "Artifact vault",
+            "Flutter PromptShell contract",
+        ],
+        "runtime": {
+            "backend": "FastAPI",
+            "database": "sqlite",
+            "connectors": len(list_connectors()),
+            "configuredProviders": configured_providers,
+            "providerMode": "partially_configured" if configured_providers else "local_contracts_only",
+        },
+        "flutter": {
+            "truthState": "FLUTTER_CLIENT_CONTRACT_READY",
+            "capabilities": [
+                "Evo-branded PromptShell command deck",
+                "Manifest-to-proof generation through API contract",
+                "Connector health and handshake actions",
+                "Proof ledger viewer",
+                "Artifact vault viewer",
+                "Runtime base URL override with PROMPTENDS_BASE_URL",
+            ],
+            "proofCommands": ["flutter test"],
+            "blocked": ["Device/emulator runtime is not proven until flutter run targets a live backend."],
+        },
+        "python": {
+            "truthState": "PYTHON_PROMPTLINK_BACKEND_READY",
+            "capabilities": [
+                "FastAPI PromptEnds backend",
+                "PromptLink connector registry",
+                "Handshake and invoke policy gates",
+                "SQLite audit, proof, and artifact persistence",
+                "Manifest-to-proof artifact chain",
+            ],
+            "proofCommands": [
+                "python -m pytest tests/test_real_logic.py",
+                "python -m pytest generated_apps/real_execution_buildkit/promptends_promptlink_backend/tests/test_real_logic.py",
+            ],
+            "blocked": ["Production deployment and live provider secrets remain gated by external credentials and proofs."],
+        },
+        "proofRail": [
+            {"step": "manifest", "route": "/api/manifest/run", "truthState": "BUILT"},
+            {"step": "connector", "route": "/link/connectors/{connector_id}/handshake", "truthState": "LOCAL_READY"},
+            {"step": "proof", "route": "/api/proof-cards", "truthState": "READABLE"},
+            {"step": "artifact", "route": "/api/artifacts", "truthState": "PERSISTED"},
+        ],
     }

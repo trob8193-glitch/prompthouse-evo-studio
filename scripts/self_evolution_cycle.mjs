@@ -5,10 +5,16 @@ import { Log } from '../src/core/autonomy/SovereignLogger.js';
 const args = process.argv.slice(2);
 const modeArg = args.find(arg => arg.startsWith('--mode='));
 const objectiveArg = args.find(arg => arg.startsWith('--objective='));
+const proofProfileArg = args.find(arg => arg.startsWith('--proof-profile='));
+const timeoutArg = args.find(arg => arg.startsWith('--timeout-ms='));
 const list = args.includes('--list');
 const status = args.includes('--status');
 
 const mode = modeArg ? modeArg.split('=').slice(1).join('=').trim() : 'proposal';
+const proofProfile = proofProfileArg
+  ? proofProfileArg.split('=').slice(1).join('=').trim()
+  : args.includes('--quick') ? 'quick' : 'full';
+const proofTimeoutMs = timeoutArg ? Number(timeoutArg.split('=').slice(1).join('=').trim()) : null;
 const objective = objectiveArg
   ? objectiveArg.split('=').slice(1).join('=').trim()
   : 'Remove non-production self-evolution language and improve local bridge URL environment readiness';
@@ -30,6 +36,8 @@ try {
     runTests: !args.includes('--skip-tests'),
     runBuild: !args.includes('--skip-build'),
     allowRollback: !args.includes('--no-rollback'),
+    proofProfile,
+    proofTimeoutMs,
   });
   Log.info(JSON.stringify(result, null, 2));
   process.exit(result.success ? 0 : 1);

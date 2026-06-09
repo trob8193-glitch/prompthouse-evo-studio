@@ -1,8 +1,8 @@
 import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
-  Activity, Eye, Swords, Sparkles, BarChart3, FolderOpen, Gauge, Zap, ChevronRight,
-  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, Lock, ScrollText, Globe
+  Activity, Eye, Sparkles, BarChart3, FolderOpen, Gauge, Zap,
+  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, Lock, ScrollText, Globe, Bot
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -23,6 +23,7 @@ export const NAV_GROUPS = [
       { id: 'portfolio', label: 'App Market', icon: Globe },
       { id: 'launch-proof', label: 'Launch Proof', icon: Shield },
       { id: 'chat', label: 'Evo Copilot', icon: MessageSquare },
+      { id: 'agent-chat', label: 'Evo Agent Chat', icon: Bot },
       { id: 'workspace', label: 'Workspace Explorer', icon: FolderOpen },
       { id: 'ghost-editor', label: 'Ghost Editor', icon: Sparkles },
     ],
@@ -54,6 +55,7 @@ export const NAV_GROUPS = [
     label: 'Operations',
     items: [
       { id: 'execution-queue', label: 'Execution Queue', icon: Rocket },
+      { id: 'brain-surfaces', label: 'Brain Surfaces', icon: Cpu },
       { id: 'proof-console', label: 'Proof Console', icon: Shield },
       { id: 'proof-center', label: 'Proof Center', icon: Shield },
       { id: 'evo-eyes', label: 'Evo Eyes', icon: Eye },

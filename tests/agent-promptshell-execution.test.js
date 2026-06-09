@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { setupAgentRoutes } from '../agent-integration.js';
 import { registerPromptShellRoutes, ensurePromptShellSchema } from '../generated_apis/promptshell_routes.js';
+import { registerExternalConnectorRoutes } from '../generated_apis/external_connector_routes.js';
 import { RealExecutionPipeline } from '../lib/execution/pipeline.js';
 
 const openServers = [];
@@ -30,6 +31,21 @@ function createFakeAgent() {
       return this.conversationHistory;
     },
   };
+}
+
+function createConnectorExecutor(result = {}) {
+  return async (connector, options = {}) => ({
+    id: options.id || 'probe_test',
+    connectorId: connector.connector_id || connector.connectorId,
+    connectorName: connector.name,
+    provider: connector.type,
+    mode: options.mode || 'local',
+    status: 'connected',
+    truthState: options.mode === 'live' ? 'PROVEN' : 'LOCAL_ONLY',
+    authenticated: options.mode === 'live',
+    timestamp: new Date().toISOString(),
+    ...result,
+  });
 }
 
 function createApp() {
@@ -87,12 +103,19 @@ describe('phase 2 PromptShell backend APIs', () => {
     const db = new Database(':memory:');
     openDbs.push(db);
     const app = createApp();
-    registerPromptShellRoutes(app, { db, evoAgent: createFakeAgent() });
+    registerPromptShellRoutes(app, { db, evoAgent: createFakeAgent(), connectorExecutor: createConnectorExecutor() });
     const baseUrl = await listen(app);
 
     const health = await fetch(`${baseUrl}/api/promptshell/health`).then((res) => res.json());
     expect(health.status).toBe('ready');
     expect(health.database).toBe('ready');
+    expect(health.brand.name).toBe('PromptHouse Evo Studio');
+
+    const capabilities = await fetch(`${baseUrl}/api/promptshell/evo-capabilities`).then((res) => res.json());
+    expect(capabilities.success).toBe(true);
+    expect(capabilities.capabilities.truthState).toBe('LOCAL_EVO_RUNTIME_READY');
+    expect(capabilities.capabilities.flutter.truthState).toBe('FLUTTER_CLIENT_CONTRACT_READY');
+    expect(capabilities.capabilities.python.capabilities).toContain('Manifest-to-proof artifact chain');
 
     const connectors = await fetch(`${baseUrl}/api/promptshell/connectors`).then((res) => res.json());
     expect(connectors.count).toBeGreaterThanOrEqual(3);
@@ -126,6 +149,31 @@ describe('phase 2 PromptShell backend APIs', () => {
     const proofCards = await fetch(`${baseUrl}/api/promptshell/proof-cards`).then((res) => res.json());
     expect(Array.isArray(proofCards.proofCards)).toBe(true);
   });
+
+  it('runs a live connector probe route through the connector executor', async () => {
+    const db = new Database(':memory:');
+    openDbs.push(db);
+    const app = createApp();
+    registerPromptShellRoutes(app, {
+      db,
+      evoAgent: createFakeAgent(),
+      connectorExecutor: createConnectorExecutor({ response: { login: 'owner' } }),
+    });
+    const baseUrl = await listen(app);
+
+    const probe = await fetch(`${baseUrl}/api/promptshell/connectors/github-1/probe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        writeReceipt: false,
+        ownerApproval: { granted: true, scope: 'provider_probe' },
+      }),
+    }).then((res) => res.json());
+
+    expect(probe.success).toBe(true);
+    expect(probe.probe.status).toBe('connected');
+    expect(probe.probe.truthState).toBe('PROVEN');
+  });
 });
 
 describe('phase 4 execution pipeline implementation file', () => {
@@ -133,7 +181,7 @@ describe('phase 4 execution pipeline implementation file', () => {
     const db = new Database(':memory:');
     openDbs.push(db);
     ensurePromptShellSchema(db);
-    const pipeline = new RealExecutionPipeline({ db, evoAgent: createFakeAgent() });
+    const pipeline = new RealExecutionPipeline({ db, evoAgent: createFakeAgent(), connectorExecutor: createConnectorExecutor() });
 
     const execution = await pipeline.executeWorkflow('Build a proof-backed chat shell');
 
@@ -148,5 +196,52 @@ describe('phase 4 execution pipeline implementation file', () => {
     expect(db.prepare('SELECT COUNT(*) AS count FROM manifests').get().count).toBe(1);
     expect(db.prepare('SELECT COUNT(*) AS count FROM artifacts').get().count).toBe(1);
     expect(db.prepare('SELECT COUNT(*) AS count FROM sovereign_ledger').get().count).toBe(1);
+  });
+
+  it('can mark workflow proof as proven when live connector mode succeeds', async () => {
+    const db = new Database(':memory:');
+    openDbs.push(db);
+    ensurePromptShellSchema(db);
+    const pipeline = new RealExecutionPipeline({
+      db,
+      evoAgent: createFakeAgent(),
+      connectorExecutor: createConnectorExecutor(),
+    });
+
+    const execution = await pipeline.executeWorkflow('Build a proof-backed chat shell', {
+      connectorMode: 'live',
+      ownerApproval: { granted: true, scope: 'provider_probe' },
+    });
+    const proof = execution.steps.find((step) => step.name === 'proof_generated');
+    const ledger = db.prepare('SELECT truth_state FROM sovereign_ledger').get();
+
+    expect(proof).toBeTruthy();
+    expect(ledger.truth_state).toBe('PROVEN');
+  });
+});
+
+describe('external connector API routes', () => {
+  it('lists connector probe plans and runs top-level live probe route', async () => {
+    const db = new Database(':memory:');
+    openDbs.push(db);
+    const app = createApp();
+    registerExternalConnectorRoutes(app, { db, connectorExecutor: createConnectorExecutor() });
+    const baseUrl = await listen(app);
+
+    const connectors = await fetch(`${baseUrl}/api/connectors`).then((res) => res.json());
+    expect(connectors.success).toBe(true);
+    expect(connectors.connectors.some((connector) => connector.probePlan?.provider === 'github')).toBe(true);
+
+    const probe = await fetch(`${baseUrl}/api/connectors/github-1/probe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        writeReceipt: false,
+        ownerApproval: { granted: true, scope: 'provider_probe' },
+      }),
+    }).then((res) => res.json());
+
+    expect(probe.success).toBe(true);
+    expect(probe.truthState).toBe('PROVEN');
   });
 });

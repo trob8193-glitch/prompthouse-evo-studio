@@ -7,7 +7,7 @@ import { EvoAgent } from './agent-runtime.js';
 import { Router } from 'express';
 import dotenv from 'dotenv';
 
-dotenv.config({ path: '.env.agent' });
+dotenv.config({ path: '.env.agent', override: false });
 
 let agentInstance = null;
 

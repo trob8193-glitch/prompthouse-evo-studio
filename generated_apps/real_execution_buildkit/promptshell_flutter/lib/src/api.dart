@@ -9,6 +9,7 @@ class PromptEndsApi {
   static const baseUrl = String.fromEnvironment('PROMPTENDS_BASE_URL', defaultValue: 'http://localhost:3001/api/promptshell');
 
   Future<Map<String, dynamic>> health() => _getMap('/health');
+  Future<Map<String, dynamic>> evoCapabilities() => _getMap('/evo-capabilities');
   Future<List<dynamic>> connectors() => _getEnvelopeList('/connectors', 'connectors');
   Future<List<dynamic>> proofCards() => _getEnvelopeList('/proof-cards', 'proofCards');
   Future<List<dynamic>> artifacts() => _getEnvelopeList('/artifacts', 'artifacts');

@@ -1,5 +1,7 @@
 import fs from 'fs';
 import path from 'path';
+import { readLatestDaemonReadiness } from '../daemons/DaemonReadiness.js';
+import { getEvolutionStatus } from '../../evolution/index.js';
 
 export const ENGINE_STATES = Object.freeze({
   implemented: 'IMPLEMENTED',
@@ -81,9 +83,52 @@ export function upsertEngine({ rootDir = process.cwd(), engine }) {
   return next;
 }
 
+const DAEMON_PROVEN_ENGINE_IDS = new Set([
+  'daemon-bus',
+  'runtime-control-center',
+  'autonomous-tether-engine',
+  'evolution-daemon',
+  'self-invention-daemon',
+]);
+
+function applyReceiptBackedLocalProof({ rootDir, engine }) {
+  const next = { ...engine };
+  const daemonProof = readLatestDaemonReadiness({ rootDir });
+  if (daemonProof?.success && DAEMON_PROVEN_ENGINE_IDS.has(next.id)) {
+    next.state = ENGINE_STATES.implemented;
+    next.completion = 100;
+    next.localCompletion = 100;
+    next.localTruthState = daemonProof.truthState;
+    next.localProofGeneratedAt = daemonProof.generatedAt;
+    next.externalTruthState = 'PROVIDER_OR_OPERATOR_GATED';
+  }
+
+  if (next.id === 'self-evolution-engine') {
+    const evolution = getEvolutionStatus({ rootDir });
+    const lastRun = evolution.lastRun;
+    const proofPassed = lastRun?.truthState === 'PROOF_PASSED' && lastRun?.proof?.passed && lastRun?.comparison?.improved;
+    if (proofPassed) {
+      next.state = ENGINE_STATES.implemented;
+      next.completion = 100;
+      next.localCompletion = 100;
+      next.localTruthState = lastRun.truthState;
+      next.localProofGeneratedAt = lastRun.updatedAt || lastRun.createdAt;
+      next.localProofRunId = lastRun.runId || lastRun.id;
+      next.externalTruthState = 'MERGE_OR_PROVIDER_GATED';
+    }
+  }
+
+  return next;
+}
+
+function applyReceiptBackedProofs({ rootDir, engines }) {
+  return engines.map(engine => applyReceiptBackedLocalProof({ rootDir, engine }));
+}
+
 export function getEngineRegistryReport({ rootDir = process.cwd() } = {}) {
   const registry = readEngineRegistry({ rootDir });
-  const categories = registry.engines.reduce((acc, engine) => {
+  const engines = applyReceiptBackedProofs({ rootDir, engines: registry.engines });
+  const categories = engines.reduce((acc, engine) => {
     const category = engine.category || 'uncategorized';
     acc[category] ||= { count: 0, avgCompletion: 0, engines: [] };
     acc[category].count += 1;
@@ -95,12 +140,27 @@ export function getEngineRegistryReport({ rootDir = process.cwd() } = {}) {
     category.avgCompletion = Math.round(category.engines.reduce((sum, engine) => sum + Number(engine.completion || 0), 0) / Math.max(1, category.engines.length));
   }
 
-  const avgCompletion = Math.round(registry.engines.reduce((sum, engine) => sum + Number(engine.completion || 0), 0) / Math.max(1, registry.engines.length));
+  const avgCompletion = Math.round(engines.reduce((sum, engine) => sum + Number(engine.completion || 0), 0) / Math.max(1, engines.length));
+  const localProofedEngines = engines.filter(engine => Number(engine.localCompletion || 0) === 100);
+  const externalGatedEngines = engines.filter(engine => engine.externalTruthState);
 
   return {
     truthState: 'ENGINE_REGISTRY_REPORT_CREATED',
-    engineCount: registry.engines.length,
+    engineCount: engines.length,
     avgCompletion,
+    localProofedEngineCount: localProofedEngines.length,
+    externalGatedEngineCount: externalGatedEngines.length,
+    localProofedEngines: localProofedEngines.map(engine => ({
+      id: engine.id,
+      localCompletion: engine.localCompletion,
+      localTruthState: engine.localTruthState,
+      localProofGeneratedAt: engine.localProofGeneratedAt,
+      localProofRunId: engine.localProofRunId || null,
+    })),
+    externalGatedEngines: externalGatedEngines.map(engine => ({
+      id: engine.id,
+      externalTruthState: engine.externalTruthState,
+    })),
     categories,
     generatedAt: new Date().toISOString()
   };
