@@ -14,16 +14,24 @@ const STORAGE_KEYS = {
   PATCH_PROPOSALS: 'ph_evo_patch_proposals',
 };
 
+// ─── Node-Safe Storage Shim ──────────────────────────────────────
+const isNode = typeof window === 'undefined' || typeof localStorage === 'undefined';
+const memoryStore = new Map();
+const safeStorage = isNode ? {
+  getItem: (k) => memoryStore.get(k) || null,
+  setItem: (k, v) => memoryStore.set(k, v)
+} : localStorage;
+
 // ─── Helpers ───────────────────────────────────────────────────
 function load(key, fallback = []) {
   try {
-    const raw = localStorage.getItem(key);
+    const raw = safeStorage.getItem(key);
     return raw ? JSON.parse(raw) : fallback;
   } catch { return fallback; }
 }
 
 function save(key, value) {
-  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* quota exceeded */ }
+  try { safeStorage.setItem(key, JSON.stringify(value)); } catch { /* quota exceeded */ }
 }
 
 function uid() {
@@ -32,11 +40,11 @@ function uid() {
 
 // ─── Sovereignty Policy ────────────────────────────────────────
 export function getSovereigntyPolicy() {
-  return localStorage.getItem(STORAGE_KEYS.POLICY) || 'sovereign';
+  return safeStorage.getItem(STORAGE_KEYS.POLICY) || 'sovereign';
 }
 
 export function setSovereigntyPolicy(policy) {
-  localStorage.setItem(STORAGE_KEYS.POLICY, policy);
+  safeStorage.setItem(STORAGE_KEYS.POLICY, policy);
 }
 
 // ─── Missions ─────────────────────────────────────────────────
