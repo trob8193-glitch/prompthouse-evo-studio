@@ -542,6 +542,3 @@ export function AutonomousSelfBuildCommandCenter() {
     </div>
   );
 }
-
-/* [EVO-DAEMON] Add a micro-animation to buttons for a more interactive and premium feel. */
-.button { transition: transform 0.2s ease-in-out; } .button:hover { transform: scale(1.05); }

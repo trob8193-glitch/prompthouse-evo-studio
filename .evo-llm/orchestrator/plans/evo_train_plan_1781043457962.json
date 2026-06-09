@@ -1,0 +1,231 @@
+{
+  "id": "evo_train_plan_1781043457962",
+  "createdAt": "2026-06-09T22:17:37.962Z",
+  "objective": "Improve Evo LLM studio reasoning from validated examples",
+  "provider": "openai",
+  "model": "gpt-4o-mini-2024-07-18",
+  "risk": "HIGH",
+  "truthState": "PROVIDER_TRAINING_PLAN_BLOCKED",
+  "dataset": {
+    "generatedAt": "2026-06-09T22:17:37.943Z",
+    "truthState": "DATASET_READY",
+    "totalExamples": 8,
+    "validExamples": 8,
+    "invalidExamples": [],
+    "trainCount": 6,
+    "evalCount": 2,
+    "files": {
+      "trainJsonl": ".evo-llm\\training-data\\evo-train.jsonl",
+      "evalJsonl": ".evo-llm\\training-data\\evo-eval.jsonl"
+    },
+    "policy": {
+      "id": "evo-llm-training-policy",
+      "name": "Evo LLM Truth-Bound Training Policy",
+      "truthState": "PIPELINE_POLICY_ONLY_NOT_TRAINED_MODEL",
+      "requiredFields": [
+        "system",
+        "instruction",
+        "response"
+      ],
+      "bannedClaims": [
+        "sentient",
+        "conscious",
+        "guaranteed profit",
+        "unlimited autonomous",
+        "break into",
+        "bypass security"
+      ],
+      "allowedUses": [
+        "PromptHouse Evo Studio architecture assistance",
+        "module maturity auditing",
+        "cost firewall reasoning",
+        "proof-gated build planning",
+        "truth-bound repair recommendations"
+      ],
+      "disallowedUses": [
+        "claims of sentience or consciousness",
+        "security bypass guidance",
+        "medical diagnosis",
+        "legal advice",
+        "financial guarantees",
+        "fake completion claims without receipts"
+      ]
+    }
+  },
+  "evaluation": {
+    "generatedAt": "2026-06-09T22:17:37.954Z",
+    "truthState": "EVAL_READY",
+    "datasetQualityScore": 100,
+    "totalExamples": 8,
+    "validExamples": 8,
+    "invalidCount": 0,
+    "blockers": [],
+    "requiredNextSteps": [
+      "Add more project-specific examples from real PromptHouse Evo Studio workflows.",
+      "Run provider-specific fine-tune command only after dataset validation passes.",
+      "Store model output evaluations and compare against baseline prompts."
+    ]
+  },
+  "gates": {
+    "datasetReady": true,
+    "evalReady": true,
+    "ownerApprovalRequired": true,
+    "providerCredentialsRequired": true,
+    "budgetApprovalRequired": true,
+    "providerGate": {
+      "provider": "openai",
+      "external": true,
+      "allowed": false,
+      "truthState": "PROVIDER_GATE_BLOCKED",
+      "model": "gpt-4o-mini-2024-07-18",
+      "checks": {
+        "supportedOk": true,
+        "credentialOk": true,
+        "modelOk": true,
+        "budgetOk": false,
+        "allowOk": false
+      },
+      "blockedReasons": [
+        "Missing positive EVO_LLM_MAX_TRAINING_BUDGET_USD.",
+        "EVO_LLM_ALLOW_PROVIDER_TRAINING is not true."
+      ]
+    },
+    "costGate": {
+      "provider": "openai",
+      "allowed": true,
+      "truthState": "COST_FIREWALL_ALLOWED",
+      "costFirewall": {
+        "allowed": true,
+        "requiresReview": false,
+        "blockedReasons": [],
+        "review": null,
+        "route": {
+          "selectedProvider": "local",
+          "selectedModel": "evo-lm",
+          "quality": "basic",
+          "estimatedCost": 0,
+          "candidates": [
+            {
+              "provider": "local",
+              "model": "evo-lm",
+              "quality": "basic",
+              "cost": {
+                "known": true,
+                "provider": "local",
+                "model": "evo-lm",
+                "inputTokens": 19,
+                "outputTokens": 1000,
+                "inputCost": 0,
+                "outputCost": 0,
+                "estimatedCost": 0,
+                "requiresOwnerApproval": false,
+                "currency": "usd"
+              }
+            },
+            {
+              "provider": "openai",
+              "model": "gpt-4o-mini",
+              "quality": "standard",
+              "cost": {
+                "known": true,
+                "provider": "openai",
+                "model": "gpt-4o-mini",
+                "inputTokens": 19,
+                "outputTokens": 1000,
+                "inputCost": 0.0000028500000000000002,
+                "outputCost": 0.0006,
+                "estimatedCost": 0.00060285,
+                "requiresOwnerApproval": false,
+                "currency": "usd"
+              }
+            },
+            {
+              "provider": "openai",
+              "model": "gpt-4o",
+              "quality": "advanced",
+              "cost": {
+                "known": true,
+                "provider": "openai",
+                "model": "gpt-4o",
+                "inputTokens": 19,
+                "outputTokens": 1000,
+                "inputCost": 0.0000475,
+                "outputCost": 0.01,
+                "estimatedCost": 0.0100475,
+                "requiresOwnerApproval": false,
+                "currency": "usd"
+              }
+            }
+          ],
+          "decisionReason": "local_first_lowest_cost"
+        },
+        "selectedCost": {
+          "known": true,
+          "provider": "local",
+          "model": "evo-lm",
+          "inputTokens": 19,
+          "outputTokens": 1000,
+          "inputCost": 0,
+          "outputCost": 0,
+          "estimatedCost": 0,
+          "requiresOwnerApproval": false,
+          "currency": "usd"
+        },
+        "budget": {
+          "allowed": true,
+          "requiresApproval": false,
+          "blockedReasons": [],
+          "approvalReasons": [],
+          "rules": {
+            "dailyMaxEstimatedDollars": 5,
+            "monthlyMaxEstimatedDollars": 100,
+            "maxCloudCallsPerDay": 100,
+            "maxCloudCallsPerMonth": 2000,
+            "requireApprovalOverEstimatedCost": 1,
+            "blockIfMarginBelowPercent": 60,
+            "freePlanCloudCallsPerDay": 0
+          },
+          "usage": {
+            "dailySpend": 0,
+            "monthlySpend": 0,
+            "dailyCloudCalls": 0,
+            "monthlyCloudCalls": 0
+          }
+        },
+        "profit": {
+          "allowed": true,
+          "requiresApproval": false,
+          "marginPercentAfter": 100,
+          "reason": "Local provider has no metered API cost."
+        },
+        "receipt": {
+          "id": "cost_1781043457961_acm6vd",
+          "createdAt": "2026-06-09T22:17:37.961Z",
+          "orgId": "studio_owner",
+          "endpoint": "/api/evo-llm/train",
+          "taskType": "evo_llm_provider_training",
+          "selectedProvider": "local",
+          "selectedModel": "evo-lm",
+          "cloudProviderAvoided": "openai:gpt-4o-mini",
+          "inputTokensBeforeCompression": 19,
+          "inputTokensAfterCompression": 19,
+          "tokensSaved": 0,
+          "estimatedCostWithoutFirewall": 0.00060285,
+          "actualCostAfterFirewall": 0,
+          "estimatedSavingsDollars": 0.00060285,
+          "estimatedSavingsPercent": 100,
+          "decisionReason": "local_first_lowest_cost",
+          "blocked": false,
+          "requiresReview": false
+        }
+      }
+    }
+  },
+  "blockedReasons": [
+    "Missing positive EVO_LLM_MAX_TRAINING_BUDGET_USD.",
+    "EVO_LLM_ALLOW_PROVIDER_TRAINING is not true."
+  ],
+  "nextActions": [
+    "Resolve blockedReasons before approval or provider execution."
+  ]
+}

@@ -44,7 +44,7 @@ The spatial map contains exact bounding rectangles of every UI element.
 Your job: identify ONE specific, actionable CSS or React improvement.
 Return ONLY a JSON object with this exact schema:
 {
-  "targetFile": "src/index.css or src/SomeComponent.jsx",
+  "targetFile": "src/index.css or another .css file under src",
   "description": "What to improve and why",
   "cssRule": "selector { property: value; }" OR null,
   "componentChange": "description of React change" OR null
@@ -116,10 +116,24 @@ Focus on: spacing, alignment, contrast, visual hierarchy, micro-animations, prem
   return null;
 }
 
+function resolveCssTargetFile(targetFile) {
+  const requested = typeof targetFile === 'string' && targetFile.trim() ? targetFile.trim() : 'src/index.css';
+  const relativeTarget = path.extname(requested).toLowerCase() === '.css' ? requested : 'src/index.css';
+  const resolved = path.resolve(rootDir, relativeTarget);
+  const rootWithSeparator = rootDir.endsWith(path.sep) ? rootDir : `${rootDir}${path.sep}`;
+  if (!resolved.startsWith(rootWithSeparator)) return null;
+  return resolved;
+}
+
 function applyCssChange(suggestion) {
   if (!suggestion.cssRule) return false;
 
-  const cssPath = path.join(rootDir, suggestion.targetFile || 'src/index.css');
+  const cssPath = resolveCssTargetFile(suggestion.targetFile);
+  if (!cssPath) {
+    Log.info('\x1b[33m⚠️ Target CSS file is outside the workspace. Skipping.\x1b[0m');
+    return false;
+  }
+
   if (!fs.existsSync(cssPath)) {
     Log.info(`\x1b[33m⚠️ Target CSS file not found: ${cssPath}\x1b[0m`);
     return false;
@@ -135,7 +149,7 @@ function applyCssChange(suggestion) {
   }
 
   fs.writeFileSync(cssPath, content + marker, 'utf-8');
-  Log.info(`\x1b[32m✅ CSS applied to ${suggestion.targetFile}\x1b[0m`);
+  Log.info(`\x1b[32m✅ CSS applied to ${path.relative(rootDir, cssPath)}\x1b[0m`);
   return true;
 }
 
@@ -280,4 +294,4 @@ if (process.argv[1] && process.argv[1].endsWith('evolution-daemon.mjs')) {
   runEvolution();
 }
 
-export { runEvolution };
+export { runEvolution, resolveCssTargetFile };
