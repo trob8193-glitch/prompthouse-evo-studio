@@ -129,7 +129,8 @@
     "mobile:build": "node scripts/mobile-architect-cli.mjs",
     "daemons:all": "concurrently \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run antigravity\"",
     "omni:orchestrator": "node src/core/daemons/omni/OmniOrchestrator.mjs",
-    "antigravity": "node scripts/antigravity-daemon.mjs"
+    "antigravity": "node scripts/antigravity-daemon.mjs",
+    "test:enterprise-license": "node scripts/test-enterprise-license.mjs"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8",
