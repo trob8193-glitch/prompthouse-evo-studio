@@ -1,16 +1,4 @@
-/**
- * PromptHouse Evo Studio — PromptBridge Server (Sovereign Finality Build)
- * ════════════════════════════════════════════════════════════════════
- * The heart of the SMFF (Self-Monetizing Feature Foundry).
- */
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
-import path, { join, relative, dirname, resolve, extname } from 'path';
-import OpenAI from 'openai';
-import { execSync } from 'child_process';
-import bcrypt from 'bcryptjs';
+
 /**
  * PromptHouse Evo Studio — PromptBridge Server (Sovereign Finality Build)
  * ════════════════════════════════════════════════════════════════════
