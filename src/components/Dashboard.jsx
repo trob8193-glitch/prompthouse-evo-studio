@@ -65,6 +65,12 @@ export const StudioDashboard = () => {
             type: 'Cost Firewall',
             desc: `Saved tokens: ${metrics?.firewall?.savedTokens ?? 0} • Saved $: ${metrics?.firewall?.savedDollars ?? '0.0000'}`,
             status: 'ACTIVE'
+          },
+          {
+            id: 'mcp_server',
+            type: 'God-Mode MCP Server',
+            desc: '17 Sovereign Tools Exposed globally via STDIO',
+            status: 'ACTIVE'
           }
         ]);
       } catch (e) {
