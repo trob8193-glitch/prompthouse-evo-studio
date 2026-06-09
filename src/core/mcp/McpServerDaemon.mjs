@@ -122,6 +122,34 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           type: "object",
           properties: {},
         },
+      },
+      {
+        name: "trigger_nuclear_audit",
+        description: "Fires the Nuclear Audit daemon to perform a deep diagnostic scan of the entire Studio.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
+      },
+      {
+        name: "trigger_team_repair",
+        description: "Fires the Team Repair daemon to initiate a collaborative multi-AI review of the codebase to hunt for and log failures.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
+      },
+      {
+        name: "trigger_gemini_repair",
+        description: "Fires the Gemini Repair daemon to physically rewrite and repair a broken file on disk using the UniversalAIAdaptor.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            targetFile: { type: "string", description: "The relative path to the file to repair (e.g. 'src/App.jsx')." },
+            issueDescription: { type: "string", description: "A detailed description of what is broken and needs to be fixed." }
+          },
+          required: ["targetFile", "issueDescription"]
+        },
       }
     ],
   };
@@ -244,6 +272,45 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         child.stderr.on("data", (data) => { output += data.toString(); });
         child.on("close", (code) => {
           resolve({ content: [{ type: "text", text: `Evolution Daemon finished with code ${code}.\n\n${output}` }] });
+        });
+      });
+    }
+
+    if (name === "trigger_nuclear_audit") {
+      const scriptPath = path.resolve(__dirname, "../../../scripts/nuclear_audit.mjs");
+      return new Promise((resolve) => {
+        const child = spawn("node", [scriptPath]);
+        let output = "";
+        child.stdout.on("data", (data) => { output += data.toString(); });
+        child.stderr.on("data", (data) => { output += data.toString(); });
+        child.on("close", (code) => {
+          resolve({ content: [{ type: "text", text: `Nuclear Audit finished with code ${code}.\n\n${output}` }] });
+        });
+      });
+    }
+
+    if (name === "trigger_team_repair") {
+      const scriptPath = path.resolve(__dirname, "../../../scripts/team_repair.mjs");
+      return new Promise((resolve) => {
+        const child = spawn("node", [scriptPath]);
+        let output = "";
+        child.stdout.on("data", (data) => { output += data.toString(); });
+        child.stderr.on("data", (data) => { output += data.toString(); });
+        child.on("close", (code) => {
+          resolve({ content: [{ type: "text", text: `Team Repair finished with code ${code}.\n\n${output}` }] });
+        });
+      });
+    }
+
+    if (name === "trigger_gemini_repair") {
+      const scriptPath = path.resolve(__dirname, "../../../scripts/gemini-repair.mjs");
+      return new Promise((resolve) => {
+        const child = spawn("node", [scriptPath, args.targetFile, args.issueDescription]);
+        let output = "";
+        child.stdout.on("data", (data) => { output += data.toString(); });
+        child.stderr.on("data", (data) => { output += data.toString(); });
+        child.on("close", (code) => {
+          resolve({ content: [{ type: "text", text: `Gemini Repair finished with code ${code}.\n\n${output}` }] });
         });
       });
     }
