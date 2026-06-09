@@ -62,6 +62,7 @@ export const NAV_GROUPS = [
       { id: 'evo-eyes', label: 'Evo Eyes', icon: Eye },
       { id: 'metrics', label: 'Metrics', icon: BarChart3 },
       { id: 'deployment-center', label: 'Deployment Center', icon: Rocket },
+      { id: 'mobile-singularity', label: 'Mobile Hub', icon: Smartphone },
     ],
   },
   {
