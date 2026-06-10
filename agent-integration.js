@@ -41,7 +41,7 @@ export function getAgentConfigStatus() {
 /**
  * Agent integration routes using Express Router
  * Add to promptbridge-server.js:
- * 
+ *
  * import { setupAgentRoutes } from './agent-integration.js';
  * setupAgentRoutes(app);
  */
@@ -152,7 +152,7 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
       });
 
       const buffer = Buffer.from(await mp3.arrayBuffer());
-      
+
       res.set({
         'Content-Type': 'audio/mpeg',
         'Content-Length': buffer.length,

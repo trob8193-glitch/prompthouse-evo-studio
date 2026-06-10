@@ -25,7 +25,7 @@ export function AgentChatPanel() {
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
-  
+
   const currentBot = ALL_BOT_ROSTER.find(b => b.id === selectedBot) || ALL_BOT_ROSTER[0];
 
   // Auto-scroll to bottom
@@ -155,7 +155,7 @@ export function AgentChatPanel() {
             voice: data.bot?.voice || currentBot.voice || 'onyx'
           })
         });
-        
+
         if (voiceRes.ok) {
           const blob = await voiceRes.blob();
           const url = URL.createObjectURL(blob);
@@ -232,7 +232,7 @@ export function AgentChatPanel() {
             <RefreshCw size={12} className={loading ? 'animate-spin' : ''} /> Reset
           </button>
         </div>
-        
+
         {/* Bot Selector */}
         <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.05)] overflow-x-auto pb-2 flex gap-2 no-scrollbar">
           {ALL_BOT_ROSTER.map(bot => (
@@ -240,8 +240,8 @@ export function AgentChatPanel() {
               key={bot.id}
               onClick={() => setSelectedBot(bot.id)}
               className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
-                selectedBot === bot.id 
-                  ? 'text-white border-transparent shadow-lg' 
+                selectedBot === bot.id
+                  ? 'text-white border-transparent shadow-lg'
                   : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'
               }`}
               style={selectedBot === bot.id ? { backgroundColor: bot.palette.primary } : {}}
@@ -329,8 +329,8 @@ export function AgentChatPanel() {
             onClick={toggleRecording}
             disabled={loading}
             className={`px-4 py-3 rounded-xl transition flex items-center justify-center shadow-lg ${
-              isRecording 
-                ? 'bg-red-500 hover:bg-red-600 animate-pulse text-white' 
+              isRecording
+                ? 'bg-red-500 hover:bg-red-600 animate-pulse text-white'
                 : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
             }`}
           >
@@ -347,7 +347,7 @@ export function AgentChatPanel() {
           </button>
         </div>
       </form>
-      
+
       {/* Global CSS for no-scrollbar */}
       <style dangerouslySetInnerHTML={{__html: `
         .no-scrollbar::-webkit-scrollbar {

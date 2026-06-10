@@ -5,7 +5,9 @@
  * All data is real — no unverified simulation layers.
  */
 
-const BRIDGE_URL = 'http://127.0.0.1:3001';
+const BRIDGE_URL = (typeof process !== 'undefined' && process.env.PROMPTBRIDGE_URL) 
+  || (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_PROMPTBRIDGE_URL) 
+  || 'http://127.0.0.1:3001';
 
 // ─── Bot Roster (Full Cast) ────────────────────────────────────
 export const BOT_ROSTER = [

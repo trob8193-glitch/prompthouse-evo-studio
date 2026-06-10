@@ -224,7 +224,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     if (name === "get_platform_readiness") {
       const sentinel = new PlatformReadinessEngine();
       const status = sentinel.status({ runCommands: false });
-      
+
       return {
         content: [{ type: "text", text: JSON.stringify(status, null, 2) }],
       };
@@ -234,14 +234,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const appId = args.appId;
       const target = args.target || "expo_router";
       const scriptPath = path.resolve(__dirname, "../../../scripts/mobile-architect-cli.mjs");
-      
+
       return new Promise((resolve) => {
         const child = spawn("node", [scriptPath, appId, target]);
         let output = "";
-        
+
         child.stdout.on("data", (data) => { output += data.toString(); });
         child.stderr.on("data", (data) => { output += data.toString(); });
-        
+
         child.on("close", (code) => {
           resolve({
             content: [{ type: "text", text: `Mobile compilation finished with code ${code}.\n\nOutput:\n${output}` }],
@@ -472,13 +472,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       // Lazy load to avoid initial boot crashes
       const { getEvoAgent } = await import("../../../agent-integration.js");
       const { ALL_BOT_ROSTER } = await import("../../engine.js");
-      
+
       const bot = ALL_BOT_ROSTER.find(b => b.id === args.botId) || ALL_BOT_ROSTER[0];
       const instructions = `You are ${bot.name}, a ${bot.species}. Role: ${bot.role}. Signature: ${bot.signature}. Always stay in character and provide production-ready solutions.`;
-      
+
       const agent = getEvoAgent();
       const response = await agent.chat(args.message, { instructions });
-      
+
       return {
         content: [{ type: "text", text: `[${bot.name}]:\n\n${response}` }]
       };
