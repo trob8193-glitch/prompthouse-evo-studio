@@ -3,6 +3,7 @@ import os from 'os';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
 
+import registerEnterpriseArchitectureRoutes from '../generated_apis/enterprise_architecture_routes.js';
 import registerQuadBrainRoutes from '../generated_apis/quadbrain_routes.js';
 import registerTriBrainRoutes from '../generated_apis/tribrain_routes.js';
 import { writeMemory, getMemoryGraph } from '../src/core/evo-layer/memory/MemoryGraph.js';
@@ -19,7 +20,16 @@ import {
   createTriBrainSystem,
   validateTriBrainCommand,
 } from '../src/core/tribrain/index.js';
-import { QUADBRAIN_SURFACES, getQuadBrainStatus, routeQuadBrainSurface } from '../src/core/quadbrain/index.js';
+import {
+  QUADBRAIN_ABILITY_CLASSES,
+  QUADBRAIN_SURFACES,
+  getQuadBrainStatus,
+  routeQuadBrainSurface,
+} from '../src/core/quadbrain/index.js';
+import {
+  getEnterpriseArchitectureStatus,
+  getEnterpriseExpansionRoadmap,
+} from '../src/core/architecture/EnterpriseArchitectureContract.js';
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'ph-brain-stack-'));
@@ -181,18 +191,62 @@ describe('TriBrain contract runtime', () => {
   });
 });
 
+describe('Enterprise architecture expansion contract', () => {
+  it('publishes infrastructure layers, product surfaces, and proof tiers', () => {
+    const status = getEnterpriseArchitectureStatus();
+    const roadmap = getEnterpriseExpansionRoadmap();
+
+    expect(status.success).toBe(true);
+    expect(status.truthLabel).toBe('ENTERPRISE_ARCHITECTURE_EXPANSION_READY');
+    expect(status.layerCount).toBeGreaterThanOrEqual(8);
+    expect(status.productSurfaceCount).toBeGreaterThanOrEqual(5);
+    expect(status.proofTiers.VERIFIED.minimumEvidence).toContain('tests-pass');
+    expect(roadmap.phases).toHaveLength(5);
+  });
+
+  it('exposes enterprise architecture routes for dashboards and cockpits', () => {
+    const handlers = createRouteHarness(registerEnterpriseArchitectureRoutes);
+    const statusRes = createResponse();
+    handlers['GET /api/enterprise-architecture/status']({ query: { compact: 'true' } }, statusRes);
+
+    expect(statusRes.body.success).toBe(true);
+    expect(statusRes.body.architecture.truthLabel).toBe('ENTERPRISE_ARCHITECTURE_EXPANSION_READY');
+
+    const productsRes = createResponse();
+    handlers['GET /api/enterprise-architecture/products']({}, productsRes);
+    expect(productsRes.body.products.some(product => product.id === 'software-audit')).toBe(true);
+  });
+});
+
 describe('QuadBrain overlay runtime', () => {
-  it('reports the four-brain overlay and routes external surfaces through the gateway contract', () => {
+  it('reports the four-brain enterprise overlay and routes external surfaces through the gateway contract', () => {
     const status = getQuadBrainStatus();
     const route = routeQuadBrainSurface({
       surface: QUADBRAIN_SURFACES.APPS_MCP_COCKPIT,
       abilityClass: 'visualize',
     });
 
-    expect(status.truthLabel).toBe('QUADBRAIN_OVERLAY_READY');
+    expect(status.truthLabel).toBe('QUADBRAIN_ENTERPRISE_OVERLAY_READY');
     expect(status.canon.brains).toHaveLength(4);
+    expect(status.enterpriseArchitecture.truthLabel).toBe('ENTERPRISE_ARCHITECTURE_EXPANSION_READY');
     expect(route.success).toBe(true);
     expect(route.requiresStudioGateway).toBe(true);
+  });
+
+  it('routes new enterprise product surfaces to the correct architecture layers', () => {
+    const costRoute = routeQuadBrainSurface({
+      surface: QUADBRAIN_SURFACES.COST_FIREWALL_CONSOLE,
+      abilityClass: QUADBRAIN_ABILITY_CLASSES.GOVERN_COST,
+    });
+    const auditRoute = routeQuadBrainSurface({
+      surface: QUADBRAIN_SURFACES.CUSTOMER_AUDIT_REPORT,
+      abilityClass: QUADBRAIN_ABILITY_CLASSES.RELEASE_VERDICT,
+    });
+
+    expect(costRoute.success).toBe(true);
+    expect(costRoute.architectureLayer).toBe('cost-economics-layer');
+    expect(auditRoute.success).toBe(true);
+    expect(auditRoute.architectureLayer).toBe('platform-readiness-layer');
   });
 });
 
@@ -216,7 +270,7 @@ describe('TriBrain and QuadBrain routes', () => {
     const handlers = createRouteHarness(registerQuadBrainRoutes);
     const statusRes = createResponse();
     handlers['GET /api/quadbrain/status']({}, statusRes);
-    expect(statusRes.body.status.truthLabel).toBe('QUADBRAIN_OVERLAY_READY');
+    expect(statusRes.body.status.truthLabel).toBe('QUADBRAIN_ENTERPRISE_OVERLAY_READY');
 
     const routeRes = createResponse();
     handlers['POST /api/quadbrain/route']({
