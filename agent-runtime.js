@@ -48,61 +48,52 @@ export class EvoAgent {
    * Send a message and get a streamed response
    */
   async chat(userMessage, opts = {}) {
-    // Initialize thread if needed
     if (!this.threadId) {
       await this.initThread();
     }
 
-    const { verbose = true, temperature = 0.7 } = opts;
+    const { verbose = true, temperature = 0.7, instructions = null } = opts;
 
     if (verbose) {
       console.log(`\n🦁 User: ${userMessage}\n`);
       console.log('⏳ Evo is thinking...\n');
     }
 
-    // Add message to thread
     await this.openai.beta.threads.messages.create(this.threadId, {
       role: 'user',
       content: userMessage,
     });
 
-    // Stream response
-    let fullResponse = '';
-    let responseStarted = false;
-
-    const stream = await this.openai.beta.threads.runs.create(this.threadId, {
+    const runParams = {
       assistant_id: this.agentId,
       tools: [{ type: 'code_interpreter' }],
-    });
+      temperature,
+    };
+    if (instructions) {
+      runParams.instructions = instructions;
+    }
 
-    // Poll for completion with streaming output
-    let runStatus = await this.openai.beta.threads.runs.retrieve(stream.id, { thread_id: this.threadId });
+    const run = await this.openai.beta.threads.runs.create(this.threadId, runParams);
+    let runStatus = await this.openai.beta.threads.runs.retrieve(run.id, { thread_id: this.threadId });
 
-    while (runStatus.status !== 'completed' && runStatus.status !== 'failed') {
+    while (!['completed', 'failed', 'cancelled', 'expired'].includes(runStatus.status)) {
       if (verbose) {
         console.log(`⏳ Status: ${runStatus.status}...`);
       }
 
-      // Small delay before next poll
-      await new Promise((r) => setTimeout(r, 1000));
-
-      runStatus = await this.openai.beta.threads.runs.retrieve(stream.id, { thread_id: this.threadId });
-
-      if (runStatus.status === 'requires_action' && runStatus.required_action) {
-        if (verbose) {
-          console.log(`🔨 Tool call requested...`);
-        }
+      if (runStatus.status === 'requires_action') {
+        throw new Error('Agent run requested external tool execution; file access, mutation, and deploy actions require explicit owner-approved Studio routes.');
       }
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      runStatus = await this.openai.beta.threads.runs.retrieve(run.id, { thread_id: this.threadId });
     }
 
-    if (runStatus.status === 'failed') {
-      throw new Error(`Run failed: ${runStatus.last_error?.message || 'Unknown error'}`);
+    if (runStatus.status !== 'completed') {
+      throw new Error(`Run ${runStatus.status}: ${runStatus.last_error?.message || 'No completed response was returned.'}`);
     }
 
-    // Retrieve messages
     const messages = await this.openai.beta.threads.messages.list(this.threadId);
-
-    // Find the assistant's latest response
     const assistantMessages = messages.data
       .filter((m) => m.role === 'assistant')
       .sort((a, b) => b.created_at - a.created_at);

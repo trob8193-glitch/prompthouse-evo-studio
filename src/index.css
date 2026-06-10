@@ -1430,3 +1430,6 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
   -webkit-box-shadow: 0 4px 12px rgba(34, 211, 238, 0.12);
   box-shadow: 0 4px 12px rgba(34, 211, 238, 0.12);
 }
+
+/* [EVO-DAEMON] Improve the visual hierarchy and premium feel by adding a subtle box shadow to the main container elements across the application. This will help in distinguishing sections and adding depth. */
+.main-container { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }

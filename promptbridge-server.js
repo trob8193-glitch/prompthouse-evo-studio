@@ -55,6 +55,7 @@ import registerExecutionRoutes from './generated_apis/execution_routes.js';
 import registerExternalConnectorRoutes from './generated_apis/external_connector_routes.js';
 import { RealExecutionPipeline } from './lib/execution/pipeline.js';
 import { registerCommerceMarketplaceRoutes } from './src/routes/commerce_marketplace_routes.js';
+import { attachSseTransport } from './src/core/mcp/McpServerDaemon.mjs';
 
 // Import our core engines
 import { UniversalAIAdaptor } from './lib/ai/UniversalAIAdaptor.js';
@@ -186,6 +187,7 @@ const evoAgent = {
   chat: async (message, options = {}) => getEvoAgent().chat(message, options),
 };
 const executionPipeline = new RealExecutionPipeline({ evoAgent, db });
+const stripeClient = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 
 setupAgentRoutes(app);
 registerEmulatorRoutes(app);
@@ -217,6 +219,10 @@ registerEvoExchangeRoutes(app);
 registerExecutionRoutes(app, { pipeline: executionPipeline });
 registerExternalConnectorRoutes(app, { db });
 registerCommerceMarketplaceRoutes(app);
+
+// Attach the Global MCP SSE Endpoints
+attachSseTransport(app);
+
 app.use('/api/launch-pilot', launchPilotRoutes);
 
 

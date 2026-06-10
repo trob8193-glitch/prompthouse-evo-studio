@@ -1,5 +1,6 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
@@ -56,10 +57,21 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "trigger_deploy_rail",
-        description: "Executes the Sovereign DeployRail to autonomously deploy the current studio codebase to Vercel.",
+        description: "Executes the Sovereign DeployRail. Defaults to non-live proof mode; live deploy requires explicit deploy approval and DEPLOY_ALLOW_PRODUCTION=true.",
         inputSchema: {
           type: "object",
-          properties: {},
+          properties: {
+            liveRun: { type: "boolean", description: "Set true only for an owner-approved live deployment. Defaults to false." },
+            candidateScore: { type: "number", description: "Proof score for the deploy candidate. Defaults to 0." },
+            ownerApproval: {
+              type: "object",
+              properties: {
+                granted: { type: "boolean" },
+                scope: { type: "string" },
+                receiptId: { type: "string" }
+              }
+            }
+          },
         },
       },
       {
@@ -187,6 +199,18 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           type: "object",
           properties: {},
         },
+      },
+      {
+        name: "summon_evo_bot",
+        description: "Summons a specific bot from the 21-Bot Dev Team to answer a query or solve a problem using its unique persona and domain expertise.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            botId: { type: "string", description: "The ID of the bot to summon (e.g., 'blueprint_orca', 'schema_beaver', 'cipher_lynx'). Default is 'evo'." },
+            message: { type: "string", description: "The message or task to send to the bot." }
+          },
+          required: ["botId", "message"]
+        },
       }
     ],
   };
@@ -227,7 +251,42 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
 
     if (name === "trigger_deploy_rail") {
-      const result = await runDeployRail("mcp_agent_deploy", { liveRun: true, ownerApproved: true, candidateScore: 100 });
+      const liveRun = args.liveRun === true;
+      const approval = args.ownerApproval || {};
+      const ownerApproved = approval.granted === true && approval.scope === "deploy";
+      if (liveRun && !ownerApproved) {
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({
+              success: false,
+              blocked: true,
+              truthState: "OWNER_APPROVAL_REQUIRED",
+              requiredApprovalScope: "deploy",
+              message: "MCP DeployRail live runs require an explicit ownerApproval object with granted=true and scope=deploy."
+            }, null, 2)
+          }]
+        };
+      }
+      if (liveRun && process.env.DEPLOY_ALLOW_PRODUCTION !== "true") {
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({
+              success: false,
+              blocked: true,
+              truthState: "PRODUCTION_DEPLOY_FLAG_REQUIRED",
+              requiredEnvKey: "DEPLOY_ALLOW_PRODUCTION",
+              requiredValue: "true"
+            }, null, 2)
+          }]
+        };
+      }
+      const result = await runDeployRail("mcp_agent_deploy", {
+        liveRun,
+        ownerApproved,
+        candidateScore: Number(args.candidateScore || 0)
+      });
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
       };
@@ -409,6 +468,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       });
     }
 
+    if (name === "summon_evo_bot") {
+      // Lazy load to avoid initial boot crashes
+      const { getEvoAgent } = await import("../../../agent-integration.js");
+      const { ALL_BOT_ROSTER } = await import("../../engine.js");
+      
+      const bot = ALL_BOT_ROSTER.find(b => b.id === args.botId) || ALL_BOT_ROSTER[0];
+      const instructions = `You are ${bot.name}, a ${bot.species}. Role: ${bot.role}. Signature: ${bot.signature}. Always stay in character and provide production-ready solutions.`;
+      
+      const agent = getEvoAgent();
+      const response = await agent.chat(args.message, { instructions });
+      
+      return {
+        content: [{ type: "text", text: `[${bot.name}]:\n\n${response}` }]
+      };
+    }
+
     throw new Error(`Unknown tool: ${name}`);
   } catch (error) {
     return {
@@ -418,14 +493,37 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 });
 
-// 3. Start STDIO Server
-async function main() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  console.error("PromptHouse Studio MCP Server running on STDIO");
-}
+// 3. Export SSE Transport Binder
+let sseTransport = null;
 
-main().catch((error) => {
-  console.error("MCP Server Error:", error);
-  process.exit(1);
-});
+export const attachSseTransport = (app) => {
+  app.get("/mcp/sse", async (req, res) => {
+    sseTransport = new SSEServerTransport("/mcp/message", res);
+    await server.connect(sseTransport);
+    console.log("Global MCP SSE Connection Established.");
+  });
+
+  app.post("/mcp/message", async (req, res) => {
+    if (sseTransport) {
+      await sseTransport.handlePostMessage(req, res);
+    } else {
+      res.status(503).send("MCP SSE not connected");
+    }
+  });
+};
+
+// 4. Start STDIO Server if run directly
+import url from "url";
+const invokedPath = process.argv[1] ? url.pathToFileURL(process.argv[1]).href : null;
+if (invokedPath && import.meta.url === invokedPath) {
+  async function main() {
+    const transport = new StdioServerTransport();
+    await server.connect(transport);
+    console.error("PromptHouse Studio MCP Server running on STDIO");
+  }
+
+  main().catch((error) => {
+    console.error("MCP Server Error:", error);
+    process.exit(1);
+  });
+}

@@ -5,8 +5,12 @@
 
 import { EvoAgent } from './agent-runtime.js';
 import { Router } from 'express';
+import express from 'express';
 import dotenv from 'dotenv';
 import { Log } from './src/core/autonomy/SovereignLogger.js';
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
 
 dotenv.config({ path: '.env.agent', override: false });
 
@@ -83,7 +87,7 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
    * Body: { "message": "your prompt here" }
    */
   router.post('/chat', async (req, res) => {
-    const { message } = req.body;
+    const { message, botId } = req.body;
 
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
       return res.status(400).json({
@@ -93,8 +97,13 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
     }
 
     try {
+      // Dynamically load ALL_BOT_ROSTER here to avoid circular imports during boot
+      const { ALL_BOT_ROSTER } = await import('./src/engine.js');
+      const bot = ALL_BOT_ROSTER.find(b => b.id === botId) || ALL_BOT_ROSTER[0];
+      const instructions = `You are ${bot.name}, a ${bot.species}. Role: ${bot.role}. Signature: ${bot.signature}. Always stay in character and provide production-ready solutions.`;
+
       const agent = agentFactory();
-      const response = await agent.chat(message, { verbose: false }).catch(err => {
+      const response = await agent.chat(message, { verbose: false, instructions }).catch(err => {
         Log.error(`[Agent] Chat execution failed: ${err.message}`);
         throw err;
       });
@@ -104,6 +113,13 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
         response,
         message: response,
         threadId: agent.threadId,
+        bot: {
+          id: bot.id,
+          name: bot.name,
+          icon: bot.icon,
+          palette: bot.palette,
+          voice: bot.voice
+        },
         timestamp: new Date().toISOString(),
       });
     } catch (err) {
@@ -113,6 +129,69 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
         error: err.message,
         help: 'Ensure AGENT_ID is set in .env.agent and OpenAI API key is valid.',
       });
+    }
+  });
+
+  /**
+   * Text-to-Speech Voice Endpoint
+   * POST /api/agent/voice
+   * Body: { "text": "Hello world", "voice": "onyx" }
+   */
+  router.post('/voice', async (req, res) => {
+    const { text, voice } = req.body;
+    if (!text) {
+      return res.status(400).json({ error: 'Text is required for TTS.' });
+    }
+
+    try {
+      const agent = agentFactory();
+      const mp3 = await agent.openai.audio.speech.create({
+        model: "tts-1",
+        voice: voice || "onyx",
+        input: text,
+      });
+
+      const buffer = Buffer.from(await mp3.arrayBuffer());
+      
+      res.set({
+        'Content-Type': 'audio/mpeg',
+        'Content-Length': buffer.length,
+      });
+      res.send(buffer);
+    } catch (err) {
+      Log.error(`[Agent] Voice generation failed: ${err.message}`);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  /**
+   * Speech-to-Text Transcription Endpoint
+   * POST /api/agent/transcribe
+   * Accepts raw audio binary (e.g., audio/webm)
+   */
+  router.post('/transcribe', express.raw({ type: '*/*', limit: '50mb' }), async (req, res) => {
+    try {
+      if (!req.body || req.body.length === 0) {
+        return res.status(400).json({ error: 'No audio data provided.' });
+      }
+
+      // Write raw buffer to a temporary webm file
+      const tempFilePath = path.join(os.tmpdir(), `upload_${Date.now()}.webm`);
+      fs.writeFileSync(tempFilePath, req.body);
+
+      const agent = agentFactory();
+      const transcription = await agent.openai.audio.transcriptions.create({
+        file: fs.createReadStream(tempFilePath),
+        model: 'whisper-1',
+      });
+
+      // Cleanup
+      fs.unlinkSync(tempFilePath);
+
+      res.json({ success: true, text: transcription.text });
+    } catch (err) {
+      Log.error(`[Agent] Transcription failed: ${err.message}`);
+      res.status(500).json({ error: err.message });
     }
   });
 
