@@ -45,21 +45,36 @@ export function runExecutionKernelStatus({ rootDir = process.cwd() } = {}) {
     queued: records.filter(row => row.status === 'QUEUED').length,
     executed: records.filter(row => row.status === 'DONE' || row.status === 'SUCCESS').length,
     failed: records.filter(row => row.status === 'FAILED').length,
+    blocked: records.filter(row => row.status === 'BLOCKED').length,
     adapters: getAdapterStatus({ rootDir }),
     adapterHealth,
     scheduler: getSchedulerReport({ rootDir }),
     coordination: getCoordinationRuntimeReport({ rootDir }),
-    safety: checkExecutionSafety({ rootDir }),
+    safety: checkExecutionSafety({ rootDir, task: 'status' }),
     timestamp: new Date().toISOString()
   };
 }
 
-export async function executeTask({ rootDir = process.cwd(), task, adapter = null, payload = {} } = {}) {
-  const safety = checkExecutionSafety({ rootDir, task });
+export async function executeTask({ rootDir = process.cwd(), task, adapter = null, payload = {}, approval = null, allowHighRisk = false } = {}) {
+  const safety = checkExecutionSafety({ rootDir, task, approval, allowHighRisk });
   if (!safety.allowed) {
-    return { success: false, status: 'BLOCKED', reason: safety.reason, task, createdAt: new Date().toISOString() };
+    const blocked = {
+      id: `exec_blocked_${Date.now()}`,
+      success: false,
+      status: 'BLOCKED',
+      reason: safety.reason,
+      risk: safety.risk,
+      category: safety.category,
+      approvalRequired: safety.approvalRequired,
+      task,
+      createdAt: new Date().toISOString()
+    };
+    const base = dir(rootDir);
+    ensure(base);
+    fs.writeFileSync(path.join(base, `${blocked.id}.json`), JSON.stringify(blocked, null, 2));
+    return blocked;
   }
-  const result = await executeAdapterTask({ rootDir, task, adapter, payload });
+  const result = await executeAdapterTask({ rootDir, task, adapter, payload, approval, allowHighRisk });
   const base = dir(rootDir);
   ensure(base);
   fs.writeFileSync(path.join(base, `${result.id}.json`), JSON.stringify(result, null, 2));
