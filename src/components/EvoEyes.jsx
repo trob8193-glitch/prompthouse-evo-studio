@@ -21,7 +21,7 @@ import { useSovereignStore } from '../store.js';
 
 import { Log } from '../core/autonomy/SovereignLogger.js';
 
-const BRIDGE_URL = 'http://127.0.0.1:3001';
+const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'));
 
 export function EvoEyes({ mode = 'overlay' }) {
   const { 

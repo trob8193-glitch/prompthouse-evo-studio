@@ -230,7 +230,7 @@ function getLocalConnectionMap() {
       name: 'PromptBridge Local Runtime',
       type: 'EVO',
       status: 'active',
-      url: 'http://127.0.0.1:3001',
+      url: (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'),
       description: 'Local bridge process and studio route surface.'
     }],
     bonded_nodes: bonded
@@ -861,7 +861,7 @@ export function registerStudioCoreRoutes(app) {
         name: 'PromptBridge Local Runtime',
         ip: '127.0.0.1',
         port: 3001,
-        url: 'http://127.0.0.1:3001',
+        url: (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'),
         type: 'EVO',
         status: 'VERIFIED',
         truthState: 'LOCAL_RUNTIME_VERIFIED',

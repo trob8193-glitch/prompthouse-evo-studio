@@ -5,7 +5,7 @@
  * No simulated logic. Real experiments with real statistical evaluation.
  */
 
-const BRIDGE = 'http://127.0.0.1:3001';
+const BRIDGE = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001');
 import { universalSend } from './lib/universal-transport.js';
 
 import { Log } from './core/autonomy/SovereignLogger.js';

@@ -3,7 +3,7 @@ import { SelfForge } from '../autonomy/SelfForge.js';
 
 const BRIDGE_URL = typeof process !== 'undefined' && process.env?.PROMPTBRIDGE_URL
   ? process.env.PROMPTBRIDGE_URL
-  : 'http://127.0.0.1:3001';
+  : (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001');
 
 async function recordHealingProbe(filePath) {
   try {

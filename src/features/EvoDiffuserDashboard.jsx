@@ -19,7 +19,7 @@ export default function EvoDiffuserDashboard() {
     Log.info(`[EvoDiffuser] Generating Latent Architecture via ${engine.toUpperCase()}: ${prompt}`);
     
     try {
-      const res = await fetch('http://127.0.0.1:3001/api/diffuser/generate', {
+      const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/diffuser/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, steps, cfg, engine })

@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { ROUTE_REGISTRY } from '../src/core/routes/RouteRegistry.js';
 
-const baseUrl = process.env.BRIDGE_URL || process.env.VITE_BRIDGE_URL || 'http://127.0.0.1:3001';
+const baseUrl = process.env.BRIDGE_URL || process.env.VITE_BRIDGE_URL || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001');
 const paths = new Set(['/status', '/api/metrics', '/api/reviews', '/api/proof-docs', '/api/truth/probe', '/api/rift/status', '/api/evopulse/nodes', '/api/evopulse/routes', '/api/ai/models', '/api/evo-bridge/status', '/api/platform-sentinel/status']);
 const routes = ROUTE_REGISTRY.filter(route => route.method === 'GET' && paths.has(route.path));
 

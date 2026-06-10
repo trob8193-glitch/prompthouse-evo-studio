@@ -7,7 +7,7 @@ export default function AppMarket() {
     const [launching, setLaunching] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/portfolio')
+        fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/portfolio')
             .then(res => res.json())
             .then(data => {
                 setProjects(data.projects || []);
@@ -21,7 +21,7 @@ export default function AppMarket() {
 
     const launchApp = (projectId) => {
         setLaunching(projectId);
-        fetch('http://localhost:3001/api/portfolio/launch', {
+        fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/portfolio/launch', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ projectId })
@@ -38,7 +38,7 @@ export default function AppMarket() {
 
     const handleConnectStripe = async () => {
         try {
-            const res = await fetch('http://localhost:3001/api/marketplace/onboard', { method: 'POST' });
+            const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/marketplace/onboard', { method: 'POST' });
             const data = await res.json();
             if (data.url) window.location.href = data.url;
         } catch (e) {
@@ -48,7 +48,7 @@ export default function AppMarket() {
 
     const handleBuyApp = async (projectId) => {
         try {
-            const res = await fetch('http://localhost:3001/api/marketplace/checkout', {
+            const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/marketplace/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ projectId })

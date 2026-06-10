@@ -17,10 +17,10 @@ export const StudioDashboard = () => {
     async function fetchLive() {
       try {
         const [statusRes, metricsRes, queueRes, nfRes] = await Promise.all([
-          fetch('http://127.0.0.1:3001/status'),
-          fetch('http://127.0.0.1:3001/api/metrics'),
-          fetch('http://127.0.0.1:3001/api/queue/master'),
-          fetch('http://127.0.0.1:3001/api/nightforge/status'),
+          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/status'),
+          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/metrics'),
+          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/queue/master'),
+          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/nightforge/status'),
         ]);
 
         const status = statusRes.ok ? await statusRes.json() : null;

@@ -35,9 +35,9 @@ export default function RareCapabilities() {
     const fetchRealityStats = async () => {
       try {
         const [auditRes, proofRes, diagRes] = await Promise.all([
-          fetch('http://127.0.0.1:3001/api/audit/nuclear-truth'),
-          fetch('http://127.0.0.1:3001/api/proof/count'),
-          fetch('http://127.0.0.1:3001/api/studio/diagnostics?limit=25'),
+          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/audit/nuclear-truth'),
+          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/proof/count'),
+          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/studio/diagnostics?limit=25'),
         ]);
 
         const audit = await auditRes.json().catch(() => null);

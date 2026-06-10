@@ -1,4 +1,4 @@
-const BASE_URL = 'http://127.0.0.1:3001';
+const BASE_URL = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001');
 
 class FreeFoundryMode {
   async train(params = {}) {

@@ -3,7 +3,7 @@ import { useSovereignStore } from '../store.js';
 import { Button, Card, StatusBadge } from './primitives.jsx';
 import { Sparkles, FileCode, Check, RefreshCw, X } from 'lucide-react';
 
-const BRIDGE_URL = 'http://127.0.0.1:3001';
+const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'));
 
 export function GhostEditor() {
   const { activeFile, addNotification, logToLedger } = useSovereignStore();

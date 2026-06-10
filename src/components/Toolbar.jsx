@@ -32,7 +32,7 @@ export function Toolbar() {
     addTerminalLog(`> [BUILD] Source: ${activeFile}`, 'info', 'build');
     
     // Trigger real terminal command for build
-    const res = await fetch('http://127.0.0.1:3001/api/intelligence/execute', {
+    const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/intelligence/execute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -57,7 +57,7 @@ export function Toolbar() {
     addTerminalLog('evo audit', 'command', 'security');
     // The terminal will handle the 'evo audit' command logic
     const fetchAudit = async () => {
-      const res = await fetch('http://127.0.0.1:3001/api/intelligence/execute', {
+      const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/intelligence/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

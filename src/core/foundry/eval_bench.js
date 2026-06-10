@@ -2,7 +2,7 @@
 // Minimal evaluation bench utilities (no synthetic scoring).
 
 export async function benchmarkChat({
-  bridgeUrl = 'http://127.0.0.1:3001',
+  bridgeUrl = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'),
   messages = [{ role: 'user', content: 'ping' }],
   systemPrompt = '',
 }) {
