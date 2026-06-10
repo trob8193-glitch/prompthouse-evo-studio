@@ -142,6 +142,11 @@
     "mobile:daemon": "node scripts/mobile-singularity-daemon.mjs",
     "mcp:server": "node src/core/mcp/McpServerDaemon.mjs",
     "seed:daemon": "node scripts/seed-round-engineering-daemon.mjs",
+    "architecture:status": "node scripts/enterprise_architecture_status.mjs",
+    "architecture:proof": "node scripts/enterprise_architecture_status.mjs --compact",
+    "architecture:audit": "npm run architecture:proof && npm run test -- tests/brain-stack-contracts.test.js",
+    "enterprise:edge": "npm run architecture:proof && npm run cost && npm run maturity:check && npm run platform:release-verdict",
+    "enterprise:full-proof": "npm run architecture:proof && npm run test && npm run build && npm run audit:imports && npm run audit:css && npm run audit:dead-surfaces && npm run maturity:strict && npm run cost && npm run platform:ready",
     "test:enterprise-license": "node scripts/test-enterprise-license.mjs"
   },
   "dependencies": {
