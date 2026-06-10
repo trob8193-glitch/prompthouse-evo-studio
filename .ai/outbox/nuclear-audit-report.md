@@ -1,22 +1,25 @@
 # Singularity Edge Enterprise Audit
-Generated: 2026-06-09T14:58:57.033Z
+Generated: 2026-06-10T00:39:47.168Z
 
 ## Truth Probe
-- State: UNAVAILABLE
-- Modules: unknown
-- Average Score: unknown
+- State: TRUTH_PROBE_READY
+- Modules: 15
+- Average Score: 100
 
 ## Studio Scan
-- State: UNAVAILABLE
-- Total Modules: unknown
-- Unresolved Routes: unknown
+- State: STUDIO_SCAN_CLEAR
+- Total Modules: 15
+- Unresolved Routes: 0
 
 ## Local Gates
-
+- PASSED: route drift audit
+- PASSED: dead surface audit
+- PASSED: enterprise static audit
+- PASSED: focused route/dead tests
 
 ## Provider Evolution
-- Status: PENDING
-- Detail: 
+- Status: SKIPPED
+- Detail: Provider-backed evolution missions require PH_ALLOW_NUCLEAR_EVOLUTION=true.
 
 ## Final
 - Status: LOCAL_SINGULARITY_EDGE_CLEAR

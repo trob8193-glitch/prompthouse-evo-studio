@@ -30,7 +30,7 @@ export class LicenseManager {
 
   verifyLicense() {
     if (!fs.existsSync(this.licensePath)) {
-      console.log('🛡️ [LicenseManager] No enterprise.lic found. Running in Community Mode.');
+      global.Log && global.Log.info('🛡️ [LicenseManager] No enterprise.lic found. Running in Community Mode.');
       this.setCommunityMode('enterprise.lic was not found.', 'LICENSE_FILE_MISSING');
       return;
     }
@@ -59,10 +59,10 @@ export class LicenseManager {
         truthState: 'LICENSE_VERIFIED',
         reason: 'enterprise.lic was verified with PROMPTHOUSE_PUBLIC_KEY.'
       };
-      console.log(`🛡️ [LicenseManager] Enterprise License Verified for: ${decoded.org || 'licensed organization'}`);
+      global.Log && global.Log.info(`🛡️ [LicenseManager] Enterprise License Verified for: ${decoded.org || 'licensed organization'}`);
       return;
     } catch (error) {
-      console.error('🛡️ [LicenseManager] Invalid or expired enterprise license. Downgrading to Community Mode.', error.message);
+      global.Log && global.Log.error('🛡️ [LicenseManager] Invalid or expired enterprise license. Downgrading to Community Mode.', error.message);
       this.setCommunityMode(error.message, 'LICENSE_VERIFICATION_FAILED');
     }
   }
@@ -70,7 +70,7 @@ export class LicenseManager {
   isEnterprise() {
     if (!this.licenseState.isEnterprise) return false;
     if (this.licenseState.expiresAt && new Date() > this.licenseState.expiresAt) {
-      console.log('🛡️ [LicenseManager] Enterprise License EXPIRED. Downgrading to Community Mode.');
+      global.Log && global.Log.info('🛡️ [LicenseManager] Enterprise License EXPIRED. Downgrading to Community Mode.');
       this.setCommunityMode('Enterprise license is expired.', 'LICENSE_EXPIRED');
       return false;
     }

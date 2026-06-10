@@ -1,13 +1,60 @@
 {
-  "generatedAt": "2026-06-09T14:58:57.033Z",
+  "generatedAt": "2026-06-10T00:39:47.168Z",
   "bridgeBase": "http://127.0.0.1:3001",
-  "truthProbe": null,
-  "studioScan": null,
-  "gates": [],
-  "providerEvolution": {
-    "status": "PENDING",
-    "detail": ""
+  "truthProbe": {
+    "success": true,
+    "truthState": "TRUTH_PROBE_READY",
+    "results": {
+      "averageScore": 100,
+      "moduleCount": 15,
+      "blockers": []
+    }
   },
-  "finalStatus": "LOCAL_SINGULARITY_EDGE_FATAL",
-  "error": "The operation was aborted."
+  "studioScan": {
+    "success": true,
+    "truthState": "STUDIO_SCAN_CLEAR",
+    "total_modules": 15,
+    "averageScore": 100,
+    "blockers": [],
+    "routes": {
+      "total": 181,
+      "unresolved": []
+    },
+    "checkedAt": "2026-06-10T00:40:04.931Z"
+  },
+  "gates": [
+    {
+      "label": "route drift audit",
+      "command": "node scripts/audit-route-drift.mjs",
+      "required": true,
+      "status": "PASSED",
+      "output": "    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/stripe/test-checkout/readiness\",\n      \"file\": \"server/routes/stripe-test-checkout.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/stripe/test-checkout/session\",\n      \"file\": \"server/routes/stripe-test-checkout.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/stripe/test/account-probe\",\n      \"file\": \"server/routes/stripe-health.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/studio-os/proof/intercept\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/studio/diagnostics\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/studio/scan\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/terminal/bond\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/terminal/execute\",\n      \"file\": \"generated_apis/evo_terminal_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/theme-evolution/apply\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/theme-evolution/approve\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/theme-evolution/preview\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/theme-evolution/profiles\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/theme-evolution/rollback\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/theme-evolution/runtime\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/theme-evolution/status\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/theme-evolution/suggest\",\n      \"file\": \"generated_apis/engine_dashboard_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/training-capture\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/training/ingest\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/training/stats\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/tribrain/contract\",\n      \"file\": \"generated_apis/tribrain_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/tribrain/final-response\",\n      \"file\": \"generated_apis/tribrain_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/tribrain/route\",\n      \"file\": \"generated_apis/tribrain_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/tribrain/status\",\n      \"file\": \"generated_apis/tribrain_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/truth/probe\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/vercel/preview-deploy\",\n      \"file\": \"server/routes/vercel-preview-deploy.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/vercel/readiness\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/vercel/status\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/healthz\",\n      \"file\": \"promptbridge-server.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/status\",\n      \"file\": \"promptbridge-server.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/status\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    }\n  ],\n  \"unresolvedClientRoutes\": [],\n  \"hardcodedStoreSidecar\": false\n}\n"
+    },
+    {
+      "label": "dead surface audit",
+      "command": "node scripts/dead-surface-audit.mjs",
+      "required": true,
+      "status": "PASSED",
+      "output": "{\n  \"success\": true,\n  \"truthState\": \"DEAD_SURFACES_CLEAR\",\n  \"scannedFiles\": 443,\n  \"violations\": []\n}\n"
+    },
+    {
+      "label": "enterprise static audit",
+      "command": "node scripts/enterprise_audit.mjs",
+      "required": true,
+      "status": "PASSED",
+      "output": "[INFO] [Enterprise Audit] Starting full project scan...\n[INFO] [Enterprise Audit] Found 553 files to audit.\n[INFO] \n[INFO] ENTERPRISE AUDIT REPORT\n[INFO] Total Files: 553\n[INFO] Passed: 553\n[INFO] Failed: 0\n[INFO] Average Score: 100.00/100\n[INFO] All files passed production audit.\n[INFO] Detailed report saved to .prompthouse-data/enterprise_audit_report.json\n"
+    },
+    {
+      "label": "focused route/dead tests",
+      "command": "npx vitest run tests/dead-surface-hunter.test.jsx tests/dead-surface-source-audit.test.js tests/navigation-contract.test.jsx tests/route-contract.test.js tests/route-registry.test.js tests/bridge-contract-ledger.test.js tests/studio_core_routes_contract.test.js",
+      "required": true,
+      "status": "PASSED",
+      "output": "\n\u001b[1m\u001b[30m\u001b[46m RUN \u001b[49m\u001b[39m\u001b[22m \u001b[36mv4.1.5 \u001b[39m\u001b[90mC:/Users/Noname/Documents/Codex/2026-05-03/prompthouse-evo-studio-files-in-my\u001b[39m\n\n \u001b[32m✓\u001b[39m tests/bridge-contract-ledger.test.js \u001b[2m(\u001b[22m\u001b[2m5 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 191\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/route-registry.test.js \u001b[2m(\u001b[22m\u001b[2m6 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 48\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/route-contract.test.js \u001b[2m(\u001b[22m\u001b[2m3 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 60\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/dead-surface-source-audit.test.js \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[33m 666\u001b[2mms\u001b[22m\u001b[39m\n     \u001b[33m\u001b[2m✓\u001b[22m\u001b[39m keeps shipped source free of inert buttons and disconnected links \u001b[33m 656\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/dead-surface-hunter.test.jsx \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[33m 630\u001b[2mms\u001b[22m\u001b[39m\n     \u001b[33m\u001b[2m✓\u001b[22m\u001b[39m detects dead buttons and disconnected links \u001b[33m 621\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/studio_core_routes_contract.test.js \u001b[2m(\u001b[22m\u001b[2m3 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 25\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/navigation-contract.test.jsx \u001b[2m(\u001b[22m\u001b[2m6 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[33m 6815\u001b[2mms\u001b[22m\u001b[39m\n\n\u001b[2m Test Files \u001b[22m \u001b[1m\u001b[32m7 passed\u001b[39m\u001b[22m\u001b[90m (7)\u001b[39m\n\u001b[2m      Tests \u001b[22m \u001b[1m\u001b[32m25 passed\u001b[39m\u001b[22m\u001b[90m (25)\u001b[39m\n\u001b[2m   Start at \u001b[22m 19:41:00\n\u001b[2m   Duration \u001b[22m 18.58s\u001b[2m (transform 6.90s, setup 8.83s, import 4.29s, tests 8.43s, environment 62.00s)\u001b[22m\n\n"
+    }
+  ],
+  "providerEvolution": {
+    "status": "SKIPPED",
+    "detail": "Provider-backed evolution missions require PH_ALLOW_NUCLEAR_EVOLUTION=true."
+  },
+  "finalStatus": "LOCAL_SINGULARITY_EDGE_CLEAR"
 }

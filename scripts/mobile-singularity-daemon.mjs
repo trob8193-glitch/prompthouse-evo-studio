@@ -54,8 +54,8 @@ export async function runMobileSingularityCycle() {
     
     if (app.status === 'live' && !app.native_compiled) {
       uncompiledFound = true;
-      console.log(\`[MobileDaemon] ⚠️ Missing Native App Detected: \${app.name} (\${app.id})\`);
-      console.log(\`[MobileDaemon] ⚡ Initializing Autonomous Compilation to \${ARCHITECTURE_TARGET}...\`);
+      console.log(`[MobileDaemon] ⚠️ Missing Native App Detected: ${app.name} (${app.id})`);
+      console.log(`[MobileDaemon] ⚡ Initializing Autonomous Compilation to ${ARCHITECTURE_TARGET}...`);
       
       const scriptPath = path.resolve(__dirname, 'mobile-architect-cli.mjs');
       
@@ -64,17 +64,17 @@ export async function runMobileSingularityCycle() {
         
         child.stdout.on('data', (data) => {
           const lines = data.toString().split('\\n').filter(Boolean);
-          lines.forEach(line => console.log(\`[Compiler] \${line.trim()}\`));
+          lines.forEach(line => console.log(`[Compiler] ${line.trim()}`));
         });
         
         child.stderr.on('data', (data) => {
           const lines = data.toString().split('\\n').filter(Boolean);
-          lines.forEach(line => console.error(\`[Compiler Error] \${line.trim()}\`));
+          lines.forEach(line => console.error(`[Compiler Error] ${line.trim()}`));
         });
         
         child.on('close', (code) => {
           if (code === 0) {
-            console.log(\`[MobileDaemon] ✅ Native Synthesis Complete for: \${app.name}\`);
+            console.log(`[MobileDaemon] ✅ Native Synthesis Complete for: ${app.name}`);
             // Mark as compiled in the actual ledger arrays
             if (ledger.find(a => a.id === app.id)) {
               ledger.find(a => a.id === app.id).native_compiled = true;
@@ -87,7 +87,7 @@ export async function runMobileSingularityCycle() {
               saveJson(CANDIDATES_PATH, candidates);
             }
           } else {
-            console.log(\`[MobileDaemon] ❌ Native Synthesis FAILED for \${app.name} (Code: \${code})\`);
+            console.log(`[MobileDaemon] ❌ Native Synthesis FAILED for ${app.name} (Code: ${code})`);
           }
           resolve();
         });

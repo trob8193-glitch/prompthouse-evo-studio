@@ -13,9 +13,9 @@ const db = new Database(DB_PATH, dbOptions);
 if (process.env.TURSO_DATABASE_URL) {
   try {
     db.sync();
-    console.log('✅ Connected and synced with Turso Global Edge Database');
+    global.Log && global.Log.info('✅ Connected and synced with Turso Global Edge Database');
   } catch (err) {
-    console.error('❌ Failed to sync with Turso:', err);
+    global.Log && global.Log.error('❌ Failed to sync with Turso:', err);
   }
 }
 

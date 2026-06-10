@@ -62,7 +62,7 @@ function evaluateSeedQuality(filePath) {
   // Rule 2: Files that are too large (Spaghetti Code risk)
   const lines = content.split('\\n').length;
   if (lines > 500) {
-    issues.push(\`File is overly massive (\${lines} lines). Requires immediate modularization.\`);
+    issues.push(`File is overly massive (${lines} lines). Requires immediate modularization.`);
   }
 
   // Rule 3: Detect inline generic styling (should use design system)
@@ -88,20 +88,20 @@ export async function runSeedValidationCycle() {
     if (!evaluation.isSeedQuality) {
       flaggedFiles++;
       const relativePath = path.relative(path.join(__dirname, '..'), file);
-      console.log(\`[SeedDaemon] ❌ NON-SEED MATERIAL DETECTED: \${relativePath}\`);
-      evaluation.issues.forEach(issue => console.log(\`  -> \${issue}\`));
+      console.log(`[SeedDaemon] ❌ NON-SEED MATERIAL DETECTED: ${relativePath}`);
+      evaluation.issues.forEach(issue => console.log(`  -> ${issue}`));
 
       // Auto-trigger the Self-Evolution Engine to fix it
       const alreadyQueued = evolutionQueue.find(q => q.targetFile === relativePath);
       if (!alreadyQueued) {
         evolutionQueue.push({
-          id: \`seed_fix_\${Date.now()}\`,
+          id: `seed_fix_${Date.now()}`,
           targetFile: relativePath,
           urgency: 'CRITICAL',
           reason: 'Failed Seed Round Engineering Standards',
-          instructions: \`Fix the following architectural issues: \${evaluation.issues.join(', ')}\`
+          instructions: `Fix the following architectural issues: ${evaluation.issues.join(', ')}`
         });
-        console.log(\`[SeedDaemon] -> Placed \${relativePath} in Evolution Queue for autonomous repair.\`);
+        console.log(`[SeedDaemon] -> Placed ${relativePath} in Evolution Queue for autonomous repair.`);
       }
     } else {
       passedFiles++;
@@ -122,7 +122,7 @@ export async function runSeedValidationCycle() {
     status: score === 100 ? 'SEED_READY' : 'EVOLUTION_REQUIRED'
   });
 
-  console.log(\`[SeedDaemon] Cycle Complete. Seed Readiness Score: \${score}/100. \${flaggedFiles > 0 ? 'Evolution Engines Activated.' : 'Platform is Flawless.'}\`);
+  console.log(`[SeedDaemon] Cycle Complete. Seed Readiness Score: ${score}/100. ${flaggedFiles > 0 ? 'Evolution Engines Activated.' : 'Platform is Flawless.'}`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

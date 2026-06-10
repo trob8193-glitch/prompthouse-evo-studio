@@ -11,7 +11,7 @@ const bridgeBase = process.env.PH_BRIDGE_AUDIT_URL || 'http://127.0.0.1:3001';
 
 async function fetchJson(pathname, label) {
   const url = `${bridgeBase}${pathname}`;
-  const response = await fetch(url, { signal: AbortSignal.timeout(12000) });
+  const response = await fetch(url, { signal: AbortSignal.timeout(30000) });
   const contentType = response.headers.get('content-type') || '';
   const text = await response.text();
 
@@ -63,7 +63,7 @@ Generated: ${results.generatedAt}
 ## Truth Probe
 - State: ${results.truthProbe?.truthState || 'UNAVAILABLE'}
 - Modules: ${results.truthProbe?.results?.moduleCount ?? 'unknown'}
-- Average Score: ${results.studioScan?.averageScore ?? 'unknown'}
+- Average Score: ${results.truthProbe?.results?.averageScore ?? 'unknown'}
 
 ## Studio Scan
 - State: ${results.studioScan?.truthState || 'UNAVAILABLE'}

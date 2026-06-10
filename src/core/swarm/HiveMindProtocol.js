@@ -13,11 +13,11 @@ export class HiveMindProtocol {
     this.bounties = new Map();
 
     this.io.on('connection', (socket) => {
-      console.log(`\n🌐 [HiveMind] New Node Connected: ${socket.id}`);
+      global.Log && global.Log.info(`\n🌐 [HiveMind] New Node Connected: ${socket.id}`);
       this.connectedNodes.set(socket.id, { computeLevel: 'idle', joinedAt: Date.now() });
 
       socket.on('broadcast_bounty', (bounty) => {
-        console.log(`🐝 [HiveMind] Swarm Bounty Received from ${socket.id}: ${bounty.taskType}`);
+        global.Log && global.Log.info(`🐝 [HiveMind] Swarm Bounty Received from ${socket.id}: ${bounty.taskType}`);
         this.bounties.set(bounty.id, bounty);
         
         // In PURE_P2P mode, we relay the bounty. In MASTER_NODE mode, the master assigns it.
@@ -30,7 +30,7 @@ export class HiveMindProtocol {
       });
 
       socket.on('submit_bounty_solution', async (solution) => {
-        console.log(`💡 [HiveMind] Swarm Node ${socket.id} submitted a bounty solution.`);
+        global.Log && global.Log.info(`💡 [HiveMind] Swarm Node ${socket.id} submitted a bounty solution.`);
         let settlement = {
           success: false,
           truthState: 'REWARD_SETTLEMENT_PROVIDER_REQUIRED',
@@ -56,7 +56,7 @@ export class HiveMindProtocol {
       });
 
       socket.on('disconnect', () => {
-        console.log(`🔌 [HiveMind] Node Disconnected: ${socket.id}`);
+        global.Log && global.Log.info(`🔌 [HiveMind] Node Disconnected: ${socket.id}`);
         this.connectedNodes.delete(socket.id);
       });
     });
