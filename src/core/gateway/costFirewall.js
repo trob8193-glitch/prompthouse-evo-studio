@@ -4,14 +4,23 @@ import db from '../db/quad_schema.js';
  * Cost Firewall — Enforces safety, budgets, and credit limits.
  * Blocks requests if credits are insufficient or limits are exceeded.
  */
+const GLOBAL_BAN_LIST = new Set();
+const VIOLATION_COUNTS = new Map();
+
 export class CostFirewall {
-  /**
-   * Checks if a request is allowed based on credits and safety rules.
-   * @param {string} orgId - The organization ID.
-   * @param {string} endpoint - The requested endpoint.
-   * @returns {boolean} - True if allowed, throws error otherwise.
-   */
-  static async authorize(orgId, endpoint) {
+  static recordViolation(identifier) {
+    const current = (VIOLATION_COUNTS.get(identifier) || 0) + 1;
+    VIOLATION_COUNTS.set(identifier, current);
+    if (current >= 3) {
+      GLOBAL_BAN_LIST.add(identifier);
+      console.warn(`[ThreatMatrix] ${identifier} permanently BANNED at the edge.`);
+    }
+  }
+
+  static async authorize(orgId, endpoint, clientIp = 'unknown') {
+    if (GLOBAL_BAN_LIST.has(clientIp) || GLOBAL_BAN_LIST.has(orgId)) {
+      throw new Error('THREAT_MATRIX_BLOCK: Request rejected at the edge. No compute consumed.');
+    }
     // 1. Check Global Emergency Shutoff
     const globalShutoff = db.prepare("SELECT value FROM system_settings WHERE key = 'emergency_shutoff'").get();
     if (globalShutoff && globalShutoff.value === 'true') {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export function EvoMobileController({ promptBridgeBaseUrl = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') }) {
+export function EvoMobileController({ promptBridgeBaseUrl = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) }) {
   const [activeTab, setActiveTab] = useState('local-cli');
 
   // Tab B: Local CLI Controller State

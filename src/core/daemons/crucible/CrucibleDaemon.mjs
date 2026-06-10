@@ -4,6 +4,9 @@ import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 
 import { Log } from '../../autonomy/SovereignLogger.js';
+import { OnlineLearningManager } from '../../evolution/OnlineLearningManager.js';
+
+const learningManager = new OnlineLearningManager();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -123,6 +126,16 @@ async function handleFileChange(eventType, filename) {
         await invokeRepairAgent(filePath, `Tests failed: ${testResult.error}`);
       } else {
         Log.info(`\x1b[32m[CRUCIBLE] ${filename} is perfectly forged.\x1b[0m`);
+        try {
+          await learningManager.ingestKnowledgeChunk({
+            id: `crucible_pass_${Date.now()}`,
+            source: 'CrucibleDaemon',
+            signal_strength: 1.5,
+            context_summary: `[CRUCIBLE-FORGE-PASS] ${filename} passed all AST audits and vitest executions without synthetic data markers. Component is stable.`
+          });
+        } catch (e) {
+          Log.error('Crucible ingestion failed: ' + e.message);
+        }
       }
     }
   } finally {

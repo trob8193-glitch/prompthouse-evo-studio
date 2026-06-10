@@ -9,55 +9,72 @@ import { motion } from 'framer-motion';
  * Live metrics from backend, bridge health, quick actions.
  */
 
-function MetricCard({ icon: Icon, label, value, sub, color = '#6366f1', pulse = false }) {
+function MetricCard({ icon: Icon, label, value, sub, color = '#00f0ff', pulse = false }) {
   return (
     <div style={{
-      background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: '20px 24px',
-      display: 'flex', alignItems: 'flex-start', gap: 14,
-    }}>
+      background: 'rgba(5,5,8,0.8)', border: `1px solid ${color}30`, borderRadius: 20, padding: '22px 26px',
+      display: 'flex', alignItems: 'flex-start', gap: 16,
+      backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+      boxShadow: `0 0 30px ${color}10`,
+      transition: 'all 0.4s cubic-bezier(0.2,0.8,0.2,1)',
+      position: 'relative',
+      overflow: 'hidden'
+    }}
+    onMouseEnter={(e) => { e.currentTarget.style.borderColor = color; e.currentTarget.style.boxShadow = `0 0 40px ${color}30`; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+    onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${color}30`; e.currentTarget.style.boxShadow = `0 0 30px ${color}10`; e.currentTarget.style.transform = 'translateY(0)'; }}
+    >
       <div style={{
-        width: 40, height: 40, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: `${color}14`, flexShrink: 0,
+        position: 'absolute', top: -50, left: -50, width: 100, height: 100, background: color, filter: 'blur(60px)', opacity: 0.15, pointerEvents: 'none'
+      }} />
+      <div style={{
+        width: 48, height: 48, borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: `${color}15`, border: `1px solid ${color}40`, flexShrink: 0,
+        boxShadow: `0 0 20px ${color}30`,
       }}>
-        <Icon size={18} color={color} />
+        <Icon size={20} color={color} style={{ filter: `drop-shadow(0 0 8px ${color})` }} />
       </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+      <div style={{ flex: 1, minWidth: 0, position: 'relative', zIndex: 1 }}>
+        <div style={{ fontSize: 10, fontWeight: 900, color: color, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 8, opacity: 0.9 }}>
           {label}
         </div>
-        <div style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.03em', lineHeight: 1 }}>
+        <div style={{ fontSize: 26, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1, textShadow: `0 0 20px ${color}50` }}>
           {value}
         </div>
-        {sub && <div style={{ fontSize: 11, color: '#475569', marginTop: 4 }}>{sub}</div>}
+        {sub && <div style={{ fontSize: 11, color: '#b4b4c4', marginTop: 8, fontWeight: 600, letterSpacing: '0.02em' }}>{sub}</div>}
       </div>
-      {pulse && <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, boxShadow: `0 0 8px ${color}60`, animation: 'pulse 2s infinite', marginTop: 4 }} />}
+      {pulse && <div style={{ width: 10, height: 10, borderRadius: '50%', background: color, boxShadow: `0 0 15px ${color}, 0 0 30px ${color}`, animation: 'pulse 1.5s infinite', marginTop: 4 }} />}
     </div>
   );
 }
 
-function QuickAction({ icon: Icon, label, sub, onClick, color = '#6366f1' }) {
+function QuickAction({ icon: Icon, label, sub, onClick, color = '#8a2be2' }) {
   return (
     <button
       onClick={onClick}
       style={{
-        background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: '16px 20px',
-        display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', width: '100%',
-        transition: 'all 0.2s ease', textAlign: 'left',
+        background: 'rgba(5,5,8,0.8)', border: `1px solid ${color}30`, borderRadius: 20, padding: '20px 24px',
+        display: 'flex', alignItems: 'center', gap: 16, cursor: 'pointer', width: '100%',
+        transition: 'all 0.4s cubic-bezier(0.2,0.8,0.2,1)', textAlign: 'left',
+        backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+        boxShadow: `0 0 20px ${color}05`,
+        position: 'relative',
+        overflow: 'hidden'
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${color}44`; e.currentTarget.style.background = `${color}08`; }}
-      onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#1e293b'; e.currentTarget.style.background = '#111827'; }}
+      onMouseEnter={(e) => { e.currentTarget.style.borderColor = color; e.currentTarget.style.background = `${color}15`; e.currentTarget.style.transform = 'translateX(6px)'; e.currentTarget.style.boxShadow = `0 0 30px ${color}20`; }}
+      onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${color}30`; e.currentTarget.style.background = 'rgba(5,5,8,0.8)'; e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = `0 0 20px ${color}05`; }}
     >
       <div style={{
-        width: 36, height: 36, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: `${color}14`, flexShrink: 0,
+        width: 44, height: 44, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: `${color}15`, border: `1px solid ${color}40`, flexShrink: 0,
+        boxShadow: `0 0 15px ${color}30`,
       }}>
-        <Icon size={16} color={color} />
+        <Icon size={18} color={color} style={{ filter: `drop-shadow(0 0 8px ${color})` }} />
       </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: '#e2e8f0' }}>{label}</div>
-        <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>{sub}</div>
+      <div style={{ flex: 1, minWidth: 0, position: 'relative', zIndex: 1 }}>
+        <div style={{ fontSize: 14, fontWeight: 800, color: '#ffffff', letterSpacing: '0.02em', textShadow: `0 0 10px rgba(255,255,255,0.2)` }}>{label}</div>
+        <div style={{ fontSize: 11, color: '#b4b4c4', marginTop: 4, fontWeight: 600, letterSpacing: '0.02em' }}>{sub}</div>
       </div>
-      <ArrowRight size={14} color="#334155" />
+      <ArrowRight size={16} color={color} style={{ opacity: 0.7 }} />
     </button>
   );
 }
@@ -91,29 +108,47 @@ export function SovereignIntelligenceDashboard() {
   };
 
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 28 }}>
+    <motion.div 
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+      style={{
+        display: 'flex', flexDirection: 'column', gap: 48, padding: 24, position: 'relative'
+      }}
+    >
+      {/* Singularity Ambient Glow */}
+      <div style={{ position: 'absolute', top: '-20%', left: '-10%', width: '120%', height: '120%', pointerEvents: 'none', opacity: 0.3, zIndex: 0 }}>
+        <div style={{ position: 'absolute', top: '25%', left: '25%', width: 500, height: 500, background: '#00f0ff', borderRadius: '50%', filter: 'blur(150px)', mixBlendMode: 'screen' }} />
+        <div style={{ position: 'absolute', top: '33%', right: '25%', width: 600, height: 600, background: '#8a2be2', borderRadius: '50%', filter: 'blur(180px)', mixBlendMode: 'screen' }} />
+      </div>
+
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', position: 'relative', zIndex: 10 }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.03em', margin: 0 }}>
+          <h1 style={{ fontSize: 36, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.04em', margin: 0, textShadow: '0 0 20px rgba(0,240,255,0.3)' }}>
             Studio Dashboard
           </h1>
-          <p style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>
+          <div style={{ fontSize: 13, color: '#00f0ff', marginTop: 8, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
             System overview, live metrics, and quick actions.
-          </p>
+          </div>
         </div>
-        <button
+        <button 
           onClick={handleRefresh}
+          disabled={refreshing}
           style={{
-            display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8,
-            background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer',
-            fontSize: 11, fontWeight: 600,
+            background: 'rgba(0,240,255,0.1)', border: '1px solid rgba(0,240,255,0.3)', borderRadius: 12, padding: '10px 18px',
+            color: '#00f0ff', fontSize: 13, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase',
+            display: 'flex', alignItems: 'center', gap: 10, cursor: refreshing ? 'wait' : 'pointer',
+            transition: 'all 0.3s',
+            boxShadow: '0 0 15px rgba(0,240,255,0.15)',
+            backdropFilter: 'blur(8px)',
           }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,240,255,0.2)'; e.currentTarget.style.boxShadow = '0 0 25px rgba(0,240,255,0.3)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(0,240,255,0.1)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(0,240,255,0.15)'; }}
         >
-          <RefreshCw size={13} style={{ transition: 'transform 0.6s', transform: refreshing ? 'rotate(360deg)' : 'none' }} />
-          Refresh
+          <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} style={{ filter: 'drop-shadow(0 0 5px #00f0ff)' }} />
+          {refreshing ? 'Syncing...' : 'Refresh'}
         </button>
-      </div>
+      </header>
 
       {/* Metric Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20, marginBottom: 28 }}>
@@ -264,7 +299,7 @@ export function SovereignIntelligenceDashboard() {
             sub="Execute physical logic evolution & compaction"
             onClick={async () => {
               try {
-                const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/study/initiate', {
+                const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) + '/api/study/initiate', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ protocolId: 'DREAM_CYCLE' })
@@ -323,7 +358,7 @@ export function SovereignIntelligenceDashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutTemplate, Layers, Cpu, Code2, Download, CheckCircle, RefreshCcw, Maximize } from 'lucide-react';
+import { LayoutTemplate, Layers, Cpu, Code2, Download, CheckCircle, RefreshCcw, Maximize, Zap } from 'lucide-react';
 import { Card, Button, StatusBadge } from '../components/primitives.jsx';
 import { callBridgeEngine } from '../engine.js';
 import { Log } from '../core/autonomy/SovereignLogger.js';
@@ -25,11 +25,11 @@ export default function EvoLayoutDashboard() {
       
       setTimeout(() => {
         setResult({
-          code: `// Generated Layout: ${prompt}\n\nexport default function Layout() {\n  return (\n    <div className="grid grid-cols-12 min-h-screen">\n      <aside className="col-span-2 bg-slate-900 border-r border-slate-800" />\n      <main className="col-span-10 bg-black flex flex-col">\n        <header className="h-16 border-b border-slate-800" />\n        <div className="flex-1 p-8" />\n      </main>\n    </div>\n  );\n}`,
+          code: `// Singularity Auto-Generated Layout: ${prompt}\n\nexport default function Layout() {\n  return (\n    <div className="grid grid-cols-12 min-h-screen bg-[var(--bg-void)] text-white">\n      <aside className="col-span-2 bg-[var(--bg-surface)] border-r border-[var(--border-dim)] backdrop-blur-xl" />\n      <main className="col-span-10 flex flex-col relative overflow-hidden">\n        <header className="h-16 border-b border-[var(--border-dim)] bg-[var(--bg-surface-top)] backdrop-blur-md z-10" />\n        <div className="flex-1 p-8 z-0">\n          {/* Content injects here */}\n        </div>\n      </main>\n    </div>\n  );\n}`,
           manifest: response
         });
         setGenerating(false);
-      }, 2000);
+      }, 2500);
     } catch (e) {
       Log.error(`[EvoLayout] Error: ${e.message}`);
       setGenerating(false);
@@ -38,82 +38,97 @@ export default function EvoLayoutDashboard() {
 
   return (
     <div className="flex flex-col space-y-12">
-      <header>
-        <h1 className="text-4xl font-black tracking-tight mb-2 flex items-center gap-4 text-[var(--text-primary)]">
-          <LayoutTemplate style={{ color: 'var(--accent-color)' }} size={36} /> Evo Layout
+      <header className="relative">
+        <div className="absolute -top-10 -left-10 w-64 h-64 bg-[#00f0ff] opacity-10 rounded-full blur-[100px] pointer-events-none" />
+        <h1 className="text-4xl font-black tracking-tight mb-2 flex items-center gap-4 text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+          <LayoutTemplate color="#00f0ff" size={36} className="drop-shadow-[0_0_10px_#00f0ff]" /> 
+          Singularity Layout Engine
         </h1>
-        <p className="text-[var(--text-secondary)] font-mono text-sm tracking-widest uppercase">Generative Wireframing & Structural UI Blueprints</p>
+        <p className="text-[#00f0ff] font-bold text-xs tracking-[0.2em] uppercase ml-12">Autonomous Structural Blueprints</p>
       </header>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 relative z-10">
         <div className="xl:col-span-4 space-y-8">
-          <Card className="p-8">
-            <h3 className="text-lg font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2"><Layers size={18} style={{ color: 'var(--accent-color)' }} /> Layout Prompt</h3>
+          <Card className="p-8 border border-[#00f0ff]/20 bg-[#050508]/80 backdrop-blur-xl shadow-[0_0_30px_rgba(0,240,255,0.05)]">
+            <h3 className="text-sm font-bold text-white tracking-widest uppercase mb-6 flex items-center gap-3">
+              <Layers size={18} color="#00f0ff" /> Architectural Prompt
+            </h3>
             <textarea 
-              className="field-textarea !min-h-[150px] mb-6" 
-              placeholder="e.g. A SaaS dashboard with a left sidebar, top nav, and a 3-column masonry grid for cards..."
+              className="w-full bg-[#0a0a10] border border-[#00f0ff]/30 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff] transition-all !min-h-[150px] mb-6" 
+              placeholder="e.g. A SaaS dashboard with a deep-space glassmorphic sidebar, neon top nav, and a 3-column data grid..."
               value={prompt}
               onChange={e => setPrompt(e.target.value)}
             />
 
             <div className="space-y-6 mb-8">
-              <div className="field">
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block flex items-center gap-2"><Cpu size={12}/> Target Engine</label>
-                <select className="field-select" value={framework} onChange={e => setFramework(e.target.value)}>
-                  <option value="react-tailwind">React + Tailwind</option>
-                  <option value="flutter">Flutter</option>
-                  <option value="swiftui">SwiftUI</option>
+              <div>
+                <label className="text-[10px] font-black text-[#b4b4c4] uppercase tracking-widest mb-3 flex items-center gap-2">
+                  <Cpu size={12} color="#00f0ff" /> Target Engine
+                </label>
+                <select 
+                  className="w-full bg-[#0a0a10] border border-[#00f0ff]/30 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-[#00f0ff] transition-all"
+                  value={framework} onChange={e => setFramework(e.target.value)}
+                >
+                  <option value="react-tailwind">Singularity React (Vite)</option>
+                  <option value="flutter">Flutter Neo</option>
+                  <option value="swiftui">SwiftUI Quantum</option>
                 </select>
               </div>
             </div>
 
-            <Button onClick={handleGenerate} disabled={generating || !prompt} className="w-full !bg-[var(--accent-color)] !text-white flex justify-center items-center gap-2">
-              {generating ? <RefreshCcw className="animate-spin" size={18} /> : <LayoutTemplate size={18} />}
-              {generating ? 'BUILDING WIREFRAME...' : 'GENERATE LAYOUT'}
+            <Button onClick={handleGenerate} disabled={generating || !prompt} className="w-full !bg-gradient-to-r !from-[#00f0ff] !to-[#8a2be2] !text-white flex justify-center items-center gap-3 !border-none shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)]">
+              {generating ? <RefreshCcw className="animate-spin" size={18} /> : <Zap size={18} />}
+              {generating ? 'MANIFESTING BLUEPRINT...' : 'ENGAGE GENERATOR'}
             </Button>
           </Card>
         </div>
 
-        <Card className={`${previewExpanded ? 'xl:col-span-12' : 'xl:col-span-8'} bg-black/40 p-0 overflow-hidden min-h-[500px] flex flex-col relative border border-slate-800`}>
-          <div className="p-6 border-b border-slate-800 bg-slate-900/30 flex justify-between items-center z-10">
-            <h3 className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-widest flex items-center gap-2"><Code2 size={14} /> Structural Blueprint</h3>
-            {result && <StatusBadge status="verified" label="SCAFFOLD READY" />}
+        <Card className={`${previewExpanded ? 'xl:col-span-12' : 'xl:col-span-8'} bg-[#020205]/90 p-0 overflow-hidden min-h-[500px] flex flex-col relative border border-[#00f0ff]/20 shadow-[0_0_30px_rgba(0,240,255,0.05)] backdrop-blur-2xl`}>
+          <div className="p-5 border-b border-[#00f0ff]/20 bg-[#050508]/60 flex justify-between items-center z-10 backdrop-blur-md">
+            <h3 className="text-[10px] font-black text-[#00f0ff] uppercase tracking-widest flex items-center gap-3">
+              <Code2 size={14} /> Structural Hologram
+            </h3>
+            {result && <StatusBadge status="executing" label="BLUEPRINT READY" />}
           </div>
           
           <div className="flex-1 flex flex-col p-0 relative">
             {generating && (
-              <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center z-20 backdrop-blur-sm">
-                <LayoutTemplate className="animate-pulse mb-4" style={{ color: 'var(--accent-color)' }} size={48} />
-                <div className="font-mono text-sm tracking-widest uppercase" style={{ color: 'var(--accent-color)' }}>Calculating Dimensions...</div>
+              <div className="absolute inset-0 bg-[#020205]/80 flex flex-col items-center justify-center z-20 backdrop-blur-md">
+                <div className="relative">
+                  <LayoutTemplate className="animate-pulse mb-6 relative z-10" color="#00f0ff" size={56} />
+                  <div className="absolute inset-0 bg-[#00f0ff] blur-[30px] opacity-40 animate-pulse" />
+                </div>
+                <div className="font-bold text-xs tracking-[0.3em] uppercase text-[#00f0ff] animate-pulse">Calculating Dimensions...</div>
               </div>
             )}
             
             {result ? (
               <div className="flex-1 flex flex-col">
-                <div className="p-4 bg-slate-900 border-b border-slate-800 flex justify-between">
-                  <span className="text-[10px] font-mono text-slate-500">component.jsx</span>
+                <div className="p-4 bg-[#050508] border-b border-[#00f0ff]/20 flex justify-between items-center">
+                  <span className="text-[10px] font-bold text-[#b4b4c4] tracking-widest uppercase">Layout.jsx</span>
                   <div className="flex gap-2">
                     <button
                       type="button"
                       onClick={() => setPreviewExpanded((value) => !value)}
                       aria-pressed={previewExpanded}
-                      className="text-slate-400 hover:text-white"
+                      className="text-[#737385] hover:text-[#00f0ff] transition-colors"
                     >
-                      <Maximize size={14}/>
+                      <Maximize size={16}/>
                     </button>
                   </div>
                 </div>
-                <div className="prompt-block !bg-transparent !border-none !p-6 !m-0 !max-h-full">
-                  {result.code}
+                <div className="flex-1 bg-[#020205] p-6 overflow-auto font-mono text-sm text-[#00f0ff] leading-relaxed">
+                  <pre className="drop-shadow-[0_0_5px_rgba(0,240,255,0.3)]">{result.code}</pre>
                 </div>
-                <div className="p-6 border-t border-slate-800 flex justify-end gap-4 bg-slate-900/30">
-                  <Button variant="secondary" className="flex items-center gap-2"><Download size={14}/> EXPORT COMPONENT</Button>
-                  <Button className="!bg-indigo-500">SEND TO CODE FORGE</Button>
+                <div className="p-5 border-t border-[#00f0ff]/20 flex justify-end gap-4 bg-[#050508]/80 backdrop-blur-md">
+                  <Button variant="ghost" className="!text-[#b4b4c4] hover:!text-white flex items-center gap-2 text-[10px]"><Download size={14}/> EXPORT</Button>
+                  <Button className="!bg-[#00f0ff]/20 !text-[#00f0ff] !border !border-[#00f0ff]/50 hover:!bg-[#00f0ff]/40 shadow-[0_0_15px_rgba(0,240,255,0.2)]">DEPLOY TO FORGE</Button>
                 </div>
               </div>
             ) : (
-              !generating && <div className="absolute inset-0 flex items-center justify-center text-slate-600 font-mono text-xs uppercase tracking-widest flex-col gap-4">
-                <Layers size={32} className="opacity-20" /> No Blueprint Active
+              !generating && <div className="absolute inset-0 flex items-center justify-center flex-col gap-6">
+                <Layers size={48} color="#00f0ff" className="opacity-10" />
+                <div className="text-[#4a4a5e] font-bold text-xs uppercase tracking-[0.2em]">Awaiting Architect Command</div>
               </div>
             )}
           </div>

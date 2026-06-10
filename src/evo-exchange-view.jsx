@@ -10,7 +10,7 @@ export function EvoExchangeView() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/exchange/listings')
+    fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) + '/api/exchange/listings')
       .then(res => res.json())
       .then(data => {
         if (data.success && data.result) {

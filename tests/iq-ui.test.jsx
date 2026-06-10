@@ -82,6 +82,6 @@ describe('IQ UI', () => {
     });
 
     render(<StudioDashboard />);
-    expect(await screen.findByText('165.0M')).toBeInTheDocument();
+    expect(await screen.findByText('165.0')).toBeInTheDocument();
   });
 });

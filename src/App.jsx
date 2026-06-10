@@ -54,6 +54,9 @@ import EvoLayoutDashboard from './features/EvoLayoutDashboard.jsx';
 import ThemeEvolutionDashboard from './features/ThemeEvolutionDashboard.jsx';
 import VisualPhysicsEditor from './components/VisualPhysicsEditor.jsx';
 import MobileSingularityDashboard from './features/MobileSingularityDashboard.jsx';
+import RealTimeValidationDashboard from './features/RealTimeValidationDashboard.jsx';
+import CommerceDashboard from './features/CommerceDashboard.jsx';
+import PricingCheckout from './features/PricingCheckout.jsx';
 
 export const PAGE_MAP = {
   'dashboard': SovereignIntelligenceDashboard,
@@ -88,6 +91,9 @@ export const PAGE_MAP = {
   'launch-proof': LaunchProofView,
   'visual-physics': VisualPhysicsEditor,
   'mobile-singularity': MobileSingularityDashboard,
+  'realtime-validation': RealTimeValidationDashboard,
+  'commerce': CommerceDashboard,
+  'pricing': PricingCheckout,
 };
 
 function PageRenderer() {
@@ -198,7 +204,7 @@ export default function App() {
       <AuthSentry>
         <div style={{
           display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw',
-          background: '#0a0e1a', color: '#e2e8f0', fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
+          background: 'var(--bg-void)', color: 'var(--text-primary)', fontFamily: 'var(--font-sans)',
           overflow: 'hidden',
         }}>
           
@@ -208,7 +214,7 @@ export default function App() {
 
           <button 
             onClick={() => setSingularityActive(true)} 
-            className="absolute top-16 right-4 z-50 bg-indigo-900/40 text-indigo-400 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg border border-indigo-500/50 hover:bg-indigo-800/50 shadow-lg shadow-indigo-500/10 flex items-center gap-2 group transition-all"
+            className="absolute top-16 right-4 z-50 bg-[#00f0ff]/10 text-[#00f0ff] text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl border border-[#00f0ff]/30 hover:bg-[#00f0ff]/20 shadow-[0_0_20px_rgba(0,240,255,0.15)] flex items-center gap-2 group transition-all duration-300"
           >
             <Zap size={14} className="group-hover:scale-125 transition-transform" />
             Manifest Singularity Engine
@@ -221,15 +227,15 @@ export default function App() {
 
             <main style={{
               flex: 1, overflow: 'auto', position: 'relative',
-              background: '#0a0e1a', paddingBottom: terminalOpen ? 300 : 32,
+              background: 'var(--bg-void)', paddingBottom: terminalOpen ? 300 : 32,
             }}>
               <Toolbar />
               
               <div style={{ padding: 28, position: 'relative', zIndex: 1, height: '100%' }}>
                 <div style={{
                   position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                  backgroundImage: 'url(/assets/generated_bg.png)', backgroundSize: 'cover', backgroundPosition: 'center',
-                  opacity: 0.15, pointerEvents: 'none', zIndex: 0
+                  background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,240,255,0.06), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 100%, rgba(138,43,226,0.06), transparent 50%)',
+                  pointerEvents: 'none', zIndex: 0
                 }} />
                 <PageRenderer />
               </div>

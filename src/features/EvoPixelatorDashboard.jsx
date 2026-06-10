@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Gamepad2, Palette, Sparkles, RefreshCcw, Download, Eye } from 'lucide-react';
+import { Grid, Gamepad2, Palette, Sparkles, RefreshCcw, Download, Eye, Zap } from 'lucide-react';
 import { Card, Button } from '../components/primitives.jsx';
 import { Log } from '../core/autonomy/SovereignLogger.js';
 import { callBridgeEngine } from '../engine.js';
@@ -38,80 +38,96 @@ export default function EvoPixelatorDashboard() {
 
   return (
     <div className="flex flex-col space-y-12">
-      <header>
-        <h1 className="text-4xl font-black tracking-tight mb-2 flex items-center gap-4 text-[var(--text-primary)]">
-          <Gamepad2 style={{ color: 'var(--accent-color)' }} size={36} /> Evo Pixelator
+      <header className="relative">
+        <div className="absolute -top-10 -left-10 w-64 h-64 bg-[#00ff88] opacity-10 rounded-full blur-[100px] pointer-events-none" />
+        <h1 className="text-4xl font-black tracking-tight mb-2 flex items-center gap-4 text-white drop-shadow-[0_0_15px_rgba(0,255,136,0.3)]">
+          <Gamepad2 color="#00ff88" size={36} className="drop-shadow-[0_0_10px_#00ff88]" /> 
+          Singularity Pixelator
         </h1>
-        <p className="text-[var(--text-secondary)] font-mono text-sm tracking-widest uppercase">Retro Engine & Asset Quantization</p>
+        <p className="text-[#00ff88] font-bold text-xs tracking-[0.2em] uppercase ml-12">Autonomous Asset Quantization Engine</p>
       </header>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 relative z-10">
         <div className="xl:col-span-4 space-y-8">
-          <Card className="p-8 border-fuchsia-500/20">
-            <h3 className="text-lg font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2"><Sparkles size={18} style={{ color: 'var(--accent-color)' }} /> Sprite Prompt</h3>
+          <Card className="p-8 border border-[#00ff88]/20 bg-[#050508]/80 backdrop-blur-xl shadow-[0_0_30px_rgba(0,255,136,0.05)]">
+            <h3 className="text-sm font-bold text-white tracking-widest uppercase mb-6 flex items-center gap-3">
+              <Sparkles size={18} color="#00ff88" /> Sprite Prompt
+            </h3>
             <textarea 
-              className="field-textarea !min-h-[120px] mb-6 !font-mono text-xs" 
+              className="w-full bg-[#0a0a10] border border-[#00ff88]/30 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] transition-all !min-h-[120px] mb-6 !font-mono" 
               placeholder="e.g. Hero character idle animation sprite sheet..."
               value={prompt}
               onChange={e => setPrompt(e.target.value)}
             />
 
             <div className="space-y-6 mb-8">
-              <div className="field">
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Bit Depth Constraints</label>
+              <div>
+                <label className="text-[10px] font-black text-[#b4b4c4] uppercase tracking-widest mb-3 block">Bit Depth Constraints</label>
                 <div className="flex gap-2">
                   {['8-bit', '16-bit', '32-bit'].map(b => (
                     <button 
                       key={b} 
                       onClick={() => setBitDepth(b)}
-                      className={`flex-1 py-2 px-3 rounded text-xs font-bold border transition-colors ${bitDepth === b ? 'bg-fuchsia-500/20 border-fuchsia-500 text-fuchsia-300' : 'bg-slate-900 border-slate-700 text-slate-500'}`}
+                      className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold border transition-all ${bitDepth === b ? 'bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.2)]' : 'bg-[#0a0a10] border-white/10 text-[#737385] hover:border-white/20'}`}
                     >
                       {b}
                     </button>
                   ))}
                 </div>
               </div>
-              <div className="field">
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block flex items-center gap-2"><Palette size={12}/> Color Palette</label>
-                <select className="field-select !font-mono text-xs" value={palette} onChange={e => setPalette(e.target.value)}>
-                  <option value="cyberpunk">Cyberpunk Neon</option>
-                  <option value="gameboy">GameBoy Classic</option>
+              <div>
+                <label className="text-[10px] font-black text-[#b4b4c4] uppercase tracking-widest mb-3 flex items-center gap-2"><Palette size={12} color="#00ff88"/> Color Palette</label>
+                <select 
+                  className="w-full bg-[#0a0a10] border border-[#00ff88]/30 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-[#00ff88] transition-all !font-mono" 
+                  value={palette} onChange={e => setPalette(e.target.value)}
+                >
+                  <option value="cyberpunk">Neon / Singularity</option>
+                  <option value="gameboy">Retro Handheld</option>
                   <option value="c64">Commodore 64</option>
-                  <option value="pico8">PICO-8</option>
+                  <option value="pico8">PICO-8 Quantum</option>
                 </select>
               </div>
             </div>
 
-            <Button onClick={handleGenerate} disabled={generating || !prompt} className="w-full !bg-[var(--accent-color)] !text-white flex justify-center items-center gap-2 !rounded-none">
+            <Button onClick={handleGenerate} disabled={generating || !prompt} className="w-full !bg-gradient-to-r !from-[#00ff88] !to-[#00f0ff] !text-black flex justify-center items-center gap-3 !border-none shadow-[0_0_20px_rgba(0,255,136,0.4)] hover:shadow-[0_0_30px_rgba(0,255,136,0.6)] font-black">
               {generating ? <RefreshCcw className="animate-spin" size={18} /> : <Grid size={18} />}
               {generating ? 'QUANTIZING...' : 'GENERATE PIXELS'}
             </Button>
           </Card>
         </div>
 
-        <Card className="xl:col-span-8 bg-black/80 p-0 overflow-hidden min-h-[500px] flex flex-col relative border-2 border-slate-800 !rounded-none" style={{ backgroundImage: 'linear-gradient(45deg, #111 25%, transparent 25%, transparent 75%, #111 75%, #111), linear-gradient(45deg, #111 25%, transparent 25%, transparent 75%, #111 75%, #111)', backgroundSize: '20px 20px', backgroundPosition: '0 0, 10px 10px' }}>
-          <div className="p-4 border-b border-slate-800 bg-slate-900 flex justify-between items-center z-10">
-            <h3 className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2" style={{ color: 'var(--accent-color)' }}><Eye size={14} /> Viewport</h3>
+        <Card className="xl:col-span-8 bg-[#020205] p-0 overflow-hidden min-h-[500px] flex flex-col relative border border-[#00ff88]/20 shadow-[0_0_30px_rgba(0,255,136,0.05)]" style={{ backgroundImage: 'linear-gradient(45deg, #050508 25%, transparent 25%, transparent 75%, #050508 75%, #050508), linear-gradient(45deg, #050508 25%, transparent 25%, transparent 75%, #050508 75%, #050508)', backgroundSize: '20px 20px', backgroundPosition: '0 0, 10px 10px' }}>
+          <div className="p-4 border-b border-[#00ff88]/20 bg-[#050508]/80 backdrop-blur-md flex justify-between items-center z-10">
+            <h3 className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-[#00ff88]"><Eye size={14} /> Viewport Engine</h3>
           </div>
           
           <div className="flex-1 flex items-center justify-center p-8 relative">
             {generating && (
-              <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center z-20">
-                <Grid className="animate-spin mb-4" style={{ color: 'var(--accent-color)' }} size={48} />
-                <div className="font-mono text-xs tracking-widest uppercase" style={{ color: 'var(--accent-color)' }}>Rendering pixels...</div>
+              <div className="absolute inset-0 bg-[#020205]/80 flex flex-col items-center justify-center z-20 backdrop-blur-sm">
+                <div className="relative">
+                  <Grid className="animate-spin mb-6 relative z-10" color="#00ff88" size={56} />
+                  <div className="absolute inset-0 bg-[#00ff88] blur-[30px] opacity-40 animate-pulse" />
+                </div>
+                <div className="font-bold text-xs tracking-[0.3em] uppercase text-[#00ff88] animate-pulse">Rendering pixels...</div>
               </div>
             )}
             
             {result ? (
-              <div className="flex flex-col items-center">
-                <img src={result.url} alt="Pixel Art" style={{ imageRendering: 'pixelated' }} className="max-w-[400px] shadow-[0_0_50px_rgba(217,70,239,0.3)] border-4 border-slate-800" />
+              <div className="flex flex-col items-center relative z-10">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-[#00ff88] blur-[50px] opacity-20" />
+                  <img src={result.url} alt="Pixel Art" style={{ imageRendering: 'pixelated' }} className="relative z-10 min-w-[200px] min-h-[200px] bg-black/50 border border-[#00ff88]/40 shadow-[0_0_30px_rgba(0,255,136,0.1)] rounded-lg" />
+                </div>
                 <div className="mt-8 flex gap-4">
-                  <Button variant="secondary" className="!rounded-none !font-mono text-xs !border-slate-700 flex items-center gap-2"><Download size={14}/> PNG</Button>
-                  <Button variant="secondary" className="!rounded-none !font-mono text-xs !border-slate-700 flex items-center gap-2"><Download size={14}/> SPRITE SHEET</Button>
+                  <Button variant="ghost" className="!text-[#b4b4c4] hover:!text-white !border border-white/10 hover:!border-white/20 flex items-center gap-2 text-xs"><Download size={14}/> PNG</Button>
+                  <Button className="!bg-[#00ff88]/20 !text-[#00ff88] !border !border-[#00ff88]/50 hover:!bg-[#00ff88]/40 shadow-[0_0_15px_rgba(0,255,136,0.2)] flex items-center gap-2 text-xs"><Download size={14}/> SPRITE SHEET</Button>
                 </div>
               </div>
             ) : (
-              !generating && <div className="text-slate-700 font-mono text-[10px] uppercase tracking-widest">[ SYSTEM IDLE ]</div>
+              !generating && <div className="text-[#4a4a5e] font-bold text-xs uppercase tracking-[0.2em] flex flex-col items-center gap-4">
+                <Grid size={48} className="opacity-20" color="#00ff88" />
+                [ QUANTIZER IDLE ]
+              </div>
             )}
           </div>
         </Card>

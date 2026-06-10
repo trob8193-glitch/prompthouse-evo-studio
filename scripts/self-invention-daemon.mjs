@@ -45,10 +45,10 @@ async function forgeCycle() {
   try {
     // Dynamic import to get the latest version of the modules
     const { runForgeCycle, getForgeStatus } = await import(
-      path.join(ROOT_DIR, 'src/core/evolution/PromptForge.js')
+      '../src/core/evolution/PromptForge.js'
     );
     const { UniversalAIAdaptor } = await import(
-      path.join(ROOT_DIR, 'lib/ai/UniversalAIAdaptor.js')
+      '../lib/ai/UniversalAIAdaptor.js'
     );
 
     // Load API keys from .env

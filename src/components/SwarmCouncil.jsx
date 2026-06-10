@@ -12,7 +12,7 @@ export function SwarmCouncil() {
 
     const poll = async () => {
       try {
-        const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/studio/diagnostics?limit=40');
+        const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) + '/api/studio/diagnostics?limit=40');
         if (!res.ok) throw new Error('Diagnostics unavailable');
         const diagnostics = await res.json();
         if (!mounted) return;

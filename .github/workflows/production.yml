@@ -1,0 +1,38 @@
+name: Production Audit & Build
+
+on:
+  push:
+    branches: [ "main", "production" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  audit-and-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        
+    - name: Install Dependencies
+      run: npm ci
+      
+    - name: Run Platform Audit
+      run: npm run audit:platform
+      
+    - name: Run Edge IO Check
+      run: npm run audit:edge-io
+      
+    - name: Cost Firewall Check
+      run: npm run cost:check
+      
+    - name: Build Frontend
+      run: npm run build
+      
+    - name: Docker Build Test
+      run: docker build -t prompthouse-backend-test .

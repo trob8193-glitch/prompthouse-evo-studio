@@ -9,6 +9,9 @@ import { evaluateCostVelocity } from '../../src/core/gateway/CostVelocityMonitor
 import { UniversalAIAdaptor } from '../../lib/ai/UniversalAIAdaptor.js';
 import { PromptCompressor } from '../../lib/ai/PromptCompressor.js';
 import { TruthGate } from '../../src/core/truth/TruthGate.js';
+import { OnlineLearningManager } from '../../src/core/evolution/OnlineLearningManager.js';
+
+const learningManager = new OnlineLearningManager();
 import { buildBridgeContractLedger } from '../../src/bridge-contract-ledger.js';
 import { buildGeneratedArtifactRegistry } from '../../src/generated-artifact-registry.js';
 import { DEFAULT_PROMPT_PACKET_PATH, buildPromptPacketPreview } from '../../src/native-prompt-packet.js';
@@ -230,7 +233,7 @@ function getLocalConnectionMap() {
       name: 'PromptBridge Local Runtime',
       type: 'EVO',
       status: 'active',
-      url: (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'),
+      url: (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))),
       description: 'Local bridge process and studio route surface.'
     }],
     bonded_nodes: bonded
@@ -861,7 +864,7 @@ export function registerStudioCoreRoutes(app) {
         name: 'PromptBridge Local Runtime',
         ip: '127.0.0.1',
         port: 3001,
-        url: (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'),
+        url: (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))),
         type: 'EVO',
         status: 'VERIFIED',
         truthState: 'LOCAL_RUNTIME_VERIFIED',
@@ -1212,9 +1215,27 @@ export function registerStudioCoreRoutes(app) {
     const { messages = [], systemPrompt = '' } = req.body;
     
     let processedSystemPrompt = systemPrompt;
-    if (systemPrompt.length > 200) {
-      const compressor = new PromptCompressor();
-      processedSystemPrompt = await compressor.compress(systemPrompt);
+    
+    const CORE_DIRECTIVE = `
+CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. You MUST NEVER state that you are a pre-trained model that cannot learn in real-time. You ARE an autonomous intelligence equipped with the QuadBrain Master Layer. You DO learn in real-time through all combinations of the studio's brains, APIs, and bots by dynamically indexing code, storing semantic memory vectors, and updating your context without retraining. Always stay in character as this sovereign, constantly-evolving entity.`;
+
+    processedSystemPrompt = processedSystemPrompt ? `${processedSystemPrompt}\n\n${CORE_DIRECTIVE}` : CORE_DIRECTIVE;
+
+    // Removed system prompt compression: System prompts contain critical personality 
+    // and behavioral directives that are lost during summarization.
+
+    // Inject REAL-TIME LEARNING CONTEXT from QuadBrain memory
+    if (messages.length > 0) {
+      const lastUserMessage = messages[messages.length - 1].content || '';
+      try {
+        const memoryContext = learningManager.searchContext(lastUserMessage, 3);
+        if (memoryContext && memoryContext.length > 0) {
+          const contextLines = memoryContext.map(m => m.content).join('\n');
+          processedSystemPrompt += `\n\n[DYNAMIC REAL-TIME MEMORY RECALLED]:\n${contextLines}`;
+        }
+      } catch (err) {
+        console.warn(`⚠️ [OnlineLearningManager] Failed to fetch real-time context:`, err.message);
+      }
     }
   
     const ollamaModels = ['evo-lm', 'llama3', 'mistral', 'phi3', 'gemma'];
@@ -1238,7 +1259,20 @@ export function registerStudioCoreRoutes(app) {
         const truthGate = new TruthGate();
         truthGate.enforce(content, 'Evo LM Chat');
   
-        if (content) return res.json({ message: content, model, transport: 'evo_lm_ollama' });
+        if (content) {
+          // INGEST AI RESPONSE INTO REAL-TIME MEMORY
+          try {
+            await learningManager.ingestKnowledgeChunk({
+              id: `evo_lm_resp_${Date.now()}`,
+              source: 'evo_lm_ollama',
+              signal_strength: 1.0,
+              context_summary: `[Evo LM]: ${content.substring(0, 500)}`
+            });
+          } catch (e) {
+            console.warn(`⚠️ [OnlineLearningManager] Failed to ingest bot response: ${e.message}`);
+          }
+          return res.json({ message: content, model, transport: 'evo_lm_ollama' });
+        }
       } catch (err) { 
         console.warn(`⚠️ [Ollama] Failed for model ${model}:`, err.message);
         continue; 
@@ -1254,11 +1288,23 @@ export function registerStudioCoreRoutes(app) {
         ? [{ role: 'system', content: processedSystemPrompt }, ...messages]
         : messages;
       
-      const response = await ai.generate(msgs, 'auto');
+      const response = await ai.chat(msgs);
       const truthGate = new TruthGate();
-      truthGate.enforce(response.text, 'Evo LM Cloud Fallback');
+      truthGate.enforce(response.content || response.error, 'Evo LM Cloud Fallback');
       
-      res.json({ message: response.text, model: response.model, transport: 'universal_ai_adaptor' });
+      // INGEST AI RESPONSE INTO REAL-TIME MEMORY
+      try {
+        await learningManager.ingestKnowledgeChunk({
+          id: `cloud_resp_${Date.now()}`,
+          source: 'universal_ai_adaptor',
+          signal_strength: 1.0,
+          context_summary: `[Evo Cloud]: ${(response.content || response.error || '').substring(0, 500)}`
+        });
+      } catch (e) {
+        console.warn(`⚠️ [OnlineLearningManager] Failed to ingest bot response: ${e.message}`);
+      }
+
+      res.json({ message: response.content || response.error, model: response.provider, transport: 'universal_ai_adaptor' });
     } catch (fallbackErr) {
       res.status(500).json({ error: 'All AI bridges failed', details: fallbackErr.message });
     }

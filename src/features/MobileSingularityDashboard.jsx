@@ -22,7 +22,7 @@ export default function MobileSingularityDashboard() {
     setIsCompiling(true);
     setCompileLogs(['[Mobile Singularity] Initiating Native Compilation Matrix...', `Architecture: ${architecture}`, `Target: ${selectedApp}`, 'Connecting to compiler stream...']);
     
-    const eventSource = new EventSource(`${(globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')}/api/mobile/compile-stream?appId=${encodeURIComponent(selectedApp)}&architecture=${encodeURIComponent(architecture)}`);
+    const eventSource = new EventSource(`${(globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))}/api/mobile/compile-stream?appId=${encodeURIComponent(selectedApp)}&architecture=${encodeURIComponent(architecture)}`);
 
     eventSource.onmessage = (event) => {
       const data = event.data;

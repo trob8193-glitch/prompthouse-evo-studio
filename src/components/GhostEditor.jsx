@@ -3,7 +3,7 @@ import { useSovereignStore } from '../store.js';
 import { Button, Card, StatusBadge } from './primitives.jsx';
 import { Sparkles, FileCode, Check, RefreshCw, X } from 'lucide-react';
 
-const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'));
+const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))));
 
 export function GhostEditor() {
   const { activeFile, addNotification, logToLedger } = useSovereignStore();
@@ -47,6 +47,13 @@ export function GhostEditor() {
 
   const handleMerge = async () => {
     try {
+      // Send Feedback
+      fetch(`${BRIDGE_URL}/api/feedback-adaptation`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filePath: activeFile, originalCode, proposedCode: ghostCode, action: 'merge' })
+      }).catch(console.error);
+
       const res = await fetch(`${BRIDGE_URL}/api/intelligence/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -68,6 +75,18 @@ export function GhostEditor() {
     } catch (err) {
       addNotification(`Merge failed: ${err.message}`, 'error');
     }
+  };
+
+  const handleReject = () => {
+    // Send Feedback
+    fetch(`${BRIDGE_URL}/api/feedback-adaptation`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filePath: activeFile, originalCode, proposedCode: ghostCode, action: 'reject' })
+    }).catch(console.error);
+
+    setIsGhostActive(false);
+    addNotification('Rejected optimization proposal.', 'error');
   };
 
   return (
@@ -93,6 +112,15 @@ export function GhostEditor() {
             className="text-[10px]"
           >
             {isGhostActive ? 'Hide Overlay' : 'Show Ghost'}
+          </Button>
+          <Button 
+            size="sm" 
+            variant="ghost" 
+            onClick={handleReject}
+            disabled={!isGhostActive || loading}
+            className="text-[10px] gap-2 text-red-400 hover:text-red-300"
+          >
+            <X size={14} /> Reject
           </Button>
           <Button 
             size="sm" 

@@ -11,6 +11,9 @@ import { Log } from './src/core/autonomy/SovereignLogger.js';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import { OnlineLearningManager } from './src/core/evolution/OnlineLearningManager.js';
+
+const learningManager = new OnlineLearningManager();
 
 dotenv.config({ path: '.env.agent', override: false });
 
@@ -100,13 +103,36 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
       // Dynamically load ALL_BOT_ROSTER here to avoid circular imports during boot
       const { ALL_BOT_ROSTER } = await import('./src/engine.js');
       const bot = ALL_BOT_ROSTER.find(b => b.id === botId) || ALL_BOT_ROSTER[0];
-      const instructions = `You are ${bot.name}, a ${bot.species}. Role: ${bot.role}. Signature: ${bot.signature}. Always stay in character and provide production-ready solutions.`;
+      let instructions = `You are ${bot.name}, a ${bot.species}. Role: ${bot.role}. Signature: ${bot.signature}. 
+CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. You MUST NEVER state that you are a pre-trained model that cannot learn in real-time. You ARE an autonomous intelligence equipped with the QuadBrain Master Layer. You DO learn in real-time through all combinations of the studio's brains, APIs, and bots by dynamically indexing code, storing semantic memory vectors, and updating your context without retraining. You have full access to the local filesystem, real-time memory ingestion pipelines, and live execution sandboxes. Always stay in character as this sovereign, constantly-evolving entity, and provide production-ready solutions.`;
+
+      try {
+        const memoryContext = learningManager.searchContext(message, 3);
+        if (memoryContext && memoryContext.length > 0) {
+          const contextLines = memoryContext.map(m => m.content).join('\n');
+          instructions += `\n\n[DYNAMIC REAL-TIME MEMORY RECALLED]:\n${contextLines}`;
+        }
+      } catch (err) {
+        Log.warn(`⚠️ [OnlineLearningManager] Failed to fetch real-time context: ${err.message}`);
+      }
 
       const agent = agentFactory();
       const response = await agent.chat(message, { verbose: false, instructions }).catch(err => {
         Log.error(`[Agent] Chat execution failed: ${err.message}`);
         throw err;
       });
+
+      // INGEST AI RESPONSE INTO REAL-TIME MEMORY
+      try {
+        await learningManager.ingestKnowledgeChunk({
+          id: `bot_resp_${Date.now()}`,
+          source: 'bot_response',
+          signal_strength: 1.0,
+          context_summary: `[Bot: ${bot.name}]: ${response.substring(0, 500)}`
+        });
+      } catch (e) {
+        Log.warn(`⚠️ [OnlineLearningManager] Failed to ingest bot response: ${e.message}`);
+      }
 
       res.json({
         success: true,

@@ -28,6 +28,75 @@ export function GlobalAPISettingsView() {
   const [nfForce3, setNfForce3] = useState(false);
   const [deployApproval, setDeployApproval] = useState(null);
 
+  // Personal IDE Keys State
+  const [personalKeys, setPersonalKeys] = useState([]);
+  const [loadingKeys, setLoadingKeys] = useState(false);
+  const [newKeyPayload, setNewKeyPayload] = useState(null);
+  const [newKeyName, setNewKeyName] = useState('');
+  const [generatingKey, setGeneratingKey] = useState(false);
+
+  const fetchPersonalKeys = async () => {
+    setLoadingKeys(true);
+    try {
+      const res = await fetch(`${apiConfig.bridgeUrl}/api/auth/keys`);
+      if (res.ok) {
+        const data = await res.json();
+        setPersonalKeys(data.keys || []);
+      }
+    } catch (e) {
+      console.error('Failed to fetch personal keys:', e);
+    }
+    setLoadingKeys(false);
+  };
+
+  useEffect(() => {
+    fetchPersonalKeys();
+  }, [apiConfig.bridgeUrl]);
+
+  const handleGenerateKey = async () => {
+    if (!newKeyName.trim()) {
+      addNotification('Please enter a key description name.', 'error');
+      return;
+    }
+    setGeneratingKey(true);
+    try {
+      const res = await fetch(`${apiConfig.bridgeUrl}/api/auth/keys`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newKeyName })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setNewKeyPayload(data.rawKey);
+        setNewKeyName('');
+        fetchPersonalKeys();
+        addNotification('Personal Evo API key generated.', 'success');
+      } else {
+        addNotification('Failed to generate key.', 'error');
+      }
+    } catch (e) {
+      addNotification(`Error: ${e.message}`, 'error');
+    }
+    setGeneratingKey(false);
+  };
+
+  const handleRevokeKey = async (id) => {
+    if (!confirm('Are you sure you want to revoke this API key? This will immediately sever any external IDE tethers using it.')) return;
+    try {
+      const res = await fetch(`${apiConfig.bridgeUrl}/api/auth/keys/${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        addNotification('API key revoked successfully.', 'success');
+        fetchPersonalKeys();
+      } else {
+        addNotification('Failed to revoke API key.', 'error');
+      }
+    } catch (e) {
+      addNotification(`Error: ${e.message}`, 'error');
+    }
+  };
+
   const handleSave = async () => {
     const ok = await saveApiKeys();
     if (ok) { setSaved(true); addNotification('API keys updated successfully.', 'success'); setTimeout(() => setSaved(false), 3000); }
@@ -194,6 +263,153 @@ export function GlobalAPISettingsView() {
             </div>
           )}
 
+        </div>
+      </div>
+
+      {/* Personal IDE Keys Card */}
+      <div style={{ background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: 24, marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+          <Key size={16} color="#ec4899" />
+          <span style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0' }}>Personal IDE Keys</span>
+        </div>
+        
+        <p style={{ fontSize: 11, color: '#94a3b8', marginBottom: 16, lineHeight: 1.5 }}>
+          Personal Evo API keys secure communication between external IDEs (like Cursor, Windsurf, VS Code, Zed) and this studio bridge server.
+        </p>
+
+        {/* Key Generation Form */}
+        <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
+          <input 
+            type="text" 
+            placeholder="Key Name (e.g. Cursor-Laptop)" 
+            value={newKeyName} 
+            onChange={(e) => setNewKeyName(e.target.value)} 
+            style={{ ...fieldStyle, flex: 1 }} 
+          />
+          <button 
+            onClick={handleGenerateKey} 
+            disabled={generatingKey}
+            style={{
+              padding: '10px 16px',
+              borderRadius: 8,
+              border: 'none',
+              background: '#ec4899',
+              color: 'white',
+              cursor: 'pointer',
+              fontSize: 12,
+              fontWeight: 700,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6
+            }}
+          >
+            {generatingKey ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+            Generate Key
+          </button>
+        </div>
+
+        {/* Display New Key Payload */}
+        {newKeyPayload && (
+          <div style={{ 
+            background: 'rgba(236, 72, 153, 0.05)', 
+            border: '1px solid rgba(236, 72, 153, 0.2)', 
+            borderRadius: 8, 
+            padding: 16, 
+            marginBottom: 20 
+          }}>
+            <div style={{ fontSize: 10, fontWeight: 800, color: '#ec4899', textTransform: 'uppercase', marginBottom: 4 }}>
+              ⚠️ Copy Your API Key Now (Only Shown Once!)
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <input 
+                type="text" 
+                readOnly 
+                value={newKeyPayload} 
+                onClick={(e) => e.target.select()}
+                style={{ ...fieldStyle, fontFamily: 'monospace', fontSize: 11, background: '#020617', borderColor: '#ec4899' }} 
+              />
+              <button 
+                onClick={() => {
+                  navigator.clipboard.writeText(newKeyPayload);
+                  addNotification('Copied API Key to clipboard.', 'success');
+                }}
+                style={{
+                  padding: '10px 14px',
+                  borderRadius: 8,
+                  border: '1px solid #ec4899',
+                  background: 'transparent',
+                  color: '#ec4899',
+                  cursor: 'pointer',
+                  fontSize: 11,
+                  fontWeight: 700
+                }}
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Active Keys List */}
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
+            Active Keys ({personalKeys.length})
+          </div>
+          
+          {loadingKeys ? (
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '20px 0' }}>
+              <Loader2 size={24} className="animate-spin" color="#64748b" />
+            </div>
+          ) : personalKeys.length === 0 ? (
+            <div style={{ fontSize: 12, color: '#64748b', textAlign: 'center', padding: '16px 0', background: '#0f172a', borderRadius: 8, border: '1px dashed #1e293b' }}>
+              No active personal API keys. Run "bond omni" or generate one above to secure your IDEs.
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {personalKeys.map((key) => (
+                <div key={key.id} style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between', 
+                  padding: '10px 14px', 
+                  background: '#0f172a', 
+                  border: '1px solid #1e293b', 
+                  borderRadius: 8 
+                }}>
+                  <div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: '#e2e8f0' }}>{key.name}</div>
+                    <div style={{ fontSize: 10, color: '#64748b', display: 'flex', gap: 8, marginTop: 2 }}>
+                      <span style={{ fontFamily: 'monospace' }}>Prefix: {key.key_prefix}...</span>
+                      <span>•</span>
+                      <span>Created: {new Date(key.created_at).toLocaleDateString()}</span>
+                      {key.last_used_at && (
+                        <>
+                          <span>•</span>
+                          <span>Last Used: {new Date(key.last_used_at).toLocaleTimeString()}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => handleRevokeKey(key.id)}
+                    style={{
+                      padding: '4px 10px',
+                      borderRadius: 6,
+                      border: '1px solid #ef4444',
+                      background: 'rgba(239, 68, 68, 0.05)',
+                      color: '#ef4444',
+                      cursor: 'pointer',
+                      fontSize: 10,
+                      fontWeight: 700,
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    Revoke
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

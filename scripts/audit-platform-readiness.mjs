@@ -146,7 +146,7 @@ async function auditAllEndsAndInventDaemons() {
     { name: 'Front-End', id: 'frontend', path: path.join(rootDir, 'src', 'views.jsx') },
     { name: 'Middle-End', id: 'middleend', path: path.join(rootDir, 'src', 'core') },
     { name: 'Bridge-End', id: 'bridgeend', path: path.join(rootDir, 'promptbridge-server.js') },
-    { name: 'Backend', id: 'backend', path: path.join(rootDir, 'scripts', 'singularity-core.mjs') },
+    { name: 'Backend', id: 'backend', path: path.join(rootDir, 'server', 'routes', 'studio-core.routes.js') },
   ];
 
   const daemonsDir = path.join(rootDir, 'scripts');

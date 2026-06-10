@@ -11,6 +11,15 @@ This repository is currently in **Launch Readiness** mode. You can verify the sy
 npm run launch:proof
 ```
 
+### ⚡ Omni-Bond (Global IDE Fusion)
+If you are using external IDEs (Cursor, Windsurf, VS Code, JetBrains, Zed), you must bind them to the Sovereign Master Layer. This prevents them from modifying truth-critical files or deleting generated data.
+
+Simply run this command to inject the constraints universally:
+```bash
+npm run bond:omni
+```
+Or, you can click the **"Omni-Bond (Global IDE Fusion)"** button inside the Studio Terminal UI.
+
 ### Key Documentation
 - [Launch Readiness Guide](./docs/LAUNCH_READINESS_GUIDE.md) — Setup and verification path.
 - [Five-Minute Demo Workflow](./docs/DEMO_WORKFLOW.md) — Flagship demo loop.

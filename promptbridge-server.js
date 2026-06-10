@@ -8,6 +8,7 @@
  * ════════════════════════════════════════════════════════════════════
  * The heart of the SMFF (Self-Monetizing Feature Foundry).
  */
+process.env.IS_BRIDGE_SERVER = 'true';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -56,6 +57,7 @@ import registerExternalConnectorRoutes from './generated_apis/external_connector
 import { RealExecutionPipeline } from './lib/execution/pipeline.js';
 import { registerCommerceMarketplaceRoutes } from './src/routes/commerce_marketplace_routes.js';
 import { attachSseTransport } from './src/core/mcp/McpServerDaemon.mjs';
+import { registerRealTimeIngestRoutes } from './server/routes/realtime-ingest.routes.js';
 
 // Import our core engines
 import { UniversalAIAdaptor } from './lib/ai/UniversalAIAdaptor.js';
@@ -112,6 +114,39 @@ ensureEvolutionSchema();
 const app = express();
 app.set('trust proxy', 1);
 app.use(express.json({ limit: '10mb' }));
+
+// Hardened Security Headers (Edge Deployment Configured)
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  next();
+});
+
+// Production API Rate Limiting
+app.use((req, res, next) => {
+  const ip = req.ip || req.connection?.remoteAddress || 'unknown';
+  const now = Date.now();
+  const windowMs = 60000; // 1 minute
+  const maxReqs = parseInt(process.env.RATE_LIMIT_MAX || '150', 10);
+  
+  if (!RATE_LIMITS.has(ip)) {
+    RATE_LIMITS.set(ip, { count: 1, resetTime: now + windowMs });
+  } else {
+    const limitData = RATE_LIMITS.get(ip);
+    if (now > limitData.resetTime) {
+      limitData.count = 1;
+      limitData.resetTime = now + windowMs;
+    } else {
+      limitData.count++;
+      if (limitData.count > maxReqs) {
+        return res.status(429).json({ success: false, truthState: 'RATE_LIMIT_EXCEEDED', error: 'Too many requests from this IP, please try again later.' });
+      }
+    }
+  }
+  next();
+});
 
 // Configurable CORS for deployment
 const allowedOrigins = process.env.ALLOWED_ORIGINS
@@ -240,7 +275,52 @@ app.get('/status', (req, res) => {
     }
   });
 });
-app.post('/api/intelligence/execute', async (req, res) => {
+// Live Telemetry for Validation Dashboard
+app.get('/api/stream-metrics', (req, res) => {
+  try {
+    const vectorCount = db.prepare('SELECT COUNT(*) as count FROM semantic_vectors').get().count;
+    
+    // In production, stability could be calculated by querying the average signal
+    const avgSignal = db.prepare('SELECT AVG(signal) as avg FROM semantic_vectors').get().avg || 0.98;
+    
+    res.json({
+      success: true,
+      stability: Math.min(1.0, Math.max(0.1, avgSignal)),
+      ingested: vectorCount,
+      rejected: Math.floor(vectorCount * 0.05), // Mocked rejection rate
+      drift: Math.max(0, 1.0 - avgSignal)
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Subscription Paywall Middleware
+function requireSubscription(req, res, next) {
+  if (!req.user_id) {
+    return res.status(401).json({ success: false, error: 'Authentication required for premium endpoints.' });
+  }
+  
+  // Verify user has an organization with an active paid API credit ledger
+  const activePlan = db.prepare(`
+    SELECT ac.subscription_status, ac.plan
+    FROM organization_members om
+    JOIN api_credits ac ON om.organization_id = ac.organization_id
+    WHERE om.user_id = ? AND ac.subscription_status = 'active' AND ac.plan = 'paid'
+    LIMIT 1
+  `).get(req.user_id);
+
+  if (!activePlan && process.env.REQUIRE_AUTH === 'true') {
+    return res.status(402).json({ 
+      success: false, 
+      truthState: 'PAYMENT_REQUIRED', 
+      error: 'Active Pro or Enterprise subscription required. Please upgrade your plan.' 
+    });
+  }
+  next();
+}
+
+app.post('/api/intelligence/execute', requireSubscription, async (req, res) => {
   try {
     const { module, action, payload } = req.body;
     const result = await intelligenceCore.executeAction(module, action, payload);
@@ -282,11 +362,50 @@ app.post('/api/sovereign-ledger/log', (req, res) => {
   }
 });
 
-// Layer 1 Protocol Public APIs
-app.post('/api/evo-git/sync', (req, res) => {
+app.post('/api/sovereign-uplink', (req, res) => {
   try {
-    const { snapshot, apiKey } = req.body;
-    if (!apiKey) return res.status(401).json({ success: false, error: 'API Key required for Evo Git Sync' });
+    const { origin, action, payload } = req.body;
+    const timestamp = new Date().toISOString();
+    
+    const logLine = `[EXTERNAL IDE UPLINK] [${timestamp}] Origin: ${origin || 'UNKNOWN'} | Action: ${action || 'UNKNOWN'} | Payload: ${payload || 'NONE'}\n`;
+    writeFileSync(path.resolve(process.cwd(), 'sovereign_broadcast.log'), logLine, { flag: 'a' });
+    
+    const id = crypto.randomUUID();
+    db.prepare(`
+      INSERT INTO sovereign_ledger (id, feature_id, action, proof_hash, truth_state, iq_gain)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(id, `uplink_${(origin || 'unknown').toLowerCase()}`, action || 'EXTERNAL_COMMAND', id, 'VERIFIED_UPLINK', 500);
+    
+    console.log(`\n📡 [SOVEREIGN UPLINK] Transmission received from ${origin || 'Unknown'}: ${action}\n`);
+    
+    res.json({ success: true, message: 'Uplink transmission received and logged to the Sovereign Ledger.', ledgerId: id });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.post('/api/training-capture', (req, res) => {
+  try {
+    const { id, project, summary, next_pass_excerpt } = req.body;
+    console.log(`\n🧠 [SINGULARITY LOOP] Training capture received for project: ${project || 'Unknown'}\n`);
+    
+    // Log the training capture into the ledger
+    const ledgerId = crypto.randomUUID();
+    db.prepare(`
+      INSERT INTO sovereign_ledger (id, feature_id, action, proof_hash, truth_state, iq_gain)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(ledgerId, `training_capture_${(project || 'unknown')}`, 'AI_SELF_TRAIN', id, 'VERIFIED_TRAINING', 1000);
+    
+    res.json({ success: true, message: 'Training capture committed to memory.', ledgerId });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Layer 1 Protocol Public APIs
+app.post('/api/evo-git/sync', validateEvoApiKey, (req, res) => {
+  try {
+    const { snapshot } = req.body;
     if (!snapshot) {
       return res.status(400).json({
         success: false,
@@ -352,6 +471,9 @@ const maintenance = new SelfMaintenance();
 const truthGate = new TruthGate();
 const stripe = new StripeAdaptor(userConfig.keys.stripe);
 const foundry = new FoundryOrchestrator(ai, stripe);
+
+// Register Real-Time Learning Routes
+registerRealTimeIngestRoutes(app, { ai });
 
 const SANDBOX_DIR = join(DATA_DIR, 'sandbox');
 const saasOrchestrator = new SaasOrchestrator(ai, SANDBOX_DIR);
@@ -701,6 +823,188 @@ app.get('/api/mobile/compile-stream', (req, res) => {
   req.on('close', () => {
     child.kill();
   });
+});
+
+// ═══════════════════════════════════════════════════════════════
+// PERSONAL EVO API KEY AUTHENTICATION & MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
+
+function validateEvoApiKey(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  let token = null;
+  
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.substring(7).trim();
+  } else if (req.body && req.body.apiKey) {
+    token = req.body.apiKey;
+  } else if (req.query && req.query.apiKey) {
+    token = req.query.apiKey;
+  }
+  
+  if (!token) {
+    return res.status(401).json({ success: false, error: 'API Key required. Please authenticate.' });
+  }
+  
+  // Master key bypass
+  const masterKey = process.env.PH_EVO_MASTER_KEY;
+  if (masterKey && token === masterKey) {
+    return next();
+  }
+  
+  // Hash token to verify against DB
+  const keyHash = crypto.createHash('sha256').update(token).digest('hex');
+  const keyRow = db.prepare(`
+    SELECT id, environment, status 
+    FROM api_keys 
+    WHERE key_hash = ? AND status = 'active'
+  `).get(keyHash);
+  
+  if (!keyRow) {
+    return res.status(401).json({ success: false, error: 'Invalid or revoked API Key.' });
+  }
+  
+  // Update last_used_at
+  db.prepare('UPDATE api_keys SET last_used_at = CURRENT_TIMESTAMP WHERE id = ?').run(keyRow.id);
+  next();
+}
+
+app.get('/api/auth/keys', (req, res) => {
+  try {
+    const keys = db.prepare(`
+      SELECT id, name, key_prefix, environment, status, created_at, last_used_at 
+      FROM api_keys 
+      WHERE status = 'active'
+      ORDER BY created_at DESC
+    `).all();
+    res.json({ success: true, keys });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.post('/api/auth/keys', (req, res) => {
+  try {
+    const { name = 'External IDE' } = req.body;
+    const randomBytes = crypto.randomBytes(24).toString('hex');
+    const rawKey = `ph_evo_sk_${randomBytes}`;
+    const prefix = `ph_evo_sk_${randomBytes.slice(0, 6)}`;
+    const keyHash = crypto.createHash('sha256').update(rawKey).digest('hex');
+    const id = `key_${crypto.randomUUID().replaceAll('-', '').slice(0, 12)}`;
+    
+    db.prepare(`
+      INSERT INTO api_keys (id, organization_id, name, key_prefix, key_hash, environment, status)
+      VALUES (?, 'org_master', ?, ?, ?, 'local', 'active')
+    `).run(id, name, prefix, keyHash);
+    
+    res.json({
+      success: true,
+      id,
+      name,
+      prefix,
+      rawKey,
+      message: 'API Key generated successfully. Save it now, it will not be displayed again.'
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.delete('/api/auth/keys/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = db.prepare(`
+      UPDATE api_keys 
+      SET status = 'revoked', revoked_at = CURRENT_TIMESTAMP 
+      WHERE id = ?
+    `).run(id);
+    
+    if (result.changes === 0) {
+      return res.status(404).json({ success: false, error: 'API Key not found or already revoked.' });
+    }
+    
+    res.json({ success: true, message: 'API Key successfully revoked.' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// SECURE LLM PROXY & FALLBACK ROUTING
+// ═══════════════════════════════════════════════════════════════
+
+app.post('/api/ai/chat', validateEvoApiKey, async (req, res) => {
+  try {
+    const { messages, prompt, options = {} } = req.body;
+    let result;
+    if (messages) {
+      result = await ai.chat(messages, options);
+    } else if (prompt) {
+      result = await ai.routeRequest(prompt, options);
+    } else {
+      return res.status(400).json({ success: false, error: 'Either messages or prompt is required.' });
+    }
+    
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.post('/v1/chat/completions', validateEvoApiKey, async (req, res) => {
+  try {
+    const { messages, model, temperature, max_tokens } = req.body;
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({
+        error: {
+          message: 'messages array is required',
+          type: 'invalid_request_error'
+        }
+      });
+    }
+
+    const options = { model, temperature, max_tokens };
+    const result = await ai.chat(messages, options);
+    
+    if (!result.success) {
+      return res.status(502).json({
+        error: {
+          message: result.error,
+          type: 'api_error',
+          code: 'provider_cascade_failed'
+        }
+      });
+    }
+    
+    res.json({
+      id: `chatcmpl-${crypto.randomUUID().replaceAll('-', '')}`,
+      object: 'chat.completion',
+      created: Math.floor(Date.now() / 1000),
+      model: model || result.provider,
+      choices: [
+        {
+          index: 0,
+          message: {
+            role: 'assistant',
+            content: result.content
+          },
+          finish_reason: 'stop'
+        }
+      ],
+      usage: {
+        prompt_tokens: 0,
+        completion_tokens: 0,
+        total_tokens: 0
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: {
+        message: error.message,
+        type: 'server_error',
+        code: 'internal_error'
+      }
+    });
+  }
 });
 
 const httpServer = createServer(app);

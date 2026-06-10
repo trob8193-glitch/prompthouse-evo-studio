@@ -3,7 +3,7 @@ import { RARE_CAPABILITIES, buildRareArtifact } from './rare-capabilities-engine
 
 import { Log } from './core/autonomy/SovereignLogger.js';
 
-const BRIDGE = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001');
+const BRIDGE = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')));
 const DEFAULT_MISSION = 'Build a trusted PromptHouse agent that turns a founder idea into proof-backed app, Chrome extension, workflow, test, and receipt artifacts.';
 
 function badgeForRisk(risk) {

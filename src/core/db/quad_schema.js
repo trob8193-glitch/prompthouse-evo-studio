@@ -2,22 +2,7 @@ import Database from 'better-sqlite3';
 import path from 'path';
 
 const DB_PATH = process.env.DATA_DIR ? path.join(process.env.DATA_DIR, 'prompthouse.db') : path.resolve('./prompthouse.db');
-
-const dbOptions = process.env.TURSO_DATABASE_URL ? {
-  syncUrl: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN
-} : {};
-
-const db = new Database(DB_PATH, dbOptions);
-
-if (process.env.TURSO_DATABASE_URL) {
-  try {
-    db.sync();
-    global.Log && global.Log.info('✅ Connected and synced with Turso Global Edge Database');
-  } catch (err) {
-    global.Log && global.Log.error('❌ Failed to sync with Turso:', err);
-  }
-}
+const db = new Database(DB_PATH);
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS organizations (
@@ -280,11 +265,18 @@ CREATE TABLE IF NOT EXISTS marketplace_listings (
   status TEXT DEFAULT 'published',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS semantic_vectors (
+  id TEXT PRIMARY KEY,
+  signal REAL DEFAULT 1.0,
+  content TEXT,
+  vector_json TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 `;
 
 export function initDatabase() {
   db.exec(SCHEMA);
-  
 }
 
 export default db;

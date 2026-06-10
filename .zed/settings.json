@@ -1,0 +1,6 @@
+{
+  "format_on_save": "on",
+  "formatter": "prettier",
+  "ui_font_size": 14,
+  "theme": "One Dark"
+}

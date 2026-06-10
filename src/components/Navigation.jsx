@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
   Activity, Eye, Sparkles, BarChart3, FolderOpen, Gauge, Zap,
-  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, Lock, ScrollText, Globe, Bot, Smartphone
+  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, Lock, ScrollText, Globe, Bot, Smartphone, ShieldCheck, CreditCard
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -60,19 +60,33 @@ export const NAV_GROUPS = [
       { id: 'proof-console', label: 'Proof Console', icon: Shield },
       { id: 'proof-center', label: 'Proof Center', icon: Shield },
       { id: 'evo-eyes', label: 'Evo Eyes', icon: Eye },
+      { id: 'realtime-validation', label: 'Validation Pipeline', icon: ShieldCheck },
       { id: 'metrics', label: 'Metrics', icon: BarChart3 },
       { id: 'deployment-center', label: 'Deployment Center', icon: Rocket },
       { id: 'mobile-singularity', label: 'Mobile Hub', icon: Smartphone },
     ],
   },
   {
+    id: 'monetization',
+    label: 'Monetization',
+    items: [
+      { id: 'commerce', label: 'Commerce Engine', icon: CreditCard },
+    ],
+  },
+  {
+    id: 'user',
+    label: 'User',
+    items: [
+      { id: 'settings', label: 'Settings', icon: Settings },
+      { id: 'pricing', label: 'Upgrade to Pro', icon: Zap },
+    ],
+  },
+  {
     id: 'system',
     label: 'System',
     items: [
-      { id: 'settings', label: 'Settings & API', icon: Settings },
       { id: 'connections', label: 'Connections', icon: ExternalLink },
       { id: 'grading', label: 'Grading & Release', icon: Gauge },
-      { id: 'commerce', label: 'Commerce', icon: Activity },
       { id: 'visual-physics', label: 'Visual Physics', icon: Zap },
     ],
   },
@@ -86,28 +100,30 @@ export function Navigation() {
   return (
     <nav
       style={{
-        width: collapsed ? 56 : 220,
-        minWidth: collapsed ? 56 : 220,
+        width: collapsed ? 60 : 240,
+        minWidth: collapsed ? 60 : 240,
         height: '100%',
-        borderRight: '1px solid #1e293b',
-        background: '#0c1222',
+        borderRight: '1px solid rgba(255,255,255,0.06)',
+        background: 'rgba(5,5,8,0.7)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
         display: 'flex',
         flexDirection: 'column',
         overflowY: 'auto',
         overflowX: 'hidden',
-        transition: 'width 0.2s ease, min-width 0.2s ease',
+        transition: 'width 0.3s cubic-bezier(0.2,0.8,0.2,1), min-width 0.3s cubic-bezier(0.2,0.8,0.2,1)',
         flexShrink: 0,
         position: 'relative',
         zIndex: 1000,
       }}
     >
-      <div style={{ padding: collapsed ? '12px 6px' : '12px 10px', flex: 1 }}>
+      <div style={{ padding: collapsed ? '16px 8px' : '16px 14px', flex: 1 }}>
         {NAV_GROUPS.map((group) => (
-          <div key={group.id} style={{ marginBottom: 20 }}>
+          <div key={group.id} style={{ marginBottom: 24 }}>
             {!collapsed && (
               <div style={{
-                fontSize: 9, fontWeight: 800, color: '#475569', textTransform: 'uppercase',
-                letterSpacing: '0.1em', padding: '4px 10px', marginBottom: 4,
+                fontSize: 10, fontWeight: 800, color: '#4a4a5e', textTransform: 'uppercase',
+                letterSpacing: '0.2em', padding: '6px 12px', marginBottom: 6,
               }}>
                 {group.label}
               </div>
@@ -125,38 +141,56 @@ export function Navigation() {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 10,
+                    gap: 12,
                     width: '100%',
-                    padding: collapsed ? '8px 0' : '7px 10px',
+                    padding: collapsed ? '10px 0' : '9px 14px',
                     justifyContent: collapsed ? 'center' : 'flex-start',
-                    border: 'none',
-                    borderRadius: 8,
+                    border: '1px solid transparent',
+                    borderRadius: 14,
                     cursor: 'pointer',
-                    fontSize: 12,
-                    fontWeight: isActive ? 700 : 500,
-                    color: isActive ? '#c7d2fe' : '#64748b',
-                    background: isActive ? 'rgba(99,102,241,0.12)' : 'transparent',
-                    transition: 'all 0.15s ease',
-                    marginBottom: 2,
+                    fontSize: 13,
+                    fontWeight: isActive ? 700 : 600,
+                    color: isActive ? '#ffffff' : '#737385',
+                    background: isActive 
+                      ? 'linear-gradient(90deg, rgba(0,240,255,0.1), transparent)' 
+                      : 'transparent',
+                    borderColor: isActive ? 'rgba(0,240,255,0.2)' : 'transparent',
+                    boxShadow: isActive ? 'inset 3px 0 0 #00f0ff' : 'none',
+                    transition: 'all 0.3s cubic-bezier(0.2,0.8,0.2,1)',
+                    marginBottom: 3,
                     textAlign: 'left',
                     position: 'relative',
+                    overflow: 'hidden',
                   }}
                   onMouseEnter={(e) => {
-                    if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-                    if (!isActive) e.currentTarget.style.color = '#94a3b8';
+                    if (!isActive) {
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
+                      e.currentTarget.style.color = '#ffffff';
+                      e.currentTarget.style.transform = 'translateX(4px)';
+                    }
                   }}
                   onMouseLeave={(e) => {
-                    if (!isActive) e.currentTarget.style.background = 'transparent';
-                    if (!isActive) e.currentTarget.style.color = '#64748b';
+                    if (!isActive) {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#737385';
+                      e.currentTarget.style.transform = 'translateX(0)';
+                    }
                   }}
                 >
                   {isActive && (
                     <div style={{
-                      position: 'absolute', left: collapsed ? 0 : -10, top: '50%', transform: 'translateY(-50%)',
-                      width: 3, height: 20, borderRadius: '0 3px 3px 0', background: '#6366f1',
+                      position: 'absolute', left: collapsed ? 0 : -14, top: '15%', bottom: '15%',
+                      width: 3, borderRadius: '0 4px 4px 0', background: '#00f0ff',
+                      boxShadow: '0 0 16px #00f0ff',
                     }} />
                   )}
-                  <Icon size={16} style={{ flexShrink: 0, opacity: isActive ? 1 : 0.7 }} />
+                  <Icon size={16} style={{ 
+                    flexShrink: 0, 
+                    opacity: isActive ? 1 : 0.6,
+                    color: isActive ? '#00f0ff' : 'inherit',
+                    filter: isActive ? 'drop-shadow(0 0 6px rgba(0,240,255,0.5))' : 'none',
+                    transition: 'all 0.3s ease'
+                  }} />
                   {!collapsed && <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</span>}
                 </button>
               );
@@ -167,10 +201,12 @@ export function Navigation() {
 
       {!collapsed && (
         <div style={{
-          padding: '12px 16px', borderTop: '1px solid #1e293b',
-          fontSize: 9, color: '#334155', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em',
+          padding: '14px 18px', borderTop: '1px solid rgba(255,255,255,0.06)',
+          fontSize: 9, color: '#00f0ff', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em',
+          background: 'rgba(0,0,0,0.2)',
+          textShadow: '0 0 10px rgba(0,240,255,0.3)'
         }}>
-          PH Evo Studio v2.0
+          ⚡ Singularity v2.0
         </div>
       )}
     </nav>

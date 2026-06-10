@@ -1,22 +1,17 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Shield, Zap, RefreshCw, Brain, TrendingUp, CheckCircle } from 'lucide-react';
+import { Shield, Zap, RefreshCw, Brain, TrendingUp, CheckCircle, Radio } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
+import { motion } from 'framer-motion';
 
 /**
  * PH EVO STUDIO — AUTONOMOUS SELF & TRAINING (ENTERPRISE GRADE)
  * ═══════════════════════════════════════════════════════════════
- * Manages self-evolution, maintenance, and training loops.
  */
 
 function StatusBadge({ active }) {
   return (
-    <div style={{
-      display: 'flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 20,
-      background: active ? '#22c55e14' : '#ef444414',
-      border: `1px solid ${active ? '#22c55e44' : '#ef444444'}`,
-      color: active ? '#22c55e' : '#ef4444', fontSize: 10, fontWeight: 700, textTransform: 'uppercase'
-    }}>
-      <div style={{ width: 6, height: 6, borderRadius: '50%', background: active ? '#22c55e' : '#ef4444', animation: active ? 'pulse 2s infinite' : 'none' }} />
+    <div className={`flex items-center gap-2 px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest ${active ? 'bg-[#00f0ff]/10 border-[#00f0ff]/30 text-[#00f0ff] shadow-[0_0_15px_rgba(0,240,255,0.2)]' : 'bg-red-500/10 border-red-500/30 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]'}`}>
+      <div className={`w-1.5 h-1.5 rounded-full ${active ? 'bg-[#00f0ff] animate-pulse shadow-[0_0_5px_#00f0ff]' : 'bg-red-500 shadow-[0_0_5px_#ef4444]'}`} />
       {active ? 'Active' : 'Standby'}
     </div>
   );
@@ -43,7 +38,6 @@ export function AutonomousSelfView() {
         if (prev >= 100) {
           clearInterval(interval);
           setEvolving(false);
-          // Reload metrics
           useSovereignStore.getState().fetchMetrics();
           return 100;
         }
@@ -55,16 +49,15 @@ export function AutonomousSelfView() {
   const auditEdges = useMemo(() => [
     { label: 'Consensus Gating', val: 'Active', status: 'verified' },
     { label: 'Verification Engine', val: 'Sovereign', status: 'verified' },
-    { label: 'Sandbox Rollback Safeguard', val: 'Enabled', status: 'verified' },
+    { label: 'Sandbox Rollback', val: 'Enabled', status: 'verified' },
     { label: 'Physical File Sync', val: '100%', status: 'verified' }
   ], []);
 
   useEffect(() => {
     let active = true;
-    
     async function loadData() {
       try {
-        const siRes = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/self-implementation/status');
+        const siRes = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) + '/api/self-implementation/status');
         if (siRes.ok && active) {
           const data = await siRes.json();
           setSelfImplementation(data);
@@ -74,7 +67,7 @@ export function AutonomousSelfView() {
       }
 
       try {
-        const auditRes = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/nuclear-truth/audit');
+        const auditRes = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) + '/api/nuclear-truth/audit');
         if (auditRes.ok && active) {
           const data = await auditRes.json();
           setNuclearAudit(data);
@@ -88,48 +81,68 @@ export function AutonomousSelfView() {
       loadData();
     }
 
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, [bridgeStatus]);
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex flex-col gap-8 p-2"
+    >
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        
         {/* Self-Evolution Panel */}
-        <div style={{ background: '#111827', border: '1px solid #1e293b', borderRadius: 16, overflow: 'hidden' }}>
-          <div style={{ padding: '20px 24px', borderBottom: '1px solid #1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(99,102,241,0.03)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <Zap size={20} color="#6366f1" />
-              <h2 style={{ fontSize: 16, fontWeight: 800, color: '#f1f5f9', margin: 0 }}>Self-Evolution Cycle</h2>
+        <div className="bg-[#0c0c12]/60 backdrop-blur-3xl border border-white/5 rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.4)] relative group">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#00f0ff]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          
+          <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-[#00f0ff]/[0.02]">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-[#00f0ff]/10 flex items-center justify-center border border-[#00f0ff]/30 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+                <Zap size={16} className="text-[#00f0ff]" />
+              </div>
+              <h2 className="text-sm font-black text-white uppercase tracking-widest">Self-Evolution Cycle</h2>
             </div>
             <StatusBadge active={evolving} />
           </div>
           
-          <div style={{ padding: 24 }}>
-            <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.6, marginBottom: 20 }}>
-              Evolution status is read from the bridge, and operational reality is sourced from the live Nuclear Truth audit and self-implementation status.
+          <div className="p-8">
+            <p className="text-xs text-[#b4b4c4] leading-relaxed mb-8">
+              Evolution status is dynamically read from the Neural Bridge. Operational reality is securely sourced from the live Nuclear Truth audit and Self-Implementation checks.
             </p>
             
-            <div style={{ marginBottom: 24 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Cycle Progress</span>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#6366f1' }}>{Number(effectiveProgress || 0).toFixed(1)}%</span>
+            <div className="mb-8 p-6 bg-[#12121a]/80 rounded-2xl border border-white/5">
+              <div className="flex justify-between items-end mb-3">
+                <span className="text-[10px] font-bold text-[#b4b4c4] uppercase tracking-[0.2em] flex items-center gap-2">
+                  <Radio size={12} className={evolving ? 'text-[#00f0ff] animate-pulse' : 'text-[#b4b4c4]'} /> 
+                  Cycle Progress
+                </span>
+                <span className="text-2xl font-black text-[#00f0ff] drop-shadow-[0_0_10px_rgba(0,240,255,0.5)]">
+                  {Number(effectiveProgress || 0).toFixed(1)}%
+                </span>
               </div>
-              <div style={{ height: 6, background: '#1e293b', borderRadius: 3, overflow: 'hidden' }}>
-                <div style={{ width: `${effectiveProgress}%`, height: '100%', background: 'linear-gradient(90deg, #4f46e5, #818cf8)', transition: 'width 1s linear' }} />
+              <div className="h-2 w-full bg-black/50 rounded-full overflow-hidden shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]">
+                <motion.div 
+                  className="h-full bg-gradient-to-r from-[#8a2be2] to-[#00f0ff] shadow-[0_0_15px_rgba(0,240,255,0.8)] relative" 
+                  initial={{ width: 0 }}
+                  animate={{ width: `${effectiveProgress}%` }}
+                  transition={{ ease: "linear" }}
+                >
+                  <div className="absolute right-0 top-0 bottom-0 w-4 bg-white blur-[2px] opacity-80" />
+                </motion.div>
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}>
-              <div style={{ padding: '12px 16px', background: '#0f172a', borderRadius: 10, border: '1px solid #1e293b' }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: 4 }}>Logic Density</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: '#f1f5f9' }}>
+            <div className="grid grid-cols-2 gap-4 mb-8">
+              <div className="p-5 bg-[#12121a]/80 rounded-2xl border border-white/5 hover:border-[#8a2be2]/40 transition-colors">
+                <div className="text-[10px] font-bold text-[#b4b4c4] uppercase tracking-widest mb-2">Logic Density</div>
+                <div className="text-2xl font-black text-white">
                   {typeof nuclearAudit?.score === 'number' ? `${nuclearAudit.score}%` : (metrics?.logic?.density || 'N/A')}
                 </div>
               </div>
-              <div style={{ padding: '12px 16px', background: '#0f172a', borderRadius: 10, border: '1px solid #1e293b' }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: 4 }}>Truth Gaps</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: (nuclearAudit?.summary?.brokenWires || 0) > 0 ? '#ef4444' : '#22c55e' }}>
+              <div className="p-5 bg-[#12121a]/80 rounded-2xl border border-white/5 hover:border-[#00f0ff]/40 transition-colors">
+                <div className="text-[10px] font-bold text-[#b4b4c4] uppercase tracking-widest mb-2">Truth Gaps</div>
+                <div className={`text-2xl font-black ${(nuclearAudit?.summary?.brokenWires || 0) > 0 ? 'text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'text-[#00ff88] drop-shadow-[0_0_10px_rgba(0,255,136,0.5)]'}`}>
                   {(nuclearAudit?.summary?.brokenWires ?? 'N/A')} Broken
                 </div>
               </div>
@@ -138,49 +151,53 @@ export function AutonomousSelfView() {
             <button 
               onClick={evolving ? () => setEvolving(false) : startEvolution}
               disabled={bridgeStatus !== 'connected'}
-              style={{ 
-                width: '100%', padding: '12px', borderRadius: 10, border: 'none', 
-                background: evolving ? '#1e293b' : '#4f46e5', color: 'white', 
-                fontSize: 13, fontWeight: 700, cursor: bridgeStatus === 'connected' ? 'pointer' : 'not-allowed',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s'
-              }}
+              className={`w-full py-4 rounded-xl font-bold text-[13px] tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-3 ${
+                evolving 
+                  ? 'bg-black/50 text-[#00f0ff] border border-[#00f0ff]/30 shadow-[inset_0_0_20px_rgba(0,240,255,0.1)]' 
+                  : 'bg-gradient-to-r from-[#8a2be2] to-[#4338ca] text-white hover:shadow-[0_0_30px_rgba(138,43,226,0.4)] disabled:opacity-50 disabled:cursor-not-allowed'
+              }`}
             >
-              {evolving ? <RefreshCw size={16} className="animate-spin" /> : <Zap size={16} />}
-              {evolving ? 'Evolution Active' : 'Start Evolution Loop'}
+              {evolving ? <RefreshCw size={16} className="animate-spin text-[#00f0ff]" /> : <Zap size={16} />}
+              {evolving ? 'Evolution Active' : 'Initialize Evolution Loop'}
             </button>
           </div>
         </div>
 
         {/* Studio Training & Edges Panel */}
-        <div style={{ background: '#111827', border: '1px solid #1e293b', borderRadius: 16, overflow: 'hidden' }}>
-          <div style={{ padding: '20px 24px', borderBottom: '1px solid #1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(16,185,129,0.03)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <Brain size={20} color="#10b981" />
-              <h2 style={{ fontSize: 16, fontWeight: 800, color: '#f1f5f9', margin: 0 }}>Training & Intelligence Edges</h2>
+        <div className="bg-[#0c0c12]/60 backdrop-blur-3xl border border-white/5 rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.4)] relative group">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#8a2be2]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+          <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-[#8a2be2]/[0.02]">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-[#8a2be2]/10 flex items-center justify-center border border-[#8a2be2]/30 shadow-[0_0_15px_rgba(138,43,226,0.2)]">
+                <Brain size={16} className="text-[#8a2be2]" />
+              </div>
+              <h2 className="text-sm font-black text-white uppercase tracking-widest">Training & Edges</h2>
             </div>
-            <TrendingUp size={18} color="#10b981" />
+            <TrendingUp size={18} className="text-[#8a2be2]" />
           </div>
 
-          <div style={{ padding: 24 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', border: '4px solid #10b98120', borderTopColor: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'spin 10s linear infinite' }}>
-                <span style={{ fontSize: 14, fontWeight: 900, color: '#10b981' }}>2M</span>
+          <div className="p-8">
+            <div className="flex items-center gap-6 mb-8 p-6 bg-[#12121a]/80 rounded-2xl border border-white/5">
+              <div className="relative w-16 h-16 flex items-center justify-center">
+                <div className="absolute inset-0 border-4 border-[#8a2be2]/20 border-t-[#8a2be2] rounded-full animate-spin shadow-[0_0_15px_rgba(138,43,226,0.5)]" />
+                <span className="text-lg font-black text-[#8a2be2]">2M</span>
               </div>
               <div>
-                <div style={{ fontSize: 14, fontWeight: 800, color: '#f1f5f9' }}>Sovereign IQ Baseline</div>
-                <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
-                  Current resonance: {bridgeData?.iq_metrics?.truth_density || `${nuclearAudit?.score ?? 0}%`}
+                <div className="text-sm font-black text-white uppercase tracking-widest">Sovereign IQ Baseline</div>
+                <div className="text-[11px] text-[#b4b4c4] mt-2 tracking-widest uppercase">
+                  Current resonance: <span className="text-[#00f0ff] font-bold">{bridgeData?.iq_metrics?.truth_density || `${nuclearAudit?.score ?? 0}%`}</span>
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div className="flex flex-col gap-3">
               {auditEdges.map((edge, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#0f172a', borderRadius: 8, border: '1px solid #1e293b' }}>
-                  <span style={{ fontSize: 12, fontWeight: 600, color: '#94a3b8' }}>{edge.label}</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: '#e2e8f0' }}>{edge.val}</span>
-                    {edge.status === 'verified' ? <CheckCircle size={12} color="#22c55e" /> : <RefreshCw size={12} color="#f59e0b" className="animate-spin" />}
+                <div key={i} className="flex justify-between items-center px-5 py-4 bg-[#12121a]/80 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+                  <span className="text-[11px] font-bold text-[#b4b4c4] uppercase tracking-widest">{edge.label}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[11px] font-bold text-white uppercase">{edge.val}</span>
+                    {edge.status === 'verified' ? <CheckCircle size={14} className="text-[#00ff88] drop-shadow-[0_0_8px_rgba(0,255,136,0.5)]" /> : <RefreshCw size={14} className="text-[#ffaa00] animate-spin" />}
                   </div>
                 </div>
               ))}
@@ -188,77 +205,76 @@ export function AutonomousSelfView() {
 
             <button 
               onClick={runMaintenance}
-              style={{ 
-                width: '100%', marginTop: 24, padding: '12px', borderRadius: 10, 
-                background: 'transparent', border: '1px solid #1e293b', color: '#94a3b8', 
-                fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = '#1e293b'; e.currentTarget.style.color = '#f1f5f9'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#94a3b8'; }}
+              className="w-full mt-8 py-4 rounded-xl font-bold text-[13px] tracking-widest uppercase text-[#b4b4c4] border border-white/10 bg-black/20 hover:bg-white/5 hover:text-white hover:border-white/20 transition-all duration-300 flex items-center justify-center gap-3"
             >
               <Shield size={16} />
-              Run Manual Maintenance Cycle
+              Execute Maintenance Protocol
             </button>
           </div>
         </div>
       </div>
 
       {/* Cost Firewall & Emergency Controls */}
-      <div style={{ background: '#111827', border: '1px solid #1e293b', borderRadius: 16, overflow: 'hidden' }}>
-        <div style={{ padding: '20px 24px', borderBottom: '1px solid #1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(239,68,68,0.03)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <Shield size={20} color="#ef4444" />
-            <h2 style={{ fontSize: 16, fontWeight: 800, color: '#f1f5f9', margin: 0 }}>Cost Firewall & Emergency Controls</h2>
+      <div className="bg-[#0c0c12]/60 backdrop-blur-3xl border border-red-500/10 rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.4)] relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-red-500/5 to-transparent pointer-events-none" />
+        
+        <div className="px-8 py-6 border-b border-red-500/10 flex justify-between items-center bg-red-500/[0.02]">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-red-500/10 flex items-center justify-center border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+              <Shield size={16} className="text-red-500" />
+            </div>
+            <h2 className="text-sm font-black text-white uppercase tracking-widest">Cost Firewall & Defenses</h2>
           </div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', textTransform: 'uppercase' }}>Phase 11 Enforced</div>
+          <div className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em] animate-pulse">Phase 11 Enforced</div>
         </div>
 
-        <div style={{ padding: 24 }}>
-          <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.6, marginBottom: 20 }}>
+        <div className="p-8 relative z-10">
+          <p className="text-xs text-[#b4b4c4] leading-relaxed mb-8">
             Enforce safety gates, credit checks, and emergency shutoff for all autonomous operations.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 24 }}>
-            <div style={{ padding: '16px', background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b' }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 8 }}>Emergency Shutoff</div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 14, fontWeight: 800, color: '#ef4444' }}>OFF</span>
-                <button disabled style={{ padding: '4px 8px', borderRadius: 6, border: 'none', background: '#334155', color: '#94a3b8', fontSize: 10, fontWeight: 700, cursor: 'not-allowed' }}>OWNER ONLY</button>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+            <div className="p-5 bg-[#12121a]/80 rounded-2xl border border-red-500/10 hover:border-red-500/30 transition-colors">
+              <div className="text-[10px] font-bold text-[#b4b4c4] uppercase tracking-widest mb-3">Emergency Shutoff</div>
+              <div className="flex items-center justify-between">
+                <span className="text-xl font-black text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">OFF</span>
+                <span className="px-2 py-1 bg-black/50 text-[#b4b4c4] rounded text-[9px] font-bold tracking-widest border border-white/5">OWNER</span>
               </div>
             </div>
-            <div style={{ padding: '16px', background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b' }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 8 }}>Paid AI Access</div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 14, fontWeight: 800, color: '#64748b' }}>DISABLED</span>
-                <span style={{ fontSize: 10, color: '#64748b' }}>Local Only</span>
+            <div className="p-5 bg-[#12121a]/80 rounded-2xl border border-white/5">
+              <div className="text-[10px] font-bold text-[#b4b4c4] uppercase tracking-widest mb-3">Paid AI Access</div>
+              <div className="flex items-center justify-between">
+                <span className="text-xl font-black text-[#b4b4c4]">DISABLED</span>
+                <span className="text-[10px] text-[#00f0ff] uppercase tracking-widest font-bold">Local</span>
               </div>
             </div>
-            <div style={{ padding: '16px', background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b' }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 8 }}>Daily Spend Cap</div>
-              <div style={{ fontSize: 14, fontWeight: 800, color: '#f1f5f9' }}>$5.00 (local policy)</div>
+            <div className="p-5 bg-[#12121a]/80 rounded-2xl border border-white/5">
+              <div className="text-[10px] font-bold text-[#b4b4c4] uppercase tracking-widest mb-3">Daily Burn Cap</div>
+              <div className="text-xl font-black text-white">$5.00 <span className="text-[10px] text-[#b4b4c4] uppercase font-normal">(Local)</span></div>
             </div>
-            <div style={{ padding: '16px', background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b' }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 8 }}>Monthly Spend Cap</div>
-              <div style={{ fontSize: 14, fontWeight: 800, color: '#f1f5f9' }}>$50.00 (local policy)</div>
+            <div className="p-5 bg-[#12121a]/80 rounded-2xl border border-white/5">
+              <div className="text-[10px] font-bold text-[#b4b4c4] uppercase tracking-widest mb-3">Monthly Burn Cap</div>
+              <div className="text-xl font-black text-white">$50.00 <span className="text-[10px] text-[#b4b4c4] uppercase font-normal">(Local)</span></div>
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="flex flex-col gap-3">
             {[
               { label: 'SELF_IMPLEMENTATION_ACTIVE', val: String(Boolean(selfImplementation?.active)), safe: Boolean(selfImplementation?.active) },
-              { label: 'PROOF_REQUIRED_FOR_COMPLETE_CLAIM', val: String(Boolean(selfImplementation?.policies?.proofRequiredForCompleteClaim)), safe: Boolean(selfImplementation?.policies?.proofRequiredForCompleteClaim) },
-              { label: 'LOCAL_ONLY_GATING', val: 'true', safe: true },
+              { label: 'PROOF_REQUIRED_FOR_CLAIM', val: String(Boolean(selfImplementation?.policies?.proofRequiredForCompleteClaim)), safe: Boolean(selfImplementation?.policies?.proofRequiredForCompleteClaim) },
+              { label: 'LOCAL_ONLY_GATING_STRICT', val: 'true', safe: true },
             ].map((setting, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#0f172a', borderRadius: 8, border: '1px solid #1e293b' }}>
-                <code style={{ fontSize: 11, color: '#94a3b8' }}>{setting.label}</code>
-                <span style={{ fontSize: 11, fontWeight: 700, color: setting.safe ? '#22c55e' : '#ef4444' }}>{setting.val}</span>
+              <div key={i} className="flex justify-between items-center px-5 py-4 bg-[#12121a]/80 rounded-xl border border-white/5">
+                <code className="text-[11px] text-[#b4b4c4]">{setting.label}</code>
+                <span className={`text-[11px] font-bold uppercase tracking-widest ${setting.safe ? 'text-[#00ff88] drop-shadow-[0_0_8px_rgba(0,255,136,0.3)]' : 'text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.3)]'}`}>
+                  {setting.val}
+                </span>
               </div>
             ))}
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

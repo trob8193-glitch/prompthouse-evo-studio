@@ -1,14 +1,14 @@
 {
-    "workbench.editorAssociations": {
-        "*.copilotmd": "vscode.markdown.preview.editor",
-        "*.svg": "default",
-        "*.sprite": "d2rmodding.spriteViewer"
-    },
-    "python.terminal.useEnvFile": true,
-    "chat.tools.terminal.autoApprove": {
-        "/^npm install --legacy-peer-deps$/": {
-            "approve": true,
-            "matchCommandLine": true
-        }
-    }
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.exclude": {
+    "**/.sovereign-shards": true,
+    "**/.prompthouse-data": true
+  },
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#0F172A",
+    "titleBar.activeBackground": "#020617",
+    "titleBar.activeForeground": "#818CF8"
+  },
+  "terminal.integrated.defaultProfile.windows": "PowerShell"
 }

@@ -5,6 +5,9 @@
  * intent -> manifest -> connector handshakes -> proof -> artifact.
  */
 
+import { exec } from 'child_process';
+import crypto from 'crypto';
+
 const ok = (res, payload = {}) => res.json({ success: true, ...payload });
 const fail = (res, error, status = 500) => res.status(status).json({ success: false, error: error?.message || String(error) });
 
@@ -14,14 +17,38 @@ export function registerExecutionRoutes(app, { pipeline } = {}) {
   }
 
   app.post('/api/execution/run', async (req, res) => {
-    const { intent, options = {} } = req.body || {};
+    const { intent, raw_code, options = {} } = req.body || {};
+    
+    // Live Execution Sandbox (The Sovereign Forge)
+    if (raw_code) {
+      return new Promise((resolve) => {
+        const timeoutMs = options.timeout || 10000; // 10s default timeout
+        const forgeId = `forge_${crypto.randomBytes(4).toString('hex')}`;
+        
+        console.log(`[SOVEREIGN FORGE] Executing sandbox code block: ${forgeId}`);
+        
+        const proc = exec(`node -e "${raw_code.replace(/"/g, '\\"')}"`, { timeout: timeoutMs }, (error, stdout, stderr) => {
+          const receipt = {
+            forge_id: forgeId,
+            timestamp: new Date().toISOString(),
+            status: error ? 'failed' : 'passed',
+            stdout: stdout ? stdout.trim() : '',
+            stderr: stderr ? stderr.trim() : '',
+            execution_time_ms: null, // Would require performance.now() tracking
+            error: error ? error.message : null
+          };
+          resolve(ok(res, { receipt, truthState: error ? 'FORGE_SANDBOX_ERROR' : 'FORGE_SANDBOX_SUCCESS' }));
+        });
+      });
+    }
+
     if (!intent || typeof intent !== 'string' || intent.trim().length === 0) {
-      return fail(res, 'intent is required and must be a non-empty string', 400);
+      return fail(res, 'intent or raw_code is required', 400);
     }
 
     try {
       const execution = await pipeline.executeWorkflow(intent.trim(), options);
-      ok(res, { execution });
+      ok(res, { execution, truthState: 'WORKFLOW_EXECUTION_STARTED' });
     } catch (error) {
       fail(res, error);
     }

@@ -5,7 +5,7 @@ import path from 'path';
 
 import { Log } from '../autonomy/SovereignLogger.js';
 
-const LOCAL_API_URL = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001');
+const LOCAL_API_URL = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')));
 const DATASET_FILE = path.join(__dirname, 'training_dataset.json');
 
 class ResponseCapture {

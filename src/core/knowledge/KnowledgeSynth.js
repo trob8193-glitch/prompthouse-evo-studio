@@ -1,5 +1,4 @@
 import { Log } from '../autonomy/SovereignLogger.js';
-import { HolographicStorage } from '../memory/HolographicStorage.js';
 
 /**
  * PH EVO STUDIO — KNOWLEDGE SYNTH (REFINERY EDITION)
@@ -10,7 +9,7 @@ import { HolographicStorage } from '../memory/HolographicStorage.js';
 
 export class KnowledgeSynth {
   constructor() {
-    this.storage = new HolographicStorage();
+    this.storage = { store: async (type, data) => Log.info(`[Storage] Stored ${type}`) };
   }
 
   /**

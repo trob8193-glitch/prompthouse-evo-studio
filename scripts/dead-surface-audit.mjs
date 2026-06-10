@@ -57,10 +57,21 @@ function getHref(tag) {
 export function auditDeadSurfaces({ rootDir = root } = {}) {
   const srcDir = path.join(rootDir, 'src');
   const violations = [];
+  const astGraph = {};
 
   for (const filePath of collectSourceFiles(srcDir)) {
     const rel = path.relative(rootDir, filePath).replace(/\\/g, '/');
     const text = fs.readFileSync(filePath, 'utf8');
+    
+    // Parse imports for AST Graph
+    const imports = [];
+    for (const match of text.matchAll(/import\s+(?:[^"']+\s+from\s+)?["']([^"']+)["']/g)) {
+      imports.push(match[1]);
+    }
+    for (const match of text.matchAll(/import\s*\(\s*["']([^"']+)["']\s*\)/g)) {
+      imports.push(match[1]);
+    }
+    astGraph[rel] = { imports, size: text.length };
 
     for (const match of text.matchAll(/<button\b[^>]*>/gms)) {
       if (isInsideTemplateLiteral(text, match.index)) continue;
@@ -100,10 +111,16 @@ export function auditDeadSurfaces({ rootDir = root } = {}) {
     }
   }
 
+  // Write AST Graph Ledger
+  const proofDir = path.join(rootDir, 'proof_receipts');
+  if (!fs.existsSync(proofDir)) fs.mkdirSync(proofDir, { recursive: true });
+  fs.writeFileSync(path.join(proofDir, 'ast_graph_ledger.json'), JSON.stringify(astGraph, null, 2));
+
   return {
     success: violations.length === 0,
     truthState: violations.length === 0 ? 'DEAD_SURFACES_CLEAR' : 'DEAD_SURFACES_FOUND',
-    scannedFiles: collectSourceFiles(srcDir).length,
+    scannedFiles: Object.keys(astGraph).length,
+    astGraphSize: Object.keys(astGraph).length,
     violations
   };
 }

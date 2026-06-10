@@ -1,9 +1,4 @@
 import { Log } from './SovereignLogger.js';
-import { HolographicStorage } from '../memory/HolographicStorage.js';
-import { PredictiveCache } from '../memory/PredictiveCache.js';
-
-const storage = new HolographicStorage();
-const cache = new PredictiveCache();
 
 /**
  * PH EVO STUDIO — BOT RESIDENT MANAGER (PRODUCTION)
@@ -48,8 +43,8 @@ export class BotResidentManager {
 
     Log.info(`⚡ [Manor] Edging ${bot.name} to Holographic Memory & Predictive Cache...`);
     
-    bot.memory_edge = storage.id;
-    bot.foresight_edge = cache.id;
+    bot.memory_edge = 'holographic_v1';
+    bot.foresight_edge = 'predictive_v1';
     bot.iq_boost = 1.5;
 
     this.residents.set(botId, bot);

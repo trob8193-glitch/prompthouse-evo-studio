@@ -41,6 +41,9 @@ export const DEFAULT_EVOLUTION_POLICY = Object.freeze({
     'npm run build',
   ],
   proofProfiles: {
+    micro: [
+      'node --check promptbridge-server.js',
+    ],
     quick: [
       'node --check promptbridge-server.js',
     ],

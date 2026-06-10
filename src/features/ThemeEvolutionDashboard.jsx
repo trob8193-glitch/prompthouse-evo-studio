@@ -3,42 +3,48 @@ import { CheckCircle2, Palette, RefreshCw, RotateCcw, ShieldCheck, Sparkles, Wan
 import { safeFetchBridge } from '../config/bridge-config.js';
 
 const card = {
-  background: 'rgba(15,23,42,0.82)',
-  border: '1px solid rgba(168,85,247,0.25)',
-  borderRadius: 18,
-  padding: 18,
-  boxShadow: '0 18px 60px rgba(0,0,0,0.28)'
+  background: 'rgba(12,12,18,0.7)',
+  border: '1px solid rgba(255,255,255,0.06)',
+  borderRadius: 20,
+  padding: 24,
+  boxShadow: '0 0 30px rgba(0,240,255,0.03)',
+  backdropFilter: 'blur(24px)',
+  WebkitBackdropFilter: 'blur(24px)',
 };
 
 const button = {
-  border: '1px solid rgba(216,180,254,0.35)',
-  background: 'rgba(88,28,135,0.28)',
-  color: '#f3e8ff',
+  border: '1px solid rgba(0,240,255,0.3)',
+  background: 'rgba(0,240,255,0.1)',
+  color: '#00f0ff',
   borderRadius: 12,
-  padding: '10px 12px',
-  fontSize: 12,
-  fontWeight: 850,
+  padding: '10px 16px',
+  fontSize: 11,
+  fontWeight: 800,
+  textTransform: 'uppercase',
+  letterSpacing: '0.1em',
   cursor: 'pointer',
   display: 'inline-flex',
   alignItems: 'center',
-  gap: 8
+  gap: 10,
+  transition: 'all 0.3s ease',
+  boxShadow: '0 0 15px rgba(0,240,255,0.1)',
 };
 
 function Badge({ value, tone = 'purple' }) {
   const colors = {
-    green: ['rgba(22,163,74,0.18)', '#86efac', 'rgba(34,197,94,0.32)'],
-    red: ['rgba(153,27,27,0.22)', '#fecaca', 'rgba(239,68,68,0.32)'],
-    amber: ['rgba(180,83,9,0.18)', '#fde68a', 'rgba(245,158,11,0.32)'],
-    purple: ['rgba(88,28,135,0.25)', '#e9d5ff', 'rgba(168,85,247,0.35)']
+    green: ['rgba(0,255,136,0.1)', '#00ff88', 'rgba(0,255,136,0.3)', '0 0 10px rgba(0,255,136,0.4)'],
+    red: ['rgba(255,51,102,0.1)', '#ff3366', 'rgba(255,51,102,0.3)', '0 0 10px rgba(255,51,102,0.4)'],
+    amber: ['rgba(255,170,0,0.1)', '#ffaa00', 'rgba(255,170,0,0.3)', '0 0 10px rgba(255,170,0,0.4)'],
+    purple: ['rgba(138,43,226,0.1)', '#8a2be2', 'rgba(138,43,226,0.3)', '0 0 10px rgba(138,43,226,0.4)']
   };
   const c = colors[tone] || colors.purple;
-  return <span style={{ background: c[0], color: c[1], border: `1px solid ${c[2]}`, borderRadius: 999, padding: '4px 9px', fontSize: 10, fontWeight: 900 }}>{value || 'UNKNOWN'}</span>;
+  return <span style={{ background: c[0], color: c[1], border: `1px solid ${c[2]}`, borderRadius: 999, padding: '4px 10px', fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', boxShadow: c[3] }}>{value || 'UNKNOWN'}</span>;
 }
 
 function ColorChip({ color, label }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: '#cbd5e1' }}>
-      <span style={{ width: 18, height: 18, borderRadius: 6, background: color, border: '1px solid rgba(255,255,255,.18)' }} />
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 11, color: '#b4b4c4', fontWeight: 600 }}>
+      <span style={{ width: 20, height: 20, borderRadius: 6, background: color, border: '1px solid rgba(255,255,255,.1)', boxShadow: `0 0 10px ${color}80` }} />
       <span>{label}</span>
     </div>
   );
@@ -72,14 +78,14 @@ export default function ThemeEvolutionDashboard() {
 
   const post = async (path, body = {}) => {
     setBusy(true);
-    setMessage('Running...');
+    setMessage('Engaging Matrix...');
     try {
       const result = await safeFetchBridge(path, { method: 'POST', body: JSON.stringify(body) });
       if (!result.ok) {
         setMessage(`ERROR: ${result.error}`);
         return null;
       }
-      setMessage('PASS');
+      setMessage('SYNC ESTABLISHED');
       await refresh();
       return result.data;
     } finally {
@@ -110,82 +116,116 @@ export default function ThemeEvolutionDashboard() {
   const previewPalette = preview?.profile?.palette || activePalette;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, color: '#e2e8f0' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-        <div>
-          <h1 style={{ fontSize: 28, fontWeight: 950, margin: 0, letterSpacing: '-.04em' }}>Theme Evolution Command</h1>
-          <p style={{ margin: '8px 0 0', color: '#94a3b8', maxWidth: 820 }}>Preview, approve, apply, and roll back colors, motion, density, and mode-based studio themes. It evolves the outfit, not the payment buttons. Civilization gets one boundary. 🎨</p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, color: '#ffffff' }}>
+      <header style={{ position: 'relative' }}>
+        <div style={{ position: 'absolute', top: -40, left: -40, width: 200, height: 200, background: '#8a2be2', opacity: 0.1, borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+          <div>
+            <h1 style={{ fontSize: 32, fontWeight: 900, margin: 0, letterSpacing: '-.02em', display: 'flex', alignItems: 'center', gap: 12, textShadow: '0 0 20px rgba(138,43,226,0.4)' }}>
+              <Palette color="#8a2be2" size={32} style={{ filter: 'drop-shadow(0 0 10px rgba(138,43,226,0.6))' }} /> 
+              Theme Evolution Matrix
+            </h1>
+            <p style={{ margin: '8px 0 0', color: '#b4b4c4', maxWidth: 820, fontSize: 13, lineHeight: 1.6 }}>Autonomous Singularity protocol for visual structure. Command the AI to dynamically adjust palettes, motion curves, and layout densities across the studio.</p>
+          </div>
+          <button style={button} onClick={refresh} disabled={busy} onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,240,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,240,255,0.1)'}><RefreshCw size={14} className={busy ? 'animate-spin' : ''} /> Refresh Vector</button>
         </div>
-        <button style={button} onClick={refresh} disabled={busy}><RefreshCw size={15} /> Refresh</button>
+      </header>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 16 }}>
+        <div style={card}><div style={{ color: '#00f0ff', fontSize: 10, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Active Matrix</div><div style={{ marginTop: 12 }}><Badge value={status?.activeThemeId || 'evoCore'} tone="purple" /></div></div>
+        <div style={card}><div style={{ color: '#00ff88', fontSize: 10, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Verified Vector</div><div style={{ marginTop: 12 }}><Badge value={status?.approvedThemeId || 'evoCore'} tone="green" /></div></div>
+        <div style={card}><div style={{ color: '#b4b4c4', fontSize: 10, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Available Profiles</div><div style={{ marginTop: 12, fontSize: 28, fontWeight: 900, textShadow: '0 0 15px rgba(255,255,255,0.2)' }}>{profiles.length}</div></div>
+        <div style={card}><div style={{ color: '#b4b4c4', fontSize: 10, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Evolution Ledger</div><div style={{ marginTop: 12, fontSize: 28, fontWeight: 900, textShadow: '0 0 15px rgba(255,255,255,0.2)' }}>{receipts.length}</div></div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 14 }}>
-        <div style={card}><div style={{ color: '#94a3b8', fontSize: 11, fontWeight: 900 }}>ACTIVE THEME</div><div style={{ marginTop: 10 }}><Badge value={status?.activeThemeId || 'evoCore'} /></div></div>
-        <div style={card}><div style={{ color: '#94a3b8', fontSize: 11, fontWeight: 900 }}>APPROVED THEME</div><div style={{ marginTop: 10 }}><Badge value={status?.approvedThemeId || 'evoCore'} tone="green" /></div></div>
-        <div style={card}><div style={{ color: '#94a3b8', fontSize: 11, fontWeight: 900 }}>PROFILES</div><div style={{ marginTop: 10, fontSize: 24, fontWeight: 950 }}>{profiles.length}</div></div>
-        <div style={card}><div style={{ color: '#94a3b8', fontSize: 11, fontWeight: 900 }}>RECEIPTS</div><div style={{ marginTop: 10, fontSize: 24, fontWeight: 950 }}>{receipts.length}</div></div>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 16 }}>
-        <div style={card}>
-          <h2 style={{ margin: 0, fontSize: 16, fontWeight: 900 }}>Suggest or Preview</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 12 }}>
-            <label style={{ fontSize: 12, color: '#cbd5e1' }}>Page
-              <input value={page} onChange={(e) => setPage(e.target.value)} style={{ marginTop: 6, width: '100%', background: '#020617', color: '#e2e8f0', border: '1px solid #1e293b', borderRadius: 10, padding: 10 }} />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+        <div style={{...card, background: 'rgba(5,5,8,0.8)'}}>
+          <h2 style={{ margin: 0, fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#00f0ff', display: 'flex', alignItems: 'center', gap: 8 }}><Wand2 size={16} /> Autonomous Suggestions</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 20 }}>
+            <label style={{ fontSize: 10, color: '#b4b4c4', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Target Surface
+              <input value={page} onChange={(e) => setPage(e.target.value)} style={{ marginTop: 8, width: '100%', background: '#0a0a10', color: '#ffffff', border: '1px solid rgba(0,240,255,0.2)', borderRadius: 12, padding: 12, fontSize: 13, outline: 'none' }} />
             </label>
-            <label style={{ fontSize: 12, color: '#cbd5e1' }}>State
-              <input value={state} onChange={(e) => setState(e.target.value)} style={{ marginTop: 6, width: '100%', background: '#020617', color: '#e2e8f0', border: '1px solid #1e293b', borderRadius: 10, padding: 10 }} />
+            <label style={{ fontSize: 10, color: '#b4b4c4', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Context State
+              <input value={state} onChange={(e) => setState(e.target.value)} style={{ marginTop: 8, width: '100%', background: '#0a0a10', color: '#ffffff', border: '1px solid rgba(0,240,255,0.2)', borderRadius: 12, padding: 12, fontSize: 13, outline: 'none' }} />
             </label>
           </div>
-          <label style={{ display: 'block', marginTop: 10, fontSize: 12, color: '#cbd5e1' }}>Preference
-            <textarea value={preference} onChange={(e) => setPreference(e.target.value)} style={{ marginTop: 6, width: '100%', minHeight: 72, background: '#020617', color: '#e2e8f0', border: '1px solid #1e293b', borderRadius: 10, padding: 10 }} />
+          <label style={{ display: 'block', marginTop: 16, fontSize: 10, color: '#b4b4c4', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Directive
+            <textarea value={preference} onChange={(e) => setPreference(e.target.value)} style={{ marginTop: 8, width: '100%', minHeight: 80, background: '#0a0a10', color: '#ffffff', border: '1px solid rgba(0,240,255,0.2)', borderRadius: 12, padding: 12, fontSize: 13, outline: 'none', resize: 'vertical' }} />
           </label>
-          <label style={{ display: 'block', marginTop: 10, fontSize: 12, color: '#cbd5e1' }}>Theme Profile
-            <select value={selectedThemeId} onChange={(e) => setSelectedThemeId(e.target.value)} style={{ marginTop: 6, width: '100%', background: '#020617', color: '#e2e8f0', border: '1px solid #1e293b', borderRadius: 10, padding: 10 }}>
+          <label style={{ display: 'block', marginTop: 16, fontSize: 10, color: '#b4b4c4', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Force Profile Override
+            <select value={selectedThemeId} onChange={(e) => setSelectedThemeId(e.target.value)} style={{ marginTop: 8, width: '100%', background: '#0a0a10', color: '#ffffff', border: '1px solid rgba(0,240,255,0.2)', borderRadius: 12, padding: 12, fontSize: 13, outline: 'none' }}>
               {profiles.map(profile => <option key={profile.id} value={profile.id}>{profile.name}</option>)}
             </select>
           </label>
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 14 }}>
-            <button style={button} disabled={busy} onClick={suggest}><Wand2 size={15} /> Suggest</button>
-            <button style={button} disabled={busy} onClick={runPreview}><Sparkles size={15} /> Preview</button>
-            <button style={button} disabled={busy} onClick={approve}><ShieldCheck size={15} /> Approve</button>
-            <button style={button} disabled={busy} onClick={applyTheme}><CheckCircle2 size={15} /> Apply</button>
-            <button style={{ ...button, background: 'rgba(127,29,29,.22)', borderColor: 'rgba(248,113,113,.35)', color: '#fecaca' }} disabled={busy} onClick={rollback}><RotateCcw size={15} /> Rollback</button>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 24 }}>
+            <button style={{...button, flex: 1, justifyContent: 'center'}} disabled={busy} onClick={suggest}><Wand2 size={14} /> Suggest</button>
+            <button style={{...button, flex: 1, justifyContent: 'center'}} disabled={busy} onClick={runPreview}><Sparkles size={14} /> Preview</button>
+            <button style={{...button, flex: 1, justifyContent: 'center'}} disabled={busy} onClick={approve}><ShieldCheck size={14} /> Approve</button>
+            <button style={{...button, flex: 1, justifyContent: 'center', background: 'rgba(0,255,136,0.1)', borderColor: 'rgba(0,255,136,0.3)', color: '#00ff88', boxShadow: '0 0 15px rgba(0,255,136,0.1)'}} disabled={busy} onClick={applyTheme}><CheckCircle2 size={14} /> Execute</button>
+            <button style={{...button, flex: 1, justifyContent: 'center', background: 'rgba(255,51,102,0.1)', borderColor: 'rgba(255,51,102,0.3)', color: '#ff3366', boxShadow: '0 0 15px rgba(255,51,102,0.1)'}} disabled={busy} onClick={rollback}><RotateCcw size={14} /> Rollback</button>
           </div>
-          {message && <div style={{ marginTop: 12, color: message.startsWith('ERROR') ? '#fecaca' : '#86efac', fontSize: 12, fontWeight: 850 }}>{message}</div>}
+          {message && <div style={{ marginTop: 16, color: message.startsWith('ERROR') ? '#ff3366' : '#00ff88', fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', textAlign: 'center' }}>{message}</div>}
         </div>
 
-        <div style={{ ...card, background: `linear-gradient(145deg, ${previewPalette.background || '#020617'}, ${previewPalette.surfaceStrong || '#111827'})` }}>
-          <h2 style={{ margin: 0, fontSize: 16, fontWeight: 900, color: previewPalette.text || '#f8fafc' }}>Preview Surface</h2>
-          <p style={{ color: previewPalette.muted || '#94a3b8', fontSize: 12, lineHeight: 1.6 }}>Theme: {preview?.profile?.name || active?.name || 'Evo Core'} · Scope: {preview?.profile?.scope || active?.scope || 'global'}</p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 12 }}>
-            <ColorChip color={previewPalette.primary} label="Primary" />
-            <ColorChip color={previewPalette.secondary} label="Secondary" />
-            <ColorChip color={previewPalette.accent} label="Accent" />
-            <ColorChip color={previewPalette.warning} label="Warning" />
-            <ColorChip color={previewPalette.danger} label="Danger" />
-            <ColorChip color={previewPalette.surface} label="Surface" />
+        <div style={{ ...card, background: `linear-gradient(135deg, ${previewPalette.background || '#020205'}, ${previewPalette.surfaceStrong || '#0a0a10'})`, border: `1px solid ${previewPalette.primary || '#00f0ff'}40`, boxShadow: `0 0 40px ${previewPalette.primary || '#00f0ff'}10` }}>
+          <h2 style={{ margin: 0, fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: previewPalette.text || '#ffffff' }}>Holographic Preview</h2>
+          <p style={{ color: previewPalette.muted || '#b4b4c4', fontSize: 12, lineHeight: 1.6, marginTop: 8 }}>Matrix: {preview?.profile?.name || active?.name || 'Singularity Core'} · Domain: {preview?.profile?.scope || active?.scope || 'Global'}</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 24 }}>
+            <ColorChip color={previewPalette.primary || '#00f0ff'} label="Primary Resonance" />
+            <ColorChip color={previewPalette.secondary || '#8a2be2'} label="Secondary Tone" />
+            <ColorChip color={previewPalette.accent || '#00ff88'} label="Accent Spark" />
+            <ColorChip color={previewPalette.warning || '#ffaa00'} label="Warning Node" />
+            <ColorChip color={previewPalette.danger || '#ff3366'} label="Critical Error" />
+            <ColorChip color={previewPalette.surface || '#12121a'} label="Base Surface" />
           </div>
-          {preview && <div style={{ marginTop: 14, background: 'rgba(2,6,23,.72)', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, padding: 12 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}><Badge value={preview.truthState} tone={preview.truthState === 'BLOCKED' ? 'red' : 'green'} /><Badge value={preview.requiresApproval ? 'APPROVAL REQUIRED' : 'AUTO SAFE'} tone="amber" /></div>
-            <div style={{ marginTop: 8, color: '#cbd5e1', fontSize: 12 }}>Contrast: {preview.accessibility?.passed ? 'passed' : 'blocked'} · Motion: {preview.performance?.passed ? 'passed' : 'blocked'}</div>
+          {preview && <div style={{ marginTop: 24, background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: 16, backdropFilter: 'blur(10px)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
+              <Badge value={preview.truthState} tone={preview.truthState === 'BLOCKED' ? 'red' : 'green'} />
+              <Badge value={preview.requiresApproval ? 'HUMAN OVERRIDE REQUIRED' : 'AUTONOMOUS EXECUTION SAFE'} tone={preview.requiresApproval ? 'amber' : 'purple'} />
+            </div>
+            <div style={{ marginTop: 12, color: '#b4b4c4', fontSize: 11, fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
+              <span>Contrast Matrix: <span style={{color: preview.accessibility?.passed ? '#00ff88' : '#ff3366'}}>{preview.accessibility?.passed ? 'VERIFIED' : 'FAILED'}</span></span>
+              <span>Motion Curves: <span style={{color: preview.performance?.passed ? '#00ff88' : '#ff3366'}}>{preview.performance?.passed ? 'OPTIMIZED' : 'DEGRADED'}</span></span>
+            </div>
           </div>}
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         <div style={card}>
-          <h2 style={{ margin: 0, fontSize: 16, fontWeight: 900 }}>Theme Profiles</h2>
-          <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {profiles.map(profile => <div key={profile.id} style={{ background: '#020617', border: '1px solid #1e293b', borderRadius: 12, padding: 12 }}><div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><b style={{ fontSize: 12 }}>{profile.name}</b><Badge value={profile.scope} /></div><div style={{ marginTop: 6, color: '#94a3b8', fontSize: 12 }}>Density: {profile.density} · Motion: {profile.motion?.intensity}</div></div>)}
+          <h2 style={{ margin: 0, fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#b4b4c4' }}>Available Matrices</h2>
+          <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {profiles.map(profile => (
+              <div key={profile.id} style={{ background: '#050508', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 14, padding: 16, transition: 'all 0.2s', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(0,240,255,0.3)'} onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center' }}>
+                  <b style={{ fontSize: 13, color: '#ffffff' }}>{profile.name}</b>
+                  <Badge value={profile.scope} tone="purple" />
+                </div>
+                <div style={{ marginTop: 8, color: '#737385', fontSize: 11, fontWeight: 600, display: 'flex', gap: 12 }}>
+                  <span>Density: <span style={{color: '#b4b4c4'}}>{profile.density}</span></span>
+                  <span>Motion: <span style={{color: '#b4b4c4'}}>{profile.motion?.intensity}</span></span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         <div style={card}>
-          <h2 style={{ margin: 0, fontSize: 16, fontWeight: 900 }}>Theme Receipts</h2>
-          <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {receipts.length === 0 && <p style={{ color: '#64748b', fontSize: 12 }}>No theme receipts yet.</p>}
-            {receipts.slice(0, 10).map(item => <div key={item.id} style={{ background: '#020617', border: '1px solid #1e293b', borderRadius: 12, padding: 12 }}><div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><b style={{ fontSize: 12 }}>{item.action}</b><Badge value={item.truthState} tone={item.truthState === 'BLOCKED' ? 'red' : 'green'} /></div><div style={{ marginTop: 6, color: '#94a3b8', fontSize: 12 }}>{item.themeId || item.fromThemeId || 'theme'} · {item.createdAt}</div></div>)}
+          <h2 style={{ margin: 0, fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#b4b4c4' }}>Execution Ledger</h2>
+          <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {receipts.length === 0 && <div style={{ color: '#4a4a5e', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', padding: 20, textAlign: 'center', border: '1px dashed rgba(255,255,255,0.05)', borderRadius: 14 }}>No modifications logged.</div>}
+            {receipts.slice(0, 10).map(item => (
+              <div key={item.id} style={{ background: '#050508', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 14, padding: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center' }}>
+                  <b style={{ fontSize: 12, color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.action}</b>
+                  <Badge value={item.truthState} tone={item.truthState === 'BLOCKED' ? 'red' : 'green'} />
+                </div>
+                <div style={{ marginTop: 8, color: '#737385', fontSize: 11, fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
+                  <span>{item.themeId || item.fromThemeId || 'MATRIX ID'}</span>
+                  <span>{item.createdAt}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

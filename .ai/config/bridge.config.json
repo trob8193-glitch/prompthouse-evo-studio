@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 {
   "maxFileBytes": 120000,
   "maxTotalBytes": 80000,
@@ -99,4 +97,3 @@
   "antigravityPromptOutputPath": ".ai/outbox/antigravity-next-pass.md",
   "repairChecklistOutputPath": ".ai/outbox/repair-checklist.md"
 }
->>>>>>> main

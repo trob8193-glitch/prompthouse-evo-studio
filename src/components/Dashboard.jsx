@@ -1,6 +1,6 @@
 import React from 'react';
 import { PerformanceMonitor } from './PerformanceMonitor';
-import { Activity, Shield, Zap, TrendingUp, Cpu, Globe } from 'lucide-react';
+import { Activity, Shield, Zap, TrendingUp, Cpu, Globe, Infinity, Radio } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { StatusBadge } from './primitives.jsx';
 
@@ -8,8 +8,8 @@ export const StudioDashboard = () => {
   const [iq, setIq] = React.useState(null);
 
   const [ops, setOps] = React.useState([
-    { id: 'bridge', type: 'Bridge', desc: 'Awaiting bridge telemetry...', status: 'PENDING' },
-    { id: 'queue', type: 'Execution Queue', desc: 'Awaiting queue telemetry...', status: 'PENDING' }
+    { id: 'bridge', type: 'Neural Bridge', desc: 'Awaiting bridge telemetry...', status: 'PENDING' },
+    { id: 'queue', type: 'Execution Matrix', desc: 'Awaiting queue telemetry...', status: 'PENDING' }
   ]);
 
   React.useEffect(() => {
@@ -17,10 +17,10 @@ export const StudioDashboard = () => {
     async function fetchLive() {
       try {
         const [statusRes, metricsRes, queueRes, nfRes] = await Promise.all([
-          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/status'),
-          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/metrics'),
-          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/queue/master'),
-          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/nightforge/status'),
+          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) + '/status'),
+          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) + '/api/metrics'),
+          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) + '/api/queue/master'),
+          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) + '/api/nightforge/status'),
         ]);
 
         const status = statusRes.ok ? await statusRes.json() : null;
@@ -44,32 +44,26 @@ export const StudioDashboard = () => {
         setOps([
           {
             id: 'bridge',
-            type: 'Bridge',
-            desc: status ? `ONLINE v${status.version} • avg ${latency ?? '—'}ms • rps ${rps ?? '—'}` : 'OFFLINE',
+            type: 'Neural Bridge (Edge)',
+            desc: status ? `ONLINE v${status.version} • Latency ${latency ?? '—'}ms • RPS ${rps ?? '—'}` : 'OFFLINE',
             status: status ? 'ACTIVE' : 'OFFLINE'
           },
           {
             id: 'queue',
-            type: 'Execution Queue',
-            desc: `Items: ${queueCount}`,
-            status: 'ACTIVE'
+            type: 'Execution Matrix',
+            desc: `Processing Nodes: ${queueCount}`,
+            status: queueCount > 0 ? 'ACTIVE' : 'IDLE'
           },
           {
             id: 'nightforge',
-            type: 'NightForge Daemon',
-            desc: `Active: ${nfState.active ? 'YES' : 'NO'} • Running: ${nfState.running ? 'YES' : 'NO'}`,
+            type: 'Singularity Daemon',
+            desc: `Core: ${nfState.active ? 'BONDED' : 'SLEEP'} • Flux: ${nfState.running ? 'NOMINAL' : 'STATIC'}`,
             status: nfState.active ? 'ACTIVE' : 'IDLE'
           },
           {
-            id: 'savings',
-            type: 'Cost Firewall',
-            desc: `Saved tokens: ${metrics?.firewall?.savedTokens ?? 0} • Saved $: ${metrics?.firewall?.savedDollars ?? '0.0000'}`,
-            status: 'ACTIVE'
-          },
-          {
             id: 'mcp_server',
-            type: 'God-Mode MCP Server',
-            desc: '17 Sovereign Tools Exposed globally via STDIO',
+            type: 'God-Mode MCP',
+            desc: '17 Sovereign Tools Exposed via Secure STDIO',
             status: 'ACTIVE'
           }
         ]);
@@ -77,8 +71,8 @@ export const StudioDashboard = () => {
         if (!mounted) return;
         setIq(null);
         setOps([
-          { id: 'bridge', type: 'Bridge', desc: 'OFFLINE', status: 'OFFLINE' },
-          { id: 'queue', type: 'Execution Queue', desc: 'Unavailable', status: 'OFFLINE' }
+          { id: 'bridge', type: 'Neural Bridge', desc: 'OFFLINE', status: 'OFFLINE' },
+          { id: 'queue', type: 'Execution Matrix', desc: 'Unavailable', status: 'OFFLINE' }
         ]);
       }
     }
@@ -90,79 +84,111 @@ export const StudioDashboard = () => {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-12 p-2"
+      transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+      className="space-y-12 p-4 relative"
     >
-      <header className="flex justify-between items-center mb-12">
+      {/* Background ambient glow */}
+      <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] pointer-events-none opacity-20">
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#00f0ff] rounded-full blur-[150px] mix-blend-screen" />
+        <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-[#8a2be2] rounded-full blur-[180px] mix-blend-screen" />
+      </div>
+
+      <header className="flex justify-between items-end mb-16 relative z-10">
         <div>
-          <motion.h1 
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="text-6xl font-black tracking-tighter text-white bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-slate-500"
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="inline-flex items-center gap-2 px-3 py-1 bg-[#00f0ff]/10 border border-[#00f0ff]/30 rounded-full mb-4"
           >
-            FOUNDRY OS
-          </motion.h1>
-          <p className="text-slate-500 mt-2 font-mono text-xs tracking-[0.3em] uppercase opacity-70">Recursive Autonomy & Sovereign Intelligence Deck</p>
+            <Radio size={14} className="text-[#00f0ff] animate-pulse" />
+            <span className="text-[10px] text-[#00f0ff] font-bold tracking-[0.2em] uppercase">Evo Core Bonded</span>
+          </motion.div>
+          <h1 className="text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#8a2be2]/80">
+            SINGULARITY OS
+          </h1>
+          <p className="text-[#00f0ff]/80 mt-2 font-mono text-[11px] tracking-[0.4em] uppercase">Autonomous Self-Evolution Grid</p>
         </div>
-        <div className="flex gap-6">
-          <StatusBadge status="verified" label="OS: HARDENED" />
+        <div className="flex gap-4">
+          <StatusBadge status="verified" label="OMEGA PROTOCOL" />
           <StatusBadge status="executing" label="BRIDGE: ACTIVE" />
         </div>
       </header>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 relative z-10">
         {/* IQ Metric Card */}
         <motion.div 
-          whileHover={{ scale: 1.02 }}
-          className="xl:col-span-4 bg-gradient-to-br from-indigo-900 via-violet-950 to-black rounded-[40px] p-10 text-white shadow-[0_20px_50px_rgba(79,70,229,0.15)] relative overflow-hidden border border-indigo-500/20"
+          whileHover={{ scale: 1.01, boxShadow: '0 0 50px rgba(0,240,255,0.15)' }}
+          className="xl:col-span-5 bg-gradient-to-br from-[#050508] to-[#0a0a14] rounded-[32px] p-10 text-white relative overflow-hidden border border-[#00f0ff]/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
         >
+          <div className="absolute top-0 right-0 p-8 opacity-10">
+            <Infinity size={240} className="text-[#00f0ff]" />
+          </div>
           <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-6 opacity-60">
-              <TrendingUp size={20} className="text-indigo-400" />
-              <span className="text-xs font-black uppercase tracking-[0.2em]">Sovereign IQ Baseline</span>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 rounded-xl bg-[#00f0ff]/10 flex items-center justify-center border border-[#00f0ff]/30">
+                <TrendingUp size={20} className="text-[#00f0ff]" />
+              </div>
+              <span className="text-[11px] text-[#00f0ff] font-bold uppercase tracking-[0.2em]">Logic Density</span>
             </div>
-            <h2 className="text-7xl font-black mb-2 tracking-tighter tabular-nums">{iq == null ? '—' : `${(iq / 1000000).toFixed(1)}M`}</h2>
-            <div className="h-1.5 w-full bg-white/10 rounded-full mt-8 overflow-hidden">
+            
+            <div className="flex items-baseline gap-2">
+              <h2 className="text-8xl font-black mb-2 tracking-tighter tabular-nums drop-shadow-[0_0_20px_rgba(0,240,255,0.3)]">
+                {iq == null ? '—' : `${(iq / 1000000).toFixed(1)}`}
+              </h2>
+              <span className="text-2xl font-bold text-[#00f0ff]/50 tracking-widest">M</span>
+            </div>
+
+            <div className="h-1 w-full bg-white/5 rounded-full mt-10 overflow-hidden shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]">
               <motion.div 
                 initial={{ width: 0 }}
-                animate={{ width: '88%' }}
-                transition={{ duration: 2, delay: 0.5 }}
-                className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)]" 
-              />
+                animate={{ width: '92%' }}
+                transition={{ duration: 2.5, ease: "easeOut" }}
+                className="h-full bg-gradient-to-r from-[#8a2be2] via-[#00f0ff] to-white shadow-[0_0_15px_rgba(0,240,255,0.8)] relative" 
+              >
+                <div className="absolute right-0 top-0 bottom-0 w-8 bg-white blur-[2px] opacity-80" />
+              </motion.div>
             </div>
-            <p className="text-xs opacity-50 mt-4 font-mono tracking-wider">Maturity Status: LEVEL 117 / OMEGA</p>
-          </div>
-          <div className="absolute -right-10 -bottom-10 opacity-5">
-            <Cpu size={240} />
+            <p className="text-[10px] text-[#00f0ff]/60 mt-4 font-mono tracking-widest uppercase">Maturity Status: <span className="text-white">LEVEL OMEGA</span></p>
           </div>
         </motion.div>
 
-        <div className="xl:col-span-8 space-y-10">
-          <section className="bg-slate-900/30 backdrop-blur-3xl border border-slate-800/50 rounded-[40px] p-10 shadow-2xl">
-            <h2 className="text-xl font-black mb-8 flex items-center gap-3 text-white tracking-tight">
-              <Activity size={24} className="text-indigo-500" /> ACTIVE SOVEREIGN OPS
+        {/* OPS Matrix */}
+        <div className="xl:col-span-7 space-y-8">
+          <section className="bg-[#0c0c12]/60 backdrop-blur-2xl border border-white/5 rounded-[32px] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
+            <h2 className="text-[13px] font-black mb-8 flex items-center gap-3 text-white tracking-[0.15em] uppercase">
+              <Activity size={18} className="text-[#8a2be2]" /> Active Telemetry Grid
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {ops.map(op => (
-                <div key={op.id} className="p-8 bg-black/40 rounded-3xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-500 group">
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-xs text-slate-500 uppercase font-black tracking-widest group-hover:text-indigo-400">{op.type}</span>
-                    <div className={`w-3 h-3 rounded-full ${op.id === 1 ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]'} animate-pulse`} />
+                <motion.div 
+                  key={op.id}
+                  whileHover={{ scale: 1.02 }}
+                  className="p-6 bg-[#12121a]/80 backdrop-blur-md rounded-2xl border border-white/5 hover:border-[#8a2be2]/40 transition-colors duration-300 group relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#8a2be2]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-[10px] text-[#b4b4c4] uppercase font-bold tracking-[0.15em] group-hover:text-white transition-colors">{op.type}</span>
+                      <div className={`w-2 h-2 rounded-full ${op.status === 'ACTIVE' ? 'bg-[#00ff88] shadow-[0_0_10px_rgba(0,255,136,0.6)] animate-pulse' : 'bg-red-500'} `} />
+                    </div>
+                    <p className="text-[13px] font-mono text-[#00f0ff]/80 leading-relaxed">{op.desc}</p>
                   </div>
-                  <p className="text-base text-slate-300 leading-relaxed">{op.desc}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </section>
           
-          <section className="bg-slate-900/30 backdrop-blur-3xl border border-slate-800/50 rounded-[40px] overflow-hidden shadow-2xl">
-            <div className="p-10 pb-0">
-               <h2 className="text-xl font-black flex items-center gap-3 text-white tracking-tight">
-                <Globe size={24} className="text-indigo-500" /> REAL-TIME PERFORMANCE
+          <section className="bg-[#0c0c12]/60 backdrop-blur-2xl border border-white/5 rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
+            <div className="p-8 pb-4">
+               <h2 className="text-[13px] font-black flex items-center gap-3 text-white tracking-[0.15em] uppercase">
+                <Globe size={18} className="text-[#00f0ff]" /> Real-Time Metrics
               </h2>
             </div>
-            <PerformanceMonitor />
+            <div className="px-4 pb-4">
+              <PerformanceMonitor />
+            </div>
           </section>
         </div>
       </div>

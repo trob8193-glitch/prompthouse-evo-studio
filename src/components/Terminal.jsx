@@ -20,7 +20,7 @@ import {
   Search
 } from 'lucide-react';
 
-const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'));
+const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))));
 
 const COMMAND_CATALOG = [
   { id: 'audit', label: 'Nuclear Truth Audit', command: 'evo:audit', session: 'security', description: 'Full studio wiring and truth-state audit.', tags: ['audit', 'truth', 'security'] },
@@ -58,11 +58,35 @@ const COMMAND_CATALOG = [
   { id: 'git-diff', label: 'Git Diff Summary', command: 'git diff --stat', session: 'main', description: 'Displays changed-file summary with line deltas.', tags: ['git', 'diff'] },
   { id: 'node-version', label: 'Node Version', command: 'node -v', session: 'main', description: 'Prints active Node.js version.', tags: ['node', 'runtime'] },
   { id: 'npm-version', label: 'NPM Version', command: 'npm -v', session: 'main', description: 'Prints active npm version.', tags: ['npm', 'runtime'] },
+  { id: 'python-version', label: 'Python Version', command: 'python --version', session: 'main', description: 'Prints active Python version.', tags: ['python', 'runtime'] },
+  { id: 'flutter-doctor', label: 'Flutter Doctor Health Check', command: 'flutter doctor', session: 'main', description: 'Reaches out to the OS, executes the native Flutter binary, and streams the full diagnostic report of your iOS/Android/Web dev environment directly back into your browser terminal, daemons, and Evo LLM.', tags: ['flutter', 'mobile', 'doctor', 'ai'] },
+  { id: 'bond-omni', label: 'Omni-Bond (Global IDE Fusion)', command: 'evo bond omni', session: 'main', description: 'Fuses all IDE tethers simultaneously. Injects Sovereign constraints globally for Cursor, Windsurf, VS Code, WebStorm, Zed, Codex, and Antigravity in one massive strike.', tags: ['ide', 'omni', 'bond', 'global', 'all'] },
+  { id: 'bond-vscode', label: 'Bond IDE: VS Code', command: 'evo bond vscode', session: 'main', description: 'Acts as the physical hookup/handshake. Executes the VS Code binary hook on your host machine, instantly ripping open the Sovereign Studio workspace inside native Visual Studio Code.', tags: ['ide', 'vscode', 'bond', 'handshake'] },
+  { id: 'bond-cursor', label: 'Bond IDE: Cursor AI', command: 'evo bond cursor', session: 'main', description: 'Bonds the workspace to Cursor. Injects Sovereign Copilot instructions into .cursorrules before hooking the physical IDE.', tags: ['ide', 'cursor', 'bond', 'ai'] },
+  { id: 'bond-windsurf', label: 'Bond IDE: Windsurf', command: 'evo bond windsurf', session: 'main', description: 'Bonds the workspace to Windsurf. Injects Sovereign Cascade instructions into .windsurfrules before hooking the physical IDE.', tags: ['ide', 'windsurf', 'bond', 'ai'] },
+  { id: 'bond-webstorm', label: 'Bond IDE: WebStorm', command: 'evo bond webstorm', session: 'main', description: 'Bonds the workspace to JetBrains WebStorm. Establishes AI Assistant project constraints before hooking the physical IDE.', tags: ['ide', 'webstorm', 'jetbrains', 'bond'] },
+  { id: 'bond-zed', label: 'Bond IDE: Zed', command: 'evo bond zed', session: 'main', description: 'Bonds the workspace to Zed. Injects native settings and tethers the built-in AI before hooking the physical IDE.', tags: ['ide', 'zed', 'bond', 'ai'] },
+  { id: 'bond-codex', label: 'Bond IDE: Codex', command: 'evo bond codex', session: 'main', description: 'Bonds the workspace to OpenAI Codex. Injects the Sovereign Lore into .codex/manifest.json before hooking.', tags: ['ide', 'codex', 'bond', 'ai', 'openai'] },
+  { id: 'bond-antigravity', label: 'Bond IDE: Antigravity', command: 'evo bond antigravity', session: 'main', description: 'Bonds the workspace to the native Antigravity IDE. Injects core memory directives into the Antigravity neural subsystem.', tags: ['ide', 'antigravity', 'bond', 'ai'] },
   { id: 'evo-repair', label: 'Evo Code Repair', command: 'evo repair', session: 'main', description: 'Triggers autonomous AI repair on a specific file.', tags: ['repair', 'fix', 'ai'] },
   { id: 'evo-doctor', label: 'Evo Studio Doctor', command: 'evo doctor', session: 'main', description: 'Diagnoses studio systems and background daemons.', tags: ['doctor', 'health', 'system'] },
   { id: 'pwd', label: 'Working Directory', command: 'pwd', session: 'main', description: 'Shows current workspace path.', tags: ['path', 'workspace'] },
   { id: 'files', label: 'List Workspace Files', command: 'Get-ChildItem', session: 'main', description: 'Lists files and folders in current directory.', tags: ['files', 'inspect'] },
-  { id: 'clear', label: 'Clear Terminal', command: 'clear', session: 'main', description: 'Clears terminal output logs.', tags: ['clear', 'cls', 'clean'] }
+  { id: 'clear', label: 'Clear Terminal', command: 'clear', session: 'main', description: 'Clears terminal output logs.', tags: ['clear', 'cls', 'clean'] },
+  { id: 'launch-studio', label: 'Launch Studio God Mode', command: 'npm run launch:studio', session: 'watch', description: 'Boots frontend, bridge, daemons, and watchdogs concurrently.', tags: ['launch', 'studio', 'godmode'] },
+  { id: 'desktop', label: 'Desktop Mode', command: 'npm run desktop', session: 'watch', description: 'Boots the studio natively as an Electron Desktop application.', tags: ['desktop', 'electron'] },
+  { id: 'daemons-all', label: 'Boot All Daemons', command: 'npm run daemons:all', session: 'watch', description: 'Boots just the background AI engine daemons without UI shell.', tags: ['daemons', 'ai', 'background'] },
+  { id: 'self-evolve', label: 'Self Evolve', command: 'npm run self:evolve', session: 'main', description: 'Triggers the autonomous self-evolution cycle.', tags: ['evolve', 'ai', 'autonomous'] },
+  { id: 'self-invent', label: 'Self Invent', command: 'npm run self:invent', session: 'main', description: 'Triggers the self-invention daemon.', tags: ['invent', 'ai', 'architecture'] },
+  { id: 'evolve-propose', label: 'Evolve Propose', command: 'npm run evolve:propose', session: 'main', description: 'Generates a proposal for the next evolution step.', tags: ['evolve', 'propose'] },
+  { id: 'evolve-sandbox', label: 'Evolve Sandbox', command: 'npm run evolve:sandbox', session: 'main', description: 'Sandboxes and tests a proposed evolution patch.', tags: ['evolve', 'sandbox', 'test'] },
+  { id: 'reality-audit', label: 'Reality Audit', command: 'npm run reality:audit', session: 'security', description: 'The Nuclear Master Reality Audit.', tags: ['audit', 'reality', 'nuclear'] },
+  { id: 'platform-ready', label: 'Platform Ready Check', command: 'npm run platform:ready', session: 'security', description: 'Strict platform compliance check and release receipt.', tags: ['platform', 'ready', 'release'] },
+  { id: 'audit-dead-surfaces', label: 'Audit Dead Surfaces', command: 'npm run audit:dead-surfaces', session: 'security', description: 'Scans live UI code for inert buttons or disconnected links.', tags: ['audit', 'dead', 'ui'] },
+  { id: 'cost', label: 'Cost Firewall', command: 'npm run cost', session: 'main', description: 'Triggers Cost Firewall v2 summary.', tags: ['cost', 'metrics', 'firewall'] },
+  { id: 'maturity-check', label: 'Maturity Check', command: 'npm run maturity:check', session: 'main', description: 'Evaluates studio maturity score.', tags: ['maturity', 'score', 'iq'] },
+  { id: 'layer-ops', label: 'Layer Ops', command: 'npm run layer:ops', session: 'main', description: 'Verifies health of SQLite and vector memories.', tags: ['layer', 'ops', 'database'] },
+  { id: 'egit-status', label: 'E-Git Status', command: 'npm run egit:status', session: 'main', description: 'Hooks into evolutionary git manager to check file states.', tags: ['egit', 'git', 'status'] }
 ];
 
 export function Terminal() {

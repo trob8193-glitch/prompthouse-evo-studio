@@ -1,11 +1,11 @@
 export async function fetchConnectors() {
-  const response = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/connectors');
+  const response = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) + '/api/connectors');
   if (!response.ok) throw new Error('Failed to fetch connectors');
   return await response.json();
 }
 
 export async function saveConnector(connector) {
-  const response = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001') + '/api/connectors', {
+  const response = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))) + '/api/connectors', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(connector)
@@ -15,7 +15,7 @@ export async function saveConnector(connector) {
 }
 
 export async function deleteConnector(id) {
-  const response = await fetch(`${(globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')}/api/connectors/${id}`, {
+  const response = await fetch(`${(globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))}/api/connectors/${id}`, {
     method: 'DELETE'
   });
   if (!response.ok) throw new Error('Failed to delete connector');

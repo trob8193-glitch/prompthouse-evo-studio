@@ -60,8 +60,10 @@ ${originalCode}`;
       });
 
       // Clean up response if it has markdown blocks
-      let ghostCode = response.content || response;
-      ghostCode = ghostCode.replace(/```javascript\n|```\n|```/g, '').trim();
+      let ghostCode = typeof response === 'string' ? response : (response.content || JSON.stringify(response));
+      if (typeof ghostCode === 'string') {
+        ghostCode = ghostCode.replace(/```(?:javascript|js)?\n|```\n|```/gi, '').trim();
+      }
 
       return { originalCode, ghostCode };
     }
