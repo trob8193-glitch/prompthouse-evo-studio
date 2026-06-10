@@ -1,0 +1,67 @@
+name: Enterprise Proof
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  enterprise-proof:
+    name: Architecture, contracts, build, audits, and platform proof
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Enterprise architecture proof
+        run: npm run architecture:proof
+
+      - name: Contract tests
+        run: npm run test -- tests/brain-stack-contracts.test.js
+
+      - name: Full test suite
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+      - name: Import audit
+        run: npm run audit:imports
+
+      - name: CSS audit
+        run: npm run audit:css
+
+      - name: Dead surface audit
+        run: npm run audit:dead-surfaces
+
+      - name: Maturity strict check
+        run: npm run maturity:strict
+
+      - name: Cost firewall proof
+        run: npm run cost
+
+      - name: Platform readiness receipt
+        run: npm run platform:ready
+
+      - name: Upload architecture receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enterprise-architecture-receipts
+          path: |
+            .prompthouse-data/architecture/latest.json
+            .prompthouse-data/**/*.json
+          if-no-files-found: ignore
