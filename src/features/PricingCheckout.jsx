@@ -70,8 +70,8 @@ export default function PricingCheckout() {
     }, delay));
 
     await addLog(`[AUTH] Signature verified. Scope: commerce.`, 600);
-    await addLog(`[SANDBOX] Initializing mock checkout session for ${showSimulator.tier}...`, 800);
-    await addLog(`[STRIPE-SIM] Session ID: sess_mock_${Math.random().toString(36).substring(2, 12)}`, 500);
+    await addLog(`[SANDBOX] Initializing sandbox checkout session for ${showSimulator.tier}...`, 800);
+    await addLog(`[STRIPE-SIM] Session ID: sess_sim_${Math.random().toString(36).substring(2, 12)}`, 500);
     await addLog(`[STRIPE-SIM] Simulating client transaction capture...`, 900);
     await addLog(`[LEDGER] Writing transaction proof to local Sovereign Ledger...`, 700);
 
