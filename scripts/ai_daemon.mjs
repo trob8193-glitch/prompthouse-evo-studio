@@ -5,7 +5,7 @@ import { Log } from '../src/core/autonomy/SovereignLogger.js';
 
 dotenv.config({ override: true });
 
-const BRIDGE_URL = process.env.BRIDGE_URL || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')));
+const BRIDGE_URL = process.env.BRIDGE_URL || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))));
 const MASTER_KEY = process.env.PH_EVO_MASTER_KEY || '';
 const INTERVAL_MINUTES = Number.parseInt(process.env.NIGHTFORGE_INTERVAL_MINUTES || '3', 10);
 const INTERVAL_MS = Math.max(1, INTERVAL_MINUTES) * 60 * 1000;
