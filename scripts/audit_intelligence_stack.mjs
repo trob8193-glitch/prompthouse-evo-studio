@@ -10,6 +10,8 @@ const targets = {
   signalBridge: 'src/core/evo-llm/EvoSignalLearningBridge.js',
   appBridge: 'src/core/evo-llm/EvoAppIntelligenceBridge.js',
   workMemory: 'src/core/evo-llm/EvoWorkMemoryEngine.js',
+  frontierSafety: 'src/core/evo-llm/FrontierIntelligenceSafetyGate.js',
+  frontierSafetyCli: 'scripts/frontier_safety_gate.mjs',
   evoIndex: 'src/core/evo-llm/index.js',
   signalInstaller: 'scripts/install_evo_signal_fabric_routes.mjs',
   appInstaller: 'scripts/install_app_intelligence_tools.mjs',
@@ -78,8 +80,15 @@ contains('work-memory:plans', targets.workMemory, 'evolution-plans.json', 5);
 contains('work-memory:dataset', targets.workMemory, 'work-memory-examples.json', 5);
 contains('work-memory:privacy', targets.workMemory, 'storesRawSecrets: false', 5);
 contains('work-cli:status', targets.workCli, 'getEvoWorkMemoryStatus', 4);
+contains('frontier-safety:approval', targets.frontierSafety, 'explicitApproval', 6);
+contains('frontier-safety:budget', targets.frontierSafety, 'budgetLimit', 6);
+contains('frontier-safety:rollback', targets.frontierSafety, 'rollbackPlan', 6);
+contains('frontier-safety:receipts', targets.frontierSafety, 'writeFrontierSafetyReceipt', 6);
+contains('frontier-safety:secret-block', targets.frontierSafety, 'secretLikeTextBlocked', 6);
+contains('frontier-safety:human-review', targets.frontierSafety, 'highRiskNeedsHumanReview', 6);
+contains('frontier-safety-cli:decision', targets.frontierSafetyCli, 'evaluateFrontierIntelligenceSafety', 5);
 
-for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.signalInstaller, targets.appInstaller, targets.hardener, targets.workCli]) {
+for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.frontierSafety, targets.frontierSafetyCli, targets.signalInstaller, targets.appInstaller, targets.hardener, targets.workCli]) {
   syntax(`syntax:${file}`, file, 4);
 }
 if (fs.existsSync(abs(targets.appRoute))) syntax(`syntax:${targets.appRoute}`, targets.appRoute, 4);
@@ -106,6 +115,8 @@ const report = {
   checks,
   missing,
   recommendedCommands: [
+    'node scripts/frontier_safety_gate.mjs --status',
+    'node scripts/frontier_safety_gate.mjs --contract',
     'npm run evo:wire-intelligence',
     'npm run evo:intelligence:verify',
     'node scripts/evo_work_memory.mjs --status',
