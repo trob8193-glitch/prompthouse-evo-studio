@@ -6,6 +6,7 @@ const routePath = path.join(rootDir, 'generated_apis', 'evo_app_intelligence_rou
 const bridgePath = path.join(rootDir, 'promptbridge-server.js');
 const coreIndexPath = path.join(rootDir, 'src', 'core', 'evo-llm', 'index.js');
 const cliPath = path.join(rootDir, 'scripts', 'build_app_intelligence_dataset.mjs');
+const packagePath = path.join(rootDir, 'package.json');
 
 function ensureDir(file) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -135,4 +136,15 @@ if (fs.existsSync(bridgePath)) {
   fs.writeFileSync(bridgePath, bridge, 'utf8');
 }
 
-console.log('PromptHouse Evo App Intelligence tools installed.');
+if (fs.existsSync(packagePath)) {
+  const pkg = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+  pkg.scripts = pkg.scripts || {};
+  pkg.scripts['evo:app-intelligence'] = 'node scripts/build_app_intelligence_dataset.mjs';
+  pkg.scripts['evo:app-intelligence:status'] = 'node scripts/build_app_intelligence_dataset.mjs --status';
+  pkg.scripts['evo:signals'] = 'node scripts/build_signal_learning_dataset.mjs';
+  pkg.scripts['evo:signals:status'] = 'node scripts/build_signal_learning_dataset.mjs --status';
+  pkg.scripts['evo:wire-intelligence'] = 'node scripts/install_evo_signal_fabric_routes.mjs && node scripts/install_app_intelligence_tools.mjs';
+  fs.writeFileSync(packagePath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
+}
+
+console.log('PromptHouse Evo App Intelligence tools installed and wired.');
