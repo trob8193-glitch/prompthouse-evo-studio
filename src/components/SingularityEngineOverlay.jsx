@@ -34,7 +34,7 @@ export default function SingularityEngineOverlay() {
         const endTime = performance.now();
         setLatency(Math.max(1, Math.round(endTime - startTime)));
 
-        const auditRes = await fetch(`${BRIDGE_URL}/api/nuclear-truth/audit`);
+        const auditRes = await fetch(`${BRIDGE_URL}/api/platform-sentinel/status`);
         const auditData = await auditRes.json();
         if (auditData && typeof auditData.score === 'number') {
           setSovereigntyScore(auditData.score);

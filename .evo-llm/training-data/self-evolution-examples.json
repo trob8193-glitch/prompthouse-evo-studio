@@ -76,5 +76,31 @@
     ],
     "source": "self-evolution-bridge",
     "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781133551353",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781133577233",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: VERIFICATION_ONLY_READY.",
+    "response": "Cycle truth state: VERIFICATION_ONLY_READY.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
   }
 ]

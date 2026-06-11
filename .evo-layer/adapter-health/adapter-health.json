@@ -31,13 +31,13 @@
       "name": "cursor",
       "status": "missing",
       "lastSeen": null,
-      "totalExecutions": 0,
-      "successes": 0,
+      "totalExecutions": 2,
+      "successes": 2,
       "failures": 0,
       "blocked": 0,
-      "successRate": null,
-      "avgDurationMs": null,
-      "trustScore": 0,
+      "successRate": 100,
+      "avgDurationMs": 0,
+      "trustScore": 50,
       "health": "WEAK"
     },
     {
@@ -107,16 +107,16 @@
     }
   ],
   "strongest": {
-    "name": "ollama",
+    "name": "cursor",
     "status": "missing",
     "lastSeen": null,
-    "totalExecutions": 0,
-    "successes": 0,
+    "totalExecutions": 2,
+    "successes": 2,
     "failures": 0,
     "blocked": 0,
-    "successRate": null,
-    "avgDurationMs": null,
-    "trustScore": 0,
+    "successRate": 100,
+    "avgDurationMs": 0,
+    "trustScore": 50,
     "health": "WEAK"
   },
   "weakest": {
@@ -132,5 +132,5 @@
     "trustScore": 0,
     "health": "WEAK"
   },
-  "generatedAt": "2026-06-10T07:35:25.059Z"
+  "generatedAt": "2026-06-10T20:49:51.506Z"
 }

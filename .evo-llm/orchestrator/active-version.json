@@ -1,8 +1,10 @@
 {
-  "id": "evo_llm_version_1779234646437",
-  "runId": "evo_train_run_1779234620653",
-  "promotedAt": "2026-05-19T23:50:46.437Z",
+  "id": "evo_llm_version_1781125905470",
+  "runId": "evo_train_run_1781125898178",
+  "promotedAt": "2026-06-10T21:11:45.470Z",
   "promotedBy": "studio_owner",
+  "provider": "local-dataset",
+  "modelId": null,
   "truthState": "DATASET_VERSION_PROMOTED_NOT_MODEL_WEIGHTS",
   "note": "This promotes a validated dataset/model-card package, not external model weights."
 }

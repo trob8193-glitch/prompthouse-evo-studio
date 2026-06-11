@@ -17,6 +17,7 @@ const TIER_BADGES = {
 };
 
 const PROVIDER_ICONS = {
+  evo: '🧬',
   gemini: '✦',
   openai: '◉',
   anthropic: '◈',
@@ -54,21 +55,37 @@ export default function ModelSelector() {
     } catch {
       // Fallback: use hardcoded registry for offline/demo mode
       setModels({
+        evo: [
+          { id: 'evo-llm-swarm', displayName: 'Evo LLM Swarm', tier: 'thinking', online: true },
+          { id: 'evo-light-agent', displayName: 'Evo Light Agent', tier: 'fast', online: true },
+        ],
         gemini: [
+          { id: 'gemini-2.5-ultra', displayName: 'Gemini 2.5 Ultra', tier: 'thinking', online: true },
           { id: 'gemini-2.5-pro', displayName: 'Gemini 2.5 Pro', tier: 'high', online: true },
           { id: 'gemini-2.5-flash', displayName: 'Gemini 2.5 Flash', tier: 'fast', online: true },
           { id: 'gemini-2.0-flash', displayName: 'Gemini 2.0 Flash', tier: 'fast', online: true },
+          { id: 'gemini-1.5-pro', displayName: 'Gemini 1.5 Pro', tier: 'high', online: true },
         ],
         openai: [
           { id: 'gpt-4o', displayName: 'GPT-4o', tier: 'high', online: true },
           { id: 'gpt-4o-mini', displayName: 'GPT-4o Mini', tier: 'fast', online: true },
+          { id: 'o1', displayName: 'o1', tier: 'thinking', online: true },
+          { id: 'o1-mini', displayName: 'o1-mini', tier: 'fast', online: true },
           { id: 'o3', displayName: 'o3', tier: 'thinking', online: true },
+          { id: 'gpt-4-turbo', displayName: 'GPT-4 Turbo', tier: 'high', online: true },
         ],
         anthropic: [
+          { id: 'claude-3-5-sonnet', displayName: 'Claude 3.5 Sonnet', tier: 'high', online: true },
           { id: 'claude-sonnet-4', displayName: 'Claude Sonnet 4', tier: 'high', online: true },
+          { id: 'claude-3-5-haiku', displayName: 'Claude 3.5 Haiku', tier: 'fast', online: true },
           { id: 'claude-opus-4', displayName: 'Claude Opus 4', tier: 'thinking', online: true },
+          { id: 'claude-3-opus', displayName: 'Claude 3.0 Opus', tier: 'thinking', online: true },
         ],
-        ollama: [], // Populated dynamically if Ollama is running
+        ollama: [
+          { id: 'llama-3.3-70b', displayName: 'Llama 3.3 (70B)', tier: 'high', online: true },
+          { id: 'deepseek-r1-70b', displayName: 'DeepSeek R1 (70B)', tier: 'thinking', online: true },
+          { id: 'qwen-2.5-coder-32b', displayName: 'Qwen 2.5 Coder (32B)', tier: 'fast', online: true },
+        ],
       });
       setActiveModel({ id: 'gemini-2.0-flash', displayName: 'Gemini 2.0 Flash', tier: 'fast', provider: 'gemini' });
     } finally {

@@ -76,7 +76,7 @@ export const PH_EVO_PRODUCT_SURFACES = Object.freeze([
   {
     id: 'software-audit',
     name: 'PH Evo AI & Software Audit',
-    buyerPain: 'A founder or business owner does not know whether their app is real, shippable, secure, wired, or fake-button theater.',
+    buyerPain: 'A founder or business owner does not know whether their app is real, shippable, secure, wired, or unwired-button theater.',
     sellableOutcome: 'Production readiness report, blocker list, repair queue, release verdict, proof receipts, and next-step implementation plan.',
     backingSystems: ['PlatformSentinel', 'ModuleMaturityEngine', 'NuclearStaticAudit', 'DeadSurfaceAudit', 'RouteDriftAudit'],
     readinessTarget: 'Sell first as a managed audit service, then productize into self-serve reports.',

@@ -24,6 +24,7 @@ export const MODEL_PROVIDERS = Object.freeze({
   ANTHROPIC: 'anthropic',
   GEMINI: 'gemini',
   OLLAMA: 'ollama',
+  EVO: 'evo',
   CUSTOM: 'custom',
 });
 
@@ -32,7 +33,42 @@ export const MODEL_PROVIDERS = Object.freeze({
  * but can dynamically expand when local offline models are detected.
  */
 export const MODEL_REGISTRY = [
+  // ── EVO API / SOVEREIGN SWARM ──────────────────────────────────
+  {
+    id: 'evo-llm-swarm',
+    displayName: 'Evo LLM Swarm (Thinking)',
+    provider: MODEL_PROVIDERS.EVO,
+    tier: MODEL_TIERS.THINKING,
+    contextWindow: 200000,
+    capabilities: ['code', 'deep-reasoning', 'agentic'],
+    apiModel: 'evo-llm-swarm',
+    costPer1kTokens: 0.002,
+    online: true,
+  },
+  {
+    id: 'evo-light-agent',
+    displayName: 'Evo Light Agent (Fast)',
+    provider: MODEL_PROVIDERS.EVO,
+    tier: MODEL_TIERS.FAST,
+    contextWindow: 128000,
+    capabilities: ['code', 'fast-inference'],
+    apiModel: 'evo-light-agent',
+    costPer1kTokens: 0.0001,
+    online: true,
+  },
+
   // ── GEMINI FAMILY ─────────────────────────────────────────────
+  {
+    id: 'gemini-2.5-ultra',
+    displayName: 'Gemini 2.5 Ultra (Thinking)',
+    provider: MODEL_PROVIDERS.GEMINI,
+    tier: MODEL_TIERS.THINKING,
+    contextWindow: 2097152,
+    capabilities: ['code', 'reasoning', 'vision', 'long-context', 'deep-thinking'],
+    apiModel: 'gemini-2.5-ultra-preview',
+    costPer1kTokens: 0.005,
+    online: true,
+  },
   {
     id: 'gemini-2.5-pro',
     displayName: 'Gemini 2.5 Pro (High)',
@@ -66,6 +102,17 @@ export const MODEL_REGISTRY = [
     costPer1kTokens: 0.0001,
     online: true,
   },
+  {
+    id: 'gemini-1.5-pro',
+    displayName: 'Gemini 1.5 Pro',
+    provider: MODEL_PROVIDERS.GEMINI,
+    tier: MODEL_TIERS.HIGH,
+    contextWindow: 1048576,
+    capabilities: ['code', 'reasoning', 'vision', 'long-context'],
+    apiModel: 'gemini-1.5-pro',
+    costPer1kTokens: 0.00125,
+    online: true,
+  },
 
   // ── OPENAI FAMILY ─────────────────────────────────────────────
   {
@@ -91,6 +138,28 @@ export const MODEL_REGISTRY = [
     online: true,
   },
   {
+    id: 'o1',
+    displayName: 'o1 (Thinking)',
+    provider: MODEL_PROVIDERS.OPENAI,
+    tier: MODEL_TIERS.THINKING,
+    contextWindow: 200000,
+    capabilities: ['code', 'deep-reasoning', 'chain-of-thought'],
+    apiModel: 'o1',
+    costPer1kTokens: 0.015,
+    online: true,
+  },
+  {
+    id: 'o1-mini',
+    displayName: 'o1-mini',
+    provider: MODEL_PROVIDERS.OPENAI,
+    tier: MODEL_TIERS.FAST,
+    contextWindow: 128000,
+    capabilities: ['code', 'fast-inference', 'reasoning'],
+    apiModel: 'o1-mini',
+    costPer1kTokens: 0.003,
+    online: true,
+  },
+  {
     id: 'o3',
     displayName: 'o3 (Thinking)',
     provider: MODEL_PROVIDERS.OPENAI,
@@ -101,8 +170,30 @@ export const MODEL_REGISTRY = [
     costPer1kTokens: 0.01,
     online: true,
   },
+  {
+    id: 'gpt-4-turbo',
+    displayName: 'GPT-4 Turbo',
+    provider: MODEL_PROVIDERS.OPENAI,
+    tier: MODEL_TIERS.HIGH,
+    contextWindow: 128000,
+    capabilities: ['code', 'reasoning'],
+    apiModel: 'gpt-4-turbo',
+    costPer1kTokens: 0.01,
+    online: true,
+  },
 
   // ── ANTHROPIC FAMILY ──────────────────────────────────────────
+  {
+    id: 'claude-3-5-sonnet',
+    displayName: 'Claude 3.5 Sonnet',
+    provider: MODEL_PROVIDERS.ANTHROPIC,
+    tier: MODEL_TIERS.HIGH,
+    contextWindow: 200000,
+    capabilities: ['code', 'reasoning', 'vision'],
+    apiModel: 'claude-3-5-sonnet-latest',
+    costPer1kTokens: 0.003,
+    online: true,
+  },
   {
     id: 'claude-sonnet-4',
     displayName: 'Claude Sonnet 4 (High)',
@@ -112,6 +203,17 @@ export const MODEL_REGISTRY = [
     capabilities: ['code', 'reasoning', 'extended-thinking'],
     apiModel: 'claude-sonnet-4-20250514',
     costPer1kTokens: 0.003,
+    online: true,
+  },
+  {
+    id: 'claude-3-5-haiku',
+    displayName: 'Claude 3.5 Haiku',
+    provider: MODEL_PROVIDERS.ANTHROPIC,
+    tier: MODEL_TIERS.FAST,
+    contextWindow: 200000,
+    capabilities: ['code', 'fast-inference'],
+    apiModel: 'claude-3-5-haiku-latest',
+    costPer1kTokens: 0.00075,
     online: true,
   },
   {
@@ -125,10 +227,52 @@ export const MODEL_REGISTRY = [
     costPer1kTokens: 0.015,
     online: true,
   },
+  {
+    id: 'claude-3-opus',
+    displayName: 'Claude 3.0 Opus',
+    provider: MODEL_PROVIDERS.ANTHROPIC,
+    tier: MODEL_TIERS.THINKING,
+    contextWindow: 200000,
+    capabilities: ['code', 'deep-reasoning', 'agentic'],
+    apiModel: 'claude-3-opus-20240229',
+    costPer1kTokens: 0.015,
+    online: true,
+  },
 
   // ── LOCAL / OLLAMA FAMILY (Zero-Cost, Offline) ────────────────
-  // Local models are now dynamically discovered by the /api/ai/models endpoint
-  // which pings http://localhost:11434/api/tags and injects them here instantly.
+  {
+    id: 'llama-3.3-70b',
+    displayName: 'Llama 3.3 (70B)',
+    provider: MODEL_PROVIDERS.OLLAMA,
+    tier: MODEL_TIERS.HIGH,
+    contextWindow: 128000,
+    capabilities: ['code', 'reasoning', 'offline'],
+    apiModel: 'llama3.3:70b',
+    costPer1kTokens: 0.0,
+    online: true,
+  },
+  {
+    id: 'deepseek-r1-70b',
+    displayName: 'DeepSeek R1 (70B)',
+    provider: MODEL_PROVIDERS.OLLAMA,
+    tier: MODEL_TIERS.THINKING,
+    contextWindow: 64000,
+    capabilities: ['code', 'deep-reasoning', 'offline'],
+    apiModel: 'deepseek-r1:70b',
+    costPer1kTokens: 0.0,
+    online: true,
+  },
+  {
+    id: 'qwen-2.5-coder-32b',
+    displayName: 'Qwen 2.5 Coder (32B)',
+    provider: MODEL_PROVIDERS.OLLAMA,
+    tier: MODEL_TIERS.FAST,
+    contextWindow: 32000,
+    capabilities: ['code', 'fast-inference', 'offline'],
+    apiModel: 'qwen2.5-coder:32b',
+    costPer1kTokens: 0.0,
+    online: true,
+  },
 ];
 
 // ═══════════════════════════════════════════════════════════════
@@ -152,7 +296,7 @@ export function registerDynamicModel(modelConfig) {
 //  ACTIVE MODEL STATE
 // ═══════════════════════════════════════════════════════════════
 
-let _activeModelId = 'gemini-2.5-flash'; // Default: fast + free-tier friendly
+let _activeModelId = 'gemini-2.0-flash'; // Default: fast + free-tier friendly
 
 /**
  * Get the currently selected model for the entire studio.

@@ -42,6 +42,7 @@ import registerAiModelRoutes from './generated_apis/ai_model_routes.js';
 import registerEvoDiffuserRoutes from './generated_apis/evo_diffuser_routes.js';
 import registerTriBrainRoutes from './generated_apis/tribrain_routes.js';
 import registerQuadBrainRoutes from './generated_apis/quadbrain_routes.js';
+import registerEnterpriseArchitectureRoutes from './generated_apis/enterprise_architecture_routes.js';
 import registerEvoTerminalRoutes from './generated_apis/evo_terminal_routes.js';
 import registerEvoCapabilityRoutes from './generated_apis/evo_capability_routes.js';
 import registerPortfolioRoutes from './generated_apis/portfolio_routes.js';
@@ -232,6 +233,7 @@ registerAiModelRoutes(app);
 registerEvoDiffuserRoutes(app);
 registerTriBrainRoutes(app);
 registerQuadBrainRoutes(app);
+registerEnterpriseArchitectureRoutes(app);
 registerEvoTerminalRoutes(app);
 registerEvoCapabilityRoutes(app);
 registerPortfolioRoutes(app);
@@ -297,6 +299,10 @@ app.get('/api/stream-metrics', (req, res) => {
 
 // Subscription Paywall Middleware
 function requireSubscription(req, res, next) {
+  if (process.env.REQUIRE_AUTH !== 'true') {
+    return next();
+  }
+
   if (!req.user_id) {
     return res.status(401).json({ success: false, error: 'Authentication required for premium endpoints.' });
   }
@@ -310,7 +316,7 @@ function requireSubscription(req, res, next) {
     LIMIT 1
   `).get(req.user_id);
 
-  if (!activePlan && process.env.REQUIRE_AUTH === 'true') {
+  if (!activePlan) {
     return res.status(402).json({ 
       success: false, 
       truthState: 'PAYMENT_REQUIRED', 

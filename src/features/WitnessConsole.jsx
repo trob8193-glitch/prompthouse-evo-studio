@@ -23,10 +23,10 @@ export const WitnessConsole = () => {
     if (studyRunning) return;
     setStudyRunning(true);
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/study/initiate`, {
+      const res = await fetch(`${BRIDGE_URL}/api/intelligence/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ protocol }),
+        body: JSON.stringify({ module: 'SovereignStudy', action: 'initiate', payload: { protocol } }),
       });
       const data = await res.json();
       snapshotState({ ...active_state, protocol, lastStudy: data });

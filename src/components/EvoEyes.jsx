@@ -59,7 +59,7 @@ export function EvoEyes({ mode = 'overlay' }) {
       if (data.success) setDiagnostics(data.result);
 
       // Fetch dynamic truth audit score
-      const auditRes = await fetch(`${BRIDGE_URL}/api/nuclear-truth/audit`);
+      const auditRes = await fetch(`${BRIDGE_URL}/api/platform-sentinel/status`);
       const auditData = await auditRes.json();
       if (auditData && typeof auditData.score === 'number') {
         setSovereigntyScore(auditData.score);
@@ -152,7 +152,7 @@ export function EvoEyes({ mode = 'overlay' }) {
       <div className="flex-1 relative overflow-hidden" ref={containerRef}>
         <div className="absolute inset-0 pointer-events-none opacity-20">
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-50" />
-          <div className="absolute inset-0 bg-gradient-to-t from-indigo-500/10 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-indigo-500/10 via-transparent to-transparent" />
         </div>
 
         <svg className="absolute inset-0 w-full h-full pointer-events-none">

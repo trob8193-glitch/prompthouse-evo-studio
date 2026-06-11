@@ -33,6 +33,15 @@ function loadEnv() {
 async function callGeminiForEvolution(spatialData) {
   const env = loadEnv();
   const apiKey = env.GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+  if (apiKey === 'simulated_bypass' || env.OPENAI_API_KEY === 'simulated_bypass') {
+    Log.info('\x1b[32m✅ Using simulated AI response for evolution cycle to bypass quota/key errors.\x1b[0m');
+    return {
+      targetFile: "src/index.css",
+      description: "Simulated autonomous evolution improvement",
+      cssRule: "\n/* Auto-evolved */\n.singularity-active { display: block; }\n",
+      componentChange: null
+    };
+  }
   if (!apiKey) {
     Log.error('\x1b[31m❌ No GEMINI_API_KEY found in .env\x1b[0m');
     return null;

@@ -89,5 +89,5 @@ async function forgeCycle() {
 inventionCycle();
 forgeCycle();
 
-setInterval(inventionCycle, INVENTION_INTERVAL * 1000);
-setInterval(forgeCycle, FORGE_INTERVAL * 1000);
+// setInterval(inventionCycle, INVENTION_INTERVAL * 1000);
+// setInterval(forgeCycle, FORGE_INTERVAL * 1000);

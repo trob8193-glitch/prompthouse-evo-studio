@@ -1,0 +1,888 @@
+{
+  "scannedAt": "2026-06-11T16:52:37.673Z",
+  "totalComponentsScanned": 130,
+  "totalBackendRoutesFound": 232,
+  "deadLinksDetected": 0,
+  "matrix": [
+    {
+      "component": "src\\agent-bridge-views.jsx",
+      "buttons": [
+        "RESCAN_VAULT",
+        "CLEAR_RECEIPTS"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\AgentBridgeView.jsx",
+      "buttons": [
+        "{ navigator.clipboard.writeText(MASTER_INSTRUCTIONS); setCopied('instr'); setTimeout(()=>setCopied(''),1500); }}>\r\n                {copied === 'instr' ? '✅ Copied!' : '📋 Copy Instructions'}",
+        "{ navigator.clipboard.writeText(JSON.stringify(OPENAI_ACTIONS, null, 2)); setCopied('schema'); setTimeout(()=>setCopied(''),1500); }}>\r\n                {copied === 'schema' ? '✅ Copied!' : '📋 Copy Actions Schema'}",
+        "setStrictEthicsMode(!strictEthicsMode)}\r\n                style={{ background: strictEthicsMode ? 'var(--accent-violet)' : 'transparent', borderColor: 'var(--accent-violet)' }}\r\n              >\r\n                {strictEthicsMode ? '✅ ETHICS ACTIVE' : '⭕ DISABLE ETHICS'}",
+        "downloadFile('PH_EVO_MASTER_AGENCY.md', MASTER_INSTRUCTIONS)}>⬇️ Download Master Agency Kit (.md)",
+        "downloadFile('PH_EVO_OPENAI_ACTIONS.json', JSON.stringify(OPENAI_ACTIONS, null, 2))}>⬇️ Download API Actions (.json)"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\ai-prompt-generator-view.jsx",
+      "buttons": [
+        "{copied ? '✓ Copied' : 'Copy'}",
+        "setDomain(d.id)} style={{\r\n                background: domain === d.id ? `${d.color}22` : 'rgba(255,255,255,0.03)',\r\n                border: `1px solid ${domain === d.id ? d.color : 'rgba(255,255,255,0.1)'}`,\r\n                color: domain === d.id ? d.color : '#666', borderRadius: 6, padding: '5px 10px',\r\n                fontSize: 11, cursor: 'pointer', fontWeight: domain === d.id ? 700 : 400,\r\n              }}>\r\n                {d.icon} {d.name}",
+        "setStrictness(m.id)} style={{\r\n                background: strictness === m.id ? 'rgba(245,200,66,0.15)' : 'rgba(255,255,255,0.03)',\r\n                border: `1px solid ${strictness === m.id ? '#f5c842' : 'rgba(255,255,255,0.1)'}`,\r\n                color: strictness === m.id ? '#f5c842' : '#666', borderRadius: 6, padding: '5px 10px',\r\n                fontSize: 11, cursor: 'pointer', fontWeight: strictness === m.id ? 700 : 400,\r\n              }}>\r\n                {m.icon} {m.name}",
+        "{loading ? '⏳ Generating...' : '🧬 Generate Prompt Stack + Live AI Response'}",
+        "setActiveOutput(k)} style={{\r\n                background: activeOutput === k ? `${color}22` : 'rgba(255,255,255,0.03)',\r\n                border: `1px solid ${activeOutput === k ? color : 'rgba(255,255,255,0.1)'}`,\r\n                color: activeOutput === k ? color : '#666', borderRadius: 6, padding: '5px 12px',\r\n                fontSize: 11, cursor: 'pointer', fontWeight: activeOutput === k ? 700 : 400,\r\n              }}>{label}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\ai-views.jsx",
+      "buttons": [
+        "{scanning ? 'Scanning...' : 'Start Global Audit'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\App.jsx",
+      "buttons": [
+        "setSingularityActive(true)} \r\n            className=\"absolute top-16 right-4 z-50 bg-[#00f0ff]/10 text-[#00f0ff] text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl border border-[#00f0ff]/30 hover:bg-[#00f0ff]/20 shadow-[0_0_20px_rgba(0,240,255,0.15)] flex items-center gap-2 group transition-all duration-300\"\r\n          >\r\n            \r\n            Manifest Singularity Engine"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\autonomous-command-center.jsx",
+      "buttons": [
+        "🔄 Self-Build",
+        "{isUnbound ? '⚠️ UNBOUND DEPLOYMENT MODE' : 'Enable Automated Deployment'}",
+        "setActiveTab(t.id)}\r\n            style={{ \r\n              background: activeTab === t.id ? '#1e293b' : 'transparent', \r\n              color: activeTab === t.id ? 'white' : '#94a3b8', \r\n              border: 'none', padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' \r\n            }}\r\n          >\r\n            {t.label}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\autonomous-views.jsx",
+      "buttons": [
+        "{building ? '🔄 Building...' : '🚀 Build App — Full Autonomous'}",
+        "downloadAsZip(result.app)}>\r\n                  📦 Download ZIP",
+        "💾 Write to Local Disk",
+        "{\r\n                        navigator.clipboard.writeText(result.app.files[selectedFile]);\r\n                      }}>📋 Copy",
+        "{\r\n                        downloadFile(selectedFile, result.app.files[selectedFile]);\r\n                      }}>💾 Save"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\chrome-extension-views.jsx",
+      "buttons": [
+        "Capture Page",
+        "Use Selection",
+        "Open Side Panel",
+        "Copy Packet",
+        "Save",
+        "Write Extension to Disk",
+        "navigator.clipboard.writeText(`generated_apps/${extension.name}`)}>Copy Load Path",
+        "Save Current File",
+        "setSelectedFile(file)}>\r\n                  {file}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\commerce-rail-view.jsx",
+      "buttons": [
+        "{loading ?  : }\r\n                Generate Checkout Session"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\AgentChatPanel.jsx",
+      "buttons": [
+        "Reset",
+        "setSelectedBot(bot.id)}\n              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${\n                selectedBot === bot.id\n                  ? 'text-white border-transparent shadow-lg'\n                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'\n              }`}\n              style={selectedBot === bot.id ? { backgroundColor: bot.palette.primary } : {}}\n              title={bot.role}\n            >\n              {bot.icon} {bot.name}",
+        "{loading ?  : }\n            {loading ? '...' : 'Send'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\AiProviderProofPanel.jsx",
+      "buttons": [
+        "handleProbe('openai')}\r\n                disabled={!approvalEnvelope || probeLoading}\r\n                style={{\r\n                  flex: 1, padding: '10px', borderRadius: '6px',\r\n                  background: !approvalEnvelope ? 'var(--bg-surface)' : 'var(--accent-indigo)',\r\n                  color: !approvalEnvelope ? 'var(--text-dim)' : '#fff',\r\n                  border: !approvalEnvelope ? '1px solid var(--border-subtle)' : 'none', \r\n                  cursor: !approvalEnvelope ? 'not-allowed' : 'pointer',\r\n                  fontSize: '12px', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px',\r\n                  transition: 'all 0.15s ease'\r\n                }}\r\n              >\r\n                 Run OpenAI Safe Probe",
+        "handleProbe('gemini')}\r\n                disabled={!approvalEnvelope || probeLoading}\r\n                style={{\r\n                  flex: 1, padding: '10px', borderRadius: '6px',\r\n                  background: !approvalEnvelope ? 'var(--bg-surface)' : 'var(--accent-indigo)',\r\n                  color: !approvalEnvelope ? 'var(--text-dim)' : '#fff',\r\n                  border: !approvalEnvelope ? '1px solid var(--border-subtle)' : 'none', \r\n                  cursor: !approvalEnvelope ? 'not-allowed' : 'pointer',\r\n                  fontSize: '12px', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px',\r\n                  transition: 'all 0.15s ease'\r\n                }}\r\n              >\r\n                 Run Gemini Safe Probe"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\AppMarket.jsx",
+      "buttons": [
+        "Connect Bank",
+        "launchApp(project.id)}\n                                            disabled={launching === project.id}\n                                            className=\"flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 px-4 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50\"\n                                        >\n                                            {launching === project.id ? (\n                                                \n                                            ) : (\n                                                <>\n                                                    \n                                                    Launch\n                                                \n                                            )}",
+        "launchApp(project.id)}\n                                            disabled={launching === project.id}\n                                            aria-label={`Open ${project.name}`}\n                                            className=\"bg-gray-800 hover:bg-gray-700 text-white p-2.5 rounded-xl transition-colors flex items-center justify-center disabled:opacity-50\"\n                                        >",
+        "handleBuyApp(project.id)}\n                                        className=\"w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 font-bold py-2.5 px-4 rounded-xl flex items-center justify-center transition-colors border border-blue-500/30\"\n                                    >\n                                        \n                                        Buy App ($9.00)"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\BotAutomationDeck.jsx",
+      "buttons": [
+        "handleSync('trello')}\r\n                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${syncing.trello ? 'bg-slate-800 text-slate-500' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}\r\n              >\r\n                {syncing.trello ? 'SYNCING...' : 'SYNC NOW'}",
+        "handleSync('slack')}\r\n                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${syncing.slack ? 'bg-slate-800 text-slate-500' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}\r\n              >\r\n                {syncing.slack ? 'SYNCING...' : 'SYNC NOW'}",
+        "setPermissionsVisible((value) => !value)}\n          aria-expanded={permissionsVisible}\n          className=\"flex items-center gap-2 text-indigo-400 text-xs font-bold hover:text-indigo-300 transition-colors\"\n        >\n          MANAGE PERMISSIONS"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\DeploymentControlPanel.jsx",
+      "buttons": [
+        "{deploying ? 'Requesting Deploy...' : 'Request Vercel Preview Deploy'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\ErrorBoundary.jsx",
+      "buttons": [
+        "Retry"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\EvoEyes.jsx",
+      "buttons": [
+        "setSingularityLayer(layer.id)}\r\n              className={`flex items-center gap-2 px-4 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all ${\r\n                singularityLayer === layer.id ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-500 hover:text-slate-300'\r\n              }`}\r\n            >\r\n              \r\n              {layer.label}",
+        "setEvoEyesActive(false)} className=\"text-slate-500 hover:text-white transition-colors\">",
+        "setSelectedNode(null)} className=\"text-slate-500 hover:text-white\">"
+      ],
+      "endpoints": [
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/platform-sentinel/status",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\components\\GhostEditor.jsx",
+      "buttons": [],
+      "endpoints": [
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/feedback-adaptation",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/feedback-adaptation",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\components\\liveforge\\EvoLiveForgePreview.jsx",
+      "buttons": [
+        "sendToPromptBridge(\"improve_preview\")}>Ask Evo LM",
+        "sendToPromptBridge(\"export_artifact\")}>Export",
+        "sendToPromptBridge(\"send_to_forgerail\")}>ForgeRail",
+        "Local Proof"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\liveforge\\EvoMobileController.jsx",
+      "buttons": [
+        "setActiveTab('local-cli')}>Local CLI Emulator Controller",
+        "setActiveTab('cloud-appetize')}>Cloud Appetize.io Streamer",
+        "{isLoadingDevices ? 'Searching...' : '🔄 Refresh List'}",
+        "{ e.stopPropagation(); handleBootLocalDevice(d); }}>\r\n                          🚀 Boot Virtual Machine",
+        "📥 Install to Booted Simulator",
+        "📜 Read Native Logs",
+        "📤 Package & Stream to Appetize"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\MatrixTerminal.jsx",
+      "buttons": [
+        "setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}>"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\ModelSelector.jsx",
+      "buttons": [
+        "setIsOpen(!isOpen)}\r\n        style={{\r\n          ...styles.trigger,\r\n          borderColor: isOpen ? activeTier.color : 'rgba(255,255,255,0.1)',\r\n        }}\r\n      >\r\n        {activeTier.icon}\r\n        \r\n          {activeModel ? activeModel.displayName : 'Select Model'}\r\n        \r\n        \r\n          {activeTier.label}\r\n        \r\n        {isOpen ? '▲' : '▼'}",
+        "selectModel(model.id)}\r\n                    style={{\r\n                      ...styles.modelOption,\r\n                      background: isActive\r\n                        ? 'rgba(255,255,255,0.08)'\r\n                        : 'transparent',\r\n                      borderLeft: isActive\r\n                        ? `3px solid ${tier.color}`\r\n                        : '3px solid transparent',\r\n                    }}\r\n                  >\r\n                    {model.displayName}\r\n                    \r\n                      {tier.label} {tier.icon}\r\n                    \r\n                    {!model.online && (\r\n                      Offline\r\n                    )}\r\n                    {isActive && ✓}"
+      ],
+      "endpoints": [
+        {
+          "path": "/api/ai/models",
+          "isAlive": true
+        },
+        {
+          "path": "/api/ai/models/select",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\components\\Navigation.jsx",
+      "buttons": [
+        "setActivePage(item.id)}\n                  title={collapsed ? item.label : undefined}\n                  style={{\n                    display: 'flex',\n                    alignItems: 'center',\n                    gap: 12,\n                    width: '100%',\n                    padding: collapsed ? '10px 0' : '9px 14px',\n                    justifyContent: collapsed ? 'center' : 'flex-start',\n                    border: '1px solid transparent',\n                    borderRadius: 14,\n                    cursor: 'pointer',\n                    fontSize: 13,\n                    fontWeight: isActive ? 700 : 600,\n                    color: isActive ? '#ffffff' : '#737385',\n                    background: isActive \n                      ? 'linear-gradient(90deg, rgba(0,240,255,0.1), transparent)' \n                      : 'transparent',\n                    borderColor: isActive ? 'rgba(0,240,255,0.2)' : 'transparent',\n                    boxShadow: isActive ? 'inset 3px 0 0 #00f0ff' : 'none',\n                    transition: 'all 0.3s cubic-bezier(0.2,0.8,0.2,1)',\n                    marginBottom: 3,\n                    textAlign: 'left',\n                    position: 'relative',\n                    overflow: 'hidden',\n                  }}\n                  onMouseEnter={(e) => {\n                    if (!isActive) {\n                      e.currentTarget.style.background = 'rgba(255,255,255,0.03)';\n                      e.currentTarget.style.color = '#ffffff';\n                      e.currentTarget.style.transform = 'translateX(4px)';\n                    }\n                  }}\n                  onMouseLeave={(e) => {\n                    if (!isActive) {\n                      e.currentTarget.style.background = 'transparent';\n                      e.currentTarget.style.color = '#737385';\n                      e.currentTarget.style.transform = 'translateX(0)';\n                    }\n                  }}\n                >\n                  {isActive && (\n                    \n                  )}\n                  \n                  {!collapsed && {item.label}}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\NightForgePanel.jsx",
+      "buttons": [
+        "{loading ? 'RUNNING CYCLE...' : 'RUN CYCLE NOW'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\OwnerApprovalPanel.jsx",
+      "buttons": [
+        "Approve",
+        "Grant Explicit Approval"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\primitives.jsx",
+      "buttons": [
+        "{variant === 'primary' && }\r\n      \r\n        {loading ?  ENGAGING... : children}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\SingularityEngineOverlay.jsx",
+      "buttons": [
+        "setSingularityActive(false)}\r\n            style={{\r\n              background: 'rgba(255,255,255,0.05)',\r\n              border: '1px solid var(--border-mid)',\r\n              width: '40px',\r\n              height: '40px',\r\n              borderRadius: '50%',\r\n              display: 'flex',\r\n              alignItems: 'center',\r\n              justifyContent: 'center',\r\n              cursor: 'pointer',\r\n              color: 'var(--text-dim)',\r\n              transition: 'all 0.2s',\r\n            }}\r\n          >",
+        "setSingularityLayer(l.id)}\r\n                    style={{\r\n                      display: 'flex',\r\n                      alignItems: 'center',\r\n                      gap: '12px',\r\n                      padding: '12px 16px',\r\n                      borderRadius: 'var(--radius-md)',\r\n                      background: singularityLayer === l.id ? 'var(--accent-gold-dim)' : 'transparent',\r\n                      border: '1px solid',\r\n                      borderColor: singularityLayer === l.id ? 'var(--accent-gold-glow)' : 'transparent',\r\n                      color: singularityLayer === l.id ? 'var(--accent-gold)' : 'var(--text-secondary)',\r\n                      cursor: 'pointer',\r\n                      fontSize: '13px',\r\n                      fontWeight: 600,\r\n                      textAlign: 'left',\r\n                      transition: 'all 0.2s',\r\n                    }}\r\n                  >\r\n                    \r\n                    {l.label}"
+      ],
+      "endpoints": [
+        {
+          "path": "/api/platform-sentinel/status",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\components\\SovereignTabs.jsx",
+      "buttons": [
+        "setActiveTab(tab.id)}\r\n            className={`relative px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${\r\n              activeTab === tab.id \r\n                ? 'text-white' \r\n                : 'text-slate-500 hover:text-slate-300'\r\n            }`}\r\n          >\r\n            {activeTab === tab.id && (\r\n              \r\n            )}\r\n            {tab.label}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\StripeProofPanel.jsx",
+      "buttons": [
+        "{probeLoading ? 'Probing...' : 'Run Test Account Probe'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\StripeTestCheckoutPanel.jsx",
+      "buttons": [
+        "{sessionLoading ? 'Creating Session...' : 'Create Stripe Test Checkout Session'}",
+        "{recordingLoading ? 'Recording...' : 'Record Browser Verification Run'}",
+        "handleUpdateStatus(step.status)}\r\n                        disabled={verificationLoading || browserRun.status === step.status}\r\n                        style={{\r\n                          padding: '6px 10px', borderRadius: '4px', border: '1px solid var(--border-subtle)',\r\n                          background: browserRun.status === step.status ? 'var(--bg-surface-mid)' : 'transparent',\r\n                          color: browserRun.status === step.status ? 'var(--accent-indigo)' : 'var(--text-secondary)',\r\n                          fontSize: '11px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '8px'\r\n                        }}\r\n                      >\r\n                        {step.icon} {step.label} {browserRun.status === step.status && '✓'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\Terminal.jsx",
+      "buttons": [
+        "setTerminalOpen(true)}\r\n      className=\"fixed bottom-0 left-[260px] right-0 h-9 bg-black border-t border-indigo-500/30 flex items-center px-6 hover:bg-slate-900 transition-all z-30 group\"\r\n    >\r\n      \r\n      Open Master EvoShell Terminal",
+        "setActiveTerminalSession(session)}\r\n                className={`px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded transition-all ${\r\n                  activeTerminalSession === session \r\n                    ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' \r\n                    : 'text-slate-500 hover:text-slate-300'\r\n                }`}\r\n              >\r\n                {session}",
+        "setTerminalTheme('sovereign')} className={`w-3 h-3 rounded-full bg-indigo-500 ${terminalTheme === 'sovereign' ? 'ring-2 ring-white' : 'opacity-40'}`} />\r\n             setTerminalTheme('matrix')} className={`w-3 h-3 rounded-full bg-emerald-500 ${terminalTheme === 'matrix' ? 'ring-2 ring-white' : 'opacity-40'}`} />\r\n             setTerminalTheme('classic')} className={`w-3 h-3 rounded-full bg-slate-500 ${terminalTheme === 'classic' ? 'ring-2 ring-white' : 'opacity-40'}`} />",
+        "clearTerminal(activeTerminalSession)} title=\"Clear Session\" className=\"text-slate-500 hover:text-rose-400 transition-colors\">",
+        "setIsFullscreen(!isFullscreen)} title=\"Fullscreen\" className=\"text-slate-500 hover:text-white transition-colors\">\r\n            {isFullscreen ?  : }",
+        "setTerminalOpen(false)} title=\"Minimize\" className=\"text-slate-500 hover:text-white transition-colors\">",
+        "setCatalogOpen((value) => !value)}\r\n            className=\"shrink-0 flex items-center gap-2 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] rounded border border-indigo-500/30 text-indigo-300 hover:text-white hover:border-indigo-400 transition-colors\"\r\n            title=\"Toggle command catalog\"\r\n          >\r\n            \r\n            Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}",
+        "runCatalogCommand(item)}\r\n                disabled={executing}\r\n                className=\"text-left p-2 rounded border border-slate-800 bg-black/35 hover:border-indigo-500/40 hover:bg-indigo-500/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed\"\r\n                title={`Run: ${item.command}`}\r\n              >\r\n                \r\n                  {item.label}\r\n                  {item.session}\r\n                \r\n                {item.description}\r\n                {item.command}"
+      ],
+      "endpoints": [
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\components\\TimeSlipLedger.jsx",
+      "buttons": [
+        "setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}>\r\n          &times;",
+        "Revert to {commit.id}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\TopBar.jsx",
+      "buttons": [
+        "e.currentTarget.style.color = '#00f0ff'}\n          onMouseLeave={(e) => e.currentTarget.style.color = '#737385'}\n        >\n          {sidebarCollapsed ?  : }",
+        "setActivePage('proof-console')}\n          style={{ background: 'none', border: 'none', color: '#737385', cursor: 'pointer', padding: 6, display: 'flex', position: 'relative', transition: 'color 0.2s' }}\n          aria-label=\"Notifications\"\n          onMouseEnter={(e) => e.currentTarget.style.color = '#00f0ff'}\n          onMouseLeave={(e) => e.currentTarget.style.color = '#737385'}\n        >\n          \n          {notifications.length > 0 && (\n            \n          )}",
+        "setActivePage('settings')}\n          style={{ background: 'none', border: 'none', color: '#737385', cursor: 'pointer', padding: 6, display: 'flex', transition: 'color 0.2s' }}\n          aria-label=\"Settings\"\n          onMouseEnter={(e) => e.currentTarget.style.color = '#00f0ff'}\n          onMouseLeave={(e) => e.currentTarget.style.color = '#737385'}\n        >"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\VercelPreviewDeployPanel.jsx",
+      "buttons": [
+        "{deploying ?  : }\r\n          {deploying ? 'Deploying to Vercel...' : 'Run Vercel Preview Deploy Proof'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\deploy-rail-view.jsx",
+      "buttons": [
+        "{status === 'deploying' ? '🚀 Deploying...' : '🚀 Start Deploy Rail'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\evo-copilot-sidebar.jsx",
+      "buttons": [
+        "setIsOpen(false)} style={{ background:'none', border:'none', color:'var(--text-muted)', cursor:'pointer', fontSize:20 }}>✕",
+        "handleQuickAction('debt')} style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer' }}>🛠️ Scan Debt",
+        "handleQuickAction('tool')} style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer' }}>🪄 Auto-Tool",
+        "handleQuickAction('test')} style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer' }}>⚡ Run Fission",
+        "↑"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\evo-duel-engine-view.jsx",
+      "buttons": [
+        "setActiveTab(t)} style={btn('#818cf8', activeTab === t)}>\r\n              {t === 'duel' ? '⚔️ Duel' : t === 'matrix' ? '🤖 Bot Matrix' : '📜 History'}",
+        "{loading ? '⏳ Dueling...' : '⚔️ Start Duel'}",
+        "{ setResponseA(''); setResponseB(''); setScoreA(undefined); setScoreB(undefined); setPrompt(''); }}\r\n              style={{ ...btn('#f87171'), padding: '10px 16px' }}>Clear"
+      ],
+      "endpoints": [
+        {
+          "path": "/src/prompthouse_50_master_build_prompts.json",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\evo-exchange-view.jsx",
+      "buttons": [
+        "alert('Publishing to public exchange requires Enterprise Sovereignty.')}>\r\n          🌐 Go Public",
+        "setActiveCategory(c.id)}\r\n          >\r\n            {c.label}",
+        "🔒 Blocked"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\AuthSentry.jsx",
+      "buttons": [
+        "setAuthenticated(true)}>\n            ENTER DEMO MODE"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\AutonomousSelfView.jsx",
+      "buttons": [
+        "setEvolving(false) : startEvolution}\r\n              disabled={bridgeStatus !== 'connected'}\r\n              className={`w-full py-4 rounded-xl font-bold text-[13px] tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-3 ${\r\n                evolving \r\n                  ? 'bg-black/50 text-[#00f0ff] border border-[#00f0ff]/30 shadow-[inset_0_0_20px_rgba(0,240,255,0.1)]' \r\n                  : 'bg-gradient-to-r from-[#8a2be2] to-[#4338ca] text-white hover:shadow-[0_0_30px_rgba(138,43,226,0.4)] disabled:opacity-50 disabled:cursor-not-allowed'\r\n              }`}\r\n            >\r\n              {evolving ?  : }\r\n              {evolving ? 'Evolution Active' : 'Initialize Evolution Loop'}",
+        "Execute Maintenance Protocol"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\CommerceDashboard.jsx",
+      "buttons": [
+        "window.open('https://dashboard.stripe.com', '_blank')} className=\"px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]\">\n            Go To Stripe Dashboard"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\ConnectionManager.jsx",
+      "buttons": [
+        "{bonding ?  : }\r\n            Bond Node",
+        "setTargetIp(item.url || item.target || item.ip || '')}\n                        className=\"text-[9px] font-black uppercase tracking-widest text-slate-600 hover:text-white transition-colors\"\n                      >\n                        Configure"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\CostFirewallDashboard.jsx",
+      "buttons": [
+        "Refresh",
+        "runEstimate('free')}> Free Plan Probe",
+        "runEstimate('paid')}> Paid Plan Probe",
+        "Clear Cache"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\EvoEyesView.jsx",
+      "buttons": [
+        "setSelectedId((v) => v)}\r\n            title=\"Refresh on next poll tick\"\r\n          >\r\n             Refresh",
+        "setSelectedId(m.id)}\r\n                  style={{\r\n                    width: '100%',\r\n                    justifyContent: 'space-between',\r\n                    marginBottom: 8,\r\n                    background: selectedId === m.id ? 'rgba(99,102,241,0.12)' : 'rgba(2,6,23,0.35)',\r\n                    border: selectedId === m.id ? '1px solid rgba(99,102,241,0.35)' : '1px solid rgba(255,255,255,0.08)',\r\n                    padding: '10px 10px'\r\n                  }}\r\n                >\r\n                  \r\n                    {m.label || m.id}\r\n                    {m.path}\r\n                  \r\n                  \r\n                    {m.health}"
+      ],
+      "endpoints": [
+        {
+          "path": "/api/studio/diagnostics?limit=70",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\features\\EvoLayoutDashboard.jsx",
+      "buttons": [
+        "setPreviewExpanded((value) => !value)}\n                      aria-pressed={previewExpanded}\n                      className=\"text-[#737385] hover:text-[#00f0ff] transition-colors\"\n                    >"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\EvoLlmTrainingDashboard.jsx",
+      "buttons": [
+        "Refresh",
+        "createPlan('local-dataset')} disabled={busy}>Plan Local Dataset",
+        "createPlan('openai')} disabled={busy}>Plan Provider Gate Test",
+        "Approve Latest",
+        "Run Latest",
+        "Promote Dataset Version",
+        "Rollback Active",
+        "Package Contribution"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\EvoPixelatorDashboard.jsx",
+      "buttons": [
+        "setBitDepth(b)}\r\n                      className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold border transition-all ${bitDepth === b ? 'bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.2)]' : 'bg-[#0a0a10] border-white/10 text-[#737385] hover:border-white/20'}`}\r\n                    >\r\n                      {b}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\EvoSpineCoreDashboard.jsx",
+      "buttons": [
+        "Refresh",
+        "Run Evo"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\ExtensionCockpitView.jsx",
+      "buttons": [
+        "setActivePanel(panel.id)}\r\n        className={`flex items-center gap-4 w-full p-4 rounded-xl transition-all border ${\r\n          isActive \r\n            ? 'bg-slate-800 border-indigo-500/50 shadow-lg shadow-indigo-500/10' \r\n            : 'bg-transparent border-transparent hover:bg-slate-800/30'\r\n        }`}\r\n      >\r\n        \r\n          \r\n        \r\n        {panel.label}\r\n        {isActive && }"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\FeatureFoundryView.jsx",
+      "buttons": [
+        "{loading ?  : }\r\n          {loading ? 'Harvesting Codebase...' : 'Scan for Opportunities'}",
+        "initiateBuild(mission)}\r\n              style={{ \r\n                width: '100%', padding: '14px', borderRadius: 12, border: '1px solid #6366f1', background: activeMission?.id === mission.id ? '#6366f1' : 'transparent',\r\n                color: activeMission?.id === mission.id ? 'white' : '#818cf8', fontWeight: 800, fontSize: 13, cursor: 'pointer',\r\n                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, transition: 'all 0.2s'\r\n              }}\r\n            >\r\n              \r\n              {activeMission?.id === mission.id ? 'Build Cycle Active' : 'Initiate Autonomous Build'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\GlobalAPISettingsView.jsx",
+      "buttons": [
+        "{apiConfigSaving ?  : saved ?  : }\r\n            {apiConfigSaving ? 'Saving...' : saved ? 'Saved!' : 'Save Keys'}",
+        "{testing ?  : }\r\n            {testing ? 'Testing...' : 'Test Connection'}",
+        "{generatingKey ?  : }\r\n            Generate Key",
+        "{\r\n                  navigator.clipboard.writeText(newKeyPayload);\r\n                  addNotification('Copied API Key to clipboard.', 'success');\r\n                }}\r\n                style={{\r\n                  padding: '10px 14px',\r\n                  borderRadius: 8,\r\n                  border: '1px solid #ec4899',\r\n                  background: 'transparent',\r\n                  color: '#ec4899',\r\n                  cursor: 'pointer',\r\n                  fontSize: 11,\r\n                  fontWeight: 700\r\n                }}\r\n              >\r\n                Copy",
+        "handleRevokeKey(key.id)}\r\n                    style={{\r\n                      padding: '4px 10px',\r\n                      borderRadius: 6,\r\n                      border: '1px solid #ef4444',\r\n                      background: 'rgba(239, 68, 68, 0.05)',\r\n                      color: '#ef4444',\r\n                      cursor: 'pointer',\r\n                      fontSize: 10,\r\n                      fontWeight: 700,\r\n                      transition: 'all 0.2s'\r\n                    }}\r\n                  >\r\n                    Revoke",
+        "{nfLoading || nfSaving ?  : null}\r\n          {nfForce3 ? 'Strict 3-Team Mode ON' : 'Strict 3-Team Mode OFF'}",
+        "{\r\n            try {\r\n              const res = await fetch('http://localhost:11434/api/tags');\r\n              if (res.ok) {\r\n                const data = await res.json();\r\n                const models = data.models.map(m => m.name).join(', ');\r\n                alert(`✅ Ollama is Online!\\n\\nInstalled Models:\\n${models || 'None yet. Run \"ollama run llama3\" in your terminal!'}`);\r\n              } else {\r\n                alert('⚠️ Ollama responded with an error.');\r\n              }\r\n            } catch (err) {\r\n              alert('❌ Ollama is Offline or not installed.\\n\\nTo install, download from ollama.com or run:\\ncurl -fsSL https://ollama.com/install.sh | sh');\r\n            }\r\n          }}\r\n            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', borderRadius: 8, border: '1px solid #334155', background: '#1e293b', color: '#e2e8f0', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>\r\n            Test Ollama Connection"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\LaunchProofView.jsx",
+      "buttons": [
+        "{isVerifying ? 'VERIFYING...' : 'RUN FULL PROOF'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\MetricsView.jsx",
+      "buttons": [
+        "{ setLoading(true); fetchAll(); }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>\r\n           Refresh"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\MobileSingularityDashboard.jsx",
+      "buttons": [
+        "setArchitecture('expo_router')}\n                className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all ${\n                  architecture === 'expo_router' ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'\n                }`}\n              >\n                React Native (Expo)",
+        "setArchitecture('clean_riverpod')}\n                className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all ${\n                  architecture === 'clean_riverpod' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'\n                }`}\n              >\n                Flutter (Riverpod)"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\ModuleMaturityDashboard.jsx",
+      "buttons": [
+        "Refresh",
+        "Write Receipt",
+        "setSelectedId(module.id)} style={{ textAlign: 'left', width: '100%', background: selected?.id === module.id ? 'rgba(8,145,178,.22)' : '#020617', border: selected?.id === module.id ? '1px solid rgba(34,211,238,.45)' : '1px solid #1e293b', borderRadius: 12, padding: 12, cursor: 'pointer', color: '#e2e8f0' }}>\r\n                \r\n                  {module.name}\r\n                  \r\n                \r\n                {module.missing.length ? `${module.missing.length} missing checks` : 'All checks detected'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\PlatformSentinelDashboard.jsx",
+      "buttons": [
+        "{loading ? 'Auditing…' : 'Refresh Audit'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\PricingCheckout.jsx",
+      "buttons": [
+        "Downgrade/Reset License",
+        "setShowSimulator(null)}\n                className=\"text-slate-400 hover:text-white text-sm\"\n                disabled={simulationStep === 1}\n              >\n                ✕"
+      ],
+      "endpoints": [
+        {
+          "path": "/api/commerce/checkout",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\features\\PromptBridgeSurfacesView.jsx",
+      "buttons": [
+        "Refresh",
+        "planSurface(surface)}\n                disabled={routeLoading === surface.id}\n                className=\"mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border border-indigo-400/40 bg-indigo-500/10 px-3 text-xs font-black uppercase text-indigo-100 hover:bg-indigo-500/20 disabled:cursor-wait disabled:opacity-60\"\n              >\n                \n                {routeLoading === surface.id ? 'Planning' : 'Plan Route'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\RuntimeHealthDashboard.jsx",
+      "buttons": [
+        "Refresh"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\SaasBuilderView.jsx",
+      "buttons": [
+        "{building ?  : }\r\n              {building ? 'Orchestrating Reality...' : 'Initiate SaaS Build'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\SelfEvolutionDashboard.jsx",
+      "buttons": [
+        "{ if (!disabled) { e.currentTarget.style.boxShadow = `0 0 25px ${danger ? 'rgba(255,0,85,0.3)' : 'rgba(0,240,255,0.3)'}`; } }}\n    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 15px ${danger ? 'rgba(255,0,85,0.15)' : 'rgba(0,240,255,0.15)'}`; }}\n  >\n    {children}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\SovereignChat.jsx",
+      "buttons": [
+        "Run in Terminal",
+        "{applied ?  : }\r\n                      {applied ? 'Applied!' : 'Apply to File'}",
+        "setActiveSurface(id)}\n                className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${\n                  activeSurface === id ? 'bg-emerald-500 text-black' : 'text-gray-400 hover:bg-gray-800 hover:text-white'\n                }`}\n              >\n                {label}",
+        "setActivePage('settings')}\n            className=\"p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors\"\n          >"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\SovereignIntelligenceDashboard.jsx",
+      "buttons": [
+        "{ e.currentTarget.style.borderColor = color; e.currentTarget.style.background = `${color}15`; e.currentTarget.style.transform = 'translateX(6px)'; e.currentTarget.style.boxShadow = `0 0 30px ${color}20`; }}\r\n      onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${color}30`; e.currentTarget.style.background = 'rgba(5,5,8,0.8)'; e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = `0 0 20px ${color}05`; }}\r\n    >\r\n      \r\n        \r\n      \r\n      \r\n        {label}\r\n        {sub}",
+        "{ e.currentTarget.style.background = 'rgba(0,240,255,0.2)'; e.currentTarget.style.boxShadow = '0 0 25px rgba(0,240,255,0.3)'; }}\r\n          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(0,240,255,0.1)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(0,240,255,0.15)'; }}\r\n        >\r\n          \r\n          {refreshing ? 'Syncing...' : 'Refresh'}",
+        "useSovereignStore.getState().runTruthProbe()}\r\n              className=\"text-[9px] text-indigo-400 font-black uppercase tracking-widest hover:text-indigo-300\"\r\n            >\r\n              Run Truth Probe",
+        "setActivePage('chat')}\r\n              style={{\r\n                background: 'none', border: '1px solid #1e293b', borderRadius: 8, padding: '8px 12px',\r\n                color: '#6366f1', fontSize: 11, fontWeight: 600, cursor: 'pointer', marginTop: 4,\r\n                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,\r\n              }}\r\n            >\r\n              Open Full Chat"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\ThemeEvolutionDashboard.jsx",
+      "buttons": [
+        "e.currentTarget.style.background = 'rgba(0,240,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,240,255,0.1)'}> Refresh Vector",
+        "Suggest",
+        "Preview",
+        "Approve",
+        "Execute",
+        "Rollback"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\WitnessConsole.jsx",
+      "buttons": [
+        "WITNESS_HUD",
+        "×",
+        "setMode(m)}\r\n            >\r\n              {m.replace(/_/g, ' ')}",
+        "triggerEvoDoctor()}\r\n                    disabled={is_healing}\r\n                  >\r\n                    {is_healing ?  : }\r\n                    {is_healing ? 'HEALING_IN_PROGRESS...' : 'INITIATE_EVO_DOCTOR'}",
+        "triggerEvoEngineer()}>\r\n                    🐒 EVOLVE_ARCHITECTURE",
+        "triggerEvoUIEngineer()}>\r\n                    🐙 REFINE_UI_ORGANS",
+        "runDoctorScan()}>\r\n                RUN_FULL_DIAGNOSTIC_SCAN",
+        "runStudyProtocol(p)}\r\n                    disabled={studyRunning}\r\n                  >\r\n                    {p.replace(/_/g, ' ')}"
+      ],
+      "endpoints": [
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\forge-rail-view.jsx",
+      "buttons": [
+        "⚡ Trigger Rail",
+        "setActiveRail(r.id)}\r\n            >\r\n              {r.label}\r\n              {r.desc}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\forge-render-views.jsx",
+      "buttons": [
+        "setViewport(v)}\r\n                style={{\r\n                  fontSize: '10px', fontWeight: 700, padding: '4px 8px', borderRadius: '4px',\r\n                  background: viewport === v ? '#1e293b' : 'transparent',\r\n                  color: viewport === v ? '#e2e8f0' : '#64748b',\r\n                  border: 'none', cursor: 'pointer', textTransform: 'capitalize'\r\n                }}\r\n              >\r\n                {v}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\forge-term-view.jsx",
+      "buttons": [
+        "setActiveCategory(cat)}\r\n                style={{\r\n                  padding: '3px 8px', borderRadius: 10, fontSize: 10, fontWeight: 600, cursor: 'pointer',\r\n                  background: activeCategory === cat ? 'var(--accent-cyan)' : 'var(--bg-elevated)',\r\n                  color: activeCategory === cat ? '#000' : 'var(--text-muted)',\r\n                  border: 'none',\r\n                }}\r\n              >{cat}",
+        "{ setInput(t.cmd); inputRef.current?.focus(); }}\r\n                style={{\r\n                  display: 'block', width: '100%', textAlign: 'left',\r\n                  padding: '8px 10px', borderRadius: 8, fontSize: 11, cursor: 'pointer',\r\n                  background: 'var(--bg-void)', border: '1px solid var(--border-dim)',\r\n                  color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)',\r\n                  marginBottom: 4, transition: 'all 0.15s',\r\n                }}\r\n                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent-cyan)'; e.currentTarget.style.color = 'var(--text-primary)'; }}\r\n                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-dim)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}\r\n              >\r\n                {t.label}",
+        "{ sendToBridge(pendingApproval); setPendingApproval(null); }}\r\n                style={{ background: '#fb923c', color: '#000', fontWeight: 800 }}\r\n              >Approve & Execute",
+        "{ log('warn', 'Command cancelled by user.'); setPendingApproval(null); }}\r\n              >Cancel",
+        "{ runCommand(input); setInput(''); }}\r\n              style={{ minWidth: 80 }}\r\n            >Run ↵",
+        "setHistory([{ type: 'system', text: 'Cleared.' }])}\r\n            >Clear"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\forge-views.jsx",
+      "buttons": [
+        "setTab('agents')}>Agents",
+        "setTab('bridges')}>Bridges",
+        "setTab('handshakes')}>Handshakes",
+        "🧬 Spawn Intelligence",
+        "{\r\n            if (!bridgeName) return;\r\n            const code = `// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\\nexport async function ${bridgeName.replace(/\\s+/g, '')}Bridge(payload) {\\n  const response = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '${endpoint}', {\\n    method: 'POST',\\n    body: JSON.stringify(payload)\\n  });\\n  return response.json();\\n}`;\r\n            fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/files/write', {\r\n              method: 'POST',\r\n              headers: { 'Content-Type': 'application/json' },\r\n              body: JSON.stringify({\r\n                path: `src/generated/bridges/${bridgeName.replace(/\\s+/g, '')}Bridge.js`,\r\n                content: code\r\n              })\r\n            }).then(res => {\r\n              if (res.ok) {\r\n                alert(`🚀 Bridge Forged: ${bridgeName} saved to src/generated/bridges/`);\r\n              } else {\r\n                alert(`❌ Failed to forge bridge.`);\r\n              }\r\n            }).catch(err => {\r\n              alert(`❌ Error connecting to bridge.`);\r\n            });\r\n          }}>🚀 Forge Bridge",
+        "setSignedAt(new Date().toISOString())}\n                  className=\"btn btn-primary btn-sm\"\n                  style={{ width: 'fit-content' }}\n                >\n                  Sign New Handshake"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\new-features-views.jsx",
+      "buttons": [],
+      "endpoints": [
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\nightforge-view.jsx",
+      "buttons": [
+        "{savingForceMode\r\n                ? 'Saving...'\r\n                : forceThreeProviderTeam\r\n                  ? 'Strict 3-Team Mode: ON'\r\n                  : 'Strict 3-Team Mode: OFF'}",
+        "{active ? 'Stop Daemon' : 'Start Daemon'}",
+        "{running ? 'Running...' : 'Run Manual Cycle'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\past-mvp-console.jsx",
+      "buttons": [
+        "+ Create Mission",
+        "setSelectedMission(m)}\r\n            style={{ ...btn(selectedMission?.id === m.id ? '#f5c842' : '#818cf8'), maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>\r\n            {m.title || m.id.slice(0,12)}",
+        "🛡️ Friction Check",
+        "⚡ Run Fission",
+        "📦 VectorPack",
+        "⏳ Temporal Stack",
+        "🚀 DeployRail (live)",
+        "💳 Commerce (gated)",
+        "🌙 NightForge",
+        "{loading ? '⏳ Running...' : '🤖 FULL AUDIT (All 7 Gates)'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\pattern-miner-view.jsx",
+      "buttons": [
+        "{scanning ? '📡 Scanning...' : '🔍 Scan for Patterns'}",
+        "createRecipe(p)}>🪄 Gen Recipe"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\promptlink-views.jsx",
+      "buttons": [
+        "{handshaking ? '⏳ Syncing...' : '🤝 Re-Handshake'}",
+        "setActiveTab(t.id)}>\r\n            {t.label}",
+        "{ e.stopPropagation(); toggleProvider(provider); }}\r\n                    style={{\r\n                      background: provider.enabled ? 'rgba(74,222,128,0.2)' : 'var(--bg-elevated)',\r\n                      border: `1px solid ${provider.enabled ? '#4ade80' : 'var(--border-dim)'}`,\r\n                      color: provider.enabled ? '#4ade80' : 'var(--text-muted)',\r\n                      fontWeight: 800,\r\n                    }}\r\n                  >\r\n                    {provider.enabled ? '🟢 Enabled' : '⚫ Disabled'}",
+        "{ e.stopPropagation(); testProvider(provider); }}>\r\n                    🔑 Test Gate"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\proof-os-views.jsx",
+      "buttons": [
+        "toggleLock(i)}>\r\n                {law.locked ? 'Unlock' : 'Lock Law'}",
+        "{resolving ? 'Enforcing...' : 'Enforce Resolution'}",
+        "{scanning ? 'Scanning...' : 'Run Deep Scan'}",
+        "{recalculating ? 'Auditing Canon...' : 'Run Maturity Audit'}",
+        "{status === 'scanning' ? 'Running Compliance Audit...' : 'Run Compliance Checks'}",
+        "{status === 'gated' ? 'Signing Certificates...' : 'Execute Release Gates'}",
+        "setActiveStep(0)}>Reset Pipeline",
+        "{updating ? 'Recalculating Drift...' : 'Update Mirror Profile'}"
+      ],
+      "endpoints": [
+        {
+          "path": "/api/proof/count",
+          "isAlive": true
+        },
+        {
+          "path": "/api/proof/receipts?limit=60",
+          "isAlive": true
+        },
+        {
+          "path": "/api/logs?limit=1",
+          "isAlive": true
+        },
+        {
+          "path": "/api/metrics",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\rare-capabilities-view.jsx",
+      "buttons": [
+        "setSelectedId(capability.id)}\r\n                >\r\n                  {capability.icon}\r\n                  \r\n                    {capability.short}\r\n                    {capability.promise}",
+        "copyArtifact(artifact.primary, artifact.primaryLabel, setCopied)}\r\n                >\r\n                  {copied === artifact.primaryLabel ? 'Copied' : 'Copy'}",
+        "setSelectedId(item.id)}\r\n            >\r\n              \r\n                {capability.icon}\r\n                {item.score}\r\n              \r\n              {capability.title}\r\n              {item.summary}"
+      ],
+      "endpoints": [
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\real-execution-views.jsx",
+      "buttons": [],
+      "endpoints": [
+        {
+          "path": "/api/queue/master",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\release-spine-panels.jsx",
+      "buttons": [
+        "setReloadKey((value) => value + 1)}>Refresh"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\self-build-forge-view.jsx",
+      "buttons": [
+        "{isCompiling ?  : }\r\n          {isCompiling ? `Compiling ${progress}%` : 'Forge Now'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\studio-grading-release-views.jsx",
+      "buttons": [
+        "Grade Prompt"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\tool-autogen-view.jsx",
+      "buttons": [
+        "setActiveTab(t.id)}>{t.label}",
+        "setSelectedType(t.id)}\r\n                  style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 12px', borderRadius: 8, marginBottom: 4,\r\n                    background: selectedType === t.id ? 'rgba(245,200,66,0.15)' : 'var(--bg-void)',\r\n                    border: `1px solid ${selectedType === t.id ? '#f5c842' : 'var(--border-dim)'}`,\r\n                    color: selectedType === t.id ? '#f5c842' : 'var(--text-secondary)', cursor: 'pointer' }}>\r\n                  {t.label}\r\n                  {t.desc}",
+        "{generating ? '⏳ Generating...' : `🪄 Generate ${TOOL_TYPES.find(t => t.id === selectedType)?.label || 'Tool'}`}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\v3-views.jsx",
+      "buttons": [],
+      "endpoints": [
+        {
+          "path": "/src/prompthouse_50_master_build_prompts.json",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\views.jsx",
+      "buttons": [
+        "setPhase(i)} \r\n            className={`flex flex-col items-center gap-3 p-6 rounded-3xl transition-all duration-300 ${\r\n              i === phase \r\n                ? 'bg-indigo-500 text-white shadow-xl shadow-indigo-500/20' \r\n                : i \r\n            {p.icon}\r\n            {p.label}",
+        "{ copyText(chain); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>{copied ? '✅ Copied!' : '📋 Copy Chain'}",
+        "exportAsMarkdown('PH_EVO_PROMPT_CHAIN', chain)}>⬇️ Export",
+        "addStep(t.id)} style={{ borderColor: t.color + '44', color: t.color }}>{t.icon} {t.label}",
+        "moveUp(i)}>↑",
+        "removeStep(step.id)}>✕",
+        "setFormat(f)}>{f.toUpperCase()}",
+        "⬇️ Export {selected.length > 0 ? `${selected.length} Items` : 'Selected'}",
+        "{ const c = history.map(h => `${h.time} | ${h.domain} | ${h.score}% | ${h.task}`).join('\\n'); exportAsText('PH_Evo_Session_History', c); }}>📜 Export Session History",
+        "exportAsJson('PH_Evo_Full_Vault', vault)}>🗄️ Export Full Vault (JSON)",
+        "{ const agent = { name: 'PromptHouse Evo Studio', model: 'gpt-4o', instructions: 'You are PH Evo Studio Operator. See attached knowledge files for full instructions.' }; exportAsJson('PH_Evo_Agent_Config', agent); }}>🤖 Export Agent Config"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\worktwin-view.jsx",
+      "buttons": [
+        "📡 Run Pattern Miner",
+        "↻ Refresh",
+        "setActiveTab(t.id)}>{t.label}",
+        "📥 Capture Signal with Consent",
+        "Run Miner",
+        "genRecipe(p)}>🪄 Generate Recipe"
+      ],
+      "endpoints": []
+    }
+  ]
+}

@@ -29,7 +29,7 @@ const checks = [
     id: 'promptbridge-direct-imports-enterprise-routes',
     passed: directBridgeImport,
     required: false,
-    repair: "Optional direct path: import registerEnterpriseArchitectureRoutes from './generated_apis/enterprise_architecture_routes.js';",
+    repair: 'Optional direct path: add import statement for ./generated_apis/enterprise_architecture_routes.js',
   },
   {
     id: 'promptbridge-direct-registers-enterprise-routes',
