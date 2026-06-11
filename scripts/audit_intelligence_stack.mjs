@@ -9,12 +9,14 @@ const targets = {
   signalFabric: 'src/core/signals/EvoSignalFabric.js',
   signalBridge: 'src/core/evo-llm/EvoSignalLearningBridge.js',
   appBridge: 'src/core/evo-llm/EvoAppIntelligenceBridge.js',
+  workMemory: 'src/core/evo-llm/EvoWorkMemoryEngine.js',
   evoIndex: 'src/core/evo-llm/index.js',
   signalInstaller: 'scripts/install_evo_signal_fabric_routes.mjs',
   appInstaller: 'scripts/install_app_intelligence_tools.mjs',
   hardener: 'scripts/harden_intelligence_wiring.mjs',
   signalCli: 'scripts/build_signal_learning_dataset.mjs',
   appCli: 'scripts/build_app_intelligence_dataset.mjs',
+  workCli: 'scripts/evo_work_memory.mjs',
   appRoute: 'generated_apis/evo_app_intelligence_routes.js',
   bridge: 'promptbridge-server.js',
   packageJson: 'package.json'
@@ -58,6 +60,7 @@ for (const [id, file] of Object.entries(targets)) exists(`exists:${id}`, file, 3
 
 contains('export:signal-bridge', targets.evoIndex, "export * from './EvoSignalLearningBridge.js';", 5);
 contains('export:app-bridge', targets.evoIndex, "export * from './EvoAppIntelligenceBridge.js';", 5);
+contains('export:work-memory', targets.evoIndex, "export * from './EvoWorkMemoryEngine.js';", 5);
 contains('installer:app-route-writer', targets.appInstaller, 'evo_app_intelligence_routes.js', 5);
 contains('installer:app-cli-writer', targets.appInstaller, 'build_app_intelligence_dataset.mjs', 5);
 contains('installer:bridge-import', targets.appInstaller, 'registerEvoAppIntelligenceRoutes', 5);
@@ -70,8 +73,13 @@ contains('app-bridge:training-output', targets.appBridge, 'app-intelligence-exam
 contains('signal-bridge:training-output', targets.signalBridge, 'signal-learning-examples.json', 5);
 contains('signal-fabric:contract', targets.signalFabric, 'getEvoSignalFabricContract', 5);
 contains('signal-cli:imports-fabric', targets.signalCli, 'importEvoSignalFabricSnapshot', 4);
+contains('work-memory:lessons', targets.workMemory, 'lessons.json', 5);
+contains('work-memory:plans', targets.workMemory, 'evolution-plans.json', 5);
+contains('work-memory:dataset', targets.workMemory, 'work-memory-examples.json', 5);
+contains('work-memory:privacy', targets.workMemory, 'storesRawSecrets: false', 5);
+contains('work-cli:status', targets.workCli, 'getEvoWorkMemoryStatus', 4);
 
-for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.signalInstaller, targets.appInstaller, targets.hardener]) {
+for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.signalInstaller, targets.appInstaller, targets.hardener, targets.workCli]) {
   syntax(`syntax:${file}`, file, 4);
 }
 if (fs.existsSync(abs(targets.appRoute))) syntax(`syntax:${targets.appRoute}`, targets.appRoute, 4);
@@ -100,6 +108,8 @@ const report = {
   recommendedCommands: [
     'npm run evo:wire-intelligence',
     'npm run evo:intelligence:verify',
+    'node scripts/evo_work_memory.mjs --status',
+    'node scripts/evo_work_memory.mjs',
     'npm run evo:signals',
     'npm run evo:app-intelligence',
     'npm run build',
