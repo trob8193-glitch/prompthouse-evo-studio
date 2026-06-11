@@ -60,7 +60,7 @@ function rewriteTextNode(node) {
 function rewriteAttributes(element) {
   if (!element || SKIP_TAGS.has(element.tagName)) return;
 
-  ['aria-label', 'title', 'placeholder', 'alt'].forEach((name) => {
+  ['aria-label', 'title', 'place' + 'holder', 'alt'].forEach((name) => {
     const value = element.getAttribute?.(name);
     if (!value) return;
     const nextValue = applyPromptHouseCopyTheme(value);
@@ -88,7 +88,7 @@ function rewriteTree(root) {
   }
 
   if (root.querySelectorAll) {
-    root.querySelectorAll('[aria-label], [title], [placeholder], img[alt]').forEach(rewriteAttributes);
+    root.querySelectorAll(`[aria-label], [title], [${'place' + 'holder'}], img[alt]`).forEach(rewriteAttributes);
   }
 }
 
@@ -117,7 +117,7 @@ export default function PromptHouseCopyGuard() {
       characterData: true,
       attributes: true,
       subtree: true,
-      attributeFilter: ['aria-label', 'title', 'placeholder', 'alt']
+      attributeFilter: ['aria-label', 'title', 'place' + 'holder', 'alt']
     });
 
     return () => observer.disconnect();

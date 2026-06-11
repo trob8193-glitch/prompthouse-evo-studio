@@ -45,6 +45,8 @@ import registerQuadBrainRoutes from './generated_apis/quadbrain_routes.js';
 import registerEnterpriseArchitectureRoutes from './generated_apis/enterprise_architecture_routes.js';
 import registerEvoTerminalRoutes from './generated_apis/evo_terminal_routes.js';
 import registerEvoCapabilityRoutes from './generated_apis/evo_capability_routes.js';
+import registerEvoSignalFabricRoutes from './generated_apis/evo_signal_fabric_routes.js';
+import registerEvoSignalLearningRoutes from './generated_apis/evo_signal_learning_routes.js';
 import registerPortfolioRoutes from './generated_apis/portfolio_routes.js';
 import registerEngineDashboardRoutes from './generated_apis/engine_dashboard_routes.js';
 import registerEvoLlmRoutes from './generated_apis/evo_llm_routes.js';
@@ -55,6 +57,7 @@ import { setupAgentRoutes, getEvoAgent } from './agent-integration.js';
 import { registerPromptShellRoutes } from './generated_apis/promptshell_routes.js';
 import registerExecutionRoutes from './generated_apis/execution_routes.js';
 import registerExternalConnectorRoutes from './generated_apis/external_connector_routes.js';
+import registerEvoAppIntelligenceRoutes from './generated_apis/evo_app_intelligence_routes.js';
 import { RealExecutionPipeline } from './lib/execution/pipeline.js';
 import { registerCommerceMarketplaceRoutes } from './src/routes/commerce_marketplace_routes.js';
 import { attachSseTransport } from './src/core/mcp/McpServerDaemon.mjs';
@@ -242,6 +245,8 @@ registerEvoLlmRoutes(app);
 registerEdgeIoRoutes(app);
 registerModuleMaturityRoutes(app);
 registerSpineCoreRoutes(app);
+registerEvoSignalFabricRoutes(app);
+registerEvoSignalLearningRoutes(app);
 registerAiProviderStatusRoutes(app);
 registerAiProviderProbeRoutes(app);
 registerStripeHealthRoutes(app);
@@ -255,6 +260,7 @@ registerStoreRoutes(app, { stripe: stripeClient, db, getEvoAgent });
 registerEvoExchangeRoutes(app);
 registerExecutionRoutes(app, { pipeline: executionPipeline });
 registerExternalConnectorRoutes(app, { db });
+registerEvoAppIntelligenceRoutes(app);
 registerCommerceMarketplaceRoutes(app);
 
 // Attach the Global MCP SSE Endpoints
@@ -353,7 +359,7 @@ app.get('/api/metrics', (req, res) => {
   });
 });
 
-app.post('/api/sovereign-ledger/log', (req, res) => {
+const handleLedgerLog = (req, res) => {
   try {
     const { feature_id, action, proof_hash, truth_state, iq_gain } = req.body;
     const id = crypto.randomUUID();
@@ -366,9 +372,12 @@ app.post('/api/sovereign-ledger/log', (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
-});
+};
 
-app.post('/api/sovereign-uplink', (req, res) => {
+app.post('/api/sovereign-ledger/log', handleLedgerLog);
+app.post('/api/evo-ledger/log', handleLedgerLog);
+
+const handleUplink = (req, res) => {
   try {
     const { origin, action, payload } = req.body;
     const timestamp = new Date().toISOString();
@@ -388,7 +397,10 @@ app.post('/api/sovereign-uplink', (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
-});
+};
+
+app.post('/api/sovereign-uplink', handleUplink);
+app.post('/api/evo-uplink', handleUplink);
 
 app.post('/api/training-capture', (req, res) => {
   try {

@@ -1,7 +1,7 @@
 {
-  "scannedAt": "2026-06-11T17:15:36.330Z",
+  "scannedAt": "2026-06-11T18:09:13.955Z",
   "totalComponentsScanned": 131,
-  "totalBackendRoutesFound": 232,
+  "totalBackendRoutesFound": 244,
   "deadLinksDetected": 0,
   "matrix": [
     {
@@ -379,7 +379,7 @@
     {
       "component": "src\\features\\AuthSentry.jsx",
       "buttons": [
-        "setAuthenticated(true)}>\n            ENTER DEMO MODE"
+        "setAuthenticated(true)}>\r\n            ENTER DEMO MODE"
       ],
       "endpoints": []
     },
@@ -402,7 +402,7 @@
       "component": "src\\features\\ConnectionManager.jsx",
       "buttons": [
         "{bonding ?  : }\r\n            Bond Node",
-        "setTargetIp(item.url || item.target || item.ip || '')}\n                        className=\"text-[9px] font-black uppercase tracking-widest text-slate-600 hover:text-white transition-colors\"\n                      >\n                        Configure"
+        "setTargetIp(item.url || item.target || item.ip || '')}\r\n                        className=\"text-[9px] font-black uppercase tracking-widest text-slate-600 hover:text-white transition-colors\"\r\n                      >\r\n                        Configure"
       ],
       "endpoints": []
     },
@@ -535,7 +535,7 @@
       "component": "src\\features\\PricingCheckout.jsx",
       "buttons": [
         "Downgrade/Reset License",
-        "setShowSimulator(null)}\n                className=\"text-slate-400 hover:text-white text-sm\"\n                disabled={simulationStep === 1}\n              >\n                ✕"
+        "setShowSimulator(null)}\r\n                className=\"text-slate-400 hover:text-white text-sm\"\r\n                disabled={simulationStep === 1}\r\n              >\r\n                ✕"
       ],
       "endpoints": [
         {
@@ -578,8 +578,8 @@
       "buttons": [
         "Run in Terminal",
         "{applied ?  : }\r\n                      {applied ? 'Applied!' : 'Apply to File'}",
-        "setActiveSurface(id)}\n                className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${\n                  activeSurface === id ? 'bg-emerald-500 text-black' : 'text-gray-400 hover:bg-gray-800 hover:text-white'\n                }`}\n              >\n                {label}",
-        "setActivePage('settings')}\n            className=\"p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors\"\n          >"
+        "setActiveSurface(id)}\r\n                className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${\r\n                  activeSurface === id ? 'bg-emerald-500 text-black' : 'text-gray-400 hover:bg-gray-800 hover:text-white'\r\n                }`}\r\n              >\r\n                {label}",
+        "setActivePage('settings')}\r\n            className=\"p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors\"\r\n          >"
       ],
       "endpoints": []
     },
@@ -659,7 +659,7 @@
         "setTab('handshakes')}>Handshakes",
         "🧬 Spawn Intelligence",
         "{\r\n            if (!bridgeName) return;\r\n            const code = `// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\\nexport async function ${bridgeName.replace(/\\s+/g, '')}Bridge(payload) {\\n  const response = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '${endpoint}', {\\n    method: 'POST',\\n    body: JSON.stringify(payload)\\n  });\\n  return response.json();\\n}`;\r\n            fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/files/write', {\r\n              method: 'POST',\r\n              headers: { 'Content-Type': 'application/json' },\r\n              body: JSON.stringify({\r\n                path: `src/generated/bridges/${bridgeName.replace(/\\s+/g, '')}Bridge.js`,\r\n                content: code\r\n              })\r\n            }).then(res => {\r\n              if (res.ok) {\r\n                alert(`🚀 Bridge Forged: ${bridgeName} saved to src/generated/bridges/`);\r\n              } else {\r\n                alert(`❌ Failed to forge bridge.`);\r\n              }\r\n            }).catch(err => {\r\n              alert(`❌ Error connecting to bridge.`);\r\n            });\r\n          }}>🚀 Forge Bridge",
-        "setSignedAt(new Date().toISOString())}\n                  className=\"btn btn-primary btn-sm\"\n                  style={{ width: 'fit-content' }}\n                >\n                  Sign New Handshake"
+        "setSignedAt(new Date().toISOString())}\r\n                  className=\"btn btn-primary btn-sm\"\r\n                  style={{ width: 'fit-content' }}\r\n                >\r\n                  Sign New Handshake"
       ],
       "endpoints": []
     },

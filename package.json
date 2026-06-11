@@ -151,7 +151,13 @@
     "enterprise:edge": "npm run architecture:proof && npm run cost && npm run maturity:check && npm run platform:release-verdict",
     "enterprise:full-proof": "npm run architecture:proof && npm run test && npm run build && npm run audit:imports && npm run audit:css && npm run audit:dead-surfaces && npm run audit:ui-matrix && npm run maturity:strict && npm run cost && npm run platform:ready",
     "launch:prove": "node scripts/prove_production_launch.mjs",
-    "test:enterprise-license": "node scripts/test-enterprise-license.mjs"
+    "test:enterprise-license": "node scripts/test-enterprise-license.mjs",
+    "evo:app-intelligence": "node scripts/build_app_intelligence_dataset.mjs",
+    "evo:app-intelligence:status": "node scripts/build_app_intelligence_dataset.mjs --status",
+    "evo:signals": "node scripts/build_signal_learning_dataset.mjs",
+    "evo:signals:status": "node scripts/build_signal_learning_dataset.mjs --status",
+    "evo:wire-intelligence": "node scripts/install_evo_signal_fabric_routes.mjs && node scripts/install_app_intelligence_tools.mjs && node scripts/harden_intelligence_wiring.mjs",
+    "evo:intelligence:verify": "node scripts/harden_intelligence_wiring.mjs && node --check promptbridge-server.js"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8",

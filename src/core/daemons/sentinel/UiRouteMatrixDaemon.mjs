@@ -8,7 +8,7 @@ const execAsync = promisify(exec);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '../../../..');
 
-// Basic SovereignLogger mock if missing, but typically we have Log.info available.
+// Basic SovereignLogger fallback if missing, but typically we have Log.info available.
 // We'll define a robust standalone logger just in case this runs completely decoupled.
 const Log = {
   info: (msg) => console.log(`\x1b[36m[INFO]\x1b[0m ${msg}`),

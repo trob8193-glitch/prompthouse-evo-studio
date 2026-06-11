@@ -30,6 +30,85 @@ function loadEnv() {
 //  → writes the improvements to disk.
 // ═══════════════════════════════════════════════════════════════
 
+async function broadcastSpatialMap(spatialData) {
+  const env = loadEnv();
+  const bridgePort = env.BRIDGE_PORT || process.env.BRIDGE_PORT || 3001;
+  const bridgeUrl = `http://127.0.0.1:${bridgePort}/api/evo-uplink`;
+  const targets = [{ url: bridgeUrl, type: 'Studio Brain' }];
+
+  // Read bonded nodes
+  try {
+    const bondedFile = path.join(rootDir, '.prompthouse-data', 'bonded-nodes.json');
+    if (fs.existsSync(bondedFile)) {
+      const bondedNodes = JSON.parse(fs.readFileSync(bondedFile, 'utf-8'));
+      for (const node of bondedNodes) {
+        if (node.url) {
+          targets.push({ url: `${node.url}/api/evo-uplink`, type: 'Bonded Node' });
+        } else if (node.ip && node.port) {
+          targets.push({ url: `http://${node.ip}:${node.port}/api/evo-uplink`, type: 'Bonded Node' });
+        }
+      }
+    }
+  } catch (e) {
+    Log.error(`\x1b[33m⚠️ Failed to read bonded nodes: ${e.message}\x1b[0m`);
+  }
+
+  // Check IDE bonds
+  const ideBonds = ['CURSOR_BOND', 'CODEX_BOND', 'VSCODE_BOND'];
+  for (const bondKey of ideBonds) {
+    const bondVal = env[bondKey] || process.env[bondKey];
+    if (bondVal && bondVal !== 'simulated_bypass') {
+      targets.push({ url: `${bondVal}/api/evo-uplink`, type: `IDE Bond (${bondKey})` });
+    }
+  }
+
+  Log.info(`\x1b[36m[EVO] Broadcasting Spatial Map to ${targets.length} connected entities...\x1b[0m`);
+
+  const payload = {
+    origin: 'evolution-daemon',
+    action: 'SPATIAL_MAP_BROADCAST',
+    payload: JSON.stringify(spatialData)
+  };
+
+  const promises = targets.map(async (target) => {
+    try {
+      // Fire and forget asynchronously
+      fetch(target.url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }).catch(() => {});
+      Log.info(`   -> Broadcast sent to ${target.type}: ${target.url}`);
+    } catch (e) {
+      Log.info(`   -> Broadcast failed to ${target.type}: ${target.url}`);
+    }
+  });
+
+  await Promise.all(promises);
+
+  // ALSO send to local signal learning ingest
+  try {
+    const ingestPayload = {
+      sourceType: 'evolution-daemon',
+      feature: 'ui-adaptation',
+      signalKind: 'spatial-map',
+      summary: 'Evolution Daemon spatial map captured for AI training',
+      payload: spatialData,
+      confidence: 0.95,
+      learningValue: 0.85
+    };
+    fetch(`http://127.0.0.1:${bridgePort}/api/evo-signal-learning/ingest`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(ingestPayload)
+    }).catch(() => {});
+    Log.info(`   -> Pushed to Evo Signal Learning Ingest`);
+  } catch (e) {
+    // ignore
+  }
+}
+
+
 async function callGeminiForEvolution(spatialData) {
   const env = loadEnv();
   const apiKey = env.GEMINI_API_KEY || process.env.GEMINI_API_KEY;
@@ -192,6 +271,9 @@ async function runEvolution() {
       timestamp: new Date().toISOString(),
     };
   }
+
+  // Broadcast the map to bonded IDEs and Studio Brains before hitting Gemini
+  await broadcastSpatialMap(spatialData);
 
   // Step 2: Send to Gemini for analysis
   Log.info('\x1b[36m[EVO] Step 2: Sending to Gemini AI for UI analysis...\x1b[0m');

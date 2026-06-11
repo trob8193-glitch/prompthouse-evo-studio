@@ -43,7 +43,7 @@ export function EvoEyesView() {
 
   const summary = diagnostics?.summary || {};
   const probes = diagnostics?.probes || [];
-  const modules = diagnostics?.modules || [];
+  const modules = diagnostics?.modules || diagnostics?.graph?.nodes || [];
 
   const selected = useMemo(() => modules.find((m) => m.id === selectedId) || null, [modules, selectedId]);
 
