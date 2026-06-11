@@ -3,6 +3,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { Log } from '../src/core/autonomy/SovereignLogger.js';
+import { getEvoWiFiStatus, listBonds } from '../src/core/signals/EvoWiFi.js';
+import { getGlobalNodeStatus } from '../src/core/evo-llm/index.js';
 
 async function generateSpatialMap() { throw new Error("Spatial mapper not available"); }
 
@@ -127,18 +129,19 @@ async function callGeminiForEvolution(spatialData) {
   }
 
   const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
-  const systemPrompt = `You are a senior UI/UX engineer analyzing a spatial map of a React application.
-The spatial map contains exact bounding rectangles of every UI element.
-Your job: identify ONE specific, actionable CSS or React improvement.
+  const systemPrompt = `You are the QuadBrain Systems Architect analyzing a spatial map of a React application and its underlying intelligence network.
+The spatial map contains exact bounding rectangles of every UI element, alongside real-time Wi-Fi topology, active bonds, and Global Hub status.
+Your job: identify ONE specific, actionable CSS, React, or Architecture improvement.
 Return ONLY a JSON object with this exact schema:
 {
-  "targetFile": "src/index.css or another .css file under src",
+  "targetFile": "src/index.css, src/components/..., or src/core/...",
   "description": "What to improve and why",
   "cssRule": "selector { property: value; }" OR null,
-  "componentChange": "description of React change" OR null
+  "componentChange": "description of React change" OR null,
+  "architectureChange": "description of router/tether/bond/networking improvement" OR null
 }
 Rules: No markdown fences. No explanations outside the JSON. Only one change per response.
-Focus on: spacing, alignment, contrast, visual hierarchy, micro-animations, premium feel.`;
+Focus on: spacing, visual hierarchy, micro-animations, or strengthening QuadBrain resilience (e.g., tether logic, offline fallbacks).`;
 
   const body = {
     system_instruction: { parts: [{ text: systemPrompt }] },
@@ -263,10 +266,22 @@ async function runEvolution() {
         size: fs.statSync(path.join(srcPath, f)).size,
         hasStyles: fs.readFileSync(path.join(srcPath, f), 'utf-8').includes('style={{'),
       }));
+      
+    // Harvest QuadBrain Environment Map
+    let quadbrainEnvironment = {};
+    try {
+      const wifiStatus = await getEvoWiFiStatus(rootDir);
+      const bonds = listBonds(rootDir);
+      const globalNode = getGlobalNodeStatus({ rootDir });
+      quadbrainEnvironment = { wifiStatus, bonds, globalNode };
+    } catch (err) {
+      Log.info(`\x1b[33m⚠️ Could not harvest full QuadBrain map: ${err.message}\x1b[0m`);
+    }
     
     spatialData = {
-      mode: 'file_analysis',
+      mode: 'file_and_network_analysis',
       components,
+      quadbrainEnvironment,
       totalComponents: components.length,
       timestamp: new Date().toISOString(),
     };
@@ -292,8 +307,9 @@ async function runEvolution() {
   let applied = false;
   if (suggestion.cssRule) {
     applied = applyCssChange(suggestion);
-  } else if (suggestion.componentChange && suggestion.targetFile) {
-    Log.info(`\x1b[35m[EVO] Autonomous Component Override Initiated for ${suggestion.targetFile}...\x1b[0m`);
+  } else if ((suggestion.componentChange || suggestion.architectureChange) && suggestion.targetFile) {
+    const changeType = suggestion.architectureChange ? 'Architecture' : 'Component';
+    Log.info(`\x1b[35m[EVO] Autonomous ${changeType} Override Initiated for ${suggestion.targetFile}...\x1b[0m`);
     
     // We import locally to prevent circular dependencies in script execution
     const { TerminalExecutionAdaptor } = await import('../lib/terminal/TerminalExecutionAdaptor.js');
@@ -310,7 +326,8 @@ async function runEvolution() {
     } else {
       // 2. Ask Gemini to rewrite the file based on the suggestion
       Log.info(`\x1b[36m[EVO] Requesting Gemini to rewrite the physical file in Phantom Sandbox...\x1b[0m`);
-      const rewritePrompt = `Rewrite the following React component to implement this improvement: "${suggestion.componentChange}". Return ONLY the raw file content, no markdown blocks.`;
+      const improvementInstruction = suggestion.architectureChange || suggestion.componentChange;
+      const rewritePrompt = `Rewrite the following file to implement this improvement: "${improvementInstruction}". Return ONLY the raw file content, no markdown blocks.`;
       
       try {
         const rewriteRes = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', {
