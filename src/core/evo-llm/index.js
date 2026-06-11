@@ -10,3 +10,4 @@ export * from './EvoLlmRegistry.js';
 export * from './EvoLlmGlobalNode.js';
 export * from './EvoSignalLearningBridge.js';
 export * from './EvoAppIntelligenceBridge.js';
+export * from './EvoWorkMemoryEngine.js';
