@@ -8,3 +8,4 @@ export * from './EvoLlmProviderAdapter.js';
 export * from './EvoLlmCostGate.js';
 export * from './EvoLlmRegistry.js';
 export * from './EvoLlmGlobalNode.js';
+export * from './EvoSignalLearningBridge.js';
