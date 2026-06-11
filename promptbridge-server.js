@@ -58,6 +58,9 @@ import { registerPromptShellRoutes } from './generated_apis/promptshell_routes.j
 import registerExecutionRoutes from './generated_apis/execution_routes.js';
 import registerExternalConnectorRoutes from './generated_apis/external_connector_routes.js';
 import registerEvoAppIntelligenceRoutes from './generated_apis/evo_app_intelligence_routes.js';
+import registerEvoWiFiRoutes from './generated_apis/evo_wifi_routes.js';
+import registerEvoBondsRoutes from './generated_apis/evo_bonds_routes.js';
+import registerBrainRouterRoutes from './generated_apis/brain_router_routes.js';
 import { RealExecutionPipeline } from './lib/execution/pipeline.js';
 import { registerCommerceMarketplaceRoutes } from './src/routes/commerce_marketplace_routes.js';
 import { attachSseTransport } from './src/core/mcp/McpServerDaemon.mjs';
@@ -262,6 +265,9 @@ registerEvoExchangeRoutes(app);
 registerExecutionRoutes(app, { pipeline: executionPipeline });
 registerExternalConnectorRoutes(app, { db });
 registerEvoAppIntelligenceRoutes(app);
+registerEvoWiFiRoutes(app);
+registerEvoBondsRoutes(app);
+registerBrainRouterRoutes(app);
 registerCommerceMarketplaceRoutes(app);
 
 // Attach the Global MCP SSE Endpoints

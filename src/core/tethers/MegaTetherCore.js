@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { initializeAutonomousTetherEngine } from './AutonomousTetherEngine.js';
 
 /**
  * MEGA TETHER CORE
@@ -79,6 +80,9 @@ export function initializeMegaTether(db, intelligenceCore) {
   if (!globalTetherCore) {
     globalTetherCore = new MegaTetherCore(db, intelligenceCore);
     console.log('[Mega Tether] Core initialized.');
+    
+    // Start autonomous monitoring loop
+    initializeAutonomousTetherEngine(process.cwd());
   }
   return globalTetherCore;
 }
