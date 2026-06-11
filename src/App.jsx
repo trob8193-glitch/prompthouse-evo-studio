@@ -3,6 +3,7 @@ import { ErrorBoundary } from './components/ErrorBoundary.jsx';
 import TopBar from './components/TopBar.jsx';
 import { Navigation } from './components/Navigation.jsx';
 import { useSovereignStore } from './store.js';
+import PromptHouseCopyGuard from './components/PromptHouseCopyGuard.jsx';
 import {
   getEvolutionClientId,
   fetchEvolutionProfile,
@@ -133,16 +134,12 @@ function NotificationToasts() {
 
 export default function App() {
   const evolutionClientIdRef = React.useRef(null);
-  const startGlobalSync = useSovereignStore((s) => s.startGlobalSync);
-  const stopGlobalSync = useSovereignStore((s) => s.stopGlobalSync);
   const activePage = useSovereignStore((s) => s.activePage);
   const terminalOpen = useSovereignStore((s) => s.terminalOpen);
   const setEvolutionProfile = useSovereignStore((s) => s.setEvolutionProfile);
   const applyEvolutionRuntime = useSovereignStore((s) => s.applyEvolutionRuntime);
   const singularityActive = useSovereignStore((s) => s.singularityActive);
   const setSingularityActive = useSovereignStore((s) => s.setSingularityActive);
-  const checkAuth = useSovereignStore((s) => s.checkAuth);
-  const isAuthenticated = useSovereignStore((s) => s.isAuthenticated);
 
   React.useEffect(() => {
     const clientId = getEvolutionClientId();
@@ -207,7 +204,7 @@ export default function App() {
           background: 'var(--bg-void)', color: 'var(--text-primary)', fontFamily: 'var(--font-sans)',
           overflow: 'hidden',
         }}>
-          
+          <PromptHouseCopyGuard />
           {singularityActive && <WitnessConsole />}
           <SingularityEngineOverlay />
           <TopBar />
@@ -217,7 +214,7 @@ export default function App() {
             className="absolute top-16 right-4 z-50 bg-[#00f0ff]/10 text-[#00f0ff] text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl border border-[#00f0ff]/30 hover:bg-[#00f0ff]/20 shadow-[0_0_20px_rgba(0,240,255,0.15)] flex items-center gap-2 group transition-all duration-300"
           >
             <Zap size={14} className="group-hover:scale-125 transition-transform" />
-            Manifest Singularity Engine
+            Open Evo Singularity Engine
           </button>
 
           <EvoEyes />
