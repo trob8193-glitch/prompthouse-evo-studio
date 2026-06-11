@@ -106,6 +106,7 @@ import {
 import { initializeMegaTether } from './src/core/tethers/MegaTetherCore.js';
 import { hasExplicitOwnerApproval, getApprovalBlockReason } from './src/owner-approval.js';
 import { runNuclearTruthAudit } from './src/core/audit/NuclearTruthAudit.js';
+import { QuadBrainEvolutionDaemon } from './src/core/daemons/QuadBrainEvolutionDaemon.js';
 
 const runtimeBridgePort = process.env.BRIDGE_PORT;
 dotenv.config({ override: true });
@@ -511,6 +512,10 @@ const intelligenceCore = new IntelligenceCore(ai, licenseManager, telemetryLedge
 const promptCompressor = new PromptCompressor();
 
 const megaTether = initializeMegaTether(db, intelligenceCore);
+
+// Initialize Autonomous Evolution Daemon
+const evolutionDaemon = new QuadBrainEvolutionDaemon(process.cwd());
+evolutionDaemon.start(300000); // 5 minutes
 
 // Global Savings Ledger
 let globalFirewallSavings = {
