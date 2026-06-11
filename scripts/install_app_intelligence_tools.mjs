@@ -143,8 +143,9 @@ if (fs.existsSync(packagePath)) {
   pkg.scripts['evo:app-intelligence:status'] = 'node scripts/build_app_intelligence_dataset.mjs --status';
   pkg.scripts['evo:signals'] = 'node scripts/build_signal_learning_dataset.mjs';
   pkg.scripts['evo:signals:status'] = 'node scripts/build_signal_learning_dataset.mjs --status';
-  pkg.scripts['evo:wire-intelligence'] = 'node scripts/install_evo_signal_fabric_routes.mjs && node scripts/install_app_intelligence_tools.mjs';
+  pkg.scripts['evo:wire-intelligence'] = 'node scripts/install_evo_signal_fabric_routes.mjs && node scripts/install_app_intelligence_tools.mjs && node scripts/harden_intelligence_wiring.mjs';
+  pkg.scripts['evo:intelligence:verify'] = 'node scripts/harden_intelligence_wiring.mjs && node --check promptbridge-server.js';
   fs.writeFileSync(packagePath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
 }
 
-console.log('PromptHouse Evo App Intelligence tools installed and wired.');
+console.log('PromptHouse Evo App Intelligence tools installed, wired, and ready for hardening.');
