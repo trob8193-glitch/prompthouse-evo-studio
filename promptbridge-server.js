@@ -100,6 +100,7 @@ import {
   DEFAULT_PROMPT_PACKET_PATH,
   buildPromptPacketPreview,
 } from './src/native-prompt-packet.js';
+import { initializeMegaTether } from './src/core/tethers/MegaTetherCore.js';
 import { hasExplicitOwnerApproval, getApprovalBlockReason } from './src/owner-approval.js';
 import { runNuclearTruthAudit } from './src/core/audit/NuclearTruthAudit.js';
 
@@ -502,6 +503,8 @@ const telemetryLedger = new TelemetryLedger(DATA_DIR);
 const intelligenceCore = new IntelligenceCore(ai, licenseManager, telemetryLedger);
 
 const promptCompressor = new PromptCompressor();
+
+const megaTether = initializeMegaTether(db, intelligenceCore);
 
 // Global Savings Ledger
 let globalFirewallSavings = {
