@@ -1,8 +1,8 @@
 # Full UI Button-to-Route Matrix
 
-**Generated**: 2026-06-11T19:03:26.827Z
+**Generated**: 2026-06-11T19:59:29.703Z
 **Components Scanned**: 131
-**Known Backend Routes**: 258
+**Known Backend Routes**: 268
 **Potential Dead Links Detected**: 0
 
 ## Matrix

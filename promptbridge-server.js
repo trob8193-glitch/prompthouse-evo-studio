@@ -63,6 +63,7 @@ import registerEvoBondsRoutes from './generated_apis/evo_bonds_routes.js';
 import registerBrainRouterRoutes from './generated_apis/brain_router_routes.js';
 import { RealExecutionPipeline } from './lib/execution/pipeline.js';
 import { registerCommerceMarketplaceRoutes } from './src/routes/commerce_marketplace_routes.js';
+import { registerStudioMarketplaceRoutes } from './server/routes/studio_marketplace_routes.js';
 import { attachSseTransport } from './src/core/mcp/McpServerDaemon.mjs';
 import { registerRealTimeIngestRoutes } from './server/routes/realtime-ingest.routes.js';
 
@@ -270,6 +271,7 @@ registerEvoWiFiRoutes(app);
 registerEvoBondsRoutes(app);
 registerBrainRouterRoutes(app);
 registerCommerceMarketplaceRoutes(app);
+registerStudioMarketplaceRoutes(app);
 
 // Attach the Global MCP SSE Endpoints
 attachSseTransport(app);

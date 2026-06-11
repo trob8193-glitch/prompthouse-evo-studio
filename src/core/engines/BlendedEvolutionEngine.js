@@ -3,6 +3,7 @@ import path from 'path';
 import { Log } from '../autonomy/SovereignLogger.js';
 import { TerminalExecutionAdaptor } from '../../../lib/terminal/TerminalExecutionAdaptor.js';
 import { runProofCommands } from '../evolution/ProofRunner.js';
+import { EvoGitLedger } from '../evo-llm/EvoGitLedger.js';
 
 function loadEnv(rootDir) {
   const envPath = path.join(rootDir, '.env');
@@ -64,6 +65,14 @@ export class BlendedEvolutionEngine {
     const adaptor = new TerminalExecutionAdaptor(this.rootDir, true);
     const targetPath = path.join(this.rootDir, suggestion.targetFile);
     
+    const ledger = new EvoGitLedger(this.rootDir);
+    const snapshot = ledger.createCryptographicSnapshot(suggestion.targetFile);
+    if (!snapshot.success) {
+      Log.error(`\x1b[31m❌ Could not capture cryptographic snapshot for ${suggestion.targetFile}\x1b[0m`);
+      return false;
+    }
+    const preHash = snapshot.hash;
+
     const readResult = adaptor.readFile(targetPath);
     if (!readResult.success) {
       Log.error(`\x1b[31m❌ Could not read target file for evolution: ${readResult.error}\x1b[0m`);
@@ -108,13 +117,21 @@ export class BlendedEvolutionEngine {
            
            if (!proof.passed) {
              Log.error(`\x1b[31m🚨 BUILD FAILED AFTER EVOLUTION. HALLUCINATION CONTAINED IN SANDBOX.\x1b[0m`);
-             Log.info(`\x1b[33m⚠️ Rollback complete. Phantom file discarded.\x1b[0m`);
+             Log.info(`\x1b[33m⚠️ Rollback complete. Phantom file discarded. Math snapshot preserved.\x1b[0m`);
              return false;
            } else {
              Log.info(`\x1b[32m🛡️ Build verified! Auto-merging from Phantom Sandbox into main repository.\x1b[0m`);
              const commitRes = adaptor.commit(suggestion.targetFile);
              if (commitRes.success) {
-                Log.success(`\x1b[32m✨ Merged successfully!\x1b[0m`);
+                const finalContent = fs.readFileSync(targetPath, 'utf8');
+                const postHash = ledger.hashContent(finalContent);
+                ledger.writeLedgerCommit({
+                  targetFile: suggestion.targetFile,
+                  preHash,
+                  postHash,
+                  intention: improvementInstruction
+                });
+                Log.success(`\x1b[32m✨ Merged successfully and signed into Unbreakable Evo Git Ledger!\x1b[0m`);
                 return true;
              } else {
                 Log.error(`\x1b[31m❌ Merge failed: ${commitRes.error}\x1b[0m`);
