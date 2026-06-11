@@ -9,20 +9,31 @@ if (!fs.existsSync(bridgeFile)) {
 }
 
 let content = fs.readFileSync(bridgeFile, 'utf8');
-const importLine = "import registerEvoSignalFabricRoutes from './generated_apis/evo_signal_fabric_routes.js';";
-const registerLine = 'registerEvoSignalFabricRoutes(app);';
+const routeModules = [
+  {
+    importLine: "import registerEvoSignalFabricRoutes from './generated_apis/evo_signal_fabric_routes.js';",
+    registerLine: 'registerEvoSignalFabricRoutes(app);'
+  },
+  {
+    importLine: "import registerEvoSignalLearningRoutes from './generated_apis/evo_signal_learning_routes.js';",
+    registerLine: 'registerEvoSignalLearningRoutes(app);'
+  }
+];
 
-if (!content.includes(importLine)) {
-  const anchor = "import registerExternalConnectorRoutes from './generated_apis/external_connector_routes.js';";
-  if (!content.includes(anchor)) throw new Error('Could not find generated API import anchor.');
-  content = content.replace(anchor, `${anchor}\n${importLine}`);
-}
+const importAnchor = "import registerExternalConnectorRoutes from './generated_apis/external_connector_routes.js';";
+const registerAnchor = 'registerExternalConnectorRoutes(app, { db });';
 
-if (!content.includes(registerLine)) {
-  const anchor = 'registerExternalConnectorRoutes(app, { db });';
-  if (!content.includes(anchor)) throw new Error('Could not find generated API registration anchor.');
-  content = content.replace(anchor, `${anchor}\n${registerLine}`);
+for (const module of routeModules) {
+  if (!content.includes(module.importLine)) {
+    if (!content.includes(importAnchor)) throw new Error('Could not find generated API import anchor.');
+    content = content.replace(importAnchor, `${importAnchor}\n${module.importLine}`);
+  }
+
+  if (!content.includes(module.registerLine)) {
+    if (!content.includes(registerAnchor)) throw new Error('Could not find generated API registration anchor.');
+    content = content.replace(registerAnchor, `${registerAnchor}\n${module.registerLine}`);
+  }
 }
 
 fs.writeFileSync(bridgeFile, content, 'utf8');
-console.log('Evo Signal Fabric routes installed into promptbridge-server.js');
+console.log('Evo Signal Fabric and Signal Learning routes installed into promptbridge-server.js');
