@@ -50,7 +50,7 @@ export function VectorMemoryView() {
             <Brain size={32} />
           </div>
           <div>
-            <h2 className="text-2xl font-black text-white">Sovereign Vector Store</h2>
+            <h2 className="text-2xl font-black text-white">Evo Studio Vector Store</h2>
             <p className="text-slate-500 font-mono text-xs uppercase tracking-widest">Multi-Dimensional Session DNA Indexing</p>
           </div>
         </div>
@@ -297,7 +297,7 @@ export function RealitySynthesisView() {
           </div>
           <div>
             <h2 className="text-2xl font-black text-white">Reality Synthesis</h2>
-            <p className="text-slate-500 font-mono text-xs uppercase tracking-widest">Clone any application surface into sovereign logic.</p>
+            <p className="text-slate-500 font-mono text-xs uppercase tracking-widest">Clone any application surface into evo logic.</p>
           </div>
         </div>
 
@@ -797,7 +797,7 @@ export function ProofVaultView() {
         <Lock size={48} className="mx-auto text-slate-700 mb-6" />
         <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Vault Status: {data?.status || 'SEALED'}</div>
         <div className="text-xs font-bold text-white mt-2">
-          {loading ? 'Counting Receipts...' : `${data?.count || 0} Sovereign Receipts Archived`}
+          {loading ? 'Counting Receipts...' : `${data?.count || 0} Evo Studio Receipts Archived`}
         </div>
       </div>
     </Card>
@@ -811,7 +811,7 @@ export function SovereignFinalityView() {
           <Shield size={48} className="text-indigo-400" />
        </div>
        <div className="space-y-2">
-         <h2 className="text-4xl font-black text-white tracking-tighter">SOVEREIGN FINALITY</h2>
+         <h2 className="text-4xl font-black text-white tracking-tighter">EVO STUDIO FINALITY</h2>
          <p className="text-slate-500 text-sm font-mono uppercase tracking-[0.2em]">Omega State Established & Immutable</p>
        </div>
        <div className="flex justify-center gap-4">

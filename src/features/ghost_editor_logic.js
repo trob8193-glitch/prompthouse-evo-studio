@@ -47,8 +47,8 @@ export class GhostEditorLogic {
 
     // Real AI Optimization Call
     if (this.ai) {
-      const prompt = `You are the Sovereign Architect. Optimize the following code for maximum performance, density, and structural integrity. 
-Maintain all core functionality but use modern ES6+ patterns and Ph-Evo Sovereign principles.
+      const prompt = `You are the Evo Studio Architect. Optimize the following code for maximum performance, density, and structural integrity. 
+Maintain all core functionality but use modern ES6+ patterns and Ph-Evo Evo Studio principles.
 Return ONLY the optimized code. No explanations.
 
 File: ${relativePath}
@@ -72,7 +72,7 @@ ${originalCode}`;
     const ghostCode = originalCode
       .replace(/var /g, 'const ')
       .replace(/function\s+(\w+)\s*\((.*?)\)\s*\{/g, 'const $1 = ($2) => {')
-      + '\n\n// [SOVEREIGN OPTIMIZATION APPLIED]';
+      + '\n\n// [EVO STUDIO OPTIMIZATION APPLIED]';
 
     return { originalCode, ghostCode };
   }

@@ -105,13 +105,13 @@ class ${toPascal(feature)}RepositoryImpl implements ${toPascal(feature)}Reposito
 
   @override
   Future<List<${toPascal(feature)}Model>> fetchAll() async {
-    // [SOVEREIGN: Strict Implementation Boundary]
+    // [EVO STUDIO: Strict Implementation Boundary]
     throw UnimplementedError('Real API connection required.');
   }
 
   @override
   Future<${toPascal(feature)}Model> fetchById(String id) async {
-    // [SOVEREIGN: Strict Implementation Boundary]
+    // [EVO STUDIO: Strict Implementation Boundary]
     throw UnimplementedError('Real API connection required.');
   }
 
@@ -294,7 +294,7 @@ export const use${toPascal(feature)}Store = create<${toPascal(feature)}State>()(
       fetch: async () => {
         set({ isLoading: true, error: null });
         try {
-          // [SOVEREIGN: Strict Implementation Boundary]
+          // [EVO STUDIO: Strict Implementation Boundary]
           throw new Error('Real API connection required.');
         } catch (err) {
           set({ error: String(err), isLoading: false });
@@ -526,7 +526,7 @@ export class MobileEngine {
     
     const prompt = `You are an expert ${arch.includes('rn_') ? 'React Native' : 'Flutter'} developer.
 Below is scaffolded code for the "${feature}" feature. It contains boundaries marked with:
-// [SOVEREIGN: Strict Implementation Boundary]
+// [EVO STUDIO: Strict Implementation Boundary]
 
 Your task is to REPLACE those boundaries with real, compiling network requests using ${arch.includes('rn_') ? 'fetch or axios' : 'dio or http'}.
 Do not change the rest of the code structure, just inject the real implementations for fetching the list and the single item.

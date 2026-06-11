@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useEvoStore } from './store.js';
 
-// ── SOVEREIGN FORGE: THE INVENTION LAYER ───────────────────
+// ── EVO STUDIO FORGE: THE INVENTION LAYER ───────────────────
 
 export function ForgeLabView() {
   const [tab, setTab] = useState('agents');
@@ -10,7 +10,7 @@ export function ForgeLabView() {
     <div className="flex-col">
       <div className="flex-between">
         <div>
-          <div className="page-title">⚒️ The Sovereign Forge</div>
+          <div className="page-title">⚒️ The Evo Studio Forge</div>
           <div className="page-subtitle">Invent new intelligences, bridges, and protocols. Evolutionary development.</div>
         </div>
         <div className="tabs-bar">
@@ -60,7 +60,7 @@ function AgentArchitect() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        path: `.sovereign-vault/agents/${newAgent.id}.json`,
+        path: `.evo-vault/agents/${newAgent.id}.json`,
         content: JSON.stringify(newAgent, null, 2)
       })
     }).then(res => {
@@ -83,7 +83,7 @@ function AgentArchitect() {
         <div className="card-body flex-col">
           <div className="field">
             <label className="field-label">Agent Name</label>
-            <input className="field-input" value={name} onChange={e => setName(e.target.value)} ghostInput="e.g. Sovereign Auditor" />
+            <input className="field-input" value={name} onChange={e => setName(e.target.value)} ghostInput="e.g. Evo Studio Auditor" />
           </div>
           <div className="field">
             <label className="field-label">Primary Role</label>
@@ -179,7 +179,7 @@ function HandshakeComposer() {
              <div className="flex-col gap-16">
                 <div className="flex-between" style={{ borderBottom: '1px solid var(--border-dim)', paddingBottom: 12 }}>
                    <div>
-                      <div style={{ fontWeight: 800 }}>Standard Sovereign Handshake</div>
+                      <div style={{ fontWeight: 800 }}>Standard Evo Studio Handshake</div>
                       <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>v1.0.0-PROMPT-NATIVE</div>
                    </div>
                    <span className="badge badge-green">ACTIVE</span>

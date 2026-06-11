@@ -46,7 +46,7 @@ const MODULE_SEEDS = [
   { id: 'deployment-center', name: 'Deployment Center', uiHints: ['DeploymentCenterView', 'DeployRailView'], apiHints: ['deploy', 'deployment'], testHints: ['deploy'] },
   { id: 'settings-api', name: 'Settings & API Credentials', uiHints: ['GlobalAPISettingsView', 'ProviderStatusPanel', 'ProviderCredentialChecklistPanel'], apiHints: ['api_keys', 'provider', 'credential'], testHints: ['provider', 'credential'] },
   { id: 'live-inspector', name: 'Live Inspector & Diagnostics', uiHints: ['LiveInspector', 'EvoEyesView', 'studio_diagnostics'], apiHints: ['diagnostics', 'metrics', 'healthz'], testHints: ['diagnostics', 'health'] },
-  { id: 'sovereign-control', name: 'Sovereign Control', uiHints: ['SovereignControl', 'SingularityCoreView', 'RecursiveSwarmView'], apiHints: ['sovereign', 'singularity', 'swarm'], testHints: ['sovereign'] }
+  { id: 'evo-control', name: 'Evo Studio Control', uiHints: ['SovereignControl', 'SingularityCoreView', 'RecursiveSwarmView'], apiHints: ['evo', 'singularity', 'swarm'], testHints: ['evo'] }
 ];
 
 function walk(root, allowedExts, ignoreDirs = new Set(['node_modules', '.git', 'dist', 'build', '.prompthouse-data'])) {

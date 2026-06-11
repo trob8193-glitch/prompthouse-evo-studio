@@ -362,7 +362,7 @@ export function EvoModelConfig() {
 
 export function SovereignControl() {
   return (
-    <ScreenTemplate title="Sovereign Control" subtitle="Maximum Executed Recursive Autonomy + Sovereign Intelligence.">
+    <ScreenTemplate title="Evo Studio Control" subtitle="Maximum Executed Recursive Autonomy + Evo Studio Intelligence.">
       <SovereignTabs tabs={[
         { id: 'intel', label: 'Intelligence Deck', component: (
           <div className="space-y-6">

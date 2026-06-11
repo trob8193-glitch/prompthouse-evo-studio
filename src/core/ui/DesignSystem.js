@@ -8,7 +8,7 @@
 export const DESIGN_SYSTEM = {
   tokens: {
     colors: {
-      primary: 'hsl(230, 80%, 60%)', // Sovereign Blue
+      primary: 'hsl(230, 80%, 60%)', // Evo Studio Blue
       accent: 'hsl(160, 80%, 45%)', // Evolution Green
       danger: 'hsl(0, 70%, 50%)',
       surface: 'hsl(220, 15%, 10%)',

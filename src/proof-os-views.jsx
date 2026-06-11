@@ -352,7 +352,7 @@ export function ForgePipelineView() {
     // Use the real scoring engine as a gate
     const score = scorePrompt('Launch Build', 'Production', 'Final Verification');
     
-    setLogs(prev => [...prev, `✅ SOVEREIGN TRUTH CERTIFICATE: v${score}.0`, 'Build locked for production.']);
+    setLogs(prev => [...prev, `✅ EVO STUDIO TRUTH CERTIFICATE: v${score}.0`, 'Build locked for production.']);
     setStatus('complete');
   };
 
@@ -416,7 +416,7 @@ export function ForgePipelineView() {
               <div style={{ textAlign: 'center', padding: 24 }}>
                 <div style={{ fontSize: 48, marginBottom: 16 }}>🏆</div>
                 <h3 style={{ color: 'var(--accent-green)' }}>Release Finalized</h3>
-                <p style={{ color: 'var(--text-muted)', marginTop: 8 }}>Your build is now fully sovereign and production-ready.</p>
+                <p style={{ color: 'var(--text-muted)', marginTop: 8 }}>Your build is now fully evo and production-ready.</p>
                 <button className="btn btn-secondary" style={{ marginTop: 20 }} onClick={() => setActiveStep(0)}>Reset Pipeline</button>
               </div>
             )}

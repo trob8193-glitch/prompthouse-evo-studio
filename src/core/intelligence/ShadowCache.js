@@ -12,7 +12,7 @@ import { Log } from '../autonomy/SovereignLogger.js';
  */
 export class ShadowCache {
   constructor() {
-    this.cacheDir = path.join(process.cwd(), '.sovereign-cache');
+    this.cacheDir = path.join(process.cwd(), '.evo-cache');
     if (!fs.existsSync(this.cacheDir)) {
       fs.mkdirSync(this.cacheDir, { recursive: true });
     }

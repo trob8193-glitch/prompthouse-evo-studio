@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { Log } from '../core/autonomy/SovereignLogger.js';
 
 /**
- * PH EVO STUDIO — SOVEREIGN WITNESS STORE
+ * PH EVO STUDIO — EVO STUDIO WITNESS STORE
  * ═══════════════════════════════════════════════════════════════
  * Central hub for real-time telemetry: prompts, traces, truth scores.
  */
@@ -35,7 +35,7 @@ export const useWitnessStore = create((set, get) => ({
 
   logRealization: async (realization) => {
     const { subjectKey } = get();
-    // EDGE: Synchronize realization with the Sovereign Ledger
+    // EDGE: Synchronize realization with the Evo Studio Ledger
     const entry = {
       type: 'COGNITIVE_REALIZATION',
       subjectKey,

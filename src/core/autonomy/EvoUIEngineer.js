@@ -4,11 +4,11 @@ import { SelfForge } from './SelfForge.js';
 import { MissionQueue } from '../automation/MissionQueue.js';
 
 /**
- * PH EVO STUDIO — EVO UI ENGINEER (REACT/VITE/SOVEREIGN)
+ * PH EVO STUDIO — EVO UI ENGINEER (REACT/VITE/EVO STUDIO)
  * ═══════════════════════════════════════════════════════════════
  * The autonomous frontend engineer for the Evo Studio.
  * Specializes in React components, Vite build optimizations,
- * and high-fidelity sovereign aesthetics.
+ * and high-fidelity evo aesthetics.
  * OCTO_UI (id: 4) is the primary sentient for this protocol.
  */
 

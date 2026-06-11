@@ -20,7 +20,7 @@ export class SelfHealingWorkflowRepair {
   async performPhysicalRepair(anomaly) {
     Log.info(`🛠️ [SelfHealing] Attempting physical repair for: ${anomaly.type}`);
     
-    // New: Sovereign Evolution Edge
+    // New: Evo Studio Evolution Edge
     if (anomaly.type === 'VISUAL_DRIFT' || anomaly.type === 'UI_INCONSISTENCY') {
       return await this.triggerAutonomousEvolution(anomaly);
     }

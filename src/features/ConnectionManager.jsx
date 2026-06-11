@@ -82,7 +82,7 @@ export default function ConnectionManager() {
         <div>
           <h1 className="text-3xl font-black italic tracking-tighter text-white flex items-center gap-3">
             <Link2 className="text-indigo-500" size={32} />
-            SOVEREIGN BONDING <span className="text-indigo-500/50 text-sm not-italic font-mono ml-4">v3.1.2</span>
+            EVO STUDIO BONDING <span className="text-indigo-500/50 text-sm not-italic font-mono ml-4">v3.1.2</span>
           </h1>
           <p className="text-slate-500 mt-2 text-sm uppercase tracking-[0.2em] font-bold">Distributed Node Orchestration & IPC</p>
         </div>
@@ -147,7 +147,7 @@ export default function ConnectionManager() {
                     </div>
 
                     <p className="text-xs text-slate-500 leading-relaxed mb-4 line-clamp-2">
-                      {item.description || 'Verified node participating in the Sovereign distributed network.'}
+                      {item.description || 'Verified node participating in the Evo Studio distributed network.'}
                     </p>
 
                     <div className="flex items-center justify-between pt-4 border-t border-slate-900">

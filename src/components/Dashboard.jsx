@@ -63,7 +63,7 @@ export const StudioDashboard = () => {
           {
             id: 'mcp_server',
             type: 'God-Mode MCP',
-            desc: '17 Sovereign Tools Exposed via Secure STDIO',
+            desc: '17 Evo Studio Tools Exposed via Secure STDIO',
             status: 'ACTIVE'
           }
         ]);

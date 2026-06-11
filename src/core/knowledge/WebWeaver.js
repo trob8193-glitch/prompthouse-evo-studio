@@ -10,7 +10,7 @@ import { Log } from '../autonomy/SovereignLogger.js';
 import fs from 'fs';
 import path from 'path';
 
-const BRAIN_PATH = path.join(process.cwd(), '.sovereign-brain.json');
+const BRAIN_PATH = path.join(process.cwd(), '.evo-brain.json');
 
 export class WebWeaver {
   constructor() {
@@ -39,7 +39,7 @@ export class WebWeaver {
     if (fs.existsSync(gardenDir)) {
       const subStudios = fs.readdirSync(gardenDir);
       for (const studio of subStudios) {
-        const subBrainPath = path.join(gardenDir, studio, '.sovereign-brain.json');
+        const subBrainPath = path.join(gardenDir, studio, '.evo-brain.json');
         if (fs.existsSync(subBrainPath)) {
           Log.info(`🕸️ [WebWevo] Scanning neighbor tree: ${studio}...`);
           const subBrain = JSON.parse(fs.readFileSync(subBrainPath, 'utf8'));

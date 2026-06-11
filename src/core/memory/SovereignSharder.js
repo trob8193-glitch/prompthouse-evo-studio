@@ -1,7 +1,7 @@
 import { Log } from '../autonomy/SovereignLogger.js';
 
 /**
- * PH EVO STUDIO — SOVEREIGN SHARDER (V4 RESTORED)
+ * PH EVO STUDIO — EVO STUDIO SHARDER (V4 RESTORED)
  * ═══════════════════════════════════════════════════════════════
  * Handles the physical distribution of logic into state-shards.
  * Prevents file-size bloat by splitting massive knowledge blocks.
@@ -9,7 +9,7 @@ import { Log } from '../autonomy/SovereignLogger.js';
 
 export class SovereignSharder {
   constructor() {
-    this.shard_directory = '.sovereign-shards';
+    this.shard_directory = '.evo-shards';
   }
 
   async shard(data, shardKey) {

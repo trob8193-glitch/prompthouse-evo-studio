@@ -1,7 +1,7 @@
 # Full UI Button-to-Route Matrix
 
-**Generated**: 2026-06-11T16:53:40.496Z
-**Components Scanned**: 130
+**Generated**: 2026-06-11T17:15:36.330Z
+**Components Scanned**: 131
 **Known Backend Routes**: 232
 **Potential Dead Links Detected**: 0
 
@@ -76,7 +76,7 @@
             className="absolute top-16 right-4 z-50 bg-[#00f0ff]/10 text-[#00f0ff] text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl border border-[#00f0ff]/30 hover:bg-[#00f0ff]/20 shadow-[0_0_20px_rgba(0,240,255,0.15)] flex items-center gap-2 group transition-all duration-300"
           >
             
-            Manifest Singularity Engine
+            Open Evo Singularity Engine
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -549,7 +549,7 @@
                 }`}
               >
                 {session}
-- setTerminalTheme('sovereign')} className={`w-3 h-3 rounded-full bg-indigo-500 ${terminalTheme === 'sovereign' ? 'ring-2 ring-white' : 'opacity-40'}`} />
+- setTerminalTheme('evo')} className={`w-3 h-3 rounded-full bg-indigo-500 ${terminalTheme === 'evo' ? 'ring-2 ring-white' : 'opacity-40'}`} />
              setTerminalTheme('matrix')} className={`w-3 h-3 rounded-full bg-emerald-500 ${terminalTheme === 'matrix' ? 'ring-2 ring-white' : 'opacity-40'}`} />
              setTerminalTheme('classic')} className={`w-3 h-3 rounded-full bg-slate-500 ${terminalTheme === 'classic' ? 'ring-2 ring-white' : 'opacity-40'}`} />
 - clearTerminal(activeTerminalSession)} title="Clear Session" className="text-slate-500 hover:text-rose-400 transition-colors">

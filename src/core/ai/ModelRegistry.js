@@ -33,7 +33,7 @@ export const MODEL_PROVIDERS = Object.freeze({
  * but can dynamically expand when local offline models are detected.
  */
 export const MODEL_REGISTRY = [
-  // ── EVO API / SOVEREIGN SWARM ──────────────────────────────────
+  // ── EVO API / EVO STUDIO SWARM ──────────────────────────────────
   {
     id: 'evo-llm-swarm',
     displayName: 'Evo LLM Swarm (Thinking)',

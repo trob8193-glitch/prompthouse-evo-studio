@@ -4,7 +4,7 @@ import { SovereignFirewall } from '../intelligence/SovereignFirewall.js';
 import { Log } from '../autonomy/SovereignLogger.js';
 
 /**
- * SOVEREIGN INTELLIGENCE CORE
+ * EVO STUDIO INTELLIGENCE CORE
  * ═══════════════════════════════════════════════════════════════
  * Centralized dynamic routing engine for all 16+ studio features.
  * Takes the module name and action, constructs the appropriate 
@@ -121,7 +121,7 @@ export class IntelligenceCore {
   }
 
   buildPrompt(moduleName, action, payload) {
-    let systemPrompt = 'You are the Sovereign Intelligence Core of the PromptHouse Evo Studio. Answer concisely and analytically.';
+    let systemPrompt = 'You are the Evo Studio Intelligence Core of the PromptHouse Evo Studio. Answer concisely and analytically.';
     let userPrompt = `Perform action: ${action}`;
 
     // Dynamic routing logic based on module
@@ -132,7 +132,7 @@ export class IntelligenceCore {
         break;
 
       case 'TruthAuditor':
-        systemPrompt = 'You are the Truth Auditor. Compare the provided workspace state against the Sovereign Ledger. Identify discrepancies.';
+        systemPrompt = 'You are the Truth Auditor. Compare the provided workspace state against the Evo Studio Ledger. Identify discrepancies.';
         userPrompt = `Audit this ledger data:\n\n${JSON.stringify(payload)}`;
         break;
 

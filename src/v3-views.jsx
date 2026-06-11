@@ -136,7 +136,7 @@ export const AgentCtlView = () => {
     <div className="p-8 bg-slate-900/50 border border-slate-800 rounded-3xl backdrop-blur-xl">
       <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-6">Agent Control Deck</h2>
       <div className="p-6 bg-indigo-600 rounded-2xl shadow-2xl shadow-indigo-500/20 mb-6">
-        <div className="text-xs text-indigo-100 font-bold uppercase mb-1">Sovereign IQ</div>
+        <div className="text-xs text-indigo-100 font-bold uppercase mb-1">Evo Studio IQ</div>
         <div className="text-4xl font-black text-white">{(bridgeData?.iq_metrics?.baseline / 1000000 || 2.0).toFixed(1)}M</div>
       </div>
       <div className="space-y-3">

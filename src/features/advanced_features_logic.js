@@ -4,7 +4,7 @@ import path from 'path';
 import { Log } from '../core/autonomy/SovereignLogger.js';
 
 /**
- * SOVEREIGN ADVANCED FEATURES (Physical Truth Edition)
+ * EVO STUDIO ADVANCED FEATURES (Physical Truth Edition)
  * ═══════════════════════════════════════════════════════════════
  * No filler claims. Every action corresponds to a
  * physical state transition on the studio's disk.
@@ -105,7 +105,7 @@ export class RealitySynthesisLogic {
       prompt,
       timestamp: new Date().toISOString(),
       status: 'SYNTHESIZED',
-      integrity: 'SOVEREIGN'
+      integrity: 'EVO STUDIO'
     };
     
     // Physical write: persist a synthesis manifest on disk.

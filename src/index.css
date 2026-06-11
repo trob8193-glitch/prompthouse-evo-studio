@@ -217,7 +217,7 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   text-transform: uppercase; letter-spacing: 1px;
 }
-.grade-sovereign { background: var(--accent-gold-dim); color: var(--accent-gold); border: 1px solid rgba(255,170,0,0.3); box-shadow: 0 0 12px var(--accent-gold-dim); }
+.grade-evo { background: var(--accent-gold-dim); color: var(--accent-gold); border: 1px solid rgba(255,170,0,0.3); box-shadow: 0 0 12px var(--accent-gold-dim); }
 .grade-singularity { background: var(--accent-cyan-dim); color: var(--accent-cyan); border: 1px solid rgba(0,240,255,0.3); box-shadow: 0 0 16px var(--accent-cyan-dim); }
 .grade-master { background: var(--accent-violet-dim); color: var(--accent-violet); border: 1px solid rgba(138,43,226,0.3); box-shadow: 0 0 12px var(--accent-violet-dim); }
 .grade-production { background: var(--accent-green-dim); color: var(--accent-green); border: 1px solid rgba(0,255,136,0.3); box-shadow: 0 0 12px var(--accent-green-dim); }

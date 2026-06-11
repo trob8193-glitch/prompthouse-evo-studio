@@ -6,7 +6,7 @@ import { CostFirewall } from './costFirewall.js';
  * Follows the rule: Free plan users are locked to Local engines.
  * Paid users can use Gemini/OpenAI if they have credits.
  * 
- * SOVEREIGN UPDATE: Economic Survival Loop integrated.
+ * EVO STUDIO UPDATE: Economic Survival Loop integrated.
  */
 export class ModelRouter {
   static DOWNSHIFT_THRESHOLD = 500; // Force local if credits < 500

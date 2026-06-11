@@ -83,7 +83,7 @@ export class SingularityCore {
     Log.info('🌌 [SingularityCore] Executing Physical Evolution Refactor...');
     // Real disk-level anchoring
     const sig = crypto.createHash('sha256').update(Date.now().toString()).digest('hex').slice(0, 8);
-    this.truth.addBlock(`Sovereign Baseline Restored: ${sig}`, { target_iq: this.baselineIQ });
+    this.truth.addBlock(`Evo Studio Baseline Restored: ${sig}`, { target_iq: this.baselineIQ });
   }
 
   pulse() {

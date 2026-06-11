@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import { Log } from '../core/autonomy/SovereignLogger.js';
 
 /**
- * PH EVO STUDIO — SOVEREIGN LEDGER (Physical Edition)
+ * PH EVO STUDIO — EVO STUDIO LEDGER (Physical Edition)
  * ═══════════════════════════════════════════════════════════════
  * The immutable record of all production missions and logic 
  * transitions. Ensures 100% auditability for the Truth Chain.

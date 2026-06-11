@@ -14,7 +14,7 @@ export function CommerceRailView() {
     productName: 'PH Studio Pro', 
     price: 29900, 
     currency: 'usd', 
-    description: 'Access to all sovereign studio modules and autonomous evolution features.' 
+    description: 'Access to all evo studio modules and autonomous evolution features.' 
   });
   const [result, setResult] = useState(null);
   const [pricingTable, setPricingTable] = useState(null);

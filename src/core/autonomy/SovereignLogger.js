@@ -1,7 +1,7 @@
 /**
- * PH EVO STUDIO — SOVEREIGN LOGGER (V4 RESTORED)
+ * PH EVO STUDIO — EVO STUDIO LOGGER (V4 RESTORED)
  * ═══════════════════════════════════════════════════════════════
- * Unified logging utility for the Sovereign Foundry.
+ * Unified logging utility for the Evo Studio Foundry.
  */
 
 export const Log = {

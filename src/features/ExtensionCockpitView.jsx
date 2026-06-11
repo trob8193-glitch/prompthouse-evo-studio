@@ -115,7 +115,7 @@ export const ExtensionCockpitView = () => {
         {/* Footer info */}
         <div className="p-4 bg-indigo-500/5 border-t border-slate-800 text-[10px] text-slate-500 font-bold flex justify-between">
           <span>PROMPTHOUSE BROWSER BRIDGE V2.4.1</span>
-          <span>SOVEREIGN INTERNALIZED STATE: ACTIVE</span>
+          <span>EVO STUDIO INTERNALIZED STATE: ACTIVE</span>
         </div>
       </div>
     </div>

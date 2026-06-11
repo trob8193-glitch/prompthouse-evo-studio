@@ -47,7 +47,7 @@ export function SelfBuildForgeView() {
           setLogs(prev => [
             ...prev,
             '✅ [SelfBuildForge] Compilation success. Output verified.',
-            '🏆 [SelfBuildForge] Sovereign validation: 100% truth state resonance.'
+            '🏆 [SelfBuildForge] Evo Studio validation: 100% truth state resonance.'
           ]);
           return 100;
         }

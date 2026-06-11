@@ -30,7 +30,7 @@ export class SyntaxSandbox {
     const code = this.extractCode(response);
     if (!code) return { fixedCode: response, wasFixed: false };
 
-    const tmpDir = path.join(process.cwd(), '.sovereign-sandbox');
+    const tmpDir = path.join(process.cwd(), '.evo-sandbox');
     if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
 
     const tmpFile = path.join(tmpDir, `check_${Date.now()}.js`);

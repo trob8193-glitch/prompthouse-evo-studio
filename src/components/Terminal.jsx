@@ -25,12 +25,12 @@ const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process
 const COMMAND_CATALOG = [
   { id: 'audit', label: 'Nuclear Truth Audit', command: 'evo:audit', session: 'security', description: 'Full studio wiring and truth-state audit.', tags: ['audit', 'truth', 'security'] },
   { id: 'compact', label: 'Logic Compaction', command: 'evo:compact', session: 'main', description: 'Compresses file logic density by purging entropy.', tags: ['compact', 'logic', 'density'] },
-  { id: 'shard-purge', label: 'Purge Shard Cache', command: 'evo:shard:purge', session: 'main', description: 'Deletes temporary .sovereign-shards metadata.', tags: ['shard', 'purge', 'memory'] },
+  { id: 'shard-purge', label: 'Purge Shard Cache', command: 'evo:shard:purge', session: 'main', description: 'Deletes temporary .evo-shards metadata.', tags: ['shard', 'purge', 'memory'] },
   { id: 'iq-status', label: 'System IQ Status', command: 'evo:iq:status', session: 'main', description: 'Reports current studio intelligence growth.', tags: ['iq', 'status', 'evolution'] },
   { id: 'truth-sign', label: 'Sign Truth Artifact', command: 'evo:truth:sign', session: 'security', description: 'Physically signs an artifact as reality-anchored.', tags: ['sign', 'truth', 'security'] },
   { id: 'drift-hunt', label: 'Reality Drift Hunt', command: 'evo:drift:hunt', session: 'security', description: 'Searches for logic drift and UI gaps in src/features.', tags: ['hunt', 'drift', 'reality'] },
   { id: 'bridge-pulse', label: 'Bridge Integrity Pulse', command: 'evo:bridge:pulse', session: 'main', description: 'Verifies bridge latency and handshake stability.', tags: ['pulse', 'bridge', 'integrity'] },
-  { id: 'ledger-sync', label: 'Sovereign Ledger Sync', session: 'main', command: 'evo:ledger:sync', description: 'Synchronizes local state with the cryptoledger.', tags: ['sync', 'ledger', 'signed'] },
+  { id: 'ledger-sync', label: 'Evo Studio Ledger Sync', session: 'main', command: 'evo:ledger:sync', description: 'Synchronizes local state with the cryptoledger.', tags: ['sync', 'ledger', 'signed'] },
   { id: 'ghost-manifest', label: 'Ghost Editor Manifest', session: 'watch', command: 'evo:ghost:manifest', description: 'Generates session manifest for ghost iteration.', tags: ['ghost', 'manifest', 'iter'] },
   { id: 'foundry-reforge', label: 'Reforge Foundry Core', session: 'build', command: 'evo:foundry:reforge', description: 'Re-compiles core foundry logic engines.', tags: ['reforge', 'foundry', 'build'] },
   { id: 'install', label: 'Install Dependencies', command: 'npm install', session: 'build', description: 'Installs package dependencies for the workspace.', tags: ['npm', 'deps'] },
@@ -40,7 +40,7 @@ const COMMAND_CATALOG = [
   { id: 'ai-pack', label: 'Context Pack Manifest', command: 'npm run ai:pack', session: 'main', description: 'Generates a condensed context pack for AI consumption.', tags: ['ai', 'context', 'pack'] },
   { id: 'ai-train', label: 'Autonomous Self-Train', command: 'npm run ai:train', session: 'watch', description: 'Starts the background self-evolution training loop.', tags: ['ai', 'train', 'evolve'] },
   { id: 'ai-review', label: 'AI Code Review', command: 'npm run ai:review', session: 'main', description: 'Performs a deep logic review of the current workspace.', tags: ['ai', 'review', 'audit'] },
-  { id: 'ai-daemon', label: 'Sovereign AI Daemon', command: 'npm run ai:daemon', session: 'watch', description: 'Launches the persistent background evolution engine.', tags: ['ai', 'daemon', 'system'] },
+  { id: 'ai-daemon', label: 'Evo Studio AI Daemon', command: 'npm run ai:daemon', session: 'watch', description: 'Launches the persistent background evolution engine.', tags: ['ai', 'daemon', 'system'] },
   { id: 'agent-repl', role: 'Agent REPL Session', command: 'npm run agent:repl', session: 'main', description: 'Opens an interactive shell with the Evo Agent.', tags: ['agent', 'repl', 'chat'] },
   { id: 'verify-setup', label: 'Verify Studio Setup', command: 'npm run verify:agent', session: 'main', description: 'Verifies API and filesystem integrity for the studio.', tags: ['verify', 'setup', 'health'] },
   { id: 'info', label: 'System Info Snapshot', command: 'evo info', session: 'main', description: 'Reports OS, node version, and local IP.', tags: ['info', 'diagnostics'] },
@@ -60,13 +60,13 @@ const COMMAND_CATALOG = [
   { id: 'npm-version', label: 'NPM Version', command: 'npm -v', session: 'main', description: 'Prints active npm version.', tags: ['npm', 'runtime'] },
   { id: 'python-version', label: 'Python Version', command: 'python --version', session: 'main', description: 'Prints active Python version.', tags: ['python', 'runtime'] },
   { id: 'flutter-doctor', label: 'Flutter Doctor Health Check', command: 'flutter doctor', session: 'main', description: 'Reaches out to the OS, executes the native Flutter binary, and streams the full diagnostic report of your iOS/Android/Web dev environment directly back into your browser terminal, daemons, and Evo LLM.', tags: ['flutter', 'mobile', 'doctor', 'ai'] },
-  { id: 'bond-omni', label: 'Omni-Bond (Global IDE Fusion)', command: 'evo bond omni', session: 'main', description: 'Fuses all IDE tethers simultaneously. Injects Sovereign constraints globally for Cursor, Windsurf, VS Code, WebStorm, Zed, Codex, and Antigravity in one massive strike.', tags: ['ide', 'omni', 'bond', 'global', 'all'] },
-  { id: 'bond-vscode', label: 'Bond IDE: VS Code', command: 'evo bond vscode', session: 'main', description: 'Acts as the physical hookup/handshake. Executes the VS Code binary hook on your host machine, instantly ripping open the Sovereign Studio workspace inside native Visual Studio Code.', tags: ['ide', 'vscode', 'bond', 'handshake'] },
-  { id: 'bond-cursor', label: 'Bond IDE: Cursor AI', command: 'evo bond cursor', session: 'main', description: 'Bonds the workspace to Cursor. Injects Sovereign Copilot instructions into .cursorrules before hooking the physical IDE.', tags: ['ide', 'cursor', 'bond', 'ai'] },
-  { id: 'bond-windsurf', label: 'Bond IDE: Windsurf', command: 'evo bond windsurf', session: 'main', description: 'Bonds the workspace to Windsurf. Injects Sovereign Cascade instructions into .windsurfrules before hooking the physical IDE.', tags: ['ide', 'windsurf', 'bond', 'ai'] },
+  { id: 'bond-omni', label: 'Omni-Bond (Global IDE Fusion)', command: 'evo bond omni', session: 'main', description: 'Fuses all IDE tethers simultaneously. Injects Evo Studio constraints globally for Cursor, Windsurf, VS Code, WebStorm, Zed, Codex, and Antigravity in one massive strike.', tags: ['ide', 'omni', 'bond', 'global', 'all'] },
+  { id: 'bond-vscode', label: 'Bond IDE: VS Code', command: 'evo bond vscode', session: 'main', description: 'Acts as the physical hookup/handshake. Executes the VS Code binary hook on your host machine, instantly ripping open the Evo Studio Studio workspace inside native Visual Studio Code.', tags: ['ide', 'vscode', 'bond', 'handshake'] },
+  { id: 'bond-cursor', label: 'Bond IDE: Cursor AI', command: 'evo bond cursor', session: 'main', description: 'Bonds the workspace to Cursor. Injects Evo Studio Copilot instructions into .cursorrules before hooking the physical IDE.', tags: ['ide', 'cursor', 'bond', 'ai'] },
+  { id: 'bond-windsurf', label: 'Bond IDE: Windsurf', command: 'evo bond windsurf', session: 'main', description: 'Bonds the workspace to Windsurf. Injects Evo Studio Cascade instructions into .windsurfrules before hooking the physical IDE.', tags: ['ide', 'windsurf', 'bond', 'ai'] },
   { id: 'bond-webstorm', label: 'Bond IDE: WebStorm', command: 'evo bond webstorm', session: 'main', description: 'Bonds the workspace to JetBrains WebStorm. Establishes AI Assistant project constraints before hooking the physical IDE.', tags: ['ide', 'webstorm', 'jetbrains', 'bond'] },
   { id: 'bond-zed', label: 'Bond IDE: Zed', command: 'evo bond zed', session: 'main', description: 'Bonds the workspace to Zed. Injects native settings and tethers the built-in AI before hooking the physical IDE.', tags: ['ide', 'zed', 'bond', 'ai'] },
-  { id: 'bond-codex', label: 'Bond IDE: Codex', command: 'evo bond codex', session: 'main', description: 'Bonds the workspace to OpenAI Codex. Injects the Sovereign Lore into .codex/manifest.json before hooking.', tags: ['ide', 'codex', 'bond', 'ai', 'openai'] },
+  { id: 'bond-codex', label: 'Bond IDE: Codex', command: 'evo bond codex', session: 'main', description: 'Bonds the workspace to OpenAI Codex. Injects the Evo Studio Lore into .codex/manifest.json before hooking.', tags: ['ide', 'codex', 'bond', 'ai', 'openai'] },
   { id: 'bond-antigravity', label: 'Bond IDE: Antigravity', command: 'evo bond antigravity', session: 'main', description: 'Bonds the workspace to the native Antigravity IDE. Injects core memory directives into the Antigravity neural subsystem.', tags: ['ide', 'antigravity', 'bond', 'ai'] },
   { id: 'evo-repair', label: 'Evo Code Repair', command: 'evo repair', session: 'main', description: 'Triggers autonomous AI repair on a specific file.', tags: ['repair', 'fix', 'ai'] },
   { id: 'evo-doctor', label: 'Evo Studio Doctor', command: 'evo doctor', session: 'main', description: 'Diagnoses studio systems and background daemons.', tags: ['doctor', 'health', 'system'] },
@@ -250,7 +250,7 @@ export function Terminal() {
   );
 
   const themeStyles = {
-    sovereign: {
+    evo: {
       bg: 'bg-[#050508]',
       border: 'border-indigo-500/40',
       text: 'text-slate-300',
@@ -276,7 +276,7 @@ export function Terminal() {
     }
   };
 
-  const s = themeStyles[terminalTheme] || themeStyles.sovereign;
+  const s = themeStyles[terminalTheme] || themeStyles.evo;
 
   return (
     <div className={`fixed bottom-0 left-[260px] right-0 ${isFullscreen ? 'top-14 h-auto' : 'h-[320px]'} ${s.bg} border-t ${s.border} flex flex-col z-40 shadow-[0_-10px_40px_rgba(0,0,0,0.8)] transition-all duration-300`}>
@@ -307,7 +307,7 @@ export function Terminal() {
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded border border-slate-800">
-            <button onClick={() => setTerminalTheme('sovereign')} className={`w-3 h-3 rounded-full bg-indigo-500 ${terminalTheme === 'sovereign' ? 'ring-2 ring-white' : 'opacity-40'}`} />
+            <button onClick={() => setTerminalTheme('evo')} className={`w-3 h-3 rounded-full bg-indigo-500 ${terminalTheme === 'evo' ? 'ring-2 ring-white' : 'opacity-40'}`} />
             <button onClick={() => setTerminalTheme('matrix')} className={`w-3 h-3 rounded-full bg-emerald-500 ${terminalTheme === 'matrix' ? 'ring-2 ring-white' : 'opacity-40'}`} />
             <button onClick={() => setTerminalTheme('classic')} className={`w-3 h-3 rounded-full bg-slate-500 ${terminalTheme === 'classic' ? 'ring-2 ring-white' : 'opacity-40'}`} />
           </div>

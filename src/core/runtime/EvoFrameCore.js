@@ -66,7 +66,7 @@ export class EvoDOM {
 }
 
 /**
- * Sovereign Reactive Engine
+ * Evo Studio Reactive Engine
  */
 export const EvoState = {
   create(initialState) {

@@ -276,7 +276,7 @@ export function buildRareArtifact(capabilityId, missionInput) {
       receipts: ['market_listing', 'install_packet', 'buyer_safety_note'],
     },
     build_court: {
-      summary: 'Bot trial generated with proposal, dispute, repair, record, and sovereign signoff lanes.',
+      summary: 'Bot trial generated with proposal, dispute, repair, record, and evo signoff lanes.',
       primaryLabel: 'Build Court Ruling',
       primary: makeJson({
         case_id: `${slug}_build_court`,

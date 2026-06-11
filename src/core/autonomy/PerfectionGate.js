@@ -6,7 +6,7 @@ import path from 'path';
  * PH EVO STUDIO — PERFECTION GATE (V4 RESTORED)
  * ═══════════════════════════════════════════════════════════════
  * Sub-optimal states are FORBIDDEN. This engine scans the codebase
- * and identifies any logic that falls below the Sovereign (S+++++) threshold.
+ * and identifies any logic that falls below the Evo Studio (S+++++) threshold.
  */
 
 const SUB_OPTIMAL_PATTERNS = [

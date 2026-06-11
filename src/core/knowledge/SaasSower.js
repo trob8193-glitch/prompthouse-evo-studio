@@ -28,7 +28,7 @@ export class SaasSower {
     this.copyFolder('evogenage/apps/api', path.join(seedPath, 'api'));
 
     // 2. Inject Niche Shards
-    this.copyFile(`.sovereign-shards/${nicheShardId}.json`, path.join(seedPath, 'config/shard.json'));
+    this.copyFile(`.evo-shards/${nicheShardId}.json`, path.join(seedPath, 'config/shard.json'));
 
     // 3. Manifest README & Deployment Logic
     fs.writeFileSync(path.join(seedPath, 'DEPLOY.md'), `# ${productName}\n\n## Deployment\n1. Run npm install\n2. Configure .env\n3. Start the PH Evo API.`);

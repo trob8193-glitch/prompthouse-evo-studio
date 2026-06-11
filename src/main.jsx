@@ -7,7 +7,7 @@ import './index.css';
  * PH EVO STUDIO — MAIN ENTRY POINT
  * ═══════════════════════════════════════════════════════════════
  * This is the physical entry point for the studio dashboard.
- * It initializes the React root and launches the Sovereign UI.
+ * It initializes the React root and launches the Evo Studio UI.
  */
 
 import { ClerkProvider } from '@clerk/clerk-react';

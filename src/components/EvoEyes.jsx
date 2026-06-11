@@ -114,7 +114,7 @@ export function EvoEyes({ mode = 'overlay' }) {
             <Eye className="text-indigo-500" size={24} />
           </div>
           <div>
-            <h1 className="text-xl font-black italic tracking-tighter text-white uppercase">Evo Eyes <span className="text-[10px] text-indigo-500 not-italic font-mono ml-2 uppercase tracking-[0.3em]">Sovereign Edition</span></h1>
+            <h1 className="text-xl font-black italic tracking-tighter text-white uppercase">Evo Eyes <span className="text-[10px] text-indigo-500 not-italic font-mono ml-2 uppercase tracking-[0.3em]">Evo Studio Edition</span></h1>
             <div className="flex gap-4 text-[9px] font-black uppercase tracking-widest text-slate-500 mt-0.5">
               <span className="flex items-center gap-1.5"><Activity size={10} className="text-emerald-500" /> Latency: {latency}ms</span>
               <span className="flex items-center gap-1.5"><Shield size={10} className="text-indigo-400" /> Sovereignty: {sovereigntyScore}%</span>
@@ -241,7 +241,7 @@ export function EvoEyes({ mode = 'overlay' }) {
                     <Target size={12} className="text-pink-500" /> Cognitive X-Ray Scan
                   </div>
                   <div className="bg-white/5 rounded-xl p-4 border border-white/5 space-y-3">
-                    <div className="text-xs text-slate-300 font-medium">Design Pattern: <span className="text-indigo-400">Sovereign-ESM</span></div>
+                    <div className="text-xs text-slate-300 font-medium">Design Pattern: <span className="text-indigo-400">Evo Studio-ESM</span></div>
                     <div className="text-[11px] text-slate-500 leading-relaxed">Multi-layered semantic analysis indicates 0.02% drift from structural canon.</div>
                   </div>
                 </div>

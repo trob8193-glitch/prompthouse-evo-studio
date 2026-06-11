@@ -11,7 +11,7 @@ const BRIDGE_URL = (typeof process !== 'undefined' && process.env.PROMPTBRIDGE_U
 
 // ─── Bot Roster (Full Cast) ────────────────────────────────────
 export const BOT_ROSTER = [
-  { id: 'evo',              name: 'Evo',              species: 'Lion',         voice: 'onyx',    role: 'Master Orchestrator — sovereign command routing, mission oversight, final authority on all gates.', signature: 'Truth above all. Sovereignty enforced.', icon: '🦁', palette: { primary: '#f5c842' } },
+  { id: 'evo',              name: 'Evo',              species: 'Lion',         voice: 'onyx',    role: 'Master Orchestrator — evo command routing, mission oversight, final authority on all gates.', signature: 'Truth above all. Sovereignty enforced.', icon: '🦁', palette: { primary: '#f5c842' } },
   { id: 'dev',              name: 'Dev',              species: 'Leopard',      voice: 'echo',    role: 'Core code builder — writes production-grade files, resolves blockers, generates artifacts.', signature: 'Code that ships. Nothing theoretical.', icon: '🐆', palette: { primary: '#22d3ee' } },
   { id: 'builder',          name: 'Builder',          species: 'Bear',         voice: 'alloy',   role: 'Artifact maker — assembles multi-file builds from blueprints into shippable packages.', signature: 'Assemble. Verify. Ship.', icon: '🐻', palette: { primary: '#fb923c' } },
   { id: 'verifier',         name: 'Verifier',         species: 'Owl',          voice: 'shimmer', role: 'Proof checker — validates output against gate definitions and truth state protocol.', signature: 'Evidence or it did not happen.', icon: '🦉', palette: { primary: '#a78bfa' } },
@@ -50,7 +50,7 @@ export const DOMAIN_PACKS = {
 
 // ─── Strictness Modes ─────────────────────────────────────────
 export const STRICTNESS_MODES = {
-  sovereign:   { id: 'sovereign',   name: 'Sovereign',   icon: '👑', description: 'Maximum truth enforcement. Blocks all unsafe patterns.' },
+  evo:   { id: 'evo',   name: 'Evo Studio',   icon: '👑', description: 'Maximum truth enforcement. Blocks all unsafe patterns.' },
   autonomous:  { id: 'autonomous',  name: 'Autonomous',  icon: '🤖', description: 'Self-directed with safety guardrails.' },
   guided:      { id: 'guided',      name: 'Guided',      icon: '🧭', description: 'Human-in-the-loop with AI assistance.' },
   experimental:{ id: 'experimental',name: 'Experimental',icon: '⚗️',  description: 'Exploratory mode. Results require verification.' },
@@ -106,14 +106,14 @@ export function scorePrompt(prompt = '', botId = '', response = '', domain = 'de
   const raw = lengthScore + specificityScore + domainScore + structureScore + contextScore;
 
   // Mode multiplier
-  const multiplier = mode === 'sovereign' ? 1.0 : mode === 'autonomous' ? 0.95 : mode === 'guided' ? 0.85 : 0.75;
+  const multiplier = mode === 'evo' ? 1.0 : mode === 'autonomous' ? 0.95 : mode === 'guided' ? 0.85 : 0.75;
 
   return Math.min(150, Math.round(raw * multiplier));
 }
 
 // ─── Grade Labels ─────────────────────────────────────────────
 export function getGrade(score) {
-  if (score >= 130) return { label: 'S+++++ Sovereign', color: '#f5c842' };
+  if (score >= 130) return { label: 'S+++++ Evo Studio', color: '#f5c842' };
   if (score >= 110) return { label: 'S++++ Apex',       color: '#a78bfa' };
   if (score >= 90)  return { label: 'S+++ Elite',       color: '#4ade80' };
   if (score >= 75)  return { label: 'A++ Expert',       color: '#22d3ee' };
@@ -141,7 +141,7 @@ export function buildPromptStack({ task = '', stack = '', domain = 'development'
     `Domain keywords: ${pack.keywords.join(', ')}.`,
     'You produce production-grade, enterprise-ready output only.',
     'Deliver complete, production-ready output. No empty skeletons, no unverified code. Real working logic only.',
-    strictness === 'sovereign' ? 'SOVEREIGN MODE: All output must pass truth verification. Reject unsafe patterns immediately.' : '',
+    strictness === 'evo' ? 'EVO STUDIO MODE: All output must pass truth verification. Reject unsafe patterns immediately.' : '',
   ].filter(Boolean).join('\n');
 
   const executionPrompt = [

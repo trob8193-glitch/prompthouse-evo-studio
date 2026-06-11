@@ -4,7 +4,7 @@ import path from 'path';
 import { Log } from '../core/autonomy/SovereignLogger.js';
 
 /**
- * STUDIO DIAGNOSTICS LOGIC (Sovereign Edition)
+ * STUDIO DIAGNOSTICS LOGIC (Evo Studio Edition)
  * ═══════════════════════════════════════════════════════════════
  * Performs a physical truth audit of the project filesystem.
  * No Theatrical-Shells. No assumptions. 100% disk-anchored telemetry.
@@ -126,7 +126,7 @@ export class StudioDiagnostics {
   }
 
   calculateDrift(content) {
-    // Cognitive X-Ray: Measure deviation from Sovereign-ESM canon
+    // Cognitive X-Ray: Measure deviation from Evo Studio-ESM canon
     let score = 0;
     if (!content.includes('import')) score += 20;
     if (content.includes('require(')) score += 30;

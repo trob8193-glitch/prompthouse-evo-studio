@@ -40,7 +40,7 @@ export class RareOsCapabilitiesLogic {
   }
 
   /**
-   * Activate Local Sovereign Feature.
+   * Activate Local Evo Studio Feature.
    * ABSOLUTE REALITY: Binds local capabilities to real OS-level truth-gates.
    */
   async activateLocalFeature(featureId) {

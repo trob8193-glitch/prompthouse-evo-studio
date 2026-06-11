@@ -48,7 +48,7 @@ export function AutonomousSelfView() {
 
   const auditEdges = useMemo(() => [
     { label: 'Consensus Gating', val: 'Active', status: 'verified' },
-    { label: 'Verification Engine', val: 'Sovereign', status: 'verified' },
+    { label: 'Verification Engine', val: 'Evo Studio', status: 'verified' },
     { label: 'Sandbox Rollback', val: 'Enabled', status: 'verified' },
     { label: 'Physical File Sync', val: '100%', status: 'verified' }
   ], []);
@@ -184,7 +184,7 @@ export function AutonomousSelfView() {
                 <span className="text-lg font-black text-[#8a2be2]">2M</span>
               </div>
               <div>
-                <div className="text-sm font-black text-white uppercase tracking-widest">Sovereign IQ Baseline</div>
+                <div className="text-sm font-black text-white uppercase tracking-widest">Evo Studio IQ Baseline</div>
                 <div className="text-[11px] text-[#b4b4c4] mt-2 tracking-widest uppercase">
                   Current resonance: <span className="text-[#00f0ff] font-bold">{bridgeData?.iq_metrics?.truth_density || `${nuclearAudit?.score ?? 0}%`}</span>
                 </div>

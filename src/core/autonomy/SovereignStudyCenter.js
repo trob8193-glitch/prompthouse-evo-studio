@@ -4,7 +4,7 @@ import { join } from 'path';
 import crypto from 'crypto';
 
 /**
- * PH EVO STUDIO — SOVEREIGN STUDY CENTER (ABSOLUTE REALITY)
+ * PH EVO STUDIO — EVO STUDIO STUDY CENTER (ABSOLUTE REALITY)
  * ═══════════════════════════════════════════════════════════════
  * The central engine for 12 Autonomous Training Protocols.
  * ABSOLUTE OPERATIONAL REALITY: No filler loops. No artificial timeouts.
@@ -60,7 +60,7 @@ export class SovereignStudyCenter {
 
   async runDreamCycle() {
     Log.info('🌙 [StudyCenter] Physical Dream Cycle: Manifesting Ancestral Shards...');
-    const shardDir = join(this.root, '.sovereign-shards');
+    const shardDir = join(this.root, '.evo-shards');
     if (!fs.existsSync(shardDir)) fs.mkdirSync(shardDir, { recursive: true });
 
     // Physical Shard Manifestation

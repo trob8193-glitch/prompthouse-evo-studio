@@ -81,7 +81,7 @@ export default function RareCapabilities() {
           metric={`${stats.dependencyEdges} EDGES`}
         />
         <CapabilityCard 
-          title="Sovereign Ledger" 
+          title="Evo Studio Ledger" 
           description="Immutable Merkle-Tree history tracking for every logic transition in the forest." 
           icon={Shield} 
           color="text-rose-400" 

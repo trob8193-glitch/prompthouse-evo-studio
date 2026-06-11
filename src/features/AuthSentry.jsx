@@ -3,7 +3,7 @@ import { SignedIn, SignedOut, SignIn } from '@clerk/clerk-react';
 import { useSovereignStore } from '../store.js';
 
 /**
- * AuthSentry — Sovereign Access Gate
+ * AuthSentry — Evo Studio Access Gate
  * ═══════════════════════════════════════════════════════════════
  * Provides a premium, glassmorphic authentication interface using
  * Clerk for global multi-tenancy.
@@ -23,7 +23,7 @@ export const AuthSentry = ({ children }) => {
         <div className="auth-sentry-header">
           <div className="auth-sentry-logo">
             <span className="logo-icon">PH</span>
-            <span className="logo-text">SOVEREIGN STUDIO</span>
+            <span className="logo-text">EVO STUDIO STUDIO</span>
           </div>
         </div>
 

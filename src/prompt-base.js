@@ -40,7 +40,7 @@ function uid() {
 
 // ─── Sovereignty Policy ────────────────────────────────────────
 export function getSovereigntyPolicy() {
-  return safeStorage.getItem(STORAGE_KEYS.POLICY) || 'sovereign';
+  return safeStorage.getItem(STORAGE_KEYS.POLICY) || 'evo';
 }
 
 export function setSovereigntyPolicy(policy) {

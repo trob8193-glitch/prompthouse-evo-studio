@@ -21,7 +21,7 @@ export class DiscoveryServer {
 
     this.socket.on('message', (msg, rinfo) => {
       Log.info(`📡 [DiscoveryServer] Inbound Handshake from ${rinfo.address}:${rinfo.port}`);
-      // Future: Implement Sovereign Auth Handshake here
+      // Future: Implement Evo Studio Auth Handshake here
     });
 
     this.socket.on('listening', () => {

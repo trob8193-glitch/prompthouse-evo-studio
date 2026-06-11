@@ -1,6 +1,6 @@
 import { Log } from './SovereignLogger.js';
 /**
- * EVOGENAGE — SOVEREIGN INTERFACE LAYER (SIL)
+ * EVOGENAGE — EVO STUDIO INTERFACE LAYER (SIL)
  * ═══════════════════════════════════════════════════════════════
  * Grants Bots the 'Hands' to interact with any feature in the Studio.
  * Maps UI and Logic controls to Bot-Callable methods.

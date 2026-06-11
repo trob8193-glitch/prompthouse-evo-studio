@@ -142,7 +142,7 @@ export default function PastMVPConsole() {
     log('Vector Wolf building VectorPack (Cipher Lynx redacting secrets)...');
     buildVectorPack(selectedMission.id, {
       rawSummary: `Mission: ${selectedMission.title}. Intent: ${selectedMission.intent}`,
-      decisions: ['Used React + Node.js', 'PromptBridge on port 3001', 'Sovereign Unbound Active'],
+      decisions: ['Used React + Node.js', 'PromptBridge on port 3001', 'Evo Studio Unbound Active'],
       openBlockers: [],
     });
     log('VectorPack built. Secrets redacted. Context compressed.');
@@ -156,7 +156,7 @@ export default function PastMVPConsole() {
     const result = await runDeployRail(selectedMission.id, { liveRun: true, candidateScore: 100, provider: 'vercel' });
     setDeployResult(result);
     result.log.forEach(l => log(l));
-    log('[UNBOUND] DeployRail complete. Sovereign auto-approved.', '#4ade80');
+    log('[UNBOUND] DeployRail complete. Evo Studio auto-approved.', '#4ade80');
     refreshAll();
     setLoading(false);
   };

@@ -42,7 +42,7 @@ export function ProofToValueView() {
         </div>
         <div>
           <h2 style={{ fontSize: '16px', fontWeight: 800, margin: 0 }}>Proof-To-Value Metrics</h2>
-          <p style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)', margin: 0 }}>Sovereign assurance metrics converted to business value</p>
+          <p style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)', margin: 0 }}>Evo Studio assurance metrics converted to business value</p>
         </div>
       </div>
 

@@ -5,7 +5,7 @@ export const ROUTE_REGISTRY = Object.freeze([
   { method: 'POST', path: '/api/auth/login', owner: 'auth', surface: 'bridge' },
   { method: 'GET', path: '/api/auth/me', owner: 'auth', surface: 'bridge' },
   { method: 'POST', path: '/api/config/keys', owner: 'config', surface: 'bridge' },
-  { method: 'POST', path: '/api/sovereign-ledger/log', owner: 'ledger', surface: 'bridge' },
+  { method: 'POST', path: '/api/evo-ledger/log', owner: 'ledger', surface: 'bridge' },
   { method: 'POST', path: '/api/maintenance/run', owner: 'maintenance', surface: 'bridge' },
   { method: 'GET', path: '/api/truth/probe', owner: 'truth', surface: 'bridge' },
   { method: 'POST', path: '/api/evo-lm/chat', owner: 'evo-lm', surface: 'bridge' },

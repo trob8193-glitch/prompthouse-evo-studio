@@ -36,7 +36,7 @@ export function DeployRailView() {
       <div className="flex-between" style={{ marginBottom: 16 }}>
         <div>
           <div className="page-title">🛤️ DeployRail</div>
-          <div className="page-subtitle">Sovereign deployment pipeline. Test → Build → Secret Check → Preview → Production.</div>
+          <div className="page-subtitle">Evo Studio deployment pipeline. Test → Build → Secret Check → Preview → Production.</div>
         </div>
         <div className="badge badge-gold">
           LIVE-RUN MODE

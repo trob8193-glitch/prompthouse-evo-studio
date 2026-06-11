@@ -13,7 +13,7 @@ import { Log } from '../core/autonomy/SovereignLogger.js';
 
 export default function SaasBuilderView() {
   const bridgeUrl = useSovereignStore(s => s.apiConfig.bridgeUrl);
-  const [prompt, setPrompt] = useState('Sovereign SaaS: A dashboard for autonomous file management.');
+  const [prompt, setPrompt] = useState('Evo Studio SaaS: A dashboard for autonomous file management.');
   const [building, setBuilding] = useState(false);
   const [blueprint, setBlueprint] = useState(null);
   const [truthState, setTruthState] = useState('PENDING');
@@ -85,7 +85,7 @@ export default function SaasBuilderView() {
               <textarea 
                 value={prompt} onChange={e => setPrompt(e.target.value)}
                 className="w-full bg-black/40 border border-slate-800 rounded-xl p-4 text-sm text-white focus:ring-2 focus:ring-indigo-500/40 outline-none transition-all resize-none min-h-[100px]"
-                ghostInput="Describe your sovereign SaaS architecture..."
+                ghostInput="Describe your evo SaaS architecture..."
               />
             </div>
             
@@ -111,7 +111,7 @@ export default function SaasBuilderView() {
             ) : (
               <div className="text-center space-y-4 max-w-sm">
                 <Code size={48} className="text-slate-800 mx-auto" />
-                <p className="text-slate-500 text-sm leading-relaxed">Enter a genesis prompt to physically instantiate your sovereign SaaS architecture nodes.</p>
+                <p className="text-slate-500 text-sm leading-relaxed">Enter a genesis prompt to physically instantiate your evo SaaS architecture nodes.</p>
               </div>
             )}
           </div>

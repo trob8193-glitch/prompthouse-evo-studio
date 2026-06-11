@@ -99,7 +99,7 @@ export function CodeForgeView() {
           </Card>
           
           <Card className="bg-emerald-500/5 border-emerald-500/20 p-8">
-            <h3 className="text-xs font-black text-emerald-400 uppercase tracking-widest mb-4">Sovereign Truth State</h3>
+            <h3 className="text-xs font-black text-emerald-400 uppercase tracking-widest mb-4">Evo Studio Truth State</h3>
             <ul className="space-y-3">
               {['No Ghost-Shells — all code is executable','Production-grade architectural patterns','Logic integrity verified via physical audit','Verified via autonomous evolution loops'].map((r,i) => (
                 <li key={i} className="text-xs text-slate-400 flex items-center gap-3">
@@ -330,7 +330,7 @@ export function MissionControlView() {
         <Card className="xl:col-span-7 bg-black/40 p-0 overflow-hidden">
           <div className="p-8 border-b border-slate-800 bg-slate-900/20 flex justify-between items-center">
             <h3 className="text-xs font-black text-white uppercase tracking-widest">Mission Packet Snapshot</h3>
-            <StatusBadge status="pending" label="Sovereign Draft" />
+            <StatusBadge status="pending" label="Evo Studio Draft" />
           </div>
           <div className="p-8">
             <div className="prompt-block !bg-transparent !border-none !p-0 !max-h-[500px]">{packet}</div>

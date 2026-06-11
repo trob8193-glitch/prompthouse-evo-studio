@@ -12,7 +12,7 @@ import path from 'path';
 export class ShadowProtocol {
   constructor() {
     this.status = 'SHADOWING_ACTIVE';
-    this.pattern_shard = path.join(process.cwd(), '.sovereign-shards', 'patterns.shard.json');
+    this.pattern_shard = path.join(process.cwd(), '.evo-shards', 'patterns.shard.json');
     this.ensureShard();
   }
 

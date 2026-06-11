@@ -11,7 +11,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
-const CHAIN_PATH = path.join(process.cwd(), '.sovereign-shards', 'truth-chain.shard.json');
+const CHAIN_PATH = path.join(process.cwd(), '.evo-shards', 'truth-chain.shard.json');
 
 export class TruthChain {
   constructor() {

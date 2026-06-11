@@ -13,7 +13,7 @@ import fs from 'fs';
 export class SelfMaintenance {
   constructor() {
     this.status = 'READY';
-    this.brainPath = join(process.cwd(), '.sovereign-brain.json');
+    this.brainPath = join(process.cwd(), '.evo-brain.json');
     this.brain = this.loadBrain();
   }
 

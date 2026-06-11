@@ -4,7 +4,7 @@ import { RefreshCw, ShieldAlert, Activity, Heart, AlertTriangle, Zap, Cpu, Code 
 import './WitnessConsole.css';
 
 /**
- * PH EVO STUDIO — SOVEREIGN WITNESS CONSOLE (THE HUD)
+ * PH EVO STUDIO — EVO STUDIO WITNESS CONSOLE (THE HUD)
  * ═══════════════════════════════════════════════════════════════
  * The ultimate interface for the 10 Live Editor features.
  */

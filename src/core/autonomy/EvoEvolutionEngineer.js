@@ -4,7 +4,7 @@ import { SelfForge } from './SelfForge.js';
 import { MissionQueue } from '../automation/MissionQueue.js';
 
 /**
- * PH EVO STUDIO — EVO EVOLUTION ENGINEER (SOVEREIGN GRADE)
+ * PH EVO STUDIO — EVO EVOLUTION ENGINEER (EVO STUDIO GRADE)
  * ═══════════════════════════════════════════════════════════════
  * The autonomous architect for the Singularity Engine.
  * Manages the evolution of core logic, architectural patterns,

@@ -50,7 +50,7 @@ export class LiveWatcher {
   }
 
   /**
-   * Physically audit the local network for compatible 'Sovereign' nodes.
+   * Physically audit the local network for compatible 'Evo Studio' nodes.
    */
   async performGridAudit() {
     Log.info('📡 [LiveWatcher] Probing Local Subnet for Physical Devices...');

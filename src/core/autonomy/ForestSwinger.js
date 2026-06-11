@@ -26,7 +26,7 @@ export class ForestSwinger {
     let bestMatch = { studio: 'MASTER', score: 0 };
 
     for (const studio of studios) {
-      const brainPath = path.join(this.gardenDir, studio, '.sovereign-brain.json');
+      const brainPath = path.join(this.gardenDir, studio, '.evo-brain.json');
       if (fs.existsSync(brainPath)) {
         const brain = JSON.parse(fs.readFileSync(brainPath, 'utf8'));
         

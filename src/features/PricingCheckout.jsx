@@ -56,7 +56,7 @@ export default function PricingCheckout() {
     setSimulationStep(0);
     setSimulationLogs([
       `[HTTP] POST /api/commerce/checkout failed: ${errorReason}`,
-      `[SYSTEM] Reverting to Sovereign Local Commerce Simulation Mode...`,
+      `[SYSTEM] Reverting to Evo Studio Local Commerce Simulation Mode...`,
       `[READY] Waiting for owner verification signature...`
     ]);
   };
@@ -73,7 +73,7 @@ export default function PricingCheckout() {
     await addLog(`[SANDBOX] Initializing sandbox checkout session for ${showSimulator.tier}...`, 800);
     await addLog(`[STRIPE-SIM] Session ID: sess_sim_${Math.random().toString(36).substring(2, 12)}`, 500);
     await addLog(`[STRIPE-SIM] Simulating client transaction capture...`, 900);
-    await addLog(`[LEDGER] Writing transaction proof to local Sovereign Ledger...`, 700);
+    await addLog(`[LEDGER] Writing transaction proof to local Evo Studio Ledger...`, 700);
 
     // Call actual ledger logger in workspace store
     try {
@@ -156,7 +156,7 @@ export default function PricingCheckout() {
 
       <div className="text-center space-y-4">
         <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-amber-500">
-          Unlock the Sovereign Engine
+          Unlock the Evo Studio Engine
         </h1>
         <p className="text-slate-400 text-lg max-w-2xl mx-auto">
           Scale your PromptHouse workspace from basic local automation to enterprise-ready white-labeled self-evolution.
@@ -177,9 +177,9 @@ export default function PricingCheckout() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Tier 1: Sovereign Developer */}
+        {/* Tier 1: Evo Studio Developer */}
         <Card className={`p-8 pricing-card flex flex-col ${currentTier === 'Developer' ? 'border-indigo-500/40 bg-indigo-950/5' : ''}`}>
-          <div className="text-slate-400 text-sm font-bold tracking-widest uppercase mb-2">Sovereign Developer</div>
+          <div className="text-slate-400 text-sm font-bold tracking-widest uppercase mb-2">Evo Studio Developer</div>
           <div className="flex items-baseline gap-2 mb-6">
             <div className="text-4xl font-black text-white">$49</div>
             <div className="text-slate-400">/ month</div>
@@ -231,9 +231,9 @@ export default function PricingCheckout() {
           </Button>
         </Card>
 
-        {/* Tier 3: Sovereign Source */}
+        {/* Tier 3: Evo Studio Source */}
         <Card className={`p-8 pricing-card pricing-card-source flex flex-col ${currentTier === 'Source' ? 'border-amber-500/40 bg-amber-950/5' : ''}`}>
-          <div className="text-slate-400 text-sm font-bold tracking-widest uppercase mb-2">Sovereign Source</div>
+          <div className="text-slate-400 text-sm font-bold tracking-widest uppercase mb-2">Evo Studio Source</div>
           <div className="flex items-baseline gap-2 mb-6">
             <div className="text-4xl font-black text-white">$9,500</div>
             <div className="text-slate-400">one-time</div>
@@ -252,7 +252,7 @@ export default function PricingCheckout() {
             disabled={currentTier === 'Source' || loading}
             onClick={() => handleUpgrade('Source', 950000, 'price_source_9500')}
           >
-            {currentTier === 'Source' ? 'Current Active Plan' : (loading === 'Source' ? 'Connecting...' : 'Acquire Sovereign Source')}
+            {currentTier === 'Source' ? 'Current Active Plan' : (loading === 'Source' ? 'Connecting...' : 'Acquire Evo Studio Source')}
           </Button>
         </Card>
       </div>

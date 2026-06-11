@@ -7,7 +7,7 @@ const BRIDGE_URL = typeof process !== 'undefined' && process.env?.PROMPTBRIDGE_U
 
 async function recordHealingProbe(filePath) {
   try {
-    await fetch(`${BRIDGE_URL}/api/sovereign-ledger/log`, {
+    await fetch(`${BRIDGE_URL}/api/evo-ledger/log`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

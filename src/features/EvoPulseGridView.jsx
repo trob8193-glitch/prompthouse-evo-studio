@@ -407,8 +407,8 @@ const ExistingGridPanel = ({ riftStatus, riftData, gridNodes, gridRoutes }) => (
     )}
 
     <div className="grid gap-4 md:grid-cols-3">
-      <PulseMetric icon={Database} label="Grid Nodes" value={gridNodes.length} detail="Existing registered node count from your sovereign store." />
-      <PulseMetric icon={Route} label="Routes" value={gridRoutes.length} detail="Existing mesh route count from your sovereign store." />
+      <PulseMetric icon={Database} label="Grid Nodes" value={gridNodes.length} detail="Existing registered node count from your evo store." />
+      <PulseMetric icon={Route} label="Routes" value={gridRoutes.length} detail="Existing mesh route count from your evo store." />
       <PulseMetric icon={Activity} label="Runtime" value={riftStatus === 'connected' ? 'ON' : 'SAFE'} detail={riftData?.system_msg || 'Grid command layer is loaded with safe defaults.'} />
     </div>
   </section>

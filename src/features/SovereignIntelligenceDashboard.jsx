@@ -204,7 +204,7 @@ export function SovereignIntelligenceDashboard() {
         />
         <MetricCard
           icon={Activity}
-          label="Sovereign IQ"
+          label="Evo Studio IQ"
           value={metrics?.logic?.iq ? metrics.logic.iq.toLocaleString() : '—'}
           sub={`Baseline: ${metrics?.logic?.total_lines || 0} LOC`}
           color="#10b981"
@@ -213,7 +213,7 @@ export function SovereignIntelligenceDashboard() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { label: 'Sovereign IQ', value: metrics?.logic?.iq ? metrics.logic.iq.toLocaleString() : 'N/A', trend: 'LIVE', icon: Zap, color: 'text-indigo-400' },
+            { label: 'Evo Studio IQ', value: metrics?.logic?.iq ? metrics.logic.iq.toLocaleString() : 'N/A', trend: 'LIVE', icon: Zap, color: 'text-indigo-400' },
             { label: 'Logic Density', value: metrics?.logic?.density || 'N/A', trend: 'PHYSICAL', icon: Cpu, color: 'text-emerald-400' },
             { label: 'Sync Latency', value: metrics?.latency ? `${metrics.latency}ms` : '0ms', trend: 'ZERO-D', icon: Clock, color: 'text-amber-400' },
             { label: 'Foundry Load', value: metrics?.memory?.heapUsed ? (metrics.memory.heapUsed / 1024 / 1024).toFixed(1) + 'MB' : 'N/A', trend: 'STABLE', icon: Activity, color: 'text-rose-400' },
@@ -239,7 +239,7 @@ export function SovereignIntelligenceDashboard() {
         {/* API Truth Status */}
         <div className="p-6 bg-black/40 border border-slate-800 rounded-3xl mt-6">
           <div className="flex items-center justify-between mb-4">
-            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Sovereign API Mesh</div>
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Evo Studio API Mesh</div>
             <button 
               onClick={() => useSovereignStore.getState().runTruthProbe()}
               className="text-[9px] text-indigo-400 font-black uppercase tracking-widest hover:text-indigo-300"

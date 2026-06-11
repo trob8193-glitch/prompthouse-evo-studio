@@ -44,7 +44,7 @@ export class TruthGate {
     // 3. CRYPTOGRAPHIC INTEGRITY CHECK (Optional for now)
     if (typeof data === 'object' && data !== null) {
       if (data.truth_state === 'VERIFIED' && !data.sovereign_seal) {
-        // issues.push('INTEGRITY_VIOLATION: Verified data lacks a Sovereign Seal');
+        // issues.push('INTEGRITY_VIOLATION: Verified data lacks a Evo Studio Seal');
       }
     }
 
@@ -71,7 +71,7 @@ export class TruthGate {
   }
 
   /**
-   * SOVEREIGN SEAL: Hashing data for immutable proof.
+   * EVO STUDIO SEAL: Hashing data for immutable proof.
    */
   sign(data) {
     if (typeof data !== 'object' || data === null) return data;

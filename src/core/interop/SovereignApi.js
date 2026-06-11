@@ -5,7 +5,7 @@ import { UNIVERSAL_BRIDGE } from './UniversalBridge.js';
 const gate = new PerfectionGate();
 
 /**
- * EVOGENAGE — SOVEREIGN INTEROP API (GATEWAY)
+ * EVOGENAGE — EVO STUDIO INTEROP API (GATEWAY)
  * ═══════════════════════════════════════════════════════════════
  * The singular entry point for external grid requests.
  * All outgoing data is passed through the PerfectionGate.

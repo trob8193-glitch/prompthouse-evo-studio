@@ -85,7 +85,7 @@ export function Toolbar() {
       <div className="flex items-center gap-4">
         <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
           <Zap size={12} className="text-indigo-400" />
-          <span className="text-[9px] font-black text-indigo-300 uppercase tracking-widest">Sovereign Mode</span>
+          <span className="text-[9px] font-black text-indigo-300 uppercase tracking-widest">Evo Studio Mode</span>
         </div>
         
         <div className="flex items-center gap-1">

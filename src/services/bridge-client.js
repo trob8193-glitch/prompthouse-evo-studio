@@ -41,7 +41,7 @@ export const bridgeClient = {
   },
 
   /**
-   * Logs a truth event to the sovereign ledger.
+   * Logs a truth event to the evo ledger.
    */
   async logLedgerEvent(payload) {
     return safeFetchBridge('/api/ledger/event', {

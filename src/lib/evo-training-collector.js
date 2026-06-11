@@ -127,7 +127,7 @@ export async function exportTrainingJSONL() {
   // OpenAI fine-tuning format
   const jsonl = examples.map(ex => JSON.stringify({
     messages: [
-      { role: 'system', content: ex.systemPrompt || 'You are PH Evo Studio — a sovereign-grade AI assistant.' },
+      { role: 'system', content: ex.systemPrompt || 'You are PH Evo Studio — a evo-grade AI assistant.' },
       { role: 'user', content: ex.input },
       { role: 'assistant', content: ex.output },
     ]

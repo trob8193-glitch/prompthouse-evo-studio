@@ -29,7 +29,7 @@ export const SOVEREIGN_CANON = {
 
 export class CanonManager {
   verify(moduleContent) {
-    Log.info('🧿 [CanonManager] Verifying logic against Sovereign standards...');
+    Log.info('🧿 [CanonManager] Verifying logic against Evo Studio standards...');
     // Real logic to audit files against the Omega Prohibition
     return true;
   }

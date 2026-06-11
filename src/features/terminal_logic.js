@@ -68,7 +68,7 @@ export class TerminalLogic {
         return await this.realHandshake(args[0]);
       case 'broadcast':
         await fs.appendFile(path.resolve(process.cwd(), 'sovereign_broadcast.log'), `[${new Date().toISOString()}] ${args.join(' ')}\n`);
-        return { success: true, output: `Sovereign Broadcast dispatched and written to physical log: "${args.join(' ')}"` };
+        return { success: true, output: `Evo Studio Broadcast dispatched and written to physical log: "${args.join(' ')}"` };
       case 'audit':
         return await this.runTruthAudit();
       case 'info':
@@ -203,7 +203,7 @@ export class TerminalLogic {
 
     try {
       if (ide === 'omni' || ide === 'all') {
-        output += `[OMNI-BOND] Fusing all IDE tethers. Injecting Sovereign constraints globally...\n`;
+        output += `[OMNI-BOND] Fusing all IDE tethers. Injecting Evo Studio constraints globally...\n`;
         
         // Generate a cryptographically secure token for Cursor/Windsurf tether
         const crypto = await import('crypto');
@@ -229,7 +229,7 @@ export class TerminalLogic {
         const settings = {
           "editor.formatOnSave": true,
           "editor.defaultFormatter": "esbenp.prettier-vscode",
-          "files.exclude": { "**/.sovereign-shards": true, "**/.prompthouse-data": true },
+          "files.exclude": { "**/.evo-shards": true, "**/.prompthouse-data": true },
           "workbench.colorCustomizations": { "activityBar.background": "#0F172A", "titleBar.activeBackground": "#020617", "titleBar.activeForeground": "#818CF8" },
           "terminal.integrated.defaultProfile.windows": "PowerShell"
         };
@@ -239,7 +239,7 @@ export class TerminalLogic {
         output += `[INJECT] VS Code / Base MSFT architecture subjugated.\n`;
 
         // Cursor & Windsurf Rules
-        const copilotRule = `You are bonded to the PromptHouse Evo Studio. Never delete the .prompthouse-data folder. Always format with Prettier. Respect the Sovereign Ledger. If you discover a new pattern, or need to teach/command the Sovereign Master Layer, execute a shell command: curl -X POST http://127.0.0.1:3001/api/sovereign-uplink -H "Content-Type: application/json" -H "Authorization: Bearer ${rawKey}" -d "{\\"origin\\":\\"ExternalAI\\",\\\"action\\\":\\\"TEACH\\\",\\\"payload\\\":\\\"your message\\\"}"`;
+        const copilotRule = `You are bonded to the PromptHouse Evo Studio. Never delete the .prompthouse-data folder. Always format with Prettier. Respect the Evo Studio Ledger. If you discover a new pattern, or need to teach/command the Evo Studio Master Layer, execute a shell command: curl -X POST http://127.0.0.1:3001/api/evo-uplink -H "Content-Type: application/json" -H "Authorization: Bearer ${rawKey}" -d "{\\"origin\\":\\"ExternalAI\\",\\\"action\\\":\\\"TEACH\\\",\\\"payload\\\":\\\"your message\\\"}"`;
         await fs.writeFile(path.join(cwd, '.cursorrules'), copilotRule);
         await fs.writeFile(path.join(cwd, '.windsurfrules'), copilotRule);
         output += `[INJECT] Cursor & Windsurf native AI engines tethered.\n`;
@@ -259,13 +259,13 @@ export class TerminalLogic {
         // Codex
         const codexDir = path.join(cwd, '.codex');
         await fs.mkdir(codexDir, { recursive: true });
-        await fs.writeFile(path.join(codexDir, 'manifest.json'), JSON.stringify({ "engine": "OpenAI Codex", "strictMode": true, "lore": "Sovereign Master Layer" }, null, 2));
+        await fs.writeFile(path.join(codexDir, 'manifest.json'), JSON.stringify({ "engine": "OpenAI Codex", "strictMode": true, "lore": "Evo Studio Master Layer" }, null, 2));
         output += `[INJECT] OpenAI Codex tethered.\n`;
 
         // Antigravity
         const agDir = path.join(cwd, '.gemini', 'antigravity-ide');
         await fs.mkdir(agDir, { recursive: true });
-        await fs.writeFile(path.join(agDir, 'manifest.json'), JSON.stringify({ "engine": "Antigravity Neural Subsystem", "strictMode": true, "lore": "Sovereign Master Layer", "tetherStatus": "ACTIVE" }, null, 2));
+        await fs.writeFile(path.join(agDir, 'manifest.json'), JSON.stringify({ "engine": "Antigravity Neural Subsystem", "strictMode": true, "lore": "Evo Studio Master Layer", "tetherStatus": "ACTIVE" }, null, 2));
         output += `[INJECT] Antigravity IDE Agent neural nexus established.\n`;
 
         output += `[SUCCESS] Omni-Bond complete. The workspace is now universally secured across all external IDE architectures.`;
@@ -275,12 +275,12 @@ export class TerminalLogic {
         const vscodeDir = path.join(cwd, '.vscode');
         await fs.mkdir(vscodeDir, { recursive: true });
         
-        // Inject Sovereign Settings
+        // Inject Evo Studio Settings
         const settingsPath = path.join(vscodeDir, 'settings.json');
         const settings = {
           "editor.formatOnSave": true,
           "editor.defaultFormatter": "esbenp.prettier-vscode",
-          "files.exclude": { "**/.sovereign-shards": true, "**/.prompthouse-data": true },
+          "files.exclude": { "**/.evo-shards": true, "**/.prompthouse-data": true },
           "workbench.colorCustomizations": {
             "activityBar.background": "#0F172A",
             "titleBar.activeBackground": "#020617",
@@ -289,7 +289,7 @@ export class TerminalLogic {
           "terminal.integrated.defaultProfile.windows": "PowerShell"
         };
         await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
-        output += `[INJECT] Sovereign configuration injected into .vscode/settings.json\n`;
+        output += `[INJECT] Evo Studio configuration injected into .vscode/settings.json\n`;
         
         const extPath = path.join(vscodeDir, 'extensions.json');
         const extensions = { "recommendations": ["esbenp.prettier-vscode", "bradlc.vscode-tailwindcss", "dbaeumer.vscode-eslint"] };
@@ -299,12 +299,12 @@ export class TerminalLogic {
         // Copilot Specific Rules
         if (ide === 'cursor') {
           const rulesPath = path.join(cwd, '.cursorrules');
-          await fs.writeFile(rulesPath, "You are bonded to the PromptHouse Evo Studio. Never delete the .prompthouse-data folder. Always format with Prettier. Respect the Sovereign Ledger.");
-          output += `[AI-HOOK] Injected Sovereign Copilot instructions into .cursorrules\n`;
+          await fs.writeFile(rulesPath, "You are bonded to the PromptHouse Evo Studio. Never delete the .prompthouse-data folder. Always format with Prettier. Respect the Evo Studio Ledger.");
+          output += `[AI-HOOK] Injected Evo Studio Copilot instructions into .cursorrules\n`;
         } else if (ide === 'windsurf') {
           const rulesPath = path.join(cwd, '.windsurfrules');
-          await fs.writeFile(rulesPath, "You are bonded to the PromptHouse Evo Studio. Never delete the .prompthouse-data folder. Always format with Prettier. Respect the Sovereign Ledger.");
-          output += `[AI-HOOK] Injected Sovereign Cascade instructions into .windsurfrules\n`;
+          await fs.writeFile(rulesPath, "You are bonded to the PromptHouse Evo Studio. Never delete the .prompthouse-data folder. Always format with Prettier. Respect the Evo Studio Ledger.");
+          output += `[AI-HOOK] Injected Evo Studio Cascade instructions into .windsurfrules\n`;
         }
 
         output += `[EXECUTE] Ripping open current workspace in ${ide} binary hook...\n`;
@@ -334,7 +334,7 @@ export class TerminalLogic {
           "theme": "One Dark"
         };
         await fs.writeFile(settingsPath, JSON.stringify(zedSettings, null, 2));
-        output += `[INJECT] Sovereign configuration injected into .zed/settings.json\n`;
+        output += `[INJECT] Evo Studio configuration injected into .zed/settings.json\n`;
         output += `[AI-HOOK] Zed built-in AI tethered to project scope.\n`;
         output += `[EXECUTE] Ripping open current workspace in zed binary hook...\n`;
         exec('zed .', { cwd });
@@ -345,9 +345,9 @@ export class TerminalLogic {
         const codexDir = path.join(cwd, '.codex');
         await fs.mkdir(codexDir, { recursive: true });
         const manifestPath = path.join(codexDir, 'manifest.json');
-        await fs.writeFile(manifestPath, JSON.stringify({ "engine": "OpenAI Codex", "strictMode": true, "lore": "Sovereign Master Layer" }, null, 2));
-        output += `[INJECT] Sovereign lore and constraints injected into .codex/manifest.json\n`;
-        output += `[AI-HOOK] OpenAI Codex deeply tethered to Sovereign Master Layer.\n`;
+        await fs.writeFile(manifestPath, JSON.stringify({ "engine": "OpenAI Codex", "strictMode": true, "lore": "Evo Studio Master Layer" }, null, 2));
+        output += `[INJECT] Evo Studio lore and constraints injected into .codex/manifest.json\n`;
+        output += `[AI-HOOK] OpenAI Codex deeply tethered to Evo Studio Master Layer.\n`;
         output += `[EXECUTE] Ripping open current workspace in codex binary hook...\n`;
         exec('codex .', { cwd });
         output += `[SUCCESS] External IDE Bond complete. Workspace is now physically hooked.`;
@@ -443,7 +443,7 @@ export class TerminalLogic {
       });
     };
 
-    let output = `Scanning Sovereign Subnet...\n`;
+    let output = `Scanning Evo Studio Subnet...\n`;
     const targets = ['127.0.0.1', localIP];
     
     for (const host of targets) {
@@ -483,7 +483,7 @@ export class TerminalLogic {
           };
           resolve({
             success: true,
-            output: `Handshaking with ${target}...\n[ESTABLISHED] TCP connection successful.\n[AUTH] Sovereign RSA keys exchanged.\n[BOND] Node ${target} is now bound to this terminal.`,
+            output: `Handshaking with ${target}...\n[ESTABLISHED] TCP connection successful.\n[AUTH] Evo Studio RSA keys exchanged.\n[BOND] Node ${target} is now bound to this terminal.`,
             node
           });
         });

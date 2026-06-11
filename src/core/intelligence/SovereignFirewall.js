@@ -4,14 +4,14 @@ import { ShadowCache } from './ShadowCache.js';
 import { SyntaxSandbox } from './SyntaxSandbox.js';
 
 /**
- * SOVEREIGN FIREWALL
+ * EVO STUDIO FIREWALL
  * ═══════════════════════════════════════════════════════════════
  * The master cost-saving interception membrane. All AI requests
  * flow through here to be compacted, cached, routed, and verified.
  */
 export class SovereignFirewall {
   static async intercept(prompt, context = '', options = {}) {
-    const { aiAdaptor, systemPrompt = 'You are a Sovereign AI.' } = options;
+    const { aiAdaptor, systemPrompt = 'You are a Evo Studio AI.' } = options;
     const startTime = Date.now();
     let tokensSaved = 0;
     let moneySaved = 0;
