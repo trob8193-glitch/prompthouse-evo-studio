@@ -58,6 +58,7 @@ import MobileSingularityDashboard from './features/MobileSingularityDashboard.js
 import RealTimeValidationDashboard from './features/RealTimeValidationDashboard.jsx';
 import CommerceDashboard from './features/CommerceDashboard.jsx';
 import PricingCheckout from './features/PricingCheckout.jsx';
+import StudioMarketplaceDashboard from './features/StudioMarketplaceDashboard.jsx';
 
 export const PAGE_MAP = {
   'dashboard': SovereignIntelligenceDashboard,
@@ -95,6 +96,7 @@ export const PAGE_MAP = {
   'realtime-validation': RealTimeValidationDashboard,
   'commerce': CommerceDashboard,
   'pricing': PricingCheckout,
+  'studio-marketplace': StudioMarketplaceDashboard,
 };
 
 function PageRenderer() {

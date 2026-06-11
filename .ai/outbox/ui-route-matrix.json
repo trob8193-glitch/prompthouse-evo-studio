@@ -1,8 +1,8 @@
 {
-  "scannedAt": "2026-06-11T19:59:29.703Z",
-  "totalComponentsScanned": 131,
+  "scannedAt": "2026-06-11T20:01:28.814Z",
+  "totalComponentsScanned": 132,
   "totalBackendRoutesFound": 268,
-  "deadLinksDetected": 0,
+  "deadLinksDetected": 1,
   "matrix": [
     {
       "component": "src\\agent-bridge-views.jsx",
@@ -592,6 +592,19 @@
         "setActivePage('chat')}\r\n              style={{\r\n                background: 'none', border: '1px solid #1e293b', borderRadius: 8, padding: '8px 12px',\r\n                color: '#6366f1', fontSize: 11, fontWeight: 600, cursor: 'pointer', marginTop: 4,\r\n                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,\r\n              }}\r\n            >\r\n              Open Full Chat"
       ],
       "endpoints": []
+    },
+    {
+      "component": "src\\features\\StudioMarketplaceDashboard.jsx",
+      "buttons": [
+        "setActiveTab(tab)}\n            className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider transition-colors ${\n              activeTab === tab \n                ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/50' \n                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'\n            }`}\n          >\n            {tab} Formats",
+        "Tether"
+      ],
+      "endpoints": [
+        {
+          "path": "/api/marketplace/catalog",
+          "isAlive": false
+        }
+      ]
     },
     {
       "component": "src\\features\\ThemeEvolutionDashboard.jsx",

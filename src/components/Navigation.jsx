@@ -21,6 +21,7 @@ export const NAV_GROUPS = [
       { id: 'dashboard', label: 'Command Center', icon: LayoutDashboard },
       { id: 'saas-builder', label: 'Singularity Studio', icon: Rocket },
       { id: 'portfolio', label: 'App Market', icon: Globe },
+      { id: 'studio-marketplace', label: 'Omni-Marketplace', icon: Globe },
       { id: 'launch-proof', label: 'Launch Proof', icon: Shield },
       { id: 'chat', label: 'Evo Copilot', icon: MessageSquare },
       { id: 'agent-chat', label: 'Evo Agent Chat', icon: Bot },

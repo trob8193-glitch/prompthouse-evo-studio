@@ -1,9 +1,9 @@
 # Full UI Button-to-Route Matrix
 
-**Generated**: 2026-06-11T19:59:29.703Z
-**Components Scanned**: 131
+**Generated**: 2026-06-11T20:01:28.814Z
+**Components Scanned**: 132
 **Known Backend Routes**: 268
-**Potential Dead Links Detected**: 0
+**Potential Dead Links Detected**: 1
 
 ## Matrix
 
@@ -1067,6 +1067,23 @@
               Open Full Chat
 
 **API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\features\StudioMarketplaceDashboard.jsx
+**Interactive Controls**: 
+- setActiveTab(tab)}
+            className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider transition-colors ${
+              activeTab === tab 
+                ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/50' 
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+            }`}
+          >
+            {tab} Formats
+- Tether
+
+**API Calls Triggered**:
+- `/api/marketplace/catalog` -> ❌ DEAD LINK / UNREGISTERED
 
 ---
 
