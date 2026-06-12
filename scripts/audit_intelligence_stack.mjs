@@ -16,6 +16,7 @@ const targets = {
   evoIndex: 'src/core/evo-llm/index.js',
   signalInstaller: 'scripts/install_evo_signal_fabric_routes.mjs',
   appInstaller: 'scripts/install_app_intelligence_tools.mjs',
+  tetherCommandInstaller: 'scripts/install_tether_completion_commands.mjs',
   hardener: 'scripts/harden_intelligence_wiring.mjs',
   signalCli: 'scripts/build_signal_learning_dataset.mjs',
   appCli: 'scripts/build_app_intelligence_dataset.mjs',
@@ -50,6 +51,9 @@ contains('installer:app-route-writer', targets.appInstaller, 'evo_app_intelligen
 contains('installer:app-cli-writer', targets.appInstaller, 'build_app_intelligence_dataset.mjs', 5);
 contains('installer:bridge-import', targets.appInstaller, 'registerEvoAppIntelligenceRoutes', 5);
 contains('installer:package-script', targets.appInstaller, 'evo:wire-intelligence', 5);
+contains('installer:tether-master-script', targets.tetherCommandInstaller, 'evo:intelligence:master', 6);
+contains('installer:tether-proof-script', targets.tetherCommandInstaller, 'evo:tether:proof', 6);
+contains('installer:tether-cycle-script', targets.tetherCommandInstaller, 'evo:tether:cycle', 6);
 contains('hardener:receipt', targets.hardener, 'intelligence-wiring-', 5);
 contains('hardener:syntax-check', targets.hardener, 'node --check', 5);
 contains('hardener:package-verify', targets.hardener, 'evo:intelligence:verify', 5);
@@ -79,7 +83,7 @@ contains('tether:promotion-proof', targets.tetherCore, 'requiredPromotionProof',
 contains('tether:receipt', targets.tetherCore, 'writeTetherReceipt', 6);
 contains('tether-cli:cycle', targets.appTetherCli, '--cycle-test', 5);
 
-for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.frontierSafety, targets.tetherCore, targets.frontierSafetyCli, targets.signalInstaller, targets.appInstaller, targets.hardener, targets.workCli, targets.appTetherCli]) {
+for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.frontierSafety, targets.tetherCore, targets.frontierSafetyCli, targets.signalInstaller, targets.appInstaller, targets.tetherCommandInstaller, targets.hardener, targets.workCli, targets.appTetherCli]) {
   syntax(`syntax:${file}`, file, 4);
 }
 if (fs.existsSync(abs(targets.appRoute))) syntax(`syntax:${targets.appRoute}`, targets.appRoute, 4);
@@ -99,6 +103,7 @@ const report = {
   generatedAt: new Date().toISOString(), truthState, score, earned, total,
   passed: checks.length - missing.length, failed: missing.length, checks, missing,
   recommendedCommands: [
+    'node scripts/install_tether_completion_commands.mjs',
     'node scripts/frontier_safety_gate.mjs --status',
     'node scripts/frontier_safety_gate.mjs --contract',
     'node scripts/evo_app_intelligence.mjs --cycle-test',
