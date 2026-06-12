@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-06-12T05:28:48.520Z",
+  "generatedAt": "2026-06-12T05:35:19.425Z",
   "truthState": "DATASET_WARNINGS",
-  "totalExamples": 29,
-  "validExamples": 28,
+  "totalExamples": 30,
+  "validExamples": 29,
   "invalidExamples": [
     {
       "index": 8,
@@ -12,7 +12,7 @@
       ]
     }
   ],
-  "trainCount": 22,
+  "trainCount": 23,
   "evalCount": 6,
   "files": {
     "trainJsonl": ".evo-llm\\training-data\\evo-train.jsonl",
