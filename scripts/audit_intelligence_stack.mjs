@@ -33,7 +33,6 @@ const targets = {
 };
 
 const checks = [];
-
 function abs(file) { return path.join(rootDir, file); }
 function read(file) { const full = abs(file); return fs.existsSync(full) ? fs.readFileSync(full, 'utf8') : ''; }
 function add(id, file, ok, weight, detail = '') { checks.push({ id, file, ok: Boolean(ok), weight, earned: ok ? weight : 0, detail }); }
@@ -98,8 +97,16 @@ contains('omnibot-mobile:contract', targets.omnibotMobile, 'getOmnibotMobileCont
 contains('omnibot-mobile:channels', targets.omnibotMobile, 'MOBILE_CHANNELS', 6);
 contains('omnibot-mobile:offline', targets.omnibotMobile, 'offlineFallbackRequired', 6);
 contains('omnibot-mobile:receipts', targets.omnibotMobile, 'writeOmnibotMobileReceipt', 6);
+contains('omnibot-mobile:intent-planner', targets.omnibotMobile, 'planOmnibotMobileIntent', 7);
+contains('omnibot-mobile:tether-core', targets.omnibotMobile, 'EvoIntelligenceTetherCore', 7);
+contains('omnibot-mobile:safety-gate', targets.omnibotMobile, 'evaluateFrontierIntelligenceSafety', 7);
+contains('omnibot-mobile:work-memory', targets.omnibotMobile, 'ingestEvoWorkMemory', 7);
+contains('omnibot-mobile:cli-intent', targets.omnibotMobileCli, '--intent', 6);
 contains('omnibot-mobile-cli:status', targets.omnibotMobileCli, 'getOmnibotMobileStatus', 5);
 contains('omnibot-mobile-route:status', targets.omnibotMobileRoute, '/api/omnibot-mobile/status', 5);
+contains('omnibot-mobile-route:session', targets.omnibotMobileRoute, '/api/omnibot-mobile/session', 6);
+contains('omnibot-mobile-route:intent', targets.omnibotMobileRoute, '/api/omnibot-mobile/intent', 6);
+contains('omnibot-mobile-route:plan', targets.omnibotMobileRoute, '/api/omnibot-mobile/plan', 6);
 
 for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.frontierSafety, targets.tetherCore, targets.safeAutonomy, targets.omnibotMobile, targets.frontierSafetyCli, targets.safeAutonomyCli, targets.omnibotMobileCli, targets.signalInstaller, targets.appInstaller, targets.tetherCommandInstaller, targets.hardener, targets.workCli, targets.appTetherCli]) {
   syntax(`syntax:${file}`, file, 4);
@@ -112,11 +119,7 @@ const total = checks.reduce((sum, item) => sum + item.weight, 0);
 const earned = checks.reduce((sum, item) => sum + item.earned, 0);
 const score = total ? Math.round((earned / total) * 100) : 0;
 const missing = checks.filter((item) => !item.ok);
-const truthState = score >= 90 && missing.length === 0
-  ? 'INTELLIGENCE_STACK_AUDIT_PASS'
-  : score >= 80
-    ? 'INTELLIGENCE_STACK_AUDIT_WARNINGS'
-    : 'INTELLIGENCE_STACK_AUDIT_FAIL';
+const truthState = score >= 90 && missing.length === 0 ? 'INTELLIGENCE_STACK_AUDIT_PASS' : score >= 80 ? 'INTELLIGENCE_STACK_AUDIT_WARNINGS' : 'INTELLIGENCE_STACK_AUDIT_FAIL';
 
 const report = {
   generatedAt: new Date().toISOString(), truthState, score, earned, total,
@@ -129,6 +132,7 @@ const report = {
     'node scripts/safe_autonomous_execution.mjs --status',
     'node scripts/omnibot_mobile.mjs --contract',
     'node scripts/omnibot_mobile.mjs --status',
+    'node scripts/omnibot_mobile.mjs --plan',
     'node scripts/evo_app_intelligence.mjs --cycle-test',
     'npm run evo:wire-intelligence',
     'npm run evo:intelligence:verify',
