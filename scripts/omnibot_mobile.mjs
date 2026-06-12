@@ -28,6 +28,21 @@ try {
     console.log(JSON.stringify(getOmnibotMobileStatus({ rootDir }), null, 2));
     process.exit(0);
   }
+  if (args.has('--autonomous-plan')) {
+    const result = planOmnibotMobileIntent({
+      rootDir,
+      intent: {
+        action: 'autonomous-execution-plan',
+        device: 'mobile-operator',
+        channel: 'omnibot-autonomous-console',
+        summary: 'Mobile requested a safety-gated autonomous execution proof plan.',
+        scope: 'sandbox',
+        tests: ['node scripts/evo_autonomous_runner.mjs --status', 'node scripts/evo_autonomous_runner.mjs', 'node scripts/audit_intelligence_stack.mjs', 'npm run build', 'npm run verify:studio']
+      }
+    });
+    console.log(JSON.stringify(result, null, 2));
+    process.exit(result.success ? 0 : 1);
+  }
   const intent = readJsonArg('--intent');
   if (intent || args.has('--plan')) {
     const result = planOmnibotMobileIntent({
@@ -47,7 +62,7 @@ try {
     device: 'mobile-operator',
     channel: 'mobile-browser',
     mode: 'status-control',
-    allowedIntents: ['status', 'proof', 'safe-plan', 'receipt', 'tether-status', 'tether-cycle-plan', 'audit-plan']
+    allowedIntents: ['status', 'proof', 'safe-plan', 'receipt', 'tether-status', 'tether-cycle-plan', 'audit-plan', 'autonomous-execution-plan', 'autonomous-runner-status', 'omnibot-master-proof']
   };
   const result = registerOmnibotMobileSession({ rootDir, session });
   writeOmnibotMobileReceipt({ rootDir, type: 'omnibot_mobile_cli_receipt', payload: result });
