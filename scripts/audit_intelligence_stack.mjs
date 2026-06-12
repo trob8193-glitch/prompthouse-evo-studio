@@ -12,7 +12,11 @@ const targets = {
   workMemory: 'src/core/evo-llm/EvoWorkMemoryEngine.js',
   frontierSafety: 'src/core/evo-llm/FrontierIntelligenceSafetyGate.js',
   tetherCore: 'src/core/evo-llm/EvoIntelligenceTetherCore.js',
+  safeAutonomy: 'src/core/autonomy/SafeAutonomousExecutionKernel.js',
+  omnibotMobile: 'src/core/omnibot/OmnibotMobileCore.js',
   frontierSafetyCli: 'scripts/frontier_safety_gate.mjs',
+  safeAutonomyCli: 'scripts/safe_autonomous_execution.mjs',
+  omnibotMobileCli: 'scripts/omnibot_mobile.mjs',
   evoIndex: 'src/core/evo-llm/index.js',
   signalInstaller: 'scripts/install_evo_signal_fabric_routes.mjs',
   appInstaller: 'scripts/install_app_intelligence_tools.mjs',
@@ -23,6 +27,7 @@ const targets = {
   appTetherCli: 'scripts/evo_app_intelligence.mjs',
   workCli: 'scripts/evo_work_memory.mjs',
   appRoute: 'generated_apis/evo_app_intelligence_routes.js',
+  omnibotMobileRoute: 'generated_apis/omnibot_mobile_routes.js',
   bridge: 'promptbridge-server.js',
   packageJson: 'package.json'
 };
@@ -82,12 +87,26 @@ contains('tether:dataset', targets.tetherCore, 'buildAppIntelligenceDataset', 6)
 contains('tether:promotion-proof', targets.tetherCore, 'requiredPromotionProof', 6);
 contains('tether:receipt', targets.tetherCore, 'writeTetherReceipt', 6);
 contains('tether-cli:cycle', targets.appTetherCli, '--cycle-test', 5);
+contains('safe-autonomy:contract', targets.safeAutonomy, 'getSafeAutonomousExecutionContract', 7);
+contains('safe-autonomy:plan', targets.safeAutonomy, 'createSafeAutonomousExecutionPlan', 7);
+contains('safe-autonomy:safety-gate', targets.safeAutonomy, 'evaluateFrontierIntelligenceSafety', 7);
+contains('safe-autonomy:rollback', targets.safeAutonomy, 'rollbackPlan', 7);
+contains('safe-autonomy:promotion-gate', targets.safeAutonomy, 'promotionWithoutProofBlocked', 7);
+contains('safe-autonomy:receipt', targets.safeAutonomy, 'writeSafeAutonomousExecutionReceipt', 7);
+contains('safe-autonomy-cli:status', targets.safeAutonomyCli, 'getSafeAutonomousExecutionStatus', 5);
+contains('omnibot-mobile:contract', targets.omnibotMobile, 'getOmnibotMobileContract', 6);
+contains('omnibot-mobile:channels', targets.omnibotMobile, 'MOBILE_CHANNELS', 6);
+contains('omnibot-mobile:offline', targets.omnibotMobile, 'offlineFallbackRequired', 6);
+contains('omnibot-mobile:receipts', targets.omnibotMobile, 'writeOmnibotMobileReceipt', 6);
+contains('omnibot-mobile-cli:status', targets.omnibotMobileCli, 'getOmnibotMobileStatus', 5);
+contains('omnibot-mobile-route:status', targets.omnibotMobileRoute, '/api/omnibot-mobile/status', 5);
 
-for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.frontierSafety, targets.tetherCore, targets.frontierSafetyCli, targets.signalInstaller, targets.appInstaller, targets.tetherCommandInstaller, targets.hardener, targets.workCli, targets.appTetherCli]) {
+for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.frontierSafety, targets.tetherCore, targets.safeAutonomy, targets.omnibotMobile, targets.frontierSafetyCli, targets.safeAutonomyCli, targets.omnibotMobileCli, targets.signalInstaller, targets.appInstaller, targets.tetherCommandInstaller, targets.hardener, targets.workCli, targets.appTetherCli]) {
   syntax(`syntax:${file}`, file, 4);
 }
 if (fs.existsSync(abs(targets.appRoute))) syntax(`syntax:${targets.appRoute}`, targets.appRoute, 4);
 if (fs.existsSync(abs(targets.appCli))) syntax(`syntax:${targets.appCli}`, targets.appCli, 4);
+if (fs.existsSync(abs(targets.omnibotMobileRoute))) syntax(`syntax:${targets.omnibotMobileRoute}`, targets.omnibotMobileRoute, 4);
 
 const total = checks.reduce((sum, item) => sum + item.weight, 0);
 const earned = checks.reduce((sum, item) => sum + item.earned, 0);
@@ -106,6 +125,10 @@ const report = {
     'node scripts/install_tether_completion_commands.mjs',
     'node scripts/frontier_safety_gate.mjs --status',
     'node scripts/frontier_safety_gate.mjs --contract',
+    'node scripts/safe_autonomous_execution.mjs --contract',
+    'node scripts/safe_autonomous_execution.mjs --status',
+    'node scripts/omnibot_mobile.mjs --contract',
+    'node scripts/omnibot_mobile.mjs --status',
     'node scripts/evo_app_intelligence.mjs --cycle-test',
     'npm run evo:wire-intelligence',
     'npm run evo:intelligence:verify',
