@@ -13,6 +13,7 @@ const targets = {
   frontierSafety: 'src/core/evo-llm/FrontierIntelligenceSafetyGate.js',
   tetherCore: 'src/core/evo-llm/EvoIntelligenceTetherCore.js',
   safeAutonomy: 'src/core/autonomy/SafeAutonomousExecutionKernel.js',
+  autonomousRunner: 'scripts/evo_autonomous_runner.mjs',
   omnibotMobile: 'src/core/omnibot/OmnibotMobileCore.js',
   frontierSafetyCli: 'scripts/frontier_safety_gate.mjs',
   safeAutonomyCli: 'scripts/safe_autonomous_execution.mjs',
@@ -91,8 +92,18 @@ contains('safe-autonomy:plan', targets.safeAutonomy, 'createSafeAutonomousExecut
 contains('safe-autonomy:safety-gate', targets.safeAutonomy, 'evaluateFrontierIntelligenceSafety', 7);
 contains('safe-autonomy:rollback', targets.safeAutonomy, 'rollbackPlan', 7);
 contains('safe-autonomy:promotion-gate', targets.safeAutonomy, 'promotionWithoutProofBlocked', 7);
+contains('safe-autonomy:runner-policy', targets.safeAutonomy, 'RUNNER_POLICY', 7);
+contains('safe-autonomy:runner-command', targets.safeAutonomy, 'node scripts/evo_autonomous_runner.mjs --execute', 7);
 contains('safe-autonomy:receipt', targets.safeAutonomy, 'writeSafeAutonomousExecutionReceipt', 7);
 contains('safe-autonomy-cli:status', targets.safeAutonomyCli, 'getSafeAutonomousExecutionStatus', 5);
+contains('autonomous-runner:contract', targets.autonomousRunner, 'getContract', 7);
+contains('autonomous-runner:status', targets.autonomousRunner, 'getStatus', 7);
+contains('autonomous-runner:safety', targets.autonomousRunner, 'evaluateFrontierIntelligenceSafety', 8);
+contains('autonomous-runner:controlled-patch', targets.autonomousRunner, 'AutonomousExecutionHeartbeat.js', 8);
+contains('autonomous-runner:allowlisted-proof', targets.autonomousRunner, 'allowedProofCommands', 8);
+contains('autonomous-runner:rollback', targets.autonomousRunner, 'rolledBack', 8);
+contains('autonomous-runner:work-memory', targets.autonomousRunner, 'ingestEvoWorkMemory', 8);
+contains('autonomous-runner:dataset', targets.autonomousRunner, 'buildEvoWorkMemoryDataset', 8);
 contains('omnibot-mobile:contract', targets.omnibotMobile, 'getOmnibotMobileContract', 6);
 contains('omnibot-mobile:channels', targets.omnibotMobile, 'MOBILE_CHANNELS', 6);
 contains('omnibot-mobile:offline', targets.omnibotMobile, 'offlineFallbackRequired', 6);
@@ -101,14 +112,17 @@ contains('omnibot-mobile:intent-planner', targets.omnibotMobile, 'planOmnibotMob
 contains('omnibot-mobile:tether-core', targets.omnibotMobile, 'EvoIntelligenceTetherCore', 7);
 contains('omnibot-mobile:safety-gate', targets.omnibotMobile, 'evaluateFrontierIntelligenceSafety', 7);
 contains('omnibot-mobile:work-memory', targets.omnibotMobile, 'ingestEvoWorkMemory', 7);
+contains('omnibot-mobile:autonomous-plan', targets.omnibotMobile, 'autonomous-execution-plan', 8);
+contains('omnibot-mobile:runner-link', targets.omnibotMobile, 'scripts/evo_autonomous_runner.mjs', 8);
 contains('omnibot-mobile:cli-intent', targets.omnibotMobileCli, '--intent', 6);
+contains('omnibot-mobile-cli:autonomous-plan', targets.omnibotMobileCli, '--autonomous-plan', 7);
 contains('omnibot-mobile-cli:status', targets.omnibotMobileCli, 'getOmnibotMobileStatus', 5);
 contains('omnibot-mobile-route:status', targets.omnibotMobileRoute, '/api/omnibot-mobile/status', 5);
 contains('omnibot-mobile-route:session', targets.omnibotMobileRoute, '/api/omnibot-mobile/session', 6);
 contains('omnibot-mobile-route:intent', targets.omnibotMobileRoute, '/api/omnibot-mobile/intent', 6);
 contains('omnibot-mobile-route:plan', targets.omnibotMobileRoute, '/api/omnibot-mobile/plan', 6);
 
-for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.frontierSafety, targets.tetherCore, targets.safeAutonomy, targets.omnibotMobile, targets.frontierSafetyCli, targets.safeAutonomyCli, targets.omnibotMobileCli, targets.signalInstaller, targets.appInstaller, targets.tetherCommandInstaller, targets.hardener, targets.workCli, targets.appTetherCli]) {
+for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.frontierSafety, targets.tetherCore, targets.safeAutonomy, targets.autonomousRunner, targets.omnibotMobile, targets.frontierSafetyCli, targets.safeAutonomyCli, targets.omnibotMobileCli, targets.signalInstaller, targets.appInstaller, targets.tetherCommandInstaller, targets.hardener, targets.workCli, targets.appTetherCli]) {
   syntax(`syntax:${file}`, file, 4);
 }
 if (fs.existsSync(abs(targets.appRoute))) syntax(`syntax:${targets.appRoute}`, targets.appRoute, 4);
@@ -126,12 +140,17 @@ const report = {
   passed: checks.length - missing.length, failed: missing.length, checks, missing,
   recommendedCommands: [
     'node scripts/install_tether_completion_commands.mjs',
+    'node scripts/evo_autonomous_runner.mjs --status',
+    'node scripts/evo_autonomous_runner.mjs --contract',
+    'node scripts/evo_autonomous_runner.mjs',
+    'PH_EVO_APPROVAL_REF=<your-approval-ref> node scripts/evo_autonomous_runner.mjs --execute',
     'node scripts/frontier_safety_gate.mjs --status',
     'node scripts/frontier_safety_gate.mjs --contract',
     'node scripts/safe_autonomous_execution.mjs --contract',
     'node scripts/safe_autonomous_execution.mjs --status',
     'node scripts/omnibot_mobile.mjs --contract',
     'node scripts/omnibot_mobile.mjs --status',
+    'node scripts/omnibot_mobile.mjs --autonomous-plan',
     'node scripts/omnibot_mobile.mjs --plan',
     'node scripts/evo_app_intelligence.mjs --cycle-test',
     'npm run evo:wire-intelligence',
