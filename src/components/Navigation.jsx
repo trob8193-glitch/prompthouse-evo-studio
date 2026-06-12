@@ -78,6 +78,7 @@ export const NAV_GROUPS = [
     label: 'Monetization',
     items: [
       { id: 'commerce', label: 'Commerce Engine', icon: CreditCard },
+      { id: 'commerce-dashboard', label: 'Commerce Dashboard', icon: BarChart3 },
     ],
   },
   {

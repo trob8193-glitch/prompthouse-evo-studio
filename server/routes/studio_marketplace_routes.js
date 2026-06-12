@@ -57,6 +57,36 @@ export function registerStudioMarketplaceRoutes(app) {
     }
   });
 
+  // 3.5. Internal Install Route
+  // Installs the feature as an active plugin directly into the Studio
+  router.get('/install/:id', async (req, res) => {
+    try {
+      const id = req.params.id;
+      const result = engine.installExtension(id);
+      
+      if (!result) {
+        return res.status(404).json({ success: false, error: 'Extension not found in Evo Studio' });
+      }
+
+      // Try hot reloading if possible
+      try {
+        const { GlobalPluginRegistry } = await import('../../src/core/plugins/PluginRegistry.js');
+        const path = await import('path');
+        await GlobalPluginRegistry.loadActivePlugins(path.join(process.cwd(), 'src/plugins/active'));
+      } catch (e) {
+        console.warn('[Marketplace] Hot reload failed, but plugin is installed. Requires restart.', e.message);
+      }
+
+      res.json({
+        success: true,
+        message: \`Extension \${result.ext.displayName} installed as an autonomous plugin\`,
+        pluginFile: result.pluginFile
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
   // 4. JetBrains Plugin Repository (XML)
   router.get('/jetbrains/updatePlugins.xml', (req, res) => {
     try {

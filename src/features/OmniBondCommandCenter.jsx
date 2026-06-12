@@ -37,7 +37,7 @@ export default function OmniBondCommandCenter() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* LEFT: Neural Trace Swarm Visualizer */}
           <div className="bg-[#0c0c0e] rounded-2xl border border-slate-800 overflow-hidden flex flex-col shadow-2xl relative">
-            <div className="p-6 border-b border-slate-800 bg-gradient-to-r from-emerald-500/5 to-transparent flex justify-between items-center z-10 relative">
+            <div className="p-6 border-b border-slate-800 bg-linear-to-r from-emerald-500/5 to-transparent flex justify-between items-center z-10 relative">
               <h2 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-3">
                 <Network size={18} className="text-emerald-500" /> Neural Swarm Visualizer
               </h2>
@@ -48,26 +48,26 @@ export default function OmniBondCommandCenter() {
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,255,136,0.05)_0%,transparent_70%)] pointer-events-none" />
               
               <div className="neural-trace-container w-full max-w-lg mx-auto">
-                <div className={`neural-node ${nodesActive ? 'active' : ''} !border-indigo-500`}>
-                  <div className="node-pulse !border-indigo-500"></div>
+                <div className={`neural-node ${nodesActive ? 'active' : ''} border-indigo-500!`}>
+                  <div className="node-pulse border-indigo-500!"></div>
                   <Cpu size={24} className="text-indigo-500" />
-                  <div className="node-label !text-indigo-400">Core</div>
+                  <div className="node-label text-indigo-400!">Core</div>
                 </div>
                 
-                <div className={`neural-link ${nodesActive ? 'active' : ''} !bg-emerald-500 !shadow-[0_0_10px_#00ff88]`}></div>
+                <div className={`neural-link ${nodesActive ? 'active' : ''} bg-emerald-500! shadow-[0_0_10px_#00ff88]!`}></div>
                 
-                <div className={`neural-node ${nodesActive ? 'active' : ''} !border-emerald-500 !w-[80px] !h-[80px]`}>
-                  <div className="node-pulse !border-emerald-500"></div>
+                <div className={`neural-node ${nodesActive ? 'active' : ''} border-emerald-500! w-[80px]! h-[80px]!`}>
+                  <div className="node-pulse border-emerald-500!"></div>
                   <Fingerprint size={36} className="text-emerald-500 drop-shadow-[0_0_15px_#00ff88]" />
-                  <div className="node-label !text-emerald-400">Omni-Bond</div>
+                  <div className="node-label text-emerald-400!">Omni-Bond</div>
                 </div>
                 
-                <div className={`neural-link ${nodesActive ? 'active' : ''} !bg-cyan-500 !shadow-[0_0_10px_#00f0ff]`}></div>
+                <div className={`neural-link ${nodesActive ? 'active' : ''} bg-cyan-500! shadow-[0_0_10px_#00f0ff]!`}></div>
                 
-                <div className={`neural-node ${nodesActive ? 'active' : ''} !border-cyan-500`}>
-                  <div className="node-pulse !border-cyan-500"></div>
+                <div className={`neural-node ${nodesActive ? 'active' : ''} border-cyan-500!`}>
+                  <div className="node-pulse border-cyan-500!"></div>
                   <Bot size={24} className="text-cyan-500" />
-                  <div className="node-label !text-cyan-400">Swarm</div>
+                  <div className="node-label text-cyan-400!">Swarm</div>
                 </div>
               </div>
             </div>
@@ -75,14 +75,14 @@ export default function OmniBondCommandCenter() {
 
           {/* RIGHT: AI Partnership Protocol */}
           <div className="bg-[#0c0c0e] rounded-2xl border border-slate-800 overflow-hidden flex flex-col shadow-2xl relative">
-            <div className="p-6 border-b border-slate-800 bg-gradient-to-r from-violet-500/5 to-transparent flex justify-between items-center z-10 relative">
+            <div className="p-6 border-b border-slate-800 bg-linear-to-r from-violet-500/5 to-transparent flex justify-between items-center z-10 relative">
               <h2 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-3">
                 <Sparkles size={18} className="text-violet-500" /> Architecture Integrations
               </h2>
             </div>
             
             <div className="p-8 space-y-6 flex-1">
-              <div className="bot-card active !p-6 !border-emerald-500/30">
+              <div className="bot-card active p-6! border-emerald-500/30!">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
                     <Globe className="text-emerald-400" size={24} />
@@ -97,7 +97,7 @@ export default function OmniBondCommandCenter() {
                 </p>
               </div>
 
-              <div className="bot-card active !p-6 !border-violet-500/30">
+              <div className="bot-card active p-6! border-violet-500/30!">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center">
                     <Zap className="text-violet-400" size={24} />

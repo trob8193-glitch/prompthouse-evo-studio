@@ -94,10 +94,26 @@
 
 html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-primary); font-family: var(--font-sans); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREMIUM GLASSMORPHIC SCROLLBARS
+   ═══════════════════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar { 
+  width: 6px; 
+  height: 6px; 
+}
+::-webkit-scrollbar-track { 
+  background: transparent; 
+}
+::-webkit-scrollbar-thumb { 
+  background: rgba(148, 163, 184, 0.2); 
+  border-radius: 10px; 
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { 
+  background: linear-gradient(180deg, rgba(99,102,241,0.8), rgba(0,240,255,0.8));
+  box-shadow: 0 0 10px rgba(0,240,255,0.5);
+}
 
 /* ── LAYOUT ── */
 .app { display: flex; height: 100vh; overflow: hidden; background: var(--bg-void); }

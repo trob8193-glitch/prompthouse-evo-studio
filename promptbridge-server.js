@@ -396,7 +396,7 @@ const handleLedgerLog = (req, res) => {
 app.post('/api/sovereign-ledger/log', handleLedgerLog);
 app.post('/api/evo-ledger/log', handleLedgerLog);
 
-const handleUplink = (req, res) => {
+const handleUplink = async (req, res) => {
   try {
     const { origin, action, payload } = req.body;
     const timestamp = new Date().toISOString();
@@ -404,6 +404,26 @@ const handleUplink = (req, res) => {
     const logLine = `[EXTERNAL IDE UPLINK] [${timestamp}] Origin: ${origin || 'UNKNOWN'} | Action: ${action || 'UNKNOWN'} | Payload: ${payload || 'NONE'}\n`;
     writeFileSync(path.resolve(process.cwd(), 'sovereign_broadcast.log'), logLine, { flag: 'a' });
     
+    // 1. Dispatch intent to Autonomous Plugins
+    let pluginResponse = null;
+    try {
+      // Dynamic import to avoid circular dependency if any
+      const { GlobalPluginRegistry } = await import('./src/core/plugins/PluginRegistry.js');
+      pluginResponse = await GlobalPluginRegistry.dispatchMobileIntent(payload);
+    } catch (e) {
+      console.warn('[Uplink] Failed to invoke PluginRegistry:', e.message);
+    }
+
+    if (pluginResponse) {
+      return res.json({ 
+        success: true, 
+        message: pluginResponse.message || 'Intent handled by plugin',
+        handledBy: pluginResponse.handledBy || 'Autonomous Plugin',
+        pluginIntercept: true
+      });
+    }
+
+    // 2. Default ledger logic
     const id = crypto.randomUUID();
     db.prepare(`
       INSERT INTO sovereign_ledger (id, feature_id, action, proof_hash, truth_state, iq_gain)

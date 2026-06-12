@@ -1,7 +1,7 @@
 {
-  "scannedAt": "2026-06-12T14:22:30.875Z",
+  "scannedAt": "2026-06-12T18:34:03.857Z",
   "totalComponentsScanned": 134,
-  "totalBackendRoutesFound": 276,
+  "totalBackendRoutesFound": 281,
   "deadLinksDetected": 0,
   "matrix": [
     {
@@ -137,7 +137,7 @@
         "Run in Terminal",
         "{applied ?  : }\n                      {applied ? 'Applied!' : 'Apply to File'}",
         "setActivePage('settings')}\n              className=\"p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors\"\n            >",
-        "setSelectedBot(bot.id)}\n              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${\n                selectedBot === bot.id\n                  ? 'text-white border-transparent shadow-lg'\n                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'\n              }`}\n              style={selectedBot === bot.id ? { backgroundColor: bot.palette?.primary || '#10b981' } : {}}\n              title={bot.role}\n            >\n              {bot.icon} {bot.name}",
+        "setSelectedBot(bot.id)}\n              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${\n                selectedBot === bot.id\n                  ? 'text-white border-transparent shadow-lg'\n                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'\n              }`}\n              style={selectedBot === bot.id ? { backgroundColor: bot.palette?.primary || '#10b981' } : {}}\n              title={bot.role}\n            >\n              {bot.icon} {bot.name}",
         "{loading ?  : }"
       ],
       "endpoints": []
@@ -298,7 +298,7 @@
     {
       "component": "src\\components\\Terminal.jsx",
       "buttons": [
-        "setTerminalOpen(true)}\n        className=\"evo-shell-container h-10 w-full flex items-center px-6 z-30 shrink-0 group\"\n        style={{ background: 'linear-gradient(90deg, rgba(5,5,8,0.95), rgba(10,10,20,0.95))' }}\n      >\n        \n        \n        \n          EvoShell Master Control\n        \n        \n          \n          STANDBY",
+        "setTerminalOpen(true)}\n          className=\"absolute inset-0 w-full h-full flex items-center px-6 z-50 cursor-pointer group hover:bg-white/5 transition-colors\"\n          style={{ opacity: terminalOpen ? 0 : 1, pointerEvents: terminalOpen ? 'none' : 'auto' }}\n        >\n          \n          \n          \n            EvoShell Master Control\n          \n          \n            \n            STANDBY",
         "setActiveTerminalSession(session)}\n                  style={{\n                    padding: '4px 10px', borderRadius: 4, fontSize: 8, fontWeight: 800,\n                    letterSpacing: '0.15em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',\n                    transition: 'all 0.2s',\n                    background: activeTerminalSession === session ? tc.accent : 'transparent',\n                    color: activeTerminalSession === session ? '#000' : '#475569',\n                    boxShadow: activeTerminalSession === session ? `0 0 12px ${tc.accent}40` : 'none'\n                  }}\n                >\n                  {session}",
         "setTerminalTheme(t.id)}\n                  style={{\n                    width: 10, height: 10, borderRadius: '50%', border: 'none', cursor: 'pointer',\n                    background: t.color,\n                    opacity: terminalTheme === t.id ? 1 : 0.3,\n                    boxShadow: terminalTheme === t.id ? `0 0 8px ${t.color}` : 'none',\n                    transition: 'all 0.2s'\n                  }}\n                />\n              ))}\n            \n\n            \n\n            {/* Action Buttons */}\n            {[\n              { icon: Copy, title: 'Copy Output', onClick: copyToClipboard },\n              { icon: Download, title: 'Download Logs', onClick: downloadLogs },\n              { icon: Trash2, title: 'Clear Session', onClick: () => clearTerminal(activeTerminalSession), hoverColor: '#f43f5e' },\n              { icon: isFullscreen ? Minimize2 : Maximize2, title: 'Fullscreen', onClick: () => setIsFullscreen(!isFullscreen) },\n              { icon: ChevronDown, title: 'Minimize', onClick: () => setTerminalOpen(false) }\n            ].map((btn, i) => (\n               e.currentTarget.style.color = btn.hoverColor || tc.accent}\n                onMouseLeave={e => e.currentTarget.style.color = '#475569'}\n              >",
         "setCatalogOpen(v => !v)}\n              style={{\n                display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',\n                borderRadius: 6, fontSize: 9, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase',\n                border: `1px solid ${tc.accent}30`, color: tc.accent, background: 'transparent', cursor: 'pointer',\n                transition: 'all 0.2s'\n              }}\n              onMouseEnter={e => { e.currentTarget.style.background = `${tc.accent}15`; e.currentTarget.style.borderColor = `${tc.accent}60`; }}\n              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = `${tc.accent}30`; }}\n            >\n              \n              Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}\n              {catalogOpen ?  : }",
@@ -387,7 +387,7 @@
     {
       "component": "src\\features\\AutonomousSelfView.jsx",
       "buttons": [
-        "setEvolving(false) : startEvolution}\r\n              disabled={bridgeStatus !== 'connected'}\r\n              className={`w-full py-4 rounded-xl font-bold text-[13px] tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-3 ${\r\n                evolving \r\n                  ? 'bg-black/50 text-[#00f0ff] border border-[#00f0ff]/30 shadow-[inset_0_0_20px_rgba(0,240,255,0.1)]' \r\n                  : 'bg-gradient-to-r from-[#8a2be2] to-[#4338ca] text-white hover:shadow-[0_0_30px_rgba(138,43,226,0.4)] disabled:opacity-50 disabled:cursor-not-allowed'\r\n              }`}\r\n            >\r\n              {evolving ?  : }\r\n              {evolving ? 'Evolution Active' : 'Initialize Evolution Loop'}",
+        "setEvolving(false) : startEvolution}\r\n              disabled={bridgeStatus !== 'connected'}\r\n              className={`w-full py-4 rounded-xl font-bold text-[13px] tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-3 ${\r\n                evolving \r\n                  ? 'bg-black/50 text-[#00f0ff] border border-[#00f0ff]/30 shadow-[inset_0_0_20px_rgba(0,240,255,0.1)]' \r\n                  : 'bg-linear-to-r from-[#8a2be2] to-[#4338ca] text-white hover:shadow-[0_0_30px_rgba(138,43,226,0.4)] disabled:opacity-50 disabled:cursor-not-allowed'\r\n              }`}\r\n            >\r\n              {evolving ?  : }\r\n              {evolving ? 'Evolution Active' : 'Initialize Evolution Loop'}",
         "Execute Maintenance Protocol"
       ],
       "endpoints": []
@@ -439,7 +439,11 @@
       "component": "src\\features\\EvoLlmTrainingDashboard.jsx",
       "buttons": [
         "Refresh",
-        "createPlan('local-dataset')} disabled={busy}>Plan Local Dataset",
+        "createPlan('local-dataset')} disabled={busy}>Create Dataset Plan",
+        "Synthesize Data",
+        "Deep Eval",
+        "Force Self-Train Cycle",
+        "Approve Plan {plans[0].id.split('_')[0]}",
         "createPlan('openai')} disabled={busy}>Plan Provider Gate Test",
         "Approve Latest",
         "Run Latest",
@@ -520,6 +524,14 @@
         "Refresh",
         "Write Receipt",
         "setSelectedId(module.id)} style={{ textAlign: 'left', width: '100%', background: selected?.id === module.id ? 'rgba(8,145,178,.22)' : '#020617', border: selected?.id === module.id ? '1px solid rgba(34,211,238,.45)' : '1px solid #1e293b', borderRadius: 12, padding: 12, cursor: 'pointer', color: '#e2e8f0' }}>\r\n                \r\n                  {module.name}\r\n                  \r\n                \r\n                {module.missing.length ? `${module.missing.length} missing checks` : 'All checks detected'}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\OmniBotRemote.jsx",
+      "buttons": [
+        "Run in Terminal",
+        "{applied ?  : }\n                      {applied ? 'Applied!' : 'Apply to File'}"
       ],
       "endpoints": []
     },

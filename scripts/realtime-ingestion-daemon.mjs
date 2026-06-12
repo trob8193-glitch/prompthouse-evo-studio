@@ -16,7 +16,7 @@ Log.info('🚀 Real-Time Ingestion Daemon Started');
 
 async function checkBridgeOnline() {
   try {
-    const res = await fetch(`${bridgeUrl}/api/health`, { method: 'GET', signal: AbortSignal.timeout(2000) });
+    const res = await fetch(`${bridgeUrl}/healthz`, { method: 'GET', signal: AbortSignal.timeout(2000) });
     return res.ok;
   } catch {
     return false;

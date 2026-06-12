@@ -54,7 +54,7 @@ export default function EvoDiffuserDashboard() {
               <Sparkles size={18} color="#8a2be2" /> Latent Prompt
             </h3>
             <textarea 
-              className="w-full bg-[#0a0a10] border border-[#8a2be2]/30 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-[#8a2be2] focus:ring-1 focus:ring-[#8a2be2] transition-all !min-h-[150px] mb-6" 
+              className="w-full bg-[#0a0a10] border border-[#8a2be2]/30 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-[#8a2be2] focus:ring-1 focus:ring-[#8a2be2] transition-all min-h-[150px]! mb-6" 
               placeholder="e.g. A sleek glassmorphism dashboard, deep space void, glowing cyan accents, dynamic 4k render..."
               value={prompt}
               onChange={e => setPrompt(e.target.value)}
@@ -95,7 +95,7 @@ export default function EvoDiffuserDashboard() {
               )}
             </div>
 
-            <Button onClick={handleGenerate} disabled={generating || !prompt} className="w-full !bg-gradient-to-r !from-[#8a2be2] !to-[#00f0ff] !text-white flex justify-center items-center gap-3 !border-none shadow-[0_0_20px_rgba(138,43,226,0.4)] hover:shadow-[0_0_30px_rgba(138,43,226,0.6)] font-black uppercase tracking-widest">
+            <Button onClick={handleGenerate} disabled={generating || !prompt} className="w-full bg-linear-to-r! from-[#8a2be2]! to-[#00f0ff]! text-white! flex justify-center items-center gap-3 border-none! shadow-[0_0_20px_rgba(138,43,226,0.4)] hover:shadow-[0_0_30px_rgba(138,43,226,0.6)] font-black uppercase tracking-widest">
               {generating ? <RefreshCcw className="animate-spin" size={18} /> : <Aperture size={18} />}
               {generating ? 'DIFFUSING LATENT SPACE...' : 'ENGAGE DIFFUSER'}
             </Button>

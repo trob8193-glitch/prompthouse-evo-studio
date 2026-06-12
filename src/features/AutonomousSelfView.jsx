@@ -98,9 +98,9 @@ export function AutonomousSelfView() {
         
         {/* Self-Evolution Panel */}
         <div className="bg-[#0c0c12]/60 backdrop-blur-3xl border border-white/5 rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.4)] relative group">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#00f0ff]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-br from-[#00f0ff]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
           
-          <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-[#00f0ff]/[0.02]">
+          <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-[#00f0ff]/2">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-xl bg-[#00f0ff]/10 flex items-center justify-center border border-[#00f0ff]/30 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
                 <Zap size={16} className="text-[#00f0ff]" />
@@ -127,7 +127,7 @@ export function AutonomousSelfView() {
               </div>
               <div className="h-2 w-full bg-black/50 rounded-full overflow-hidden shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]">
                 <motion.div 
-                  className="h-full bg-gradient-to-r from-[#8a2be2] to-[#00f0ff] shadow-[0_0_15px_rgba(0,240,255,0.8)] relative" 
+                  className="h-full bg-linear-to-r from-[#8a2be2] to-[#00f0ff] shadow-[0_0_15px_rgba(0,240,255,0.8)] relative" 
                   initial={{ width: 0 }}
                   animate={{ width: `${effectiveProgress}%` }}
                   transition={{ ease: "linear" }}
@@ -158,7 +158,7 @@ export function AutonomousSelfView() {
               className={`w-full py-4 rounded-xl font-bold text-[13px] tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-3 ${
                 evolving 
                   ? 'bg-black/50 text-[#00f0ff] border border-[#00f0ff]/30 shadow-[inset_0_0_20px_rgba(0,240,255,0.1)]' 
-                  : 'bg-gradient-to-r from-[#8a2be2] to-[#4338ca] text-white hover:shadow-[0_0_30px_rgba(138,43,226,0.4)] disabled:opacity-50 disabled:cursor-not-allowed'
+                  : 'bg-linear-to-r from-[#8a2be2] to-[#4338ca] text-white hover:shadow-[0_0_30px_rgba(138,43,226,0.4)] disabled:opacity-50 disabled:cursor-not-allowed'
               }`}
             >
               {evolving ? <RefreshCw size={16} className="animate-spin text-[#00f0ff]" /> : <Zap size={16} />}
@@ -169,9 +169,9 @@ export function AutonomousSelfView() {
 
         {/* Studio Training & Edges Panel */}
         <div className="bg-[#0c0c12]/60 backdrop-blur-3xl border border-white/5 rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.4)] relative group">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#8a2be2]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-br from-[#8a2be2]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-          <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-[#8a2be2]/[0.02]">
+          <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center bg-[#8a2be2]/2">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-xl bg-[#8a2be2]/10 flex items-center justify-center border border-[#8a2be2]/30 shadow-[0_0_15px_rgba(138,43,226,0.2)]">
                 <Brain size={16} className="text-[#8a2be2]" />
@@ -220,9 +220,9 @@ export function AutonomousSelfView() {
 
       {/* Cost Firewall & Emergency Controls */}
       <div className="bg-[#0c0c12]/60 backdrop-blur-3xl border border-red-500/10 rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.4)] relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-red-500/5 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-b from-red-500/5 to-transparent pointer-events-none" />
         
-        <div className="px-8 py-6 border-b border-red-500/10 flex justify-between items-center bg-red-500/[0.02]">
+        <div className="px-8 py-6 border-b border-red-500/10 flex justify-between items-center bg-red-500/2">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-xl bg-red-500/10 flex items-center justify-center border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
               <Shield size={16} className="text-red-500" />

@@ -362,55 +362,41 @@ export function Terminal() {
     URL.revokeObjectURL(url);
   };
 
-  // ═══════════════════════════════════════════════════════════════════════
-  // MINIMIZED BAR — pulsating collapsed state
-  // ═══════════════════════════════════════════════════════════════════════
-  if (!terminalOpen) return (
-    <>
-      <style>{shellStyles}</style>
-      <button 
-        onClick={() => setTerminalOpen(true)}
-        className="evo-shell-container h-10 w-full flex items-center px-6 z-30 shrink-0 group"
-        style={{ background: 'linear-gradient(90deg, rgba(5,5,8,0.95), rgba(10,10,20,0.95))' }}
-      >
-        <div className="evo-pulse-orb w-2 h-2 rounded-full mr-3" style={{ background: '#6366f1' }} />
-        <TerminalIcon size={14} style={{ color: '#818cf8', marginRight: 8 }} />
-        <span className="evo-shell-title" style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-          EvoShell Master Control
-        </span>
-        <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Radio size={10} style={{ color: '#10b981' }} />
-          <span style={{ fontSize: 8, color: '#475569', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase' }}>STANDBY</span>
-        </span>
-        <ChevronUp size={14} style={{ color: '#475569', marginLeft: 12 }} />
-      </button>
-    </>
-  );
-
-  // ═══════════════════════════════════════════════════════════════════════
-  // FULL TERMINAL — pulsating border, layered glow, holographic title
-  // ═══════════════════════════════════════════════════════════════════════
-  const themeColors = {
-    evo:     { accent: '#818cf8', accentDim: 'rgba(99,102,241,0.1)',  logBg: 'rgba(5,5,12,0.85)' },
-    matrix:  { accent: '#34d399', accentDim: 'rgba(52,211,153,0.08)', logBg: 'rgba(0,0,0,0.9)' },
-    classic: { accent: '#94a3b8', accentDim: 'rgba(148,163,184,0.06)', logBg: 'rgba(30,30,30,0.9)' }
-  };
-  const tc = themeColors[terminalTheme] || themeColors.evo;
-
   return (
     <>
       <style>{shellStyles}</style>
       <div 
-        className={`evo-shell-container w-full ${isFullscreen ? 'flex-1' : ''} flex flex-col z-40 shrink-0 relative overflow-hidden`}
+        className={`evo-shell-container w-full ${isFullscreen ? 'flex-1' : ''} flex flex-col z-40 shrink-0 relative overflow-hidden transition-all duration-500 ease-in-out`}
         style={{ 
           background: 'linear-gradient(180deg, rgba(5,5,12,0.98), rgba(2,2,8,0.99))',
-          minHeight: isFullscreen ? undefined : 340,
-          height: isFullscreen ? undefined : 340,
-          borderRadius: 0
+          height: isFullscreen ? '100%' : (terminalOpen ? 340 : 40),
+          minHeight: isFullscreen ? '100%' : (terminalOpen ? 340 : 40),
+          borderRadius: 0,
+          borderTop: '1px solid rgba(0,240,255,0.4)',
+          boxShadow: terminalOpen ? '0 -10px 30px rgba(0,0,0,0.5)' : 'none'
         }}
       >
-        {/* Scan Line Overlay */}
-        <div className="evo-scan-overlay" />
+        {/* Minimized Overlay - Only visible when collapsed */}
+        <button 
+          onClick={() => setTerminalOpen(true)}
+          className="absolute inset-0 w-full h-full flex items-center px-6 z-50 cursor-pointer group hover:bg-white/5 transition-colors"
+          style={{ opacity: terminalOpen ? 0 : 1, pointerEvents: terminalOpen ? 'none' : 'auto' }}
+        >
+          <div className="evo-pulse-orb w-2 h-2 rounded-full mr-3" style={{ background: '#6366f1' }} />
+          <TerminalIcon size={14} style={{ color: '#818cf8', marginRight: 8 }} />
+          <span className="evo-shell-title" style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+            EvoShell Master Control
+          </span>
+          <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Radio size={10} style={{ color: '#10b981' }} />
+            <span style={{ fontSize: 8, color: '#475569', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase' }}>STANDBY</span>
+            <ChevronUp size={14} className="text-[#475569] group-hover:text-[#818cf8] transition-colors" />
+          </span>
+        </button>
+
+        <div style={{ opacity: terminalOpen ? 1 : 0, transition: 'opacity 0.3s ease', display: 'flex', flexDirection: 'column', height: '100%' }}>
+          {/* Scan Line Overlay */}
+          <div className="evo-scan-overlay" />
 
         {/* ══ MASTER HEADER ══ */}
         <div style={{
@@ -675,9 +661,9 @@ export function Terminal() {
           )}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8, opacity: 0.3, transition: 'opacity 0.2s' }}>
             <History size={13} style={{ color: '#475569' }} />
-            <Settings size={13} style={{ color: '#475569' }} />
           </div>
         </form>
+        </div>
       </div>
     </>
   );

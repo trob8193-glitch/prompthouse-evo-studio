@@ -324,7 +324,7 @@ export function EvoCopilot() {
             <button
               key={bot.id}
               onClick={() => setSelectedBot(bot.id)}
-              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
                 selectedBot === bot.id
                   ? 'text-white border-transparent shadow-lg'
                   : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'
@@ -353,7 +353,7 @@ export function EvoCopilot() {
                     ? 'bg-red-900/40 border border-red-500/30 text-red-100 rounded-bl-none'
                     : 'bg-[#121214] border border-gray-800/60 rounded-bl-none'
               }`}>
-                {isAssistant && !msg.isError && (
+                {isAssistant && msg?.isError && (
                   <div className="flex items-center mb-2 text-[10px] font-black uppercase tracking-widest" style={{ color: botColor }}>
                     <Cpu className="w-3 h-3 mr-1.5" />
                     {currentBot.name}
@@ -394,7 +394,7 @@ export function EvoCopilot() {
           </div>
         )}
 
-        <form onSubmit={handleSendSubmit} className="relative flex items-end bg-[#16161a] border border-gray-700/50 rounded-2xl shadow-inner focus-within:border-[var(--accent-color)] focus-within:shadow-[0_0_20px_rgba(16,185,129,0.1)] transition-all">
+        <form onSubmit={handleSendSubmit} className="relative flex items-end bg-[#16161a] border border-gray-700/50 rounded-2xl shadow-inner focus-within:border-(--accent-color) focus-within:shadow-[0_0_20px_rgba(16,185,129,0.1)] transition-all">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -421,9 +421,9 @@ export function EvoCopilot() {
             
             <button
               type="submit"
-              disabled={!input.trim() || loading || isRecording}
-              className="p-3 text-black disabled:text-gray-600 rounded-xl transition-all disabled:opacity-50 font-bold flex items-center justify-center disabled:bg-gray-800"
-              style={{ backgroundColor: (!input.trim() || loading || isRecording) ? '' : (currentBot.palette?.primary || '#10b981') }}
+              disabled={!input?.trim() || loading || isRecording}
+              className="bg-transparent text-white border-none focus:outline-none focus:ring-0 shadow-none px-2! rounded-none w-10! h-10! flex items-center justify-center transition-all duration-300 hover:bg-white/10 ml-2"
+              style={{ backgroundColor: (!input?.trim() || loading || isRecording) ? '' : (currentBot.palette?.primary || '#10b981') }}
             >
               {loading ? <RefreshCw className="w-5 h-5 animate-spin text-gray-400" /> : <Send className="w-5 h-5 ml-0.5" />}
             </button>

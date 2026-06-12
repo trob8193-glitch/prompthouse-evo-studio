@@ -95,7 +95,7 @@ export const PAGE_MAP = {
   'visual-physics': VisualPhysicsEditor,
   'mobile-singularity': MobileSingularityDashboard,
   'realtime-validation': RealTimeValidationDashboard,
-  'commerce': CommerceDashboard,
+  'commerce-dashboard': CommerceDashboard,
   'pricing': PricingCheckout,
   'studio-marketplace': StudioMarketplaceDashboard,
   'omni-bond': OmniBondCommandCenter,

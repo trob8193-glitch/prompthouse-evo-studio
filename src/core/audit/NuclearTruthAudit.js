@@ -113,7 +113,7 @@ function routeExists(compiledRoutes, method, requestPath) {
 function normalizeFetchUrl(raw) {
   if (!raw) return null;
   if (raw.startsWith('/')) return raw;
-  if (raw.startsWith(BRIDGE_URL || raw.startsWith(BRIDGE_URL {
+  if (raw.startsWith(BRIDGE_URL)) {
     return raw.replace(/^https?:\/\/(?:127\.0\.0\.1|localhost):3001/, '');
   }
   return null;

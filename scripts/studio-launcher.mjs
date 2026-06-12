@@ -40,6 +40,7 @@ const daemons = [
   { name: 'WD:UIMatrix',   cmd: 'npm', args: ['run', 'watchdog:ui-matrix'], color: c.white, group: 'Watchdog' },
   { name: 'Self-Invent',   cmd: 'npm', args: ['run', 'self:invent'],        color: c.green, group: 'Evo' },
   { name: 'OmniRouter',    cmd: 'npm', args: ['run', 'omni:orchestrator'],  color: c.blue, group: 'Core' },
+  { name: 'PluginInst.', cmd: 'node', args: ['scripts/plugin-installer-daemon.mjs'], color: c.cyan, group: 'Evo' },
   { name: 'Antigravity',   cmd: 'npm', args: ['run', 'antigravity'],        color: c.cyan, group: 'Core' },
   { name: 'MarketBrain',   cmd: 'npm', args: ['run', 'marketing:daemon'],   color: c.magenta, group: 'Market' },
   { name: 'SeedRound',     cmd: 'npm', args: ['run', 'seed:daemon'],        color: c.green, group: 'Market' },
@@ -50,15 +51,33 @@ const daemons = [
 
 const processes = new Map();
 
+const logBuffers = new Map();
+
 function prefixLog(name, color, data, isError = false) {
   const lines = data.toString().split('\n').filter(l => l.trim().length > 0);
   const prefix = `${c.dim}[${c.reset}${color}${c.bold}${name.padEnd(12)}${c.reset}${c.dim}]${c.reset}`;
   
+  if (!logBuffers.has(name)) {
+    logBuffers.set(name, { count: 0, lastReset: Date.now() });
+  }
+  const state = logBuffers.get(name);
+  
+  // Throttle to max 5 logs per second per daemon to prevent IDE terminal crashing
+  if (Date.now() - state.lastReset > 1000) {
+    state.count = 0;
+    state.lastReset = Date.now();
+  }
+
   lines.forEach(line => {
     if (isError) {
       console.error(`${prefix} ${c.red}${line}${c.reset}`);
     } else {
-      console.log(`${prefix} ${line}`);
+      state.count++;
+      if (state.count <= 5) {
+        console.log(`${prefix} ${line}`);
+      } else if (state.count === 6) {
+        console.log(`${prefix} ${c.dim}... [Logs throttled to prevent IDE crash]${c.reset}`);
+      }
     }
   });
 }
@@ -69,9 +88,19 @@ function spawnDaemon(daemon) {
   const isWindows = process.platform === 'win32';
   const cmd = isWindows && daemon.cmd === 'npm' ? 'npm.cmd' : daemon.cmd;
   
+  // HARDENING: Force strict memory limits on swarm nodes to prevent IDE RAM exhaustion
+  // Give Bridge and Vite 1GB, heavily restrict everything else to 256MB
+  const memLimit = ['Bridge', 'Vite', 'Sing.Builder'].includes(daemon.name) ? '1024' : '256';
+  const nodeOptions = (process.env.NODE_OPTIONS || '') + ` --max-old-space-size=${memLimit}`;
+
   const proc = spawn(cmd, daemon.args, {
     cwd: rootDir,
-    env: { ...process.env, FORCE_COLOR: '1', NODE_NO_WARNINGS: '1' },
+    env: { 
+      ...process.env, 
+      FORCE_COLOR: '1', 
+      NODE_NO_WARNINGS: '1',
+      NODE_OPTIONS: nodeOptions
+    },
     stdio: ['ignore', 'pipe', 'pipe'],
     shell: isWindows
   });
@@ -94,10 +123,19 @@ function spawnDaemon(daemon) {
 }
 
 // Staggered Boot Sequence
+const isLite = process.argv.includes('--lite');
+const activeDaemons = isLite 
+  ? daemons.filter(d => ['Vite', 'Bridge', 'OmniRouter', 'Singularity'].includes(d.name))
+  : daemons;
+
+if (isLite) {
+  console.log(`${c.yellow}${c.bold}LITE MODE ACTIVE: Skipping heavy background daemons to conserve IDE resources.${c.reset}`);
+}
+
 let delay = 0;
-for (const daemon of daemons) {
+for (const daemon of activeDaemons) {
   setTimeout(() => spawnDaemon(daemon), delay);
-  delay += 500; // 500ms stagger between each process to prevent I/O storm
+  delay += 1200; // 1200ms stagger between each process to prevent I/O & CPU storms
 }
 
 // Graceful Shutdown

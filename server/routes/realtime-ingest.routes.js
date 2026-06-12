@@ -125,8 +125,21 @@ export function registerRealTimeIngestRoutes(app, { ai }) {
       const clientIp = req.ip || 'unknown';
       const orgId = req.user_id ? 'org_' + req.user_id : 'org_anonymous';
 
-      // 1. Proactive Edge Threat Matrix Check (Zero Latency)
-      await CostFirewall.authorize(orgId, 'realtime-ingest', clientIp);
+      // 1. Proactive Edge Threat Matrix Check (graceful for anonymous telemetry)
+      try {
+        await CostFirewall.authorize(orgId, 'realtime-ingest', clientIp);
+      } catch (authErr) {
+        // If it's an explicit threat block, reject hard
+        if (authErr.message && authErr.message.includes('THREAT_MATRIX')) {
+          return res.status(403).json({ success: false, truthState: 'REALTIME_TRAINING_REJECTED', error: authErr.message });
+        }
+        // For anonymous telemetry, log warning but allow through
+        if (orgId === 'org_anonymous') {
+          console.warn(`[StreamIngest] CostFirewall warning for anonymous pulse (allowing): ${authErr.message}`);
+        } else {
+          return res.status(403).json({ success: false, truthState: 'REALTIME_TRAINING_REJECTED', error: authErr.message });
+        }
+      }
 
       // 2. Add to background async queue
       ingestQueue.emit('process', { rawPayload, ingestId, req });
@@ -140,7 +153,8 @@ export function registerRealTimeIngestRoutes(app, { ai }) {
         message: 'Payload accepted and queued for real-time Evo training capture.'
       });
     } catch (error) {
-      res.status(error.message.includes('THREAT_MATRIX') ? 403 : 500).json({ success: false, truthState: 'REALTIME_TRAINING_REJECTED', error: error.message });
+      console.error('[StreamIngest] Unexpected error:', error.message);
+      res.status(error.message && error.message.includes('THREAT_MATRIX') ? 403 : 500).json({ success: false, truthState: 'REALTIME_TRAINING_REJECTED', error: error.message });
     }
   });
 

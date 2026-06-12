@@ -130,6 +130,52 @@ export class StudioMarketplaceEngine {
     return packageManifest;
   }
 
+  installExtension(id) {
+    const catalog = this.harvestMarketplaceCatalog();
+    const ext = catalog.extensions.find(e => e.extensionId === id);
+    if (!ext) return null;
+
+    const activePluginsDir = path.join(this.rootDir, 'src', 'plugins', 'active');
+    if (!fs.existsSync(activePluginsDir)) {
+      fs.mkdirSync(activePluginsDir, { recursive: true });
+    }
+
+    const pluginName = ext.extensionName.replace(/[^a-zA-Z0-9_]/g, '_');
+    const pluginContent = `
+import { BasePlugin } from '../../core/plugins/BasePlugin.js';
+import { Log } from '../../core/autonomy/SovereignLogger.js';
+
+export default class ${pluginName}Plugin extends BasePlugin {
+  constructor() {
+    super();
+    this.id = "${ext.extensionId}";
+    this.name = "${ext.displayName}";
+    this.version = "${ext.version}";
+    this.description = \`${ext.shortDescription}\`;
+    this.payload = ${JSON.stringify(ext.payload)};
+  }
+
+  async onInstall(registry) {
+    Log.info(\`[${pluginName}Plugin] Installed and loaded successfully from Marketplace!\`);
+  }
+
+  async onMobileIntent(intent) {
+    // If the mobile intent matches our blueprint's intent or domain, handle it
+    const domain = this.payload?.appDomain || '';
+    if (intent && typeof intent === 'string' && intent.toLowerCase().includes(domain.toLowerCase()) && domain !== '') {
+      return { handledBy: this.name, message: \`Autonomous response from ${ext.displayName}: Handled intent related to \${domain}\` };
+    }
+    return null;
+  }
+}
+`;
+
+    const destPath = path.join(activePluginsDir, `${pluginName}.plugin.js`);
+    fs.writeFileSync(destPath, pluginContent.trim(), 'utf8');
+
+    return { success: true, pluginFile: destPath, ext };
+  }
+
   // --- Polyglot IDE Translations ---
 
   generateJetBrainsXmlFeed() {

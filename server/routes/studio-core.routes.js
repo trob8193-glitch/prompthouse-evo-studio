@@ -10,6 +10,7 @@ import { UniversalAIAdaptor } from '../../lib/ai/UniversalAIAdaptor.js';
 import { PromptCompressor } from '../../lib/ai/PromptCompressor.js';
 import { TruthGate } from '../../src/core/truth/TruthGate.js';
 import { OnlineLearningManager } from '../../src/core/evolution/OnlineLearningManager.js';
+import { GlobalPluginRegistry } from '../../src/core/plugins/PluginRegistry.js';
 
 const learningManager = new OnlineLearningManager();
 import { buildBridgeContractLedger } from '../../src/bridge-contract-ledger.js';
@@ -543,6 +544,14 @@ function readAvailableFilesForStudioCore() {
 export function registerStudioCoreRoutes(app) {
   ensureDataDir();
 
+  // Load plugins dynamically on boot
+  GlobalPluginRegistry.loadActivePlugins(path.join(process.cwd(), 'src/plugins/active'));
+  GlobalPluginRegistry.dispatchBackendRoutes(app);
+
+  app.get('/api/plugins', (_req, res) => {
+    res.json({ success: true, plugins: GlobalPluginRegistry.getAll() });
+  });
+
   app.get('/status', (_req, res) => {
     const ledgerStats = readStudioLedgerStats();
     const iq = buildStudioIqMetrics(ledgerStats.sovereignGain, ledgerStats.actionCount);
@@ -672,6 +681,25 @@ export function registerStudioCoreRoutes(app) {
 
   app.get('/api/studio/diagnostics', (req, res) => {
     res.json(buildStudioDiagnostics(req.query.limit));
+  });
+
+  app.post('/api/evo-llm/force-self-train', async (req, res) => {
+    try {
+      const { exec } = await import('child_process');
+      const util = await import('util');
+      const execPromise = util.promisify(exec);
+      
+      const { stdout, stderr } = await execPromise('node scripts/ai_self_train.mjs', { cwd: process.cwd() });
+      
+      res.json({
+        success: true,
+        message: 'Self-training cycle completed successfully',
+        output: stdout,
+        errors: stderr
+      });
+    } catch (e) {
+      res.status(500).json({ success: false, error: e.message || e.toString() });
+    }
   });
 
   app.post('/api/evolution/cycle', (req, res) => {
@@ -1248,6 +1276,17 @@ CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. 
     // Inject REAL-TIME LEARNING CONTEXT from QuadBrain memory
     if (messages.length > 0) {
       const lastUserMessage = messages[messages.length - 1].content || '';
+      
+      // Hook: Intercept via Autonomous Plugins
+      const pluginResponse = await GlobalPluginRegistry.dispatchMobileIntent(lastUserMessage);
+      if (pluginResponse) {
+        return res.json({ 
+          message: pluginResponse.message || JSON.stringify(pluginResponse),
+          pluginIntercept: true,
+          handledBy: pluginResponse.handledBy
+        });
+      }
+
       try {
         const memoryContext = learningManager.searchContext(lastUserMessage, 3);
         if (memoryContext && memoryContext.length > 0) {
@@ -1270,7 +1309,7 @@ CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. 
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ model, messages: ollamaMessages, stream: false }),
-          signal: AbortSignal.timeout(30000),
+          signal: AbortSignal.timeout(2000),
         });
         if (!response.ok) continue;
         const data = await response.json();

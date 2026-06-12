@@ -27,6 +27,12 @@ export class CostFirewall {
       throw new Error('System is temporarily offline for maintenance.');
     }
 
+    if (orgId === 'org_anonymous') {
+      // Anonymous telemetry is allowed for realtime-ingest
+      if (endpoint === 'realtime-ingest') return true;
+      throw new Error('Anonymous access restricted.');
+    }
+
     // 2. Check Organization Status
     const org = db.prepare('SELECT status, plan FROM organizations WHERE id = ?').get(orgId);
     if (!org) {

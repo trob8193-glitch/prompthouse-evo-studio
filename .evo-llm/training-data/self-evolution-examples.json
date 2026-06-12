@@ -1142,5 +1142,538 @@
     ],
     "source": "self-evolution-bridge",
     "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781277816715",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":2671,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781277816715\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781277816715\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":261117,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781277816715\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781277816715\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781281933041",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":3267,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781281933041\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781281933041\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":317332,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781281933041\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781281933041\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781282567816",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":1136,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781282567816\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781282567816\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":262597,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781282567816\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781282567816\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781282867838",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":337,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781282867838\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781282867838\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":206379,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781282867838\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781282867838\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781283167859",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":279,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283167859\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283167859\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":219985,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283167859\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283167859\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781283467892",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":218,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283467892\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283467892\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":185634,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283467892\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283467892\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781283767904",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":1626,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283767904\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283767904\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":183419,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283767904\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781283767904\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781285638894",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781285657927",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":542,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781285657927\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781285657927\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":227846,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781285657927\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781285657927\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781286484436",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781286192448",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":1141,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286192448\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286192448\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":361243,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286192448\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286192448\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781286854768",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781286899737",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781286492458",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":3355,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286492458\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286492458\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":418061,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286492458\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286492458\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781286929680",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781286946841",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781286970312",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287007698",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287036289",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287069897",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287093333",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287123051",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287159050",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287198242",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287226418",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287257773",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781286792468",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":2978,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286792468\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286792468\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":454171,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286792468\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781286792468\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287278216",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287092480",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":4200,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287092480\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287092480\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":478314,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287092480\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287092480\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287392493",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":5270,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287392493\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287392493\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":433440,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287392493\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287392493\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287692496",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":1000,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287692496\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287692496\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":307985,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287692496\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287692496\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781288206348",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781288235885",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781288265070",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781287992497",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":1419,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287992497\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287992497\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":265040,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287992497\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781287992497\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781288291005",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781288330281",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781288364753",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781288387267",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781288418042",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Remove non-production self-evolution language and improve local bridge URL environment readiness. Truth state: PROPOSED.",
+    "response": "Cycle truth state: PROPOSED.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: No proof object was attached to this cycle result.\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
+  },
+  {
+    "id": "self_evolution_evo_1781288292544",
+    "system": "You are Evo LLM for PromptHouse Evo Studio. Learn from self-evolution cycles while staying truth-bound, receipt-backed, and approval-gated.",
+    "instruction": "Analyze this self-evolution cycle and explain the next safest studio improvement. Objective: Implement the architectural blueprint for: Evo Duel Engine Development. Truth state: ROLLED_BACK.",
+    "response": "Cycle truth state: ROLLED_BACK.\nProposal summary: Self-evolution proposal completed a gated analysis step.\nNo blocker list was recorded for this cycle.\nProof summary: {\"passed\":false,\"commandCount\":2,\"failedCommand\":\"npm test\",\"commands\":[{\"command\":\"node --check promptbridge-server.js\",\"exitCode\":0,\"durationMs\":2016,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781288292544\\\\node_check_promptbridge_server_js.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781288292544\\\\node_check_promptbridge_server_js.stderr.log\"},{\"command\":\"npm test\",\"exitCode\":1,\"durationMs\":350703,\"stdoutPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781288292544\\\\npm_test.stdout.log\",\"stderrPath\":\"C:\\\\Users\\\\Noname\\\\Documents\\\\Codex\\\\2026-05-03\\\\prompthouse-evo-studio-files-in-my\\\\.prompthouse-data\\\\evolution\\\\proof\\\\evo_1781288292544\\\\npm_test.stderr.log\"}]}\nNext safest improvement: keep the change behind proof gates, update receipts, run audits/tests/build, and require owner approval before promotion.",
+    "tags": [
+      "self-evolution",
+      "evo-llm",
+      "receipt-learning"
+    ],
+    "source": "self-evolution-bridge",
+    "truthPolicy": "truth-bound-production-only"
   }
 ]

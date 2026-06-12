@@ -103,6 +103,16 @@ export default function EvoLlmTrainingDashboard() {
     } finally { setBusy(false); }
   };
 
+  const runForceSelfTrain = async () => {
+    setBusy(true);
+    try {
+      setMessage('Running forced self-train cycle (this may take a minute)...');
+      const result = await post('/api/evo-llm/force-self-train');
+      setMessage(result.ok ? `Force Self-Train Complete. ${result.data.message}` : `ERROR: ${result.error}`);
+      await refresh();
+    } finally { setBusy(false); }
+  };
+
   const runDeepEval = async () => {
     setBusy(true);
     try {
@@ -169,6 +179,7 @@ export default function EvoLlmTrainingDashboard() {
             {status && status.truthState === 'DATASET_READY' && <button style={button} onClick={() => createPlan('local-dataset')} disabled={busy}>Create Dataset Plan</button>}
             {status && <button style={button} onClick={synthesize} disabled={busy}><RefreshCw size={14} /> Synthesize Data</button>}
             {status && <button style={button} onClick={runDeepEval} disabled={busy}><Brain size={14} /> Deep Eval</button>}
+            <button style={{ ...button, borderColor: '#a855f7', color: '#e9d5ff' }} onClick={runForceSelfTrain} disabled={busy}><Brain size={15}/>Force Self-Train Cycle</button>
             {plans[0] && plans[0].status === 'NEEDS_APPROVAL' && <button style={{ ...button, borderColor: '#34d399', background: 'rgba(5,46,22,.4)' }} onClick={approveLatest} disabled={busy}>Approve Plan {plans[0].id.split('_')[0]}</button>}
             <button style={button} onClick={() => createPlan('openai')} disabled={busy}><ShieldAlert size={15}/>Plan Provider Gate Test</button>
             <button style={button} onClick={approveLatest} disabled={busy}><CheckCircle2 size={15}/>Approve Latest</button>

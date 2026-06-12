@@ -75,7 +75,7 @@ export default function SaasBuilderView() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* LEFT: Live Blueprint Canvas */}
         <div className="lg:col-span-2 bg-[#0c0c0e] rounded-2xl border border-slate-800 overflow-hidden flex flex-col shadow-2xl">
-          <div className="p-6 border-b border-slate-800 bg-gradient-to-r from-indigo-500/5 to-transparent flex justify-between items-center">
+          <div className="p-6 border-b border-slate-800 bg-linear-to-r from-indigo-500/5 to-transparent flex justify-between items-center">
             <h2 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-3">
               <Network size={18} className="text-indigo-500" /> Physical SaaS Genesis
             </h2>
@@ -121,7 +121,7 @@ export default function SaasBuilderView() {
 
         {/* RIGHT: Evo Eyes Preview */}
         <div className="bg-[#0c0c0e] rounded-2xl border border-slate-800 overflow-hidden flex flex-col shadow-2xl">
-          <div className="p-6 border-b border-slate-800 bg-gradient-to-r from-emerald-500/5 to-transparent">
+          <div className="p-6 border-b border-slate-800 bg-linear-to-r from-emerald-500/5 to-transparent">
             <h2 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-3">
               <Eye size={18} className="text-emerald-500" /> Evo Eyes (Physical Render)
             </h2>

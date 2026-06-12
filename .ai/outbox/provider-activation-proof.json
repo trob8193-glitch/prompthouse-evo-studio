@@ -3,7 +3,7 @@
   "success": true,
   "truthState": "LOCAL_ONLY",
   "liveRequested": false,
-  "checkedAt": "2026-06-12T06:24:16.713Z",
+  "checkedAt": "2026-06-12T17:51:24.575Z",
   "summary": {
     "totalActions": 4,
     "readyActions": 4,
@@ -105,7 +105,7 @@
   "blockers": [],
   "receipts": [
     {
-      "id": "rcpt_1781245456707_64lwa",
+      "id": "rcpt_1781286684560_2dasx",
       "provider": "openai",
       "action": "ai_provider_probe",
       "status": "armed_local_only",
@@ -113,10 +113,10 @@
       "message": "openai has credentials; live action was not requested.",
       "requestHash": "0228eba87335fbe8",
       "responseHash": "a1e78a38c0520ed4",
-      "createdAt": "2026-06-12T06:24:16.708Z"
+      "createdAt": "2026-06-12T17:51:24.561Z"
     },
     {
-      "id": "rcpt_1781245456710_k6zw3",
+      "id": "rcpt_1781286684570_tyo65",
       "provider": "gemini",
       "action": "ai_provider_probe",
       "status": "armed_local_only",
@@ -124,10 +124,10 @@
       "message": "gemini has credentials; live action was not requested.",
       "requestHash": "0228eba87335fbe8",
       "responseHash": "a1e78a38c0520ed4",
-      "createdAt": "2026-06-12T06:24:16.710Z"
+      "createdAt": "2026-06-12T17:51:24.570Z"
     },
     {
-      "id": "rcpt_1781245456711_0ndkh",
+      "id": "rcpt_1781286684571_0nso4",
       "provider": "stripe",
       "action": "stripe_test_checkout",
       "status": "armed_local_only",
@@ -135,10 +135,10 @@
       "message": "stripe has credentials; live action was not requested.",
       "requestHash": "fc221f1271107d8e",
       "responseHash": "e736d411e2b570cd",
-      "createdAt": "2026-06-12T06:24:16.711Z"
+      "createdAt": "2026-06-12T17:51:24.571Z"
     },
     {
-      "id": "rcpt_1781245456712_cc4zd",
+      "id": "rcpt_1781286684572_maxrx",
       "provider": "vercel",
       "action": "vercel_preview_deploy",
       "status": "armed_local_only",
@@ -146,7 +146,7 @@
       "message": "vercel has credentials; live action was not requested.",
       "requestHash": "1a9718757f640970",
       "responseHash": "abfae1d6c3f1652e",
-      "createdAt": "2026-06-12T06:24:16.712Z"
+      "createdAt": "2026-06-12T17:51:24.573Z"
     }
   ]
 }

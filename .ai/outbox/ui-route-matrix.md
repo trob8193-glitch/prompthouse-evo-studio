@@ -1,8 +1,8 @@
 # Full UI Button-to-Route Matrix
 
-**Generated**: 2026-06-12T14:22:30.875Z
+**Generated**: 2026-06-12T18:34:03.857Z
 **Components Scanned**: 134
-**Known Backend Routes**: 276
+**Known Backend Routes**: 281
 **Potential Dead Links Detected**: 0
 
 ## Matrix
@@ -250,7 +250,7 @@
               className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors"
             >
 - setSelectedBot(bot.id)}
-              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
                 selectedBot === bot.id
                   ? 'text-white border-transparent shadow-lg'
                   : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'
@@ -527,17 +527,17 @@
 ### src\components\Terminal.jsx
 **Interactive Controls**: 
 - setTerminalOpen(true)}
-        className="evo-shell-container h-10 w-full flex items-center px-6 z-30 shrink-0 group"
-        style={{ background: 'linear-gradient(90deg, rgba(5,5,8,0.95), rgba(10,10,20,0.95))' }}
-      >
-        
-        
-        
-          EvoShell Master Control
-        
-        
+          className="absolute inset-0 w-full h-full flex items-center px-6 z-50 cursor-pointer group hover:bg-white/5 transition-colors"
+          style={{ opacity: terminalOpen ? 0 : 1, pointerEvents: terminalOpen ? 'none' : 'auto' }}
+        >
           
-          STANDBY
+          
+          
+            EvoShell Master Control
+          
+          
+            
+            STANDBY
 - setActiveTerminalSession(session)}
                   style={{
                     padding: '4px 10px', borderRadius: 4, fontSize: 8, fontWeight: 800,
@@ -715,7 +715,7 @@
               className={`w-full py-4 rounded-xl font-bold text-[13px] tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-3 ${
                 evolving 
                   ? 'bg-black/50 text-[#00f0ff] border border-[#00f0ff]/30 shadow-[inset_0_0_20px_rgba(0,240,255,0.1)]' 
-                  : 'bg-gradient-to-r from-[#8a2be2] to-[#4338ca] text-white hover:shadow-[0_0_30px_rgba(138,43,226,0.4)] disabled:opacity-50 disabled:cursor-not-allowed'
+                  : 'bg-linear-to-r from-[#8a2be2] to-[#4338ca] text-white hover:shadow-[0_0_30px_rgba(138,43,226,0.4)] disabled:opacity-50 disabled:cursor-not-allowed'
               }`}
             >
               {evolving ?  : }
@@ -807,7 +807,11 @@
 ### src\features\EvoLlmTrainingDashboard.jsx
 **Interactive Controls**: 
 - Refresh
-- createPlan('local-dataset')} disabled={busy}>Plan Local Dataset
+- createPlan('local-dataset')} disabled={busy}>Create Dataset Plan
+- Synthesize Data
+- Deep Eval
+- Force Self-Train Cycle
+- Approve Plan {plans[0].id.split('_')[0]}
 - createPlan('openai')} disabled={busy}>Plan Provider Gate Test
 - Approve Latest
 - Run Latest
@@ -983,6 +987,16 @@
                   
                 
                 {module.missing.length ? `${module.missing.length} missing checks` : 'All checks detected'}
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\features\OmniBotRemote.jsx
+**Interactive Controls**: 
+- Run in Terminal
+- {applied ?  : }
+                      {applied ? 'Applied!' : 'Apply to File'}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 

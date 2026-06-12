@@ -183,7 +183,9 @@ export default function OmniBotRemote() {
         id: Date.now() + 1, 
         role: 'system', 
         text: responseText,
-        bot: activeBot
+        bot: activeBot,
+        pluginIntercept: result.pluginIntercept,
+        handledBy: result.handledBy
       }]);
 
       if (isVoiceMode || usedVoice) {
@@ -286,36 +288,42 @@ export default function OmniBotRemote() {
       {/* Chat Area */}
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-transparent to-[rgba(16,185,129,0.02)] pb-24"
+        className="flex-1 overflow-y-auto p-6 space-y-6 bg-linear-to-b from-transparent to-[rgba(16,185,129,0.02)] pb-24"
       >
-        {messages.map(msg => {
-          const botPalette = msg.bot?.palette?.primary || currentBot.palette?.primary || '#10b981';
+        {messages.map(m => {
+          const botPalette = m.bot?.palette?.primary || currentBot.palette?.primary || '#10b981';
           return (
-            <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[85%] rounded-2xl p-5 text-sm shadow-xl ${
-                msg.role === 'user' 
+                m.role === 'user' 
                   ? 'bg-indigo-600 text-white rounded-tr-sm border border-indigo-500/50' 
                   : 'bg-[#111116] text-slate-200 rounded-tl-sm border border-slate-800/80'
               }`}>
-                {msg.role === 'system' && (
+                {m.role === 'system' && (
                   <div className="flex items-center gap-2 mb-3 border-b border-slate-800/50 pb-2" style={{ color: botPalette }}>
-                    {msg.bot ? (
-                        <span className="text-lg">{msg.bot.icon}</span>
+                    {m.pluginIntercept && (
+                      <div className="flex items-center gap-1.5 mr-2 px-2 py-0.5 bg-indigo-500/20 text-indigo-300 text-[10px] uppercase font-black tracking-wider rounded border border-indigo-500/30">
+                        <Zap size={10} className="text-indigo-400" />
+                        Plugin Handled: {m.handledBy}
+                      </div>
+                    )}
+                    {m.bot ? (
+                        <span className="text-lg">{m.bot.icon}</span>
                     ) : (
                         <Zap size={14} className="opacity-70" />
                     )}
-                    <span className="text-[10px] font-black uppercase tracking-widest">{msg.bot?.name || 'Evo System'}</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest">{m.bot?.name || 'Evo System'}</span>
                   </div>
                 )}
                 
-                {msg.role === 'system' ? (
+                {m.role === 'system' ? (
                   <div className="prose prose-invert prose-sm max-w-none prose-pre:bg-transparent prose-pre:p-0 prose-pre:m-0 prose-p:leading-relaxed">
                     <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ code: CodeBlock }}>
-                      {msg.text}
+                      {m.text}
                     </ReactMarkdown>
                   </div>
                 ) : (
-                  <div className="leading-relaxed whitespace-pre-wrap">{msg.text}</div>
+                  <div className="leading-relaxed whitespace-pre-wrap">{m.text}</div>
                 )}
               </div>
             </div>
@@ -332,7 +340,7 @@ export default function OmniBotRemote() {
       </div>
 
       {/* Input Area */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#050505] via-[#050505] to-transparent pt-8">
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-[#050505] via-[#050505] to-transparent pt-8">
         <form 
           onSubmit={handleSend}
           className="flex items-center gap-2 bg-[#111116] p-2 rounded-full border border-slate-700 shadow-2xl focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all max-w-4xl mx-auto"
@@ -356,7 +364,7 @@ export default function OmniBotRemote() {
           
           <button 
             type="submit"
-            disabled={(!input.trim() && !isRecording) || sending}
+            disabled={(!input?.trim() && !isRecording) || sending}
             className="w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 disabled:opacity-50"
             style={{ backgroundColor: currentBot.palette?.primary || '#4f46e5' }}
           >

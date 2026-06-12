@@ -1,6 +1,6 @@
 {
   "success": false,
   "truthState": "BROWSER_E2E_PROOF_BLOCKED",
-  "checkedAt": "2026-06-12T06:24:40.139Z",
-  "error": "Button not found: Settings & API. Visible text sample: ⚡\nPromptHouse Evo\nSTUDIO — SINGULARITY\nLOGIC DENSITY:\n165.00 IQ\nSTUDIO IQ:\n165,000,000\n⚡\nGemini 2.0 Flash\nFAST\n▼\nCOUNCIL:\nDeadHunter\nTruthAuditor\nMaturityScore\nBRIDGE ONLINE\nOPEN EVO SINGULARITY ENGINE\nSTUDIO\nCommand Center\nSingularity Studio\nApp Market\nOmni-Marketplace\nLaunch Proof\nEvo Copilot\nEvo Agent Chat\nWorkspace Explorer\nGhost Editor\nGOVERNANCE\nSelf-Evolution\nCost Firewall\nReview Ledger\nProof Docs\nINTELLIGENCE\nPrompt Registry\nEvo Diffuser\nEvo Pixelator\nEvo Layout\nTheme Evolution\nEvoPulse Grid\nAI Generator\nOPERATIONS\nExecution Queue\nBrain Surfaces\nProof Console\nProof Center\nEvo Eyes\nVali"
+  "checkedAt": "2026-06-12T17:53:00.947Z",
+  "error": "page.goto: net::ERR_NETWORK_CHANGED at http://127.0.0.1:4173/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:4173/\", waiting until \"domcontentloaded\"\u001b[22m\n"
 }

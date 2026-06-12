@@ -24,17 +24,24 @@ export default function StudioMarketplaceDashboard() {
       });
   }, []);
 
-  const handleTether = (ext) => {
+  const handleTether = async (ext) => {
     setTethering(ext.id);
-    // Simulate tethering process
-    setTimeout(() => {
-      setTethering(null);
+    
+    try {
+      const res = await safeFetchBridge(\`/api/marketplace/install/\${ext.id || ext.extensionId}\`);
+      if (!res.ok) throw new Error(res.error || 'Failed to install extension');
+      
       setTethered(prev => {
         const next = new Set(prev);
-        next.add(ext.id);
+        next.add(ext.id || ext.extensionId);
         return next;
       });
-    }, 1500);
+    } catch (e) {
+      console.error(e);
+      alert('Failed to tether: ' + e.message);
+    } finally {
+      setTethering(null);
+    }
   };
 
   const tabs = ['all', 'ide', 'ai', 'raw'];

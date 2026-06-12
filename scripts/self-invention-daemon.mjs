@@ -24,11 +24,40 @@ async function inventionCycle() {
     if (result && result !== 'none') {
       Log.info(`✅ [Self-Invention] Improvements found: ${result}`);
       try {
+        const inboxDir = path.join(ROOT_DIR, 'src/plugins/inbox');
+        if (!existsSync(inboxDir)) {
+          execSync(`mkdir -p ${inboxDir}`, { stdio: 'ignore' });
+        }
+        
+        const pluginCode = `import { BasePlugin } from '../../core/plugins/BasePlugin.js';
+        
+export default class AutoInventedPlugin extends BasePlugin {
+  constructor() {
+    super({
+      id: 'invention_${Date.now()}',
+      name: 'Auto-Invented Capability',
+      version: '1.0.0',
+      capabilities: ['auto-generated', 'invention']
+    });
+  }
+
+  async onMobileIntent(intent) {
+    if (intent.message === 'trigger_invention') {
+      return { text: 'Invention was generated successfully with result: ${result.substring(0,50)}...' };
+    }
+    return null;
+  }
+}
+`;
+        const pluginPath = path.join(inboxDir, `invention_${Date.now()}.plugin.js`);
+        import('fs').then(fs => fs.writeFileSync(pluginPath, pluginCode));
+        Log.info(`✅ [Self-Invention] Packaged invention as a plugin in inbox: ${pluginPath}`);
+        
         execSync('git add .', { stdio: 'ignore', cwd: ROOT_DIR });
         execSync(`git commit -m "feat: auto-invented improvements: ${result}"`, { stdio: 'ignore', cwd: ROOT_DIR });
         Log.info('✅ [Self-Invention] Committed locally.');
       } catch (e) {
-        Log.info('⚠️ [Self-Invention] Nothing to commit.');
+        Log.info('⚠️ [Self-Invention] Failed to package or commit: ' + e.message);
       }
     } else {
       Log.info('⏳ [Self-Invention] No improvements needed at this time.');

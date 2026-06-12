@@ -311,7 +311,7 @@ export class PlatformReadinessEngine {
           ollamaOnline = false;
         }
       } else {
-        ollamaOnline = process.env.MOCK_OLLAMA_OFFLINE !== 'true';
+        ollamaOnline = process.env.SIMULATE_OLLAMA_OFFLINE !== 'true';
       }
 
       if (!ollamaOnline) {
@@ -366,7 +366,7 @@ export class PlatformReadinessEngine {
             evoConnected = false;
           }
         } else {
-          evoConnected = process.env.MOCK_EVO_OFFLINE !== 'true';
+          evoConnected = process.env.SIMULATE_EVO_OFFLINE !== 'true';
         }
 
         if (!evoConnected) {
