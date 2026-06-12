@@ -1,8 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { EvoIntelligenceTetherCore } from '../evo-llm/EvoIntelligenceTetherCore.js';
+import { evaluateFrontierIntelligenceSafety, writeFrontierSafetyReceipt } from '../evo-llm/FrontierIntelligenceSafetyGate.js';
+import { ingestEvoWorkMemory } from '../evo-llm/EvoWorkMemoryEngine.js';
 
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 
 const MOBILE_CHANNELS = Object.freeze([
   'android-webview',
@@ -22,8 +25,22 @@ const REQUIRED_MOBILE_PROOF = Object.freeze([
   'offline-fallback-present',
   'auth-scope-checked',
   'dangerous-action-gated',
+  'frontier-safety-decision-written',
+  'tether-plan-written',
+  'work-memory-lesson-written',
   'receipt-written',
   'operator-visible-status'
+]);
+
+const ALLOWED_SAFE_INTENTS = Object.freeze([
+  'status',
+  'proof',
+  'safe-plan',
+  'receipt',
+  'tether-status',
+  'tether-cycle-plan',
+  'audit-plan',
+  'mobile-session'
 ]);
 
 function ensureDir(dir) {
@@ -40,7 +57,8 @@ function mobilePaths({ rootDir = process.cwd() } = {}) {
     base,
     sessions: path.join(base, 'sessions.jsonl'),
     receipts: path.join(base, 'receipts'),
-    status: path.join(base, 'status.json')
+    status: path.join(base, 'status.json'),
+    intentPlans: path.join(base, 'intent-plans')
   };
 }
 
@@ -61,12 +79,34 @@ function readJsonl(file, limit = 100) {
   }).filter(Boolean);
 }
 
+function normalizeIntent(intent = {}) {
+  const action = String(intent.action || intent.intent || 'status').toLowerCase().replace(/\s+/g, '-');
+  const safeAction = ALLOWED_SAFE_INTENTS.includes(action) ? action : 'safe-plan';
+  return {
+    id: intent.id || `omnibot_mobile_intent_${Date.now()}_${hash(JSON.stringify(intent))}`,
+    createdAt: new Date().toISOString(),
+    action: safeAction,
+    requestedAction: action,
+    device: String(intent.device || 'mobile-operator'),
+    operator: String(intent.operator || 'studio-owner'),
+    channel: MOBILE_CHANNELS.includes(intent.channel) ? intent.channel : 'mobile-browser',
+    summary: String(intent.summary || `Mobile requested ${safeAction}.`).slice(0, 1200),
+    scope: String(intent.scope || 'sandbox'),
+    tests: Array.isArray(intent.tests) && intent.tests.length ? intent.tests.slice(0, 10) : ['npm run build', 'npm run verify:studio', 'node scripts/audit_intelligence_stack.mjs'],
+    payload: intent.payload || {},
+    executeCommands: false,
+    dangerousActionsBlocked: true,
+    proofRequired: REQUIRED_MOBILE_PROOF
+  };
+}
+
 export function getOmnibotMobileContract() {
   return {
     name: 'PromptHouse Omnibot Mobile Control Layer',
     version: VERSION,
-    purpose: 'Expose a safe mobile-first cockpit for Omnibot actions, studio status, offline fallbacks, mobile intents, and proof-gated remote control.',
+    purpose: 'Expose a safe mobile-first cockpit for Omnibot actions, studio status, offline fallbacks, mobile intents, tether planning, and proof-gated remote control.',
     channels: MOBILE_CHANNELS,
+    safeIntents: ALLOWED_SAFE_INTENTS,
     proofRequired: REQUIRED_MOBILE_PROOF,
     policy: {
       mobileFirst: true,
@@ -74,7 +114,9 @@ export function getOmnibotMobileContract() {
       noDangerousActionWithoutGate: true,
       rawCredentialsNeverStored: true,
       receiptsRequired: true,
-      operatorStatusVisible: true
+      operatorStatusVisible: true,
+      autonomousExecutionRequiresLocalProof: true,
+      mobileCanRequestPlansButCannotBypassSafety: true
     }
   };
 }
@@ -87,13 +129,15 @@ export function getOmnibotMobileStatus({ rootDir = process.cwd(), limit = 25 } =
     version: VERSION,
     truthState: sessions.length ? 'OMNIBOT_MOBILE_READY' : 'OMNIBOT_MOBILE_WAITING_FOR_SESSION',
     channels: MOBILE_CHANNELS,
+    safeIntents: ALLOWED_SAFE_INTENTS,
     proofRequired: REQUIRED_MOBILE_PROOF,
     sessionCount: sessions.length,
     latestSession: sessions.at(-1) || null,
     files: {
       sessions: path.relative(rootDir, paths.sessions),
       receipts: path.relative(rootDir, paths.receipts),
-      status: path.relative(rootDir, paths.status)
+      status: path.relative(rootDir, paths.status),
+      intentPlans: path.relative(rootDir, paths.intentPlans)
     }
   };
   writeJson(paths.status, status);
@@ -109,7 +153,7 @@ export function registerOmnibotMobileSession({ rootDir = process.cwd(), session 
     channel: MOBILE_CHANNELS.includes(session.channel) ? session.channel : 'mobile-browser',
     operator: String(session.operator || 'studio-owner'),
     mode: String(session.mode || 'status-control'),
-    allowedIntents: Array.isArray(session.allowedIntents) ? session.allowedIntents.slice(0, 24) : ['status', 'proof', 'safe-plan', 'receipt'],
+    allowedIntents: Array.isArray(session.allowedIntents) ? session.allowedIntents.slice(0, 24) : ALLOWED_SAFE_INTENTS,
     dangerousActionsBlocked: true,
     offlineFallback: true,
     proofRequired: REQUIRED_MOBILE_PROOF
@@ -118,6 +162,70 @@ export function registerOmnibotMobileSession({ rootDir = process.cwd(), session 
   const status = getOmnibotMobileStatus({ rootDir });
   const receipt = writeOmnibotMobileReceipt({ rootDir, type: 'omnibot_mobile_session_receipt', payload: normalized });
   return { success: true, session: normalized, status, receipt };
+}
+
+export function planOmnibotMobileIntent({ rootDir = process.cwd(), intent = {} } = {}) {
+  const paths = mobilePaths({ rootDir });
+  const normalized = normalizeIntent(intent);
+  const tether = new EvoIntelligenceTetherCore(rootDir);
+  const safetyDecision = evaluateFrontierIntelligenceSafety({
+    rootDir,
+    request: {
+      summary: `Omnibot Mobile requested ${normalized.action}: ${normalized.summary}`,
+      autonomous: normalized.action.includes('tether') || normalized.action.includes('audit'),
+      mode: 'plan',
+      planOnly: true,
+      workspaceScope: normalized.scope,
+      tests: normalized.tests,
+      rollbackPlan: 'Mobile intent is plan-only. Discard plan or revert branch if verification fails.',
+      receiptPlan: 'Write mobile, safety, tether, work-memory, and audit receipts before promotion.',
+      humanReviewRequired: true,
+      payload: normalized
+    }
+  });
+  const safetyReceipt = writeFrontierSafetyReceipt({ rootDir, decision: safetyDecision, payload: normalized });
+  const tetherPlan = tether.createSafeEvolutionPlan({
+    sourceData: { mobileIntent: normalized },
+    intent: `omnibot-mobile-${normalized.action}`,
+    tests: normalized.tests,
+    scope: normalized.scope
+  });
+  const memory = ingestEvoWorkMemory({
+    rootDir,
+    item: {
+      sourceType: 'operator-note',
+      module: 'omnibot-mobile',
+      intent: 'improve_learning_loop',
+      summary: `Omnibot Mobile planned safe intent ${normalized.action}: ${normalized.summary}`,
+      payload: { normalized, safetyDecision, tetherPlan },
+      allowedForTraining: true,
+      tags: ['omnibot-mobile', 'safe-intent', 'tether', normalized.action]
+    }
+  });
+  const plan = {
+    id: normalized.id,
+    createdAt: new Date().toISOString(),
+    truthState: safetyDecision.allowed ? 'OMNIBOT_MOBILE_INTENT_PLAN_READY' : 'OMNIBOT_MOBILE_INTENT_BLOCKED',
+    intent: normalized,
+    safetyDecision,
+    safetyReceipt,
+    tetherPlan,
+    memory,
+    localProofCommands: normalized.tests,
+    executeCommands: false,
+    nextCommands: [
+      'node scripts/omnibot_mobile.mjs --status',
+      'node scripts/frontier_safety_gate.mjs --status',
+      'node scripts/evo_app_intelligence.mjs --cycle-test',
+      'node scripts/audit_intelligence_stack.mjs',
+      ...normalized.tests
+    ]
+  };
+  ensureDir(paths.intentPlans);
+  const planFile = path.join(paths.intentPlans, `${plan.id}.json`);
+  writeJson(planFile, plan);
+  const receipt = writeOmnibotMobileReceipt({ rootDir, type: 'omnibot_mobile_intent_plan_receipt', payload: { planFile: path.relative(rootDir, planFile), plan } });
+  return { success: safetyDecision.allowed, plan, planFile: path.relative(rootDir, planFile), receipt };
 }
 
 export function writeOmnibotMobileReceipt({ rootDir = process.cwd(), type = 'omnibot_mobile_receipt', payload = {} } = {}) {
