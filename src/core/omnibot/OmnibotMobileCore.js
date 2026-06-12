@@ -5,7 +5,7 @@ import { EvoIntelligenceTetherCore } from '../evo-llm/EvoIntelligenceTetherCore.
 import { evaluateFrontierIntelligenceSafety, writeFrontierSafetyReceipt } from '../evo-llm/FrontierIntelligenceSafetyGate.js';
 import { ingestEvoWorkMemory } from '../evo-llm/EvoWorkMemoryEngine.js';
 
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 
 const MOBILE_CHANNELS = Object.freeze([
   'android-webview',
@@ -17,7 +17,8 @@ const MOBILE_CHANNELS = Object.freeze([
   'camera-intent',
   'gps-context',
   'nfc-qr-intent',
-  'studio-remote-control'
+  'studio-remote-control',
+  'omnibot-autonomous-console'
 ]);
 
 const REQUIRED_MOBILE_PROOF = Object.freeze([
@@ -27,6 +28,7 @@ const REQUIRED_MOBILE_PROOF = Object.freeze([
   'dangerous-action-gated',
   'frontier-safety-decision-written',
   'tether-plan-written',
+  'autonomous-runner-plan-written',
   'work-memory-lesson-written',
   'receipt-written',
   'operator-visible-status'
@@ -40,7 +42,20 @@ const ALLOWED_SAFE_INTENTS = Object.freeze([
   'tether-status',
   'tether-cycle-plan',
   'audit-plan',
-  'mobile-session'
+  'mobile-session',
+  'autonomous-execution-plan',
+  'autonomous-runner-status',
+  'omnibot-master-proof'
+]);
+
+const AUTONOMOUS_PROOF_COMMANDS = Object.freeze([
+  'node scripts/evo_autonomous_runner.mjs --status',
+  'node scripts/evo_autonomous_runner.mjs --contract',
+  'node scripts/evo_autonomous_runner.mjs',
+  'PH_EVO_APPROVAL_REF=<your-approval-ref> node scripts/evo_autonomous_runner.mjs --execute',
+  'node scripts/audit_intelligence_stack.mjs',
+  'npm run build',
+  'npm run verify:studio'
 ]);
 
 function ensureDir(dir) {
@@ -82,6 +97,7 @@ function readJsonl(file, limit = 100) {
 function normalizeIntent(intent = {}) {
   const action = String(intent.action || intent.intent || 'status').toLowerCase().replace(/\s+/g, '-');
   const safeAction = ALLOWED_SAFE_INTENTS.includes(action) ? action : 'safe-plan';
+  const autonomyRequested = safeAction.includes('autonomous') || safeAction.includes('runner') || safeAction.includes('master-proof');
   return {
     id: intent.id || `omnibot_mobile_intent_${Date.now()}_${hash(JSON.stringify(intent))}`,
     createdAt: new Date().toISOString(),
@@ -96,6 +112,8 @@ function normalizeIntent(intent = {}) {
     payload: intent.payload || {},
     executeCommands: false,
     dangerousActionsBlocked: true,
+    autonomousExecutionRequested: autonomyRequested,
+    autonomousProofCommands: autonomyRequested ? AUTONOMOUS_PROOF_COMMANDS : [],
     proofRequired: REQUIRED_MOBILE_PROOF
   };
 }
@@ -104,10 +122,11 @@ export function getOmnibotMobileContract() {
   return {
     name: 'PromptHouse Omnibot Mobile Control Layer',
     version: VERSION,
-    purpose: 'Expose a safe mobile-first cockpit for Omnibot actions, studio status, offline fallbacks, mobile intents, tether planning, and proof-gated remote control.',
+    purpose: 'Expose a safe mobile-first cockpit for Omnibot actions, studio status, offline fallbacks, mobile intents, tether planning, autonomous execution proof planning, and proof-gated remote control.',
     channels: MOBILE_CHANNELS,
     safeIntents: ALLOWED_SAFE_INTENTS,
     proofRequired: REQUIRED_MOBILE_PROOF,
+    autonomousProofCommands: AUTONOMOUS_PROOF_COMMANDS,
     policy: {
       mobileFirst: true,
       offlineFallbackRequired: true,
@@ -116,7 +135,8 @@ export function getOmnibotMobileContract() {
       receiptsRequired: true,
       operatorStatusVisible: true,
       autonomousExecutionRequiresLocalProof: true,
-      mobileCanRequestPlansButCannotBypassSafety: true
+      mobileCanRequestPlansButCannotBypassSafety: true,
+      mobileNeverExecutesShellDirectly: true
     }
   };
 }
@@ -124,6 +144,7 @@ export function getOmnibotMobileContract() {
 export function getOmnibotMobileStatus({ rootDir = process.cwd(), limit = 25 } = {}) {
   const paths = mobilePaths({ rootDir });
   const sessions = readJsonl(paths.sessions, limit);
+  const autonomousHeartbeat = path.join(rootDir, 'src', 'core', 'evo-llm', 'AutonomousExecutionHeartbeat.js');
   const status = {
     success: true,
     version: VERSION,
@@ -131,6 +152,12 @@ export function getOmnibotMobileStatus({ rootDir = process.cwd(), limit = 25 } =
     channels: MOBILE_CHANNELS,
     safeIntents: ALLOWED_SAFE_INTENTS,
     proofRequired: REQUIRED_MOBILE_PROOF,
+    autonomousExecution: {
+      runner: 'scripts/evo_autonomous_runner.mjs',
+      heartbeatPresent: fs.existsSync(autonomousHeartbeat),
+      executeRequiresLocalApproval: true,
+      proofCommands: AUTONOMOUS_PROOF_COMMANDS
+    },
     sessionCount: sessions.length,
     latestSession: sessions.at(-1) || null,
     files: {
@@ -172,13 +199,13 @@ export function planOmnibotMobileIntent({ rootDir = process.cwd(), intent = {} }
     rootDir,
     request: {
       summary: `Omnibot Mobile requested ${normalized.action}: ${normalized.summary}`,
-      autonomous: normalized.action.includes('tether') || normalized.action.includes('audit'),
+      autonomous: normalized.autonomousExecutionRequested || normalized.action.includes('tether') || normalized.action.includes('audit'),
       mode: 'plan',
       planOnly: true,
       workspaceScope: normalized.scope,
       tests: normalized.tests,
       rollbackPlan: 'Mobile intent is plan-only. Discard plan or revert branch if verification fails.',
-      receiptPlan: 'Write mobile, safety, tether, work-memory, and audit receipts before promotion.',
+      receiptPlan: 'Write mobile, safety, tether, autonomous-runner, work-memory, and audit receipts before promotion.',
       humanReviewRequired: true,
       payload: normalized
     }
@@ -211,11 +238,22 @@ export function planOmnibotMobileIntent({ rootDir = process.cwd(), intent = {} }
     safetyReceipt,
     tetherPlan,
     memory,
+    autonomousExecutionPlan: normalized.autonomousExecutionRequested ? {
+      runner: 'scripts/evo_autonomous_runner.mjs',
+      executeDefault: false,
+      localApprovalRequired: 'PH_EVO_APPROVAL_REF=<your-approval-ref>',
+      safeStatusCommand: 'node scripts/evo_autonomous_runner.mjs --status',
+      safeContractCommand: 'node scripts/evo_autonomous_runner.mjs --contract',
+      planCommand: 'node scripts/evo_autonomous_runner.mjs',
+      executeCommand: 'PH_EVO_APPROVAL_REF=<your-approval-ref> node scripts/evo_autonomous_runner.mjs --execute',
+      proofCommands: AUTONOMOUS_PROOF_COMMANDS
+    } : null,
     localProofCommands: normalized.tests,
     executeCommands: false,
     nextCommands: [
       'node scripts/omnibot_mobile.mjs --status',
       'node scripts/frontier_safety_gate.mjs --status',
+      'node scripts/evo_autonomous_runner.mjs --status',
       'node scripts/evo_app_intelligence.mjs --cycle-test',
       'node scripts/audit_intelligence_stack.mjs',
       ...normalized.tests
