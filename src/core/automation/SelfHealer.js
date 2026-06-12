@@ -1,9 +1,10 @@
 import { Log } from '../autonomy/SovereignLogger.js';
 import { SelfForge } from '../autonomy/SelfForge.js';
+import { BRIDGE_URL } from '../../config/bridge-config.js';
 
 const BRIDGE_URL = typeof process !== 'undefined' && process.env?.PROMPTBRIDGE_URL
   ? process.env.PROMPTBRIDGE_URL
-  : (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))));
+  : BRIDGE_URL;
 
 async function recordHealingProbe(filePath) {
   try {

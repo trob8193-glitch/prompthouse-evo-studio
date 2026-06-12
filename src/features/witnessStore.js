@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { Log } from '../core/autonomy/SovereignLogger.js';
+import { safeFetchBridge } from '../config/bridge-config.js';
 
 /**
  * PH EVO STUDIO — EVO STUDIO WITNESS STORE
@@ -45,9 +46,8 @@ export const useWitnessStore = create((set, get) => ({
     
     // Physical Push to Ledger via Bridge
     try {
-      await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/evolution/log-realization', {
+      await safeFetchBridge('/api/evolution/log-realization', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(entry)
       });
     } catch (e) {
@@ -61,9 +61,9 @@ export const useWitnessStore = create((set, get) => ({
 
   runDoctorScan: async () => {
     try {
-      const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/doctor/scan');
-      const data = await res.json();
-      if (data.success) {
+      const res = await safeFetchBridge('/api/doctor/scan');
+      const data = res.data;
+      if (res.ok && data?.success) {
         set({ health_status: { 
           score: 1.0 - (data.scanResults.driftCount * 0.1), 
           driftCount: data.scanResults.driftCount,
@@ -80,12 +80,11 @@ export const useWitnessStore = create((set, get) => ({
   triggerEvoDoctor: async (targetFiles = []) => {
     set({ is_healing: true });
     try {
-      const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/doctor/heal', {
+      const res = await safeFetchBridge('/api/doctor/heal', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ targetFiles })
       });
-      const data = await res.json();
+      const data = res.data;
       set({ is_healing: false });
       get().runDoctorScan(); // Refresh after healing
       return data;
@@ -97,8 +96,8 @@ export const useWitnessStore = create((set, get) => ({
 
   triggerEvoEngineer: async () => {
     try {
-      const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/engineer/evolve', { method: 'POST' });
-      return await res.json();
+      const res = await safeFetchBridge('/api/engineer/evolve', { method: 'POST' });
+      return res.data;
     } catch (err) {
       return { success: false };
     }
@@ -106,8 +105,8 @@ export const useWitnessStore = create((set, get) => ({
 
   triggerEvoUIEngineer: async () => {
     try {
-      const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/ui-engineer/evolve', { method: 'POST' });
-      return await res.json();
+      const res = await safeFetchBridge('/api/ui-engineer/evolve', { method: 'POST' });
+      return res.data;
     } catch (err) {
       return { success: false };
     }

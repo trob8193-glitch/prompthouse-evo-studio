@@ -16,6 +16,7 @@ const TOOL_TYPES = [
 ];
 
 import { universalSend } from './lib/universal-transport.js';
+import { BRIDGE_URL } from './config/bridge-config.js';
 
 async function callBridge(prompt) {
   try {
@@ -37,7 +38,7 @@ export function ToolAutogenView() {
 
   useEffect(() => {
     getAllRecipes().then(setRecipes);
-    fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/status', { signal: AbortSignal.timeout(2000) })
+    fetch(BRIDGE_URL + '/status', { signal: AbortSignal.timeout(2000) })
       .then(r => setBridgeLive(r.ok)).catch(() => setBridgeLive(false));
   }, []);
 

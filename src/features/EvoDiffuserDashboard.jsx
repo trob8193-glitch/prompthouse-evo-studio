@@ -3,7 +3,8 @@ import { Aperture, Sparkles, Sliders, Image as ImageIcon, Download, CheckCircle,
 import { Card, Button } from '../components/primitives.jsx';
 import { callBridgeEngine } from '../engine.js';
 import { Log } from '../core/autonomy/SovereignLogger.js';
-
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
+import { safeFetchBridge } from '../config/bridge-config.js';
 export default function EvoDiffuserDashboard() {
   const [prompt, setPrompt] = useState('');
   const [generating, setGenerating] = useState(false);
@@ -19,21 +20,18 @@ export default function EvoDiffuserDashboard() {
     Log.info(`[EvoDiffuser] Generating Latent Architecture via ${engine.toUpperCase()}: ${prompt}`);
     
     try {
-      const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/diffuser/generate', {
+      const res = await safeFetchBridge('/api/diffuser/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, steps, cfg, engine })
       });
       
-      const data = await res.json();
-      
-      if (!data.success) {
-        throw new Error(data.error || 'Unknown error during generation');
+      if (!res.ok || !res.data?.success) {
+        throw new Error(res.error || res.data?.error || 'Unknown error during generation');
       }
 
       setImageResult({
-        url: data.url,
-        manifest: data
+        url: res.data.url,
+        manifest: res.data
       });
     } catch (e) {
       Log.error(`[EvoDiffuser] Generation failed: ${e.message}`);
@@ -44,16 +42,11 @@ export default function EvoDiffuserDashboard() {
   };
 
   return (
-    <div className="flex flex-col space-y-12">
-      <header className="relative">
-        <div className="absolute -top-10 -left-10 w-64 h-64 bg-[#8a2be2] opacity-10 rounded-full blur-[100px] pointer-events-none" />
-        <h1 className="text-4xl font-black tracking-tight mb-2 flex items-center gap-4 text-white drop-shadow-[0_0_15px_rgba(138,43,226,0.4)]">
-          <Aperture color="#8a2be2" size={36} className="drop-shadow-[0_0_10px_#8a2be2]" /> 
-          Singularity Diffuser
-        </h1>
-        <p className="text-[#8a2be2] font-bold text-xs tracking-[0.2em] uppercase ml-12">Latent UI Architecture & High-Fidelity Synthesis</p>
-      </header>
-
+    <IDEPageLayout
+      title="Singularity Diffuser"
+      description="Latent UI Architecture & High-Fidelity Synthesis"
+      icon={Aperture}
+    >
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 relative z-10">
         <div className="xl:col-span-5 space-y-8">
           <Card className="p-8 border border-[#8a2be2]/20 bg-[#050508]/80 backdrop-blur-xl shadow-[0_0_30px_rgba(138,43,226,0.05)]">
@@ -145,6 +138,6 @@ export default function EvoDiffuserDashboard() {
           </div>
         </Card>
       </div>
-    </div>
+    </IDEPageLayout>
   );
 }

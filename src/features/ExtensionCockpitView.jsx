@@ -6,6 +6,7 @@ import {
   Settings, ChevronRight, Share2, MousePointer
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 const PANELS = [
   { id: 'home', label: 'Home Cockpit', icon: Home, color: 'text-blue-400' },
@@ -48,15 +49,15 @@ export const ExtensionCockpitView = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[600px]">
-      {/* Sidebar Navigation */}
-      <div className="lg:col-span-3 bg-slate-900/50 border border-slate-800 rounded-3xl p-4 space-y-1">
-        <div className="px-4 py-6">
-          <h2 className="text-xl font-black text-indigo-400">Extension Cockpit</h2>
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">12 Autonomous Panels</p>
+    <IDEPageLayout
+      title="Extension Cockpit"
+      description="12 Autonomous Panels"
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[600px]">
+        {/* Sidebar Navigation */}
+        <div className="lg:col-span-3 bg-slate-900/50 border border-slate-800 rounded-3xl p-4 space-y-1">
+          {PANELS.map(p => <PanelItem key={p.id} panel={p} />)}
         </div>
-        {PANELS.map(p => <PanelItem key={p.id} panel={p} />)}
-      </div>
 
       {/* Main Panel Content */}
       <div className="lg:col-span-9 bg-slate-900/50 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative flex flex-col">
@@ -118,7 +119,8 @@ export const ExtensionCockpitView = () => {
           <span>EVO STUDIO INTERNALIZED STATE: ACTIVE</span>
         </div>
       </div>
-    </div>
+      </div>
+    </IDEPageLayout>
   );
 };
 

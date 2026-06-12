@@ -18,6 +18,7 @@ describe('platform online blockers', () => {
     vi.stubEnv('VERCEL_TOKEN', '');
     vi.stubEnv('DEPLOY_ALLOW_PRODUCTION', 'false');
     vi.stubEnv('GITHUB_TOKEN', '');
+    vi.stubEnv('PH_EVO_API_KEY', 'mock_ph_evo_api_key');
 
     const engine = new PlatformReadinessEngine();
     const blockers = engine.onlineBlockers();
@@ -42,6 +43,7 @@ describe('platform online blockers', () => {
     vi.stubEnv('VERCEL_TOKEN', 'vcp_live_token');
     vi.stubEnv('DEPLOY_ALLOW_PRODUCTION', 'true');
     vi.stubEnv('GITHUB_TOKEN', 'ghp_live_token');
+    vi.stubEnv('PH_EVO_API_KEY', 'mock_ph_evo_api_key');
 
     const engine = new PlatformReadinessEngine();
     const blockers = engine.onlineBlockers();
@@ -56,6 +58,7 @@ describe('platform online blockers', () => {
     vi.stubEnv('STRIPE_SECRET_KEY', 'sk_test_stripe');
     vi.stubEnv('VERCEL_TOKEN', '');
     vi.stubEnv('DEPLOY_ALLOW_PRODUCTION', 'false');
+    vi.stubEnv('PH_EVO_API_KEY', 'mock_ph_evo_api_key');
 
     const handlers = {};
     const app = {
@@ -75,4 +78,29 @@ describe('platform online blockers', () => {
     expect(res.body.onlineSummary.requiredBlockers).toBeGreaterThan(0);
     expect(res.body.onlineBlockers.some((item) => item.id === 'vercel-preview-deploy')).toBe(true);
   });
+
+  it('reports Ollama local server offline blocker when mock offline is true', () => {
+    vi.stubEnv('MOCK_OLLAMA_OFFLINE', 'true');
+    vi.stubEnv('PH_EVO_API_KEY', 'mock_ph_evo_api_key');
+    const engine = new PlatformReadinessEngine();
+    const blockers = engine.onlineBlockers();
+    expect(blockers.some(b => b.id === 'ollama-local-server')).toBe(true);
+  });
+
+  it('reports Evo API credentials blocker when key is missing', () => {
+    vi.stubEnv('PH_EVO_API_KEY', '');
+    vi.stubEnv('PH_EVO_MASTER_KEY', '');
+    const engine = new PlatformReadinessEngine();
+    const blockers = engine.onlineBlockers();
+    expect(blockers.some(b => b.id === 'evo-api-credentials')).toBe(true);
+  });
+
+  it('reports Evo API connectivity blocker when mock offline is true', () => {
+    vi.stubEnv('PH_EVO_API_KEY', 'mock_ph_evo_api_key');
+    vi.stubEnv('MOCK_EVO_OFFLINE', 'true');
+    const engine = new PlatformReadinessEngine();
+    const blockers = engine.onlineBlockers();
+    expect(blockers.some(b => b.id === 'evo-api-connectivity')).toBe(true);
+  });
 });
+

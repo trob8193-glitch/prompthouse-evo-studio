@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-
-const API_BASE = import.meta.env?.VITE_BRIDGE_URL || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))));
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
+import { safeFetchBridge } from '../config/bridge-config.js';
 
 function badgeClass(verdict) {
   if (verdict === 'PLATFORM_READY') return 'text-emerald-300 border-emerald-500/40 bg-emerald-500/10';
@@ -13,18 +13,33 @@ export default function PlatformSentinelDashboard() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const [learningStatus, setLearningStatus] = useState(null);
+  const [learningError, setLearningError] = useState('');
+  const [learningLoading, setLearningLoading] = useState(false);
+
   async function load() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`${API_BASE}/api/platform-sentinel/status`);
-      if (!res.ok) throw new Error(`Platform Sentinel API failed with ${res.status}`);
-      const data = await res.json();
-      setStatus(data.status || data);
+      const res = await safeFetchBridge('/api/platform-sentinel/status');
+      if (!res.ok) throw new Error(`Platform Sentinel API failed`);
+      setStatus(res.data?.status || res.data);
     } catch (err) {
       setError(err.message || String(err));
     } finally {
       setLoading(false);
+    }
+
+    setLearningLoading(true);
+    setLearningError('');
+    try {
+      const res = await safeFetchBridge('/api/evo-signal-learning/status');
+      if (!res.ok) throw new Error(`Signal Learning API failed`);
+      setLearningStatus(res.data?.status || res.data);
+    } catch (err) {
+      setLearningError(err.message || String(err));
+    } finally {
+      setLearningLoading(false);
     }
   }
 
@@ -36,20 +51,15 @@ export default function PlatformSentinelDashboard() {
   const requiredOnline = onlineBlockers.filter(item => !item.optional);
 
   return (
-    <div className="rounded-2xl border border-slate-700/70 bg-slate-950/70 p-6 shadow-xl">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">Platform Sentinel</p>
-          <h2 className="mt-2 text-2xl font-bold text-white">Platform Readiness Governor</h2>
-          <p className="mt-2 max-w-3xl text-sm text-slate-300">
-            Enforces proof-backed platform readiness across modules, APIs, UI actions, unproven claims, provider gates, release docs, and repair queues.
-          </p>
-        </div>
-        <button onClick={load} disabled={loading} className="rounded-xl border border-cyan-400/40 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-cyan-400/20 disabled:opacity-60">
-          {loading ? 'Auditing…' : 'Refresh Audit'}
+    <IDEPageLayout
+      title="Platform Readiness Governor"
+      description="Enforces proof-backed platform readiness across modules, APIs, UI actions, unproven claims, provider gates, release docs, and repair queues."
+      actions={
+        <button onClick={load} disabled={loading || learningLoading} className="rounded-xl border border-cyan-400/40 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-cyan-400/20 disabled:opacity-60">
+          {loading || learningLoading ? 'Auditing…' : 'Refresh Audit'}
         </button>
-      </div>
-
+      }
+    >
       {error && <div className="mt-4 rounded-xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-200">{error}</div>}
 
       <div className="mt-6 grid gap-4 md:grid-cols-5">
@@ -123,6 +133,77 @@ export default function PlatformSentinelDashboard() {
           </div>
         </section>
       </div>
-    </div>
+
+      {/* 📡 Signal Fabric & Learning Status */}
+      <div className="mt-8 border-t border-slate-800 pt-6">
+        <div className="flex items-center gap-3">
+          <span className="text-xl">📡</span>
+          <h3 className="text-lg font-bold text-white">Signal Fabric & Learning Status</h3>
+        </div>
+
+        {learningError && (
+          <div className="mt-4 rounded-xl border border-red-500/40 bg-red-500/10 p-4 text-xs text-red-200">
+            {learningError}
+          </div>
+        )}
+
+        {learningStatus && (
+          <div className="mt-4 grid gap-6 md:grid-cols-4">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
+              <p className="text-xs uppercase tracking-widest text-slate-400 font-semibold">Captured Signals</p>
+              <p className="mt-2 text-2xl font-black text-white">{learningStatus.eventCount ?? 0}</p>
+              <p className="mt-1 text-[10px] text-slate-500 truncate">{learningStatus.files?.eventLog}</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
+              <p className="text-xs uppercase tracking-widest text-slate-400 font-semibold">Training Examples</p>
+              <p className="mt-2 text-2xl font-black text-cyan-300">{learningStatus.trainingEventCount ?? 0}</p>
+              <p className="mt-1 text-[10px] text-slate-500 truncate">{learningStatus.files?.datasetJson}</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
+              <p className="text-xs uppercase tracking-widest text-slate-400 font-semibold">Truth State</p>
+              <p className="mt-2 text-sm font-black text-emerald-400 uppercase tracking-wider">{learningStatus.truthState ?? 'Waiting'}</p>
+              <p className="mt-1 text-[10px] text-slate-500">Version: {learningStatus.version}</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
+              <p className="text-xs uppercase tracking-widest text-slate-400 font-semibold">Observations Total</p>
+              <p className="mt-2 text-2xl font-black text-white">
+                {learningStatus.featureMemory ? Object.values(learningStatus.featureMemory).reduce((sum, item) => sum + (item.observations || 0), 0) : 0}
+              </p>
+              <p className="mt-1 text-[10px] text-slate-500 truncate">Feature Memory Count: {learningStatus.featureMemory ? Object.keys(learningStatus.featureMemory).length : 0}</p>
+            </div>
+          </div>
+        )}
+
+        {learningStatus?.featureMemory && Object.keys(learningStatus.featureMemory).length > 0 && (
+          <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900/30 p-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300 mb-3">Active Feature Observations</h4>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-850 text-slate-400">
+                    <th className="py-2 px-3">Feature Area</th>
+                    <th className="py-2 px-3 text-right">Observations</th>
+                    <th className="py-2 px-3 text-right">Normalized score</th>
+                    <th className="py-2 px-3 text-right">Recommendations</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-850/60">
+                  {Object.entries(learningStatus.featureMemory).map(([featureName, metrics]) => (
+                    <tr key={featureName} className="hover:bg-slate-900/20">
+                      <td className="py-2 px-3 font-medium text-slate-200">{featureName}</td>
+                      <td className="py-2 px-3 text-right text-slate-300">{metrics.observations ?? 1}</td>
+                      <td className="py-2 px-3 text-right text-cyan-400 font-semibold">
+                        {metrics.normalizedScore !== undefined ? `${(metrics.normalizedScore * 100).toFixed(0)}%` : '—'}
+                      </td>
+                      <td className="py-2 px-3 text-right text-slate-400">{metrics.recommendations?.join('; ') || 'None'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    </IDEPageLayout>
   );
 }

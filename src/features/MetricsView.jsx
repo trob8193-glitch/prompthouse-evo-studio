@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Activity, Cpu, HardDrive, Clock, Zap, RefreshCw, TrendingUp } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
-
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 /**
  * PH EVO STUDIO — METRICS VIEW (ENTERPRISE GRADE)
@@ -9,8 +9,6 @@ import { useSovereignStore } from '../store.js';
  */
 
 export default function MetricsView() {
-  const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))));
-
   const metrics = useSovereignStore((s) => s.metrics) || {};
   const { cpu = {}, mem = {} } = metrics;
   const loading = useSovereignStore((s) => s.metricsLoading);
@@ -52,16 +50,17 @@ export default function MetricsView() {
   const formatUptime = (s) => { if (!s) return '—'; const h = Math.floor(s / 3600); const m = Math.floor((s % 3600) / 60); return h > 0 ? `${h}h ${m}m` : `${m}m ${Math.floor(s % 60)}s`; };
 
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 28 }}>
-        <div>
-          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.03em', margin: 0 }}>Performance Metrics</h1>
-          <p style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>Live system telemetry — refreshes every 15 seconds.</p>
-        </div>
-        <button onClick={() => { setLoading(true); fetchAll(); }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>
+    <IDEPageLayout
+      title="Performance Metrics"
+      description="Live system telemetry — refreshes every 15 seconds."
+      icon={Activity}
+      actions={
+        <button onClick={() => { fetchAll(); }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>
           <RefreshCw size={13} /> Refresh
         </button>
-      </div>
+      }
+    >
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14, marginBottom: 16 }}>
         <Card icon={Clock} title="Uptime" color="#f59e0b">
@@ -99,6 +98,7 @@ export default function MetricsView() {
           ) : <div style={{ fontSize: 12, color: '#475569' }}>Evolution data unavailable.</div>}
         </Card>
       </div>
-    </div>
+      </div>
+    </IDEPageLayout>
   );
 }

@@ -53,14 +53,17 @@ function getAllFiles(dirPath, arrayOfFiles) {
 function evaluateSeedQuality(filePath) {
   const content = fs.readFileSync(filePath, 'utf8');
   const issues = [];
-  
-  // Rule 1: No console.logs left in production-tier files
-  if (content.match(/console\.log\(/g) && !filePath.includes('daemon') && !filePath.includes('test')) {
+
+  // Rule 1: No raw console.logs in production-tier files
+  // Exclusions: daemon scripts, test files, and the logger utility itself
+  const isLoggerFile = filePath.includes('Logger') || filePath.includes('logger');
+  const isDaemonOrTest = filePath.includes('daemon') || filePath.includes('test');
+  if (content.match(/console\.log\(/g) && !isDaemonOrTest && !isLoggerFile) {
     issues.push('Contains lingering console.log statements (Unprofessional for production).');
   }
 
   // Rule 2: Files that are too large (Spaghetti Code risk)
-  const lines = content.split('\\n').length;
+  const lines = content.split('\n').length;
   if (lines > 500) {
     issues.push(`File is overly massive (${lines} lines). Requires immediate modularization.`);
   }

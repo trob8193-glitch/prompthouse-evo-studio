@@ -13,14 +13,23 @@ class TrainingJobQueue {
     }
 
     async loadJobs() {
-        if (fs.existsSync(JOBS_FILE)) {
-            const data = fs.readFileSync(JOBS_FILE, 'utf8');
-            this.jobs = JSON.parse(data);
+        try {
+            if (fs.existsSync(JOBS_FILE)) {
+                const data = fs.readFileSync(JOBS_FILE, 'utf8');
+                this.jobs = JSON.parse(data);
+            }
+        } catch (e) {
+            console.error('[TrainingQueue] Failed to load jobs:', e.message);
+            this.jobs = [];
         }
     }
 
     saveJobs() {
-        fs.writeFileSync(JOBS_FILE, JSON.stringify(this.jobs, null, 2));
+        try {
+            fs.writeFileSync(JOBS_FILE, JSON.stringify(this.jobs, null, 2));
+        } catch (e) {
+            console.error('[TrainingQueue] Failed to save jobs:', e.message);
+        }
     }
 
     addJob(job) {

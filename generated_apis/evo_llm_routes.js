@@ -4,6 +4,8 @@ import {
   createEvoTrainPlan,
   evaluateEvoLlmTrainingCostGate,
   evaluateEvoProviderGate,
+  evaluateEvoLlmDataset,
+  synthesizeEvoLlmDataset,
   getGlobalNodeStatus,
   getEvoTrainRun,
   getEvoTrainStatus,
@@ -34,6 +36,14 @@ export default function registerEvoLlmRoutes(app) {
 
   app.get('/api/evo-llm/plans', (req, res) => {
     try { ok(res, { plans: listEvoTrainPlans({ limit: Number(req.query.limit || 50) }) }); } catch (error) { fail(res, error); }
+  });
+
+  app.post('/api/evo-llm/synthesize', (req, res) => {
+    try { ok(res, synthesizeEvoLlmDataset({ rootDir: process.cwd(), limit: req.body?.limit || 10 })); } catch (error) { fail(res, error); }
+  });
+
+  app.get('/api/evo-llm/eval/deep', (req, res) => {
+    try { ok(res, evaluateEvoLlmDataset({ rootDir: process.cwd(), deepEval: true })); } catch (error) { fail(res, error); }
   });
 
   app.post('/api/evo-llm/plan', (req, res) => {

@@ -1,5 +1,14 @@
 import http from 'http';
 
+let currentBackoff = 3000;
+const MAX_BACKOFF = 30000;
+
+function scheduleRetry(message) {
+  console.log(`${message} Retrying in ${currentBackoff / 1000}s...`);
+  setTimeout(pushNotification, currentBackoff);
+  currentBackoff = Math.min(currentBackoff * 1.5, MAX_BACKOFF);
+}
+
 function pushNotification() {
   const data = JSON.stringify({ message: "Hello! This is a direct Sovereign Uplink push notification from the Studio Brain on your PC! I have successfully completed the Nuclear Audit and I am fully connected to your device." });
 
@@ -22,18 +31,16 @@ function pushNotification() {
           console.log(`Success! Notification pushed to ${result.pushedTo} connected phones.`);
           process.exit(0); // Exit once successful
         } else {
-          console.log('Server is running but no phones are connected yet. Waiting...');
-          setTimeout(pushNotification, 3000);
+          scheduleRetry('Server is running but no phones are connected yet.');
         }
       } catch(e) {
-        setTimeout(pushNotification, 3000);
+        scheduleRetry('Failed to parse server response.');
       }
     });
   });
 
   req.on('error', () => {
-    console.log('Waiting for bridge server to restart...');
-    setTimeout(pushNotification, 3000);
+    scheduleRetry('Waiting for bridge server to restart...');
   });
 
   req.write(data);

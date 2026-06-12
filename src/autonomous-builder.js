@@ -1,4 +1,5 @@
 import { Log } from './core/autonomy/SovereignLogger.js';
+import { BRIDGE_URL } from './config/bridge-config.js';
 
 export { APP_TYPES } from './core/builder/ProjectTemplates.js';
 
@@ -18,8 +19,7 @@ export class AutonomousBuilder {
 
 export async function runBotPipeline(mission, appType, name, features) {
   Log.info(`🚀 Starting production build for "${name}" (${appType})...`);
-  const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))));
-  
+    
   // Build the evo build command with proper flags
   const command = `evo build ${name} --platform ${appType} --features ${features} ${mission}`;
   

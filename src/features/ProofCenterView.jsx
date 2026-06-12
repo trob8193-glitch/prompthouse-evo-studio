@@ -1,5 +1,6 @@
 import React from 'react';
 import { Shield } from 'lucide-react';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 import ProviderStatusPanel from '../components/ProviderStatusPanel.jsx';
 import ProviderCredentialChecklistPanel from '../components/ProviderCredentialChecklistPanel.jsx';
 import StripeProofPanel from '../components/StripeProofPanel.jsx';
@@ -22,24 +23,11 @@ import { OWNER_APPROVAL_SCOPES } from '../services/owner-approval-client.js';
  */
 export function ProofCenterView() {
   return (
-    <div className="flex flex-col h-full animate-in fade-in duration-300 pb-10">
-      <header className="mb-[var(--space-24)]">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{
-            width: '48px', height: '48px',
-            background: 'linear-gradient(135deg, var(--accent-indigo), var(--accent-violet))',
-            borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'
-          }}>
-            <Shield size={24} color="#fff" />
-          </div>
-          <div>
-            <h1 className="font-[var(--text-page-title)] text-[var(--text-primary)] m-0">Proof Center</h1>
-            <p className="font-[var(--text-body)] text-[var(--text-secondary)] mt-1 mb-0">
-              Provider verification, security audits, and truth-state execution gates.
-            </p>
-          </div>
-        </div>
-      </header>
+    <IDEPageLayout
+      title="Proof Center"
+      description="Provider verification, security audits, and truth-state execution gates."
+      icon={Shield}
+    >
 
       <div style={{
         display: 'grid',
@@ -115,7 +103,7 @@ export function ProofCenterView() {
           </div>
         </div>
       </div>
-    </div>
+    </IDEPageLayout>
   );
 }
 

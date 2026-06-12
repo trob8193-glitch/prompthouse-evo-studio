@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckCircle2, Palette, RefreshCw, RotateCcw, ShieldCheck, Sparkles, Wand2 } from 'lucide-react';
 import { safeFetchBridge } from '../config/bridge-config.js';
-
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 const card = {
   background: 'rgba(12,12,18,0.7)',
   border: '1px solid rgba(255,255,255,0.06)',
@@ -116,21 +116,21 @@ export default function ThemeEvolutionDashboard() {
   const previewPalette = preview?.profile?.palette || activePalette;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, color: '#ffffff' }}>
-      <header style={{ position: 'relative' }}>
-        <div style={{ position: 'absolute', top: -40, left: -40, width: 200, height: 200, background: '#8a2be2', opacity: 0.1, borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-          <div>
-            <h1 style={{ fontSize: 32, fontWeight: 900, margin: 0, letterSpacing: '-.02em', display: 'flex', alignItems: 'center', gap: 12, textShadow: '0 0 20px rgba(138,43,226,0.4)' }}>
-              <Palette color="#8a2be2" size={32} style={{ filter: 'drop-shadow(0 0 10px rgba(138,43,226,0.6))' }} /> 
-              Theme Evolution Matrix
-            </h1>
-            <p style={{ margin: '8px 0 0', color: '#b4b4c4', maxWidth: 820, fontSize: 13, lineHeight: 1.6 }}>Autonomous Singularity protocol for visual structure. Command the AI to dynamically adjust palettes, motion curves, and layout densities across the studio.</p>
-          </div>
-          <button style={button} onClick={refresh} disabled={busy} onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,240,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,240,255,0.1)'}><RefreshCw size={14} className={busy ? 'animate-spin' : ''} /> Refresh Vector</button>
-        </div>
-      </header>
-
+    <IDEPageLayout
+      title={
+        <>
+          <Palette color="#8a2be2" size={16} style={{ filter: 'drop-shadow(0 0 10px rgba(138,43,226,0.6))' }} />
+          Theme Evolution Matrix
+        </>
+      }
+      description="Autonomous Singularity protocol for visual structure. Command the AI to dynamically adjust palettes, motion curves, and layout densities across the studio."
+      actions={
+        <button style={button} onClick={refresh} disabled={busy} onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,240,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,240,255,0.1)'}>
+          <RefreshCw size={14} className={busy ? 'animate-spin' : ''} /> Refresh Vector
+        </button>
+      }
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, color: '#ffffff' }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 16 }}>
         <div style={card}><div style={{ color: '#00f0ff', fontSize: 10, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Active Matrix</div><div style={{ marginTop: 12 }}><Badge value={status?.activeThemeId || 'evoCore'} tone="purple" /></div></div>
         <div style={card}><div style={{ color: '#00ff88', fontSize: 10, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Verified Vector</div><div style={{ marginTop: 12 }}><Badge value={status?.approvedThemeId || 'evoCore'} tone="green" /></div></div>
@@ -229,6 +229,7 @@ export default function ThemeEvolutionDashboard() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </IDEPageLayout>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BadgeDollarSign, BarChart3, Database, RefreshCw, ShieldCheck, Trash2, WalletCards, Zap } from 'lucide-react';
 import { safeFetchBridge } from '../config/bridge-config.js';
-
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 const card = {
   background: 'rgba(15,23,42,0.82)',
   border: '1px solid rgba(34,197,94,0.20)',
@@ -113,15 +113,14 @@ export default function CostFirewallDashboard() {
   const certified80 = claims.find((claim) => String(claim.claim || '').includes('80'));
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, color: '#e2e8f0' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-        <div>
-          <h1 style={{ fontSize: 28, fontWeight: 950, margin: 0, letterSpacing: '-.04em' }}>Cost Firewall Command</h1>
-          <p style={{ margin: '8px 0 0', color: '#94a3b8', maxWidth: 760 }}>Provider routing, budget gates, profit protection, cache tracking, savings receipts, and claim certification. The wallet gets a helmet. 💸</p>
-        </div>
+    <IDEPageLayout
+      title="Cost Firewall Command"
+      description="Provider routing, budget gates, profit protection, cache tracking, savings receipts, and claim certification. The wallet gets a helmet. 💸"
+      actions={
         <button style={button} onClick={refresh} disabled={busy}><RefreshCw size={15} /> Refresh</button>
-      </div>
-
+      }
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, color: '#e2e8f0' }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 14 }}>
         <Stat label="Requests Measured" value={savings.requests || 0} icon={Database} />
         <Stat label="Avg Savings" value={`${savings.averageSavingsPercent || 0}%`} sub={`$${Number(savings.estimatedSavingsDollars || 0).toFixed(6)} saved`} icon={BadgeDollarSign} />
@@ -174,6 +173,7 @@ export default function CostFirewallDashboard() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </IDEPageLayout>
   );
 }

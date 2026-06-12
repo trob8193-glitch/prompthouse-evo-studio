@@ -3,6 +3,7 @@ import { LayoutTemplate, Layers, Cpu, Code2, Download, CheckCircle, RefreshCcw, 
 import { Card, Button, StatusBadge } from '../components/primitives.jsx';
 import { callBridgeEngine } from '../engine.js';
 import { Log } from '../core/autonomy/SovereignLogger.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 export default function EvoLayoutDashboard() {
   const [prompt, setPrompt] = useState('');
@@ -37,16 +38,11 @@ export default function EvoLayoutDashboard() {
   };
 
   return (
-    <div className="flex flex-col space-y-12">
-      <header className="relative">
-        <div className="absolute -top-10 -left-10 w-64 h-64 bg-[#00f0ff] opacity-10 rounded-full blur-[100px] pointer-events-none" />
-        <h1 className="text-4xl font-black tracking-tight mb-2 flex items-center gap-4 text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.3)]">
-          <LayoutTemplate color="#00f0ff" size={36} className="drop-shadow-[0_0_10px_#00f0ff]" /> 
-          Singularity Layout Engine
-        </h1>
-        <p className="text-[#00f0ff] font-bold text-xs tracking-[0.2em] uppercase ml-12">Autonomous Structural Blueprints</p>
-      </header>
-
+    <IDEPageLayout
+      title="Singularity Layout Engine"
+      description="Autonomous Structural Blueprints"
+      icon={LayoutTemplate}
+    >
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 relative z-10">
         <div className="xl:col-span-4 space-y-8">
           <Card className="p-8 border border-[#00f0ff]/20 bg-[#050508]/80 backdrop-blur-xl shadow-[0_0_30px_rgba(0,240,255,0.05)]">
@@ -134,6 +130,6 @@ export default function EvoLayoutDashboard() {
           </div>
         </Card>
       </div>
-    </div>
+    </IDEPageLayout>
   );
 }

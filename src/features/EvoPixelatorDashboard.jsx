@@ -3,6 +3,7 @@ import { Grid, Gamepad2, Palette, Sparkles, RefreshCcw, Download, Eye, Zap } fro
 import { Card, Button } from '../components/primitives.jsx';
 import { Log } from '../core/autonomy/SovereignLogger.js';
 import { callBridgeEngine } from '../engine.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 export default function EvoPixelatorDashboard() {
   const [prompt, setPrompt] = useState('');
@@ -37,16 +38,11 @@ export default function EvoPixelatorDashboard() {
   };
 
   return (
-    <div className="flex flex-col space-y-12">
-      <header className="relative">
-        <div className="absolute -top-10 -left-10 w-64 h-64 bg-[#00ff88] opacity-10 rounded-full blur-[100px] pointer-events-none" />
-        <h1 className="text-4xl font-black tracking-tight mb-2 flex items-center gap-4 text-white drop-shadow-[0_0_15px_rgba(0,255,136,0.3)]">
-          <Gamepad2 color="#00ff88" size={36} className="drop-shadow-[0_0_10px_#00ff88]" /> 
-          Singularity Pixelator
-        </h1>
-        <p className="text-[#00ff88] font-bold text-xs tracking-[0.2em] uppercase ml-12">Autonomous Asset Quantization Engine</p>
-      </header>
-
+    <IDEPageLayout
+      title="Singularity Pixelator"
+      description="Autonomous Asset Quantization Engine"
+      icon={Gamepad2}
+    >
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 relative z-10">
         <div className="xl:col-span-4 space-y-8">
           <Card className="p-8 border border-[#00ff88]/20 bg-[#050508]/80 backdrop-blur-xl shadow-[0_0_30px_rgba(0,255,136,0.05)]">
@@ -132,6 +128,6 @@ export default function EvoPixelatorDashboard() {
           </div>
         </Card>
       </div>
-    </div>
+    </IDEPageLayout>
   );
 }

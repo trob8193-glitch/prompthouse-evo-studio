@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Code2, Clock, Globe, ArrowRight, ServerCrash, DollarSign, Wallet } from 'lucide-react';
+import { Play, Code2, Clock, Globe, ArrowRight, ServerCrash, DollarSign, Wallet, LayoutGrid } from 'lucide-react';
+import { IDEPageLayout } from './layouts/IDEPageLayout.jsx';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
 export default function AppMarket() {
     const [projects, setProjects] = useState([]);
@@ -7,7 +9,7 @@ export default function AppMarket() {
     const [launching, setLaunching] = useState(null);
 
     useEffect(() => {
-        fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/portfolio')
+        fetch(BRIDGE_URL + '/api/portfolio')
             .then(res => res.json())
             .then(data => {
                 setProjects(data.projects || []);
@@ -21,7 +23,7 @@ export default function AppMarket() {
 
     const launchApp = (projectId) => {
         setLaunching(projectId);
-        fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/portfolio/launch', {
+        fetch(BRIDGE_URL + '/api/portfolio/launch', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ projectId })
@@ -38,7 +40,7 @@ export default function AppMarket() {
 
     const handleConnectStripe = async () => {
         try {
-            const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/marketplace/onboard', { method: 'POST' });
+            const res = await fetch(BRIDGE_URL + '/api/marketplace/onboard', { method: 'POST' });
             const data = await res.json();
             if (data.url) window.location.href = data.url;
         } catch (e) {
@@ -48,7 +50,7 @@ export default function AppMarket() {
 
     const handleBuyApp = async (projectId) => {
         try {
-            const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/marketplace/checkout', {
+            const res = await fetch(BRIDGE_URL + '/api/marketplace/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ projectId })
@@ -60,42 +62,43 @@ export default function AppMarket() {
         }
     };
 
+    const headerActions = (
+        <div className="flex items-center gap-4">
+            <button onClick={handleConnectStripe} className="flex items-center space-x-2 text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20 px-4 py-2 rounded-lg border border-indigo-500/20 transition-colors">
+                <Wallet className="w-4 h-4" />
+                <span className="font-bold text-[10px] tracking-widest uppercase">Connect Bank</span>
+            </button>
+            <div className="flex items-center space-x-2 text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-lg border border-emerald-500/20">
+                <Globe className="w-4 h-4" />
+                <span className="font-bold text-[10px] tracking-widest uppercase">Proof Gated</span>
+            </div>
+        </div>
+    );
+
     if (loading) {
         return (
-            <div className="flex-1 bg-[#09090b] text-white flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
-            </div>
+            <IDEPageLayout 
+                title="Autonomous Portfolio"
+                subtitle="Loading generated micro-apps..."
+                icon={LayoutGrid}
+            >
+                <div className="flex items-center justify-center h-full">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
+                </div>
+            </IDEPageLayout>
         );
     }
 
     return (
-        <div className="flex-1 bg-[#09090b] text-gray-200 overflow-y-auto">
-            <div className="max-w-7xl mx-auto p-8">
-                {/* Header */}
-                <div className="flex justify-between items-end mb-12">
-                    <div>
-                        <h1 className="text-4xl font-black tracking-tight text-white mb-2">
-                            My Autonomous Portfolio
-                        </h1>
-                        <p className="text-gray-400 text-lg">
-                            {projects.length} micro-apps generated by the Studio's daemons.
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <button onClick={handleConnectStripe} className="flex items-center space-x-2 text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20 px-4 py-2 rounded-full border border-indigo-500/20 transition-colors">
-                            <Wallet className="w-5 h-5" />
-                            <span className="font-semibold text-sm tracking-wide">Connect Bank</span>
-                        </button>
-                        <div className="flex items-center space-x-2 text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/20">
-                            <Globe className="w-5 h-5" />
-                            <span className="font-semibold text-sm tracking-wide uppercase">Proof Gated</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Grid */}
+        <IDEPageLayout 
+            title="Autonomous Portfolio"
+            subtitle={`${projects.length} micro-apps generated by the Studio's daemons`}
+            icon={LayoutGrid}
+            headerActions={headerActions}
+        >
+            <div className="overflow-y-auto pb-20 p-2">
                 {projects.length === 0 ? (
-                    <div className="text-center py-24 border border-dashed border-gray-800 rounded-2xl">
+                    <div className="text-center py-24 border border-dashed border-gray-800 rounded-2xl h-full flex flex-col items-center justify-center">
                         <ServerCrash className="w-12 h-12 text-gray-700 mx-auto mb-4" />
                         <h3 className="text-xl font-bold text-gray-400 mb-2">No Apps Found</h3>
                         <p className="text-gray-600">Your daemons haven't generated any apps yet.</p>
@@ -105,7 +108,7 @@ export default function AppMarket() {
                         {projects.map((project) => (
                             <div 
                                 key={project.id} 
-                                className="group relative bg-[#121214] border border-gray-800 hover:border-emerald-500/50 rounded-2xl p-5 transition-all duration-300 flex flex-col"
+                                className="group relative bg-[#121214] border border-gray-800 hover:border-emerald-500/50 rounded-2xl p-5 transition-all duration-300 flex flex-col hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]"
                             >
                                 {/* Card Top */}
                                 <div className="mb-4">
@@ -166,6 +169,6 @@ export default function AppMarket() {
                     </div>
                 )}
             </div>
-        </div>
+        </IDEPageLayout>
     );
 }

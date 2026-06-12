@@ -39,7 +39,9 @@ async function runMatrixCycle() {
 }
 
 async function startDaemon() {
-  Log.info('🕸️ [UI Matrix Daemon] Booted and armed.');
+  Log.info('🕸️ [UI Matrix Daemon] Booted. Waiting 30s for bridge to fully initialize...');
+  // Grace period: bridge needs time to register all routes on startup
+  await new Promise(resolve => setTimeout(resolve, 30000));
   await runMatrixCycle();
   setInterval(runMatrixCycle, 60000); // 60 seconds interval
 }

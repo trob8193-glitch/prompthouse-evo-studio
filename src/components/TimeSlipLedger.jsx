@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { History, GitCommit, GitBranch, Rewind } from 'lucide-react';
 
 import { Log } from '../core/autonomy/SovereignLogger.js';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
 export function TimeSlipLedger() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +10,7 @@ export function TimeSlipLedger() {
 
   React.useEffect(() => {
     if (isOpen) {
-      fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/commits')
+      fetch(BRIDGE_URL + '/api/commits')
         .then(res => res.json())
         .then(data => setCommits(data))
         .catch(err => Log.error(err));

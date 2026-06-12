@@ -1,5 +1,6 @@
 import { useWitnessStore } from "../../features/witnessStore.js";
 import { Log } from '../autonomy/SovereignLogger.js';
+import { BRIDGE_URL as DEFAULT_BRIDGE_URL } from '../../config/bridge-config.js';
 
 /**
  * PH EVO STUDIO — UNIVERSAL BRIDGE (Physical Reality Edition)
@@ -8,7 +9,7 @@ import { Log } from '../autonomy/SovereignLogger.js';
  * ABSOLUTE REALITY: Verified IPC through process-anchored truth-gates.
  */
 
-let BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))));
+let BRIDGE_URL = DEFAULT_BRIDGE_URL;
 
 async function physicalRealityAudit(type, data) {
   try {

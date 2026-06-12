@@ -4,6 +4,7 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
 import { createHash } from 'crypto';
+import { BRIDGE_URL } from '../../config/bridge-config.js';
 
 const DB_FILE = path.resolve(__dirname, 'memory_vectors.json');
 
@@ -62,7 +63,7 @@ class LocalVectorSearch {
     }
 
     async syncWithRemote() {
-        const remoteData = await this.fetchFromRemote((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/sync');
+        const remoteData = await this.fetchFromRemote(BRIDGE_URL + '/sync');
         remoteData.forEach(entry => this.addVector(entry.vector, entry.metadata));
     }
 }

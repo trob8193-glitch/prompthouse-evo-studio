@@ -13,6 +13,7 @@ import {
   Plus,
   ArrowRight
 } from 'lucide-react';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 export default function ConnectionManager() {
   const { bondedNodes, addBondedNode } = useSovereignStore();
@@ -125,21 +126,21 @@ export default function ConnectionManager() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-10 animate-in fade-in duration-500">
-      {/* Header */}
-      <div className="flex items-end justify-between border-b border-slate-800 pb-6">
-        <div>
-          <h1 className="text-3xl font-black italic tracking-tighter text-white flex items-center gap-3">
-            <Link2 className="text-indigo-500" size={32} />
-            EVO STUDIO BONDING <span className="text-indigo-500/50 text-sm not-italic font-mono ml-4">v3.1.2</span>
-          </h1>
-          <p className="text-slate-500 mt-2 text-sm uppercase tracking-[0.2em] font-bold">Distributed Node Orchestration & IPC</p>
-        </div>
+    <IDEPageLayout
+      title={
+        <>
+          EVO STUDIO BONDING <span className="text-indigo-500/50 text-sm not-italic font-mono ml-4">v3.1.2</span>
+        </>
+      }
+      description="Distributed Node Orchestration & IPC"
+      icon={Link2}
+      actions={
         <button onClick={fetchConnections} className="p-2 text-slate-400 hover:text-white transition-colors bg-slate-900 rounded-md border border-slate-800">
           <RefreshCcw size={16} className={loading ? 'animate-spin' : ''} />
         </button>
-      </div>
-
+      }
+    >
+      <div className="flex flex-col space-y-10 animate-in fade-in duration-500">
       {/* Bonding Input */}
       <div className="bg-gradient-to-br from-indigo-500/10 to-transparent p-1 rounded-xl border border-indigo-500/20 shadow-2xl shadow-indigo-500/5">
         <form onSubmit={handleBond} className="bg-[#0c0c0e] rounded-[10px] p-6 flex flex-col md:flex-row items-center gap-4">
@@ -263,6 +264,7 @@ export default function ConnectionManager() {
           ))
         )}
       </div>
-    </div>
+      </div>
+    </IDEPageLayout>
   );
 }

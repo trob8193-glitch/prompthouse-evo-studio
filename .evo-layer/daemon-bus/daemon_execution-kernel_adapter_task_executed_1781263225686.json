@@ -1,0 +1,34 @@
+{
+  "id": "daemon_execution-kernel_adapter_task_executed_1781263225686",
+  "daemonId": "execution-kernel",
+  "event": "adapter_task_executed",
+  "payload": {
+    "id": "exec_1781263225677",
+    "success": true,
+    "status": "SUCCESS",
+    "task": "refactor dashboard",
+    "adapter": "cursor",
+    "safety": {
+      "allowed": true,
+      "risk": "MEDIUM",
+      "category": "general_command",
+      "approvalRequired": false,
+      "reason": "General execution requires receipt and adapter routing.",
+      "rootDir": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my"
+    },
+    "credentialGate": {
+      "ok": true,
+      "reason": null
+    },
+    "adapterResult": {
+      "success": true,
+      "stdout": "{\n  \"selectedAdapter\": \"cursor\",\n  \"task\": \"refactor dashboard\",\n  \"payload\": {},\n  \"mode\": \"routed_receipt_pending_runtime_bridge\"\n}",
+      "stderr": "",
+      "durationMs": 0,
+      "truthState": "ADAPTER_ROUTED_RUNTIME_BRIDGE_REQUIRED"
+    },
+    "createdAt": "2026-06-12T11:20:25.677Z",
+    "file": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.evo-layer\\execution-results\\exec_1781263225677.json"
+  },
+  "createdAt": "2026-06-12T11:20:25.686Z"
+}

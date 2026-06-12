@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSovereignStore } from '../store.js';
 import { Button, Card, StatusBadge } from './primitives.jsx';
 import { Sparkles, FileCode, Check, RefreshCw, X } from 'lucide-react';
+import { IDEPageLayout } from './layouts/IDEPageLayout.jsx';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
-const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))));
 
 export function GhostEditor() {
   const { activeFile, addNotification, logToLedger } = useSovereignStore();
@@ -90,17 +91,11 @@ export function GhostEditor() {
   };
 
   return (
-    <Card className="flex-1 bg-[#0d1117] relative p-0 font-mono text-sm overflow-hidden h-full flex flex-col border-none">
-      {/* Ghost Toolbar */}
-      <div className="flex items-center justify-between p-4 bg-black/40 border-b border-slate-800 z-20">
-        <div className="flex items-center gap-3">
-          <Sparkles size={18} className="text-indigo-400" />
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest truncate max-w-[200px]">
-            {activeFile || 'No file selected'}
-          </span>
-          {loading && <RefreshCw size={12} className="animate-spin text-slate-500" />}
-        </div>
-        
+    <IDEPageLayout
+      title="Ghost Editor"
+      description="Autonomous overlay editor and holographic diffs"
+      noPadding={true}
+      actions={
         <div className="flex items-center gap-2">
           {isGhostActive && (
             <StatusBadge status="executing" label="GHOST LAYER ACTIVE" />
@@ -132,13 +127,25 @@ export function GhostEditor() {
             <Check size={14} /> Merge
           </Button>
         </div>
-      </div>
+      }
+    >
+      <div className="flex-1 bg-[#0d1117] relative p-0 font-mono text-sm overflow-hidden h-full flex flex-col border-none">
+        {/* File Toolbar */}
+        <div className="flex items-center justify-between p-2 bg-black/40 border-b border-slate-800 z-20">
+          <div className="flex items-center gap-3 px-2">
+            <Sparkles size={14} className="text-indigo-400" />
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest truncate max-w-[400px]">
+              {activeFile || 'No file selected'}
+            </span>
+            {loading && <RefreshCw size={12} className="animate-spin text-slate-500" />}
+          </div>
+        </div>
 
-      <div className="relative flex-1 overflow-auto p-6 bg-[rgba(2,6,23,0.5)]">
-        {/* Original Code Layer */}
-        <pre className={`text-slate-600 transition-opacity duration-500 ${isGhostActive ? 'opacity-30' : 'opacity-100'}`}>
-          <code>{originalCode}</code>
-        </pre>
+        <div className="relative flex-1 overflow-auto p-6 bg-[rgba(2,6,23,0.5)]">
+          {/* Original Code Layer */}
+          <pre className={`text-slate-600 transition-opacity duration-500 ${isGhostActive ? 'opacity-30' : 'opacity-100'}`}>
+            <code>{originalCode}</code>
+          </pre>
 
         {/* Holographic Ghost Layer */}
         {isGhostActive && !loading && (
@@ -157,14 +164,15 @@ export function GhostEditor() {
         )}
       </div>
 
-      {/* Mini Info Bar */}
-      <div className="p-2 px-4 bg-black/60 border-t border-slate-800 flex justify-between items-center text-[9px] text-slate-500 font-bold uppercase tracking-widest">
-        <span>Active File: {activeFile}</span>
-        <span className="flex items-center gap-4">
-          <span>Overlay ratio: {originalCode && ghostCode ? `${(ghostCode.length / Math.max(1, originalCode.length)).toFixed(2)}x` : '—'}</span>
-          <span>Chars delta: {originalCode && ghostCode ? `${ghostCode.length - originalCode.length}` : '—'}</span>
-        </span>
+        {/* Mini Info Bar */}
+        <div className="p-2 px-4 bg-black/60 border-t border-slate-800 flex justify-between items-center text-[9px] text-slate-500 font-bold uppercase tracking-widest">
+          <span>Active File: {activeFile}</span>
+          <span className="flex items-center gap-4">
+            <span>Overlay ratio: {originalCode && ghostCode ? `${(ghostCode.length / Math.max(1, originalCode.length)).toFixed(2)}x` : '—'}</span>
+            <span>Chars delta: {originalCode && ghostCode ? `${ghostCode.length - originalCode.length}` : '—'}</span>
+          </span>
+        </div>
       </div>
-    </Card>
+    </IDEPageLayout>
   );
 }

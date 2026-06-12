@@ -18,13 +18,16 @@ export const PLATFORM_MODULES = Object.freeze([
 
 export const PLATFORM_REQUIRED_COMMANDS = Object.freeze([
   { id: 'syntax_bridge', command: 'node --check promptbridge-server.js', critical: true },
+  { id: 'syntax_routes', command: 'node --check server/routes/studio-core.routes.js', critical: true },
+  { id: 'syntax_orchestrator', command: 'node --check scripts/super-orchestrator.mjs', critical: true },
   { id: 'test', command: 'npm test', critical: true },
   { id: 'build', command: 'npm run build', critical: true },
   { id: 'audit_imports', command: 'npm run audit:imports', critical: true },
   { id: 'audit_css', command: 'npm run audit:css', critical: true },
   { id: 'verify_studio', command: 'npm run verify:studio', critical: true },
   { id: 'maturity', command: 'npm run maturity:check', critical: true },
-  { id: 'evolve_status', command: 'npm run evolve:status', critical: false }
+  { id: 'evolve_status', command: 'npm run evolve:status', critical: false },
+  { id: 'architecture_audit', command: 'npm run architecture:audit', critical: false }
 ]);
 
 export const ONLINE_REQUIREMENTS = Object.freeze([
@@ -156,13 +159,52 @@ export class PlatformClaimScanner {
   }
   scan() {
     const issues = [];
+    const SECRET_KEY_PATTERNS = [
+      new RegExp('sk_live_' + '[a-zA-Z0-9]{12,}', 'i'),
+      new RegExp('sk_test_' + '[a-zA-Z0-9]{12,}', 'i'),
+      new RegExp('sk-proj-' + '[a-zA-Z0-9-_]{12,}', 'i'),
+      new RegExp('ph_evo_master_' + '[a-zA-Z0-9]{12,}', 'i'),
+      new RegExp('evo_master_' + '[a-zA-Z0-9]{12,}', 'i')
+    ];
+
     for (const file of this.collectFiles()) {
+      const rel = relative(this.rootDir, file).replace(/\\/g, '/');
+      if (
+        rel === 'src/core/platform-sentinel/index.js' ||
+        rel.startsWith('tests/') ||
+        rel.includes('package-lock.json') ||
+        rel.includes('.test.js') ||
+        rel.includes('.test.jsx') ||
+        rel.includes('.spec.js')
+      ) {
+        continue;
+      }
+
       const content = readFileSync(file, 'utf8');
       const gatedContext = /PROVIDER_GATED|OWNER_APPROVAL_REQUIRED|proof-gated|blocked/i.test(content);
-      const rel = relative(this.rootDir, file).replace(/\\/g, '/');
+
       for (const pattern of RISKY_CLAIMS) {
         const match = content.match(pattern);
-        if (match && !gatedContext) issues.push(createPlatformIssue({ id: `claim:${rel}`, severity: 'error', file: rel, message: `Unproven readiness claim detected: ${match[0]}` }));
+        if (match && !gatedContext) {
+          issues.push(createPlatformIssue({
+            id: `claim:${rel}`,
+            severity: 'error',
+            file: rel,
+            message: `Unproven readiness claim detected: ${match[0]}`
+          }));
+        }
+      }
+
+      for (const pattern of SECRET_KEY_PATTERNS) {
+        const match = content.match(pattern);
+        if (match) {
+          issues.push(createPlatformIssue({
+            id: `leak:${rel}`,
+            severity: 'error',
+            file: rel,
+            message: `Raw un-redacted credential detected: ${match[0].slice(0, 8)}...`
+          }));
+        }
       }
     }
     return issues;
@@ -180,7 +222,7 @@ export class PlatformGateRunner {
     }
   }
   run({ includeHeavy = false } = {}) {
-    const commands = includeHeavy ? PLATFORM_REQUIRED_COMMANDS : PLATFORM_REQUIRED_COMMANDS.filter(command => !['test', 'build'].includes(command.id));
+    const commands = includeHeavy ? PLATFORM_REQUIRED_COMMANDS : PLATFORM_REQUIRED_COMMANDS.filter(command => !['test', 'build', 'architecture_audit'].includes(command.id));
     return commands.map(command => this.runCommand(command));
   }
 }
@@ -257,6 +299,96 @@ export class PlatformReadinessEngine {
         nextAction: requirement.nextAction,
       });
     }
+
+    if (includeOptional) {
+      let ollamaOnline = true;
+      if (process.env.VITEST !== 'true') {
+        try {
+          const cmd = process.platform === 'win32' ? 'curl.exe' : 'curl';
+          const out = execSync(`${cmd} --max-time 1 -s http://localhost:11434/api/tags`, { stdio: 'pipe', timeout: 1500 });
+          ollamaOnline = out && out.toString().includes('models');
+        } catch {
+          ollamaOnline = false;
+        }
+      } else {
+        ollamaOnline = process.env.MOCK_OLLAMA_OFFLINE !== 'true';
+      }
+
+      if (!ollamaOnline) {
+        blockers.push({
+          id: 'ollama-local-server',
+          label: 'Ollama local tag server check',
+          provider: 'ollama',
+          severity: 'P2',
+          optional: true,
+          truthLabel: 'OPTIONAL_PROVIDER_GATED',
+          reasons: ['Ollama local server offline or unreachable on port 11434'],
+          requiredEnvKey: null,
+          requiredFlag: null,
+          approvalScope: 'provider_probe',
+          route: 'GET http://localhost:11434/api/tags',
+          proofCommand: 'ollama serve',
+          nextAction: 'Ensure Ollama is installed and running locally with "ollama serve".',
+        });
+      }
+    }
+
+    if (includeOptional) {
+      const evoUrl = process.env.EVO_API_URL || 'https://api.evo.prompthouse.dev/v1/chat/completions';
+      const evoKey = process.env.PH_EVO_API_KEY || process.env.PH_EVO_MASTER_KEY || '';
+      const hasEvoKey = Boolean(evoKey.trim());
+
+      if (!hasEvoKey) {
+        blockers.push({
+          id: 'evo-api-credentials',
+          label: 'Evo API remote credentials check',
+          provider: 'evo',
+          severity: 'P1',
+          optional: true,
+          truthLabel: 'OPTIONAL_PROVIDER_GATED',
+          reasons: ['PH_EVO_API_KEY or PH_EVO_MASTER_KEY is missing'],
+          requiredEnvKey: 'PH_EVO_API_KEY',
+          requiredFlag: null,
+          approvalScope: 'provider_probe',
+          route: 'POST /api/connectors/evo/probe',
+          proofCommand: 'npm run proof:connectors:live',
+          nextAction: 'Add PH_EVO_API_KEY to enable remote Evo API completions and training synchronization.',
+        });
+      } else {
+        let evoConnected = true;
+        if (process.env.VITEST !== 'true') {
+          try {
+            const cmd = process.platform === 'win32' ? 'curl.exe' : 'curl';
+            const out = execSync(`${cmd} --max-time 2 -s -o NUL -w "%{http_code}" "${evoUrl}"`, { stdio: 'pipe', timeout: 2500 });
+            const code = out.toString().trim();
+            evoConnected = code && code !== '000';
+          } catch {
+            evoConnected = false;
+          }
+        } else {
+          evoConnected = process.env.MOCK_EVO_OFFLINE !== 'true';
+        }
+
+        if (!evoConnected) {
+          blockers.push({
+            id: 'evo-api-connectivity',
+            label: 'Evo API remote connectivity check',
+            provider: 'evo',
+            severity: 'P1',
+            optional: true,
+            truthLabel: 'OPTIONAL_PROVIDER_GATED',
+            reasons: [`Failed to connect to Evo API URL (${evoUrl})`],
+            requiredEnvKey: 'EVO_API_URL',
+            requiredFlag: null,
+            approvalScope: 'provider_probe',
+            route: 'POST /api/connectors/evo/probe',
+            proofCommand: 'npm run proof:connectors:live',
+            nextAction: `Verify network connection to ${evoUrl} and ensure the endpoint is active.`,
+          });
+        }
+      }
+    }
+
     return blockers;
   }
   onlineSummary(onlineBlockers = this.onlineBlockers()) {
@@ -283,4 +415,14 @@ export class PlatformReadinessEngine {
   }
   receipt(options = {}) { const result = this.status(options); return this.ledger.append({ type: 'platform_readiness_receipt', score: result.score, release: result.release, blockers: result.repairQueue.length, onlineBlockers: result.onlineBlockers.length, result }); }
   receipts(options = {}) { return this.ledger.list(options); }
+  auditDomAndApps() {
+    const featuresDir = join(this.rootDir, 'src', 'features');
+    const coreDir = join(this.rootDir, 'src', 'core');
+    const issues = [];
+    if (existsSync(featuresDir)) issues.push(...new PlatformClaimScanner({ rootDir: featuresDir }).scan());
+    if (existsSync(coreDir)) issues.push(...new PlatformClaimScanner({ rootDir: coreDir }).scan());
+    const blockers = issues.filter(issue => issue.severity === 'error');
+    const verdict = blockers.length ? 'NEEDS_REPAIR' : 'DOM_READY';
+    return { verdict, issues, totalBlockers: blockers.length, auditedAt: new Date().toISOString() };
+  }
 }

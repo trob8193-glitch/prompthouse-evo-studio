@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Shield, Zap, RefreshCw, Brain, TrendingUp, CheckCircle, Radio } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 import { motion } from 'framer-motion';
+import { safeFetchBridge } from '../config/bridge-config.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 /**
  * PH EVO STUDIO — AUTONOMOUS SELF & TRAINING (ENTERPRISE GRADE)
@@ -57,20 +59,18 @@ export function AutonomousSelfView() {
     let active = true;
     async function loadData() {
       try {
-        const siRes = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/self-implementation/status');
+        const siRes = await safeFetchBridge('/api/self-implementation/status');
         if (siRes.ok && active) {
-          const data = await siRes.json();
-          setSelfImplementation(data);
+          setSelfImplementation(siRes.data);
         }
       } catch (e) {
         console.warn('Failed to load self-implementation status:', e);
       }
 
       try {
-        const auditRes = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/nuclear-truth/audit');
+        const auditRes = await safeFetchBridge('/api/nuclear-truth/audit');
         if (auditRes.ok && active) {
-          const data = await auditRes.json();
-          setNuclearAudit(data);
+          setNuclearAudit(auditRes.data);
         }
       } catch (e) {
         console.warn('Failed to load nuclear truth audit:', e);
@@ -85,11 +85,15 @@ export function AutonomousSelfView() {
   }, [bridgeStatus]);
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col gap-8 p-2"
+    <IDEPageLayout
+      title="Autonomous Self & Training"
+      description="Enterprise grade evolution and self-improvement tracking."
     >
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col gap-8 p-2"
+      >
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         
         {/* Self-Evolution Panel */}
@@ -274,7 +278,8 @@ export function AutonomousSelfView() {
           </div>
         </div>
       </div>
-    </motion.div>
+      </motion.div>
+    </IDEPageLayout>
   );
 }
 

@@ -4,9 +4,10 @@ import fs from 'fs';
 import path from 'path';
 
 import { Log } from '../autonomy/SovereignLogger.js';
+import { BRIDGE_URL } from '../../config/bridge-config.js';
 
 const VAULT_FILE = path.join(__dirname, 'canon_vault.json');
-const LOCAL_BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))))) + '';
+const LOCAL_BRIDGE_URL = BRIDGE_URL + '';
 
 class CanonVault {
     constructor() {

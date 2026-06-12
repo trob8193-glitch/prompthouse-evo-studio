@@ -1,7 +1,7 @@
 import React from 'react';
 import { Activity, AlertTriangle, CheckCircle2, FileJson, RefreshCw, ShieldCheck, Trophy } from 'lucide-react';
 import { safeFetchBridge } from '../config/bridge-config.js';
-
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 const card = {
   background: 'rgba(15,23,42,0.82)',
   border: '1px solid rgba(56,189,248,0.22)',
@@ -97,17 +97,17 @@ export default function ModuleMaturityDashboard() {
   const avgTone = avg >= 90 ? 'green' : avg >= 75 ? 'cyan' : avg >= 60 ? 'amber' : 'red';
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, color: '#e2e8f0' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-        <div>
-          <h1 style={{ fontSize: 28, fontWeight: 950, margin: 0, letterSpacing: '-.04em' }}>Module Maturity Engine</h1>
-          <p style={{ margin: '8px 0 0', color: '#94a3b8', maxWidth: 860 }}>Grades every major studio module against the 14-point production checklist: routes, UI, actions, services, data, errors, tests, build, audit, receipts, and user-readable success/failure. Finally, a scoreboard for the chaos. 🧪</p>
-        </div>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+    <IDEPageLayout
+      title="Module Maturity Engine"
+      description="Grades every major studio module against the 14-point production checklist."
+      actions={
+        <>
           <button style={button} onClick={refresh} disabled={busy}><RefreshCw size={15} /> Refresh</button>
           <button style={button} onClick={writeReceipt} disabled={busy}><FileJson size={15} /> Write Receipt</button>
-        </div>
-      </div>
+        </>
+      }
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, color: '#e2e8f0' }}>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 14 }}>
         <Stat label="Average Maturity" value={`${avg}%`} icon={Trophy} tone={avgTone} />
@@ -170,6 +170,7 @@ export default function ModuleMaturityDashboard() {
           {blockers.slice(0, 24).map((item, index) => <div key={`${item.moduleId}-${item.key}-${index}`} style={{ background: '#020617', border: '1px solid #1e293b', borderRadius: 10, padding: 10, display: 'flex', justifyContent: 'space-between', gap: 12 }}><span style={{ fontSize: 12, color: '#e2e8f0' }}>{item.moduleName}</span><Badge value={item.label} tone="amber" /></div>)}
         </div>
       </div>
-    </div>
+      </div>
+    </IDEPageLayout>
   );
 }

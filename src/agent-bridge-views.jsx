@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSovereignStore } from './store.js';
 
 import { Log } from './core/autonomy/SovereignLogger.js';
+import { BRIDGE_URL } from './config/bridge-config.js';
 
 export function AgentBridgeView() {
   const [receipts, setReceipts] = useState([]);
@@ -10,7 +11,7 @@ export function AgentBridgeView() {
 
   const fetchReceipts = async () => {
     try {
-      const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/browser-bridge/list');
+      const res = await fetch(BRIDGE_URL + '/api/browser-bridge/list');
       const data = await res.json();
       setReceipts(data.sort((a, b) => b.id.localeCompare(a.id)));
     } catch (e) {

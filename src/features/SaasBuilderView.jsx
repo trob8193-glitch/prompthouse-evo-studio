@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Network, Layout, Play, Eye, Server, Database, Code, Shield, CheckCircle2, Activity } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
-
 import { Log } from '../core/autonomy/SovereignLogger.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
+import { safeFetchBridge } from '../config/bridge-config.js';
 
 /**
  * PH EVO STUDIO — SAAS BUILDER (Absolute Operational Reality)
@@ -24,26 +25,22 @@ export default function SaasBuilderView() {
     
     try {
       // 1. PHYSICAL GATE: Verify local system integrity before build
-      const auditRes = await fetch(`${bridgeUrl}/api/reality/audit-connection`, {
+      const auditRes = await safeFetchBridge('/api/reality/audit-connection', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type: 'INTEGRITY_CHECK', data: { scope: 'SAAS_GENESIS' } })
       });
-      const audit = await auditRes.json();
       
-      if (!audit.verified) throw new Error('Physical Reality Audit Failed.');
+      if (!auditRes.ok || !auditRes.data?.verified) throw new Error('Physical Reality Audit Failed.');
 
       setTruthState('ORCHESTRATING_PHYSICAL_NODES');
 
-      const res = await fetch(`${bridgeUrl}/api/foundry/orchestrate`, {
+      const res = await safeFetchBridge('/api/foundry/orchestrate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, truthVerified: true }),
       });
       
-      const data = await res.json();
-      if (data.success) {
-        setBlueprint(data.nodes || []);
+      if (res.ok && res.data?.success) {
+        setBlueprint(res.data?.nodes || []);
         setTruthState('SIGNED_PHYSICAL');
       }
     } catch (e) {
@@ -55,7 +52,12 @@ export default function SaasBuilderView() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-10 animate-in fade-in duration-500">
+    <IDEPageLayout
+      title="SaaS Builder"
+      description="Absolute Operational Reality. Physically instantiates SaaS products."
+      icon={Layout}
+    >
+      <div className="flex flex-col space-y-10 animate-in fade-in duration-500">
       {/* Status Bar */}
       <div className="flex items-center justify-between bg-black/40 border border-slate-800 p-4 rounded-xl">
         <div className="flex items-center gap-4">
@@ -163,7 +165,8 @@ export default function SaasBuilderView() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </IDEPageLayout>
   );
 }
 

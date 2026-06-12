@@ -4,6 +4,7 @@ import { useSovereignStore } from '../store.js';
 import { getNightForgeSettings, updateNightForgeSettings } from '../nightforge.js';
 import OwnerApprovalPanel from '../components/OwnerApprovalPanel.jsx';
 import { OWNER_APPROVAL_SCOPES } from '../services/owner-approval-client.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 /**
  * PH EVO STUDIO — GLOBAL API SETTINGS (ENTERPRISE GRADE)
@@ -38,10 +39,9 @@ export function GlobalAPISettingsView() {
   const fetchPersonalKeys = async () => {
     setLoadingKeys(true);
     try {
-      const res = await fetch(`${apiConfig.bridgeUrl}/api/auth/keys`);
+      const res = await safeFetchBridge('/api/auth/keys');
       if (res.ok) {
-        const data = await res.json();
-        setPersonalKeys(data.keys || []);
+        setPersonalKeys(res.data?.keys || []);
       }
     } catch (e) {
       console.error('Failed to fetch personal keys:', e);
@@ -60,14 +60,12 @@ export function GlobalAPISettingsView() {
     }
     setGeneratingKey(true);
     try {
-      const res = await fetch(`${apiConfig.bridgeUrl}/api/auth/keys`, {
+      const res = await safeFetchBridge('/api/auth/keys', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newKeyName })
       });
       if (res.ok) {
-        const data = await res.json();
-        setNewKeyPayload(data.rawKey);
+        setNewKeyPayload(res.data?.rawKey);
         setNewKeyName('');
         fetchPersonalKeys();
         addNotification('Personal Evo API key generated.', 'success');
@@ -83,7 +81,7 @@ export function GlobalAPISettingsView() {
   const handleRevokeKey = async (id) => {
     if (!confirm('Are you sure you want to revoke this API key? This will immediately sever any external IDE tethers using it.')) return;
     try {
-      const res = await fetch(`${apiConfig.bridgeUrl}/api/auth/keys/${id}`, {
+      const res = await safeFetchBridge(`/api/auth/keys/${id}`, {
         method: 'DELETE'
       });
       if (res.ok) {
@@ -156,11 +154,12 @@ export function GlobalAPISettingsView() {
   };
 
   return (
+    <IDEPageLayout
+      title="Settings & API"
+      description="Configure your API keys, model, and bridge connection."
+      icon={Settings}
+    >
     <div style={{ maxWidth: 720, margin: '0 auto' }}>
-      <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.03em', margin: 0 }}>Settings & API</h1>
-        <p style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>Configure your API keys, model, and bridge connection.</p>
-      </div>
 
       {/* API Keys Card */}
       <div style={{ background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: 24, marginBottom: 16 }}>
@@ -498,6 +497,7 @@ export function GlobalAPISettingsView() {
         </div>
       )}
     </div>
+    </IDEPageLayout>
   );
 }
 

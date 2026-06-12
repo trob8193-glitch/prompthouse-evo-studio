@@ -3,7 +3,7 @@
   "success": true,
   "truthState": "LOCAL_ONLY",
   "liveRequested": false,
-  "checkedAt": "2026-06-11T15:58:55.041Z",
+  "checkedAt": "2026-06-12T06:24:16.713Z",
   "summary": {
     "totalActions": 4,
     "readyActions": 4,
@@ -20,13 +20,13 @@
       "envKey": "GEMINI_API_KEY",
       "configured": true,
       "truthState": "BUILT",
-      "redacted": "AIza****Z8KQ"
+      "redacted": "simu****pass"
     },
     "stripe": {
       "envKey": "STRIPE_SECRET_KEY",
       "configured": true,
       "truthState": "BUILT",
-      "redacted": "simu****pass"
+      "redacted": "sk_l****pass"
     },
     "vercel": {
       "envKey": "VERCEL_TOKEN",
@@ -105,7 +105,7 @@
   "blockers": [],
   "receipts": [
     {
-      "id": "rcpt_1781193535033_izqi5",
+      "id": "rcpt_1781245456707_64lwa",
       "provider": "openai",
       "action": "ai_provider_probe",
       "status": "armed_local_only",
@@ -113,10 +113,10 @@
       "message": "openai has credentials; live action was not requested.",
       "requestHash": "0228eba87335fbe8",
       "responseHash": "a1e78a38c0520ed4",
-      "createdAt": "2026-06-11T15:58:55.035Z"
+      "createdAt": "2026-06-12T06:24:16.708Z"
     },
     {
-      "id": "rcpt_1781193535038_h4g5n",
+      "id": "rcpt_1781245456710_k6zw3",
       "provider": "gemini",
       "action": "ai_provider_probe",
       "status": "armed_local_only",
@@ -124,10 +124,10 @@
       "message": "gemini has credentials; live action was not requested.",
       "requestHash": "0228eba87335fbe8",
       "responseHash": "a1e78a38c0520ed4",
-      "createdAt": "2026-06-11T15:58:55.038Z"
+      "createdAt": "2026-06-12T06:24:16.710Z"
     },
     {
-      "id": "rcpt_1781193535039_16uvn",
+      "id": "rcpt_1781245456711_0ndkh",
       "provider": "stripe",
       "action": "stripe_test_checkout",
       "status": "armed_local_only",
@@ -135,10 +135,10 @@
       "message": "stripe has credentials; live action was not requested.",
       "requestHash": "fc221f1271107d8e",
       "responseHash": "e736d411e2b570cd",
-      "createdAt": "2026-06-11T15:58:55.039Z"
+      "createdAt": "2026-06-12T06:24:16.711Z"
     },
     {
-      "id": "rcpt_1781193535040_fu1tn",
+      "id": "rcpt_1781245456712_cc4zd",
       "provider": "vercel",
       "action": "vercel_preview_deploy",
       "status": "armed_local_only",
@@ -146,7 +146,7 @@
       "message": "vercel has credentials; live action was not requested.",
       "requestHash": "1a9718757f640970",
       "responseHash": "abfae1d6c3f1652e",
-      "createdAt": "2026-06-11T15:58:55.040Z"
+      "createdAt": "2026-06-12T06:24:16.712Z"
     }
   ]
 }

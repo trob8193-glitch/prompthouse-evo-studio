@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Zap, Shield, Cpu, Layers } from 'lucide-react';
 import { Log } from '../core/autonomy/SovereignLogger.js';
+import { safeFetchBridge } from '../config/bridge-config.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 /**
  * PH EVO STUDIO — RARE CAPABILITIES (Physical Edition)
@@ -35,14 +37,14 @@ export default function RareCapabilities() {
     const fetchRealityStats = async () => {
       try {
         const [auditRes, proofRes, diagRes] = await Promise.all([
-          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/audit/nuclear-truth'),
-          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/proof/count'),
-          fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/studio/diagnostics?limit=25'),
+          safeFetchBridge('/api/audit/nuclear-truth'),
+          safeFetchBridge('/api/proof/count'),
+          safeFetchBridge('/api/studio/diagnostics?limit=25'),
         ]);
 
-        const audit = await auditRes.json().catch(() => null);
-        const proof = await proofRes.json().catch(() => null);
-        const diag = await diagRes.json().catch(() => null);
+        const audit = auditRes.data;
+        const proof = proofRes.data;
+        const diag = diagRes.data;
 
         setStats({
           ledgerEntries: Number(proof?.count || 0),
@@ -57,12 +59,11 @@ export default function RareCapabilities() {
   }, []);
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Rare Capabilities</h2>
-        <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest italic">Physical Truth Active</div>
-      </div>
-
+    <IDEPageLayout
+      title="Rare Capabilities"
+      description="Physical Truth Active"
+      icon={Cpu}
+    >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <CapabilityCard 
           title="Cognitive X-Ray" 
@@ -103,6 +104,6 @@ export default function RareCapabilities() {
           status="STABLE"
         />
       </div>
-    </div>
+    </IDEPageLayout>
   );
 }

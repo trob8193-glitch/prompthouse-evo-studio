@@ -74,11 +74,11 @@ async function runBuilderCycle(isDryRun = false) {
 // Support manual execution from CLI
 const args = process.argv.slice(2);
 const isDryRun = args.includes('--dry-run');
+const isDaemon = args.includes('--daemon') || process.env.DAEMON_MODE === 'true';
 
 runBuilderCycle(isDryRun).then(() => {
-  // If not dry-run and launched as daemon, we could loop it. 
-  // For now, it runs once per invocation.
-  if (!isDryRun && process.env.DAEMON_MODE === 'true') {
+  // If not dry-run and launched as daemon, loop it.
+  if (!isDryRun && isDaemon) {
     setInterval(() => runBuilderCycle(false), DAEMON_INTERVAL_MS);
   }
 });

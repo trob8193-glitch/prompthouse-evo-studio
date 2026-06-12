@@ -16,13 +16,17 @@ function statePath(rootDir) { return path.join(getEvoLlmPaths({ rootDir }).base,
 function approvalsPath(rootDir) { return path.join(getEvoLlmPaths({ rootDir }).base, APPROVALS_FILE); }
 
 export function getEvoTrainingState({ rootDir = process.cwd() } = {}) {
-  return readJsonSafe(statePath(rootDir), {
+  const state = readJsonSafe(statePath(rootDir), {
     truthState: 'NO_TRAINING_RUNS',
     runs: [],
     activeModel: null,
     promotedModels: [],
     rolledBackModels: []
   });
+  if (!state.runs) state.runs = [];
+  if (!state.promotedModels) state.promotedModels = [];
+  if (!state.rolledBackModels) state.rolledBackModels = [];
+  return state;
 }
 
 function saveState(rootDir, state) {
@@ -95,7 +99,7 @@ export function planEvoLlmTraining({
 }
 
 export function approveEvoTrainingPlan({ rootDir = process.cwd(), planId, actor = 'studio_owner', note = '' } = {}) {
-  if (!planId) throw new Error('planId is required.');
+  if (!planId || typeof planId !== 'string') throw new Error('Valid planId is required.');
   const state = getEvoTrainingState({ rootDir });
   const plan = state.runs.find((run) => run.id === planId);
   if (!plan) throw new Error(`Unknown training plan: ${planId}`);
@@ -115,7 +119,7 @@ export function approveEvoTrainingPlan({ rootDir = process.cwd(), planId, actor 
 }
 
 export function runEvoTrainingJob({ rootDir = process.cwd(), planId, provider = 'local-dataset-only' } = {}) {
-  if (!planId) throw new Error('planId is required.');
+  if (!planId || typeof planId !== 'string') throw new Error('Valid planId is required.');
   const approvals = loadApprovals(rootDir);
   const approved = approvals.find((approval) => approval.planId === planId);
   if (!approved) {
@@ -166,7 +170,7 @@ export function runEvoTrainingJob({ rootDir = process.cwd(), planId, provider = 
 }
 
 export function promoteEvoModel({ rootDir = process.cwd(), modelId, actor = 'studio_owner' } = {}) {
-  if (!modelId) throw new Error('modelId is required.');
+  if (!modelId || typeof modelId !== 'string') throw new Error('Valid modelId is required.');
   const state = getEvoTrainingState({ rootDir });
   const promotion = {
     modelId,

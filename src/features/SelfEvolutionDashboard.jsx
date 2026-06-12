@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Activity, AlertTriangle, Brain, CheckCircle2, PauseCircle, PlayCircle, RefreshCw, Shield, Square, Zap } from 'lucide-react';
 import { safeFetchBridge } from '../config/bridge-config.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 function Badge({ value, tone = 'cyan' }) {
   const colors = {
@@ -112,25 +113,20 @@ export default function SelfEvolutionDashboard() {
   const killSwitch = daemon?.killSwitch || null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-      style={{ display: 'flex', flexDirection: 'column', gap: 20, color: '#e2e8f0' }}
+    <IDEPageLayout
+      title="Self-Evolution Control"
+      description="Proof-gated repair cycles, sandbox patching, rollback receipts, daemon controls."
+      actions={
+        <ActionButton onClick={refresh} disabled={busy}><RefreshCw size={14} /> Refresh</ActionButton>
+      }
     >
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-          <div>
-            <h1 style={{ fontSize: 36, fontWeight: 900, margin: 0, letterSpacing: '-0.04em', color: '#fff', textShadow: '0 0 20px rgba(0,255,136,0.3)' }}>Self-Evolution Control</h1>
-            <p style={{ margin: '10px 0 0', color: '#00ff88', fontSize: 13, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', maxWidth: 780 }}>
-              Proof-gated repair cycles, sandbox patching, rollback receipts, daemon controls.
-            </p>
-          </div>
-          <ActionButton onClick={refresh} disabled={busy}><RefreshCw size={14} /> Refresh</ActionButton>
-        </div>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 16 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+        style={{ display: 'flex', flexDirection: 'column', gap: 20, color: '#e2e8f0' }}
+      >
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 16 }}>
         <Stat label="Truth State" value={<Badge value={truthState} tone={truthState.includes('PASS') || truthState === 'ROLLED_BACK' ? 'green' : truthState.includes('FAIL') ? 'red' : 'cyan'} />} icon={Shield} />
         <Stat label="Recent Runs" value={receipts.length} icon={Activity} />
         <Stat label="Memory Patterns" value={memory.length} icon={Brain} />
@@ -210,6 +206,7 @@ export default function SelfEvolutionDashboard() {
           </div>
         </SectionCard>
       </div>
-    </motion.div>
+      </motion.div>
+    </IDEPageLayout>
   );
 }

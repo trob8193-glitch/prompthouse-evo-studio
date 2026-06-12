@@ -1,10 +1,11 @@
+import { BRIDGE_URL } from '../config/bridge-config.js';
 // Browser-safe transport client.
 // All provider calls must go through PromptBridge (never ship provider keys to the browser).
 
 const LS_ENDPOINTS = 'ph_evo_custom_endpoints_v1';
 const LS_OFFLINE_QUEUE = 'ph_evo_offline_queue_v1';
 
-const DEFAULT_BRIDGE = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))));
+const DEFAULT_BRIDGE = BRIDGE_URL;
 
 function readJson(key, fallback) {
   try {

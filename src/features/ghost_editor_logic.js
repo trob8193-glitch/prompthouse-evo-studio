@@ -42,8 +42,17 @@ export class GhostEditorLogic {
     if (!fs.existsSync(absolutePath)) {
       throw new Error(`File not found: ${relativePath}`);
     }
+    
+    if (!fs.statSync(absolutePath).isFile()) {
+      throw new Error(`Invalid target: ${relativePath} is not a file`);
+    }
 
-    const originalCode = fs.readFileSync(absolutePath, 'utf8');
+    let originalCode;
+    try {
+      originalCode = fs.readFileSync(absolutePath, 'utf8');
+    } catch (e) {
+      throw new Error(`Failed to read file ${relativePath}: ${e.message}`);
+    }
 
     // Real AI Optimization Call
     if (this.ai) {
@@ -80,6 +89,10 @@ ${originalCode}`;
   mergeOptimization(absolutePath, code, ownerApproval = {}) {
     if (!fs.existsSync(absolutePath)) {
       throw new Error(`Cannot merge ghost layer: target file not found (${absolutePath})`);
+    }
+
+    if (!fs.statSync(absolutePath).isFile()) {
+      throw new Error(`Cannot merge ghost layer: target is not a file (${absolutePath})`);
     }
 
     if (this.isProtectedCorePath(absolutePath) && !hasExplicitOwnerApproval(ownerApproval, 'core_merge')) {

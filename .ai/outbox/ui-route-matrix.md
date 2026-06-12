@@ -1,9 +1,9 @@
 # Full UI Button-to-Route Matrix
 
-**Generated**: 2026-06-12T05:35:19.330Z
-**Components Scanned**: 133
-**Known Backend Routes**: 271
-**Potential Dead Links Detected**: 1
+**Generated**: 2026-06-12T14:22:30.875Z
+**Components Scanned**: 134
+**Known Backend Routes**: 276
+**Potential Dead Links Detected**: 0
 
 ## Matrix
 
@@ -142,26 +142,6 @@
 
 ---
 
-### src\components\AgentChatPanel.jsx
-**Interactive Controls**: 
-- Reset
-- setSelectedBot(bot.id)}
-              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
-                selectedBot === bot.id
-                  ? 'text-white border-transparent shadow-lg'
-                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'
-              }`}
-              style={selectedBot === bot.id ? { backgroundColor: bot.palette.primary } : {}}
-              title={bot.role}
-            >
-              {bot.icon} {bot.name}
-- {loading ?  : }
-            {loading ? '...' : 'Send'}
-
-**API Calls Triggered**: (No direct fetch calls detected)
-
----
-
 ### src\components\AiProviderProofPanel.jsx
 **Interactive Controls**: 
 - handleProbe('openai')}
@@ -256,6 +236,30 @@
 ### src\components\ErrorBoundary.jsx
 **Interactive Controls**: 
 - Retry
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\components\EvoCopilot.jsx
+**Interactive Controls**: 
+- Run in Terminal
+- {applied ?  : }
+                      {applied ? 'Applied!' : 'Apply to File'}
+- setActivePage('settings')}
+              className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors"
+            >
+- setSelectedBot(bot.id)}
+              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
+                selectedBot === bot.id
+                  ? 'text-white border-transparent shadow-lg'
+                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'
+              }`}
+              style={selectedBot === bot.id ? { backgroundColor: bot.palette?.primary || '#10b981' } : {}}
+              title={bot.role}
+            >
+              {bot.icon} {bot.name}
+- {loading ?  : }
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -368,52 +372,38 @@
 
 ### src\components\Navigation.jsx
 **Interactive Controls**: 
+- {
+                setActiveGroup(group.id);
+                if (collapsed) toggleSidebar();
+              }}
+              title={group.label}
+              style={{
+                width: 40, height: 40, borderRadius: 8,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: isActive ? '#ffffff' : '#5a5a72',
+                background: isActive ? 'rgba(255,255,255,0.05)' : 'transparent',
+                marginBottom: 8, transition: 'all 0.2s',
+                position: 'relative', border: 'none', cursor: 'pointer'
+              }}
+              onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = '#00f0ff'; }}
+              onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#5a5a72'; }}
+            >
+              {isActive && }
 - setActivePage(item.id)}
-                  title={collapsed ? item.label : undefined}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 12,
-                    width: '100%',
-                    padding: collapsed ? '10px 0' : '9px 14px',
-                    justifyContent: collapsed ? 'center' : 'flex-start',
-                    border: '1px solid transparent',
-                    borderRadius: 14,
-                    cursor: 'pointer',
-                    fontSize: 13,
-                    fontWeight: isActive ? 700 : 600,
-                    color: isActive ? '#ffffff' : '#737385',
-                    background: isActive 
-                      ? 'linear-gradient(90deg, rgba(0,240,255,0.1), transparent)' 
-                      : 'transparent',
-                    borderColor: isActive ? 'rgba(0,240,255,0.2)' : 'transparent',
-                    boxShadow: isActive ? 'inset 3px 0 0 #00f0ff' : 'none',
-                    transition: 'all 0.3s cubic-bezier(0.2,0.8,0.2,1)',
-                    marginBottom: 3,
-                    textAlign: 'left',
-                    position: 'relative',
-                    overflow: 'hidden',
+                    display: 'flex', alignItems: 'center', gap: 10, width: '100%',
+                    padding: '7px 10px', borderRadius: 6, cursor: 'pointer',
+                    fontSize: 12, fontWeight: isActive ? 600 : 500,
+                    color: isActive ? '#ffffff' : '#8e8e9f',
+                    background: isActive ? 'rgba(0,240,255,0.1)' : 'transparent',
+                    border: '1px solid transparent', textAlign: 'left', marginBottom: 2,
+                    transition: 'all 0.2s', borderColor: isActive ? 'rgba(0,240,255,0.2)' : 'transparent'
                   }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-                      e.currentTarget.style.color = '#ffffff';
-                      e.currentTarget.style.transform = 'translateX(4px)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.color = '#737385';
-                      e.currentTarget.style.transform = 'translateX(0)';
-                    }
-                  }}
+                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
+                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
                 >
-                  {isActive && (
-                    
-                  )}
                   
-                  {!collapsed && {item.label}}
+                  {item.label}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -537,42 +527,80 @@
 ### src\components\Terminal.jsx
 **Interactive Controls**: 
 - setTerminalOpen(true)}
-      className="fixed bottom-0 left-[260px] right-0 h-9 bg-black border-t border-indigo-500/30 flex items-center px-6 hover:bg-slate-900 transition-all z-30 group"
-    >
-      
-      Open Master EvoShell Terminal
+        className="evo-shell-container h-10 w-full flex items-center px-6 z-30 shrink-0 group"
+        style={{ background: 'linear-gradient(90deg, rgba(5,5,8,0.95), rgba(10,10,20,0.95))' }}
+      >
+        
+        
+        
+          EvoShell Master Control
+        
+        
+          
+          STANDBY
 - setActiveTerminalSession(session)}
-                className={`px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded transition-all ${
-                  activeTerminalSession === session 
-                    ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' 
-                    : 'text-slate-500 hover:text-slate-300'
-                }`}
-              >
-                {session}
-- setTerminalTheme('evo')} className={`w-3 h-3 rounded-full bg-indigo-500 ${terminalTheme === 'evo' ? 'ring-2 ring-white' : 'opacity-40'}`} />
-             setTerminalTheme('matrix')} className={`w-3 h-3 rounded-full bg-emerald-500 ${terminalTheme === 'matrix' ? 'ring-2 ring-white' : 'opacity-40'}`} />
-             setTerminalTheme('classic')} className={`w-3 h-3 rounded-full bg-slate-500 ${terminalTheme === 'classic' ? 'ring-2 ring-white' : 'opacity-40'}`} />
-- clearTerminal(activeTerminalSession)} title="Clear Session" className="text-slate-500 hover:text-rose-400 transition-colors">
-- setIsFullscreen(!isFullscreen)} title="Fullscreen" className="text-slate-500 hover:text-white transition-colors">
-            {isFullscreen ?  : }
-- setTerminalOpen(false)} title="Minimize" className="text-slate-500 hover:text-white transition-colors">
-- setCatalogOpen((value) => !value)}
-            className="shrink-0 flex items-center gap-2 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] rounded border border-indigo-500/30 text-indigo-300 hover:text-white hover:border-indigo-400 transition-colors"
-            title="Toggle command catalog"
-          >
+                  style={{
+                    padding: '4px 10px', borderRadius: 4, fontSize: 8, fontWeight: 800,
+                    letterSpacing: '0.15em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    background: activeTerminalSession === session ? tc.accent : 'transparent',
+                    color: activeTerminalSession === session ? '#000' : '#475569',
+                    boxShadow: activeTerminalSession === session ? `0 0 12px ${tc.accent}40` : 'none'
+                  }}
+                >
+                  {session}
+- setTerminalTheme(t.id)}
+                  style={{
+                    width: 10, height: 10, borderRadius: '50%', border: 'none', cursor: 'pointer',
+                    background: t.color,
+                    opacity: terminalTheme === t.id ? 1 : 0.3,
+                    boxShadow: terminalTheme === t.id ? `0 0 8px ${t.color}` : 'none',
+                    transition: 'all 0.2s'
+                  }}
+                />
+              ))}
             
-            Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}
-- runCatalogCommand(item)}
-                disabled={executing}
-                className="text-left p-2 rounded border border-slate-800 bg-black/35 hover:border-indigo-500/40 hover:bg-indigo-500/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                title={`Run: ${item.command}`}
+
+            
+
+            {/* Action Buttons */}
+            {[
+              { icon: Copy, title: 'Copy Output', onClick: copyToClipboard },
+              { icon: Download, title: 'Download Logs', onClick: downloadLogs },
+              { icon: Trash2, title: 'Clear Session', onClick: () => clearTerminal(activeTerminalSession), hoverColor: '#f43f5e' },
+              { icon: isFullscreen ? Minimize2 : Maximize2, title: 'Fullscreen', onClick: () => setIsFullscreen(!isFullscreen) },
+              { icon: ChevronDown, title: 'Minimize', onClick: () => setTerminalOpen(false) }
+            ].map((btn, i) => (
+               e.currentTarget.style.color = btn.hoverColor || tc.accent}
+                onMouseLeave={e => e.currentTarget.style.color = '#475569'}
               >
-                
-                  {item.label}
-                  {item.session}
-                
-                {item.description}
-                {item.command}
+- setCatalogOpen(v => !v)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',
+                borderRadius: 6, fontSize: 9, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase',
+                border: `1px solid ${tc.accent}30`, color: tc.accent, background: 'transparent', cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = `${tc.accent}15`; e.currentTarget.style.borderColor = `${tc.accent}60`; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = `${tc.accent}30`; }}
+            >
+              
+              Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}
+              {catalogOpen ?  : }
+- runCatalogCommand(item)}
+                  disabled={executing}
+                  className="evo-cmd-card"
+                  style={executing ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                >
+                  
+                    {item.label}
+                    {item.session}
+                  
+                  {item.description}
+                  {item.command}
+- { e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'scale(1.15)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = tc.accent; e.currentTarget.style.transform = 'scale(1)'; }}
+            >
 
 **API Calls Triggered**:
 - `/api/intelligence/execute` -> ✅ ALIVE
@@ -761,8 +789,7 @@
                   
                     {m.health}
 
-**API Calls Triggered**:
-- `/api/studio/diagnostics?limit=70` -> ✅ ALIVE
+**API Calls Triggered**: (No direct fetch calls detected)
 
 ---
 
@@ -920,7 +947,7 @@
 
 ### src\features\MetricsView.jsx
 **Interactive Controls**: 
-- { setLoading(true); fetchAll(); }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>
+- { fetchAll(); }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>
            Refresh
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -963,7 +990,7 @@
 
 ### src\features\PlatformSentinelDashboard.jsx
 **Interactive Controls**: 
-- {loading ? 'Auditing…' : 'Refresh Audit'}
+- {loading || learningLoading ? 'Auditing…' : 'Refresh Audit'}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -971,15 +998,14 @@
 
 ### src\features\PricingCheckout.jsx
 **Interactive Controls**: 
-- Downgrade/Reset License
+- Reset
 - setShowSimulator(null)}
                 className="text-slate-400 hover:text-white text-sm"
                 disabled={simulationStep === 1}
               >
                 ✕
 
-**API Calls Triggered**:
-- `/api/commerce/checkout` -> ✅ ALIVE
+**API Calls Triggered**: (No direct fetch calls detected)
 
 ---
 
@@ -1025,25 +1051,6 @@
 
 ---
 
-### src\features\SovereignChat.jsx
-**Interactive Controls**: 
-- Run in Terminal
-- {applied ?  : }
-                      {applied ? 'Applied!' : 'Apply to File'}
-- setActiveSurface(id)}
-                className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${
-                  activeSurface === id ? 'bg-emerald-500 text-black' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-                }`}
-              >
-                {label}
-- setActivePage('settings')}
-            className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors"
-          >
-
-**API Calls Triggered**: (No direct fetch calls detected)
-
----
-
 ### src\features\SovereignIntelligenceDashboard.jsx
 **Interactive Controls**: 
 - { e.currentTarget.style.borderColor = color; e.currentTarget.style.background = `${color}15`; e.currentTarget.style.transform = 'translateX(6px)'; e.currentTarget.style.boxShadow = `0 0 30px ${color}20`; }}
@@ -1055,11 +1062,7 @@
       
         {label}
         {sub}
-- { e.currentTarget.style.background = 'rgba(0,240,255,0.2)'; e.currentTarget.style.boxShadow = '0 0 25px rgba(0,240,255,0.3)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(0,240,255,0.1)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(0,240,255,0.15)'; }}
-        >
-          
-          {refreshing ? 'Syncing...' : 'Refresh'}
+- {refreshing ? 'Syncing...' : 'Refresh'}
 - useSovereignStore.getState().runTruthProbe()}
               className="text-[9px] text-indigo-400 font-black uppercase tracking-widest hover:text-indigo-300"
             >
@@ -1080,23 +1083,39 @@
 ### src\features\StudioMarketplaceDashboard.jsx
 **Interactive Controls**: 
 - setActiveTab(tab)}
-            className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider transition-colors ${
-              activeTab === tab 
-                ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/50' 
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
-            }`}
-          >
-            {tab} Formats
-- Tether
+          className={`px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-wider transition-colors ${
+            activeTab === tab 
+              ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/50' 
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-transparent'
+          }`}
+        >
+          {tab}
+- !isTethered && !isTethering && handleTether(ext)}
+                  disabled={isTethering || isTethered}
+                  className={`flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-lg transition-all ${
+                    isTethered 
+                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' 
+                      : isTethering
+                        ? 'bg-indigo-500/20 text-indigo-400 animate-pulse border border-indigo-500/50'
+                        : 'text-[#00f0ff] hover:text-white bg-[#00f0ff]/10 hover:bg-[#00f0ff]/30 border border-transparent'
+                  }`}
+                >
+                  {isTethered ? (
+                    <> Tethered
+                  ) : isTethering ? (
+                    <> Tethering...
+                  ) : (
+                    <> Tether
+                  )}
 
-**API Calls Triggered**:
-- `/api/marketplace/catalog` -> ❌ DEAD LINK / UNREGISTERED
+**API Calls Triggered**: (No direct fetch calls detected)
 
 ---
 
 ### src\features\ThemeEvolutionDashboard.jsx
 **Interactive Controls**: 
-- e.currentTarget.style.background = 'rgba(0,240,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,240,255,0.1)'}> Refresh Vector
+- e.currentTarget.style.background = 'rgba(0,240,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,240,255,0.1)'}>
+           Refresh Vector
 - Suggest
 - Preview
 - Approve
@@ -1130,8 +1149,7 @@
                   >
                     {p.replace(/_/g, ' ')}
 
-**API Calls Triggered**:
-- `/api/intelligence/execute` -> ✅ ALIVE
+**API Calls Triggered**: (No direct fetch calls detected)
 
 ---
 
@@ -1208,8 +1226,8 @@
 - 🧬 Spawn Intelligence
 - {
             if (!bridgeName) return;
-            const code = `// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\nexport async function ${bridgeName.replace(/\s+/g, '')}Bridge(payload) {\n  const response = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '${endpoint}', {\n    method: 'POST',\n    body: JSON.stringify(payload)\n  });\n  return response.json();\n}`;
-            fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/files/write', {
+            const code = `// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\nexport async function ${bridgeName.replace(/\s+/g, '')}Bridge(payload) {\n  const response = await fetch(BRIDGE_URL + '${endpoint}', {\n    method: 'POST',\n    body: JSON.stringify(payload)\n  });\n  return response.json();\n}`;
+            fetch(BRIDGE_URL + '/api/files/write', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

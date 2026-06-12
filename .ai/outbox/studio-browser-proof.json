@@ -1,31 +1,6 @@
 {
-  "success": true,
-  "truthState": "BROWSER_E2E_PROOF_CLEAR",
-  "checkedAt": "2026-06-09T15:07:22.833Z",
-  "previewUrl": "http://127.0.0.1:4173",
-  "bridgeUrl": "http://127.0.0.1:3001",
-  "clickedPages": [
-    "Settings & API",
-    "Deployment Center",
-    "Cost Firewall",
-    "Theme Evolution",
-    "Launch Proof"
-  ],
-  "apiTruthStates": {
-    "studio": "STUDIO_SCAN_CLEAR",
-    "security": "SECURITY_AUDIT_CLEAR",
-    "providers": "PROVIDER_GATED"
-  },
-  "domSummary": {
-    "title": "PromptHouse Evo Studio",
-    "buttons": 98,
-    "links": 3,
-    "inputs": 2,
-    "rootTextLength": 4711,
-    "visibleTextSample": "PromptHouse Evo\nSTUDIO\nLOGIC DENSITY:\n0.00M IQ\nSTUDIO IQ:\n0\n⚡\nGemini 2.0 Flash\nFAST\n▼\nCOUNCIL:\nDeadHunter\nTruthAuditor\nMaturityScore\nBRIDGE ONLINE\nMANIFEST SINGULARITY ENGINE\nSTUDIO\nCommand Center\nSingularity Studio\nApp Market\nLaunch Proof\nEvo Copilot\nEvo Agent Chat\nWorkspace Explorer\nGhost Editor\nGOVERNANCE\nSelf-Evolution\nCost Firewall\nReview Ledger\nProof Docs\nINTELLIGENCE\nPrompt Registry\nEvo Diffuser\nEvo Pixelator\nEvo Layout\nTheme Evolution\nEvoPulse Grid\nOPERATIONS\nExecution Queue\nBrain Surfac"
-  },
-  "consoleErrors": [],
-  "pageErrors": [],
-  "failures": [],
-  "screenshot": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.ai\\outbox\\studio-browser-proof.png"
+  "success": false,
+  "truthState": "BROWSER_E2E_PROOF_BLOCKED",
+  "checkedAt": "2026-06-12T06:24:40.139Z",
+  "error": "Button not found: Settings & API. Visible text sample: ⚡\nPromptHouse Evo\nSTUDIO — SINGULARITY\nLOGIC DENSITY:\n165.00 IQ\nSTUDIO IQ:\n165,000,000\n⚡\nGemini 2.0 Flash\nFAST\n▼\nCOUNCIL:\nDeadHunter\nTruthAuditor\nMaturityScore\nBRIDGE ONLINE\nOPEN EVO SINGULARITY ENGINE\nSTUDIO\nCommand Center\nSingularity Studio\nApp Market\nOmni-Marketplace\nLaunch Proof\nEvo Copilot\nEvo Agent Chat\nWorkspace Explorer\nGhost Editor\nGOVERNANCE\nSelf-Evolution\nCost Firewall\nReview Ledger\nProof Docs\nINTELLIGENCE\nPrompt Registry\nEvo Diffuser\nEvo Pixelator\nEvo Layout\nTheme Evolution\nEvoPulse Grid\nAI Generator\nOPERATIONS\nExecution Queue\nBrain Surfaces\nProof Console\nProof Center\nEvo Eyes\nVali"
 }

@@ -2,21 +2,40 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Lock, ScrollText, FileCheck, AlertCircle, Loader2 } from 'lucide-react';
 import { safeFetchBridge } from '../config/bridge-config.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
-function useBridgeJson(path) {
+function useBridgeJson(path, maxRetries = 3) {
   const [state, setState] = React.useState({ loading: true, data: null, error: null });
   React.useEffect(() => {
     let active = true;
-    setState({ loading: true, data: null, error: null });
-    safeFetchBridge(path)
-      .then(result => {
+    let retryCount = 0;
+    
+    const fetchData = async () => {
+      try {
+        if (!active) return;
+        setState(prev => ({ ...prev, loading: true }));
+        const result = await safeFetchBridge(path);
+        
         if (!active) return;
         if (!result.ok) throw new Error(result.error || `Request failed: ${path}`);
+        
         setState({ loading: false, data: result.data, error: null });
-      })
-      .catch(error => active && setState({ loading: false, data: null, error: error.message }));
+      } catch (error) {
+        if (!active) return;
+        
+        if (retryCount < maxRetries) {
+          retryCount++;
+          const delay = Math.pow(2, retryCount) * 500;
+          setTimeout(fetchData, delay);
+        } else {
+          setState({ loading: false, data: null, error: error.message });
+        }
+      }
+    };
+    
+    fetchData();
     return () => { active = false; };
-  }, [path]);
+  }, [path, maxRetries]);
   return state;
 }
 
@@ -122,66 +141,45 @@ function PageHeader({ title, subtitle, icon: Icon, color = '#00f0ff' }) {
 export function SelfEvolutionDashboard() {
   const metrics = useBridgeJson('/api/metrics');
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-      style={{ display: 'flex', flexDirection: 'column', gap: 20 }}
+    <IDEPageLayout
+      title="Self-Evolution Dashboard"
+      description="Readiness view for mutation, receipts, and maturity evidence."
+      icon={Shield}
     >
-      <PageHeader
-        title="Self-Evolution Dashboard"
-        subtitle="Readiness view for mutation, receipts, and maturity evidence."
-        icon={Shield}
-        color="#00ff88"
-      />
       <Panel title="Maturity + Review Snapshot" icon={Shield} color="#00ff88">
         <StateBlock state={metrics} />
       </Panel>
-    </motion.div>
+    </IDEPageLayout>
   );
 }
 
 export function CostFirewallDashboard() {
   const metrics = useBridgeJson('/api/metrics');
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-      style={{ display: 'flex', flexDirection: 'column', gap: 20 }}
+    <IDEPageLayout
+      title="Cost Firewall"
+      description="Budget, review, and cost velocity evidence for autonomous safety."
+      icon={Lock}
     >
-      <PageHeader
-        title="Cost Firewall"
-        subtitle="Budget, review, and cost velocity evidence for autonomous safety."
-        icon={Lock}
-        color="#f59e0b"
-      />
       <Panel title="Cost Velocity" icon={Lock} color="#f59e0b">
         <StateBlock state={metrics} />
       </Panel>
-    </motion.div>
+    </IDEPageLayout>
   );
 }
 
 export function ReviewLedgerView() {
   const reviews = useBridgeJson('/api/reviews');
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-      style={{ display: 'flex', flexDirection: 'column', gap: 20 }}
+    <IDEPageLayout
+      title="Review Ledger"
+      description="Stored Gatekeeper and Auditor review records."
+      icon={ScrollText}
     >
-      <PageHeader
-        title="Review Ledger"
-        subtitle="Stored Gatekeeper and Auditor review records."
-        icon={ScrollText}
-        color="#8a2be2"
-      />
       <Panel title="Reviews" icon={ScrollText} color="#8a2be2">
         <StateBlock state={reviews} />
       </Panel>
-    </motion.div>
+    </IDEPageLayout>
   );
 }
 
@@ -189,18 +187,11 @@ export function ProofDocsView() {
   const docs = useBridgeJson('/api/proof-docs');
   const data = docs.data?.docs || {};
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-      style={{ display: 'flex', flexDirection: 'column', gap: 20 }}
+    <IDEPageLayout
+      title="Proof Docs"
+      description="Generated proof-facing documentation from local receipts."
+      icon={FileCheck}
     >
-      <PageHeader
-        title="Proof Docs"
-        subtitle="Generated proof-facing documentation from local receipts."
-        icon={FileCheck}
-        color="#00f0ff"
-      />
       {docs.loading || docs.error ? (
         <Panel title="Status" icon={FileCheck} color="#00f0ff">
           <StateBlock state={docs} />
@@ -254,7 +245,7 @@ export function ProofDocsView() {
           </Panel>
         </>
       )}
-    </motion.div>
+    </IDEPageLayout>
   );
 }
 

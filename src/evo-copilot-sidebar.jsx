@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BOT_EMOJI, BOT_AVATARS } from './bot-orb.jsx';
+import { BRIDGE_URL } from './config/bridge-config.js';
 
 const COPILOT_ROSTER = [
   { id: 'evo', name: 'Evo (Mission Commander)', icon: BOT_EMOJI.evo || '🦁', avatar: BOT_AVATARS.evo },
@@ -36,7 +37,7 @@ export function EvoCopilotSidebar({ currentView }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/evo-lm/chat', {
+      const response = await fetch(BRIDGE_URL + '/api/evo-lm/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

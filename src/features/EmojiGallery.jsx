@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 const EmojiGallery = () => {
   const images = [
     {
@@ -15,14 +15,10 @@ const EmojiGallery = () => {
   ];
 
   return (
-    <div className="p-6 bg-slate-900 rounded-2xl border border-slate-800 backdrop-blur-xl bg-opacity-50">
-      <h2 className="text-2xl font-bold text-white mb-4 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-        Evo Studio Asset Gallery
-      </h2>
-      <p className="text-slate-400 mb-6 text-sm">
-        Extracted and analyzed by OpenAI & Antigravity Team. These assets are now available for the studio.
-      </p>
-      
+    <IDEPageLayout
+      title="Evo Studio Asset Gallery"
+      description="Extracted and analyzed by OpenAI & Antigravity Team. These assets are now available for the studio."
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {images.map((img, index) => (
           <div key={index} className="group relative bg-slate-800 rounded-xl overflow-hidden border border-slate-700 transition-all duration-300 hover:border-cyan-500 hover:shadow-lg hover:shadow-cyan-500/10">
@@ -44,7 +40,7 @@ const EmojiGallery = () => {
           </div>
         ))}
       </div>
-    </div>
+    </IDEPageLayout>
   );
 };
 

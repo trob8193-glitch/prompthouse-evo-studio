@@ -1,11 +1,11 @@
 import { Log } from './core/autonomy/SovereignLogger.js';
+import { BRIDGE_URL } from './config/bridge-config.js';
 /**
  * PromptHouse Evo Studio — Feedback Collection Engine
  * Logs every AI interaction with user rating. No simulated data.
  * Powers: Pattern Analysis, Prompt Evolution, Fine-Tuning Pipeline.
  */
 
-const BRIDGE = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))));
 
 /**
  * Log an AI interaction for later analysis and rating.

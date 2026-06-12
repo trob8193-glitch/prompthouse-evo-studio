@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Hammer, Sparkles, TrendingUp, ShieldCheck, Zap, Layers, RefreshCw } from 'lucide-react';
 import { UniversalBridge } from '../core/interop/UniversalBridge.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 import { Log } from '../core/autonomy/SovereignLogger.js';
 
@@ -44,14 +45,14 @@ export function FeatureFoundryView() {
   }, []);
 
   return (
-    <div style={{ padding: 24, animation: 'fadeIn 0.4s ease-out' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-        <div>
-          <h1 style={{ fontSize: 28, fontWeight: 900, color: '#f8fafc', margin: 0, letterSpacing: '-0.5px' }}>
-            Feature <span style={{ color: '#6366f1' }}>Foundry</span>
-          </h1>
-          <p style={{ color: '#64748b', fontSize: 14, marginTop: 4 }}>Autonomous SaaS Genesis Loop — Analyzing project gaps and building revenue streams.</p>
-        </div>
+    <IDEPageLayout
+      title={
+        <>
+          Feature <span style={{ color: '#6366f1' }}>Foundry</span>
+        </>
+      }
+      description="Autonomous SaaS Genesis Loop — Analyzing project gaps and building revenue streams."
+      actions={
         <button 
           onClick={harvestOpportunities} 
           disabled={loading}
@@ -64,8 +65,9 @@ export function FeatureFoundryView() {
           {loading ? <RefreshCw className="animate-spin" size={16} /> : <Sparkles size={16} />}
           {loading ? 'Harvesting Codebase...' : 'Scan for Opportunities'}
         </button>
-      </header>
-
+      }
+    >
+      <div style={{ padding: 24, animation: 'fadeIn 0.4s ease-out' }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: 24 }}>
         {Array.isArray(missions) && missions.length > 0 ? missions.map((mission, idx) => (
           <div key={mission.id} style={{ 
@@ -136,6 +138,7 @@ export function FeatureFoundryView() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </IDEPageLayout>
   );
 }

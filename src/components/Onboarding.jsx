@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
  /**
   * Onboarding — Evo Studio Implementation
   * Live status surface only (no unverified claims): reports current bridge health.
   */
-export const Onboarding = ({ bridgeUrl = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) }) => {
+export const Onboarding = ({ bridgeUrl = BRIDGE_URL }) => {
   const [state, setState] = useState({ status: 'initializing', data: null, error: null });
 
   useEffect(() => {

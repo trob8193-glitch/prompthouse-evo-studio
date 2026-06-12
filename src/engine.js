@@ -5,10 +5,6 @@
  * All data is real — no unverified simulation layers.
  */
 
-const BRIDGE_URL = (typeof process !== 'undefined' && process.env.PROMPTBRIDGE_URL)
-  || (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_PROMPTBRIDGE_URL)
-  || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))));
-
 // ─── Bot Roster (Full Cast) ────────────────────────────────────
 export const BOT_ROSTER = [
   { id: 'evo',              name: 'Evo',              species: 'Lion',         voice: 'onyx',    role: 'Master Orchestrator — evo command routing, mission oversight, final authority on all gates.', signature: 'Truth above all. Sovereignty enforced.', icon: '🦁', palette: { primary: '#f5c842' } },

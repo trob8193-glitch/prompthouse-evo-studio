@@ -102,6 +102,65 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent, authMiddlewa
       });
     }
 
+    // --- Platform Sentinel Interceptor ---
+    if (message.toLowerCase().startsWith('sentinel audit')) {
+      try {
+        const { PlatformReadinessEngine } = await import('./src/core/platform-sentinel/index.js');
+        const engine = new PlatformReadinessEngine();
+        const bridgePort = process.env.BRIDGE_PORT || 3001;
+        const notify = async (msg) => {
+          try {
+            await fetch(`http://localhost:${bridgePort}/api/push-notification`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message: msg })
+            });
+          } catch (e) { Log.warn(`Failed to push notification: ${e.message}`); }
+        };
+
+        let responseText = '';
+        const command = message.toLowerCase().trim();
+        
+        await notify('[SENTINEL] Intercepted audit command. Initializing core engines...');
+        
+        if (command.includes('platform')) {
+          await notify('[SENTINEL] Running full platform readiness audit (heavy)...');
+          const report = engine.status({ runCommands: true, includeHeavy: true });
+          responseText = `**Platform Audit Complete**\nScore: ${report.score}/100\nVerdict: ${report.release.verdict}\nBlockers: ${report.repairQueue.length}`;
+        } else if (command.includes('dom') || command.includes('app')) {
+          await notify('[SENTINEL] Scanning DOM & App artifacts...');
+          const report = engine.auditDomAndApps();
+          responseText = `**DOM & Apps Audit Complete**\nVerdict: ${report.verdict}\nIssues Found: ${report.totalBlockers}`;
+          if (report.issues.length) {
+             responseText += '\n\n**Issues:**\n' + report.issues.map(i => `- ${i.severity.toUpperCase()}: ${i.message} (${i.file})`).join('\n');
+          }
+        } else if (command.includes('ai')) {
+          await notify('[SENTINEL] Probing AI provider network connectivity...');
+          const report = engine.onlineBlockers();
+          const summary = engine.onlineSummary(report);
+          responseText = `**AI Providers Audit Complete**\nStatus: ${summary.truthLabel}\nBlockers: ${summary.totalBlockers}`;
+          if (report.length) {
+             responseText += '\n\n**Issues:**\n' + report.map(r => `- ${r.label}: ${r.reasons.join(', ')}`).join('\n');
+          }
+        } else {
+          responseText = "Sentinel Audit command recognized, but target is unclear. Try 'sentinel audit platform', 'sentinel audit dom', or 'sentinel audit ai'.";
+        }
+
+        return res.json({
+          success: true,
+          response: responseText,
+          message: responseText,
+          threadId: null,
+          bot: { id: 'sentinel', name: 'Platform Sentinel', icon: 'Shield', palette: 'emerald', voice: 'onyx' },
+          timestamp: new Date().toISOString()
+        });
+      } catch (err) {
+        Log.error(`[Sentinel] Audit execution failed: ${err.message}`);
+        return res.status(500).json({ success: false, error: `Sentinel execution failed: ${err.message}` });
+      }
+    }
+    // --- End Interceptor ---
+
     try {
       // Dynamically load ALL_BOT_ROSTER here to avoid circular imports during boot
       const { ALL_BOT_ROSTER } = await import('./src/engine.js');

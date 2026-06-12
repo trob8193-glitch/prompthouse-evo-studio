@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useSovereignStore } from '../store.js';
 import { Button, Card, StatusBadge } from '../components/primitives.jsx';
 import { Smartphone, Terminal, Cpu, Play, CheckCircle2, Zap } from 'lucide-react';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
 export default function MobileSingularityDashboard() {
   const { addNotification, logToLedger } = useSovereignStore();
@@ -22,7 +24,7 @@ export default function MobileSingularityDashboard() {
     setIsCompiling(true);
     setCompileLogs(['[Mobile Singularity] Initiating Native Compilation Matrix...', `Architecture: ${architecture}`, `Target: ${selectedApp}`, 'Connecting to compiler stream...']);
     
-    const eventSource = new EventSource(`${(globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))))}/api/mobile/compile-stream?appId=${encodeURIComponent(selectedApp)}&architecture=${encodeURIComponent(architecture)}`);
+    const eventSource = new EventSource(`${BRIDGE_URL}/api/mobile/compile-stream?appId=${encodeURIComponent(selectedApp)}&architecture=${encodeURIComponent(architecture)}`);
 
     eventSource.onmessage = (event) => {
       const data = event.data;
@@ -51,21 +53,11 @@ export default function MobileSingularityDashboard() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#09090b] text-white">
-      {/* Header */}
-      <div className="p-8 border-b border-gray-800 bg-gradient-to-r from-[#0d1117] to-[#161b22]">
-        <div className="flex items-center gap-4 mb-2">
-          <Smartphone className="w-8 h-8 text-indigo-400" />
-          <h1 className="text-3xl font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
-            Mobile Singularity Hub
-          </h1>
-        </div>
-        <p className="text-gray-400 max-w-2xl text-sm leading-relaxed">
-          Autonomously compile your web-based SaaS platforms into fully native iOS and Android applications. Choose your target architecture and let the intelligence core do the rest.
-        </p>
-      </div>
-
-      <div className="flex flex-1 p-8 gap-8 overflow-hidden">
+    <IDEPageLayout
+      title="Mobile Singularity Hub"
+      description="Autonomously compile your web-based SaaS platforms into fully native iOS and Android applications. Choose your target architecture and let the intelligence core do the rest."
+    >
+      <div className="flex flex-1 gap-8 h-full">
         {/* Left Column: Configuration */}
         <div className="w-1/3 flex flex-col gap-6">
           <Card className="bg-[#121214] border-gray-800 p-6 flex flex-col gap-4">
@@ -160,6 +152,6 @@ export default function MobileSingularityDashboard() {
           <div className="absolute inset-0 bg-[url('/assets/grid.svg')] opacity-5 pointer-events-none"></div>
         </Card>
       </div>
-    </div>
+    </IDEPageLayout>
   );
 }

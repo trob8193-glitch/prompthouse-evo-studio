@@ -4,11 +4,29 @@
  * Centralized resolution for bridge URLs and fetch operations.
  */
 
-const defaultBridgeUrl = typeof window !== 'undefined' 
-  ? '' // Use relative path to hit Vite proxy and bypass Windows Firewall
-  : 'http://127.0.0.1:3001';
+function resolveBridgeUrl() {
+  const defaultBridgeUrl = typeof window !== 'undefined' ? '' : 'http://127.0.0.1:3001';
+  if (typeof globalThis !== 'undefined' && globalThis.process?.env) {
+    if (globalThis.process.env.BRIDGE_URL || globalThis.process.env.VITE_BRIDGE_URL) {
+      return globalThis.process.env.BRIDGE_URL || globalThis.process.env.VITE_BRIDGE_URL;
+    }
+  }
+  if (typeof process !== 'undefined' && process.env) {
+    if (process.env.BRIDGE_URL || process.env.VITE_BRIDGE_URL) {
+      return process.env.BRIDGE_URL || process.env.VITE_BRIDGE_URL;
+    }
+  }
+  try {
+    if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_BRIDGE_URL) {
+      return import.meta.env.VITE_BRIDGE_URL;
+    }
+  } catch (e) {
+    // Ignore
+  }
+  return defaultBridgeUrl;
+}
 
-export const BRIDGE_URL = import.meta.env?.VITE_BRIDGE_URL || (globalThis.process?.env?.BRIDGE_URL || defaultBridgeUrl);
+export const BRIDGE_URL = resolveBridgeUrl();
 
 /**
  * Cleanly joins path segments to the bridge URL.

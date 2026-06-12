@@ -1,9 +1,10 @@
 import React from 'react';
 import { Log } from './core/autonomy/SovereignLogger.js';
-import SovereignChat from './features/SovereignChat';
+import { EvoCopilot } from './components/EvoCopilot.jsx';
 import RareCapabilities from './features/RareCapabilities';
 import { EvoEyesView } from './features/EvoEyesView';
 import MetricsView from './features/MetricsView';
+import { BRIDGE_URL } from './config/bridge-config.js';
 
 
 /**
@@ -14,7 +15,7 @@ import MetricsView from './features/MetricsView';
  */
 
 
-            export class AiViews {
+export class AiViews {
   constructor() {
     this.status = 'OMNIPOTENT';
     this.iq_baseline = 165.0;
@@ -36,7 +37,7 @@ import MetricsView from './features/MetricsView';
   }
 }
 
-export const LiveChatView = SovereignChat;
+export const LiveChatView = EvoCopilot;
 
 export const TemplateLibraryView = RareCapabilities;
 
@@ -51,7 +52,7 @@ export const AutoRepairView = () => {
   const runRepair = async () => {
     setScanning(true);
     try {
-      const response = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/intelligence/execute', {
+      const response = await fetch(BRIDGE_URL + '/api/intelligence/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

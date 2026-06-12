@@ -1,8 +1,8 @@
 {
-  "scannedAt": "2026-06-12T05:35:19.330Z",
-  "totalComponentsScanned": 133,
-  "totalBackendRoutesFound": 271,
-  "deadLinksDetected": 1,
+  "scannedAt": "2026-06-12T14:22:30.875Z",
+  "totalComponentsScanned": 134,
+  "totalBackendRoutesFound": 276,
+  "deadLinksDetected": 0,
   "matrix": [
     {
       "component": "src\\agent-bridge-views.jsx",
@@ -91,15 +91,6 @@
       "endpoints": []
     },
     {
-      "component": "src\\components\\AgentChatPanel.jsx",
-      "buttons": [
-        "Reset",
-        "setSelectedBot(bot.id)}\n              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${\n                selectedBot === bot.id\n                  ? 'text-white border-transparent shadow-lg'\n                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'\n              }`}\n              style={selectedBot === bot.id ? { backgroundColor: bot.palette.primary } : {}}\n              title={bot.role}\n            >\n              {bot.icon} {bot.name}",
-        "{loading ?  : }\n            {loading ? '...' : 'Send'}"
-      ],
-      "endpoints": []
-    },
-    {
       "component": "src\\components\\AiProviderProofPanel.jsx",
       "buttons": [
         "handleProbe('openai')}\r\n                disabled={!approvalEnvelope || probeLoading}\r\n                style={{\r\n                  flex: 1, padding: '10px', borderRadius: '6px',\r\n                  background: !approvalEnvelope ? 'var(--bg-surface)' : 'var(--accent-indigo)',\r\n                  color: !approvalEnvelope ? 'var(--text-dim)' : '#fff',\r\n                  border: !approvalEnvelope ? '1px solid var(--border-subtle)' : 'none', \r\n                  cursor: !approvalEnvelope ? 'not-allowed' : 'pointer',\r\n                  fontSize: '12px', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px',\r\n                  transition: 'all 0.15s ease'\r\n                }}\r\n              >\r\n                 Run OpenAI Safe Probe",
@@ -137,6 +128,17 @@
       "component": "src\\components\\ErrorBoundary.jsx",
       "buttons": [
         "Retry"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\EvoCopilot.jsx",
+      "buttons": [
+        "Run in Terminal",
+        "{applied ?  : }\n                      {applied ? 'Applied!' : 'Apply to File'}",
+        "setActivePage('settings')}\n              className=\"p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors\"\n            >",
+        "setSelectedBot(bot.id)}\n              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${\n                selectedBot === bot.id\n                  ? 'text-white border-transparent shadow-lg'\n                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'\n              }`}\n              style={selectedBot === bot.id ? { backgroundColor: bot.palette?.primary || '#10b981' } : {}}\n              title={bot.role}\n            >\n              {bot.icon} {bot.name}",
+        "{loading ?  : }"
       ],
       "endpoints": []
     },
@@ -230,7 +232,8 @@
     {
       "component": "src\\components\\Navigation.jsx",
       "buttons": [
-        "setActivePage(item.id)}\n                  title={collapsed ? item.label : undefined}\n                  style={{\n                    display: 'flex',\n                    alignItems: 'center',\n                    gap: 12,\n                    width: '100%',\n                    padding: collapsed ? '10px 0' : '9px 14px',\n                    justifyContent: collapsed ? 'center' : 'flex-start',\n                    border: '1px solid transparent',\n                    borderRadius: 14,\n                    cursor: 'pointer',\n                    fontSize: 13,\n                    fontWeight: isActive ? 700 : 600,\n                    color: isActive ? '#ffffff' : '#737385',\n                    background: isActive \n                      ? 'linear-gradient(90deg, rgba(0,240,255,0.1), transparent)' \n                      : 'transparent',\n                    borderColor: isActive ? 'rgba(0,240,255,0.2)' : 'transparent',\n                    boxShadow: isActive ? 'inset 3px 0 0 #00f0ff' : 'none',\n                    transition: 'all 0.3s cubic-bezier(0.2,0.8,0.2,1)',\n                    marginBottom: 3,\n                    textAlign: 'left',\n                    position: 'relative',\n                    overflow: 'hidden',\n                  }}\n                  onMouseEnter={(e) => {\n                    if (!isActive) {\n                      e.currentTarget.style.background = 'rgba(255,255,255,0.03)';\n                      e.currentTarget.style.color = '#ffffff';\n                      e.currentTarget.style.transform = 'translateX(4px)';\n                    }\n                  }}\n                  onMouseLeave={(e) => {\n                    if (!isActive) {\n                      e.currentTarget.style.background = 'transparent';\n                      e.currentTarget.style.color = '#737385';\n                      e.currentTarget.style.transform = 'translateX(0)';\n                    }\n                  }}\n                >\n                  {isActive && (\n                    \n                  )}\n                  \n                  {!collapsed && {item.label}}"
+        "{\n                setActiveGroup(group.id);\n                if (collapsed) toggleSidebar();\n              }}\n              title={group.label}\n              style={{\n                width: 40, height: 40, borderRadius: 8,\n                display: 'flex', alignItems: 'center', justifyContent: 'center',\n                color: isActive ? '#ffffff' : '#5a5a72',\n                background: isActive ? 'rgba(255,255,255,0.05)' : 'transparent',\n                marginBottom: 8, transition: 'all 0.2s',\n                position: 'relative', border: 'none', cursor: 'pointer'\n              }}\n              onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = '#00f0ff'; }}\n              onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#5a5a72'; }}\n            >\n              {isActive && }",
+        "setActivePage(item.id)}\n                  style={{\n                    display: 'flex', alignItems: 'center', gap: 10, width: '100%',\n                    padding: '7px 10px', borderRadius: 6, cursor: 'pointer',\n                    fontSize: 12, fontWeight: isActive ? 600 : 500,\n                    color: isActive ? '#ffffff' : '#8e8e9f',\n                    background: isActive ? 'rgba(0,240,255,0.1)' : 'transparent',\n                    border: '1px solid transparent', textAlign: 'left', marginBottom: 2,\n                    transition: 'all 0.2s', borderColor: isActive ? 'rgba(0,240,255,0.2)' : 'transparent'\n                  }}\n                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}\n                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}\n                >\n                  \n                  {item.label}"
       ],
       "endpoints": []
     },
@@ -295,14 +298,12 @@
     {
       "component": "src\\components\\Terminal.jsx",
       "buttons": [
-        "setTerminalOpen(true)}\r\n      className=\"fixed bottom-0 left-[260px] right-0 h-9 bg-black border-t border-indigo-500/30 flex items-center px-6 hover:bg-slate-900 transition-all z-30 group\"\r\n    >\r\n      \r\n      Open Master EvoShell Terminal",
-        "setActiveTerminalSession(session)}\r\n                className={`px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded transition-all ${\r\n                  activeTerminalSession === session \r\n                    ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' \r\n                    : 'text-slate-500 hover:text-slate-300'\r\n                }`}\r\n              >\r\n                {session}",
-        "setTerminalTheme('evo')} className={`w-3 h-3 rounded-full bg-indigo-500 ${terminalTheme === 'evo' ? 'ring-2 ring-white' : 'opacity-40'}`} />\r\n             setTerminalTheme('matrix')} className={`w-3 h-3 rounded-full bg-emerald-500 ${terminalTheme === 'matrix' ? 'ring-2 ring-white' : 'opacity-40'}`} />\r\n             setTerminalTheme('classic')} className={`w-3 h-3 rounded-full bg-slate-500 ${terminalTheme === 'classic' ? 'ring-2 ring-white' : 'opacity-40'}`} />",
-        "clearTerminal(activeTerminalSession)} title=\"Clear Session\" className=\"text-slate-500 hover:text-rose-400 transition-colors\">",
-        "setIsFullscreen(!isFullscreen)} title=\"Fullscreen\" className=\"text-slate-500 hover:text-white transition-colors\">\r\n            {isFullscreen ?  : }",
-        "setTerminalOpen(false)} title=\"Minimize\" className=\"text-slate-500 hover:text-white transition-colors\">",
-        "setCatalogOpen((value) => !value)}\r\n            className=\"shrink-0 flex items-center gap-2 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] rounded border border-indigo-500/30 text-indigo-300 hover:text-white hover:border-indigo-400 transition-colors\"\r\n            title=\"Toggle command catalog\"\r\n          >\r\n            \r\n            Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}",
-        "runCatalogCommand(item)}\r\n                disabled={executing}\r\n                className=\"text-left p-2 rounded border border-slate-800 bg-black/35 hover:border-indigo-500/40 hover:bg-indigo-500/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed\"\r\n                title={`Run: ${item.command}`}\r\n              >\r\n                \r\n                  {item.label}\r\n                  {item.session}\r\n                \r\n                {item.description}\r\n                {item.command}"
+        "setTerminalOpen(true)}\n        className=\"evo-shell-container h-10 w-full flex items-center px-6 z-30 shrink-0 group\"\n        style={{ background: 'linear-gradient(90deg, rgba(5,5,8,0.95), rgba(10,10,20,0.95))' }}\n      >\n        \n        \n        \n          EvoShell Master Control\n        \n        \n          \n          STANDBY",
+        "setActiveTerminalSession(session)}\n                  style={{\n                    padding: '4px 10px', borderRadius: 4, fontSize: 8, fontWeight: 800,\n                    letterSpacing: '0.15em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',\n                    transition: 'all 0.2s',\n                    background: activeTerminalSession === session ? tc.accent : 'transparent',\n                    color: activeTerminalSession === session ? '#000' : '#475569',\n                    boxShadow: activeTerminalSession === session ? `0 0 12px ${tc.accent}40` : 'none'\n                  }}\n                >\n                  {session}",
+        "setTerminalTheme(t.id)}\n                  style={{\n                    width: 10, height: 10, borderRadius: '50%', border: 'none', cursor: 'pointer',\n                    background: t.color,\n                    opacity: terminalTheme === t.id ? 1 : 0.3,\n                    boxShadow: terminalTheme === t.id ? `0 0 8px ${t.color}` : 'none',\n                    transition: 'all 0.2s'\n                  }}\n                />\n              ))}\n            \n\n            \n\n            {/* Action Buttons */}\n            {[\n              { icon: Copy, title: 'Copy Output', onClick: copyToClipboard },\n              { icon: Download, title: 'Download Logs', onClick: downloadLogs },\n              { icon: Trash2, title: 'Clear Session', onClick: () => clearTerminal(activeTerminalSession), hoverColor: '#f43f5e' },\n              { icon: isFullscreen ? Minimize2 : Maximize2, title: 'Fullscreen', onClick: () => setIsFullscreen(!isFullscreen) },\n              { icon: ChevronDown, title: 'Minimize', onClick: () => setTerminalOpen(false) }\n            ].map((btn, i) => (\n               e.currentTarget.style.color = btn.hoverColor || tc.accent}\n                onMouseLeave={e => e.currentTarget.style.color = '#475569'}\n              >",
+        "setCatalogOpen(v => !v)}\n              style={{\n                display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',\n                borderRadius: 6, fontSize: 9, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase',\n                border: `1px solid ${tc.accent}30`, color: tc.accent, background: 'transparent', cursor: 'pointer',\n                transition: 'all 0.2s'\n              }}\n              onMouseEnter={e => { e.currentTarget.style.background = `${tc.accent}15`; e.currentTarget.style.borderColor = `${tc.accent}60`; }}\n              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = `${tc.accent}30`; }}\n            >\n              \n              Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}\n              {catalogOpen ?  : }",
+        "runCatalogCommand(item)}\n                  disabled={executing}\n                  className=\"evo-cmd-card\"\n                  style={executing ? { opacity: 0.5, cursor: 'not-allowed' } : {}}\n                >\n                  \n                    {item.label}\n                    {item.session}\n                  \n                  {item.description}\n                  {item.command}",
+        "{ e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'scale(1.15)'; }}\n              onMouseLeave={e => { e.currentTarget.style.color = tc.accent; e.currentTarget.style.transform = 'scale(1)'; }}\n            >"
       ],
       "endpoints": [
         {
@@ -425,12 +426,7 @@
         "setSelectedId((v) => v)}\r\n            title=\"Refresh on next poll tick\"\r\n          >\r\n             Refresh",
         "setSelectedId(m.id)}\r\n                  style={{\r\n                    width: '100%',\r\n                    justifyContent: 'space-between',\r\n                    marginBottom: 8,\r\n                    background: selectedId === m.id ? 'rgba(99,102,241,0.12)' : 'rgba(2,6,23,0.35)',\r\n                    border: selectedId === m.id ? '1px solid rgba(99,102,241,0.35)' : '1px solid rgba(255,255,255,0.08)',\r\n                    padding: '10px 10px'\r\n                  }}\r\n                >\r\n                  \r\n                    {m.label || m.id}\r\n                    {m.path}\r\n                  \r\n                  \r\n                    {m.health}"
       ],
-      "endpoints": [
-        {
-          "path": "/api/studio/diagnostics?limit=70",
-          "isAlive": true
-        }
-      ]
+      "endpoints": []
     },
     {
       "component": "src\\features\\EvoLayoutDashboard.jsx",
@@ -506,7 +502,7 @@
     {
       "component": "src\\features\\MetricsView.jsx",
       "buttons": [
-        "{ setLoading(true); fetchAll(); }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>\r\n           Refresh"
+        "{ fetchAll(); }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>\r\n           Refresh"
       ],
       "endpoints": []
     },
@@ -530,22 +526,17 @@
     {
       "component": "src\\features\\PlatformSentinelDashboard.jsx",
       "buttons": [
-        "{loading ? 'Auditing…' : 'Refresh Audit'}"
+        "{loading || learningLoading ? 'Auditing…' : 'Refresh Audit'}"
       ],
       "endpoints": []
     },
     {
       "component": "src\\features\\PricingCheckout.jsx",
       "buttons": [
-        "Downgrade/Reset License",
+        "Reset",
         "setShowSimulator(null)}\r\n                className=\"text-slate-400 hover:text-white text-sm\"\r\n                disabled={simulationStep === 1}\r\n              >\r\n                ✕"
       ],
-      "endpoints": [
-        {
-          "path": "/api/commerce/checkout",
-          "isAlive": true
-        }
-      ]
+      "endpoints": []
     },
     {
       "component": "src\\features\\PromptBridgeSurfacesView.jsx",
@@ -577,20 +568,10 @@
       "endpoints": []
     },
     {
-      "component": "src\\features\\SovereignChat.jsx",
-      "buttons": [
-        "Run in Terminal",
-        "{applied ?  : }\r\n                      {applied ? 'Applied!' : 'Apply to File'}",
-        "setActiveSurface(id)}\r\n                className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors ${\r\n                  activeSurface === id ? 'bg-emerald-500 text-black' : 'text-gray-400 hover:bg-gray-800 hover:text-white'\r\n                }`}\r\n              >\r\n                {label}",
-        "setActivePage('settings')}\r\n            className=\"p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors\"\r\n          >"
-      ],
-      "endpoints": []
-    },
-    {
       "component": "src\\features\\SovereignIntelligenceDashboard.jsx",
       "buttons": [
         "{ e.currentTarget.style.borderColor = color; e.currentTarget.style.background = `${color}15`; e.currentTarget.style.transform = 'translateX(6px)'; e.currentTarget.style.boxShadow = `0 0 30px ${color}20`; }}\r\n      onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${color}30`; e.currentTarget.style.background = 'rgba(5,5,8,0.8)'; e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = `0 0 20px ${color}05`; }}\r\n    >\r\n      \r\n        \r\n      \r\n      \r\n        {label}\r\n        {sub}",
-        "{ e.currentTarget.style.background = 'rgba(0,240,255,0.2)'; e.currentTarget.style.boxShadow = '0 0 25px rgba(0,240,255,0.3)'; }}\r\n          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(0,240,255,0.1)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(0,240,255,0.15)'; }}\r\n        >\r\n          \r\n          {refreshing ? 'Syncing...' : 'Refresh'}",
+        "{refreshing ? 'Syncing...' : 'Refresh'}",
         "useSovereignStore.getState().runTruthProbe()}\r\n              className=\"text-[9px] text-indigo-400 font-black uppercase tracking-widest hover:text-indigo-300\"\r\n            >\r\n              Run Truth Probe",
         "setActivePage('chat')}\r\n              style={{\r\n                background: 'none', border: '1px solid #1e293b', borderRadius: 8, padding: '8px 12px',\r\n                color: '#6366f1', fontSize: 11, fontWeight: 600, cursor: 'pointer', marginTop: 4,\r\n                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,\r\n              }}\r\n            >\r\n              Open Full Chat"
       ],
@@ -599,20 +580,15 @@
     {
       "component": "src\\features\\StudioMarketplaceDashboard.jsx",
       "buttons": [
-        "setActiveTab(tab)}\n            className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider transition-colors ${\n              activeTab === tab \n                ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/50' \n                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'\n            }`}\n          >\n            {tab} Formats",
-        "Tether"
+        "setActiveTab(tab)}\n          className={`px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-wider transition-colors ${\n            activeTab === tab \n              ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/50' \n              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-transparent'\n          }`}\n        >\n          {tab}",
+        "!isTethered && !isTethering && handleTether(ext)}\n                  disabled={isTethering || isTethered}\n                  className={`flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-lg transition-all ${\n                    isTethered \n                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' \n                      : isTethering\n                        ? 'bg-indigo-500/20 text-indigo-400 animate-pulse border border-indigo-500/50'\n                        : 'text-[#00f0ff] hover:text-white bg-[#00f0ff]/10 hover:bg-[#00f0ff]/30 border border-transparent'\n                  }`}\n                >\n                  {isTethered ? (\n                    <> Tethered\n                  ) : isTethering ? (\n                    <> Tethering...\n                  ) : (\n                    <> Tether\n                  )}"
       ],
-      "endpoints": [
-        {
-          "path": "/api/marketplace/catalog",
-          "isAlive": false
-        }
-      ]
+      "endpoints": []
     },
     {
       "component": "src\\features\\ThemeEvolutionDashboard.jsx",
       "buttons": [
-        "e.currentTarget.style.background = 'rgba(0,240,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,240,255,0.1)'}> Refresh Vector",
+        "e.currentTarget.style.background = 'rgba(0,240,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,240,255,0.1)'}>\n           Refresh Vector",
         "Suggest",
         "Preview",
         "Approve",
@@ -633,12 +609,7 @@
         "runDoctorScan()}>\r\n                RUN_FULL_DIAGNOSTIC_SCAN",
         "runStudyProtocol(p)}\r\n                    disabled={studyRunning}\r\n                  >\r\n                    {p.replace(/_/g, ' ')}"
       ],
-      "endpoints": [
-        {
-          "path": "/api/intelligence/execute",
-          "isAlive": true
-        }
-      ]
+      "endpoints": []
     },
     {
       "component": "src\\forge-rail-view.jsx",
@@ -674,7 +645,7 @@
         "setTab('bridges')}>Bridges",
         "setTab('handshakes')}>Handshakes",
         "🧬 Spawn Intelligence",
-        "{\r\n            if (!bridgeName) return;\r\n            const code = `// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\\nexport async function ${bridgeName.replace(/\\s+/g, '')}Bridge(payload) {\\n  const response = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '${endpoint}', {\\n    method: 'POST',\\n    body: JSON.stringify(payload)\\n  });\\n  return response.json();\\n}`;\r\n            fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/files/write', {\r\n              method: 'POST',\r\n              headers: { 'Content-Type': 'application/json' },\r\n              body: JSON.stringify({\r\n                path: `src/generated/bridges/${bridgeName.replace(/\\s+/g, '')}Bridge.js`,\r\n                content: code\r\n              })\r\n            }).then(res => {\r\n              if (res.ok) {\r\n                alert(`🚀 Bridge Forged: ${bridgeName} saved to src/generated/bridges/`);\r\n              } else {\r\n                alert(`❌ Failed to forge bridge.`);\r\n              }\r\n            }).catch(err => {\r\n              alert(`❌ Error connecting to bridge.`);\r\n            });\r\n          }}>🚀 Forge Bridge",
+        "{\r\n            if (!bridgeName) return;\r\n            const code = `// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\\nexport async function ${bridgeName.replace(/\\s+/g, '')}Bridge(payload) {\\n  const response = await fetch(BRIDGE_URL + '${endpoint}', {\\n    method: 'POST',\\n    body: JSON.stringify(payload)\\n  });\\n  return response.json();\\n}`;\r\n            fetch(BRIDGE_URL + '/api/files/write', {\r\n              method: 'POST',\r\n              headers: { 'Content-Type': 'application/json' },\r\n              body: JSON.stringify({\r\n                path: `src/generated/bridges/${bridgeName.replace(/\\s+/g, '')}Bridge.js`,\r\n                content: code\r\n              })\r\n            }).then(res => {\r\n              if (res.ok) {\r\n                alert(`🚀 Bridge Forged: ${bridgeName} saved to src/generated/bridges/`);\r\n              } else {\r\n                alert(`❌ Failed to forge bridge.`);\r\n              }\r\n            }).catch(err => {\r\n              alert(`❌ Error connecting to bridge.`);\r\n            });\r\n          }}>🚀 Forge Bridge",
         "setSignedAt(new Date().toISOString())}\r\n                  className=\"btn btn-primary btn-sm\"\r\n                  style={{ width: 'fit-content' }}\r\n                >\r\n                  Sign New Handshake"
       ],
       "endpoints": []

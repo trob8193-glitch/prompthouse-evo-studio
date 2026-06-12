@@ -12,6 +12,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { safeFetchBridge } from '../config/bridge-config.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 const SURFACES = [
   {
@@ -198,22 +199,11 @@ export default function PromptBridgeSurfacesView() {
   }, [triStatus, quadStatus, quadContract]);
 
   return (
-    <div className="flex h-full flex-col gap-6">
-      <header className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-md border border-cyan-500/30 bg-cyan-500/10 text-cyan-200">
-              <Route size={22} />
-            </div>
-            <div>
-              <p className="text-xs font-black uppercase text-cyan-300">PromptBridge Surfaces</p>
-              <h1 className="text-3xl font-black text-white">Studio Brain Surface Router</h1>
-            </div>
-          </div>
-          <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">
-            Operator view for Studio, ChatGPT operator, IDE agent, and external experience surfaces using the active TriBrain and QuadBrain bridge contracts.
-          </p>
-        </div>
+    <IDEPageLayout
+      title="Studio Brain Surface Router"
+      description="Operator view for Studio, ChatGPT operator, IDE agent, and external experience surfaces using the active TriBrain and QuadBrain bridge contracts."
+      icon={Route}
+      actions={
         <button
           type="button"
           onClick={load}
@@ -223,7 +213,9 @@ export default function PromptBridgeSurfacesView() {
           <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
           Refresh
         </button>
-      </header>
+      }
+    >
+    <div className="flex flex-col gap-6">
 
       {error && (
         <div className="flex items-start gap-3 rounded-md border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-100">
@@ -350,6 +342,7 @@ export default function PromptBridgeSurfacesView() {
         </div>
       </section>
     </div>
+    </IDEPageLayout>
   );
 }
 

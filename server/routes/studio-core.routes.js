@@ -13,6 +13,7 @@ import { OnlineLearningManager } from '../../src/core/evolution/OnlineLearningMa
 
 const learningManager = new OnlineLearningManager();
 import { buildBridgeContractLedger } from '../../src/bridge-contract-ledger.js';
+import { ingestEvoSignalLearningEvent } from '../../src/core/evo-llm/EvoSignalLearningBridge.js';
 import { buildGeneratedArtifactRegistry } from '../../src/generated-artifact-registry.js';
 import { DEFAULT_PROMPT_PACKET_PATH, buildPromptPacketPreview } from '../../src/native-prompt-packet.js';
 import {
@@ -1086,6 +1087,26 @@ export function registerStudioCoreRoutes(app) {
     };
     profiles[clientId] = next;
     writeJson(EVOLUTION_PROFILE_FILE(), profiles);
+
+    // Ingest the evolution signal into the Signal Learning Bridge
+    try {
+      ingestEvoSignalLearningEvent({
+        rootDir: process.cwd(),
+        event: {
+          sourceType: 'studio-ui',
+          sourceName: clientId,
+          feature: req.body?.page || 'studio-runtime',
+          signalKind: req.body?.action || 'interaction',
+          summary: `UI signal from ${clientId}: page=${req.body?.page}, action=${req.body?.action}`,
+          confidence: req.body?.intensity ?? 0.55,
+          learningValue: req.body?.complexity ?? 0.5,
+          payload: req.body || {}
+        }
+      });
+    } catch (e) {
+      console.warn('Failed to ingest evolution signal:', e.message);
+    }
+
     res.json({ success: true, truthState: 'EVOLUTION_SIGNAL_RECORDED', profile: next });
   });
 

@@ -12,6 +12,7 @@
     "prompthouse": "bin/prompthouse.js"
   },
   "scripts": {
+    "autonomy:supreme": "node scripts/super-orchestrator.mjs",
     "dev": "vite --host",
     "build": "vite build",
     "test": "vitest run",
@@ -140,8 +141,10 @@
     "self:invent": "node scripts/self-invention-daemon.mjs",
     "self:build": "npm run build && npm run platform:audit",
     "mobile:build": "node scripts/mobile-architect-cli.mjs",
-    "daemons:all": "concurrently \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run watchdog:api-fallback\" \"npm run watchdog:ui-matrix\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run antigravity\" \"npm run marketing:daemon\"",
-    "launch:studio": "concurrently \"npm run dev\" \"npm run bridge\" \"npm run singularity\" \"npm run crucible\" \"npm run sentinel:daemon\" \"npm run convergence:daemon\" \"node scripts/evolution-daemon.mjs\" \"npm run ai:daemon\" \"npm run audit:platform:daemon\" \"npm run watchdog:frontend\" \"npm run watchdog:middleend\" \"npm run watchdog:bridgeend\" \"npm run watchdog:backend\" \"npm run watchdog:api-fallback\" \"npm run watchdog:ui-matrix\" \"npm run self:invent\" \"npm run omni:orchestrator\" \"npm run antigravity\" \"npm run marketing:daemon\" \"npm run seed:daemon\" \"npm run mobile:daemon\"",
+    "ingestion:daemon": "node scripts/realtime-ingestion-daemon.mjs",
+    "singularity:build:daemon": "node scripts/singularity-builder-daemon.mjs --daemon",
+    "daemons:all": "node scripts/studio-launcher.mjs",
+    "launch:studio": "node scripts/studio-launcher.mjs",
     "omni:orchestrator": "node src/core/daemons/omni/OmniOrchestrator.mjs",
     "antigravity": "node scripts/antigravity-daemon.mjs",
     "marketing:daemon": "node scripts/marketing-singularity-daemon.mjs",

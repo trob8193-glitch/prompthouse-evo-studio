@@ -16,6 +16,7 @@ import {
   syncPromptLink,
 } from './promptlink-registry.js';
 import { addProofReceipt } from './prompt-base.js';
+import { BRIDGE_URL } from './config/bridge-config.js';
 
 const STATUS_COLORS = {
   verified: '#4ade80',
@@ -56,8 +57,8 @@ export function PromptLinkView() {
       addProofReceipt('browser_bridge', 'promptlink_handshake', 'verified', { latency: result.latency });
       // Load bridge data
       try {
-        const caps = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/browser-bridge/forgecapsule').then(r => r.json());
-        const receipts = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/browser-bridge/proof').then(r => r.json());
+        const caps = await fetch(BRIDGE_URL + '/api/browser-bridge/forgecapsule').then(r => r.json());
+        const receipts = await fetch(BRIDGE_URL + '/api/browser-bridge/proof').then(r => r.json());
         setBridgeCapsules(Array.isArray(caps) ? caps.slice(0, 20) : []);
         setProofReceipts(Array.isArray(receipts) ? receipts.slice(0, 20) : []);
       } catch { /* Bridge may not have data yet */ }

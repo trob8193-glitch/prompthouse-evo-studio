@@ -13,7 +13,6 @@ import {
 
 // ─── Page Components (lazy-safe imports) ─────────────────────
 import SovereignIntelligenceDashboard from './features/SovereignIntelligenceDashboard.jsx';
-import SovereignChat from './features/SovereignChat.jsx';
 import GlobalAPISettingsView from './features/GlobalAPISettingsView.jsx';
 import MetricsView from './features/MetricsView.jsx';
 import { EvoEyesView } from './features/EvoEyesView.jsx';
@@ -29,7 +28,7 @@ import { AuthSentry } from './features/AuthSentry.jsx';
 import EvoPulseGridView from './features/EvoPulseGridView.jsx';
 import SingularityEngineOverlay from './components/SingularityEngineOverlay.jsx';
 import AppMarket from './components/AppMarket.jsx';
-import { AgentChatPanel } from './components/AgentChatPanel.jsx';
+import { EvoCopilot } from './components/EvoCopilot.jsx';
 
 import ProofCenterView from './features/ProofCenterView.jsx';
 import DeploymentCenterView from './features/DeploymentCenterView.jsx';
@@ -60,11 +59,12 @@ import CommerceDashboard from './features/CommerceDashboard.jsx';
 import PricingCheckout from './features/PricingCheckout.jsx';
 import StudioMarketplaceDashboard from './features/StudioMarketplaceDashboard.jsx';
 import OmniBotRemote from './features/OmniBotRemote.jsx';
+import OmniBondCommandCenter from './features/OmniBondCommandCenter.jsx';
+import RareCapabilities from './features/RareCapabilities.jsx';
+import TemporalTraceView from './features/TemporalTraceView.jsx';
 
 export const PAGE_MAP = {
   'dashboard': SovereignIntelligenceDashboard,
-  'chat': SovereignChat,
-  'agent-chat': AgentChatPanel,
   'workspace': WorkspaceShell,
   'prompt-registry': PromptRegistry,
   'ai-generator': AIGeneratorHub,
@@ -98,6 +98,11 @@ export const PAGE_MAP = {
   'commerce': CommerceDashboard,
   'pricing': PricingCheckout,
   'studio-marketplace': StudioMarketplaceDashboard,
+  'omni-bond': OmniBondCommandCenter,
+  'omni-bot': OmniBotRemote,
+  'rare-capabilities': RareCapabilities,
+  'temporal-trace': TemporalTraceView,
+  'witness-console': WitnessConsole,
 };
 
 function PageRenderer() {
@@ -234,24 +239,47 @@ export default function App() {
           <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
             <Navigation />
 
-            <main style={{
-              flex: 1, overflow: 'auto', position: 'relative',
-              background: 'var(--bg-void)', paddingBottom: terminalOpen ? 300 : 32,
-            }}>
-              <Toolbar />
-              
-              <div style={{ padding: 28, position: 'relative', zIndex: 1, height: '100%' }}>
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                  background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,240,255,0.06), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 100%, rgba(138,43,226,0.06), transparent 50%)',
-                  pointerEvents: 'none', zIndex: 0
-                }} />
-                <PageRenderer />
-              </div>
-            </main>
-          </div>
+            <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+              <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+                <main style={{
+                  flex: 1, overflow: 'hidden', position: 'relative',
+                  background: 'var(--bg-void)', display: 'flex', flexDirection: 'column'
+                }}>
+                  <Toolbar />
+                  
+                  <div style={{ flex: 1, overflow: 'auto', padding: 28, position: 'relative', zIndex: 1 }}>
+                    <div style={{
+                      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                      background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,240,255,0.06), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 100%, rgba(138,43,226,0.06), transparent 50%)',
+                      pointerEvents: 'none', zIndex: 0
+                    }} />
+                    <PageRenderer />
+                  </div>
+                </main>
 
-          <Terminal />
+                {/* Right Chat Sidebar */}
+                <div style={{
+                  width: 380, borderLeft: '1px solid rgba(255,255,255,0.06)',
+                  background: 'rgba(5,5,8,0.7)', display: 'flex', flexDirection: 'column',
+                  overflow: 'hidden', zIndex: 2
+                }}>
+                  <div style={{
+                    padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)',
+                    fontSize: 10, fontWeight: 800, color: '#4a4a5e', textTransform: 'uppercase',
+                    letterSpacing: '0.2em'
+                  }}>
+                    Evo Copilot
+                  </div>
+                  <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+                    <EvoCopilot />
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Terminal Panel */}
+              <Terminal />
+            </div>
+          </div>
           <NotificationToasts />
         </div>
       </AuthSentry>

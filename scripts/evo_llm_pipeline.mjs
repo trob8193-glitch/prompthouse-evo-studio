@@ -4,6 +4,7 @@ import {
   buildEvoLlmDataset,
   createEvoSeedDataset,
   evaluateEvoLlmDataset,
+  synthesizeEvoLlmDataset,
   writeEvoLlmModelCard,
   writeEvoLlmTrainingReceipt,
 } from '../src/core/evo-llm/index.js';
@@ -33,11 +34,25 @@ if (args.has('--dataset') || process.argv.length <= 2) {
   if (args.has('--json')) printJson(manifest);
 }
 
-if (args.has('--eval')) {
-  const report = evaluateEvoLlmDataset({ rootDir });
-  Log.info('Evo LLM Evaluation');
+if (args.has('--synthesize')) {
+  const synthesis = synthesizeEvoLlmDataset({ rootDir });
+  Log.info('Evo LLM Synthesis Pipeline');
+  Log.info(`Status: ${synthesis.status}`);
+  Log.info(`Examples Synthesized: ${synthesis.synthesizedCount}`);
+  Log.info(`Output File: ${synthesis.file}`);
+  if (args.has('--json')) printJson(synthesis);
+}
+
+if (args.has('--eval') || args.has('--deep-eval')) {
+  const report = evaluateEvoLlmDataset({ rootDir, deepEval: args.has('--deep-eval') });
+  Log.info(args.has('--deep-eval') ? 'Evo LLM Deep Semantic Evaluation' : 'Evo LLM Evaluation');
   Log.info(`Truth State: ${report.truthState}`);
   Log.info(`Dataset Quality Score: ${report.datasetQualityScore}%`);
+  if (report.deepEvalMetrics) {
+    Log.info(`Hallucination Score: ${report.deepEvalMetrics.hallucinationScore}`);
+    Log.info(`Context Coherence: ${report.deepEvalMetrics.contextCoherence}`);
+    Log.info(`Matrix Status: ${report.deepEvalMetrics.matrixStatus}`);
+  }
   Log.info(`Invalid Examples: ${report.invalidCount}`);
   if (args.has('--json')) printJson(report);
 }

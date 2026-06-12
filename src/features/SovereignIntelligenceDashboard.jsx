@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Activity, Cpu, HardDrive, Clock, Zap, MessageSquare, ArrowRight, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 import { motion } from 'framer-motion';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
+import { safeFetchBridge } from '../config/bridge-config.js';
 
 /**
  * PH EVO STUDIO — DASHBOARD (ENTERPRISE GRADE)
@@ -108,47 +110,37 @@ export function SovereignIntelligenceDashboard() {
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-      style={{
-        display: 'flex', flexDirection: 'column', gap: 48, padding: 24, position: 'relative'
-      }}
-    >
-      {/* Singularity Ambient Glow */}
-      <div style={{ position: 'absolute', top: '-20%', left: '-10%', width: '120%', height: '120%', pointerEvents: 'none', opacity: 0.3, zIndex: 0 }}>
-        <div style={{ position: 'absolute', top: '25%', left: '25%', width: 500, height: 500, background: '#00f0ff', borderRadius: '50%', filter: 'blur(150px)', mixBlendMode: 'screen' }} />
-        <div style={{ position: 'absolute', top: '33%', right: '25%', width: 600, height: 600, background: '#8a2be2', borderRadius: '50%', filter: 'blur(180px)', mixBlendMode: 'screen' }} />
-      </div>
-
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', position: 'relative', zIndex: 10 }}>
-        <div>
-          <h1 style={{ fontSize: 36, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.04em', margin: 0, textShadow: '0 0 20px rgba(0,240,255,0.3)' }}>
-            Studio Dashboard
-          </h1>
-          <div style={{ fontSize: 13, color: '#00f0ff', marginTop: 8, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            System overview, live metrics, and quick actions.
-          </div>
-        </div>
+    <IDEPageLayout
+      title="Studio Command Center"
+      description="System overview, live metrics, and quick actions"
+      actions={
         <button 
           onClick={handleRefresh}
           disabled={refreshing}
           style={{
-            background: 'rgba(0,240,255,0.1)', border: '1px solid rgba(0,240,255,0.3)', borderRadius: 12, padding: '10px 18px',
-            color: '#00f0ff', fontSize: 13, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase',
-            display: 'flex', alignItems: 'center', gap: 10, cursor: refreshing ? 'wait' : 'pointer',
+            background: 'rgba(0,240,255,0.1)', border: '1px solid rgba(0,240,255,0.3)', borderRadius: 8, padding: '6px 12px',
+            color: '#00f0ff', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+            display: 'flex', alignItems: 'center', gap: 6, cursor: refreshing ? 'wait' : 'pointer',
             transition: 'all 0.3s',
-            boxShadow: '0 0 15px rgba(0,240,255,0.15)',
-            backdropFilter: 'blur(8px)',
           }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,240,255,0.2)'; e.currentTarget.style.boxShadow = '0 0 25px rgba(0,240,255,0.3)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(0,240,255,0.1)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(0,240,255,0.15)'; }}
         >
-          <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} style={{ filter: 'drop-shadow(0 0 5px #00f0ff)' }} />
+          <RefreshCw size={12} className={refreshing ? 'animate-spin' : ''} />
           {refreshing ? 'Syncing...' : 'Refresh'}
         </button>
-      </header>
+      }
+    >
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        style={{ display: 'flex', flexDirection: 'column', gap: 32, position: 'relative' }}
+      >
+        {/* Singularity Ambient Glow */}
+        <div style={{ position: 'absolute', top: '-20%', left: '-10%', width: '120%', height: '120%', pointerEvents: 'none', opacity: 0.2, zIndex: 0 }}>
+          <div style={{ position: 'absolute', top: '25%', left: '25%', width: 500, height: 500, background: '#00f0ff', borderRadius: '50%', filter: 'blur(150px)', mixBlendMode: 'screen' }} />
+          <div style={{ position: 'absolute', top: '33%', right: '25%', width: 600, height: 600, background: '#8a2be2', borderRadius: '50%', filter: 'blur(180px)', mixBlendMode: 'screen' }} />
+        </div>
+
 
       {/* Metric Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20, marginBottom: 28 }}>
@@ -299,16 +291,16 @@ export function SovereignIntelligenceDashboard() {
             sub="Execute physical logic evolution & compaction"
             onClick={async () => {
               try {
-                const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/study/initiate', {
+                const res = await safeFetchBridge('/api/study/initiate', {
                   method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ protocolId: 'DREAM_CYCLE' })
                 });
-                const data = await res.json();
-                useSovereignStore.getState().addNotification(`Evolution Cycle Complete: ${data.signature}`, 'success');
-                useSovereignStore.getState().fetchMetrics();
+                
+                if (!res.ok) throw new Error(res.error || 'Failed to initiate study');
+                
+                useSovereignStore.getState().addNotification(`Evolution Cycle Complete: ${res.data?.signature}`, 'success');
               } catch (err) {
-                useSovereignStore.getState().addNotification(`Evolution Failed: ${err.message}`, 'error');
+                useSovereignStore.getState().addNotification(`Evolution Cycle Failed: ${err.message}`, 'error');
               }
             }}
             color="#6366f1"
@@ -358,7 +350,8 @@ export function SovereignIntelligenceDashboard() {
           </div>
         </div>
       </div>
-    </motion.div>
+      </motion.div>
+    </IDEPageLayout>
   );
 }
 

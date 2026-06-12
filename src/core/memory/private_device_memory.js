@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import { promises as fsPromises } from 'fs';
+import { BRIDGE_URL } from '../../config/bridge-config.js';
 
 const ALGORITHM = 'aes-256-cbc';
 const SECRET_KEY = crypto.randomBytes(32); // Should be stored securely
@@ -44,7 +45,7 @@ const loadFromLocal = async (key) => {
 
 const saveToServer = async (key, value) => {
     const encryptedValue = encrypt(value);
-    const response = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/save', {
+    const response = await fetch(BRIDGE_URL + '/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key, data: encryptedValue })
@@ -56,7 +57,7 @@ const saveToServer = async (key, value) => {
 };
 
 const loadFromServer = async (key) => {
-    const response = await fetch(`${(globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))))}/load/${key}`);
+    const response = await fetch(`${BRIDGE_URL}/load/${key}`);
     
     if (!response.ok) {
         throw new Error('Data not found on server.');

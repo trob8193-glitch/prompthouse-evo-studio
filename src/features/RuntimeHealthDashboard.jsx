@@ -1,6 +1,6 @@
 import React from 'react';
 import { safeFetchBridge } from '../config/bridge-config.js';
-
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 function HealthCard({ title, value, detail }) {
   return (
     <section style={{ border: '1px solid #1e293b', borderRadius: 16, background: 'rgba(15,23,42,0.78)', padding: 18 }}>
@@ -34,17 +34,15 @@ export default function RuntimeHealthDashboard() {
   const route = data.routeVerification?.data || data.routeVerification || null;
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, marginBottom: 18 }}>
-        <div>
-          <h1 style={{ margin: 0 }}>Runtime Health</h1>
-          <p style={{ color: '#94a3b8', marginTop: 8 }}>Live bridge, proof, route, cost, and maturity status.</p>
-        </div>
-        <button onClick={refresh} style={{ border: '1px solid #334155', borderRadius: 10, background: '#111827', color: '#dbeafe', padding: '10px 14px', cursor: 'pointer' }}>
+    <IDEPageLayout
+      title="Runtime Health"
+      description="Live bridge, proof, route, cost, and maturity status."
+      actions={
+        <button onClick={refresh} style={{ border: '1px solid #334155', borderRadius: 10, background: '#111827', color: '#dbeafe', padding: '10px 14px', cursor: 'pointer', fontSize: 12, fontWeight: 800 }}>
           Refresh
         </button>
-      </div>
-
+      }
+    >
       {state.error && <div style={{ color: '#fca5a5', marginBottom: 16 }}>Runtime health error: {state.error}</div>}
       {state.loading && !state.data && <div style={{ color: '#94a3b8' }}>Loading runtime health...</div>}
 
@@ -61,6 +59,6 @@ export default function RuntimeHealthDashboard() {
         <h2 style={{ marginTop: 0, color: '#c7d2fe' }}>Raw Health Payload</h2>
         <pre style={{ whiteSpace: 'pre-wrap', overflow: 'auto', maxHeight: 520, color: '#dbeafe', fontSize: 12 }}>{JSON.stringify(data, null, 2)}</pre>
       </section>
-    </div>
+    </IDEPageLayout>
   );
 }

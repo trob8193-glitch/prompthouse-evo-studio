@@ -24,7 +24,7 @@ npm run create:agent:classic
 
 1. **OpenAI API Key** (already in `.env`)
    - Verify: `echo $env:OPENAI_API_KEY` (PowerShell)
-   - Key should start with `sk-proj-`
+   - Key should start with your OpenAI project prefix
 
 2. **OpenAI Account with Agent Access**
    - Visit: https://platform.openai.com/account/api-keys
@@ -62,11 +62,11 @@ cd C:\Users\Noname\.gemini\antigravity\scratch\prompthouse-evo-studio
 $env:OPENAI_API_KEY
 ```
 
-Expected: `sk-proj-...` (no output means it's not set)
+Expected: Your OpenAI key (no output means it's not set)
 
 If missing, update `.env`:
 ```
-OPENAI_API_KEY=sk-proj-YOUR_ACTUAL_KEY_HERE
+OPENAI_API_KEY=<YOUR_OPENAI_API_KEY_HERE>
 OPENAI_MODEL=gpt-5.5
 ```
 
@@ -93,7 +93,7 @@ ID: agent_abc123xyz...
 Create `.env.agent`:
 ```
 AGENT_ID=agent_abc123xyz...
-OPENAI_API_KEY=sk-proj-...
+OPENAI_API_KEY=<YOUR_OPENAI_API_KEY_HERE>
 ```
 
 ### Step 5: Test the Agent

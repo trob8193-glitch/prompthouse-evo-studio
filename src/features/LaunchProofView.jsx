@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
+import { Rocket } from 'lucide-react';
 /**
  * PH EVO STUDIO — LAUNCH PROOF VIEW
  * ═══════════════════════════════════════════════════════════════
@@ -28,12 +29,11 @@ const LaunchProofView = () => {
   };
 
   return (
-    <div className="launch-proof-container">
-      <div className="proof-header">
-        <h1>🚀 Launch Readiness Cockpit</h1>
-        <p>Verified proof-chain for PromptHouse Evo Studio</p>
-      </div>
-
+    <IDEPageLayout
+      title="Launch Readiness Cockpit"
+      description="Verified proof-chain for PromptHouse Evo Studio"
+      icon={Rocket}
+    >
       <div className="proof-grid">
         <div className="proof-card status-card">
           <h2>Verification Status</h2>
@@ -91,18 +91,6 @@ const LaunchProofView = () => {
       </div>
 
       <style jsx>{`
-        .launch-proof-container {
-          padding: 40px;
-          color: #fff;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-        .proof-header {
-          margin-bottom: 40px;
-          text-align: center;
-        }
-        h1 { font-size: 32px; margin-bottom: 8px; }
-        p { opacity: 0.6; font-size: 16px; }
         .proof-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -174,7 +162,7 @@ const LaunchProofView = () => {
         }
         @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
-    </div>
+    </IDEPageLayout>
   );
 };
 

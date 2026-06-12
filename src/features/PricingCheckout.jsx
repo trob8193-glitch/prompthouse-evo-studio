@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Shield, Zap, Sparkles, Check, Globe, RefreshCw, Terminal, CheckCircle, HelpCircle } from 'lucide-react';
 import { Card, Button } from '../components/primitives.jsx';
 import { useSovereignStore } from '../store.js';
-
+import { safeFetchBridge } from '../config/bridge-config.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 export default function PricingCheckout() {
   const [currentTier, setCurrentTier] = useState('Free');
   const [loading, setLoading] = useState(null);
@@ -25,9 +26,8 @@ export default function PricingCheckout() {
     try {
       const approval = { granted: true, scope: 'commerce', grantedAt: new Date().toISOString() };
       
-      const res = await fetch('/api/commerce/checkout', {
+      const res = await safeFetchBridge('/api/commerce/checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           priceId,
           successUrl: window.location.origin + '/?success=true',
@@ -36,14 +36,14 @@ export default function PricingCheckout() {
         })
       });
 
-      const data = await res.json();
+      const data = res.data || {};
       
-      if (data.success && data.url) {
+      if (res.ok && data.success && data.url) {
         // Redirect to real Stripe Checkout if configured
         window.location.href = data.url;
       } else {
         // Fall back to Sandbox Simulator Modal
-        triggerSimulator(tierName, priceCents, data.error || 'Stripe keys are missing (PROVIDER_GATED).');
+        triggerSimulator(tierName, priceCents, res.error || data.error || 'Stripe keys are missing (PROVIDER_GATED).');
       }
     } catch (e) {
       triggerSimulator(tierName, priceCents, e.message);
@@ -100,6 +100,21 @@ export default function PricingCheckout() {
   };
 
   return (
+    <IDEPageLayout
+      title="Unlock the Evo Studio Engine"
+      description="Scale your PromptHouse workspace from basic local automation to enterprise-ready white-labeled self-evolution."
+      icon={Sparkles}
+      actions={
+        currentTier !== 'Free' ? (
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/10 border border-indigo-500/20 text-indigo-300">
+              Active: <strong className="text-white uppercase">{currentTier}</strong>
+            </span>
+            <button onClick={resetTier} className="text-xs text-slate-500 hover:text-slate-300 transition-colors underline">Reset</button>
+          </div>
+        ) : null
+      }
+    >
     <div className="p-8 max-w-6xl mx-auto space-y-12 animate-in fade-in duration-500">
       {/* Dynamic Style Injection */}
       <style>{`
@@ -154,27 +169,7 @@ export default function PricingCheckout() {
         }
       `}</style>
 
-      <div className="text-center space-y-4">
-        <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-amber-500">
-          Unlock the Evo Studio Engine
-        </h1>
-        <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-          Scale your PromptHouse workspace from basic local automation to enterprise-ready white-labeled self-evolution.
-        </p>
-        {currentTier !== 'Free' && (
-          <div className="pt-2">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/10 border border-indigo-500/20 text-indigo-300">
-              Active Tier: <strong className="text-white uppercase">{currentTier}</strong>
-            </span>
-            <button 
-              onClick={resetTier}
-              className="ml-4 text-xs text-slate-500 hover:text-slate-300 transition-colors underline"
-            >
-              Downgrade/Reset License
-            </button>
-          </div>
-        )}
-      </div>
+
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Tier 1: Evo Studio Developer */}
@@ -327,6 +322,7 @@ export default function PricingCheckout() {
         </div>
       )}
     </div>
+    </IDEPageLayout>
   );
 }
 

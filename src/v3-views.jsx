@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSovereignStore } from './store.js';
 
 // Restored View Imports
-import SovereignChat from './features/SovereignChat';
+import EvoCopilot from './components/EvoCopilot.jsx';
 import RareCapabilities from './features/RareCapabilities';
 import { EvoEyesView } from './features/EvoEyesView';
 
@@ -30,7 +30,7 @@ export default function V3Views() {
           transition={{ duration: 0.3 }}
           className="h-full"
         >
-          {activeTab === 'chat' && <SovereignChat />}
+          {activeTab === 'chat' && <EvoCopilot />}
           {activeTab === 'capabilities' && <RareCapabilities />}
           {activeTab === 'vision' && <EvoEyesView />}
           

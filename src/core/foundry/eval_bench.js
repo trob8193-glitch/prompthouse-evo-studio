@@ -1,8 +1,9 @@
+import { BRIDGE_URL } from '../../config/bridge-config.js';
 // src/core/foundry/eval_bench.js
 // Minimal evaluation bench utilities (no synthetic scoring).
 
 export async function benchmarkChat({
-  bridgeUrl = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))),
+  bridgeUrl = BRIDGE_URL,
   messages = [{ role: 'user', content: 'ping' }],
   systemPrompt = '',
 }) {

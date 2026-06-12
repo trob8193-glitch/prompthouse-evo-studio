@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Activity, AlertTriangle, ShieldCheck, Cpu } from 'lucide-react';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
+import { safeFetchBridge } from '../config/bridge-config.js';
 
 export default function RealTimeValidationDashboard() {
   const [metrics, setMetrics] = useState({
@@ -16,14 +18,14 @@ export default function RealTimeValidationDashboard() {
     const fetchMetrics = async () => {
       try {
         const [metricsRes, queueRes] = await Promise.all([
-          fetch(((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))) + '/api/stream-metrics').catch(() => null),
-          fetch(((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))) + '/api/stream-queue-status').catch(() => null)
+          safeFetchBridge('/api/stream-metrics'),
+          safeFetchBridge('/api/stream-queue-status')
         ]);
 
         if (!metricsRes || !queueRes) return;
 
-        const data = await metricsRes.json();
-        const queueData = await queueRes.json();
+        const data = metricsRes.data || {};
+        const queueData = queueRes.data || {};
 
         if (data.success && mounted) {
           setMetrics({
@@ -48,11 +50,11 @@ export default function RealTimeValidationDashboard() {
   }, []);
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] to-[#8a2be2]">
-          Validation Pipeline <span className="text-sm font-normal text-white/50 tracking-widest uppercase ml-4">Master Layer</span>
-        </h1>
+    <IDEPageLayout
+      title="Validation Pipeline"
+      description="Master Layer — semantic stability and threat matrix."
+      icon={ShieldCheck}
+      actions={
         <div className="flex items-center gap-4">
           {metrics.queueDepth > 0 && (
             <div className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full text-sm font-bold shadow-[0_0_15px_rgba(245,158,11,0.2)]">
@@ -65,8 +67,9 @@ export default function RealTimeValidationDashboard() {
             Zero-Latency Edge Active
           </div>
         </div>
-      </div>
-
+      }
+    >
+      <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <MetricCard icon={<ShieldCheck size={24} className="text-[#00f0ff]" />} label="Stability Score" value={(metrics.stability * 100).toFixed(1) + '%'} />
         <MetricCard icon={<Activity size={24} className="text-purple-400" />} label="Concept Clusters" value={metrics.ingested} />
@@ -110,7 +113,8 @@ export default function RealTimeValidationDashboard() {
           </svg>
         </div>
       </div>
-    </div>
+      </div>
+    </IDEPageLayout>
   );
 }
 

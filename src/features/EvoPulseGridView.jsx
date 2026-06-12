@@ -23,6 +23,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 const MODULE_DOMAINS = {
   STUDIO: 'PH Evo Studio',
@@ -424,55 +425,39 @@ export default function EvoPulseGridView() {
   const digest = buildDigest(EVO_PULSE_MODULES.map(({ id, score, status }) => ({ id, score, status })));
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 relative z-10" style={{ paddingBottom: 64 }}>
-      {/* Background ambient glow for entire view */}
-      <div style={{ position: 'absolute', top: -100, left: -100, width: '150%', height: '100%', pointerEvents: 'none', zIndex: -1 }}>
-        <div style={{ position: 'absolute', top: '10%', left: '10%', width: 600, height: 600, background: '#00f0ff', borderRadius: '50%', filter: 'blur(200px)', opacity: 0.1, mixBlendMode: 'screen' }} />
-        <div style={{ position: 'absolute', top: '30%', right: '10%', width: 500, height: 500, background: '#8a2be2', borderRadius: '50%', filter: 'blur(180px)', opacity: 0.1, mixBlendMode: 'screen' }} />
-      </div>
-
-      <section style={{
-        position: 'relative', overflow: 'hidden', borderRadius: 40, border: '1px solid rgba(0,240,255,0.3)',
-        background: 'linear-gradient(135deg, rgba(5,5,8,0.9) 0%, rgba(138,43,226,0.1) 100%)', padding: 40,
-        boxShadow: '0 0 50px rgba(0,240,255,0.1)', backdropFilter: 'blur(30px)'
-      }}>
-        <div style={{ position: 'absolute', right: -100, top: -100, width: 400, height: 400, borderRadius: '50%', background: '#8a2be2', filter: 'blur(120px)', opacity: 0.2 }} />
-        <div style={{ position: 'absolute', left: 50, bottom: -100, width: 400, height: 400, borderRadius: '50%', background: '#00f0ff', filter: 'blur(120px)', opacity: 0.15 }} />
-
-        <div className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <div style={{ flex: 1 }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(0,240,255,0.1)', border: '1px solid rgba(0,240,255,0.3)',
-              borderRadius: 20, padding: '6px 14px', fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em',
-              color: '#00f0ff', boxShadow: '0 0 15px rgba(0,240,255,0.2)', marginBottom: 16
-            }}>
-              <Rocket size={14} /> Max Integration Build
-            </div>
-            <h2 style={{ fontSize: 48, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.04em', color: '#fff', textShadow: '0 0 20px rgba(0,240,255,0.4)', lineHeight: 1.1 }}>
-              EvoPulse Grid <br />
-              <span style={{ color: '#00f0ff' }}>Command Core</span>
-            </h2>
-            <p style={{ marginTop: 20, maxWidth: 600, fontSize: 13, fontWeight: 600, color: '#b4b4c4', lineHeight: 1.6 }}>
-              All 12 breakout inventions are fused into the existing EvoPulse page as a proof-gated studio command layer for visibility, reasoning, self-evolution, rollback, and founder invention scoring.
-            </p>
+    <IDEPageLayout
+      title={
+        <>
+          EvoPulse Grid <span style={{ color: '#00f0ff' }}>Command Core</span>
+        </>
+      }
+      description="All 12 breakout inventions are fused into the existing EvoPulse page as a proof-gated studio command layer for visibility, reasoning, self-evolution, rollback, and founder invention scoring."
+      icon={Rocket}
+      actions={
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(0,240,255,0.1)', border: '1px solid rgba(0,240,255,0.3)',
+          borderRadius: 20, padding: '6px 14px', fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em',
+          color: '#00f0ff', boxShadow: '0 0 15px rgba(0,240,255,0.2)'
+        }}>
+          <Rocket size={14} /> Max Integration Build
+        </div>
+      }
+    >
+      <div className="space-y-8 animate-in fade-in duration-500 relative z-10" style={{ paddingBottom: 64 }}>
+        <div className="grid grid-cols-3 gap-4 text-center">
+          <div style={{ background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 24, padding: 20 }}>
+            <div style={{ fontSize: 36, fontWeight: 900, color: '#fff', lineHeight: 1 }}>12</div>
+            <div style={{ fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#8a8a9a', marginTop: 4 }}>Modules</div>
           </div>
-
-          <div className="grid grid-cols-3 gap-4 text-right">
-            <div style={{ background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 24, padding: 20 }}>
-              <div style={{ fontSize: 36, fontWeight: 900, color: '#fff', lineHeight: 1 }}>12</div>
-              <div style={{ fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#8a8a9a', marginTop: 4 }}>Modules</div>
-            </div>
-            <div style={{ background: 'rgba(0,255,136,0.1)', border: '1px solid rgba(0,255,136,0.3)', borderRadius: 24, padding: 20, boxShadow: '0 0 20px rgba(0,255,136,0.15)' }}>
-              <div style={{ fontSize: 36, fontWeight: 900, color: '#00ff88', lineHeight: 1, textShadow: '0 0 15px rgba(0,255,136,0.4)' }}>{averageScore}%</div>
-              <div style={{ fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(0,255,136,0.8)', marginTop: 4 }}>Avg Score</div>
-            </div>
-            <div style={{ background: 'rgba(138,43,226,0.1)', border: '1px solid rgba(138,43,226,0.3)', borderRadius: 24, padding: 20, boxShadow: '0 0 20px rgba(138,43,226,0.15)' }}>
-              <div style={{ fontSize: 24, fontWeight: 900, color: '#8a2be2', lineHeight: 1.5, textShadow: '0 0 15px rgba(138,43,226,0.4)' }}>{digest.slice(-6)}</div>
-              <div style={{ fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(138,43,226,0.8)', marginTop: 4 }}>Digest</div>
-            </div>
+          <div style={{ background: 'rgba(0,255,136,0.1)', border: '1px solid rgba(0,255,136,0.3)', borderRadius: 24, padding: 20, boxShadow: '0 0 20px rgba(0,255,136,0.15)' }}>
+            <div style={{ fontSize: 36, fontWeight: 900, color: '#00ff88', lineHeight: 1, textShadow: '0 0 15px rgba(0,255,136,0.4)' }}>{averageScore}%</div>
+            <div style={{ fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(0,255,136,0.8)', marginTop: 4 }}>Avg Score</div>
+          </div>
+          <div style={{ background: 'rgba(138,43,226,0.1)', border: '1px solid rgba(138,43,226,0.3)', borderRadius: 24, padding: 20, boxShadow: '0 0 20px rgba(138,43,226,0.15)' }}>
+            <div style={{ fontSize: 24, fontWeight: 900, color: '#8a2be2', lineHeight: 1.5, textShadow: '0 0 15px rgba(138,43,226,0.4)' }}>{digest.slice(-6)}</div>
+            <div style={{ fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(138,43,226,0.8)', marginTop: 4 }}>Digest</div>
           </div>
         </div>
-      </section>
 
       <div className="grid gap-6 md:grid-cols-4">
         <PulseMetric icon={Layers3} label="Domains" value="4" detail="Studio, LLM, self-evolve, and self-invent layers fused into one page." />
@@ -489,6 +474,7 @@ export default function EvoPulseGridView() {
           <DomainColumn key={domain} domain={domain} />
         ))}
       </div>
-    </div>
+      </div>
+    </IDEPageLayout>
   );
 }

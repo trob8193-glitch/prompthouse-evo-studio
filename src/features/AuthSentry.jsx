@@ -23,7 +23,7 @@ export const AuthSentry = ({ children }) => {
         <div className="auth-sentry-header">
           <div className="auth-sentry-logo">
             <span className="logo-icon">PH</span>
-            <span className="logo-text">EVO STUDIO STUDIO</span>
+            <span className="logo-text">EVO STUDIO</span>
           </div>
         </div>
 

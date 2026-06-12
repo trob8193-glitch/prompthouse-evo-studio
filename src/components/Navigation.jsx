@@ -2,14 +2,15 @@ import React from 'react';
 import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
   Activity, Eye, Sparkles, BarChart3, FolderOpen, Gauge, Zap,
-  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, Lock, ScrollText, Globe, Bot, Smartphone, ShieldCheck, CreditCard
+  ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, Lock, ScrollText, Globe, Bot, Smartphone, ShieldCheck, CreditCard,
+  Briefcase, Boxes, Database, Fingerprint, Search, Clock, Orbit
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
 /**
- * PH EVO STUDIO — SIDEBAR NAVIGATION
+ * PH EVO STUDIO — IDE SIDEBAR NAVIGATION
  * ═══════════════════════════════════════════════════════════════
- * Collapsible sidebar with grouped navigation items.
+ * IDE-style Activity Bar and Collapsible Primary Sidebar.
  * Drives the activePage state in the Zustand store.
  */
 
@@ -50,6 +51,9 @@ export const NAV_GROUPS = [
       { id: 'theme-evolution', label: 'Theme Evolution', icon: Palette },
       { id: 'evopulse-grid', label: 'EvoPulse Grid', icon: Share2 },
       { id: 'ai-generator', label: 'AI Generator', icon: Sparkles },
+      { id: 'omni-bond', label: 'Omni-Bond Nexus', icon: Fingerprint },
+      { id: 'omni-bot', label: 'OmniBot Remote', icon: Bot },
+      { id: 'rare-capabilities', label: 'Rare Capabilities', icon: Orbit },
     ],
   },
   {
@@ -65,6 +69,8 @@ export const NAV_GROUPS = [
       { id: 'metrics', label: 'Metrics', icon: BarChart3 },
       { id: 'deployment-center', label: 'Deployment Center', icon: Rocket },
       { id: 'mobile-singularity', label: 'Mobile Hub', icon: Smartphone },
+      { id: 'temporal-trace', label: 'Temporal Trace', icon: Clock },
+      { id: 'witness-console', label: 'Witness Console', icon: Search },
     ],
   },
   {
@@ -97,117 +103,140 @@ export function Navigation() {
   const activePage = useSovereignStore((s) => s.activePage);
   const setActivePage = useSovereignStore((s) => s.setActivePage);
   const collapsed = useSovereignStore((s) => s.sidebarCollapsed);
+  const toggleSidebar = useSovereignStore((s) => s.toggleSidebar);
+
+  const [activeGroup, setActiveGroup] = React.useState(() => {
+    for (const group of NAV_GROUPS) {
+      if (group.items.some(item => item.id === activePage)) return group.id;
+    }
+    return NAV_GROUPS[0].id;
+  });
+
+  React.useEffect(() => {
+    for (const group of NAV_GROUPS) {
+      if (group.items.some(item => item.id === activePage)) {
+        setActiveGroup(group.id);
+        break;
+      }
+    }
+  }, [activePage]);
+
+  const activeGroupData = NAV_GROUPS.find(g => g.id === activeGroup) || NAV_GROUPS[0];
+
+  const getGroupIcon = (id) => {
+    switch (id) {
+      case 'studio': return LayoutDashboard;
+      case 'governance': return Shield;
+      case 'intelligence': return Sparkles;
+      case 'operations': return Activity;
+      case 'monetization': return CreditCard;
+      case 'user': return Settings;
+      case 'system': return Database;
+      default: return Boxes;
+    }
+  };
 
   return (
-    <nav
-      style={{
-        width: collapsed ? 60 : 240,
-        minWidth: collapsed ? 60 : 240,
-        height: '100%',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
-        background: 'rgba(5,5,8,0.7)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
+    <nav style={{
+      height: '100%',
+      display: 'flex',
+      flexShrink: 0,
+      zIndex: 1000,
+      transition: 'width 0.3s cubic-bezier(0.2,0.8,0.2,1)',
+      borderRight: '1px solid rgba(255,255,255,0.06)',
+      background: 'rgba(5,5,8,0.7)',
+      backdropFilter: 'blur(24px)',
+      WebkitBackdropFilter: 'blur(24px)'
+    }}>
+      {/* Activity Bar */}
+      <div style={{
+        width: 50,
+        background: 'rgba(2,2,4,0.6)',
+        borderRight: '1px solid rgba(255,255,255,0.03)',
         display: 'flex',
         flexDirection: 'column',
-        overflowY: 'auto',
-        overflowX: 'hidden',
-        transition: 'width 0.3s cubic-bezier(0.2,0.8,0.2,1), min-width 0.3s cubic-bezier(0.2,0.8,0.2,1)',
-        flexShrink: 0,
-        position: 'relative',
-        zIndex: 1000,
-      }}
-    >
-      <div style={{ padding: collapsed ? '16px 8px' : '16px 14px', flex: 1 }}>
-        {NAV_GROUPS.map((group) => (
-          <div key={group.id} style={{ marginBottom: 24 }}>
-            {!collapsed && (
-              <div style={{
-                fontSize: 10, fontWeight: 800, color: '#4a4a5e', textTransform: 'uppercase',
-                letterSpacing: '0.2em', padding: '6px 12px', marginBottom: 6,
-              }}>
-                {group.label}
-              </div>
-            )}
+        alignItems: 'center',
+        paddingTop: 12
+      }}>
+        {NAV_GROUPS.map((group) => {
+          const isActive = activeGroup === group.id;
+          const GIcon = getGroupIcon(group.id);
+          return (
+            <button
+              key={group.id}
+              onClick={() => {
+                setActiveGroup(group.id);
+                if (collapsed) toggleSidebar();
+              }}
+              title={group.label}
+              style={{
+                width: 40, height: 40, borderRadius: 8,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: isActive ? '#ffffff' : '#5a5a72',
+                background: isActive ? 'rgba(255,255,255,0.05)' : 'transparent',
+                marginBottom: 8, transition: 'all 0.2s',
+                position: 'relative', border: 'none', cursor: 'pointer'
+              }}
+              onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = '#00f0ff'; }}
+              onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#5a5a72'; }}
+            >
+              {isActive && <div style={{ position: 'absolute', left: 0, top: '25%', bottom: '25%', width: 2, background: '#00f0ff', borderRadius: '0 2px 2px 0', boxShadow: '0 0 10px #00f0ff' }} />}
+              <GIcon size={22} style={{ opacity: isActive ? 1 : 0.8, filter: isActive ? 'drop-shadow(0 0 6px rgba(0,240,255,0.4))' : 'none', color: isActive ? '#00f0ff' : 'inherit' }} />
+            </button>
+          );
+        })}
+      </div>
 
-            {group.items.map((item) => {
+      {/* Primary Sidebar */}
+      {!collapsed && (
+        <div style={{
+          width: 200,
+          display: 'flex',
+          flexDirection: 'column',
+          overflowY: 'auto',
+          overflowX: 'hidden'
+        }}>
+          <div style={{
+            fontSize: 10, fontWeight: 800, color: '#737385', textTransform: 'uppercase',
+            letterSpacing: '0.15em', padding: '16px 14px 10px',
+          }}>
+            {activeGroupData.label}
+          </div>
+          
+          <div style={{ padding: '0 8px', flex: 1 }}>
+            {activeGroupData.items.map((item) => {
               const isActive = activePage === item.id;
               const Icon = item.icon;
-
               return (
                 <button
                   key={item.id}
                   onClick={() => setActivePage(item.id)}
-                  title={collapsed ? item.label : undefined}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 12,
-                    width: '100%',
-                    padding: collapsed ? '10px 0' : '9px 14px',
-                    justifyContent: collapsed ? 'center' : 'flex-start',
-                    border: '1px solid transparent',
-                    borderRadius: 14,
-                    cursor: 'pointer',
-                    fontSize: 13,
-                    fontWeight: isActive ? 700 : 600,
-                    color: isActive ? '#ffffff' : '#737385',
-                    background: isActive 
-                      ? 'linear-gradient(90deg, rgba(0,240,255,0.1), transparent)' 
-                      : 'transparent',
-                    borderColor: isActive ? 'rgba(0,240,255,0.2)' : 'transparent',
-                    boxShadow: isActive ? 'inset 3px 0 0 #00f0ff' : 'none',
-                    transition: 'all 0.3s cubic-bezier(0.2,0.8,0.2,1)',
-                    marginBottom: 3,
-                    textAlign: 'left',
-                    position: 'relative',
-                    overflow: 'hidden',
+                    display: 'flex', alignItems: 'center', gap: 10, width: '100%',
+                    padding: '7px 10px', borderRadius: 6, cursor: 'pointer',
+                    fontSize: 12, fontWeight: isActive ? 600 : 500,
+                    color: isActive ? '#ffffff' : '#8e8e9f',
+                    background: isActive ? 'rgba(0,240,255,0.1)' : 'transparent',
+                    border: '1px solid transparent', textAlign: 'left', marginBottom: 2,
+                    transition: 'all 0.2s', borderColor: isActive ? 'rgba(0,240,255,0.2)' : 'transparent'
                   }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-                      e.currentTarget.style.color = '#ffffff';
-                      e.currentTarget.style.transform = 'translateX(4px)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.color = '#737385';
-                      e.currentTarget.style.transform = 'translateX(0)';
-                    }
-                  }}
+                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
+                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
                 >
-                  {isActive && (
-                    <div style={{
-                      position: 'absolute', left: collapsed ? 0 : -14, top: '15%', bottom: '15%',
-                      width: 3, borderRadius: '0 4px 4px 0', background: '#00f0ff',
-                      boxShadow: '0 0 16px #00f0ff',
-                    }} />
-                  )}
-                  <Icon size={16} style={{ 
-                    flexShrink: 0, 
-                    opacity: isActive ? 1 : 0.6,
-                    color: isActive ? '#00f0ff' : 'inherit',
-                    filter: isActive ? 'drop-shadow(0 0 6px rgba(0,240,255,0.5))' : 'none',
-                    transition: 'all 0.3s ease'
-                  }} />
-                  {!collapsed && <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</span>}
+                  <Icon size={14} style={{ color: isActive ? '#00f0ff' : 'inherit', opacity: isActive ? 1 : 0.7 }} />
+                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</span>
                 </button>
               );
             })}
           </div>
-        ))}
-      </div>
 
-      {!collapsed && (
-        <div style={{
-          padding: '14px 18px', borderTop: '1px solid rgba(255,255,255,0.06)',
-          fontSize: 9, color: '#00f0ff', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em',
-          background: 'rgba(0,0,0,0.2)',
-          textShadow: '0 0 10px rgba(0,240,255,0.3)'
-        }}>
-          ⚡ Singularity v2.0
+          <div style={{
+            padding: '14px 18px', borderTop: '1px solid rgba(255,255,255,0.06)',
+            fontSize: 9, color: '#00f0ff', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em',
+            background: 'rgba(0,0,0,0.2)'
+          }}>
+            ⚡ Singularity v2.0
+          </div>
         </div>
       )}
     </nav>

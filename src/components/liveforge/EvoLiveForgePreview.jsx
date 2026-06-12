@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { LIVEFORGE_TEMPLATES } from "../../lib/liveforge/liveForgeTemplates";
 import { createProofReceipt, promptBridgeCall } from "../../lib/liveforge/promptBridgeClient";
+import { BRIDGE_URL } from '../../config/bridge-config.js';
 
 const deviceWidths = {
   mobile: "390px",
@@ -16,7 +17,7 @@ function buildSrcDoc(draft) {
   return `<!doctype html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><style>html,body{margin:0;min-height:100%;height:100%}${draft.css}</style></head><body>${draft.html}<script>try{${draft.js || ""}}catch(error){document.body.insertAdjacentHTML('beforeend','<pre style="color:#ff6b6b;background:#111;padding:12px;">JS Error: '+error.message+'</pre>')}</script></body></html>`;
 }
 
-export function EvoLiveForgePreview({ promptBridgeBaseUrl = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) }) {
+export function EvoLiveForgePreview({ promptBridgeBaseUrl = BRIDGE_URL }) {
   const first = LIVEFORGE_TEMPLATES[0];
   const [selectedTemplateId, setSelectedTemplateId] = useState(first.id);
   const [instruction, setInstruction] = useState("");

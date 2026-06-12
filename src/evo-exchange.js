@@ -21,16 +21,20 @@ export class EvoExchange {
   }
 
   getStatus() {
-    return { 
-      id: 'evo-exchange', 
-      grade: 'S+++++', 
+    return {
+      id: 'evo-exchange',
+      grade: 'S+++++',
       state: 'VERIFIED',
-      resonance: 0.99 
+      resonance: 0.99
     };
   }
 }
 
 export function submitForExchange(recipeId, params = {}) {
+  if (!recipeId || typeof recipeId !== 'string') {
+    return { blocked: true, error: 'Invalid or missing recipeId', listing: { status: 'failed', moderationRequired: true } };
+  }
+
   const {
     authorId = 'studio_owner',
     title = params.name || `Recipe ${recipeId}`,
@@ -39,15 +43,26 @@ export function submitForExchange(recipeId, params = {}) {
     payloadJson = JSON.stringify({ recipeId, ...params }),
     priceCredits = 0
   } = params;
-  
+
+  if (typeof priceCredits !== 'number' || priceCredits < 0) {
+    return { blocked: true, error: 'priceCredits must be a positive number', listing: { status: 'failed', moderationRequired: true } };
+  }
+
   try {
     initDatabase();
-    const id = `mx_${Date.now()}`;
-    db.prepare(`
-      INSERT INTO marketplace_listings 
-      (id, author_id, title, description, type, payload_json, price_credits, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, 'published')
-    `).run(id, authorId, title, description, type, payloadJson, priceCredits);
+
+    // Begin transaction for safe rollback if insertion fails
+    const insertListing = db.transaction(() => {
+      const id = `mx_${Date.now()}`;
+      db.prepare(`
+        INSERT INTO marketplace_listings
+        (id, author_id, title, description, type, payload_json, price_credits, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'published')
+      `).run(id, authorId, title, description, type, payloadJson, priceCredits);
+      return id;
+    });
+
+    const id = insertListing();
 
     return {
       blocked: false,
@@ -68,10 +83,10 @@ export function downloadListing(listingId) {
     initDatabase();
     const listing = db.prepare('SELECT * FROM marketplace_listings WHERE id = ?').get(listingId);
     if (!listing) throw new Error('Listing not found');
-    
+
     // Increment downloads
     db.prepare('UPDATE marketplace_listings SET downloads = downloads + 1 WHERE id = ?').run(listingId);
-    
+
     return { success: true, listing };
   } catch (error) {
     Log.error('Failed to download listing:', error);

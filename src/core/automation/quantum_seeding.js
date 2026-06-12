@@ -1,5 +1,6 @@
 import { Log } from '../autonomy/SovereignLogger.js';
 import { execSync } from 'child_process';
+import { BRIDGE_URL } from '../../config/bridge-config.js';
 
 /**
  * PH EVO STUDIO — QUANTUM SEEDING (V4 RESTORED)
@@ -19,7 +20,7 @@ export class QuantumSeeding {
     try {
       // Run the self-train script with the correct bridge URL
       execSync('node scripts/ai_self_train.mjs', {
-        env: { ...process.env, BRIDGE_URL: (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) },
+        env: { ...process.env, BRIDGE_URL: BRIDGE_URL },
         stdio: 'inherit'
       });
       this.garden_status = 'SEEDED';

@@ -1,3 +1,4 @@
+import { BRIDGE_URL } from './config/bridge-config.js';
 /**
  * PH EVO STUDIO — PROMPTLINK REGISTRY (ENTERPRISE PRODUCTION)
  * ═══════════════════════════════════════════════════════════════
@@ -5,7 +6,6 @@
  * and validates PromptLink call gates. All state is persisted.
  */
 
-const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))));
 const STORAGE_KEY = 'ph_evo_promptlink_registry';
 
 // ─── Default Provider Registry ────────────────────────────────
@@ -13,7 +13,7 @@ const DEFAULT_PROVIDERS = [
   {
     id: 'prompthouse_local',
     displayName: 'PromptHouse Local Bridge',
-    baseUrl: (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))),
+    baseUrl: BRIDGE_URL,
     authType: 'ph_evo_api_key',
     credentialEnvKey: 'PH_EVO_API_KEY',
     capabilities: ['chat', 'embeddings', 'prompt_compile', 'forge'],

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
 export function PulseResourceBar() {
   const [cpu, setCpu] = useState(null);
@@ -13,7 +14,7 @@ export function PulseResourceBar() {
 
     const fetchMetrics = async () => {
       try {
-        const res = await fetch((globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))) + '/api/metrics');
+        const res = await fetch(BRIDGE_URL + '/api/metrics');
         if (res.ok) {
           const data = await res.json();
           if (!mounted) return;

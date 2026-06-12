@@ -1,4 +1,5 @@
 import { Log } from '../autonomy/SovereignLogger.js';
+import { BRIDGE_URL } from '../../config/bridge-config.js';
 /**
  * EVOGENAGE — EVOLUTION BRIDGE (STUDIO CORE)
  * ═══════════════════════════════════════════════════════════════
@@ -7,7 +8,7 @@ import { Log } from '../autonomy/SovereignLogger.js';
  */
 
 export class EvolutionBridge {
-  constructor(apiBaseUrl = (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))))) {
+  constructor(apiBaseUrl = BRIDGE_URL {
     this.apiBaseUrl = apiBaseUrl;
   }
 

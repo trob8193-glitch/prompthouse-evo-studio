@@ -66,6 +66,8 @@ import { registerCommerceMarketplaceRoutes } from './src/routes/commerce_marketp
 import { registerStudioMarketplaceRoutes } from './server/routes/studio_marketplace_routes.js';
 import { attachSseTransport } from './src/core/mcp/McpServerDaemon.mjs';
 import { registerRealTimeIngestRoutes } from './server/routes/realtime-ingest.routes.js';
+import { registerMobileEngineRoutes } from './generated_apis/mobile_engine_routes.js';
+import { registerTrainingQueueRoutes } from './generated_apis/training_queue_routes.js';
 
 // Import our core engines
 import { UniversalAIAdaptor } from './lib/ai/UniversalAIAdaptor.js';
@@ -277,6 +279,8 @@ registerEvoBondsRoutes(app);
 registerBrainRouterRoutes(app);
 registerCommerceMarketplaceRoutes(app);
 registerStudioMarketplaceRoutes(app);
+registerMobileEngineRoutes(app);
+registerTrainingQueueRoutes(app);
 
 // Attach the Global MCP SSE Endpoints
 attachSseTransport(app);

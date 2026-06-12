@@ -1,6 +1,7 @@
 export * from './EvoLlmPaths.js';
 export * from './EvoLlmPolicy.js';
 export * from './EvoLlmDataset.js';
+export * from './EvoLlmSynthesizer.js';
 export * from './EvoLlmEvaluation.js';
 export * from './EvoLlmRegistry.js';
 export * from './EvoLlmProviderAdapter.js';

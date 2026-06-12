@@ -4,6 +4,10 @@ import path from 'path';
 const DB_PATH = process.env.DATA_DIR ? path.join(process.env.DATA_DIR, 'prompthouse.db') : path.resolve('./prompthouse.db');
 const db = new Database(DB_PATH);
 
+// Critical Database Hardening: Enable WAL for high concurrency and strict Foreign Keys
+db.pragma('journal_mode = WAL');
+db.pragma('foreign_keys = ON');
+
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS organizations (
   id TEXT PRIMARY KEY,

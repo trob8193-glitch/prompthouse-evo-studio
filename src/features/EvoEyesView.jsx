@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Eye, AlertTriangle, CheckCircle2, Clock, Link2, RefreshCw } from 'lucide-react';
-
-const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))));
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
+import { safeFetchBridge } from '../config/bridge-config.js';
 
 function pillTone(health) {
   if (health === 'error') return { bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.35)', text: '#fca5a5' };
@@ -21,10 +21,10 @@ export function EvoEyesView() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${BRIDGE_URL}/api/studio/diagnostics?limit=70`, { signal: AbortSignal.timeout(12000) });
-        const data = await res.json().catch(() => null);
-        if (!res.ok) throw new Error(data?.error || `Diagnostics failed (${res.status})`);
+        const res = await safeFetchBridge('/api/studio/diagnostics?limit=70', { signal: AbortSignal.timeout(12000) });
+        if (!res.ok) throw new Error(res.error || `Diagnostics failed`);
         if (!mounted) return;
+        const data = res.data;
         setDiagnostics(data);
         if (!selectedId && data?.modules?.length) setSelectedId(data.modules[0].id);
       } catch (e) {
@@ -49,14 +49,11 @@ export function EvoEyesView() {
 
 
   return (
-    <div className="flex-col animate-in">
-      <div className="flex-between" style={{ marginBottom: 14 }}>
-        <div>
-          <div className="page-title" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Eye size={20} /> Evo Eyes
-          </div>
-          <div className="page-subtitle">Live module health, runtime probes, dependency edges (bridge-backed only).</div>
-        </div>
+    <IDEPageLayout
+      title="Evo Eyes"
+      description="Live module health, runtime probes, dependency edges (bridge-backed only)."
+      icon={Eye}
+      actions={
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {loading ? <span className="badge badge-dim">Scanning...</span> : null}
           <button
@@ -67,7 +64,8 @@ export function EvoEyesView() {
             <RefreshCw size={14} /> Refresh
           </button>
         </div>
-      </div>
+      }
+    >
 
       {error ? (
         <div className="card" style={{ border: '1px solid rgba(248,113,113,0.35)', background: 'rgba(248,113,113,0.06)' }}>
@@ -206,7 +204,7 @@ export function EvoEyesView() {
           </div>
         </div>
       </div>
-    </div>
+    </IDEPageLayout>
   );
 }
 

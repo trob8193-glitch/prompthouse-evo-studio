@@ -9,6 +9,8 @@ import './WitnessConsole.css';
  * The ultimate interface for the 10 Live Editor features.
  */
 
+import { safeFetchBridge } from '../config/bridge-config.js';
+
 export const WitnessConsole = () => {
   const { 
     is_hud_open, active_mode, setMode, prompts, traces, truth_scores, 
@@ -17,18 +19,17 @@ export const WitnessConsole = () => {
   } = useWitnessStore();
   const [glitchText, setGlitchText] = useState('SOVEREIGN_WITNESS_ACTIVE');
   const [studyRunning, setStudyRunning] = useState(false);
-  const BRIDGE_URL = ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001'))))))));
 
   const runStudyProtocol = async (protocol) => {
     if (studyRunning) return;
     setStudyRunning(true);
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/intelligence/execute`, {
+      const res = await safeFetchBridge('/api/intelligence/execute', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ module: 'SovereignStudy', action: 'initiate', payload: { protocol } }),
       });
-      const data = await res.json();
+      if (!res.ok) throw new Error(res.error || 'Study protocol failed');
+      const data = res.data;
       snapshotState({ ...active_state, protocol, lastStudy: data });
       setGlitchText(`STUDY_${protocol}_DONE`);
     } catch (e) {

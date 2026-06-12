@@ -13,6 +13,7 @@ import BrowserPreviewVerificationPanel from '../components/BrowserPreviewVerific
 import HandoverStatusPanel from '../components/HandoverStatusPanel.jsx';
 import { PreviewAccessDecisionPanel } from '../components/PreviewAccessDecisionPanel.jsx';
 import StripeCheckoutBrowserVerificationPanel from '../components/StripeCheckoutBrowserVerificationPanel.jsx';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
 
 /**
@@ -24,25 +25,11 @@ import StripeCheckoutBrowserVerificationPanel from '../components/StripeCheckout
  */
 export default function DeploymentCenterView() {
   return (
-    <div className="flex flex-col h-full animate-in fade-in duration-300 pb-10">
-      <header style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{
-            width: '48px', height: '48px',
-            background: 'linear-gradient(135deg, var(--accent-violet), var(--accent-indigo))',
-            borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'
-          }}>
-            <Rocket size={24} color="#fff" />
-          </div>
-          <div>
-            <h1 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>Deployment Center</h1>
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px', marginBottom: 0 }}>
-              Pre-flight readiness, deployment receipts, and owner-approved deploy actions.
-            </p>
-          </div>
-        </div>
-      </header>
-
+    <IDEPageLayout
+      title="Deployment Center"
+      description="Pre-flight readiness, deployment receipts, and owner-approved deploy actions."
+      icon={Rocket}
+    >
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
@@ -68,6 +55,6 @@ export default function DeploymentCenterView() {
           <DeploymentControlPanel />
         </div>
       </div>
-    </div>
+    </IDEPageLayout>
   );
 }
