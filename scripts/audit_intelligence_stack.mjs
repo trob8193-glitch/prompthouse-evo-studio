@@ -11,6 +11,7 @@ const targets = {
   appBridge: 'src/core/evo-llm/EvoAppIntelligenceBridge.js',
   workMemory: 'src/core/evo-llm/EvoWorkMemoryEngine.js',
   frontierSafety: 'src/core/evo-llm/FrontierIntelligenceSafetyGate.js',
+  tetherCore: 'src/core/evo-llm/EvoIntelligenceTetherCore.js',
   frontierSafetyCli: 'scripts/frontier_safety_gate.mjs',
   evoIndex: 'src/core/evo-llm/index.js',
   signalInstaller: 'scripts/install_evo_signal_fabric_routes.mjs',
@@ -18,6 +19,7 @@ const targets = {
   hardener: 'scripts/harden_intelligence_wiring.mjs',
   signalCli: 'scripts/build_signal_learning_dataset.mjs',
   appCli: 'scripts/build_app_intelligence_dataset.mjs',
+  appTetherCli: 'scripts/evo_app_intelligence.mjs',
   workCli: 'scripts/evo_work_memory.mjs',
   appRoute: 'generated_apis/evo_app_intelligence_routes.js',
   bridge: 'promptbridge-server.js',
@@ -26,36 +28,15 @@ const targets = {
 
 const checks = [];
 
-function abs(file) {
-  return path.join(rootDir, file);
-}
-
-function read(file) {
-  const full = abs(file);
-  return fs.existsSync(full) ? fs.readFileSync(full, 'utf8') : '';
-}
-
-function add(id, file, ok, weight, detail = '') {
-  checks.push({ id, file, ok: Boolean(ok), weight, earned: ok ? weight : 0, detail });
-}
-
-function exists(id, file, weight) {
-  add(id, file, fs.existsSync(abs(file)), weight, fs.existsSync(abs(file)) ? 'present' : 'missing');
-}
-
-function contains(id, file, needle, weight) {
-  const ok = read(file).includes(needle);
-  add(id, file, ok, weight, ok ? 'found' : `missing ${needle}`);
-}
-
+function abs(file) { return path.join(rootDir, file); }
+function read(file) { const full = abs(file); return fs.existsSync(full) ? fs.readFileSync(full, 'utf8') : ''; }
+function add(id, file, ok, weight, detail = '') { checks.push({ id, file, ok: Boolean(ok), weight, earned: ok ? weight : 0, detail }); }
+function exists(id, file, weight) { add(id, file, fs.existsSync(abs(file)), weight, fs.existsSync(abs(file)) ? 'present' : 'missing'); }
+function contains(id, file, needle, weight) { const ok = read(file).includes(needle); add(id, file, ok, weight, ok ? 'found' : `missing ${needle}`); }
 function syntax(id, file, weight) {
   if (!fs.existsSync(abs(file))) return add(id, file, false, weight, 'missing');
-  try {
-    execFileSync(process.execPath, ['--check', abs(file)], { cwd: rootDir, stdio: 'pipe' });
-    add(id, file, true, weight, 'node --check passed');
-  } catch (error) {
-    add(id, file, false, weight, String(error.stderr || error.message).slice(0, 800));
-  }
+  try { execFileSync(process.execPath, ['--check', abs(file)], { cwd: rootDir, stdio: 'pipe' }); add(id, file, true, weight, 'node --check passed'); }
+  catch (error) { add(id, file, false, weight, String(error.stderr || error.message).slice(0, 800)); }
 }
 
 for (const [id, file] of Object.entries(targets)) exists(`exists:${id}`, file, 3);
@@ -63,6 +44,8 @@ for (const [id, file] of Object.entries(targets)) exists(`exists:${id}`, file, 3
 contains('export:signal-bridge', targets.evoIndex, "export * from './EvoSignalLearningBridge.js';", 5);
 contains('export:app-bridge', targets.evoIndex, "export * from './EvoAppIntelligenceBridge.js';", 5);
 contains('export:work-memory', targets.evoIndex, "export * from './EvoWorkMemoryEngine.js';", 5);
+contains('export:frontier-safety', targets.evoIndex, "export * from './FrontierIntelligenceSafetyGate.js';", 5);
+contains('export:tether-core', targets.evoIndex, "export * from './EvoIntelligenceTetherCore.js';", 5);
 contains('installer:app-route-writer', targets.appInstaller, 'evo_app_intelligence_routes.js', 5);
 contains('installer:app-cli-writer', targets.appInstaller, 'build_app_intelligence_dataset.mjs', 5);
 contains('installer:bridge-import', targets.appInstaller, 'registerEvoAppIntelligenceRoutes', 5);
@@ -87,8 +70,16 @@ contains('frontier-safety:receipts', targets.frontierSafety, 'writeFrontierSafet
 contains('frontier-safety:secret-block', targets.frontierSafety, 'secretLikeTextBlocked', 6);
 contains('frontier-safety:human-review', targets.frontierSafety, 'highRiskNeedsHumanReview', 6);
 contains('frontier-safety-cli:decision', targets.frontierSafetyCli, 'evaluateFrontierIntelligenceSafety', 5);
+contains('tether:class', targets.tetherCore, 'class EvoIntelligenceTetherCore', 6);
+contains('tether:safety', targets.tetherCore, 'evaluateFrontierIntelligenceSafety', 6);
+contains('tether:safety-receipt', targets.tetherCore, 'writeFrontierSafetyReceipt', 6);
+contains('tether:work-memory', targets.tetherCore, 'ingestEvoWorkMemory', 6);
+contains('tether:dataset', targets.tetherCore, 'buildAppIntelligenceDataset', 6);
+contains('tether:promotion-proof', targets.tetherCore, 'requiredPromotionProof', 6);
+contains('tether:receipt', targets.tetherCore, 'writeTetherReceipt', 6);
+contains('tether-cli:cycle', targets.appTetherCli, '--cycle-test', 5);
 
-for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.frontierSafety, targets.frontierSafetyCli, targets.signalInstaller, targets.appInstaller, targets.hardener, targets.workCli]) {
+for (const file of [targets.signalFabric, targets.signalBridge, targets.appBridge, targets.workMemory, targets.frontierSafety, targets.tetherCore, targets.frontierSafetyCli, targets.signalInstaller, targets.appInstaller, targets.hardener, targets.workCli, targets.appTetherCli]) {
   syntax(`syntax:${file}`, file, 4);
 }
 if (fs.existsSync(abs(targets.appRoute))) syntax(`syntax:${targets.appRoute}`, targets.appRoute, 4);
@@ -105,18 +96,12 @@ const truthState = score >= 90 && missing.length === 0
     : 'INTELLIGENCE_STACK_AUDIT_FAIL';
 
 const report = {
-  generatedAt: new Date().toISOString(),
-  truthState,
-  score,
-  earned,
-  total,
-  passed: checks.length - missing.length,
-  failed: missing.length,
-  checks,
-  missing,
+  generatedAt: new Date().toISOString(), truthState, score, earned, total,
+  passed: checks.length - missing.length, failed: missing.length, checks, missing,
   recommendedCommands: [
     'node scripts/frontier_safety_gate.mjs --status',
     'node scripts/frontier_safety_gate.mjs --contract',
+    'node scripts/evo_app_intelligence.mjs --cycle-test',
     'npm run evo:wire-intelligence',
     'npm run evo:intelligence:verify',
     'node scripts/evo_work_memory.mjs --status',
