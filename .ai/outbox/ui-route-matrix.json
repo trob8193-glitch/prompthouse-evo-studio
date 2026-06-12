@@ -1,7 +1,7 @@
 {
-  "scannedAt": "2026-06-11T20:01:28.814Z",
-  "totalComponentsScanned": 132,
-  "totalBackendRoutesFound": 268,
+  "scannedAt": "2026-06-12T05:28:46.274Z",
+  "totalComponentsScanned": 133,
+  "totalBackendRoutesFound": 271,
   "deadLinksDetected": 1,
   "matrix": [
     {
@@ -401,7 +401,10 @@
     {
       "component": "src\\features\\ConnectionManager.jsx",
       "buttons": [
-        "{bonding ?  : }\r\n            Bond Node",
+        "{scanning ?  : }\r\n              Auto-Discover",
+        "BLE Pair",
+        "{bonding ?  : }\r\n              Bond Node",
+        "{ setTargetIp(node.ip); handleBond(); }}\r\n                  className=\"px-3 py-1.5 bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white rounded text-xs font-bold transition-colors\"\r\n                >\r\n                  Bond",
         "setTargetIp(item.url || item.target || item.ip || '')}\r\n                        className=\"text-[9px] font-black uppercase tracking-widest text-slate-600 hover:text-white transition-colors\"\r\n                      >\r\n                        Configure"
       ],
       "endpoints": []

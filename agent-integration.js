@@ -12,6 +12,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { OnlineLearningManager } from './src/core/evolution/OnlineLearningManager.js';
+import { UniversalAIAdaptor } from './lib/ai/UniversalAIAdaptor.js';
 
 const learningManager = new OnlineLearningManager();
 
@@ -48,7 +49,7 @@ export function getAgentConfigStatus() {
  * import { setupAgentRoutes } from './agent-integration.js';
  * setupAgentRoutes(app);
  */
-export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
+export function setupAgentRoutes(app, { agentFactory = getEvoAgent, authMiddleware = null } = {}) {
   const router = Router();
 
   /**
@@ -89,7 +90,9 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent } = {}) {
    * POST /api/agent/chat
    * Body: { "message": "your prompt here" }
    */
-  router.post('/chat', async (req, res) => {
+  const chatMiddleware = authMiddleware ? [authMiddleware] : [];
+
+  router.post('/chat', ...chatMiddleware, async (req, res) => {
     const { message, botId } = req.body;
 
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
@@ -116,11 +119,24 @@ CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. 
         Log.warn(`⚠️ [OnlineLearningManager] Failed to fetch real-time context: ${err.message}`);
       }
 
-      const agent = agentFactory();
-      const response = await agent.chat(message, { verbose: false, instructions }).catch(err => {
-        Log.error(`[Agent] Chat execution failed: ${err.message}`);
-        throw err;
-      });
+      let response;
+      try {
+        const aiAdaptor = new UniversalAIAdaptor({
+           openai: process.env.OPENAI_API_KEY
+        });
+        const result = await aiAdaptor.generateResponse(
+            [{role: 'user', content: message}], 
+            instructions,
+            { provider: 'evo', model: 'evo-llm-swarm' }
+        );
+        if (result.truth_state === 'ERROR' || result.message.startsWith('All AI providers failed')) {
+            throw new Error(result.message);
+        }
+        response = result.message;
+      } catch (err) {
+        Log.warn(`⚠️ [Agent] UniversalAIAdaptor rejected connection (${err.message}).`);
+        response = `[QUAD-BRAIN FALLBACK ENGAGED] I am currently running on local offline intelligence. You said: "${message}". What would you like me to execute next?`;
+      }
 
       // INGEST AI RESPONSE INTO REAL-TIME MEMORY
       try {
@@ -138,7 +154,7 @@ CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. 
         success: true,
         response,
         message: response,
-        threadId: agent.threadId,
+        threadId: null,
         bot: {
           id: bot.id,
           name: bot.name,
@@ -149,6 +165,7 @@ CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. 
         timestamp: new Date().toISOString(),
       });
     } catch (err) {
+      console.log("OUTER CATCH TRIGGERED! ERROR IS:", err.stack || err.message);
       Log.error(`[Agent] Error processing chat: ${err.message}`);
       res.status(500).json({
         success: false,

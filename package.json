@@ -12,7 +12,7 @@
     "prompthouse": "bin/prompthouse.js"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "test": "vitest run",
     "singularity:build": "node scripts/singularity-builder-daemon.mjs",
@@ -27,7 +27,7 @@
     "start": "node promptbridge-server.js",
     "bridge": "node promptbridge-server.js",
     "bridge:legacy": "node promptbridge-server-recovery.js",
-    "preview": "vite preview",
+    "preview": "vite preview --host",
     "dev:all": "concurrently \"npm run dev\" \"npm run bridge\"",
     "desktop": "electron desktop/evo-desktop-host.js",
     "desktop:dev": "concurrently \"npm run dev\" \"npm run desktop\"",
@@ -57,6 +57,9 @@
     "layer:snapshot": "node scripts/evo-layer.mjs snapshot",
     "layer:x10": "node scripts/evo-layer.mjs x10",
     "layer:runtime": "node scripts/evo-layer.mjs runtime",
+    "api:keys:generate": "node scripts/evo-api-keys.mjs generate",
+    "api:keys:list": "node scripts/evo-api-keys.mjs list",
+    "api:keys:revoke": "node scripts/evo-api-keys.mjs revoke",
     "layer:engines": "node scripts/evo-layer.mjs engines",
     "layer:tethers": "node scripts/evo-layer.mjs tethers",
     "layer:coordination": "node scripts/evo-layer.mjs coordination",

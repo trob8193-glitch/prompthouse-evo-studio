@@ -124,6 +124,11 @@ ensureEvolutionSchema();
 const app = express();
 app.set('trust proxy', 1);
 app.use(express.json({ limit: '10mb' }));
+app.use(cors({
+  origin: '*', // Allow all LAN IPs
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Hardened Security Headers (Edge Deployment Configured)
 app.use((req, res, next) => {
@@ -234,7 +239,7 @@ const evoAgent = {
 const executionPipeline = new RealExecutionPipeline({ evoAgent, db });
 const stripeClient = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 
-setupAgentRoutes(app);
+setupAgentRoutes(app, { authMiddleware: validateEvoApiKey });
 registerEmulatorRoutes(app);
 registerEvoBridgeRoutes(app);
 registerPlatformSentinelRoutes(app);
@@ -904,12 +909,13 @@ function validateEvoApiKey(req, res, next) {
 
 app.get('/api/auth/keys', (req, res) => {
   try {
+    const orgId = req.auth?.orgId || req.user_id || 'org_master';
     const keys = db.prepare(`
       SELECT id, name, key_prefix, environment, status, created_at, last_used_at 
       FROM api_keys 
-      WHERE status = 'active'
+      WHERE status = 'active' AND organization_id = ?
       ORDER BY created_at DESC
-    `).all();
+    `).all(orgId);
     res.json({ success: true, keys });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -919,6 +925,7 @@ app.get('/api/auth/keys', (req, res) => {
 app.post('/api/auth/keys', (req, res) => {
   try {
     const { name = 'External IDE' } = req.body;
+    const orgId = req.auth?.orgId || req.user_id || 'org_master';
     const randomBytes = crypto.randomBytes(24).toString('hex');
     const rawKey = `ph_evo_sk_${randomBytes}`;
     const prefix = `ph_evo_sk_${randomBytes.slice(0, 6)}`;
@@ -927,8 +934,8 @@ app.post('/api/auth/keys', (req, res) => {
     
     db.prepare(`
       INSERT INTO api_keys (id, organization_id, name, key_prefix, key_hash, environment, status)
-      VALUES (?, 'org_master', ?, ?, ?, 'local', 'active')
-    `).run(id, name, prefix, keyHash);
+      VALUES (?, ?, ?, ?, ?, 'local', 'active')
+    `).run(id, orgId, name, prefix, keyHash);
     
     res.json({
       success: true,
@@ -946,11 +953,12 @@ app.post('/api/auth/keys', (req, res) => {
 app.delete('/api/auth/keys/:id', (req, res) => {
   try {
     const { id } = req.params;
+    const orgId = req.auth?.orgId || req.user_id || 'org_master';
     const result = db.prepare(`
       UPDATE api_keys 
       SET status = 'revoked', revoked_at = CURRENT_TIMESTAMP 
-      WHERE id = ?
-    `).run(id);
+      WHERE id = ? AND organization_id = ?
+    `).run(id, orgId);
     
     if (result.changes === 0) {
       return res.status(404).json({ success: false, error: 'API Key not found or already revoked.' });
@@ -1044,6 +1052,29 @@ app.post('/v1/chat/completions', validateEvoApiKey, async (req, res) => {
 const httpServer = createServer(app);
 const hiveMind = new HiveMindProtocol(httpServer);
 
-httpServer.listen(port, '127.0.0.1', () => {
-  console.log(`PromptBridge Server & Hive Mind Swarm Node listening on http://127.0.0.1:${port}`);
+// --- Remote Mobile Push Notification Tunnel ---
+let connectedPhones = [];
+app.get('/api/remote-stream', (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'Access-Control-Allow-Origin': '*'
+  });
+  connectedPhones.push(res);
+  req.on('close', () => {
+    connectedPhones = connectedPhones.filter(p => p !== res);
+  });
+});
+app.post('/api/push-notification', (req, res) => {
+  const msg = req.body.message || 'Notification from Studio';
+  connectedPhones.forEach(p => p.write(`data: ${JSON.stringify({ message: msg })}\n\n`));
+  res.json({ success: true, pushedTo: connectedPhones.length });
+});
+// ----------------------------------------------
+
+httpServer.listen(port, '0.0.0.0', () => {
+  console.log(`PromptBridge Server & Hive Mind Swarm Node listening on http://0.0.0.0:${port}`);
+  console.log(`  → Local:   http://127.0.0.1:${port}`);
+  console.log(`  → Network: http://192.168.1.245:${port}  (LAN devices can reach this)`);
 });

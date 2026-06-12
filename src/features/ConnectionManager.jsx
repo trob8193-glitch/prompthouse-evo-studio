@@ -21,6 +21,8 @@ export default function ConnectionManager() {
   const [error, setError] = useState(null);
   const [targetIp, setTargetIp] = useState('');
   const [bonding, setBonding] = useState(false);
+  const [scanning, setScanning] = useState(false);
+  const [discoveredNodes, setDiscoveredNodes] = useState([]);
 
   const fetchConnections = async () => {
     setLoading(true);
@@ -62,6 +64,53 @@ export default function ConnectionManager() {
       alert(`System Error: ${err.message}`);
     } finally {
       setBonding(false);
+    }
+  };
+
+  const handleWifiScan = async () => {
+    setScanning(true);
+    try {
+      const result = await safeFetchBridge('/api/evo-wifi/scan');
+      if (result.ok && result.data?.discovered) {
+        setDiscoveredNodes(result.data.discovered);
+      }
+    } catch (err) {
+      alert(`Wi-Fi Scan Failed: ${err.message}`);
+    } finally {
+      setScanning(false);
+    }
+  };
+
+  const handleBluetoothPair = async () => {
+    if (!navigator.bluetooth) {
+      alert('Web Bluetooth API is not supported in this browser. Please use Chrome/Edge.');
+      return;
+    }
+    
+    try {
+      const device = await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: ['generic_access']
+      });
+      
+      // Successfully got a device, bond it in the backend
+      const result = await safeFetchBridge('/api/terminal/bond', {
+        method: 'POST',
+        body: JSON.stringify({ 
+          target: device.id || device.name || 'Bluetooth_Device',
+          type: 'BLUETOOTH',
+          name: device.name || 'Unknown Bluetooth Node'
+        }),
+      });
+      
+      if (result.data?.success) {
+        addBondedNode(result.data.node);
+        fetchConnections();
+      } else {
+        alert('Bluetooth handshake completed, but backend bonding failed.');
+      }
+    } catch (err) {
+      console.log('Bluetooth pairing cancelled or failed', err);
     }
   };
 
@@ -107,16 +156,60 @@ export default function ConnectionManager() {
               <ArrowRight className="absolute right-4 top-3.5 text-slate-700 group-focus-within:text-indigo-500 transition-colors" size={16} />
             </div>
           </div>
-          <button 
-            type="submit"
-            disabled={bonding || !targetIp}
-            className="md:self-end h-[46px] px-8 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:grayscale text-white font-black text-xs uppercase tracking-widest rounded-lg transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20"
-          >
-            {bonding ? <RefreshCcw size={14} className="animate-spin" /> : <Plus size={14} />}
-            Bond Node
-          </button>
+          <div className="flex flex-col md:flex-row gap-2 md:self-end">
+            <button 
+              type="button"
+              onClick={handleWifiScan}
+              disabled={scanning}
+              className="h-[46px] px-6 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-white font-black text-xs uppercase tracking-widest rounded-lg transition-all flex items-center gap-2"
+            >
+              {scanning ? <RefreshCcw size={14} className="animate-spin" /> : <Wifi size={14} />}
+              Auto-Discover
+            </button>
+            <button 
+              type="button"
+              onClick={handleBluetoothPair}
+              className="h-[46px] px-6 bg-slate-800 hover:bg-slate-700 text-white font-black text-xs uppercase tracking-widest rounded-lg transition-all flex items-center gap-2"
+            >
+              <Bluetooth size={14} className="text-blue-400" />
+              BLE Pair
+            </button>
+            <button 
+              type="submit"
+              disabled={bonding || !targetIp}
+              className="h-[46px] px-8 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:grayscale text-white font-black text-xs uppercase tracking-widest rounded-lg transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20"
+            >
+              {bonding ? <RefreshCcw size={14} className="animate-spin" /> : <Plus size={14} />}
+              Bond Node
+            </button>
+          </div>
         </form>
       </div>
+
+      {/* Discovered Nodes List */}
+      {discoveredNodes.length > 0 && (
+        <div className="bg-[#0c0c0e] rounded-xl border border-indigo-500/30 p-6 space-y-4">
+          <h3 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] flex items-center gap-2">
+            <Wifi size={12} /> Discovered Local Nodes
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {discoveredNodes.map((node, i) => (
+              <div key={i} className="flex items-center justify-between p-3 bg-slate-900 rounded-lg border border-slate-800">
+                <div>
+                  <div className="text-sm font-bold text-white">{node.name || 'Unknown Device'}</div>
+                  <div className="text-[10px] font-mono text-slate-500">{node.ip}</div>
+                </div>
+                <button 
+                  onClick={() => { setTargetIp(node.ip); handleBond(); }}
+                  className="px-3 py-1.5 bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white rounded text-xs font-bold transition-colors"
+                >
+                  Bond
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Connection Grid */}
       <div className="space-y-8">

@@ -59,6 +59,7 @@ import RealTimeValidationDashboard from './features/RealTimeValidationDashboard.
 import CommerceDashboard from './features/CommerceDashboard.jsx';
 import PricingCheckout from './features/PricingCheckout.jsx';
 import StudioMarketplaceDashboard from './features/StudioMarketplaceDashboard.jsx';
+import OmniBotRemote from './features/OmniBotRemote.jsx';
 
 export const PAGE_MAP = {
   'dashboard': SovereignIntelligenceDashboard,
@@ -197,6 +198,15 @@ export default function App() {
       clearInterval(timer);
     };
   }, [activePage, setEvolutionProfile, applyEvolutionRuntime]);
+
+  // Intercept the /remote route for external mobile devices
+  if (typeof window !== 'undefined' && window.location.pathname === '/remote') {
+    return (
+      <ErrorBoundary fallbackMessage="OmniBot Remote encountered an error.">
+        <OmniBotRemote />
+      </ErrorBoundary>
+    );
+  }
 
   return (
     <ErrorBoundary fallbackMessage="The studio encountered a critical error.">

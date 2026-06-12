@@ -1,10 +1,18 @@
 {
-  "generatedAt": "2026-06-11T20:01:58.788Z",
-  "truthState": "DATASET_READY",
-  "totalExamples": 27,
-  "validExamples": 27,
-  "invalidExamples": [],
-  "trainCount": 21,
+  "generatedAt": "2026-06-12T05:28:48.520Z",
+  "truthState": "DATASET_WARNINGS",
+  "totalExamples": 29,
+  "validExamples": 28,
+  "invalidExamples": [
+    {
+      "index": 8,
+      "valid": false,
+      "issues": [
+        "Unsupported claim detected: sentient"
+      ]
+    }
+  ],
+  "trainCount": 22,
   "evalCount": 6,
   "files": {
     "trainJsonl": ".evo-llm\\training-data\\evo-train.jsonl",

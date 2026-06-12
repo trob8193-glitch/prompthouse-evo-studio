@@ -1,7 +1,7 @@
 # AI Self-Training Report
-Generated: 2026-06-10T09:25:13.123Z
+Generated: 2026-06-11T20:06:07.110Z
 Bridge: http://127.0.0.1:3001
-Training capture: training_1781083512986
+Training capture: training_1781208366698
 Model: gpt-4o
 
 ## Review Snapshot
@@ -91,10 +91,10 @@ Read the full review at .ai/outbox/gpt-review.md and execute the recommended pro
   "capabilitySummary": {
     "total": 4
   },
-  "checkedAt": "2026-06-10T09:25:13.119Z",
+  "checkedAt": "2026-06-11T20:06:07.101Z",
   "applied": true,
   "receipt": {
-    "id": "self_impl_1781083513119",
-    "createdAt": "2026-06-10T09:25:13.119Z"
+    "id": "self_impl_1781208367101",
+    "createdAt": "2026-06-11T20:06:07.101Z"
   }
 }

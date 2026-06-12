@@ -4,7 +4,11 @@
  * Centralized resolution for bridge URLs and fetch operations.
  */
 
-export const BRIDGE_URL = import.meta.env?.VITE_BRIDGE_URL || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))));
+const defaultBridgeUrl = typeof window !== 'undefined' 
+  ? '' // Use relative path to hit Vite proxy and bypass Windows Firewall
+  : 'http://127.0.0.1:3001';
+
+export const BRIDGE_URL = import.meta.env?.VITE_BRIDGE_URL || (globalThis.process?.env?.BRIDGE_URL || defaultBridgeUrl);
 
 /**
  * Cleanly joins path segments to the bridge URL.

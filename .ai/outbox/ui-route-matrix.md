@@ -1,8 +1,8 @@
 # Full UI Button-to-Route Matrix
 
-**Generated**: 2026-06-11T20:01:28.814Z
-**Components Scanned**: 132
-**Known Backend Routes**: 268
+**Generated**: 2026-06-12T05:28:46.274Z
+**Components Scanned**: 133
+**Known Backend Routes**: 271
 **Potential Dead Links Detected**: 1
 
 ## Matrix
@@ -709,8 +709,15 @@
 
 ### src\features\ConnectionManager.jsx
 **Interactive Controls**: 
+- {scanning ?  : }
+              Auto-Discover
+- BLE Pair
 - {bonding ?  : }
-            Bond Node
+              Bond Node
+- { setTargetIp(node.ip); handleBond(); }}
+                  className="px-3 py-1.5 bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white rounded text-xs font-bold transition-colors"
+                >
+                  Bond
 - setTargetIp(item.url || item.target || item.ip || '')}
                         className="text-[9px] font-black uppercase tracking-widest text-slate-600 hover:text-white transition-colors"
                       >
