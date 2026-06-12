@@ -13,7 +13,13 @@ const scripts = {
   'evo:tether:memory': 'node scripts/evo_work_memory.mjs --status',
   'evo:tether:audit': 'node scripts/audit_intelligence_stack.mjs',
   'evo:tether:proof': 'node scripts/frontier_safety_gate.mjs --status && node scripts/evo_work_memory.mjs --status && node scripts/evo_app_intelligence.mjs --cycle-test && node scripts/audit_intelligence_stack.mjs',
-  'evo:intelligence:master': 'npm run evo:wire-intelligence && npm run evo:tether:proof && npm run build && npm run verify:studio'
+  'evo:auto:contract': 'node scripts/safe_autonomous_execution.mjs --contract',
+  'evo:auto:status': 'node scripts/safe_autonomous_execution.mjs --status',
+  'evo:auto:plan': 'node scripts/safe_autonomous_execution.mjs',
+  'evo:omnibot-mobile:contract': 'node scripts/omnibot_mobile.mjs --contract',
+  'evo:omnibot-mobile:status': 'node scripts/omnibot_mobile.mjs --status',
+  'evo:omnibot-mobile:session': 'node scripts/omnibot_mobile.mjs',
+  'evo:intelligence:master': 'npm run evo:wire-intelligence && npm run evo:tether:proof && npm run evo:auto:contract && npm run evo:auto:status && npm run evo:omnibot-mobile:contract && npm run evo:omnibot-mobile:status && npm run build && npm run verify:studio'
 };
 
 if (!fs.existsSync(pkgPath)) {
@@ -29,7 +35,7 @@ const receiptDir = path.join(rootDir, '.prompthouse-data', 'intelligence-wiring'
 fs.mkdirSync(receiptDir, { recursive: true });
 const receipt = {
   generatedAt: new Date().toISOString(),
-  truthState: 'TETHER_COMPLETION_COMMANDS_INSTALLED',
+  truthState: 'TETHER_AUTONOMY_AND_MOBILE_COMMANDS_INSTALLED',
   scripts
 };
 const receiptPath = path.join(receiptDir, `tether-completion-commands-${Date.now()}.json`);
