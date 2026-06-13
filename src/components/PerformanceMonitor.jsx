@@ -14,46 +14,49 @@ export const PerformanceMonitor = () => {
   };
 
   const MetricCard = ({ title, value, unit, icon: Icon, color, max = 100 }) => (
-    <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-xl">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-slate-400 text-xs font-medium uppercase tracking-wider">{title}</span>
-        <Icon size={16} className={color} />
-      </div>
+    <div className="card">
+      <div className="card-body">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">{title}</span>
+          <Icon size={16} className={color} />
+        </div>
       <div className="flex items-baseline gap-1">
         <span className="text-2xl font-bold font-mono">{value == null ? '—' : value.toFixed(1)}</span>
         <span className="text-slate-500 text-xs">{unit}</span>
       </div>
-      <div className="mt-3 h-1 bg-slate-800 rounded-full overflow-hidden">
+      <div className="mt-4 h-1 bg-[rgba(0,0,0,0.4)] rounded-full overflow-hidden shadow-inner">
         <motion.div 
           className={`h-full ${color.replace('text-', 'bg-')}`}
+          style={{ boxShadow: '0 0 10px currentColor' }}
           initial={{ width: 0 }}
           animate={{ width: `${value == null ? 0 : Math.min(100, (value / max) * 100)}%` }}
         />
+      </div>
       </div>
     </div>
   );
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold flex items-center gap-2">
-          <Activity className="text-indigo-500" /> System Performance
+    <div className="module-container">
+      <div className="module-header">
+        <h2 className="module-title">
+          <Activity className="text-indigo-500 drop-shadow-md" /> System Performance
         </h2>
-        <div className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">Live Profile: ACTIVE</div>
+        <div className="text-[10px] text-cyan-400 font-bold bg-cyan-900/30 border border-cyan-500/30 px-3 py-1 rounded-full uppercase tracking-wider">Live Profile: ACTIVE</div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="evo-grid">
         <MetricCard title="Request Latency" value={metrics.latency} unit="ms" icon={Zap} color="text-yellow-500" max={500} />
         <MetricCard title="Cache Hit Rate" value={metrics.cacheHit} unit="%" icon={Activity} color="text-emerald-500" max={100} />
         <MetricCard title="CPU User Time" value={metrics.cpuUserSeconds} unit="s" icon={Cpu} color="text-rose-500" max={30} />
         <MetricCard title="Requests" value={metrics.rps} unit="/s" icon={Database} color="text-indigo-500" max={5} />
       </div>
 
-      <div className="mt-8 bg-slate-900/80 border border-slate-800 rounded-xl p-6">
-        <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
-          <Database size={16} className="text-indigo-400" /> Optimization Proof
+      <div className="mt-6 card p-6 border-l-2 border-l-indigo-500">
+        <h3 className="text-xs font-bold mb-4 flex items-center gap-2 uppercase tracking-widest text-slate-300">
+          <Database size={14} className="text-indigo-400" /> Optimization Proof
         </h3>
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div className="flex justify-between text-xs">
             <span className="text-slate-400">In-Memory Cache (TTL 60s)</span>
             <span className="text-emerald-400">ENABLED</span>

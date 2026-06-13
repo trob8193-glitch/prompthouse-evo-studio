@@ -1,10 +1,10 @@
 # Singularity Edge Enterprise Audit
-Generated: 2026-06-12T01:32:46.306Z
+Generated: 2026-06-12T18:43:27.803Z
 
 ## Truth Probe
 - State: TRUTH_PROBE_READY
 - Modules: 15
-- Average Score: 100
+- Average Score: 96
 
 ## Studio Scan
 - State: STUDIO_SCAN_CLEAR
@@ -13,7 +13,7 @@ Generated: 2026-06-12T01:32:46.306Z
 
 ## Local Gates
 - FAILED: route drift audit
-- FAILED: dead surface audit
+- PASSED: dead surface audit
 - FAILED: enterprise static audit
 - FAILED: focused route/dead tests
 

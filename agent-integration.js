@@ -197,6 +197,13 @@ CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. 
         response = `[QUAD-BRAIN FALLBACK ENGAGED] I am currently running on local offline intelligence. You said: "${message}". What would you like me to execute next?`;
       }
 
+      const agent = agentFactory();
+      agent.conversationHistory.push({
+        timestamp: new Date(),
+        user: message,
+        assistant: response,
+      });
+
       // INGEST AI RESPONSE INTO REAL-TIME MEMORY
       try {
         await learningManager.ingestKnowledgeChunk({

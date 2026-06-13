@@ -10,6 +10,26 @@ import {
 } from '../generated_apis/promptshell_routes.js';
 import { registerExternalConnectorRoutes } from '../generated_apis/external_connector_routes.js';
 import { RealExecutionPipeline } from '../lib/execution/pipeline.js';
+import { UniversalAIAdaptor } from '../lib/ai/UniversalAIAdaptor.js';
+
+vi.mock('../lib/ai/UniversalAIAdaptor.js', () => ({
+  UniversalAIAdaptor: class {
+    async generateResponse(messages) {
+      return {
+        truth_state: 'READY',
+        message: JSON.stringify({
+          name: 'Agent Built Project',
+          description: 'Generated from test intent',
+          features: ['Agent route', 'PromptShell route'],
+          architecture: 'PromptBridge API and Flutter client',
+          required_connectors: ['github'],
+          readiness_score: 82,
+          estimated_hours: 12,
+        }),
+      };
+    }
+  },
+}));
 
 const openServers = [];
 const openDbs = [];

@@ -239,8 +239,16 @@ export function Terminal() {
     addTerminalHistory,
     addBondedNode,
     bondedNodes,
-    metrics
+    metrics,
+    sendChatMessage
   } = useSovereignStore();
+
+  const themeConfigs = {
+    evo: { accent: '#818cf8', logBg: 'rgba(5,5,12,0.6)' },
+    matrix: { accent: '#34d399', logBg: 'rgba(2,10,5,0.8)' },
+    classic: { accent: '#64748b', logBg: 'rgba(15,23,42,0.9)' }
+  };
+  const tc = themeConfigs[terminalTheme] || themeConfigs.evo;
 
   const [command, setCommand] = useState('');
   const [executing, setExecuting] = useState(false);
@@ -249,7 +257,15 @@ export function Terminal() {
   const [catalogOpen, setCatalogOpen] = useState(true);
   const [catalogFilter, setCatalogFilter] = useState('');
   const [sessionCwds, setSessionCwds] = useState({});
+  const [activePane, setActivePane] = useState('terminal'); // 'terminal', 'output', 'debug', 'ports'
   const scrollRef = useRef(null);
+
+  const debugWithAI = () => {
+    const text = (terminalSessions[activeTerminalSession] || []).map(l => l.content).join('\n');
+    if (text) {
+      sendChatMessage(`Analyze and debug these terminal logs:\n\`\`\`\n${text.substring(text.length - 3000)}\n\`\`\``);
+    }
+  };
 
   const logs = terminalSessions[activeTerminalSession] || [];
   const normalizedFilter = catalogFilter.trim().toLowerCase();
@@ -413,27 +429,28 @@ export function Terminal() {
               <span className="evo-shell-title" style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase' }}>
                 EvoShell Master Control
               </span>
-              <span style={{ fontSize: 7, color: '#334155', fontWeight: 800, letterSpacing: '0.15em', marginLeft: 4 }}>v4.0</span>
             </div>
             
-            {/* Session Tabs */}
+            {/* Pane Tabs */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 2, background: 'rgba(0,0,0,0.4)', padding: 3, borderRadius: 6, border: '1px solid rgba(255,255,255,0.04)' }}>
-              {Object.keys(terminalSessions).map((session) => (
-                <button
-                  key={session}
-                  onClick={() => setActiveTerminalSession(session)}
-                  style={{
-                    padding: '4px 10px', borderRadius: 4, fontSize: 8, fontWeight: 800,
-                    letterSpacing: '0.15em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    background: activeTerminalSession === session ? tc.accent : 'transparent',
-                    color: activeTerminalSession === session ? '#000' : '#475569',
-                    boxShadow: activeTerminalSession === session ? `0 0 12px ${tc.accent}40` : 'none'
-                  }}
-                >
-                  {session}
-                </button>
-              ))}
+              {['Terminal', 'Output', 'Debug Console', 'Ports'].map((pane) => {
+                const paneId = pane.toLowerCase().split(' ')[0];
+                return (
+                  <button
+                    key={pane}
+                    onClick={() => setActivePane(paneId)}
+                    style={{
+                      padding: '4px 10px', borderRadius: 4, fontSize: 10, fontWeight: 700,
+                      border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+                      background: activePane === paneId ? tc.accent : 'transparent',
+                      color: activePane === paneId ? '#000' : '#94a3b8',
+                      boxShadow: activePane === paneId ? `0 0 12px ${tc.accent}40` : 'none'
+                    }}
+                  >
+                    {pane}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -464,6 +481,7 @@ export function Terminal() {
 
             {/* Action Buttons */}
             {[
+              { icon: Zap, title: 'Debug with AI', onClick: debugWithAI, hoverColor: '#ec4899' },
               { icon: Copy, title: 'Copy Output', onClick: copyToClipboard },
               { icon: Download, title: 'Download Logs', onClick: downloadLogs },
               { icon: Trash2, title: 'Clear Session', onClick: () => clearTerminal(activeTerminalSession), hoverColor: '#f43f5e' },
@@ -484,185 +502,250 @@ export function Terminal() {
           </div>
         </div>
 
-        {/* ══ STATS BAR ══ */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 10, padding: '4px 20px',
-          background: 'rgba(0,0,0,0.25)',
-          borderBottom: '1px solid rgba(255,255,255,0.03)'
-        }}>
-          {[
-            { icon: Activity, color: '#818cf8', label: 'Latency', value: metrics?.latency ? `${parseFloat(metrics.latency).toFixed(0)}ms` : '4ms' },
-            { icon: Shield, color: '#10b981', label: 'Bonding', value: bondedNodes.length > 0 ? `${bondedNodes.length} Nodes` : 'Standalone' },
-            { icon: Zap, color: '#f59e0b', label: 'Power', value: metrics ? 'Optimal' : 'Standby' },
-            { icon: Layers, color: '#818cf8', label: 'Session', value: activeTerminalSession.toUpperCase() },
-            { icon: Radio, color: '#10b981', label: 'Bridge', value: 'Connected' }
-          ].map((stat, i) => (
-            <div key={i} className="evo-stat-badge" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <stat.icon size={9} style={{ color: stat.color }} />
-              <span style={{ fontSize: 7, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#475569' }}>
-                {stat.label}:
-              </span>
-              <span style={{ fontSize: 7, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#64748b' }}>
-                {stat.value}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* ══ COMMAND DECK ══ */}
-        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', background: 'rgba(0,0,0,0.2)' }}>
-          <div style={{ padding: '8px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <button
-              onClick={() => setCatalogOpen(v => !v)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',
-                borderRadius: 6, fontSize: 9, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase',
-                border: `1px solid ${tc.accent}30`, color: tc.accent, background: 'transparent', cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = `${tc.accent}15`; e.currentTarget.style.borderColor = `${tc.accent}60`; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = `${tc.accent}30`; }}
-            >
-              <Command size={11} />
-              Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}
-              {catalogOpen ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
-            </button>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.3)' }}>
-              <Search size={11} style={{ color: '#334155' }} />
-              <input
-                type="text"
-                value={catalogFilter}
-                onChange={e => setCatalogFilter(e.target.value)}
-                placeholder="Filter commands..."
-                aria-label="Filter command catalog"
-                style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 10, color: '#cbd5e1', fontFamily: 'inherit' }}
-              />
-            </div>
-          </div>
-
-          {catalogOpen && (
-            <div style={{ padding: '0 20px 10px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 6, maxHeight: 180, overflowY: 'auto' }}>
-              {filteredCommands.map(item => (
+        {/* ══ PANE CONTENT ══ */}
+        {activePane === 'terminal' && (
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+            {/* Session Tabs */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(0,0,0,0.25)', padding: '6px 20px', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+              <span style={{ fontSize: 8, fontWeight: 800, color: '#475569', letterSpacing: '0.1em', textTransform: 'uppercase', marginRight: 8 }}>SESSIONS:</span>
+              {Object.keys(terminalSessions).map((session) => (
                 <button
-                  key={item.id}
-                  onClick={() => runCatalogCommand(item)}
-                  disabled={executing}
-                  className="evo-cmd-card"
-                  style={executing ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                  key={session}
+                  onClick={() => setActiveTerminalSession(session)}
+                  style={{
+                    padding: '4px 10px', borderRadius: 4, fontSize: 8, fontWeight: 800,
+                    letterSpacing: '0.15em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    background: activeTerminalSession === session ? tc.accent : 'rgba(0,0,0,0.4)',
+                    color: activeTerminalSession === session ? '#000' : '#475569',
+                    boxShadow: activeTerminalSession === session ? `0 0 12px ${tc.accent}40` : 'none'
+                  }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 9, color: tc.accent, fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{item.label}</span>
-                    <span style={{ fontSize: 7, color: '#334155', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{item.session}</span>
-                  </div>
-                  <div style={{ marginTop: 4, fontSize: 9, color: '#475569', lineHeight: 1.3 }}>{item.description}</div>
-                  <div style={{ marginTop: 4, fontFamily: 'monospace', fontSize: 9, color: '#34d399', opacity: 0.8 }}>{item.command}</div>
+                  {session}
                 </button>
               ))}
-              {filteredCommands.length === 0 && (
-                <div style={{ gridColumn: '1/-1', fontSize: 10, color: '#334155', padding: '12px 0' }}>No commands match this filter.</div>
-              )}
             </div>
-          )}
-        </div>
 
-        {/* ══ TERMINAL OUTPUT ══ */}
-        <div 
-          ref={scrollRef}
-          style={{
-            flex: 1, overflowY: 'auto', padding: '12px 20px',
-            fontFamily: '"JetBrains Mono", "Fira Code", "Cascadia Code", monospace',
-            fontSize: 11, background: tc.logBg
-          }}
-        >
-          {logs.map((log) => (
-            <div key={log.id} className="evo-log-entry" style={{ marginBottom: 4 }}>
-              <div style={{ display: 'flex', gap: 12, lineHeight: 1.6 }}>
-                <span style={{ color: '#1e293b', fontSize: 8, marginTop: 3, flexShrink: 0, userSelect: 'none', fontWeight: 700 }}>
-                  [{new Date(log.timestamp).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]
-                </span>
-                <span style={{
-                  wordBreak: 'break-all', whiteSpace: 'pre-wrap', flex: 1,
-                  color: log.type === 'command' ? '#e2e8f0' :
-                         log.type === 'error' ? '#fb7185' :
-                         log.type === 'success' ? '#34d399' :
-                         log.type === 'system' ? tc.accent : '#94a3b8',
-                  fontWeight: log.type === 'command' ? 700 : log.type === 'system' ? 800 : 400,
-                  textShadow: log.type === 'error' ? '0 0 8px rgba(251,113,133,0.3)' :
-                              log.type === 'success' ? '0 0 8px rgba(52,211,153,0.2)' : 'none'
-                }}>
-                  {log.content}
-                </span>
+            {/* ══ STATS BAR ══ */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 10, padding: '4px 20px',
+              background: 'rgba(0,0,0,0.25)',
+              borderBottom: '1px solid rgba(255,255,255,0.03)'
+            }}>
+              {[
+                { icon: Activity, color: '#818cf8', label: 'Latency', value: metrics?.latency ? `${parseFloat(metrics.latency).toFixed(0)}ms` : '4ms' },
+                { icon: Shield, color: '#10b981', label: 'Bonding', value: bondedNodes.length > 0 ? `${bondedNodes.length} Nodes` : 'Standalone' },
+                { icon: Zap, color: '#f59e0b', label: 'Power', value: metrics ? 'Optimal' : 'Standby' },
+                { icon: Layers, color: '#818cf8', label: 'Session', value: activeTerminalSession.toUpperCase() },
+                { icon: Radio, color: '#10b981', label: 'Bridge', value: 'Connected' }
+              ].map((stat, i) => (
+                <div key={i} className="evo-stat-badge" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <stat.icon size={9} style={{ color: stat.color }} />
+                  <span style={{ fontSize: 7, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#475569' }}>
+                    {stat.label}:
+                  </span>
+                  <span style={{ fontSize: 7, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#64748b' }}>
+                    {stat.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* ══ COMMAND DECK ══ */}
+            <div style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', background: 'rgba(0,0,0,0.2)' }}>
+              <div style={{ padding: '8px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
+                <button
+                  onClick={() => setCatalogOpen(v => !v)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',
+                    borderRadius: 6, fontSize: 9, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase',
+                    border: `1px solid ${tc.accent}30`, color: tc.accent, background: 'transparent', cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = `${tc.accent}15`; e.currentTarget.style.borderColor = `${tc.accent}60`; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = `${tc.accent}30`; }}
+                >
+                  <Command size={11} />
+                  Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}
+                  {catalogOpen ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
+                </button>
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.3)' }}>
+                  <Search size={11} style={{ color: '#334155' }} />
+                  <input
+                    type="text"
+                    value={catalogFilter}
+                    onChange={e => setCatalogFilter(e.target.value)}
+                    placeholder="Filter commands..."
+                    aria-label="Filter command catalog"
+                    style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 10, color: '#cbd5e1', fontFamily: 'inherit' }}
+                  />
+                </div>
               </div>
-              {log.signature && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginLeft: 44, marginTop: 2, fontSize: 7, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(99,102,241,0.4)' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Shield size={7} /> TRUTH_SIG: {log.signature}</span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Zap size={7} /> LATENCY: {log.duration}ms</span>
-                  <span style={{ color: 'rgba(16,185,129,0.4)' }}>[REALITY_SIGNED]</span>
+
+              {catalogOpen && (
+                <div style={{ padding: '0 20px 10px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 6, maxHeight: 180, overflowY: 'auto' }}>
+                  {filteredCommands.map(item => (
+                    <button
+                      key={item.id}
+                      onClick={() => runCatalogCommand(item)}
+                      disabled={executing}
+                      className="evo-cmd-card"
+                      style={executing ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: 9, color: tc.accent, fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{item.label}</span>
+                        <span style={{ fontSize: 7, color: '#334155', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{item.session}</span>
+                      </div>
+                      <div style={{ marginTop: 4, fontSize: 9, color: '#475569', lineHeight: 1.3 }}>{item.description}</div>
+                      <div style={{ marginTop: 4, fontFamily: 'monospace', fontSize: 9, color: '#34d399', opacity: 0.8 }}>{item.command}</div>
+                    </button>
+                  ))}
+                  {filteredCommands.length === 0 && (
+                    <div style={{ gridColumn: '1/-1', fontSize: 10, color: '#334155', padding: '12px 0' }}>No commands match this filter.</div>
+                  )}
                 </div>
               )}
             </div>
-          ))}
-          {executing && (
-            <div style={{ display: 'flex', gap: 12, padding: '4px 0' }}>
-              <span style={{ color: '#1e293b', fontSize: 8, marginTop: 3, fontWeight: 700 }}>[......]</span>
-              <span style={{ color: tc.accent, fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 8, fontSize: 11 }}>
-                <div className="evo-pulse-orb" style={{ width: 6, height: 6, borderRadius: '50%', background: '#00f0ff' }} />
-                ANCHORING_REALITY...
-              </span>
-            </div>
-          )}
-        </div>
 
-        {/* ══ INPUT BAR ══ */}
-        <form 
-          onSubmit={handleRunCommand}
-          className="evo-input-glow"
-          style={{
-            display: 'flex', alignItems: 'center', gap: 12, padding: '10px 20px',
-            background: 'linear-gradient(90deg, rgba(99,102,241,0.03), transparent)',
-            borderTop: '1px solid rgba(255,255,255,0.05)',
-            transition: 'all 0.2s'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-            <span style={{ color: '#10b981', fontWeight: 900, fontSize: 11 }}>PS</span>
-            <span style={{ color: '#1e293b', fontWeight: 700, fontSize: 10, maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                  title={sessionCwds[activeTerminalSession] || 'C:\\PH\\Evo\\Studio'}>
-              {sessionCwds[activeTerminalSession] || 'C:\\PH\\Evo\\Studio'}
-            </span>
-            <span className="evo-shell-title" style={{ fontWeight: 900, fontSize: 12, letterSpacing: '-0.5px' }}>❯❯❯</span>
-          </div>
-          <input 
-            type="text"
-            value={command}
-            onChange={e => setCommand(e.target.value)}
-            onKeyDown={handleKeyDown}
-            disabled={executing}
-            aria-label="Terminal command input"
-            placeholder="Enter command..."
-            style={{
-              flex: 1, background: 'transparent', border: 'none', outline: 'none',
-              color: '#e2e8f0', fontFamily: '"JetBrains Mono", "Fira Code", monospace', fontSize: 12
-            }}
-            autoFocus
-          />
-          {command.trim() && (
-            <button 
-              type="submit" 
-              style={{ 
-                background: 'none', border: 'none', cursor: 'pointer',
-                color: tc.accent, transition: 'all 0.15s', display: 'flex'
+            {/* ══ TERMINAL OUTPUT ══ */}
+            <div 
+              ref={scrollRef}
+              style={{
+                flex: 1, overflowY: 'auto', padding: '12px 20px',
+                fontFamily: '"JetBrains Mono", "Fira Code", "Cascadia Code", monospace',
+                fontSize: 11, background: tc.logBg
               }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'scale(1.15)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = tc.accent; e.currentTarget.style.transform = 'scale(1)'; }}
             >
-              <Play size={16} fill="currentColor" />
-            </button>
-          )}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8, opacity: 0.3, transition: 'opacity 0.2s' }}>
-            <History size={13} style={{ color: '#475569' }} />
+              {logs.map((log) => (
+                <div key={log.id} className="evo-log-entry" style={{ marginBottom: 4 }}>
+                  <div style={{ display: 'flex', gap: 12, lineHeight: 1.6 }}>
+                    <span style={{ color: '#1e293b', fontSize: 8, marginTop: 3, flexShrink: 0, userSelect: 'none', fontWeight: 700 }}>
+                      [{new Date(log.timestamp).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]
+                    </span>
+                    <span style={{
+                      wordBreak: 'break-all', whiteSpace: 'pre-wrap', flex: 1,
+                      color: log.type === 'command' ? '#e2e8f0' :
+                             log.type === 'error' ? '#fb7185' :
+                             log.type === 'success' ? '#34d399' :
+                             log.type === 'system' ? tc.accent : '#94a3b8',
+                      fontWeight: log.type === 'command' ? 700 : log.type === 'system' ? 800 : 400,
+                      textShadow: log.type === 'error' ? '0 0 8px rgba(251,113,133,0.3)' :
+                                  log.type === 'success' ? '0 0 8px rgba(52,211,153,0.2)' : 'none'
+                    }}>
+                      {log.content}
+                    </span>
+                  </div>
+                  {log.signature && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginLeft: 44, marginTop: 2, fontSize: 7, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(99,102,241,0.4)' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Shield size={7} /> TRUTH_SIG: {log.signature}</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Zap size={7} /> LATENCY: {log.duration}ms</span>
+                      <span style={{ color: 'rgba(16,185,129,0.4)' }}>[REALITY_SIGNED]</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+              {executing && (
+                <div style={{ display: 'flex', gap: 12, padding: '4px 0' }}>
+                  <span style={{ color: '#1e293b', fontSize: 8, marginTop: 3, fontWeight: 700 }}>[......]</span>
+                  <span style={{ color: tc.accent, fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 8, fontSize: 11 }}>
+                    <div className="evo-pulse-orb" style={{ width: 6, height: 6, borderRadius: '50%', background: '#00f0ff' }} />
+                    ANCHORING_REALITY...
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* ══ INPUT BAR ══ */}
+            <form 
+              onSubmit={handleRunCommand}
+              className="evo-input-glow"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 12, padding: '10px 20px',
+                background: 'linear-gradient(90deg, rgba(99,102,241,0.03), transparent)',
+                borderTop: '1px solid rgba(255,255,255,0.05)',
+                transition: 'all 0.2s',
+                marginTop: 'auto'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                <span style={{ color: '#10b981', fontWeight: 900, fontSize: 11 }}>PS</span>
+                <span style={{ color: '#1e293b', fontWeight: 700, fontSize: 10, maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                      title={sessionCwds[activeTerminalSession] || 'C:\\PH\\Evo\\Studio'}>
+                  {sessionCwds[activeTerminalSession] || 'C:\\PH\\Evo\\Studio'}
+                </span>
+                <span className="evo-shell-title" style={{ fontWeight: 900, fontSize: 12, letterSpacing: '-0.5px' }}>❯❯❯</span>
+              </div>
+              <input 
+                type="text"
+                value={command}
+                onChange={e => setCommand(e.target.value)}
+                onKeyDown={handleKeyDown}
+                disabled={executing}
+                aria-label="Terminal command input"
+                placeholder="Enter command..."
+                style={{
+                  flex: 1, background: 'transparent', border: 'none', outline: 'none',
+                  color: '#e2e8f0', fontFamily: '"JetBrains Mono", "Fira Code", monospace', fontSize: 12
+                }}
+                autoFocus
+              />
+              {command.trim() && (
+                <button 
+                  type="submit" 
+                  style={{ 
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    color: tc.accent, transition: 'all 0.15s', display: 'flex'
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'scale(1.15)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = tc.accent; e.currentTarget.style.transform = 'scale(1)'; }}
+                >
+                  <Play size={16} fill="currentColor" />
+                </button>
+              )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8, opacity: 0.3, transition: 'opacity 0.2s' }}>
+                <History size={13} style={{ color: '#475569' }} />
+              </div>
+            </form>
           </div>
-        </form>
+        )}
+
+        {activePane === 'output' && (
+          <div style={{ flex: 1, padding: '20px 30px', color: '#94a3b8', fontSize: 12, fontFamily: '"JetBrains Mono", monospace', overflowY: 'auto', background: tc.logBg }}>
+            <div style={{ color: tc.accent, marginBottom: 16, fontWeight: 'bold', fontSize: 14 }}>[OUTPUT STREAM COMPILER READY]</div>
+            <div style={{ color: '#475569' }}>No active build artifacts or output streams detected. Run a build to populate.</div>
+          </div>
+        )}
+
+        {activePane === 'debug' && (
+          <div style={{ flex: 1, padding: '20px 30px', color: '#94a3b8', fontSize: 12, fontFamily: '"JetBrains Mono", monospace', overflowY: 'auto', background: tc.logBg }}>
+             <div style={{ color: '#fb7185', marginBottom: 16, fontWeight: 'bold', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Activity size={16} /> DEBUG CONSOLE
+             </div>
+             <div style={{ color: '#475569' }}>No active error breakpoints or runtime exceptions traced. Use 'Debug with AI' in the Terminal pane to trace errors.</div>
+          </div>
+        )}
+
+        {activePane === 'ports' && (
+          <div style={{ flex: 1, padding: '20px 30px', color: '#94a3b8', fontSize: 12, fontFamily: '"JetBrains Mono", monospace', overflowY: 'auto', background: tc.logBg }}>
+             <div style={{ color: '#34d399', marginBottom: 20, fontWeight: 'bold', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Radio size={16} /> ACTIVE PORTS ROUTING
+             </div>
+             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(255,255,255,0.02)', padding: '12px 16px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#34d399', boxShadow: '0 0 10px #34d399' }} />
+                    <span style={{ color: '#e2e8f0', fontWeight: 'bold', width: 60 }}>3001</span>
+                    <span style={{ color: '#94a3b8', flex: 1 }}>EvoBridge Runtime daemon</span>
+                    <span style={{ color: '#34d399', fontSize: 10, fontWeight: 'bold', letterSpacing: '0.1em' }}>CONNECTED</span>
+                 </div>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(255,255,255,0.02)', padding: '12px 16px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#34d399', boxShadow: '0 0 10px #34d399' }} />
+                    <span style={{ color: '#e2e8f0', fontWeight: 'bold', width: 60 }}>5173</span>
+                    <span style={{ color: '#94a3b8', flex: 1 }}>EvoStudio Web UI framework</span>
+                    <span style={{ color: '#34d399', fontSize: 10, fontWeight: 'bold', letterSpacing: '0.1em' }}>CONNECTED</span>
+                 </div>
+             </div>
+          </div>
+        )}
         </div>
       </div>
     </>

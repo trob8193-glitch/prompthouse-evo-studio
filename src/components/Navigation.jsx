@@ -24,8 +24,6 @@ export const NAV_GROUPS = [
       { id: 'portfolio', label: 'App Market', icon: Globe },
       { id: 'studio-marketplace', label: 'Omni-Marketplace', icon: Globe },
       { id: 'launch-proof', label: 'Launch Proof', icon: Shield },
-      { id: 'chat', label: 'Evo Copilot', icon: MessageSquare },
-      { id: 'agent-chat', label: 'Evo Agent Chat', icon: Bot },
       { id: 'workspace', label: 'Workspace Explorer', icon: FolderOpen },
       { id: 'ghost-editor', label: 'Ghost Editor', icon: Sparkles },
     ],

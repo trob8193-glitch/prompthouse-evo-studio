@@ -80,7 +80,7 @@ describe('platform online blockers', () => {
   });
 
   it('reports Ollama local server offline blocker when mock offline is true', () => {
-    vi.stubEnv('MOCK_OLLAMA_OFFLINE', 'true');
+    vi.stubEnv('SIMULATE_OLLAMA_OFFLINE', 'true');
     vi.stubEnv('PH_EVO_API_KEY', 'mock_ph_evo_api_key');
     const engine = new PlatformReadinessEngine();
     const blockers = engine.onlineBlockers();
@@ -97,7 +97,7 @@ describe('platform online blockers', () => {
 
   it('reports Evo API connectivity blocker when mock offline is true', () => {
     vi.stubEnv('PH_EVO_API_KEY', 'mock_ph_evo_api_key');
-    vi.stubEnv('MOCK_EVO_OFFLINE', 'true');
+    vi.stubEnv('SIMULATE_EVO_OFFLINE', 'true');
     const engine = new PlatformReadinessEngine();
     const blockers = engine.onlineBlockers();
     expect(blockers.some(b => b.id === 'evo-api-connectivity')).toBe(true);

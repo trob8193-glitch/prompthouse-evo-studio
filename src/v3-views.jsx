@@ -51,24 +51,27 @@ export default function V3Views() {
 export const BotStageView = () => {
   const metrics = useSovereignStore((s) => s.metrics);
   return (
-    <div className="p-8 bg-slate-900/50 border border-slate-800 rounded-3xl backdrop-blur-xl">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
-        <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Bot Execution Stage</h2>
+    <div className="module-container border-l-2 border-l-emerald-500">
+      <div className="module-header">
+        <h2 className="module-title text-emerald-400">
+          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" /> Bot Execution Stage
+        </h2>
       </div>
-      <div className="grid grid-cols-2 gap-6">
-        <div className="p-6 bg-black/40 rounded-2xl border border-slate-800">
-          <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">Active Thread</div>
-          <div className="text-lg font-mono text-indigo-400">foundry_orchestrator.js:L127</div>
+      <div className="module-content">
+        <div className="evo-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <div className="card p-6 border border-slate-800/50 hover:border-emerald-500/30">
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">Active Thread</div>
+            <div className="text-lg font-mono text-emerald-400">foundry_orchestrator.js:L127</div>
+          </div>
+          <div className="card p-6 border border-slate-800/50 hover:border-emerald-500/30">
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">Cycles Completed</div>
+            <div className="text-2xl font-black text-white">{metrics?.uptime ? Math.floor(metrics.uptime / 60) : 0}</div>
+          </div>
         </div>
-        <div className="p-6 bg-black/40 rounded-2xl border border-slate-800">
-          <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">Cycles Completed</div>
-          <div className="text-2xl font-black text-white">{metrics?.uptime ? Math.floor(metrics.uptime / 60) : 0}</div>
+        <div className="mt-4 p-4 card border-l-2 border-l-indigo-500 bg-indigo-500/5">
+          <div className="text-[10px] text-indigo-400 font-black uppercase tracking-widest mb-1">Reality Log</div>
+          <div className="text-xs text-indigo-300/70 font-medium tracking-wide">System state synchronized with Bridge 127.0.0.1:3001. No drift markers detected.</div>
         </div>
-      </div>
-      <div className="mt-8 p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
-        <div className="text-[10px] text-indigo-400 font-black uppercase tracking-widest mb-1">Reality Log</div>
-        <div className="text-xs text-indigo-300/70 font-medium">System state synchronized with Bridge 127.0.0.1:3001. No drift markers detected.</div>
       </div>
     </div>
   );
@@ -101,13 +104,14 @@ export const MasterPromptVaultView = () => {
   }, []);
 
   return (
-    <div className="p-8 bg-slate-900/50 border border-slate-800 rounded-3xl backdrop-blur-xl">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Master Prompt Vault</h2>
-        <div className={`text-[10px] font-black uppercase px-2 py-1 rounded border ${isSyncing ? 'bg-indigo-900/50 text-indigo-400 border-indigo-500/30 animate-pulse' : 'bg-emerald-900/50 text-emerald-400 border-emerald-500/30'}`}>
+    <div className="module-container border-t-2 border-t-indigo-500">
+      <div className="module-header">
+        <h2 className="module-title">Master Prompt Vault</h2>
+        <div className={`text-[10px] font-black uppercase px-3 py-1 rounded-full border ${isSyncing ? 'bg-indigo-900/50 text-indigo-400 border-indigo-500/30 animate-pulse' : 'bg-emerald-900/30 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]'}`}>
           {isSyncing ? 'SYNCING...' : 'VERIFIED'}
         </div>
       </div>
+      <div className="module-content">
       {error ? (
         <div className="text-xs text-rose-300/80 border border-rose-500/20 bg-rose-500/5 rounded-xl p-3 mb-4">
           Vault load failed: {error}
@@ -125,6 +129,7 @@ export const MasterPromptVaultView = () => {
         {prompts.length === 0 && !isSyncing ? (
           <div className="text-xs text-slate-500">No prompts loaded.</div>
         ) : null}
+      </div>
       </div>
     </div>
   );

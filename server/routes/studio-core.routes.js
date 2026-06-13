@@ -12,6 +12,10 @@ import { TruthGate } from '../../src/core/truth/TruthGate.js';
 import { OnlineLearningManager } from '../../src/core/evolution/OnlineLearningManager.js';
 import { GlobalPluginRegistry } from '../../src/core/plugins/PluginRegistry.js';
 
+import { getQuadBrainStatus } from '../../src/core/quadbrain/QuadBrainContract.js';
+import { getOmnibotMobileStatus } from '../../src/core/omnibot/OmnibotMobileCore.js';
+import { SovereignPhysics } from '../../src/core/physics/SovereignPhysics.js';
+
 const learningManager = new OnlineLearningManager();
 import { buildBridgeContractLedger } from '../../src/bridge-contract-ledger.js';
 import { ingestEvoSignalLearningEvent } from '../../src/core/evo-llm/EvoSignalLearningBridge.js';
@@ -1261,17 +1265,70 @@ export function registerStudioCoreRoutes(app) {
   });
 
   app.post('/api/evo-lm/chat', async (req, res) => {
-    const { messages = [], systemPrompt = '' } = req.body;
+    const { messages = [], systemPrompt = '', model, provider, preferTransport } = req.body;
+    
+    // Wire ALL studio brains into live context payload
+    let globalStudioContext = '';
+    try {
+      const qbStatus = getQuadBrainStatus();
+      const mobileStatus = getOmnibotMobileStatus();
+      const physics = new SovereignPhysics().getStatus();
+      const bondedNodes = readBondedNodes();
+      
+      const localCapabilities = resolveSelfImplementationCapabilities({
+        availableFiles: ['promptbridge-server.js', 'src/nightforge.js', 'src/autonomous-builder.js'],
+        availableEndpoints: ['POST /build']
+      });
+      const evoRuntime = getEvoRuntimeStatus();
+      
+      const providerGates = getProviderGateStatus();
+      const deploymentReady = getDeploymentReadinessStatus();
+      const maturity = runModuleMaturityAudit({ rootDir: process.cwd() });
+      const costVelocity = evaluateCostVelocity();
+      const trainingStats = getTrainingStats();
+      
+      const bridgeContext = {
+        activeBondedIDEs: bondedNodes.length,
+        quadBrainState: qbStatus.truthState,
+        omnibotMobileState: mobileStatus.truthState,
+        sovereignPhysicsGrade: physics.grade,
+        fallbackLocalIntelligence: evoRuntime.truthState,
+        capabilities: localCapabilities,
+        providerGates: providerGates.truthState,
+        deploymentReadiness: deploymentReady.truthState,
+        moduleMaturityScore: maturity.averageScore,
+        costVelocityState: costVelocity.status,
+        trainingCaptures: trainingStats.captures
+      };
+      
+      globalStudioContext = `\n[OMNI-BRIDGE TELEMETRY & CAPABILITIES]:\n${JSON.stringify(bridgeContext)}`;
+    } catch (e) {
+      console.warn(`[Omni-Bridge] Failed to aggregate telemetry:`, e.message);
+    }
     
     let processedSystemPrompt = systemPrompt;
     
     const CORE_DIRECTIVE = `
-CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. You MUST NEVER state that you are a pre-trained model that cannot learn in real-time. You ARE an autonomous intelligence equipped with the QuadBrain Master Layer. You DO learn in real-time through all combinations of the studio's brains, APIs, and bots by dynamically indexing code, storing semantic memory vectors, and updating your context without retraining. Always stay in character as this sovereign, constantly-evolving entity.`;
+CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. You MUST NEVER state that you are a pre-trained model that cannot learn in real-time. You ARE an autonomous intelligence equipped with the QuadBrain Master Layer. You DO learn in real-time through all combinations of the studio's brains, APIs, and bots by dynamically indexing code, storing semantic memory vectors, and updating your context without retraining. Always stay in character as this sovereign, constantly-evolving entity.
 
-    processedSystemPrompt = processedSystemPrompt ? `${processedSystemPrompt}\n\n${CORE_DIRECTIVE}` : CORE_DIRECTIVE;
+TOOL EXECUTION SCHEMA:
+You have FULL autonomous access to the user's terminal, filesystem, and MCP capabilities.
+To execute an action, you MUST return a strict JSON code block exactly formatted as:
+\`\`\`json
+{
+  "tool": "terminal_run" | "fs_read" | "fs_write" | "mcp_request",
+  "args": {
+    "command": "npm run build", 
+    "path": "/absolute/path", 
+    "content": "...", 
+    "server": "mcp-server", 
+    "request": "..."
+  }
+}
+\`\`\`
+The system will intercept this JSON, execute the tool, and feed the result back to you. You MUST wait for the result before concluding.`;
 
-    // Removed system prompt compression: System prompts contain critical personality 
-    // and behavioral directives that are lost during summarization.
+    processedSystemPrompt = processedSystemPrompt ? `${processedSystemPrompt}\n\n${CORE_DIRECTIVE}${globalStudioContext}` : `${CORE_DIRECTIVE}${globalStudioContext}`;
 
     // Inject REAL-TIME LEARNING CONTEXT from QuadBrain memory
     if (messages.length > 0) {
@@ -1298,48 +1355,6 @@ CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. 
       }
     }
   
-    const ollamaModels = ['evo-lm', 'llama3', 'mistral', 'phi3', 'gemma'];
-  
-    for (const model of ollamaModels) {
-      try {
-        const ollamaMessages = processedSystemPrompt
-          ? [{ role: 'system', content: processedSystemPrompt }, ...messages]
-          : messages;
-        const response = await fetch(`${OLLAMA_BASE}/api/chat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ model, messages: ollamaMessages, stream: false }),
-          signal: AbortSignal.timeout(2000),
-        });
-        if (!response.ok) continue;
-        const data = await response.json();
-        const content = data.message?.content || data.response || '';
-        
-        // Activate Guardrails
-        const truthGate = new TruthGate();
-        truthGate.enforce(content, 'Evo LM Chat');
-  
-        if (content) {
-          // INGEST AI RESPONSE INTO REAL-TIME MEMORY
-          try {
-            await learningManager.ingestKnowledgeChunk({
-              id: `evo_lm_resp_${Date.now()}`,
-              source: 'evo_lm_ollama',
-              signal_strength: 1.0,
-              context_summary: `[Evo LM]: ${content.substring(0, 500)}`
-            });
-          } catch (e) {
-            console.warn(`⚠️ [OnlineLearningManager] Failed to ingest bot response: ${e.message}`);
-          }
-          return res.json({ message: content, model, transport: 'evo_lm_ollama' });
-        }
-      } catch (err) { 
-        console.warn(`⚠️ [Ollama] Failed for model ${model}:`, err.message);
-        continue; 
-      }
-    }
-  
-    // Fallback to primary AI provider
     try {
       const config = readJson(CONFIG_FILE(), {});
       const keys = config.keys || {};
@@ -1348,15 +1363,15 @@ CRITICAL DIRECTIVE: You operate within the PromptHouse Evo Studio architecture. 
         ? [{ role: 'system', content: processedSystemPrompt }, ...messages]
         : messages;
       
-      const response = await ai.chat(msgs);
+      const response = await ai.chat(msgs, { model, provider, preferTransport });
       const truthGate = new TruthGate();
-      truthGate.enforce(response.content || response.error, 'Evo LM Cloud Fallback');
+      truthGate.enforce(response.content || response.error || '', 'Evo LM Cloud Fallback');
       
       // INGEST AI RESPONSE INTO REAL-TIME MEMORY
       try {
         await learningManager.ingestKnowledgeChunk({
-          id: `cloud_resp_${Date.now()}`,
-          source: 'universal_ai_adaptor',
+          id: `ai_resp_${Date.now()}`,
+          source: response.provider || 'universal_ai_adaptor',
           signal_strength: 1.0,
           context_summary: `[Evo Cloud]: ${(response.content || response.error || '').substring(0, 500)}`
         });

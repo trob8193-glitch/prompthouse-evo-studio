@@ -187,7 +187,7 @@ function exampleFromLesson(lesson, item) {
       `Proof required: ${lesson.proofRequired}.`,
       'Policy: use approved summaries only, redact secrets, avoid raw private chat, require verification before promotion.'
     ].join('\n'),
-    tags: ['work-memory', lesson.intent, lesson.module, ...lesson.tags].slice(0, 24),
+    tags: ['work-memory', lesson.intent, lesson.module, ...(lesson.tags || [])].slice(0, 24),
     source: 'evo-work-memory-engine'
   };
 }

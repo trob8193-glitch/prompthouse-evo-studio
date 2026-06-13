@@ -79,7 +79,7 @@ export function registerStudioMarketplaceRoutes(app) {
 
       res.json({
         success: true,
-        message: \`Extension \${result.ext.displayName} installed as an autonomous plugin\`,
+        message: `Extension ${result.ext.displayName} installed as an autonomous plugin`,
         pluginFile: result.pluginFile
       });
     } catch (error) {

@@ -65,15 +65,16 @@ export function AutonomousBuilderView() {
   };
 
   return (
-    <div className="flex-col">
-      <div>
-        <div className="page-title">🤖 Autonomous App Builder</div>
-        <div className="page-subtitle">Describe your app. The AI generates a complete, production-grade multi-file project — written directly to your disk. React, Flutter, Next.js, or Express API.</div>
+    <div className="module-container border-t-2 border-t-amber-500">
+      <div className="module-header flex-col items-start gap-1">
+        <div className="module-title text-amber-500">🤖 Autonomous App Builder</div>
+        <div className="text-[11px] text-slate-400 font-medium">Describe your app. The AI generates a complete, production-grade multi-file project — written directly to your disk. React, Flutter, Next.js, or Express API.</div>
       </div>
 
-      {/* Mission Input */}
-      <div className="card" style={{ border: '1px solid var(--accent-gold)', background: 'var(--bg-void)' }}>
-        <div className="card-body flex-col">
+      <div className="module-content">
+        {/* Mission Input */}
+        <div className="card">
+          <div className="card-body flex-col gap-4">
           <div className="field">
             <label className="field-label">🎯 Mission — What are we building?</label>
             <textarea className="field-textarea" value={mission} onChange={e => setMission(e.target.value)}
@@ -107,13 +108,12 @@ export function AutonomousBuilderView() {
 
       {/* Build Timeline + Active Bot */}
       {timeline.length > 0 && (
-        <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 16 }}>
+        <div className="evo-grid mt-4">
           {/* Active Bot Character */}
-          <div className="card" style={{
-            background: 'linear-gradient(180deg, #030508 0%, #0a0e1a 100%)',
+          <div className="card flex flex-col items-center justify-center p-6 min-h-[340px]" style={{
+            background: 'linear-gradient(180deg, rgba(3,5,8,0.8) 0%, rgba(10,14,26,0.8) 100%)',
             border: `1px solid ${activeBot.palette.accent}33`,
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            padding: 24, minHeight: 340,
+            boxShadow: `inset 0 0 40px ${activeBot.palette.accent}10`
           }}>
             <BotCharacter
               bot={activeBot}
@@ -246,6 +246,7 @@ export function AutonomousBuilderView() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

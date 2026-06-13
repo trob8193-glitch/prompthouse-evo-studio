@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-06-12T18:34:04.811Z",
+  "generatedAt": "2026-06-13T22:45:52.117Z",
   "truthState": "DATASET_WARNINGS",
-  "totalExamples": 837,
-  "validExamples": 833,
+  "totalExamples": 852,
+  "validExamples": 844,
   "invalidExamples": [
     {
       "index": 12,
@@ -31,10 +31,38 @@
       "issues": [
         "Unsupported claim detected: sentient"
       ]
+    },
+    {
+      "index": 694,
+      "valid": false,
+      "issues": [
+        "Unsupported claim detected: sentient"
+      ]
+    },
+    {
+      "index": 695,
+      "valid": false,
+      "issues": [
+        "Unsupported claim detected: sentient"
+      ]
+    },
+    {
+      "index": 696,
+      "valid": false,
+      "issues": [
+        "Unsupported claim detected: sentient"
+      ]
+    },
+    {
+      "index": 697,
+      "valid": false,
+      "issues": [
+        "Unsupported claim detected: sentient"
+      ]
     }
   ],
-  "trainCount": 666,
-  "evalCount": 167,
+  "trainCount": 675,
+  "evalCount": 169,
   "files": {
     "trainJsonl": ".evo-llm\\training-data\\evo-train.jsonl",
     "evalJsonl": ".evo-llm\\training-data\\evo-eval.jsonl"

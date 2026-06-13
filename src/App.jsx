@@ -45,7 +45,7 @@ import {
 import {
   WorkspaceShell, PromptRegistry, ExecutionQueue,
   ProofConsole, ForgeLabs, EvoDuelArena, AIGeneratorHub,
-  GradingAndRelease, CommerceCore, FeatureFoundry,
+  GradingAndRelease, CommerceCore, FeatureFoundry, EvoCastRouter
 } from './features/index.jsx';
 
 import EvoDiffuserDashboard from './features/EvoDiffuserDashboard.jsx';

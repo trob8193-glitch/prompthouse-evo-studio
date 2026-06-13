@@ -38,6 +38,7 @@ export function EvoCopilot() {
   const fileContent = useSovereignStore((s) => s.fileContent);
   const addTerminalLogs = useSovereignStore((s) => s.addTerminalLogs);
   const setActivePage = useSovereignStore((s) => s.setActivePage);
+  const bondedNodes = useSovereignStore((s) => s.bondedNodes);
 
   const currentBot = ALL_BOT_ROSTER.find(b => b.id === selectedBot) || ALL_BOT_ROSTER[0];
 
@@ -165,10 +166,12 @@ export function EvoCopilot() {
 
       const botSystemPrompt = `You are ${currentBot.name}, a ${currentBot.species}. Role: ${currentBot.role}. Signature: ${currentBot.signature}.\nOutput clean markdown. Use \`\`\`language blocks for code.`;
 
+      const isBonded = bondedNodes && bondedNodes.length > 0;
+
       // Route all bots through universalSend to guarantee QuadBrain fallbacks
       const res = await universalSend(payloadMessages, botSystemPrompt, {
         model: targetBotId === 'evo' ? 'evo-llm-swarm' : 'gpt-4.1-mini',
-        provider: 'evo'
+        provider: isBonded ? 'bonded_ide' : 'evo'
       });
 
       assistantContent = res.message || "No response generated.";

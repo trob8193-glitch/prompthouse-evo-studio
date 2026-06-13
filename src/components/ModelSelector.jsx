@@ -22,6 +22,7 @@ const PROVIDER_ICONS = {
   openai: '◉',
   anthropic: '◈',
   ollama: '⬡',
+  omnibonded_ides: '🔌',
   custom: '⬢',
 };
 
@@ -85,6 +86,13 @@ export default function ModelSelector() {
           { id: 'llama-3.3-70b', displayName: 'Llama 3.3 (70B)', tier: 'high', online: true },
           { id: 'deepseek-r1-70b', displayName: 'DeepSeek R1 (70B)', tier: 'thinking', online: true },
           { id: 'qwen-2.5-coder-32b', displayName: 'Qwen 2.5 Coder (32B)', tier: 'fast', online: true },
+        ],
+        omnibonded_ides: [
+          { id: 'antigravity-ai-omnibonded', displayName: 'Antigravity AI (Omni-Bonded)', tier: 'thinking', online: true },
+          { id: 'cursor-ai-omnibonded', displayName: 'Cursor AI (Omni-Bonded)', tier: 'thinking', online: true },
+          { id: 'windsurf-cascade-omnibonded', displayName: 'Windsurf Cascade (Omni-Bonded)', tier: 'thinking', online: true },
+          { id: 'vscode-copilot-omnibonded', displayName: 'VS Code Copilot (Omni-Bonded)', tier: 'high', online: true },
+          { id: 'zed-ai-omnibonded', displayName: 'Zed AI (Omni-Bonded)', tier: 'fast', online: true },
         ],
       });
       setActiveModel({ id: 'gemini-2.0-flash', displayName: 'Gemini 2.0 Flash', tier: 'fast', provider: 'gemini' });

@@ -1,3 +1,5 @@
+import React from 'react';
+import { motion } from 'framer-motion';
 import { StateView } from '../components/primitives.jsx';
 import { SovereignTabs } from '../components/SovereignTabs.jsx';
 
@@ -52,12 +54,26 @@ import { ProofToValueView } from '../proof-to-value-view.jsx';
 
 // ─── SCREEN TEMPLATES ────────────────────────────────────────────────────────
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
+
 function ScreenTemplate({ title, subtitle, children, state = 'idle', errorMsg }) {
   return (
-    <div className="flex flex-col h-full animate-in fade-in duration-300">
-      <header className="mb-[var(--space-24)]">
-        <h1 className="font-[var(--text-page-title)] text-[var(--text-primary)]">{title}</h1>
-        {subtitle && <p className="font-[var(--text-body)] text-[var(--text-secondary)] mt-1">{subtitle}</p>}
+    <div className="flex flex-col h-full">
+      <header className="mb-(--space-24) border-b border-[rgba(255,255,255,0.05)] pb-6 relative">
+        <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-[rgba(0,240,255,0.3)] to-transparent opacity-50"></div>
+        <h1 className="font-(--text-page-title) text-(--text-primary)" style={{ textShadow: '0 0 15px rgba(0,240,255,0.2)' }}>{title}</h1>
+        {subtitle && <p className="font-medium text-(--text-secondary) mt-2 tracking-wide">{subtitle}</p>}
       </header>
       
       {state !== 'idle' && state !== 'success' ? (
@@ -65,9 +81,16 @@ function ScreenTemplate({ title, subtitle, children, state = 'idle', errorMsg })
            <StateView state={state} message={errorMsg} />
          </div>
       ) : (
-         <div className="flex-1 overflow-y-auto pb-10 space-y-[var(--space-24)]">
-           {children}
-         </div>
+         <motion.div 
+           className="flex-1 overflow-y-auto pb-10 space-y-(--space-24)"
+           variants={containerVariants}
+           initial="hidden"
+           animate="show"
+         >
+           {React.Children.map(children, (child) => (
+             <motion.div variants={itemVariants}>{child}</motion.div>
+           ))}
+         </motion.div>
       )}
     </div>
   );
@@ -78,7 +101,7 @@ function ScreenTemplate({ title, subtitle, children, state = 'idle', errorMsg })
 export function StudioDashboard() {
   return (
     <ScreenTemplate title="Studio Dashboard" subtitle="Operator overview, active work, and performance metrics.">
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-[var(--space-24)]">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-(--space-24)">
         <PerformanceMonitor />
         <div className="flex flex-col gap-6">
           <AutonomousSelfBuildCommandCenter />

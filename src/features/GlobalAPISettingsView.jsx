@@ -5,6 +5,7 @@ import { getNightForgeSettings, updateNightForgeSettings } from '../nightforge.j
 import OwnerApprovalPanel from '../components/OwnerApprovalPanel.jsx';
 import { OWNER_APPROVAL_SCOPES } from '../services/owner-approval-client.js';
 import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
+import { safeFetchBridge } from '../config/bridge-config.js';
 
 /**
  * PH EVO STUDIO — GLOBAL API SETTINGS (ENTERPRISE GRADE)

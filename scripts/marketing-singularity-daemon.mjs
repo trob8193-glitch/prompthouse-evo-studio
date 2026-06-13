@@ -112,7 +112,7 @@ function buildCampaign(app) {
   };
 }
 
-// Stubbed routing endpoints for actual provider tethering
+// Simulated routing endpoints for actual provider tethering
 async function routeToTwitter(thread) {
   // If X_API_KEY is present, this will execute the HTTP post to Twitter
   console.log(`${c.cyan}[Router:X] Tethering payload to Twitter...${c.reset}`);

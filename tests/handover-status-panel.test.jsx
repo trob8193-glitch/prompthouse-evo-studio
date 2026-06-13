@@ -49,7 +49,7 @@ describe('HandoverStatusPanel', () => {
     render(<HandoverStatusPanel />);
 
     await waitFor(() => {
-      expect(screen.getByText(/Sovereign Handover Status/i)).toBeTruthy();
+      expect(screen.getByText(/Evo Studio Handover Status/i)).toBeTruthy();
       expect(screen.getAllByText(/BLOCKED ✅/i)).toHaveLength(2); // Deploy and Billing
       expect(screen.getByText(/No OpenAI key/i)).toBeTruthy();
       expect(screen.getByText(/Configure OpenAI key/i)).toBeTruthy();

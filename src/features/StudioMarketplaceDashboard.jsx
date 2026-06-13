@@ -28,7 +28,7 @@ export default function StudioMarketplaceDashboard() {
     setTethering(ext.id);
     
     try {
-      const res = await safeFetchBridge(\`/api/marketplace/install/\${ext.id || ext.extensionId}\`);
+      const res = await safeFetchBridge(`/api/marketplace/install/${ext.id || ext.extensionId}`);
       if (!res.ok) throw new Error(res.error || 'Failed to install extension');
       
       setTethered(prev => {
