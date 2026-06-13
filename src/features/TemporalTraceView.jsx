@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, History, Search, Zap, Layers } from 'lucide-react';
 import { Log } from '../core/autonomy/SovereignLogger.js';

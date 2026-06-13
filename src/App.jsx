@@ -63,6 +63,21 @@ import OmniBondCommandCenter from './features/OmniBondCommandCenter.jsx';
 import RareCapabilities from './features/RareCapabilities.jsx';
 import TemporalTraceView from './features/TemporalTraceView.jsx';
 
+// Previously unreachable views — now wired
+import { NightForgeView } from './nightforge-view.jsx';
+import { AutonomousSelfBuildCommandCenter } from './autonomous-command-center.jsx';
+import { SelfBuildForgeView } from './self-build-forge-view.jsx';
+import { EvoDuelEngineView } from './evo-duel-engine-view.jsx';
+import { WorkTwinVaultView } from './worktwin-view.jsx';
+import { ToolAutogenView } from './tool-autogen-view.jsx';
+import { PatternMinerView } from './pattern-miner-view.jsx';
+import { ChromeExtensionView } from './chrome-extension-views.jsx';
+import { ForgeTermView } from './forge-term-view.jsx';
+import { PromptLinkView } from './promptlink-views.jsx';
+import { DeployRailView } from './deploy-rail-view.jsx';
+import { CommerceRailView } from './commerce-rail-view.jsx';
+import { AIPromptGeneratorView } from './ai-prompt-generator-view.jsx';
+
 export const PAGE_MAP = {
   'dashboard': SovereignIntelligenceDashboard,
   'workspace': WorkspaceShell,
@@ -103,6 +118,19 @@ export const PAGE_MAP = {
   'rare-capabilities': RareCapabilities,
   'temporal-trace': TemporalTraceView,
   'witness-console': WitnessConsole,
+  'nightforge': NightForgeView,
+  'autonomous-command': AutonomousSelfBuildCommandCenter,
+  'self-build-forge': SelfBuildForgeView,
+  'evo-duel': EvoDuelEngineView,
+  'worktwin': WorkTwinVaultView,
+  'tool-autogen': ToolAutogenView,
+  'pattern-miner': PatternMinerView,
+  'chrome-extension': ChromeExtensionView,
+  'forge-terminal': ForgeTermView,
+  'promptlink': PromptLinkView,
+  'deploy-rail': DeployRailView,
+  'commerce-rail': CommerceRailView,
+  'ai-prompt-gen': AIPromptGeneratorView,
 };
 
 function PageRenderer() {

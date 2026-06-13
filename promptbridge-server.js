@@ -309,12 +309,20 @@ app.get('/api/stream-metrics', (req, res) => {
     
     // In production, stability could be calculated by querying the average signal
     const avgSignal = db.prepare('SELECT AVG(signal) as avg FROM semantic_vectors').get().avg || 0.98;
+
+    // Count rejected vectors from the truth gate audit trail
+    let rejectedCount = 0;
+    try {
+      rejectedCount = db.prepare('SELECT COUNT(*) as count FROM sovereign_ledger WHERE truth_state = ?').get('REJECTED').count;
+    } catch {
+      rejectedCount = 0; // Table column may not exist yet
+    }
     
     res.json({
       success: true,
       stability: Math.min(1.0, Math.max(0.1, avgSignal)),
       ingested: vectorCount,
-      rejected: Math.floor(vectorCount * 0.05), // Mocked rejection rate
+      rejected: rejectedCount,
       drift: Math.max(0, 1.0 - avgSignal)
     });
   } catch (error) {

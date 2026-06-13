@@ -1,14 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CreditCard, TrendingUp, Users, Activity } from 'lucide-react';
 import { Card } from '../components/primitives.jsx';
 import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
+import { safeFetchBridge } from '../config/bridge-config.js';
 export default function CommerceDashboard() {
-  const [metrics] = useState({
-    mrr: 12450.00,
-    activeLicenses: 342,
-    conversionRate: 8.4,
-    apiRequests: 1420000
+  const [metrics, setMetrics] = useState({
+    mrr: 0,
+    activeLicenses: 0,
+    conversionRate: 0,
+    apiRequests: 0
   });
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      try {
+        const [stripeRes, ledgerRes] = await Promise.all([
+          safeFetchBridge('/api/stripe/health'),
+          safeFetchBridge('/api/metrics')
+        ]);
+        if (!mounted) return;
+        const stripe = stripeRes?.data || {};
+        const ledger = ledgerRes?.data || {};
+        setMetrics({
+          mrr: stripe.mrr || 0,
+          activeLicenses: stripe.activeLicenses || stripe.active_subscriptions || 0,
+          conversionRate: stripe.conversionRate || 0,
+          apiRequests: ledger.logic?.action_count || 0
+        });
+        if (stripe.recentTransactions?.length) {
+          setTransactions(stripe.recentTransactions);
+        }
+      } catch {
+        // Bridge unavailable — keep zeros
+      }
+    };
+    load();
+    return () => { mounted = false; };
+  }, []);
 
   return (
     <IDEPageLayout
@@ -50,15 +80,17 @@ export default function CommerceDashboard() {
         <Card className="p-6 bg-[#050508]/80 border-white/5 shadow-xl">
           <h2 className="text-xl font-bold text-white mb-4">Recent Transactions</h2>
           <div className="space-y-4">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="flex justify-between items-center p-4 bg-white/5 rounded-xl">
+            {transactions.length > 0 ? transactions.map((tx, i) => (
+              <div key={tx.id || i} className="flex justify-between items-center p-4 bg-white/5 rounded-xl">
                 <div>
-                  <div className="text-sm font-bold text-white">Enterprise License (Annual)</div>
-                  <div className="text-xs text-white/50">org_stellar_dynamics_${i}</div>
+                  <div className="text-sm font-bold text-white">{tx.description || 'Transaction'}</div>
+                  <div className="text-xs text-white/50">{tx.customer || tx.id}</div>
                 </div>
-                <div className="text-emerald-400 font-bold">+$9,900.00</div>
+                <div className="text-emerald-400 font-bold">+${((tx.amount || 0) / 100).toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
               </div>
-            ))}
+            )) : (
+              <div className="text-center text-white/30 py-8 text-sm">No transactions yet. Connect Stripe to see live data.</div>
+            )}
           </div>
         </Card>
 

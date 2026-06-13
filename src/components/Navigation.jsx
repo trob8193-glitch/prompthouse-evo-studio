@@ -3,7 +3,8 @@ import {
   LayoutDashboard, MessageSquare, Code2, Cpu, Rocket, Shield, Settings,
   Activity, Eye, Sparkles, BarChart3, FolderOpen, Gauge, Zap,
   ExternalLink, Share2, Aperture, Gamepad2, LayoutTemplate, Palette, Lock, ScrollText, Globe, Bot, Smartphone, ShieldCheck, CreditCard,
-  Briefcase, Boxes, Database, Fingerprint, Search, Clock, Orbit
+  Briefcase, Boxes, Database, Fingerprint, Search, Clock, Orbit,
+  Moon, Hammer, Swords, Copy, Wrench, Puzzle, Chrome, Terminal as TermIcon, Link2, Truck, ShoppingCart, Wand2
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 
@@ -26,6 +27,9 @@ export const NAV_GROUPS = [
       { id: 'launch-proof', label: 'Launch Proof', icon: Shield },
       { id: 'workspace', label: 'Workspace Explorer', icon: FolderOpen },
       { id: 'ghost-editor', label: 'Ghost Editor', icon: Sparkles },
+      { id: 'nightforge', label: 'NightForge', icon: Moon },
+      { id: 'autonomous-command', label: 'Autonomous HQ', icon: Cpu },
+      { id: 'self-build-forge', label: 'Self-Build Forge', icon: Hammer },
     ],
   },
   {
@@ -52,6 +56,12 @@ export const NAV_GROUPS = [
       { id: 'omni-bond', label: 'Omni-Bond Nexus', icon: Fingerprint },
       { id: 'omni-bot', label: 'OmniBot Remote', icon: Bot },
       { id: 'rare-capabilities', label: 'Rare Capabilities', icon: Orbit },
+      { id: 'evo-duel', label: 'Evo Duel Arena', icon: Swords },
+      { id: 'worktwin', label: 'WorkTwin Vault', icon: Copy },
+      { id: 'tool-autogen', label: 'Tool Auto-Gen', icon: Wrench },
+      { id: 'pattern-miner', label: 'Pattern Miner', icon: Search },
+      { id: 'promptlink', label: 'PromptLink', icon: Link2 },
+      { id: 'ai-prompt-gen', label: 'AI Prompt Gen', icon: Wand2 },
     ],
   },
   {
@@ -69,6 +79,8 @@ export const NAV_GROUPS = [
       { id: 'mobile-singularity', label: 'Mobile Hub', icon: Smartphone },
       { id: 'temporal-trace', label: 'Temporal Trace', icon: Clock },
       { id: 'witness-console', label: 'Witness Console', icon: Search },
+      { id: 'forge-terminal', label: 'Forge Terminal', icon: TermIcon },
+      { id: 'deploy-rail', label: 'Deploy Rail', icon: Truck },
     ],
   },
   {
@@ -77,6 +89,7 @@ export const NAV_GROUPS = [
     items: [
       { id: 'commerce', label: 'Commerce Engine', icon: CreditCard },
       { id: 'commerce-dashboard', label: 'Commerce Dashboard', icon: BarChart3 },
+      { id: 'commerce-rail', label: 'Commerce Rail', icon: ShoppingCart },
     ],
   },
   {
@@ -94,6 +107,7 @@ export const NAV_GROUPS = [
       { id: 'connections', label: 'Connections', icon: ExternalLink },
       { id: 'grading', label: 'Grading & Release', icon: Gauge },
       { id: 'visual-physics', label: 'Visual Physics', icon: Zap },
+      { id: 'chrome-extension', label: 'Chrome Extension', icon: Chrome },
     ],
   },
 ];
