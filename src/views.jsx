@@ -40,85 +40,87 @@ export function CodeForgeView() {
   }, [lang, feature, appName, arch, baseUrl, features]);
 
   return (
-    <div className="flex flex-col space-y-10">
-      <header>
-        <h1 className="text-4xl font-black tracking-tight text-white mb-2">Code Forge</h1>
-        <p className="text-slate-500 font-mono text-sm tracking-widest uppercase">Generate 100% executable Flutter & React Native code.</p>
-      </header>
+    <div className="module-container border-t-2 border-t-cyan-500">
+      <div className="module-header flex-col items-start gap-1">
+        <div className="module-title text-cyan-500">🏗️ Code Forge</div>
+        <div className="text-[11px] text-slate-400 font-medium uppercase tracking-widest">Generate 100% executable Flutter & React Native code.</div>
+      </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
-        <div className="xl:col-span-5 space-y-8">
-          <Card className="p-8">
-            <h3 className="text-lg font-bold text-white mb-6">Generator Configuration</h3>
-            <div className="space-y-6">
-              <div className="field">
-                <label className="field-label">Target Template</label>
-                <select className="field-select" value={lang} onChange={e => setLang(e.target.value)}>
-                  {GENERATORS.map(g => <option key={g.id} value={g.id}>{g.label}</option>)}
-                </select>
-                <p className="text-[10px] text-slate-500 mt-2 font-mono uppercase tracking-wider">{GENERATORS.find(g => g.id === lang)?.desc}</p>
-              </div>
-              {['flutter_feature','rn_component','zustand_store'].includes(lang) && (
+      <div className="module-content p-6">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+          <div className="xl:col-span-5 space-y-8">
+            <div className="bg-black/40 border border-slate-800 p-8 rounded-2xl">
+              <h3 className="text-lg font-bold text-white mb-6">Generator Configuration</h3>
+              <div className="space-y-6">
                 <div className="field">
-                  <label className="field-label">Feature / Model Identity</label>
-                  <input className="field-input" ghostInput="Auth" value={feature} onChange={e => setFeature(e.target.value)} />
-                </div>
-              )}
-              {['flutter_pubspec','api_service','flutter_router'].includes(lang) && (
-                <div className="field">
-                  <label className="field-label">App / Service Namespace</label>
-                  <input className="field-input" ghostInput="MyApp" value={appName} onChange={e => setAppName(e.target.value)} />
-                </div>
-              )}
-              {lang === 'flutter_feature' && (
-                <div className="field">
-                  <label className="field-label">Architecture Paradigm</label>
-                  <select className="field-select" value={arch} onChange={e => setArch(e.target.value)}>
-                    {Object.values(MOBILE_ARCHITECTURES).map(a => <option key={a.id} value={a.id}>{a.icon} {a.name}</option>)}
+                  <label className="field-label">Target Template</label>
+                  <select className="field-select" value={lang} onChange={e => setLang(e.target.value)}>
+                    {GENERATORS.map(g => <option key={g.id} value={g.id}>{g.label}</option>)}
                   </select>
+                  <p className="text-[10px] text-slate-500 mt-2 font-mono uppercase tracking-wider">{GENERATORS.find(g => g.id === lang)?.desc}</p>
                 </div>
-              )}
-              {lang === 'api_service' && (
-                <div className="field">
-                  <label className="field-label">Core API Endpoint</label>
-                  <input className="field-input" ghostInput="https://api.example.com/v1" value={baseUrl} onChange={e => setBaseUrl(e.target.value)} />
+                {['flutter_feature','rn_component','zustand_store'].includes(lang) && (
+                  <div className="field">
+                    <label className="field-label">Feature / Model Identity</label>
+                    <input className="field-input" ghostInput="Auth" value={feature} onChange={e => setFeature(e.target.value)} />
+                  </div>
+                )}
+                {['flutter_pubspec','api_service','flutter_router'].includes(lang) && (
+                  <div className="field">
+                    <label className="field-label">App / Service Namespace</label>
+                    <input className="field-input" ghostInput="MyApp" value={appName} onChange={e => setAppName(e.target.value)} />
+                  </div>
+                )}
+                {lang === 'flutter_feature' && (
+                  <div className="field">
+                    <label className="field-label">Architecture Paradigm</label>
+                    <select className="field-select" value={arch} onChange={e => setArch(e.target.value)}>
+                      {Object.values(MOBILE_ARCHITECTURES).map(a => <option key={a.id} value={a.id}>{a.icon} {a.name}</option>)}
+                    </select>
+                  </div>
+                )}
+                {lang === 'api_service' && (
+                  <div className="field">
+                    <label className="field-label">Core API Endpoint</label>
+                    <input className="field-input" ghostInput="https://api.example.com/v1" value={baseUrl} onChange={e => setBaseUrl(e.target.value)} />
+                  </div>
+                )}
+                <div className="flex gap-4 pt-4">
+                  <Button className="flex-1" onClick={() => { copyText(code); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>
+                    {copied ? '✅ COPIED TO CLIPBOARD' : '📋 CLONE SOURCE CODE'}
+                  </Button>
+                  <Button variant="secondary" onClick={async () => {
+                    const bridge = new UniversalBridge();
+                    const res = await bridge.dispatch('codeforge', 'save', { filename: `${feature || 'Feature'}.dart`, content: code });
+                    if (res.success) alert(`Saved to: ${res.path}`);
+                    else alert(`Save failed: ${res.error}`);
+                  }}>💾 SAVE TO PROJECT</Button>
                 </div>
-              )}
-              <div className="flex gap-4 pt-4">
-                <Button className="flex-1" onClick={() => { copyText(code); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>
-                  {copied ? '✅ COPIED TO CLIPBOARD' : '📋 CLONE SOURCE CODE'}
-                </Button>
-                <Button variant="secondary" onClick={async () => {
-                  const bridge = new UniversalBridge();
-                  const res = await bridge.dispatch('codeforge', 'save', { filename: `${feature || 'Feature'}.dart`, content: code });
-                  if (res.success) alert(`Saved to: ${res.path}`);
-                  else alert(`Save failed: ${res.error}`);
-                }}>💾 SAVE TO PROJECT</Button>
               </div>
             </div>
-          </Card>
-          
-          <Card className="bg-emerald-500/5 border-emerald-500/20 p-8">
-            <h3 className="text-xs font-black text-emerald-400 uppercase tracking-widest mb-4">Evo Studio Truth State</h3>
-            <ul className="space-y-3">
-              {['No Ghost-Shells — all code is executable','Production-grade architectural patterns','Logic integrity verified via physical audit','Verified via autonomous evolution loops'].map((r,i) => (
-                <li key={i} className="text-xs text-slate-400 flex items-center gap-3">
-                  <div className="w-1 h-1 rounded-full bg-emerald-500" /> {r}
-                </li>
-              ))}
-            </ul>
-          </Card>
-        </div>
+            
+            <div className="bg-emerald-500/5 border border-emerald-500/20 p-8 rounded-2xl">
+              <h3 className="text-xs font-black text-emerald-400 uppercase tracking-widest mb-4">Evo Studio Truth State</h3>
+              <ul className="space-y-3">
+                {['No Ghost-Shells — all code is executable','Production-grade architectural patterns','Logic integrity verified via physical audit','Verified via autonomous evolution loops'].map((r,i) => (
+                  <li key={i} className="text-xs text-slate-400 flex items-center gap-3">
+                    <div className="w-1 h-1 rounded-full bg-emerald-500" /> {r}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
-        <Card className="xl:col-span-7 flex flex-col p-0 overflow-hidden bg-black/40">
-          <div className="p-8 border-b border-slate-800 flex justify-between items-center bg-slate-900/20">
-            <h3 className="text-xs font-black text-white uppercase tracking-widest">Master-Grade Output</h3>
-            <StatusBadge status="verified" label="100% EXECUTABLE" />
+          <div className="xl:col-span-7 flex flex-col p-0 overflow-hidden bg-black/40 rounded-2xl border border-slate-800">
+            <div className="p-8 border-b border-slate-800 flex justify-between items-center bg-slate-900/20">
+              <h3 className="text-xs font-black text-white uppercase tracking-widest">Master-Grade Output</h3>
+              <StatusBadge status="verified" label="100% EXECUTABLE" />
+            </div>
+            <div className="flex-1 p-8">
+              <div className="prompt-block !max-h-[600px] !bg-transparent !border-none !p-0">{code}</div>
+            </div>
           </div>
-          <div className="flex-1 p-8">
-            <div className="prompt-block !max-h-[600px] !bg-transparent !border-none !p-0">{code}</div>
-          </div>
-        </Card>
+        </div>
       </div>
     </div>
   );
@@ -150,71 +152,73 @@ flutter analyze
 flutter test`;
 
   return (
-    <div className="flex flex-col space-y-12">
-      <header>
-        <h1 className="text-4xl font-black tracking-tight text-white mb-2">Mobile Architect</h1>
-        <p className="text-slate-500 font-mono text-sm tracking-widest uppercase">Choose your architecture paradigm. Get the full scaffold and CLI logic.</p>
-      </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {Object.values(MOBILE_ARCHITECTURES).map(a => (
-          <motion.div 
-            key={a.id} 
-            whileHover={{ y: -5 }}
-            onClick={() => setSelected(a.id)}
-            className={`cursor-pointer p-8 rounded-[32px] border-2 transition-all duration-300 ${
-              selected === a.id 
-                ? 'bg-indigo-500/10 border-indigo-500 shadow-[0_0_30px_rgba(99,102,241,0.2)]' 
-                : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
-            }`}
-          >
-            <div className="text-4xl mb-6">{a.icon}</div>
-            <h3 className={`text-xl font-black mb-2 ${selected === a.id ? 'text-white' : 'text-slate-400'}`}>{a.name}</h3>
-            <p className="text-sm text-slate-500 leading-relaxed mb-6">{a.desc}</p>
-            <div className="flex flex-wrap gap-2">
-              {a.layers.map(l => <span key={l} className="text-[9px] font-black uppercase tracking-widest px-2 py-1 bg-white/5 rounded text-slate-400">{l}/</span>)}
-            </div>
-          </motion.div>
-        ))}
+    <div className="module-container border-t-2 border-t-indigo-500">
+      <div className="module-header flex-col items-start gap-1">
+        <div className="module-title text-indigo-500">📱 Mobile Architect</div>
+        <div className="text-[11px] text-slate-400 font-medium uppercase tracking-widest">Choose your architecture paradigm. Get the full scaffold and CLI logic.</div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
-        <div className="xl:col-span-5">
-          <Card className="h-full flex flex-col p-10">
-            <h3 className="text-xl font-black text-white mb-8">Architectural Specs</h3>
-            <div className="space-y-8 flex-1">
-              <div>
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-3">Technology Stack</span>
-                <p className="font-mono text-sm text-indigo-400 leading-relaxed bg-indigo-500/5 p-4 rounded-xl border border-indigo-500/10">{arch.stack}</p>
+      <div className="module-content p-6 space-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {Object.values(MOBILE_ARCHITECTURES).map(a => (
+            <motion.div 
+              key={a.id} 
+              whileHover={{ y: -5 }}
+              onClick={() => setSelected(a.id)}
+              className={`cursor-pointer p-8 rounded-[32px] border-2 transition-all duration-300 ${
+                selected === a.id 
+                  ? 'bg-indigo-500/10 border-indigo-500 shadow-[0_0_30px_rgba(99,102,241,0.2)]' 
+                  : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
+              }`}
+            >
+              <div className="text-4xl mb-6">{a.icon}</div>
+              <h3 className={`text-xl font-black mb-2 ${selected === a.id ? 'text-white' : 'text-slate-400'}`}>{a.name}</h3>
+              <p className="text-sm text-slate-500 leading-relaxed mb-6">{a.desc}</p>
+              <div className="flex flex-wrap gap-2">
+                {a.layers.map(l => <span key={l} className="text-[9px] font-black uppercase tracking-widest px-2 py-1 bg-white/5 rounded text-slate-400">{l}/</span>)}
               </div>
-              <div>
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-3">Logic Flow</span>
-                <div className="flex flex-wrap gap-3">
-                  {arch.layers.map((l, i) => (
-                    <React.Fragment key={l}>
-                      <span className="px-3 py-1.5 bg-slate-800 rounded-lg text-xs font-bold text-slate-300 border border-slate-700">{l}</span>
-                      {i < arch.layers.length - 1 && <span className="text-slate-600 flex items-center">→</span>}
-                    </React.Fragment>
-                  ))}
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+          <div className="xl:col-span-5">
+            <div className="h-full flex flex-col p-10 bg-black/40 border border-slate-800 rounded-2xl">
+              <h3 className="text-xl font-black text-white mb-8">Architectural Specs</h3>
+              <div className="space-y-8 flex-1">
+                <div>
+                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-3">Technology Stack</span>
+                  <p className="font-mono text-sm text-indigo-400 leading-relaxed bg-indigo-500/5 p-4 rounded-xl border border-indigo-500/10">{arch.stack}</p>
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-3">Logic Flow</span>
+                  <div className="flex flex-wrap gap-3">
+                    {arch.layers.map((l, i) => (
+                      <React.Fragment key={l}>
+                        <span className="px-3 py-1.5 bg-slate-800 rounded-lg text-xs font-bold text-slate-300 border border-slate-700">{l}</span>
+                        {i < arch.layers.length - 1 && <span className="text-slate-600 flex items-center">→</span>}
+                      </React.Fragment>
+                    ))}
+                  </div>
                 </div>
               </div>
+              <div className="flex gap-4 pt-10">
+                <Button className="flex-1" onClick={() => { copyText(archPrompt); setCopied('arch'); setTimeout(() => setCopied(''), 1500); }}>
+                  {copied === 'arch' ? '✅ COPIED' : '📋 CLONE PARADIGM'}
+                </Button>
+                <Button variant="secondary" onClick={() => exportAsMarkdown(`${arch.name}_Architecture`, archPrompt)}>⬇️ EXPORT</Button>
+              </div>
             </div>
-            <div className="flex gap-4 pt-10">
-              <Button className="flex-1" onClick={() => { copyText(archPrompt); setCopied('arch'); setTimeout(() => setCopied(''), 1500); }}>
-                {copied === 'arch' ? '✅ COPIED' : '📋 CLONE PARADIGM'}
-              </Button>
-              <Button variant="secondary" onClick={() => exportAsMarkdown(`${arch.name}_Architecture`, archPrompt)}>⬇️ EXPORT</Button>
+          </div>
+          <div className="xl:col-span-7 bg-black/40 p-0 overflow-hidden rounded-2xl border border-slate-800 flex flex-col">
+             <div className="p-8 border-b border-slate-800 bg-slate-900/20">
+              <h3 className="text-xs font-black text-white uppercase tracking-widest">Paradigm Definition Prompt</h3>
             </div>
-          </Card>
+            <div className="p-8 flex-1">
+              <div className="prompt-block !bg-transparent !border-none !p-0 !max-h-[400px]">{archPrompt}</div>
+            </div>
+          </div>
         </div>
-        <Card className="xl:col-span-7 bg-black/40 p-0 overflow-hidden">
-           <div className="p-8 border-b border-slate-800 bg-slate-900/20">
-            <h3 className="text-xs font-black text-white uppercase tracking-widest">Paradigm Definition Prompt</h3>
-          </div>
-          <div className="p-8">
-            <div className="prompt-block !bg-transparent !border-none !p-0 !max-h-[400px]">{archPrompt}</div>
-          </div>
-        </Card>
       </div>
     </div>
   );
@@ -233,109 +237,113 @@ export function MissionControlView() {
   const addRow = (key) => setMission(m => ({ ...m, [key]: [...(m[key] || ['']), ''] }));
 
   return (
-    <div className="flex flex-col space-y-12">
-      <header className="flex justify-between items-end">
-        <div>
-          <h1 className="text-4xl font-black tracking-tight text-white mb-2">Mission Control</h1>
-          <p className="text-slate-500 font-mono text-sm tracking-widest uppercase">Intake → Synthesis → Route → Execution → Verification</p>
-        </div>
-        <div className="flex flex-col items-end gap-2">
-          <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Master Workflow Progress</span>
-          <div className="flex gap-1.5">
-            {MISSION_PHASES.map((_, i) => (
-              <div key={i} className={`h-1.5 w-10 rounded-full transition-all duration-500 ${i <= phase ? 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : 'bg-slate-800'}`} />
-            ))}
+    <div className="module-container border-t-2 border-t-fuchsia-500">
+      <div className="module-header flex-col items-start gap-1">
+        <div className="w-full flex justify-between items-center">
+          <div>
+            <div className="module-title text-fuchsia-500">🚀 Mission Control</div>
+            <div className="text-[11px] text-slate-400 font-medium uppercase tracking-widest mt-1">Intake → Synthesis → Route → Execution → Verification</div>
+          </div>
+          <div className="flex flex-col items-end gap-2">
+            <span className="text-[10px] font-black text-fuchsia-400 uppercase tracking-widest">Master Workflow Progress</span>
+            <div className="flex gap-1.5">
+              {MISSION_PHASES.map((_, i) => (
+                <div key={i} className={`h-1.5 w-10 rounded-full transition-all duration-500 ${i <= phase ? 'bg-fuchsia-500 shadow-[0_0_10px_rgba(217,70,239,0.5)]' : 'bg-slate-800'}`} />
+              ))}
+            </div>
           </div>
         </div>
-      </header>
-
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 p-2 bg-slate-900/40 rounded-[32px] border border-slate-800/50 backdrop-blur-xl">
-        {MISSION_PHASES.map((p, i) => (
-          <button 
-            key={p.id} 
-            onClick={() => setPhase(i)} 
-            className={`flex flex-col items-center gap-3 p-6 rounded-3xl transition-all duration-300 ${
-              i === phase 
-                ? 'bg-indigo-500 text-white shadow-xl shadow-indigo-500/20' 
-                : i < phase 
-                  ? 'text-emerald-400 hover:bg-slate-800/50' 
-                  : 'text-slate-500 hover:bg-slate-800/30'
-            }`}
-          >
-            <span className="text-2xl">{p.icon}</span>
-            <span className="text-[10px] font-black uppercase tracking-widest">{p.label}</span>
-          </button>
-        ))}
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
-        <div className="xl:col-span-5">
-          <Card className="p-10 h-full flex flex-col">
-            <div className="mb-10">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-3xl">{MISSION_PHASES[phase].icon}</span>
-                <h3 className="text-2xl font-black text-white">{MISSION_PHASES[phase].label}</h3>
-              </div>
-              <p className="text-slate-400 text-sm leading-relaxed">{MISSION_PHASES[phase].desc}</p>
-            </div>
-
-            <div className="space-y-8 flex-1">
-              {phase === 0 && (<>
-                <div className="field">
-                  <label className="field-label">Primary Mission Objective</label>
-                  <textarea className="field-textarea !min-h-[120px]" ghostInput="Define the end-state reality..." value={mission.objective} onChange={e => setMission(m => ({ ...m, objective: e.target.value }))} />
-                </div>
-                <div className="field">
-                  <label className="field-label">Executive Owner</label>
-                  <input className="field-input" value={mission.owner} onChange={e => setMission(m => ({ ...m, owner: e.target.value }))} />
-                </div>
-              </>)}
-              
-              {phase === 1 && (
-                <div className="field">
-                  <label className="field-label">Known Truths & Inputs</label>
-                  <div className="space-y-3">
-                    {(mission.known || ['']).map((v, i) => (
-                      <div key={i} className="flex gap-3">
-                        <input className="field-input" ghostInput="Verified fact..." value={v} onChange={e => updateArr('known', i, e.target.value)} />
-                        {i === mission.known.length - 1 && <IconButton icon={Activity} onClick={() => addRow('known')} variant="surface" />}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {phase === 6 && (<>
-                <div className="field">
-                  <label className="field-label">Executive Recommendation</label>
-                  <input className="field-input" value={mission.recommended} onChange={e => setMission(m => ({ ...m, recommended: e.target.value }))} ghostInput="Final gate instructions..." />
-                </div>
-                <div className="flex gap-4 pt-6">
-                  <Button className="flex-1" onClick={() => { copyText(packet); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>
-                    {copied ? '✅ PACKET SEALED' : '📋 CLONE MISSION PACKET'}
-                  </Button>
-                  <Button variant="secondary" onClick={() => exportAsMarkdown('PH_EVO_MISSION_PACKET', packet)}>⬇️ EXPORT</Button>
-                </div>
-              </>)}
-            </div>
-            
-            {phase < total - 1 && (
-              <Button className="mt-8" onClick={() => setPhase(p => Math.min(p + 1, total - 1))}>
-                PROCEED TO PHASE {phase + 2} →
-              </Button>
-            )}
-          </Card>
+      <div className="module-content p-6 space-y-12">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 p-2 bg-slate-900/40 rounded-[32px] border border-slate-800/50 backdrop-blur-xl">
+          {MISSION_PHASES.map((p, i) => (
+            <button 
+              key={p.id} 
+              onClick={() => setPhase(i)} 
+              className={`flex flex-col items-center gap-3 p-6 rounded-3xl transition-all duration-300 ${
+                i === phase 
+                  ? 'bg-fuchsia-500 text-white shadow-xl shadow-fuchsia-500/20' 
+                  : i < phase 
+                    ? 'text-emerald-400 hover:bg-slate-800/50' 
+                    : 'text-slate-500 hover:bg-slate-800/30'
+              }`}
+            >
+              <span className="text-2xl">{p.icon}</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">{p.label}</span>
+            </button>
+          ))}
         </div>
 
-        <Card className="xl:col-span-7 bg-black/40 p-0 overflow-hidden">
-          <div className="p-8 border-b border-slate-800 bg-slate-900/20 flex justify-between items-center">
-            <h3 className="text-xs font-black text-white uppercase tracking-widest">Mission Packet Snapshot</h3>
-            <StatusBadge status="pending" label="Evo Studio Draft" />
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+          <div className="xl:col-span-5">
+            <div className="p-10 h-full flex flex-col bg-black/40 border border-slate-800 rounded-2xl">
+              <div className="mb-10">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-3xl">{MISSION_PHASES[phase].icon}</span>
+                  <h3 className="text-2xl font-black text-white">{MISSION_PHASES[phase].label}</h3>
+                </div>
+                <p className="text-slate-400 text-sm leading-relaxed">{MISSION_PHASES[phase].desc}</p>
+              </div>
+
+              <div className="space-y-8 flex-1">
+                {phase === 0 && (<>
+                  <div className="field">
+                    <label className="field-label">Primary Mission Objective</label>
+                    <textarea className="field-textarea !min-h-[120px]" ghostInput="Define the end-state reality..." value={mission.objective} onChange={e => setMission(m => ({ ...m, objective: e.target.value }))} />
+                  </div>
+                  <div className="field">
+                    <label className="field-label">Executive Owner</label>
+                    <input className="field-input" value={mission.owner} onChange={e => setMission(m => ({ ...m, owner: e.target.value }))} />
+                  </div>
+                </>)}
+                
+                {phase === 1 && (
+                  <div className="field">
+                    <label className="field-label">Known Truths & Inputs</label>
+                    <div className="space-y-3">
+                      {(mission.known || ['']).map((v, i) => (
+                        <div key={i} className="flex gap-3">
+                          <input className="field-input" ghostInput="Verified fact..." value={v} onChange={e => updateArr('known', i, e.target.value)} />
+                          {i === mission.known.length - 1 && <Button className="px-4" variant="secondary" onClick={() => addRow('known')}>+</Button>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {phase === 6 && (<>
+                  <div className="field">
+                    <label className="field-label">Executive Recommendation</label>
+                    <input className="field-input" value={mission.recommended} onChange={e => setMission(m => ({ ...m, recommended: e.target.value }))} ghostInput="Final gate instructions..." />
+                  </div>
+                  <div className="flex gap-4 pt-6">
+                    <Button className="flex-1" onClick={() => { copyText(packet); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>
+                      {copied ? '✅ PACKET SEALED' : '📋 CLONE MISSION PACKET'}
+                    </Button>
+                    <Button variant="secondary" onClick={() => exportAsMarkdown('PH_EVO_MISSION_PACKET', packet)}>⬇️ EXPORT</Button>
+                  </div>
+                </>)}
+              </div>
+              
+              {phase < total - 1 && (
+                <Button className="mt-8" onClick={() => setPhase(p => Math.min(p + 1, total - 1))}>
+                  PROCEED TO PHASE {phase + 2} →
+                </Button>
+              )}
+            </div>
           </div>
-          <div className="p-8">
-            <div className="prompt-block !bg-transparent !border-none !p-0 !max-h-[500px]">{packet}</div>
+
+          <div className="xl:col-span-7 bg-black/40 p-0 overflow-hidden rounded-2xl border border-slate-800 flex flex-col">
+            <div className="p-8 border-b border-slate-800 bg-slate-900/20 flex justify-between items-center">
+              <h3 className="text-xs font-black text-white uppercase tracking-widest">Mission Packet Snapshot</h3>
+              <StatusBadge status="pending" label="Evo Studio Draft" />
+            </div>
+            <div className="p-8 flex-1">
+              <div className="prompt-block !bg-transparent !border-none !p-0 !max-h-[500px]">{packet}</div>
+            </div>
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   );
@@ -358,55 +366,66 @@ export function ChainBuilderView() {
   const moveUp = (i) => { const s = [...steps]; if (i > 0) { [s[i-1], s[i]] = [s[i], s[i-1]]; setSteps(s); } };
 
   return (
-    <div className="flex-col">
-      <div className="flex-between">
-        <div><div className="page-title">🔗 Prompt Chain Builder</div><div className="page-subtitle">Wire multiple prompts into a sequential execution pipeline.</div></div>
-        <div className="flex-row gap-8">
-          <button className="btn btn-primary" onClick={() => { copyText(chain); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>{copied ? '✅ Copied!' : '📋 Copy Chain'}</button>
-          <button className="btn btn-secondary" onClick={() => exportAsMarkdown('PH_EVO_PROMPT_CHAIN', chain)}>⬇️ Export</button>
+    <div className="module-container border-t-2 border-t-amber-500">
+      <div className="module-header flex-col items-start gap-1">
+        <div className="w-full flex justify-between items-center">
+          <div>
+            <div className="module-title text-amber-500">🔗 Prompt Chain Builder</div>
+            <div className="text-[11px] text-slate-400 font-medium uppercase tracking-widest mt-1">Wire multiple prompts into a sequential execution pipeline.</div>
+          </div>
+          <div className="flex gap-4">
+            <Button onClick={() => { copyText(chain); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>{copied ? '✅ COPIED!' : '📋 COPY CHAIN'}</Button>
+            <Button variant="secondary" onClick={() => exportAsMarkdown('PH_EVO_PROMPT_CHAIN', chain)}>⬇️ EXPORT</Button>
+          </div>
         </div>
       </div>
-      <div className="grid-builder">
-        <div className="flex-col">
-          {/* Step type picker */}
-          <div className="card">
-            <div className="card-header"><div className="card-title">Add Step</div></div>
-            <div className="card-body" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {CHAIN_STEP_TYPES.map(t => (
-                <button key={t.id} className="btn btn-secondary btn-sm" onClick={() => addStep(t.id)} style={{ borderColor: t.color + '44', color: t.color }}>{t.icon} {t.label}</button>
-              ))}
+
+      <div className="module-content p-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
+          <div className="flex flex-col space-y-6">
+            {/* Step type picker */}
+            <div className="bg-black/40 border border-slate-800 p-6 rounded-2xl">
+              <h3 className="text-sm font-black text-white uppercase tracking-widest mb-4">Add Step</h3>
+              <div className="flex flex-wrap gap-2">
+                {CHAIN_STEP_TYPES.map(t => (
+                  <button key={t.id} className="px-4 py-2 rounded-lg text-xs font-bold transition-all border" onClick={() => addStep(t.id)} style={{ borderColor: t.color + '44', color: t.color, backgroundColor: t.color + '10' }}>{t.icon} {t.label}</button>
+                ))}
+              </div>
             </div>
-          </div>
-          {/* Steps */}
-          {steps.map((step, i) => {
-            const type = CHAIN_STEP_TYPES.find(t => t.id === step.type);
-            return (
-              <div key={step.id} className="card" style={{ borderColor: (type?.color || '#fff') + '33' }}>
-                <div className="card-header">
-                  <div className="flex-between">
-                    <div className="flex-row gap-8">
-                      <span style={{ fontSize: 18 }}>{type?.icon}</span>
-                      <select className="field-select" style={{ width: 'auto', padding: '4px 8px' }} value={step.type} onChange={e => updateType(step.id, e.target.value)}>
+            {/* Steps */}
+            {steps.map((step, i) => {
+              const type = CHAIN_STEP_TYPES.find(t => t.id === step.type);
+              return (
+                <div key={step.id} className="bg-slate-900/40 rounded-2xl border" style={{ borderColor: (type?.color || '#fff') + '33' }}>
+                  <div className="p-4 border-b flex justify-between items-center" style={{ borderColor: (type?.color || '#fff') + '22', backgroundColor: (type?.color || '#fff') + '0a' }}>
+                    <div className="flex items-center gap-4">
+                      <span className="text-xl">{type?.icon}</span>
+                      <select className="field-select !w-auto !py-1 !text-xs" value={step.type} onChange={e => updateType(step.id, e.target.value)}>
                         {CHAIN_STEP_TYPES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
                       </select>
-                      <span className="badge badge-dim">Step {i + 1}</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 bg-black/40 px-2 py-1 rounded">Step {i + 1}</span>
                     </div>
-                    <div className="flex-row gap-8">
-                      {i > 0 && <button className="btn btn-ghost btn-sm" onClick={() => moveUp(i)}>↑</button>}
-                      <button className="btn btn-danger btn-sm" onClick={() => removeStep(step.id)}>✕</button>
+                    <div className="flex items-center gap-2">
+                      {i > 0 && <button className="text-slate-400 hover:text-white px-2" onClick={() => moveUp(i)}>↑</button>}
+                      <button className="text-rose-400 hover:text-rose-300 px-2 font-bold" onClick={() => removeStep(step.id)}>✕</button>
                     </div>
                   </div>
+                  <div className="p-4">
+                    <textarea className="field-textarea !min-h-[80px]" ghostInput={`${type?.label} instructions...`} value={step.content} onChange={e => updateStep(step.id, e.target.value)} />
+                  </div>
                 </div>
-                <div className="card-body">
-                  <textarea className="field-textarea" ghostInput={`${type?.label} instructions...`} value={step.content} onChange={e => updateStep(step.id, e.target.value)} style={{ minHeight: 80 }} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="card">
-          <div className="card-header"><div className="card-title">Chain Preview</div></div>
-          <div className="card-body"><div className="prompt-block" style={{ maxHeight: 520 }}>{chain || 'Add steps to build your chain...'}</div></div>
+              );
+            })}
+          </div>
+
+          <div className="bg-black/40 rounded-2xl border border-slate-800 flex flex-col overflow-hidden">
+            <div className="p-6 border-b border-slate-800 bg-slate-900/20">
+              <h3 className="text-xs font-black text-white uppercase tracking-widest">Chain Preview</h3>
+            </div>
+            <div className="p-6 flex-1">
+              <div className="prompt-block !bg-transparent !border-none !p-0 !max-h-[600px]">{chain || 'Add steps to build your chain...'}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -430,42 +449,72 @@ export function ExportLabView() {
   };
 
   return (
-    <div className="flex-col">
-      <div><div className="page-title">📤 Export Lab</div><div className="page-subtitle">Export prompt stacks, session history, and mission packets in any format.</div></div>
-      <div className="grid-2">
-        <div className="card">
-          <div className="card-header"><div className="card-title">Select Vault Items</div></div>
-          <div className="card-body flex-col">
-            {vault.length === 0 ? <div className="empty-state"><div className="empty-icon">🗄️</div><div className="empty-title">Vault is empty</div><div className="empty-sub">Save prompts from the Builder first.</div></div> : vault.map(item => (
-              <label key={item.id} style={{ display: 'flex', gap: 10, alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--border-subtle)', cursor: 'pointer' }}>
-                <input type="checkbox" checked={selected.includes(item.id)} onChange={() => toggle(item.id)} style={{ accentColor: 'var(--accent-gold)', width: 16, height: 16 }} />
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>{item.task?.slice(0, 60)}{item.task?.length > 60 ? '...' : ''}</div>
-                  <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{item.domain} · {item.score}% · {item.saved}</div>
-                </div>
-              </label>
-            ))}
+    <div className="module-container border-t-2 border-t-emerald-500">
+      <div className="module-header flex-col items-start gap-1">
+        <div className="w-full flex justify-between items-center">
+          <div>
+            <div className="module-title text-emerald-500">📤 Export Lab</div>
+            <div className="text-[11px] text-slate-400 font-medium uppercase tracking-widest mt-1">Export prompt stacks, session history, and mission packets in any format.</div>
           </div>
         </div>
-        <div className="card">
-          <div className="card-header"><div className="card-title">Export Options</div></div>
-          <div className="card-body flex-col">
-            <div className="field"><label className="field-label">Format</label>
-              <div className="tabs-bar">
-                {['md','txt','json'].map(f => <button key={f} className={`tab-btn ${format === f ? 'active' : ''}`} onClick={() => setFormat(f)}>{f.toUpperCase()}</button>)}
+      </div>
+
+      <div className="module-content p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div className="bg-black/40 rounded-2xl border border-slate-800 flex flex-col overflow-hidden">
+            <div className="p-6 border-b border-slate-800 bg-slate-900/20">
+              <h3 className="text-xs font-black text-white uppercase tracking-widest">Select Vault Items</h3>
+            </div>
+            <div className="p-6 flex flex-col space-y-2">
+              {vault.length === 0 ? (
+                <div className="flex flex-col items-center justify-center p-12 text-slate-500">
+                  <div className="text-4xl mb-4">🗄️</div>
+                  <div className="text-sm font-bold text-white mb-2">Vault is empty</div>
+                  <div className="text-xs">Save prompts from the Builder first.</div>
+                </div>
+              ) : vault.map(item => (
+                <label key={item.id} className="flex items-center gap-4 p-4 border border-slate-800/50 bg-slate-900/30 hover:bg-slate-800/50 rounded-xl cursor-pointer transition-all">
+                  <input type="checkbox" checked={selected.includes(item.id)} onChange={() => toggle(item.id)} className="w-5 h-5 accent-emerald-500 bg-slate-800 border-slate-700 rounded" />
+                  <div>
+                    <div className="text-sm font-bold text-white">{item.task?.slice(0, 60)}{item.task?.length > 60 ? '...' : ''}</div>
+                    <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 mt-1">{item.domain} · {item.score}% · {item.saved}</div>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-black/40 rounded-2xl border border-slate-800 flex flex-col overflow-hidden">
+            <div className="p-6 border-b border-slate-800 bg-slate-900/20">
+              <h3 className="text-xs font-black text-white uppercase tracking-widest">Export Options</h3>
+            </div>
+            <div className="p-6 flex flex-col space-y-6">
+              <div className="field">
+                <label className="field-label">Format</label>
+                <div className="flex gap-2">
+                  {['md','txt','json'].map(f => (
+                    <button key={f} className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all border ${format === f ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/50' : 'bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800'}`} onClick={() => setFormat(f)}>
+                      {f.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="text-xs text-slate-400 p-4 bg-slate-900/50 border border-slate-800 rounded-xl leading-relaxed">
+                {format === 'md' && '📝 Markdown — Full prompt stacks with headers. Best for Notion, GitHub, docs.'}
+                {format === 'txt' && '📄 Plain text — Stripped format. Best for pasting into OpenAI/Claude.'}
+                {format === 'json' && '🔧 JSON — Structured data with all metadata. Best for API integration.'}
+              </div>
+
+              <Button className="w-full py-4" onClick={exportSelected}>⬇️ EXPORT {selected.length > 0 ? `${selected.length} ITEMS` : 'SELECTED'}</Button>
+              
+              <div className="border-t border-slate-800 pt-6 mt-2 space-y-4">
+                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-4">Quick Exports</h4>
+                <Button variant="secondary" className="w-full" onClick={() => { const c = history.map(h => `${h.time} | ${h.domain} | ${h.score}% | ${h.task}`).join('\n'); exportAsText('PH_Evo_Session_History', c); }}>📜 EXPORT SESSION HISTORY</Button>
+                <Button variant="secondary" className="w-full" onClick={() => exportAsJson('PH_Evo_Full_Vault', vault)}>🗄️ EXPORT FULL VAULT (JSON)</Button>
+                <Button variant="secondary" className="w-full" onClick={() => { const agent = { name: 'PromptHouse Evo Studio', model: 'gpt-4o', instructions: 'You are PH Evo Studio Operator. See attached knowledge files for full instructions.' }; exportAsJson('PH_Evo_Agent_Config', agent); }}>🤖 EXPORT AGENT CONFIG</Button>
               </div>
             </div>
-            <div style={{ fontSize: 12, color: 'var(--text-dim)', padding: '8px 12px', background: 'var(--bg-surface)', borderRadius: 8 }}>
-              {format === 'md' && '📝 Markdown — Full prompt stacks with headers. Best for Notion, GitHub, docs.'}
-              {format === 'txt' && '📄 Plain text — Stripped format. Best for pasting into OpenAI/Claude.'}
-              {format === 'json' && '🔧 JSON — Structured data with all metadata. Best for API integration.'}
-            </div>
-            <button className="btn btn-primary" onClick={exportSelected}>⬇️ Export {selected.length > 0 ? `${selected.length} Items` : 'Selected'}</button>
-            <div className="section-divider" />
-            <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 8 }}>Quick Exports</div>
-            <button className="btn btn-secondary" onClick={() => { const c = history.map(h => `${h.time} | ${h.domain} | ${h.score}% | ${h.task}`).join('\n'); exportAsText('PH_Evo_Session_History', c); }}>📜 Export Session History</button>
-            <button className="btn btn-secondary" onClick={() => exportAsJson('PH_Evo_Full_Vault', vault)}>🗄️ Export Full Vault (JSON)</button>
-            <button className="btn btn-secondary" onClick={() => { const agent = { name: 'PromptHouse Evo Studio', model: 'gpt-4o', instructions: 'You are PH Evo Studio Operator. See attached knowledge files for full instructions.' }; exportAsJson('PH_Evo_Agent_Config', agent); }}>🤖 Export Agent Config</button>
           </div>
         </div>
       </div>
