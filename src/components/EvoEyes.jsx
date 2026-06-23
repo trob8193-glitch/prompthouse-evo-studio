@@ -38,7 +38,43 @@ export function EvoEyes({ mode = 'overlay' }) {
   const [loading, setLoading] = useState(false);
   const [latency, setLatency] = useState(4);
   const [sovereigntyScore, setSovereigntyScore] = useState(99.8);
+  const [isEvolving, setIsEvolving] = useState(false);
   const containerRef = useRef(null);
+
+  const performUIEvolution = async () => {
+    setIsEvolving(true);
+    try {
+      // Capture structural DOM, sanitizing out large noisy elements
+      const rawHtml = document.body.innerHTML;
+      const sanitizedDom = rawHtml.replace(/<svg[^>]*>[\s\S]*?<\/svg>/gi, '<svg>[ICON]</svg>')
+                                  .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+
+      const res = await fetch(`${BRIDGE_URL}/api/intelligence/execute`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          module: 'UIEvolution',
+          action: 'evolve',
+          payload: { dom: sanitizedDom }
+        }),
+      });
+      const data = await res.json();
+      if (data.success && data.result?.css) {
+        let styleTag = document.getElementById('evo-ui-evolution');
+        if (!styleTag) {
+          styleTag = document.createElement('style');
+          styleTag.id = 'evo-ui-evolution';
+          document.head.appendChild(styleTag);
+        }
+        styleTag.innerHTML = data.result.css;
+        Log.info('🎨 Applied AI UI Evolution Live!');
+      }
+    } catch (err) {
+      Log.error('UI Evolution Failed:', err);
+    } finally {
+      setIsEvolving(false);
+    }
+  };
 
   const fetchState = async () => {
     setLoading(true);
@@ -97,8 +133,8 @@ export function EvoEyes({ mode = 'overlay' }) {
   if (!evoEyesActive && mode === 'overlay') return null;
 
   const containerClasses = mode === 'overlay' 
-    ? "fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl flex flex-col overflow-hidden animate-in fade-in duration-500 font-sans"
-    : "relative w-full h-[600px] bg-black/40 border border-white/10 rounded-3xl flex flex-col overflow-hidden font-sans";
+    ? "fixed inset-0 z-100 bg-black/95 backdrop-blur-2xl flex-col overflow-hidden animate-in fade-in duration-500 font-sans"
+    : "relative w-full h-[600px] bg-black/40 border-white/10 rounded-3xl flex-col overflow-hidden font-sans";
 
   return (
     <div className={containerClasses}>
@@ -109,7 +145,7 @@ export function EvoEyes({ mode = 'overlay' }) {
             <motion.div 
               animate={{ rotate: 360 }} 
               transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-              className="absolute -inset-2 border border-indigo-500/30 rounded-full border-dashed"
+              className="absolute -inset-2 border-indigo-500/30 rounded-full border-dashed"
             />
             <Eye className="text-indigo-500" size={24} />
           </div>
@@ -117,13 +153,13 @@ export function EvoEyes({ mode = 'overlay' }) {
             <h1 className="text-xl font-black italic tracking-tighter text-white uppercase">Evo Eyes <span className="text-[10px] text-indigo-500 not-italic font-mono ml-2 uppercase tracking-[0.3em]">Evo Studio Edition</span></h1>
             <div className="flex gap-4 text-[9px] font-black uppercase tracking-widest text-slate-500 mt-0.5">
               <span className="flex items-center gap-1.5"><Activity size={10} className="text-emerald-500" /> Latency: {latency}ms</span>
-              <span className="flex items-center gap-1.5"><Shield size={10} className="text-indigo-400" /> Sovereignty: {sovereigntyScore}%</span>
+              <span className="flex items-center gap-1.5"><Shield size={10} className="text-neon-cyan" /> Sovereignty: {sovereigntyScore}%</span>
               <span className="flex items-center gap-1.5"><Network size={10} className="text-pink-500" /> Bonded Nodes: {bondedNodes ? bondedNodes.length : 0}</span>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-lg border border-white/10">
+        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border-white/10">
           {[
             { id: 'diagnostics', icon: Eye, label: 'Health' },
             { id: 'network', icon: Network, label: "Connectome" },
@@ -142,6 +178,17 @@ export function EvoEyes({ mode = 'overlay' }) {
               {layer.label}
             </button>
           ))}
+          <div className="w-px h-6 bg-white/10 mx-2" />
+          <button
+            onClick={performUIEvolution}
+            disabled={isEvolving}
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all ${
+              isEvolving ? 'bg-amber-500/20 text-amber-500 animate-pulse' : 'bg-linear-to-r from-indigo-600 to-purple-600 text-white shadow-lg hover:shadow-indigo-500/50'
+            }`}
+          >
+            {isEvolving ? <Zap size={12} className="animate-spin" /> : <Maximize2 size={12} />}
+            {isEvolving ? 'Evolving UI...' : 'UI Evolution'}
+          </button>
         </div>
 
         <button onClick={() => setEvoEyesActive(false)} className="text-slate-500 hover:text-white transition-colors">
@@ -188,10 +235,10 @@ export function EvoEyes({ mode = 'overlay' }) {
           />
         ))}
 
-        <div className="absolute bottom-10 left-10 p-6 bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl w-80 space-y-4">
+        <div className="absolute bottom-10 left-10 p-6 bg-black/60 backdrop-blur-xl border-white/10 rounded-2xl w-80 space-y-4">
           <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center justify-between">
             <span>Module Intelligence</span>
-            <span className="text-indigo-400">{singularityLayer.toUpperCase()}</span>
+            <span className="text-neon-cyan">{singularityLayer.toUpperCase()}</span>
           </div>
           <div className="space-y-3">
             {singularityLayer === 'diagnostics' && (
@@ -204,7 +251,7 @@ export function EvoEyes({ mode = 'overlay' }) {
               <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
                 <motion.div animate={{ width: '85%' }} className="h-full bg-indigo-500" />
               </div>
-              <span className="text-[9px] font-mono text-indigo-400">85% OPTIMAL</span>
+              <span className="text-[9px] font-mono text-neon-cyan">85% OPTIMAL</span>
             </div>
           </div>
         </div>
@@ -217,8 +264,8 @@ export function EvoEyes({ mode = 'overlay' }) {
             >
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center border border-indigo-500/40">
-                    <Layers size={20} className="text-indigo-400" />
+                  <div className="w-10 h-10 rounded-3xl bg-indigo-500/20 flex items-center justify-center border-indigo-500/40">
+                    <Layers size={20} className="text-neon-cyan" />
                   </div>
                   <div>
                     <h2 className="text-lg font-black text-white truncate w-48">{selectedNode.label || selectedNode.id}</h2>
@@ -231,7 +278,7 @@ export function EvoEyes({ mode = 'overlay' }) {
               <div className="space-y-8">
                 <div className="grid grid-cols-2 gap-3">
                   <StatItem label="Health" value={selectedNode.health.toUpperCase()} color={selectedNode.health === 'healthy' ? 'text-emerald-500' : 'text-rose-500'} />
-                  <StatItem label="Drift" value={`${selectedNode.drift.toFixed(1)}%`} color={selectedNode.drift > 50 ? 'text-amber-500' : 'text-indigo-400'} />
+                  <StatItem label="Drift" value={`${selectedNode.drift.toFixed(1)}%`} color={selectedNode.drift > 50 ? 'text-amber-500' : 'text-neon-cyan'} />
                   <StatItem label="Lines" value={selectedNode.lines} />
                   <StatItem label="Dependents" value={selectedNode.dependents || 0} />
                 </div>
@@ -240,8 +287,8 @@ export function EvoEyes({ mode = 'overlay' }) {
                   <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                     <Target size={12} className="text-pink-500" /> Cognitive X-Ray Scan
                   </div>
-                  <div className="bg-white/5 rounded-xl p-4 border border-white/5 space-y-3">
-                    <div className="text-xs text-slate-300 font-medium">Design Pattern: <span className="text-indigo-400">Evo Studio-ESM</span></div>
+                  <div className="bg-white/5 rounded-3xl p-4 border-white/5 space-y-3">
+                    <div className="text-xs text-slate-300 font-medium">Design Pattern: <span className="text-neon-cyan">Evo Studio-ESM</span></div>
                     <div className="text-[11px] text-slate-500 leading-relaxed">Multi-layered semantic analysis indicates 0.02% drift from structural canon.</div>
                   </div>
                 </div>
@@ -252,7 +299,7 @@ export function EvoEyes({ mode = 'overlay' }) {
                   </div>
                   <div className="space-y-2">
                     {[1, 2, 3].map(i => (
-                      <div key={i} className="flex gap-4 items-start bg-white/5 p-3 rounded-lg border border-white/5">
+                      <div key={i} className="flex gap-4 items-start bg-white/5 p-3 rounded-2xl border-white/5">
                         <div className="text-[9px] font-mono text-slate-600 mt-1">v3.{4-i}.0</div>
                         <div>
                           <div className="text-xs text-slate-200 font-bold">Logic Transition Sealed</div>
@@ -264,7 +311,7 @@ export function EvoEyes({ mode = 'overlay' }) {
                 </div>
 
                 {selectedNode.isSprout && (
-                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-center gap-4">
+                  <div className="bg-amber-500/10 border-amber-500/30 rounded-3xl p-4 flex items-center gap-4">
                     <Zap className="text-amber-500" size={20} />
                     <div>
                       <div className="text-xs font-black text-amber-500 uppercase tracking-widest">Quantum Sprout Detected</div>
@@ -317,7 +364,7 @@ function NodePoint({ node, layer, selected, onClick }) {
 
 function StatItem({ label, value, color = "text-white" }) {
   return (
-    <div className="bg-white/5 border border-white/5 rounded-xl p-3 flex flex-col justify-center">
+    <div className="bg-white/5 border-white/5 rounded-3xl p-3 flex-col gap-4 justify-center">
       <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1">{label}</span>
       <span className={`text-xs font-black ${color}`}>{value}</span>
     </div>

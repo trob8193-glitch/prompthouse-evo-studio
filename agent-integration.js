@@ -18,27 +18,39 @@ const learningManager = new OnlineLearningManager();
 
 dotenv.config({ path: '.env.agent', override: false });
 
-let agentInstance = null;
+let agentInstances = new Map();
+let currentAgentIndex = 0;
 
 /**
  * Initialize the agent on first use
  */
 export function getEvoAgent() {
-  if (!agentInstance) {
+  dotenv.config({ path: '.env.agent', override: true });
+  const swarmIds = process.env.SWARM_IDS ? process.env.SWARM_IDS.split(',') : [process.env.AGENT_ID];
+  const activeId = swarmIds[currentAgentIndex % swarmIds.length];
+  currentAgentIndex++;
+
+  if (!activeId) {
+    throw new Error('No AGENT_ID or SWARM_IDS configured.');
+  }
+
+  if (!agentInstances.has(activeId)) {
     try {
-      agentInstance = new EvoAgent(process.env.AGENT_ID);
+      agentInstances.set(activeId, new EvoAgent(activeId));
     } catch (err) {
       throw new Error(`Agent not initialized. Run: npm run create:agent. Error: ${err.message}`);
     }
   }
-  return agentInstance;
+  return agentInstances.get(activeId);
 }
 
 export function getAgentConfigStatus() {
+  const swarmIds = process.env.SWARM_IDS ? process.env.SWARM_IDS.split(',') : [];
   return {
-    configured: Boolean(process.env.AGENT_ID && process.env.OPENAI_API_KEY),
-    hasAgentId: Boolean(process.env.AGENT_ID),
+    configured: Boolean(process.env.AGENT_ID && process.env.OPENAI_API_KEY) || swarmIds.length > 0,
+    hasAgentId: Boolean(process.env.AGENT_ID) || swarmIds.length > 0,
     hasOpenAiKey: Boolean(process.env.OPENAI_API_KEY),
+    swarmSize: Math.max(swarmIds.length, process.env.AGENT_ID ? 1 : 0),
   };
 }
 
@@ -74,6 +86,7 @@ export function setupAgentRoutes(app, { agentFactory = getEvoAgent, authMiddlewa
         configured: true,
         agentId: agent.agentId,
         threadId: agent.threadId,
+        swarmSize: configStatus.swarmSize,
       });
     } catch (err) {
       Log.error(`[Agent] Health check initialization failed: ${err.message}`);

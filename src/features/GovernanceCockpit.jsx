@@ -138,20 +138,7 @@ function PageHeader({ title, subtitle, icon: Icon, color = '#00f0ff' }) {
   );
 }
 
-export function SelfEvolutionDashboard() {
-  const metrics = useBridgeJson('/api/metrics');
-  return (
-    <IDEPageLayout
-      title="Self-Evolution Dashboard"
-      description="Readiness view for mutation, receipts, and maturity evidence."
-      icon={Shield}
-    >
-      <Panel title="Maturity + Review Snapshot" icon={Shield} color="#00ff88">
-        <StateBlock state={metrics} />
-      </Panel>
-    </IDEPageLayout>
-  );
-}
+
 
 export function CostFirewallDashboard() {
   const metrics = useBridgeJson('/api/metrics');
@@ -249,4 +236,4 @@ export function ProofDocsView() {
   );
 }
 
-export default SelfEvolutionDashboard;
+

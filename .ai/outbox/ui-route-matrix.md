@@ -1,8 +1,8 @@
 # Full UI Button-to-Route Matrix
 
-**Generated**: 2026-06-12T18:34:03.857Z
-**Components Scanned**: 134
-**Known Backend Routes**: 281
+**Generated**: 2026-06-21T00:43:45.286Z
+**Components Scanned**: 187
+**Known Backend Routes**: 340
 **Potential Dead Links Detected**: 0
 
 ## Matrix
@@ -10,7 +10,7 @@
 ### src\agent-bridge-views.jsx
 **Interactive Controls**: 
 - RESCAN_VAULT
-- CLEAR_RECEIPTS
+- {}}>CLEAR_RECEIPTS
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -64,7 +64,19 @@
 
 ### src\ai-views.jsx
 **Interactive Controls**: 
-- {scanning ? 'Scanning...' : 'Start Global Audit'}
+- EXECUTE
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\app\AppShell.jsx
+**Interactive Controls**: 
+- setActiveTab('workspace')} className={`text-left hover:text-white transition-colors ${activeTab === 'workspace' ? 'text-white' : ''}`}>Workspace
+- setActiveTab('local-intel')} className={`text-left hover:text-[#00ffcc] transition-colors ${activeTab === 'local-intel' ? 'text-[#00ffcc]' : ''}`}>Local Intelligence
+- setActiveTab('omni')} className={`text-left hover:text-white transition-colors ${activeTab === 'omni' ? 'text-white' : ''}`}>Omni-Tether
+- setActiveTab('forge')} className={`text-left hover:text-white transition-colors ${activeTab === 'forge' ? 'text-white' : ''}`}>Forge
+- setActiveTab('ledger')} className={`text-left hover:text-white transition-colors ${activeTab === 'ledger' ? 'text-white' : ''}`}>Value Ledger
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -118,11 +130,6 @@
 
 ### src\chrome-extension-views.jsx
 **Interactive Controls**: 
-- Capture Page
-- Use Selection
-- Open Side Panel
-- Copy Packet
-- Save
 - Write Extension to Disk
 - navigator.clipboard.writeText(`generated_apps/${extension.name}`)}>Copy Load Path
 - Save Current File
@@ -180,7 +187,7 @@
 - Connect Bank
 - launchApp(project.id)}
                                             disabled={launching === project.id}
-                                            className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 px-4 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50"
+                                            className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 px-4 rounded-3xl flex items-center justify-center transition-colors disabled:opacity-50"
                                         >
                                             {launching === project.id ? (
                                                 
@@ -193,10 +200,10 @@
 - launchApp(project.id)}
                                             disabled={launching === project.id}
                                             aria-label={`Open ${project.name}`}
-                                            className="bg-gray-800 hover:bg-gray-700 text-white p-2.5 rounded-xl transition-colors flex items-center justify-center disabled:opacity-50"
+                                            className="bg-gray-800 hover:bg-gray-700 text-white p-2.5 rounded-3xl transition-colors flex items-center justify-center disabled:opacity-50"
                                         >
 - handleBuyApp(project.id)}
-                                        className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 font-bold py-2.5 px-4 rounded-xl flex items-center justify-center transition-colors border border-blue-500/30"
+                                        className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-neon-cyan font-bold py-2.5 px-4 rounded-3xl flex items-center justify-center transition-colors border-blue-500/30"
                                     >
                                         
                                         Buy App ($9.00)
@@ -205,21 +212,45 @@
 
 ---
 
+### src\components\AutonomousSelfRepairBoundary.jsx
+**Interactive Controls**: 
+- {
+                  useSovereignStore.getState().rollbackState(); // Revert any bad mutations
+                  window.location.reload();
+                }}
+                className="mt-4 px-6 py-2 bg-[#00f0ff] text-black font-bold uppercase tracking-widest rounded hover:bg-white transition-all shadow-[0_0_15px_rgba(0,240,255,0.5)]"
+              >
+                Rollback State & Re-Ignite
+
+**API Calls Triggered**:
+- `/api/intelligence/execute` -> ✅ ALIVE
+
+---
+
 ### src\components\BotAutomationDeck.jsx
 **Interactive Controls**: 
 - handleSync('trello')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${syncing.trello ? 'bg-slate-800 text-slate-500' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}
+                className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all ${syncing.trello ? 'bg-black/40 backdrop-blur-md border-white/5 text-slate-500' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}
               >
                 {syncing.trello ? 'SYNCING...' : 'SYNC NOW'}
 - handleSync('slack')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${syncing.slack ? 'bg-slate-800 text-slate-500' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}
+                className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all ${syncing.slack ? 'bg-black/40 backdrop-blur-md border-white/5 text-slate-500' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}
               >
                 {syncing.slack ? 'SYNCING...' : 'SYNC NOW'}
 - setPermissionsVisible((value) => !value)}
           aria-expanded={permissionsVisible}
-          className="flex items-center gap-2 text-indigo-400 text-xs font-bold hover:text-indigo-300 transition-colors"
+          className="flex items-center gap-2 text-neon-cyan text-xs font-bold hover:text-indigo-300 transition-colors"
         >
           MANAGE PERMISSIONS
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\components\Dashboard.jsx
+**Interactive Controls**: 
+- {}}>_
+- {}}>X
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -242,6 +273,18 @@
 ---
 
 ### src\components\EvoCopilot.jsx
+**Interactive Controls**: 
+- Run in Terminal
+- {applied ?  : }
+                      {applied ? 'Applied!' : 'Apply to File'}
+- {}} className="text-white/40 hover:text-white transition-colors ml-1">
+- {}} className="text-white/40 hover:text-white transition-colors">
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\components\EvoCopilot_original.jsx
 **Interactive Controls**: 
 - Run in Terminal
 - {applied ?  : }
@@ -274,10 +317,13 @@
             >
               
               {layer.label}
+- {isEvolving ?  : }
+            {isEvolving ? 'Evolving UI...' : 'UI Evolution'}
 - setEvoEyesActive(false)} className="text-slate-500 hover:text-white transition-colors">
 - setSelectedNode(null)} className="text-slate-500 hover:text-white">
 
 **API Calls Triggered**:
+- `/api/intelligence/execute` -> ✅ ALIVE
 - `/api/intelligence/execute` -> ✅ ALIVE
 - `/api/platform-sentinel/status` -> ✅ ALIVE
 
@@ -333,7 +379,11 @@
 - setIsOpen(!isOpen)}
         style={{
           ...styles.trigger,
-          borderColor: isOpen ? activeTier.color : 'rgba(255,255,255,0.1)',
+          borderColor: isOpen ? activeTier.color : (isCopilot ? 'var(--hologram-color-40)' : 'rgba(255,255,255,0.1)'),
+          background: isCopilot ? 'transparent' : 'rgba(255,255,255,0.04)',
+          color: isCopilot ? 'var(--hologram-color)' : '#e0e0e0',
+          boxShadow: isCopilot && isOpen ? `0 0 15px ${activeTier.color}40` : (isCopilot ? '0 0 8px var(--hologram-color-20)' : 'none'),
+          textShadow: isCopilot ? '0 0 5px var(--hologram-color)' : 'none',
         }}
       >
         {activeTier.icon}
@@ -347,12 +397,15 @@
 - selectModel(model.id)}
                     style={{
                       ...styles.modelOption,
+                      fontFamily: isCopilot ? 'monospace' : 'inherit',
                       background: isActive
-                        ? 'rgba(255,255,255,0.08)'
+                        ? (isCopilot ? 'var(--hologram-color-20)' : 'rgba(255,255,255,0.08)')
                         : 'transparent',
                       borderLeft: isActive
-                        ? `3px solid ${tier.color}`
+                        ? `3px solid ${isCopilot ? 'var(--hologram-color)' : tier.color}`
                         : '3px solid transparent',
+                      color: isCopilot ? (isActive ? '#fff' : 'var(--hologram-color-80)') : '#d4d4d4',
+                      textShadow: isCopilot && isActive ? '0 0 5px var(--hologram-color)' : 'none',
                     }}
                   >
                     {model.displayName}
@@ -373,37 +426,40 @@
 ### src\components\Navigation.jsx
 **Interactive Controls**: 
 - {
-                setActiveGroup(group.id);
-                if (collapsed) toggleSidebar();
-              }}
-              title={group.label}
-              style={{
-                width: 40, height: 40, borderRadius: 8,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: isActive ? '#ffffff' : '#5a5a72',
-                background: isActive ? 'rgba(255,255,255,0.05)' : 'transparent',
-                marginBottom: 8, transition: 'all 0.2s',
-                position: 'relative', border: 'none', cursor: 'pointer'
-              }}
-              onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = '#00f0ff'; }}
-              onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#5a5a72'; }}
-            >
-              {isActive && }
+                  setActiveGroup(group.id);
+                  if (collapsed) toggleSidebar();
+                }}
+                title={group.label}
+                style={{
+                  width: 44, height: 44, borderRadius: 12,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-dim)',
+                  background: isActive ? 'var(--accent-cyan-dim)' : 'transparent',
+                  marginBottom: 8, transition: 'var(--transition)',
+                  position: 'relative', border: 'none', cursor: 'pointer',
+                  boxShadow: isActive ? 'var(--shadow-glass)' : 'none'
+                }}
+                onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = 'var(--accent-cyan)'; }}
+                onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = 'var(--text-dim)'; }}
+              >
+                {isActive && }
 - setActivePage(item.id)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 10, width: '100%',
-                    padding: '7px 10px', borderRadius: 6, cursor: 'pointer',
-                    fontSize: 12, fontWeight: isActive ? 600 : 500,
-                    color: isActive ? '#ffffff' : '#8e8e9f',
-                    background: isActive ? 'rgba(0,240,255,0.1)' : 'transparent',
-                    border: '1px solid transparent', textAlign: 'left', marginBottom: 2,
-                    transition: 'all 0.2s', borderColor: isActive ? 'rgba(0,240,255,0.2)' : 'transparent'
-                  }}
-                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
-                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
-                >
-                  
-                  {item.label}
+                    className={isActive ? "hologram-text-glow-accent" : "hologram-text-glow"}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 12, width: '100%',
+                      padding: '8px 12px', borderRadius: 8, cursor: 'pointer',
+                      fontSize: 13, fontWeight: isActive ? 600 : 500,
+                      color: isActive ? 'white' : 'var(--text-secondary)',
+                      background: isActive ? 'var(--accent-cyan-dim)' : 'transparent',
+                      border: '1px solid transparent', textAlign: 'left', marginBottom: 4,
+                      transition: 'var(--transition)', borderColor: isActive ? 'var(--border-neon)' : 'transparent',
+                      boxShadow: isActive ? 'var(--shadow-glass), inset 0 0 20px rgba(0,240,255,0.05)' : 'none'
+                    }}
+                    onMouseEnter={e => { if (!isActive) Object.assign(e.currentTarget.style, { background: 'var(--bg-glass-light)', color: 'white' }); }}
+                    onMouseLeave={e => { if (!isActive) Object.assign(e.currentTarget.style, { background: 'transparent', color: 'var(--text-secondary)' }); }}
+                  >
+                    
+                    {item.label}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -421,6 +477,23 @@
 **Interactive Controls**: 
 - Approve
 - Grant Explicit Approval
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\components\OwnerApprovalRail.jsx
+**Interactive Controls**: 
+- handleDecision(false)}
+            disabled={processing}
+            style={{ flex: 1, background: 'transparent', color: '#f8fafc', border: '1px solid #ef4444', padding: '12px', borderRadius: 6, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+          >
+             Reject & Suspend
+- handleDecision(true)}
+            disabled={processing}
+            style={{ flex: 1, background: '#ef4444', color: '#f8fafc', border: 'none', padding: '12px', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+          >
+             Authorize Action
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -482,16 +555,27 @@
 ### src\components\SovereignTabs.jsx
 **Interactive Controls**: 
 - setActiveTab(tab.id)}
-            className={`relative px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-              activeTab === tab.id 
-                ? 'text-white' 
-                : 'text-slate-500 hover:text-slate-300'
-            }`}
-          >
-            {activeTab === tab.id && (
-              
-            )}
-            {tab.label}
+                className={`relative px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-500 ${
+                  isActive 
+                    ? 'text-white scale-110 shadow-[0_0_30px_rgba(0,240,255,0.6)]' 
+                    : 'text-cyan-900 hover:text-cyan-400 hover:scale-105'
+                }`}
+                style={{
+                  transform: isActive ? 'translateZ(30px)' : 'translateZ(0px)',
+                  background: isActive ? 'linear-gradient(180deg, rgba(0,240,255,0.2) 0%, rgba(0,0,0,0.8) 100%)' : 'transparent',
+                  border: isActive ? '1px solid rgba(0,240,255,0.8)' : '1px solid transparent'
+                }}
+              >
+                {/* Active Light Beam */}
+                {isActive && (
+                  
+                )}
+                {/* Active Underglow */}
+                {isActive && (
+                  
+                )}
+                
+                  {tab.icon && } {tab.label}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -538,17 +622,16 @@
           
             
             STANDBY
-- setActiveTerminalSession(session)}
-                  style={{
-                    padding: '4px 10px', borderRadius: 4, fontSize: 8, fontWeight: 800,
-                    letterSpacing: '0.15em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    background: activeTerminalSession === session ? tc.accent : 'transparent',
-                    color: activeTerminalSession === session ? '#000' : '#475569',
-                    boxShadow: activeTerminalSession === session ? `0 0 12px ${tc.accent}40` : 'none'
-                  }}
-                >
-                  {session}
+- setActivePane(paneId)}
+                    style={{
+                      padding: '4px 0', fontSize: 10, fontWeight: 700,
+                      border: 'none', borderBottom: activePane === paneId ? `2px solid ${tc.accent}` : '2px solid transparent',
+                      cursor: 'pointer', transition: 'all 0.2s',
+                      background: 'transparent',
+                      color: activePane === paneId ? '#fff' : '#94a3b8',
+                    }}
+                  >
+                    {pane}
 - setTerminalTheme(t.id)}
                   style={{
                     width: 10, height: 10, borderRadius: '50%', border: 'none', cursor: 'pointer',
@@ -564,43 +647,18 @@
             
 
             {/* Action Buttons */}
-            {[
-              { icon: Copy, title: 'Copy Output', onClick: copyToClipboard },
-              { icon: Download, title: 'Download Logs', onClick: downloadLogs },
-              { icon: Trash2, title: 'Clear Session', onClick: () => clearTerminal(activeTerminalSession), hoverColor: '#f43f5e' },
-              { icon: isFullscreen ? Minimize2 : Maximize2, title: 'Fullscreen', onClick: () => setIsFullscreen(!isFullscreen) },
-              { icon: ChevronDown, title: 'Minimize', onClick: () => setTerminalOpen(false) }
-            ].map((btn, i) => (
-               e.currentTarget.style.color = btn.hoverColor || tc.accent}
-                onMouseLeave={e => e.currentTarget.style.color = '#475569'}
-              >
-- setCatalogOpen(v => !v)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',
-                borderRadius: 6, fontSize: 9, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase',
-                border: `1px solid ${tc.accent}30`, color: tc.accent, background: 'transparent', cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = `${tc.accent}15`; e.currentTarget.style.borderColor = `${tc.accent}60`; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = `${tc.accent}30`; }}
-            >
-              
-              Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}
-              {catalogOpen ?  : }
-- runCatalogCommand(item)}
-                  disabled={executing}
-                  className="evo-cmd-card"
-                  style={executing ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
-                >
-                  
-                    {item.label}
-                    {item.session}
-                  
-                  {item.description}
-                  {item.command}
+            
+              {[
+                { icon: Zap, title: 'Debug with AI', onClick: debugWithAI },
+                { icon: Copy, title: 'Copy Output', onClick: copyToClipboard },
+                { icon: Download, title: 'Download Logs', onClick: downloadLogs },
+                { icon: Trash2, title: 'Clear Session', onClick: () => clearTerminal(activeTerminalSession) },
+                { icon: isFullscreen ? Minimize2 : Maximize2, title: 'Fullscreen', onClick: () => setIsFullscreen(!isFullscreen) },
+                { icon: ChevronDown, title: 'Minimize', onClick: () => setTerminalOpen(false) }
+              ].map((btn, i) => (
 - { e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'scale(1.15)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = tc.accent; e.currentTarget.style.transform = 'scale(1)'; }}
-            >
+                  onMouseLeave={e => { e.currentTarget.style.color = tc.accent; e.currentTarget.style.transform = 'scale(1)'; }}
+                >
 
 **API Calls Triggered**:
 - `/api/intelligence/execute` -> ✅ ALIVE
@@ -611,7 +669,17 @@
 **Interactive Controls**: 
 - setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}>
           &times;
-- Revert to {commit.id}
+- {}}>
+                 Revert to {commit.id}
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\components\Toolbar.jsx
+**Interactive Controls**: 
+- {}}>Run.exe
+- {}}>Options
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -623,6 +691,28 @@
           onMouseLeave={(e) => e.currentTarget.style.color = '#737385'}
         >
           {sidebarCollapsed ?  : }
+- setShowThemeMenu(!showThemeMenu)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',
+              borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+              color: '#fff', fontSize: 10, fontWeight: 800, letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+          >
+             METAMORPHOSIS: {globalTheme.layout.toUpperCase()}
+- { 
+                    setGlobalTheme({ layout: t, ui: t, bots: t, wiring: t, building: t, routing: t, inventing: t, agent: t, brain: t, module: t }); 
+                    setShowThemeMenu(false); 
+                  }}
+                  style={{
+                    padding: '8px 12px', textAlign: 'left', borderRadius: 6,
+                    background: globalTheme.layout === t ? 'rgba(0,240,255,0.1)' : 'transparent',
+                    color: globalTheme.layout === t ? '#00f0ff' : '#a0a0b0',
+                    border: 'none', cursor: 'pointer', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em'
+                  }}
+                >
+                  {t} Version
 - setActivePage('proof-console')}
           style={{ background: 'none', border: 'none', color: '#737385', cursor: 'pointer', padding: 6, display: 'flex', position: 'relative', transition: 'color 0.2s' }}
           aria-label="Notifications"
@@ -664,9 +754,9 @@
 ### src\evo-copilot-sidebar.jsx
 **Interactive Controls**: 
 - setIsOpen(false)} style={{ background:'none', border:'none', color:'var(--text-muted)', cursor:'pointer', fontSize:20 }}>✕
-- handleQuickAction('debt')} style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer' }}>🛠️ Scan Debt
-- handleQuickAction('tool')} style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer' }}>🪄 Auto-Tool
-- handleQuickAction('test')} style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer' }}>⚡ Run Fission
+- handleQuickAction('debt')} className="hover:bg-blue-500" style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer', transition: 'background 0.3s' }}>🛠️ Scan Debt
+- handleQuickAction('tool')} className="hover:bg-blue-500" style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer', transition: 'background 0.3s' }}>🪄 Auto-Tool
+- handleQuickAction('test')} className="hover:bg-blue-500" style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer', transition: 'background 0.3s' }}>⚡ Run Fission
 - ↑
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -688,12 +778,12 @@
 
 ### src\evo-exchange-view.jsx
 **Interactive Controls**: 
-- alert('Publishing to public exchange requires Enterprise Sovereignty.')}>
+- useSovereignStore.getState().addNotification({ msg: 'Publishing to public exchange requires Enterprise Sovereignty.', type: 'warning' })}>
           🌐 Go Public
 - setActiveCategory(c.id)}
           >
             {c.label}
-- 🔒 Blocked
+- {}}>🔒 Blocked
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -708,28 +798,19 @@
 
 ---
 
-### src\features\AutonomousSelfView.jsx
+### src\features\autonomous\SovereignCommandNexus.jsx
 **Interactive Controls**: 
-- setEvolving(false) : startEvolution}
-              disabled={bridgeStatus !== 'connected'}
-              className={`w-full py-4 rounded-xl font-bold text-[13px] tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-3 ${
-                evolving 
-                  ? 'bg-black/50 text-[#00f0ff] border border-[#00f0ff]/30 shadow-[inset_0_0_20px_rgba(0,240,255,0.1)]' 
-                  : 'bg-linear-to-r from-[#8a2be2] to-[#4338ca] text-white hover:shadow-[0_0_30px_rgba(138,43,226,0.4)] disabled:opacity-50 disabled:cursor-not-allowed'
-              }`}
-            >
-              {evolving ?  : }
-              {evolving ? 'Evolution Active' : 'Initialize Evolution Loop'}
-- Execute Maintenance Protocol
+- {}}>INITIATE WIPE
+- {}}>ROUTE TRAFFIC
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
 ---
 
-### src\features\CommerceDashboard.jsx
+### src\features\autonomous\SynapticForge.jsx
 **Interactive Controls**: 
-- window.open('https://dashboard.stripe.com', '_blank')} className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-            Go To Stripe Dashboard
+- {}}>
+            COMPILE
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -742,8 +823,8 @@
 - BLE Pair
 - {bonding ?  : }
               Bond Node
-- { setTargetIp(node.ip); handleBond(); }}
-                  className="px-3 py-1.5 bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white rounded text-xs font-bold transition-colors"
+- handleBond(null, node.ip)}
+                  className="px-3 py-1.5 bg-indigo-600/20 text-neon-cyan hover:bg-indigo-600 hover:text-white rounded text-xs font-bold transition-colors"
                 >
                   Bond
 - setTargetIp(item.url || item.target || item.ip || '')}
@@ -766,28 +847,9 @@
 
 ---
 
-### src\features\EvoEyesView.jsx
+### src\features\EvoDiffuserDashboard.jsx
 **Interactive Controls**: 
-- setSelectedId((v) => v)}
-            title="Refresh on next poll tick"
-          >
-             Refresh
-- setSelectedId(m.id)}
-                  style={{
-                    width: '100%',
-                    justifyContent: 'space-between',
-                    marginBottom: 8,
-                    background: selectedId === m.id ? 'rgba(99,102,241,0.12)' : 'rgba(2,6,23,0.35)',
-                    border: selectedId === m.id ? '1px solid rgba(99,102,241,0.35)' : '1px solid rgba(255,255,255,0.08)',
-                    padding: '10px 10px'
-                  }}
-                >
-                  
-                    {m.label || m.id}
-                    {m.path}
-                  
-                  
-                    {m.health}
+- {}}> EXPORT ASSET
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -799,25 +861,8 @@
                       aria-pressed={previewExpanded}
                       className="text-[#737385] hover:text-[#00f0ff] transition-colors"
                     >
-
-**API Calls Triggered**: (No direct fetch calls detected)
-
----
-
-### src\features\EvoLlmTrainingDashboard.jsx
-**Interactive Controls**: 
-- Refresh
-- createPlan('local-dataset')} disabled={busy}>Create Dataset Plan
-- Synthesize Data
-- Deep Eval
-- Force Self-Train Cycle
-- Approve Plan {plans[0].id.split('_')[0]}
-- createPlan('openai')} disabled={busy}>Plan Provider Gate Test
-- Approve Latest
-- Run Latest
-- Promote Dataset Version
-- Rollback Active
-- Package Contribution
+- {}}> EXPORT
+- {}}>DEPLOY TO FORGE
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -826,18 +871,23 @@
 ### src\features\EvoPixelatorDashboard.jsx
 **Interactive Controls**: 
 - setBitDepth(b)}
-                      className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold border transition-all ${bitDepth === b ? 'bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.2)]' : 'bg-[#0a0a10] border-white/10 text-[#737385] hover:border-white/20'}`}
+                      className={`flex-1 py-2 px-3 rounded-2xl text-xs font-bold border transition-all ${bitDepth === b ? 'bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.2)]' : 'bg-[#0a0a10] border-white/10 text-[#737385] hover:border-white/20'}`}
                     >
                       {b}
+- {}}> PNG
+- {}}> SPRITE SHEET
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
 ---
 
-### src\features\EvoSpineCoreDashboard.jsx
+### src\features\EvoPulseGridView.jsx
 **Interactive Controls**: 
-- Refresh
-- Run Evo
+- triggerTridallIngestion('Analyze SaaS CRM trends', { time: 'Q4' })}
+            disabled={tridallState?.status === 'INGESTING'}
+          >
+            {tridallState?.status === 'INGESTING' ? 'EXTRACTING...' : 'INITIATE INGESTION'}
+- {}}>X
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -846,10 +896,10 @@
 ### src\features\ExtensionCockpitView.jsx
 **Interactive Controls**: 
 - setActivePanel(panel.id)}
-        className={`flex items-center gap-4 w-full p-4 rounded-xl transition-all border ${
+        className={`flex items-center gap-4 w-full p-4 rounded-3xl transition-all border ${
           isActive 
-            ? 'bg-slate-800 border-indigo-500/50 shadow-lg shadow-indigo-500/10' 
-            : 'bg-transparent border-transparent hover:bg-slate-800/30'
+            ? 'bg-black/40 backdrop-blur-md border-white/5 border-indigo-500/50 shadow-lg shadow-indigo-500/10' 
+            : 'bg-transparent border-transparent hover:bg-black/40 backdrop-blur-md border-white/5/30'
         }`}
       >
         
@@ -862,19 +912,21 @@
 
 ---
 
-### src\features\FeatureFoundryView.jsx
+### src\features\FirstRunWizard.jsx
 **Interactive Controls**: 
-- {loading ?  : }
-          {loading ? 'Harvesting Codebase...' : 'Scan for Opportunities'}
-- initiateBuild(mission)}
-              style={{ 
-                width: '100%', padding: '14px', borderRadius: 12, border: '1px solid #6366f1', background: activeMission?.id === mission.id ? '#6366f1' : 'transparent',
-                color: activeMission?.id === mission.id ? 'white' : '#818cf8', fontWeight: 800, fontSize: 13, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, transition: 'all 0.2s'
-              }}
+- setStep(2)}
+              style={{ background: '#6366f1', color: 'white', border: 'none', padding: '12px 24px', borderRadius: 8, cursor: 'pointer', fontWeight: 'bold', width: '100%' }}
             >
-              
-              {activeMission?.id === mission.id ? 'Build Cycle Active' : 'Initiate Autonomous Build'}
+              Configure Credentials
+- onComplete()}
+              style={{ background: 'transparent', color: '#64748b', border: 'none', padding: '12px 24px', cursor: 'pointer', width: '100%', marginTop: 8 }}
+            >
+              Skip for now (Run in Demo Mode)
+- setStep(1)}
+                style={{ flex: 1, background: '#334155', color: 'white', border: 'none', padding: '10px', borderRadius: 6, cursor: 'pointer' }}
+              >
+                Back
+- {saving ? 'Securing...' : 'Lock in Vault'}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -883,76 +935,48 @@
 ### src\features\GlobalAPISettingsView.jsx
 **Interactive Controls**: 
 - {apiConfigSaving ?  : saved ?  : }
-            {apiConfigSaving ? 'Saving...' : saved ? 'Saved!' : 'Save Keys'}
-- {testing ?  : }
-            {testing ? 'Testing...' : 'Test Connection'}
-- {generatingKey ?  : }
-            Generate Key
-- {
-                  navigator.clipboard.writeText(newKeyPayload);
-                  addNotification('Copied API Key to clipboard.', 'success');
-                }}
-                style={{
-                  padding: '10px 14px',
-                  borderRadius: 8,
-                  border: '1px solid #ec4899',
-                  background: 'transparent',
-                  color: '#ec4899',
-                  cursor: 'pointer',
-                  fontSize: 11,
-                  fontWeight: 700
-                }}
-              >
-                Copy
-- handleRevokeKey(key.id)}
-                    style={{
-                      padding: '4px 10px',
-                      borderRadius: 6,
-                      border: '1px solid #ef4444',
-                      background: 'rgba(239, 68, 68, 0.05)',
-                      color: '#ef4444',
-                      cursor: 'pointer',
-                      fontSize: 10,
-                      fontWeight: 700,
-                      transition: 'all 0.2s'
-                    }}
+          
+            {apiConfigSaving ? 'Synchronizing...' : saved ? 'Synchronized' : 'Save Configurations'}
+- setShowOpenAiKey(!showOpenAiKey)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-neon-cyan transition-colors"
                   >
-                    Revoke
-- {nfLoading || nfSaving ?  : null}
-          {nfForce3 ? 'Strict 3-Team Mode ON' : 'Strict 3-Team Mode OFF'}
+                    {showOpenAiKey ?  : }
+- setShowVercelKey(!showVercelKey)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-emerald-400 transition-colors"
+                  >
+                    {showVercelKey ?  : }
+- {testing ?  : }
+                    {testing ? 'Probing...' : 'Run Probe'}
+- {generatingKey ?  : }
+                Create Key
 - {
-            try {
-              const res = await fetch('http://localhost:11434/api/tags');
-              if (res.ok) {
-                const data = await res.json();
-                const models = data.models.map(m => m.name).join(', ');
-                alert(`✅ Ollama is Online!\n\nInstalled Models:\n${models || 'None yet. Run "ollama run llama3" in your terminal!'}`);
-              } else {
-                alert('⚠️ Ollama responded with an error.');
-              }
-            } catch (err) {
-              alert('❌ Ollama is Offline or not installed.\n\nTo install, download from ollama.com or run:\ncurl -fsSL https://ollama.com/install.sh | sh');
-            }
-          }}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', borderRadius: 8, border: '1px solid #334155', background: '#1e293b', color: '#e2e8f0', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>
-            Test Ollama Connection
-
-**API Calls Triggered**: (No direct fetch calls detected)
-
----
-
-### src\features\LaunchProofView.jsx
-**Interactive Controls**: 
-- {isVerifying ? 'VERIFYING...' : 'RUN FULL PROOF'}
-
-**API Calls Triggered**: (No direct fetch calls detected)
-
----
-
-### src\features\MetricsView.jsx
-**Interactive Controls**: 
-- { fetchAll(); }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>
-           Refresh
+                      navigator.clipboard.writeText(newKeyPayload);
+                      addNotification('Key copied to clipboard.', 'success');
+                    }}
+                    className="px-4 py-2.5 bg-pink-500/20 hover:bg-pink-500/30 text-pink-400 font-bold rounded-2xl border-pink-500/30 transition-colors flex items-center"
+                  >
+                    
+                    Copy
+- handleRevokeKey(key.id)}
+                        className="p-2 text-gray-600 hover:text-rose-400 hover:bg-rose-500/10 rounded-2xl transition-colors opacity-0 group-hover/item:opacity-100"
+                        title="Revoke Key"
+                      >
+- {nfLoading || nfSaving ?  : nfForce3 ? 'Strict Mode Active' : 'Enable Strict Mode'}
+- {
+                  try {
+                    const res = await fetch('http://localhost:11434/api/tags');
+                    if (res.ok) {
+                      const data = await res.json();
+                      addNotification(`✅ Local Engine !Online Models: ${data.models.map(m => m.name).join(', ') || 'None'}`, 'success');
+                    }
+                  } catch (err) {
+                    addNotification('❌ Engine Offline. Start the local daemon.', 'error');
+                  }
+                }}
+                className="w-full py-2.5 rounded-2xl bg-gray-800 hover:bg-gray-700 border-gray-700 text-white text-xs font-bold transition-all flex items-center justify-center"
+              >
+                
+                Ping Engine
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -961,13 +985,13 @@
 ### src\features\MobileSingularityDashboard.jsx
 **Interactive Controls**: 
 - setArchitecture('expo_router')}
-                className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all ${
+                className={`flex-1 py-3 px-4 rounded-2xl text-sm font-bold transition-all ${
                   architecture === 'expo_router' ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                 }`}
               >
                 React Native (Expo)
 - setArchitecture('clean_riverpod')}
-                className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all ${
+                className={`flex-1 py-3 px-4 rounded-2xl text-sm font-bold transition-all ${
                   architecture === 'clean_riverpod' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                 }`}
               >
@@ -1002,9 +1026,21 @@
 
 ---
 
-### src\features\PlatformSentinelDashboard.jsx
+### src\features\OmniMarketplaceNexus.jsx
 **Interactive Controls**: 
-- {loading || learningLoading ? 'Auditing…' : 'Refresh Audit'}
+- {}}>
+           View Ledger
+- {}}>
+            Configure Gateways
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\features\OmniscientObservabilityDeck.jsx
+**Interactive Controls**: 
+- {}}>
+           Scan Environment
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -1012,12 +1048,7 @@
 
 ### src\features\PricingCheckout.jsx
 **Interactive Controls**: 
-- Reset
-- setShowSimulator(null)}
-                className="text-slate-400 hover:text-white text-sm"
-                disabled={simulationStep === 1}
-              >
-                ✕
+- {checkoutLoading ? 'Processing...' : 'Proceed to Stripe Checkout'}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -1028,7 +1059,7 @@
 - Refresh
 - planSurface(surface)}
                 disabled={routeLoading === surface.id}
-                className="mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border border-indigo-400/40 bg-indigo-500/10 px-3 text-xs font-black uppercase text-indigo-100 hover:bg-indigo-500/20 disabled:cursor-wait disabled:opacity-60"
+                className="mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border-indigo-400/40 bg-indigo-500/10 px-3 text-xs font-black uppercase text-indigo-100 hover:bg-indigo-500/20 disabled:cursor-wait disabled:opacity-60"
               >
                 
                 {routeLoading === surface.id ? 'Planning' : 'Plan Route'}
@@ -1037,29 +1068,59 @@
 
 ---
 
-### src\features\RuntimeHealthDashboard.jsx
-**Interactive Controls**: 
-- Refresh
-
-**API Calls Triggered**: (No direct fetch calls detected)
-
----
-
-### src\features\SaasBuilderView.jsx
-**Interactive Controls**: 
-- {building ?  : }
-              {building ? 'Orchestrating Reality...' : 'Initiate SaaS Build'}
-
-**API Calls Triggered**: (No direct fetch calls detected)
-
----
-
 ### src\features\SelfEvolutionDashboard.jsx
 **Interactive Controls**: 
-- { if (!disabled) { e.currentTarget.style.boxShadow = `0 0 25px ${danger ? 'rgba(255,0,85,0.3)' : 'rgba(0,240,255,0.3)'}`; } }}
-    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 15px ${danger ? 'rgba(255,0,85,0.15)' : 'rgba(0,240,255,0.15)'}`; }}
-  >
-    {children}
+- {refreshing ? 'Syncing...' : 'Refresh'}
+- {status?.killSwitchEngaged ?  : }
+              {status?.killSwitchEngaged ? 'Kill Switch: ENGAGED' : 'Kill Switch: OFF'}
+- handleQueueAction(item.id, 'approve')}
+                      className="flex-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                    >
+                      Approve
+- handleQueueAction(item.id, 'reject')}
+                      className="flex-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                    >
+                      Reject
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\features\SingularityCommandCenter.jsx
+**Interactive Controls**: (No static buttons found)
+
+**API Calls Triggered**:
+- `/api/singularity/status` -> ✅ ALIVE
+
+---
+
+### src\features\SingularityEvolutionNexus.jsx
+**Interactive Controls**: 
+- {}}>
+           Synchronize Neural Nets
+- {}}>
+            Trigger Compaction Cycle
+- setIsAutoEvolving(!isAutoEvolving)}
+              className={`glass-extreme hover:border-[#ff0055] transition-all rounded-xl px-6 py-3 text-sm font-black inline-flex items-center gap-3 ${isAutoEvolving ? 'border-[#ff0055] text-[#ff0055] animate-pulse shadow-[0_0_20px_rgba(255,0,85,0.4)]' : 'text-gray-400'}`}
+            >
+              
+              {isAutoEvolving ? 'HYPER-DRIVE ACTIVE (15s)' : 'ENABLE 15s HYPER-DRIVE'}
+- {isEvolving ?  : }
+              {isEvolving ? 'Consulting Omni-Brain...' : 'Trigger Autonomous Evolution'}
+- {
+                  const dims = {};
+                  ['layout','ui','bots','wiring','feature','app'].forEach(d => dims[d] = t);
+                  setGlobalTheme(dims);
+                }}
+                className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-cyan-500/50 hover:text-cyan-400 transition-colors"
+              >
+                {t}
+- setActivePangram(prev => (prev > 0 ? prev - 1 : pangrams.length - 1))}
+                className="p-2 glass-extreme rounded-lg hover:border-[#00f0ff] transition-colors"
+              >
+- setActivePangram(prev => (prev
+- {}}>
+        Launch {tool.name}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -1067,74 +1128,25 @@
 
 ### src\features\SovereignIntelligenceDashboard.jsx
 **Interactive Controls**: 
-- { e.currentTarget.style.borderColor = color; e.currentTarget.style.background = `${color}15`; e.currentTarget.style.transform = 'translateX(6px)'; e.currentTarget.style.boxShadow = `0 0 30px ${color}20`; }}
-      onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${color}30`; e.currentTarget.style.background = 'rgba(5,5,8,0.8)'; e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = `0 0 20px ${color}05`; }}
-    >
-      
-        
-      
-      
-        {label}
+- {label}
         {sub}
 - {refreshing ? 'Syncing...' : 'Refresh'}
 - useSovereignStore.getState().runTruthProbe()}
-              className="text-[9px] text-indigo-400 font-black uppercase tracking-widest hover:text-indigo-300"
+              className="text-[10px] text-neon-cyan font-black uppercase tracking-widest hover:text-indigo-300 transition-colors"
             >
               Run Truth Probe
 - setActivePage('chat')}
-              style={{
-                background: 'none', border: '1px solid #1e293b', borderRadius: 8, padding: '8px 12px',
-                color: '#6366f1', fontSize: 11, fontWeight: 600, cursor: 'pointer', marginTop: 4,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-              }}
-            >
-              Open Full Chat
+                className="mt-2 glass-extreme px-4 py-3 rounded-xl border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:border-indigo-400 transition-all hover:bg-indigo-500/10"
+              >
+                Open Full Chat
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
 ---
 
-### src\features\StudioMarketplaceDashboard.jsx
+### src\features\TheMasterForge.jsx
 **Interactive Controls**: 
-- setActiveTab(tab)}
-          className={`px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-wider transition-colors ${
-            activeTab === tab 
-              ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/50' 
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-transparent'
-          }`}
-        >
-          {tab}
-- !isTethered && !isTethering && handleTether(ext)}
-                  disabled={isTethering || isTethered}
-                  className={`flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-lg transition-all ${
-                    isTethered 
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' 
-                      : isTethering
-                        ? 'bg-indigo-500/20 text-indigo-400 animate-pulse border border-indigo-500/50'
-                        : 'text-[#00f0ff] hover:text-white bg-[#00f0ff]/10 hover:bg-[#00f0ff]/30 border border-transparent'
-                  }`}
-                >
-                  {isTethered ? (
-                    <> Tethered
-                  ) : isTethering ? (
-                    <> Tethering...
-                  ) : (
-                    <> Tether
-                  )}
-
-**API Calls Triggered**: (No direct fetch calls detected)
-
----
-
-### src\features\ThemeEvolutionDashboard.jsx
-**Interactive Controls**: 
-- e.currentTarget.style.background = 'rgba(0,240,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,240,255,0.1)'}>
-           Refresh Vector
-- Suggest
-- Preview
-- Approve
-- Execute
-- Rollback
+- Deploy to Singularity
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -1174,22 +1186,6 @@
             >
               {r.label}
               {r.desc}
-
-**API Calls Triggered**: (No direct fetch calls detected)
-
----
-
-### src\forge-render-views.jsx
-**Interactive Controls**: 
-- setViewport(v)}
-                style={{
-                  fontSize: '10px', fontWeight: 700, padding: '4px 8px', borderRadius: '4px',
-                  background: viewport === v ? '#1e293b' : 'transparent',
-                  color: viewport === v ? '#e2e8f0' : '#64748b',
-                  border: 'none', cursor: 'pointer', textTransform: 'capitalize'
-                }}
-              >
-                {v}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -1250,12 +1246,12 @@
               })
             }).then(res => {
               if (res.ok) {
-                alert(`🚀 Bridge Forged: ${bridgeName} saved to src/generated/bridges/`);
+                addNotification({ msg: `🚀 Bridge Forged: ${bridgeName} saved to src/generated/bridges/`, type: 'success' });
               } else {
-                alert(`❌ Failed to forge bridge.`);
+                addNotification({ msg: `❌ Failed to forge bridge.`, type: 'error' });
               }
             }).catch(err => {
-              alert(`❌ Error connecting to bridge.`);
+              addNotification({ msg: `❌ Error connecting to bridge.`, type: 'error' });
             });
           }}>🚀 Forge Bridge
 - setSignedAt(new Date().toISOString())}
@@ -1269,7 +1265,8 @@
 ---
 
 ### src\new-features-views.jsx
-**Interactive Controls**: (No static buttons found)
+**Interactive Controls**: 
+- {}}>RESOLVE GAP
 
 **API Calls Triggered**:
 - `/api/intelligence/execute` -> ✅ ALIVE
@@ -1366,7 +1363,53 @@
 - `/api/proof/count` -> ✅ ALIVE
 - `/api/proof/receipts?limit=60` -> ✅ ALIVE
 - `/api/logs?limit=1` -> ✅ ALIVE
-- `/api/metrics` -> ✅ ALIVE
+- `/api/grading/maturity` -> ✅ ALIVE
+- `/api/audit/nuclear-truth` -> ✅ ALIVE
+- `/api/grading/maturity` -> ✅ ALIVE
+
+---
+
+### src\prototypes\HybridStudio.jsx
+**Interactive Controls**: 
+- DECONSTRUCT
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\prototypes\PrototypeLauncher.jsx
+**Interactive Controls**: 
+- Exit Autonomous Explorer
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\prototypes\StudioBeta.jsx
+**Interactive Controls**: 
+- {}} className="absolute right-3 w-10 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-3xl flex items-center justify-center transition-colors shadow-md shadow-indigo-600">
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\prototypes\ThemeSynthesizer.jsx
+**Interactive Controls**: 
+- Back to Explorer
+- setActivePersona(p)}
+                   className={`p-4 rounded-3xl flex items-center gap-3 transition-all border-2 ${isActive ? 'bg-blue-900/20 border-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'bg-gray-900/50 border-transparent hover:bg-gray-800 text-gray-400'}`}
+                 >
+                   
+                   {p.name}
+- setSelections(s => ({...s, [dim.id]: p.id}))}
+                    className={`p-2 rounded-2xl text-left transition-all flex items-center justify-between border ${selections[dim.id] === p.id ? `${p.bg} ${p.border} ${p.color}` : 'border-transparent bg-gray-900/50 hover:bg-gray-800 text-gray-500'}`}
+                  >
+                    {p.name.split(' ')[0]}
+                    {selections[dim.id] === p.id && }
+- MANUAL SYNTHESIS
+- START AUTONOMOUS EVOLUTION
+
+**API Calls Triggered**: (No direct fetch calls detected)
 
 ---
 
@@ -1413,8 +1456,7 @@
 
 ### src\self-build-forge-view.jsx
 **Interactive Controls**: 
-- {isCompiling ?  : }
-          {isCompiling ? `Compiling ${progress}%` : 'Forge Now'}
+- {status === 'BUILDING' ? 'EVOLVING...' : 'FORGE APPLICATION'}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -1422,7 +1464,8 @@
 
 ### src\studio-grading-release-views.jsx
 **Interactive Controls**: 
-- Grade Prompt
+- {grading ? 'Grading...' : 'Grade Prompt'}
+- {loading ? 'Verifying...' : 'Auto-Verify'}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -1455,22 +1498,17 @@
 ### src\views.jsx
 **Interactive Controls**: 
 - setPhase(i)} 
-            className={`flex flex-col items-center gap-3 p-6 rounded-3xl transition-all duration-300 ${
-              i === phase 
-                ? 'bg-indigo-500 text-white shadow-xl shadow-indigo-500/20' 
-                : i 
-            {p.icon}
-            {p.label}
-- { copyText(chain); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>{copied ? '✅ Copied!' : '📋 Copy Chain'}
-- exportAsMarkdown('PH_EVO_PROMPT_CHAIN', chain)}>⬇️ Export
-- addStep(t.id)} style={{ borderColor: t.color + '44', color: t.color }}>{t.icon} {t.label}
+              className={`flex-col items-center gap-3 p-6 rounded-3xl transition-all duration-300 ${
+                i === phase 
+                  ? 'bg-fuchsia-500 text-white shadow-xl shadow-fuchsia-500/20' 
+                  : i 
+              {p.icon}
+              {p.label}
+- addStep(t.id)} style={{ borderColor: t.color + '44', color: t.color, backgroundColor: t.color + '10' }}>{t.icon} {t.label}
 - moveUp(i)}>↑
 - removeStep(step.id)}>✕
-- setFormat(f)}>{f.toUpperCase()}
-- ⬇️ Export {selected.length > 0 ? `${selected.length} Items` : 'Selected'}
-- { const c = history.map(h => `${h.time} | ${h.domain} | ${h.score}% | ${h.task}`).join('\n'); exportAsText('PH_Evo_Session_History', c); }}>📜 Export Session History
-- exportAsJson('PH_Evo_Full_Vault', vault)}>🗄️ Export Full Vault (JSON)
-- { const agent = { name: 'PromptHouse Evo Studio', model: 'gpt-4o', instructions: 'You are PH Evo Studio Operator. See attached knowledge files for full instructions.' }; exportAsJson('PH_Evo_Agent_Config', agent); }}>🤖 Export Agent Config
+- setFormat(f)}>
+                      {f.toUpperCase()}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 

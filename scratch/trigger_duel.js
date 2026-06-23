@@ -1,5 +1,5 @@
 import { EvoDuelEngine } from '../src/core/autonomy/EvoDuelEngine.js';
-import { EVO_DEV_TEAM } from '../src/bot-characters.js';
+import { EVO_DEV_TEAM } from '../src/bot-characters.jsx';
 import { Log } from '../src/core/autonomy/SovereignLogger.js';
 
 async function runLiveDuel() {

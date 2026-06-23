@@ -24,18 +24,18 @@ npm run layer:x10
 
 ## Current High-Level Scores
 
-| System | Completion | Status |
-|---|---:|---|
-| Evo Layer Core | 90% | PARTIAL/IMPLEMENTED |
-| Evo Git Legacy Foundation | 88% | PARTIAL/IMPLEMENTED |
-| Execution Runtime | 86% | PARTIAL |
-| Scheduler + Worker | 84% | PARTIAL |
-| Memory System | 84% | PARTIAL |
-| Observability | 72% | PARTIAL |
-| Daemon Mesh | 84% | PARTIAL |
-| Runtime OS | 66% | PARTIAL |
-| Evogenage Stack | 84% | PARTIAL/PLANNED |
-| Full Studio Vision | 73% | PARTIAL |
+| System                    | Completion | Status              |
+| ------------------------- | ---------: | ------------------- |
+| Evo Layer Core            |        90% | PARTIAL/IMPLEMENTED |
+| Evo Git Legacy Foundation |        88% | PARTIAL/IMPLEMENTED |
+| Execution Runtime         |        86% | PARTIAL             |
+| Scheduler + Worker        |        84% | PARTIAL             |
+| Memory System             |        84% | PARTIAL             |
+| Observability             |        72% | PARTIAL             |
+| Daemon Mesh               |        84% | PARTIAL             |
+| Runtime OS                |        66% | PARTIAL             |
+| Evogenage Stack           |        84% | PARTIAL/PLANNED     |
+| Full Studio Vision        |        73% | PARTIAL             |
 
 ## Key Findings
 

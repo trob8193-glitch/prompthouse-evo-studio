@@ -1,60 +1,29 @@
 import fs from 'fs';
 import path from 'path';
-import { spawn } from 'child_process';
+import { execSync } from 'child_process';
+import { Log } from '../autonomy/SovereignLogger.js';
 
-export function runCommandWithTimeout({ cwd, command, timeoutMs = 120000 } = {}) {
-  return new Promise((resolve) => {
-    const started = Date.now();
-    const child = spawn(command, { cwd, shell: true, env: process.env });
-    let stdout = '';
-    let stderr = '';
-    const timer = setTimeout(() => {
-      child.kill('SIGTERM');
-      stderr += `\nCommand timed out after ${timeoutMs}ms.`;
-    }, timeoutMs);
-    child.stdout.on('data', chunk => { stdout += chunk.toString(); });
-    child.stderr.on('data', chunk => { stderr += chunk.toString(); });
-    child.on('close', code => {
-      clearTimeout(timer);
-      resolve({ command, exitCode: code ?? 1, durationMs: Date.now() - started, stdout, stderr });
-    });
-    child.on('error', error => {
-      clearTimeout(timer);
-      resolve({ command, exitCode: 1, durationMs: Date.now() - started, stdout, stderr: stderr || error.message });
-    });
-  });
-}
-
-export async function runProofCommands({ workspaceDir, commands = [], receiptDir, timeoutMs = 180000 } = {}) {
-  if (!workspaceDir) throw new Error('workspaceDir is required.');
-  if (!receiptDir) throw new Error('receiptDir is required.');
+export async function runProofCommands({ workspaceDir, commands, receiptDir }) {
   fs.mkdirSync(receiptDir, { recursive: true });
+  
+  let passed = true;
   const results = [];
-  for (const command of commands) {
-    const result = await runCommandWithTimeout({ cwd: workspaceDir, command, timeoutMs });
-    const safeName = command.replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '').slice(0, 80) || 'command';
-    const stdoutPath = path.join(receiptDir, `${safeName}.stdout.log`);
-    const stderrPath = path.join(receiptDir, `${safeName}.stderr.log`);
-    fs.writeFileSync(stdoutPath, result.stdout || '', 'utf8');
-    fs.writeFileSync(stderrPath, result.stderr || '', 'utf8');
-    results.push({
-      command,
-      exitCode: result.exitCode,
-      durationMs: result.durationMs,
-      stdoutPath,
-      stderrPath,
-    });
-    if (result.exitCode !== 0) break;
-  }
-  return summarizeProofResults(results);
-}
 
-export function summarizeProofResults(commands = []) {
-  const passed = commands.length > 0 && commands.every(item => item.exitCode === 0);
-  return {
-    passed,
-    commandCount: commands.length,
-    failedCommand: commands.find(item => item.exitCode !== 0)?.command || null,
-    commands,
-  };
+  for (const cmd of commands) {
+    try {
+      Log.info(`\x1b[36m[ProofRunner] Running: ${cmd}\x1b[0m`);
+      const output = execSync(cmd, { cwd: workspaceDir, encoding: 'utf-8', stdio: 'pipe' });
+      results.push({ cmd, success: true, output });
+    } catch (e) {
+      Log.error(`\x1b[31m[ProofRunner] Failed: ${cmd}\x1b[0m`);
+      results.push({ cmd, success: false, error: e.message, output: e.stdout || e.stderr });
+      passed = false;
+      break; // Stop on first failure
+    }
+  }
+
+  const receiptPath = path.join(receiptDir, `proof-${Date.now()}.json`);
+  fs.writeFileSync(receiptPath, JSON.stringify({ passed, results, timestamp: new Date().toISOString() }, null, 2));
+
+  return { passed, receiptPath, results };
 }

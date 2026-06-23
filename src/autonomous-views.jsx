@@ -2,9 +2,10 @@
 // Bots build apps in real-time with animated collaboration pipeline
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { BotCharacter, BotStageCharacter, EXPRESSIONS, MOTIONS } from './bot-characters.js';
+import { BotCharacter, BotStageCharacter, EXPRESSIONS, MOTIONS } from './bot-characters.jsx';
 import { BOT_ROSTER } from './engine.js';
 import { APP_TYPES, runBotPipeline, downloadAsZip, downloadFile, writeToLocalDisk } from './autonomous-builder.js';
+import { useSovereignStore } from './store.js';
 import { BotBus } from './bot-orb.jsx';
 
 
@@ -58,9 +59,9 @@ export function AutonomousBuilderView() {
   const handleWriteToDisk = async () => {
     try {
       await writeToLocalDisk(result.app);
-      alert(`Success! Wrote ${result.fileCount} files to generated_apps/${result.app.name}/`);
+      useSovereignStore.getState().addNotification({ msg: `Success! Wrote ${result.fileCount} files to generated_apps/${result.app.name}/`, type: 'success' });
     } catch (e) {
-      alert(e.message);
+      useSovereignStore.getState().addNotification({ msg: e.message, type: 'error' });
     }
   };
 
@@ -110,7 +111,7 @@ export function AutonomousBuilderView() {
       {timeline.length > 0 && (
         <div className="evo-grid mt-4">
           {/* Active Bot Character */}
-          <div className="card flex flex-col items-center justify-center p-6 min-h-[340px]" style={{
+          <div className="card flex-col items-center justify-center p-6 min-h-[340px]" style={{
             background: 'linear-gradient(180deg, rgba(3,5,8,0.8) 0%, rgba(10,14,26,0.8) 100%)',
             border: `1px solid ${activeBot.palette.accent}33`,
             boxShadow: `inset 0 0 40px ${activeBot.palette.accent}10`

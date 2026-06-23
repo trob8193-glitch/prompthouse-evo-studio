@@ -59,21 +59,36 @@ export const BotCharacter = ({ bot, expression = 'neutral', motion = 'idle', isS
   const sizeMap = { sm: 48, md: 80, lg: 160 };
   const pxSize = sizeMap[size] || sizeMap.md;
 
+  const [imgError, setImgError] = React.useState(false);
+  const imgUrl = `/assets/bots/${bot.id}.png`;
+
   return (
     <div className={`bot-char-container ${motionClass} ${speakingClass}`} style={{ '--char-size': `${pxSize}px`, '--bot-accent': color }}>
       <div className="char-image-wrapper" style={{ width: pxSize, height: pxSize }}>
-        <div className="bot-sigil-avatar" style={{ width: '100%', height: '100%', borderColor: `${color}88`, boxShadow: showGlow ? `0 0 ${pxSize/3}px ${color}44, inset 0 0 ${pxSize/4}px ${color}33` : 'none' }}>
-          <div className="bot-sigil-grid"></div>
-          <div className="bot-sigil-ring" style={{ borderColor: `${color}88` }}></div>
-          <div className="bot-sigil-ring ring-two" style={{ borderColor: `${color}55` }}></div>
-          <div className="bot-scanline"></div>
-          
-          <div className="bot-sigil-mark" style={{ color: '#fff', textShadow: `0 0 12px ${color}` }}>
-            {showExpression ? icon : ''}
-          </div>
+        <div className="bot-sigil-avatar relative overflow-hidden" style={{ width: '100%', height: '100%', borderColor: `${color}88`, boxShadow: showGlow ? `0 0 ${pxSize/3}px ${color}44, inset 0 0 ${pxSize/4}px ${color}33` : 'none' }}>
+          {!imgError ? (
+            <img 
+              src={imgUrl} 
+              onError={() => setImgError(true)}
+              alt={bot.name}
+              className="absolute inset-0 w-full h-full object-cover z-10"
+              style={{ mixBlendMode: 'screen' }} 
+            />
+          ) : (
+            <>
+              <div className="bot-sigil-grid"></div>
+              <div className="bot-sigil-ring" style={{ borderColor: `${color}88` }}></div>
+              <div className="bot-sigil-ring ring-two" style={{ borderColor: `${color}55` }}></div>
+              <div className="bot-scanline"></div>
+              
+              <div className="bot-sigil-mark" style={{ color: '#fff', textShadow: `0 0 12px ${color}` }}>
+                {showExpression ? icon : ''}
+              </div>
+            </>
+          )}
           
           {size === 'lg' && (
-            <div className="bot-sigil-name" style={{ color: color }}>
+            <div className="bot-sigil-name z-20 relative" style={{ color: color }}>
               {bot.name}
             </div>
           )}

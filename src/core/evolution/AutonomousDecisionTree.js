@@ -1,22 +1,17 @@
 export class AutonomousDecisionTree {
-  /**
-   * Decides what action to take on a proposed real-time update.
-   * Returns: 'MERGE_INSTANT', 'REQUIRE_OWNER_APPROVAL', or 'DISCARD'
-   */
-  static evaluateUpdate(stabilityScore, ethicalReport, riskLevel = 'LOW') {
-    if (!ethicalReport.compliant) {
-      return 'DISCARD';
+  static evaluateUpdate(stabilityScore, ethicalReport, riskLevel) {
+    if (!ethicalReport || !ethicalReport.compliant) {
+      return { action: 'REJECT', reason: 'Failed ethical guardrail check' };
     }
-
-    if (riskLevel === 'HIGH' || riskLevel === 'CRITICAL') {
-      return 'REQUIRE_OWNER_APPROVAL';
+    
+    if (stabilityScore < 0.3) {
+      return { action: 'REVIEW', reason: 'Stability score too low for autonomous integration' };
     }
-
-    // If stability score is too low, the update might be destructive
-    if (stabilityScore < 0.2) {
-      return 'REQUIRE_OWNER_APPROVAL';
+    
+    if (riskLevel === 'HIGH' && stabilityScore < 0.8) {
+       return { action: 'REVIEW', reason: 'High risk update requires strong stability evidence' };
     }
-
-    return 'MERGE_INSTANT';
+    
+    return { action: 'INTEGRATE', reason: 'Update meets stability and ethical thresholds' };
   }
 }

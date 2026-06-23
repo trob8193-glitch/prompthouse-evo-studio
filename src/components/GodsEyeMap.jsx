@@ -68,19 +68,19 @@ export function GodsEyeMap() {
   const strokeFor = (type) => (type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6');
 
   return (
-    <div className="absolute inset-0 bg-gray-900 bg-opacity-95 z-50 flex items-center justify-center p-8 backdrop-blur-md">
-      <div className="relative w-full h-full border border-blue-500/30 rounded-xl overflow-hidden bg-black">
+    <div className="absolute inset-0 bg-opacity-95 z-50 flex items-center justify-center p-8 backdrop-blur-md">
+      <div className="relative w-full h-full border-blue-500/30 rounded-3xl overflow-hidden bg-black">
         {/* Header */}
-        <div className="absolute top-0 left-0 w-full p-4 bg-gradient-to-b from-blue-900/50 to-transparent flex justify-between items-center z-10">
+        <div className="absolute top-0 left-0 w-full p-4 bg-linear-to-b from-blue-900/50 to-transparent flex justify-between items-center z-10">
           <div className="flex items-center space-x-3">
-            <span className="text-blue-400">👁️</span>
+            <span className="text-neon-cyan">👁️</span>
             <h2 className="text-xl font-bold text-white tracking-widest font-mono">GOD'S EYE VIEW</h2>
           </div>
           <div className="flex space-x-2">
-            <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full border border-blue-500/30">
+            <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full border-blue-500/30">
               {nodes.length} Active Nodes
             </span>
-            <span className="px-3 py-1 bg-green-500/20 text-green-300 text-xs rounded-full border border-green-500/30 animate-pulse">
+            <span className="px-3 py-1 bg-green-500/20 text-green-300 text-xs rounded-full border-green-500/30 animate-pulse">
               {nodes.length > 0 ? 'SYNCED' : 'OFFLINE'}
             </span>
           </div>
@@ -89,7 +89,7 @@ export function GodsEyeMap() {
         {/* Node Graph Background */}
         <div className="absolute inset-0 grid grid-cols-12 grid-rows-12 gap-1 opacity-10">
           {Array.from({ length: 144 }).map((_, i) => (
-            <div key={i} className="border border-blue-400"></div>
+            <div key={i} className="border-blue-400"></div>
           ))}
         </div>
 
@@ -118,7 +118,7 @@ export function GodsEyeMap() {
         {nodes.map((node, index) => (
           <div 
             key={index}
-            className="absolute flex flex-col items-center justify-center transition-all duration-1000"
+            className="absolute flex-col gap-4 items-center justify-center transition-all duration-1000"
             style={{ left: `${node.x}%`, top: `${node.y}%`, transform: 'translate(-50%, -50%)' }}
           >
             <div

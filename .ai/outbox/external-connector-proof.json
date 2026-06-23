@@ -1,12 +1,12 @@
 {
-  "success": false,
-  "truthState": "PROVIDER_GATED",
-  "liveRequested": true,
-  "checkedAt": "2026-06-10T21:12:45.868Z",
+  "success": true,
+  "truthState": "LOCAL_ONLY",
+  "liveRequested": false,
+  "checkedAt": "2026-06-14T01:12:27.907Z",
   "plans": [
     {
       "provider": "github",
-      "mode": "live",
+      "mode": "local",
       "knownProvider": true,
       "envKey": "GITHUB_TOKEN",
       "approvalScope": "provider_probe",
@@ -15,7 +15,7 @@
     },
     {
       "provider": "openai",
-      "mode": "live",
+      "mode": "local",
       "knownProvider": true,
       "envKey": "OPENAI_API_KEY",
       "approvalScope": "provider_probe",
@@ -24,7 +24,7 @@
     },
     {
       "provider": "stripe",
-      "mode": "live",
+      "mode": "local",
       "knownProvider": true,
       "envKey": "STRIPE_SECRET_KEY",
       "approvalScope": "commerce",
@@ -33,7 +33,7 @@
     },
     {
       "provider": "vercel",
-      "mode": "live",
+      "mode": "local",
       "knownProvider": true,
       "envKey": "VERCEL_TOKEN",
       "approvalScope": "deploy",
@@ -43,108 +43,63 @@
   ],
   "probes": [
     {
-      "id": "hs_8d8f3229-dd5",
+      "id": "hs_1d0f36c3-486",
       "connectorId": "github-1",
       "connectorName": "GitHub",
       "provider": "github",
-      "mode": "live",
-      "timestamp": "2026-06-10T21:12:45.866Z",
+      "mode": "local",
+      "timestamp": "2026-06-14T01:12:27.905Z",
       "status": "connected",
-      "truthState": "PROVEN",
-      "authenticated": true,
-      "external": true,
-      "requiredEnvKey": "GITHUB_TOKEN",
-      "approvalScope": "provider_probe",
-      "httpStatus": 200,
-      "reason": "Simulated live github connector probe succeeded.",
-      "response": {
-        "simulated": true
-      }
+      "truthState": "LOCAL_ONLY",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": true,
+      "reason": "Local connector contract is reachable; no external provider call was requested."
     },
     {
-      "id": "hs_ecffc42d-4d0",
+      "id": "hs_7c18c2dc-326",
       "connectorId": "openai-1",
       "connectorName": "OpenAI",
       "provider": "openai",
-      "mode": "live",
-      "timestamp": "2026-06-10T21:12:45.868Z",
-      "status": "blocked",
-      "truthState": "NEEDS_OWNER_APPROVAL",
+      "mode": "local",
+      "timestamp": "2026-06-14T01:12:27.907Z",
+      "status": "connected",
+      "truthState": "LOCAL_ONLY",
       "authenticated": false,
-      "requiredEnvKey": "OPENAI_API_KEY",
-      "approvalScope": "provider_probe",
-      "reason": "Owner approval scope provider_probe is required for live openai connector execution."
+      "external": false,
+      "contractReachable": true,
+      "reason": "Local connector contract is reachable; no external provider call was requested."
     },
     {
-      "id": "hs_4340e780-cb7",
+      "id": "hs_4681ac28-3a2",
       "connectorId": "stripe-1",
       "connectorName": "Stripe",
       "provider": "stripe",
-      "mode": "live",
-      "timestamp": "2026-06-10T21:12:45.868Z",
+      "mode": "local",
+      "timestamp": "2026-06-14T01:12:27.907Z",
       "status": "connected",
-      "truthState": "PROVEN",
-      "authenticated": true,
-      "external": true,
-      "requiredEnvKey": "STRIPE_SECRET_KEY",
-      "approvalScope": "commerce",
-      "httpStatus": 200,
-      "reason": "Simulated live stripe connector probe succeeded.",
-      "response": {
-        "simulated": true
-      }
+      "truthState": "LOCAL_ONLY",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": true,
+      "reason": "Local connector contract is reachable; no external provider call was requested."
     },
     {
-      "id": "hs_3a30baab-c45",
+      "id": "hs_ecb1df84-670",
       "connectorId": "vercel-1",
       "connectorName": "Vercel",
       "provider": "vercel",
-      "mode": "live",
-      "timestamp": "2026-06-10T21:12:45.868Z",
+      "mode": "local",
+      "timestamp": "2026-06-14T01:12:27.907Z",
       "status": "connected",
-      "truthState": "PROVEN",
-      "authenticated": true,
-      "external": true,
-      "requiredEnvKey": "VERCEL_TOKEN",
-      "approvalScope": "deploy",
-      "httpStatus": 200,
-      "reason": "Simulated live vercel connector probe succeeded.",
-      "response": {
-        "simulated": true
-      }
-    }
-  ],
-  "providerGates": [
-    {
-      "id": "hs_ecffc42d-4d0",
-      "connectorId": "openai-1",
-      "connectorName": "OpenAI",
-      "provider": "openai",
-      "mode": "live",
-      "timestamp": "2026-06-10T21:12:45.868Z",
-      "status": "blocked",
-      "truthState": "NEEDS_OWNER_APPROVAL",
+      "truthState": "LOCAL_ONLY",
       "authenticated": false,
-      "requiredEnvKey": "OPENAI_API_KEY",
-      "approvalScope": "provider_probe",
-      "reason": "Owner approval scope provider_probe is required for live openai connector execution."
+      "external": false,
+      "contractReachable": true,
+      "reason": "Local connector contract is reachable; no external provider call was requested."
     }
   ],
-  "liveBlockers": [
-    {
-      "id": "hs_ecffc42d-4d0",
-      "connectorId": "openai-1",
-      "connectorName": "OpenAI",
-      "provider": "openai",
-      "mode": "live",
-      "timestamp": "2026-06-10T21:12:45.868Z",
-      "status": "blocked",
-      "truthState": "NEEDS_OWNER_APPROVAL",
-      "authenticated": false,
-      "requiredEnvKey": "OPENAI_API_KEY",
-      "approvalScope": "provider_probe",
-      "reason": "Owner approval scope provider_probe is required for live openai connector execution."
-    }
-  ],
+  "providerGates": [],
+  "liveBlockers": [],
   "localFailures": []
 }

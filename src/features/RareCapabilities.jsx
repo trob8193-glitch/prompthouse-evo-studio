@@ -13,10 +13,10 @@ import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
  */
 
 const CapabilityCard = ({ title, description, icon: Icon, color, status, metric }) => (
-  <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl hover:border-indigo-500/30 transition-all">
+  <div className="glass-extreme border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] p-6 rounded-2xl hover:border-indigo-500/30 transition-all">
     <div className="flex justify-between items-start mb-4">
-      <div className={`p-3 rounded-xl bg-slate-800 ${color}`}><Icon size={20} /></div>
-      <div className="flex flex-col items-end">
+      <div className={`p-3 rounded-3xl bg-black/40 backdrop-blur-md border-white/5 ${color}`}><Icon size={20} /></div>
+      <div className="flex-col gap-4 items-end">
         <div className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">{status}</div>
         {metric && <div className="text-[9px] font-bold text-slate-500 mt-1">{metric}</div>}
       </div>

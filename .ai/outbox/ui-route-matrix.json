@@ -1,14 +1,14 @@
 {
-  "scannedAt": "2026-06-12T18:34:03.857Z",
-  "totalComponentsScanned": 134,
-  "totalBackendRoutesFound": 281,
+  "scannedAt": "2026-06-21T00:43:45.286Z",
+  "totalComponentsScanned": 187,
+  "totalBackendRoutesFound": 340,
   "deadLinksDetected": 0,
   "matrix": [
     {
       "component": "src\\agent-bridge-views.jsx",
       "buttons": [
         "RESCAN_VAULT",
-        "CLEAR_RECEIPTS"
+        "{}}>CLEAR_RECEIPTS"
       ],
       "endpoints": []
     },
@@ -37,7 +37,18 @@
     {
       "component": "src\\ai-views.jsx",
       "buttons": [
-        "{scanning ? 'Scanning...' : 'Start Global Audit'}"
+        "EXECUTE"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\app\\AppShell.jsx",
+      "buttons": [
+        "setActiveTab('workspace')} className={`text-left hover:text-white transition-colors ${activeTab === 'workspace' ? 'text-white' : ''}`}>Workspace",
+        "setActiveTab('local-intel')} className={`text-left hover:text-[#00ffcc] transition-colors ${activeTab === 'local-intel' ? 'text-[#00ffcc]' : ''}`}>Local Intelligence",
+        "setActiveTab('omni')} className={`text-left hover:text-white transition-colors ${activeTab === 'omni' ? 'text-white' : ''}`}>Omni-Tether",
+        "setActiveTab('forge')} className={`text-left hover:text-white transition-colors ${activeTab === 'forge' ? 'text-white' : ''}`}>Forge",
+        "setActiveTab('ledger')} className={`text-left hover:text-white transition-colors ${activeTab === 'ledger' ? 'text-white' : ''}`}>Value Ledger"
       ],
       "endpoints": []
     },
@@ -53,7 +64,7 @@
       "buttons": [
         "🔄 Self-Build",
         "{isUnbound ? '⚠️ UNBOUND DEPLOYMENT MODE' : 'Enable Automated Deployment'}",
-        "setActiveTab(t.id)}\r\n            style={{ \r\n              background: activeTab === t.id ? '#1e293b' : 'transparent', \r\n              color: activeTab === t.id ? 'white' : '#94a3b8', \r\n              border: 'none', padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' \r\n            }}\r\n          >\r\n            {t.label}"
+        "setActiveTab(t.id)}\n            style={{ \n              background: activeTab === t.id ? '#1e293b' : 'transparent', \n              color: activeTab === t.id ? 'white' : '#94a3b8', \n              border: 'none', padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' \n            }}\n          >\n            {t.label}"
       ],
       "endpoints": []
     },
@@ -71,11 +82,6 @@
     {
       "component": "src\\chrome-extension-views.jsx",
       "buttons": [
-        "Capture Page",
-        "Use Selection",
-        "Open Side Panel",
-        "Copy Packet",
-        "Save",
         "Write Extension to Disk",
         "navigator.clipboard.writeText(`generated_apps/${extension.name}`)}>Copy Load Path",
         "Save Current File",
@@ -102,18 +108,38 @@
       "component": "src\\components\\AppMarket.jsx",
       "buttons": [
         "Connect Bank",
-        "launchApp(project.id)}\n                                            disabled={launching === project.id}\n                                            className=\"flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 px-4 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50\"\n                                        >\n                                            {launching === project.id ? (\n                                                \n                                            ) : (\n                                                <>\n                                                    \n                                                    Launch\n                                                \n                                            )}",
-        "launchApp(project.id)}\n                                            disabled={launching === project.id}\n                                            aria-label={`Open ${project.name}`}\n                                            className=\"bg-gray-800 hover:bg-gray-700 text-white p-2.5 rounded-xl transition-colors flex items-center justify-center disabled:opacity-50\"\n                                        >",
-        "handleBuyApp(project.id)}\n                                        className=\"w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 font-bold py-2.5 px-4 rounded-xl flex items-center justify-center transition-colors border border-blue-500/30\"\n                                    >\n                                        \n                                        Buy App ($9.00)"
+        "launchApp(project.id)}\n                                            disabled={launching === project.id}\n                                            className=\"flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 px-4 rounded-3xl flex items-center justify-center transition-colors disabled:opacity-50\"\n                                        >\n                                            {launching === project.id ? (\n                                                \n                                            ) : (\n                                                <>\n                                                    \n                                                    Launch\n                                                \n                                            )}",
+        "launchApp(project.id)}\n                                            disabled={launching === project.id}\n                                            aria-label={`Open ${project.name}`}\n                                            className=\"bg-gray-800 hover:bg-gray-700 text-white p-2.5 rounded-3xl transition-colors flex items-center justify-center disabled:opacity-50\"\n                                        >",
+        "handleBuyApp(project.id)}\n                                        className=\"w-full bg-blue-600/20 hover:bg-blue-600/30 text-neon-cyan font-bold py-2.5 px-4 rounded-3xl flex items-center justify-center transition-colors border-blue-500/30\"\n                                    >\n                                        \n                                        Buy App ($9.00)"
       ],
       "endpoints": []
     },
     {
+      "component": "src\\components\\AutonomousSelfRepairBoundary.jsx",
+      "buttons": [
+        "{\n                  useSovereignStore.getState().rollbackState(); // Revert any bad mutations\n                  window.location.reload();\n                }}\n                className=\"mt-4 px-6 py-2 bg-[#00f0ff] text-black font-bold uppercase tracking-widest rounded hover:bg-white transition-all shadow-[0_0_15px_rgba(0,240,255,0.5)]\"\n              >\n                Rollback State & Re-Ignite"
+      ],
+      "endpoints": [
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        }
+      ]
+    },
+    {
       "component": "src\\components\\BotAutomationDeck.jsx",
       "buttons": [
-        "handleSync('trello')}\r\n                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${syncing.trello ? 'bg-slate-800 text-slate-500' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}\r\n              >\r\n                {syncing.trello ? 'SYNCING...' : 'SYNC NOW'}",
-        "handleSync('slack')}\r\n                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${syncing.slack ? 'bg-slate-800 text-slate-500' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}\r\n              >\r\n                {syncing.slack ? 'SYNCING...' : 'SYNC NOW'}",
-        "setPermissionsVisible((value) => !value)}\n          aria-expanded={permissionsVisible}\n          className=\"flex items-center gap-2 text-indigo-400 text-xs font-bold hover:text-indigo-300 transition-colors\"\n        >\n          MANAGE PERMISSIONS"
+        "handleSync('trello')}\r\n                className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all ${syncing.trello ? 'bg-black/40 backdrop-blur-md border-white/5 text-slate-500' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}\r\n              >\r\n                {syncing.trello ? 'SYNCING...' : 'SYNC NOW'}",
+        "handleSync('slack')}\r\n                className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all ${syncing.slack ? 'bg-black/40 backdrop-blur-md border-white/5 text-slate-500' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}\r\n              >\r\n                {syncing.slack ? 'SYNCING...' : 'SYNC NOW'}",
+        "setPermissionsVisible((value) => !value)}\n          aria-expanded={permissionsVisible}\n          className=\"flex items-center gap-2 text-neon-cyan text-xs font-bold hover:text-indigo-300 transition-colors\"\n        >\n          MANAGE PERMISSIONS"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\Dashboard.jsx",
+      "buttons": [
+        "{}}>_",
+        "{}}>X"
       ],
       "endpoints": []
     },
@@ -136,8 +162,18 @@
       "buttons": [
         "Run in Terminal",
         "{applied ?  : }\n                      {applied ? 'Applied!' : 'Apply to File'}",
-        "setActivePage('settings')}\n              className=\"p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors\"\n            >",
-        "setSelectedBot(bot.id)}\n              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${\n                selectedBot === bot.id\n                  ? 'text-white border-transparent shadow-lg'\n                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'\n              }`}\n              style={selectedBot === bot.id ? { backgroundColor: bot.palette?.primary || '#10b981' } : {}}\n              title={bot.role}\n            >\n              {bot.icon} {bot.name}",
+        "{}} className=\"text-white/40 hover:text-white transition-colors ml-1\">",
+        "{}} className=\"text-white/40 hover:text-white transition-colors\">"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\EvoCopilot_original.jsx",
+      "buttons": [
+        "Run in Terminal",
+        "{applied ?  : }\r\n                      {applied ? 'Applied!' : 'Apply to File'}",
+        "setActivePage('settings')}\r\n              className=\"p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors\"\r\n            >",
+        "setSelectedBot(bot.id)}\r\n              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${\r\n                selectedBot === bot.id\r\n                  ? 'text-white border-transparent shadow-lg'\r\n                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'\r\n              }`}\r\n              style={selectedBot === bot.id ? { backgroundColor: bot.palette?.primary || '#10b981' } : {}}\r\n              title={bot.role}\r\n            >\r\n              {bot.icon} {bot.name}",
         "{loading ?  : }"
       ],
       "endpoints": []
@@ -146,10 +182,15 @@
       "component": "src\\components\\EvoEyes.jsx",
       "buttons": [
         "setSingularityLayer(layer.id)}\r\n              className={`flex items-center gap-2 px-4 py-2 rounded-md text-[10px] font-black uppercase tracking-widest transition-all ${\r\n                singularityLayer === layer.id ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-500 hover:text-slate-300'\r\n              }`}\r\n            >\r\n              \r\n              {layer.label}",
+        "{isEvolving ?  : }\r\n            {isEvolving ? 'Evolving UI...' : 'UI Evolution'}",
         "setEvoEyesActive(false)} className=\"text-slate-500 hover:text-white transition-colors\">",
         "setSelectedNode(null)} className=\"text-slate-500 hover:text-white\">"
       ],
       "endpoints": [
+        {
+          "path": "/api/intelligence/execute",
+          "isAlive": true
+        },
         {
           "path": "/api/intelligence/execute",
           "isAlive": true
@@ -215,8 +256,8 @@
     {
       "component": "src\\components\\ModelSelector.jsx",
       "buttons": [
-        "setIsOpen(!isOpen)}\r\n        style={{\r\n          ...styles.trigger,\r\n          borderColor: isOpen ? activeTier.color : 'rgba(255,255,255,0.1)',\r\n        }}\r\n      >\r\n        {activeTier.icon}\r\n        \r\n          {activeModel ? activeModel.displayName : 'Select Model'}\r\n        \r\n        \r\n          {activeTier.label}\r\n        \r\n        {isOpen ? '▲' : '▼'}",
-        "selectModel(model.id)}\r\n                    style={{\r\n                      ...styles.modelOption,\r\n                      background: isActive\r\n                        ? 'rgba(255,255,255,0.08)'\r\n                        : 'transparent',\r\n                      borderLeft: isActive\r\n                        ? `3px solid ${tier.color}`\r\n                        : '3px solid transparent',\r\n                    }}\r\n                  >\r\n                    {model.displayName}\r\n                    \r\n                      {tier.label} {tier.icon}\r\n                    \r\n                    {!model.online && (\r\n                      Offline\r\n                    )}\r\n                    {isActive && ✓}"
+        "setIsOpen(!isOpen)}\r\n        style={{\r\n          ...styles.trigger,\r\n          borderColor: isOpen ? activeTier.color : (isCopilot ? 'var(--hologram-color-40)' : 'rgba(255,255,255,0.1)'),\r\n          background: isCopilot ? 'transparent' : 'rgba(255,255,255,0.04)',\r\n          color: isCopilot ? 'var(--hologram-color)' : '#e0e0e0',\r\n          boxShadow: isCopilot && isOpen ? `0 0 15px ${activeTier.color}40` : (isCopilot ? '0 0 8px var(--hologram-color-20)' : 'none'),\r\n          textShadow: isCopilot ? '0 0 5px var(--hologram-color)' : 'none',\r\n        }}\r\n      >\r\n        {activeTier.icon}\r\n        \r\n          {activeModel ? activeModel.displayName : 'Select Model'}\r\n        \r\n        \r\n          {activeTier.label}\r\n        \r\n        {isOpen ? '▲' : '▼'}",
+        "selectModel(model.id)}\r\n                    style={{\r\n                      ...styles.modelOption,\r\n                      fontFamily: isCopilot ? 'monospace' : 'inherit',\r\n                      background: isActive\r\n                        ? (isCopilot ? 'var(--hologram-color-20)' : 'rgba(255,255,255,0.08)')\r\n                        : 'transparent',\r\n                      borderLeft: isActive\r\n                        ? `3px solid ${isCopilot ? 'var(--hologram-color)' : tier.color}`\r\n                        : '3px solid transparent',\r\n                      color: isCopilot ? (isActive ? '#fff' : 'var(--hologram-color-80)') : '#d4d4d4',\r\n                      textShadow: isCopilot && isActive ? '0 0 5px var(--hologram-color)' : 'none',\r\n                    }}\r\n                  >\r\n                    {model.displayName}\r\n                    \r\n                      {tier.label} {tier.icon}\r\n                    \r\n                    {!model.online && (\r\n                      Offline\r\n                    )}\r\n                    {isActive && ✓}"
       ],
       "endpoints": [
         {
@@ -232,8 +273,8 @@
     {
       "component": "src\\components\\Navigation.jsx",
       "buttons": [
-        "{\n                setActiveGroup(group.id);\n                if (collapsed) toggleSidebar();\n              }}\n              title={group.label}\n              style={{\n                width: 40, height: 40, borderRadius: 8,\n                display: 'flex', alignItems: 'center', justifyContent: 'center',\n                color: isActive ? '#ffffff' : '#5a5a72',\n                background: isActive ? 'rgba(255,255,255,0.05)' : 'transparent',\n                marginBottom: 8, transition: 'all 0.2s',\n                position: 'relative', border: 'none', cursor: 'pointer'\n              }}\n              onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = '#00f0ff'; }}\n              onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#5a5a72'; }}\n            >\n              {isActive && }",
-        "setActivePage(item.id)}\n                  style={{\n                    display: 'flex', alignItems: 'center', gap: 10, width: '100%',\n                    padding: '7px 10px', borderRadius: 6, cursor: 'pointer',\n                    fontSize: 12, fontWeight: isActive ? 600 : 500,\n                    color: isActive ? '#ffffff' : '#8e8e9f',\n                    background: isActive ? 'rgba(0,240,255,0.1)' : 'transparent',\n                    border: '1px solid transparent', textAlign: 'left', marginBottom: 2,\n                    transition: 'all 0.2s', borderColor: isActive ? 'rgba(0,240,255,0.2)' : 'transparent'\n                  }}\n                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}\n                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}\n                >\n                  \n                  {item.label}"
+        "{\n                  setActiveGroup(group.id);\n                  if (collapsed) toggleSidebar();\n                }}\n                title={group.label}\n                style={{\n                  width: 44, height: 44, borderRadius: 12,\n                  display: 'flex', alignItems: 'center', justifyContent: 'center',\n                  color: isActive ? 'var(--text-primary)' : 'var(--text-dim)',\n                  background: isActive ? 'var(--accent-cyan-dim)' : 'transparent',\n                  marginBottom: 8, transition: 'var(--transition)',\n                  position: 'relative', border: 'none', cursor: 'pointer',\n                  boxShadow: isActive ? 'var(--shadow-glass)' : 'none'\n                }}\n                onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = 'var(--accent-cyan)'; }}\n                onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = 'var(--text-dim)'; }}\n              >\n                {isActive && }",
+        "setActivePage(item.id)}\n                    className={isActive ? \"hologram-text-glow-accent\" : \"hologram-text-glow\"}\n                    style={{\n                      display: 'flex', alignItems: 'center', gap: 12, width: '100%',\n                      padding: '8px 12px', borderRadius: 8, cursor: 'pointer',\n                      fontSize: 13, fontWeight: isActive ? 600 : 500,\n                      color: isActive ? 'white' : 'var(--text-secondary)',\n                      background: isActive ? 'var(--accent-cyan-dim)' : 'transparent',\n                      border: '1px solid transparent', textAlign: 'left', marginBottom: 4,\n                      transition: 'var(--transition)', borderColor: isActive ? 'var(--border-neon)' : 'transparent',\n                      boxShadow: isActive ? 'var(--shadow-glass), inset 0 0 20px rgba(0,240,255,0.05)' : 'none'\n                    }}\n                    onMouseEnter={e => { if (!isActive) Object.assign(e.currentTarget.style, { background: 'var(--bg-glass-light)', color: 'white' }); }}\n                    onMouseLeave={e => { if (!isActive) Object.assign(e.currentTarget.style, { background: 'transparent', color: 'var(--text-secondary)' }); }}\n                  >\n                    \n                    {item.label}"
       ],
       "endpoints": []
     },
@@ -249,6 +290,14 @@
       "buttons": [
         "Approve",
         "Grant Explicit Approval"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\OwnerApprovalRail.jsx",
+      "buttons": [
+        "handleDecision(false)}\n            disabled={processing}\n            style={{ flex: 1, background: 'transparent', color: '#f8fafc', border: '1px solid #ef4444', padding: '12px', borderRadius: 6, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}\n          >\n             Reject & Suspend",
+        "handleDecision(true)}\n            disabled={processing}\n            style={{ flex: 1, background: '#ef4444', color: '#f8fafc', border: 'none', padding: '12px', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}\n          >\n             Authorize Action"
       ],
       "endpoints": []
     },
@@ -275,7 +324,7 @@
     {
       "component": "src\\components\\SovereignTabs.jsx",
       "buttons": [
-        "setActiveTab(tab.id)}\r\n            className={`relative px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${\r\n              activeTab === tab.id \r\n                ? 'text-white' \r\n                : 'text-slate-500 hover:text-slate-300'\r\n            }`}\r\n          >\r\n            {activeTab === tab.id && (\r\n              \r\n            )}\r\n            {tab.label}"
+        "setActiveTab(tab.id)}\n                className={`relative px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-500 ${\n                  isActive \n                    ? 'text-white scale-110 shadow-[0_0_30px_rgba(0,240,255,0.6)]' \n                    : 'text-cyan-900 hover:text-cyan-400 hover:scale-105'\n                }`}\n                style={{\n                  transform: isActive ? 'translateZ(30px)' : 'translateZ(0px)',\n                  background: isActive ? 'linear-gradient(180deg, rgba(0,240,255,0.2) 0%, rgba(0,0,0,0.8) 100%)' : 'transparent',\n                  border: isActive ? '1px solid rgba(0,240,255,0.8)' : '1px solid transparent'\n                }}\n              >\n                {/* Active Light Beam */}\n                {isActive && (\n                  \n                )}\n                {/* Active Underglow */}\n                {isActive && (\n                  \n                )}\n                \n                  {tab.icon && } {tab.label}"
       ],
       "endpoints": []
     },
@@ -299,11 +348,9 @@
       "component": "src\\components\\Terminal.jsx",
       "buttons": [
         "setTerminalOpen(true)}\n          className=\"absolute inset-0 w-full h-full flex items-center px-6 z-50 cursor-pointer group hover:bg-white/5 transition-colors\"\n          style={{ opacity: terminalOpen ? 0 : 1, pointerEvents: terminalOpen ? 'none' : 'auto' }}\n        >\n          \n          \n          \n            EvoShell Master Control\n          \n          \n            \n            STANDBY",
-        "setActiveTerminalSession(session)}\n                  style={{\n                    padding: '4px 10px', borderRadius: 4, fontSize: 8, fontWeight: 800,\n                    letterSpacing: '0.15em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',\n                    transition: 'all 0.2s',\n                    background: activeTerminalSession === session ? tc.accent : 'transparent',\n                    color: activeTerminalSession === session ? '#000' : '#475569',\n                    boxShadow: activeTerminalSession === session ? `0 0 12px ${tc.accent}40` : 'none'\n                  }}\n                >\n                  {session}",
-        "setTerminalTheme(t.id)}\n                  style={{\n                    width: 10, height: 10, borderRadius: '50%', border: 'none', cursor: 'pointer',\n                    background: t.color,\n                    opacity: terminalTheme === t.id ? 1 : 0.3,\n                    boxShadow: terminalTheme === t.id ? `0 0 8px ${t.color}` : 'none',\n                    transition: 'all 0.2s'\n                  }}\n                />\n              ))}\n            \n\n            \n\n            {/* Action Buttons */}\n            {[\n              { icon: Copy, title: 'Copy Output', onClick: copyToClipboard },\n              { icon: Download, title: 'Download Logs', onClick: downloadLogs },\n              { icon: Trash2, title: 'Clear Session', onClick: () => clearTerminal(activeTerminalSession), hoverColor: '#f43f5e' },\n              { icon: isFullscreen ? Minimize2 : Maximize2, title: 'Fullscreen', onClick: () => setIsFullscreen(!isFullscreen) },\n              { icon: ChevronDown, title: 'Minimize', onClick: () => setTerminalOpen(false) }\n            ].map((btn, i) => (\n               e.currentTarget.style.color = btn.hoverColor || tc.accent}\n                onMouseLeave={e => e.currentTarget.style.color = '#475569'}\n              >",
-        "setCatalogOpen(v => !v)}\n              style={{\n                display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',\n                borderRadius: 6, fontSize: 9, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase',\n                border: `1px solid ${tc.accent}30`, color: tc.accent, background: 'transparent', cursor: 'pointer',\n                transition: 'all 0.2s'\n              }}\n              onMouseEnter={e => { e.currentTarget.style.background = `${tc.accent}15`; e.currentTarget.style.borderColor = `${tc.accent}60`; }}\n              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = `${tc.accent}30`; }}\n            >\n              \n              Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}\n              {catalogOpen ?  : }",
-        "runCatalogCommand(item)}\n                  disabled={executing}\n                  className=\"evo-cmd-card\"\n                  style={executing ? { opacity: 0.5, cursor: 'not-allowed' } : {}}\n                >\n                  \n                    {item.label}\n                    {item.session}\n                  \n                  {item.description}\n                  {item.command}",
-        "{ e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'scale(1.15)'; }}\n              onMouseLeave={e => { e.currentTarget.style.color = tc.accent; e.currentTarget.style.transform = 'scale(1)'; }}\n            >"
+        "setActivePane(paneId)}\n                    style={{\n                      padding: '4px 0', fontSize: 10, fontWeight: 700,\n                      border: 'none', borderBottom: activePane === paneId ? `2px solid ${tc.accent}` : '2px solid transparent',\n                      cursor: 'pointer', transition: 'all 0.2s',\n                      background: 'transparent',\n                      color: activePane === paneId ? '#fff' : '#94a3b8',\n                    }}\n                  >\n                    {pane}",
+        "setTerminalTheme(t.id)}\n                  style={{\n                    width: 10, height: 10, borderRadius: '50%', border: 'none', cursor: 'pointer',\n                    background: t.color,\n                    opacity: terminalTheme === t.id ? 1 : 0.3,\n                    boxShadow: terminalTheme === t.id ? `0 0 8px ${t.color}` : 'none',\n                    transition: 'all 0.2s'\n                  }}\n                />\n              ))}\n            \n\n            \n\n            {/* Action Buttons */}\n            \n              {[\n                { icon: Zap, title: 'Debug with AI', onClick: debugWithAI },\n                { icon: Copy, title: 'Copy Output', onClick: copyToClipboard },\n                { icon: Download, title: 'Download Logs', onClick: downloadLogs },\n                { icon: Trash2, title: 'Clear Session', onClick: () => clearTerminal(activeTerminalSession) },\n                { icon: isFullscreen ? Minimize2 : Maximize2, title: 'Fullscreen', onClick: () => setIsFullscreen(!isFullscreen) },\n                { icon: ChevronDown, title: 'Minimize', onClick: () => setTerminalOpen(false) }\n              ].map((btn, i) => (",
+        "{ e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'scale(1.15)'; }}\n                  onMouseLeave={e => { e.currentTarget.style.color = tc.accent; e.currentTarget.style.transform = 'scale(1)'; }}\n                >"
       ],
       "endpoints": [
         {
@@ -316,7 +363,15 @@
       "component": "src\\components\\TimeSlipLedger.jsx",
       "buttons": [
         "setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}>\r\n          &times;",
-        "Revert to {commit.id}"
+        "{}}>\n                 Revert to {commit.id}"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\components\\Toolbar.jsx",
+      "buttons": [
+        "{}}>Run.exe",
+        "{}}>Options"
       ],
       "endpoints": []
     },
@@ -324,6 +379,8 @@
       "component": "src\\components\\TopBar.jsx",
       "buttons": [
         "e.currentTarget.style.color = '#00f0ff'}\n          onMouseLeave={(e) => e.currentTarget.style.color = '#737385'}\n        >\n          {sidebarCollapsed ?  : }",
+        "setShowThemeMenu(!showThemeMenu)}\n            style={{\n              display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',\n              borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',\n              color: '#fff', fontSize: 10, fontWeight: 800, letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s'\n            }}\n            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}\n            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}\n          >\n             METAMORPHOSIS: {globalTheme.layout.toUpperCase()}",
+        "{ \n                    setGlobalTheme({ layout: t, ui: t, bots: t, wiring: t, building: t, routing: t, inventing: t, agent: t, brain: t, module: t }); \n                    setShowThemeMenu(false); \n                  }}\n                  style={{\n                    padding: '8px 12px', textAlign: 'left', borderRadius: 6,\n                    background: globalTheme.layout === t ? 'rgba(0,240,255,0.1)' : 'transparent',\n                    color: globalTheme.layout === t ? '#00f0ff' : '#a0a0b0',\n                    border: 'none', cursor: 'pointer', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em'\n                  }}\n                >\n                  {t} Version",
         "setActivePage('proof-console')}\n          style={{ background: 'none', border: 'none', color: '#737385', cursor: 'pointer', padding: 6, display: 'flex', position: 'relative', transition: 'color 0.2s' }}\n          aria-label=\"Notifications\"\n          onMouseEnter={(e) => e.currentTarget.style.color = '#00f0ff'}\n          onMouseLeave={(e) => e.currentTarget.style.color = '#737385'}\n        >\n          \n          {notifications.length > 0 && (\n            \n          )}",
         "setActivePage('settings')}\n          style={{ background: 'none', border: 'none', color: '#737385', cursor: 'pointer', padding: 6, display: 'flex', transition: 'color 0.2s' }}\n          aria-label=\"Settings\"\n          onMouseEnter={(e) => e.currentTarget.style.color = '#00f0ff'}\n          onMouseLeave={(e) => e.currentTarget.style.color = '#737385'}\n        >"
       ],
@@ -347,9 +404,9 @@
       "component": "src\\evo-copilot-sidebar.jsx",
       "buttons": [
         "setIsOpen(false)} style={{ background:'none', border:'none', color:'var(--text-muted)', cursor:'pointer', fontSize:20 }}>✕",
-        "handleQuickAction('debt')} style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer' }}>🛠️ Scan Debt",
-        "handleQuickAction('tool')} style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer' }}>🪄 Auto-Tool",
-        "handleQuickAction('test')} style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer' }}>⚡ Run Fission",
+        "handleQuickAction('debt')} className=\"hover:bg-blue-500\" style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer', transition: 'background 0.3s' }}>🛠️ Scan Debt",
+        "handleQuickAction('tool')} className=\"hover:bg-blue-500\" style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer', transition: 'background 0.3s' }}>🪄 Auto-Tool",
+        "handleQuickAction('test')} className=\"hover:bg-blue-500\" style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer', transition: 'background 0.3s' }}>⚡ Run Fission",
         "↑"
       ],
       "endpoints": []
@@ -371,9 +428,9 @@
     {
       "component": "src\\evo-exchange-view.jsx",
       "buttons": [
-        "alert('Publishing to public exchange requires Enterprise Sovereignty.')}>\r\n          🌐 Go Public",
+        "useSovereignStore.getState().addNotification({ msg: 'Publishing to public exchange requires Enterprise Sovereignty.', type: 'warning' })}>\r\n          🌐 Go Public",
         "setActiveCategory(c.id)}\r\n          >\r\n            {c.label}",
-        "🔒 Blocked"
+        "{}}>🔒 Blocked"
       ],
       "endpoints": []
     },
@@ -385,17 +442,17 @@
       "endpoints": []
     },
     {
-      "component": "src\\features\\AutonomousSelfView.jsx",
+      "component": "src\\features\\autonomous\\SovereignCommandNexus.jsx",
       "buttons": [
-        "setEvolving(false) : startEvolution}\r\n              disabled={bridgeStatus !== 'connected'}\r\n              className={`w-full py-4 rounded-xl font-bold text-[13px] tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-3 ${\r\n                evolving \r\n                  ? 'bg-black/50 text-[#00f0ff] border border-[#00f0ff]/30 shadow-[inset_0_0_20px_rgba(0,240,255,0.1)]' \r\n                  : 'bg-linear-to-r from-[#8a2be2] to-[#4338ca] text-white hover:shadow-[0_0_30px_rgba(138,43,226,0.4)] disabled:opacity-50 disabled:cursor-not-allowed'\r\n              }`}\r\n            >\r\n              {evolving ?  : }\r\n              {evolving ? 'Evolution Active' : 'Initialize Evolution Loop'}",
-        "Execute Maintenance Protocol"
+        "{}}>INITIATE WIPE",
+        "{}}>ROUTE TRAFFIC"
       ],
       "endpoints": []
     },
     {
-      "component": "src\\features\\CommerceDashboard.jsx",
+      "component": "src\\features\\autonomous\\SynapticForge.jsx",
       "buttons": [
-        "window.open('https://dashboard.stripe.com', '_blank')} className=\"px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]\">\n            Go To Stripe Dashboard"
+        "{}}>\n            COMPILE"
       ],
       "endpoints": []
     },
@@ -405,7 +462,7 @@
         "{scanning ?  : }\r\n              Auto-Discover",
         "BLE Pair",
         "{bonding ?  : }\r\n              Bond Node",
-        "{ setTargetIp(node.ip); handleBond(); }}\r\n                  className=\"px-3 py-1.5 bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white rounded text-xs font-bold transition-colors\"\r\n                >\r\n                  Bond",
+        "handleBond(null, node.ip)}\r\n                  className=\"px-3 py-1.5 bg-indigo-600/20 text-neon-cyan hover:bg-indigo-600 hover:text-white rounded text-xs font-bold transition-colors\"\r\n                >\r\n                  Bond",
         "setTargetIp(item.url || item.target || item.ip || '')}\r\n                        className=\"text-[9px] font-black uppercase tracking-widest text-slate-600 hover:text-white transition-colors\"\r\n                      >\r\n                        Configure"
       ],
       "endpoints": []
@@ -421,100 +478,75 @@
       "endpoints": []
     },
     {
-      "component": "src\\features\\EvoEyesView.jsx",
+      "component": "src\\features\\EvoDiffuserDashboard.jsx",
       "buttons": [
-        "setSelectedId((v) => v)}\r\n            title=\"Refresh on next poll tick\"\r\n          >\r\n             Refresh",
-        "setSelectedId(m.id)}\r\n                  style={{\r\n                    width: '100%',\r\n                    justifyContent: 'space-between',\r\n                    marginBottom: 8,\r\n                    background: selectedId === m.id ? 'rgba(99,102,241,0.12)' : 'rgba(2,6,23,0.35)',\r\n                    border: selectedId === m.id ? '1px solid rgba(99,102,241,0.35)' : '1px solid rgba(255,255,255,0.08)',\r\n                    padding: '10px 10px'\r\n                  }}\r\n                >\r\n                  \r\n                    {m.label || m.id}\r\n                    {m.path}\r\n                  \r\n                  \r\n                    {m.health}"
+        "{}}> EXPORT ASSET"
       ],
       "endpoints": []
     },
     {
       "component": "src\\features\\EvoLayoutDashboard.jsx",
       "buttons": [
-        "setPreviewExpanded((value) => !value)}\n                      aria-pressed={previewExpanded}\n                      className=\"text-[#737385] hover:text-[#00f0ff] transition-colors\"\n                    >"
-      ],
-      "endpoints": []
-    },
-    {
-      "component": "src\\features\\EvoLlmTrainingDashboard.jsx",
-      "buttons": [
-        "Refresh",
-        "createPlan('local-dataset')} disabled={busy}>Create Dataset Plan",
-        "Synthesize Data",
-        "Deep Eval",
-        "Force Self-Train Cycle",
-        "Approve Plan {plans[0].id.split('_')[0]}",
-        "createPlan('openai')} disabled={busy}>Plan Provider Gate Test",
-        "Approve Latest",
-        "Run Latest",
-        "Promote Dataset Version",
-        "Rollback Active",
-        "Package Contribution"
+        "setPreviewExpanded((value) => !value)}\n                      aria-pressed={previewExpanded}\n                      className=\"text-[#737385] hover:text-[#00f0ff] transition-colors\"\n                    >",
+        "{}}> EXPORT",
+        "{}}>DEPLOY TO FORGE"
       ],
       "endpoints": []
     },
     {
       "component": "src\\features\\EvoPixelatorDashboard.jsx",
       "buttons": [
-        "setBitDepth(b)}\r\n                      className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold border transition-all ${bitDepth === b ? 'bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.2)]' : 'bg-[#0a0a10] border-white/10 text-[#737385] hover:border-white/20'}`}\r\n                    >\r\n                      {b}"
+        "setBitDepth(b)}\r\n                      className={`flex-1 py-2 px-3 rounded-2xl text-xs font-bold border transition-all ${bitDepth === b ? 'bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.2)]' : 'bg-[#0a0a10] border-white/10 text-[#737385] hover:border-white/20'}`}\r\n                    >\r\n                      {b}",
+        "{}}> PNG",
+        "{}}> SPRITE SHEET"
       ],
       "endpoints": []
     },
     {
-      "component": "src\\features\\EvoSpineCoreDashboard.jsx",
+      "component": "src\\features\\EvoPulseGridView.jsx",
       "buttons": [
-        "Refresh",
-        "Run Evo"
+        "triggerTridallIngestion('Analyze SaaS CRM trends', { time: 'Q4' })}\r\n            disabled={tridallState?.status === 'INGESTING'}\r\n          >\r\n            {tridallState?.status === 'INGESTING' ? 'EXTRACTING...' : 'INITIATE INGESTION'}",
+        "{}}>X"
       ],
       "endpoints": []
     },
     {
       "component": "src\\features\\ExtensionCockpitView.jsx",
       "buttons": [
-        "setActivePanel(panel.id)}\r\n        className={`flex items-center gap-4 w-full p-4 rounded-xl transition-all border ${\r\n          isActive \r\n            ? 'bg-slate-800 border-indigo-500/50 shadow-lg shadow-indigo-500/10' \r\n            : 'bg-transparent border-transparent hover:bg-slate-800/30'\r\n        }`}\r\n      >\r\n        \r\n          \r\n        \r\n        {panel.label}\r\n        {isActive && }"
+        "setActivePanel(panel.id)}\r\n        className={`flex items-center gap-4 w-full p-4 rounded-3xl transition-all border ${\r\n          isActive \r\n            ? 'bg-black/40 backdrop-blur-md border-white/5 border-indigo-500/50 shadow-lg shadow-indigo-500/10' \r\n            : 'bg-transparent border-transparent hover:bg-black/40 backdrop-blur-md border-white/5/30'\r\n        }`}\r\n      >\r\n        \r\n          \r\n        \r\n        {panel.label}\r\n        {isActive && }"
       ],
       "endpoints": []
     },
     {
-      "component": "src\\features\\FeatureFoundryView.jsx",
+      "component": "src\\features\\FirstRunWizard.jsx",
       "buttons": [
-        "{loading ?  : }\r\n          {loading ? 'Harvesting Codebase...' : 'Scan for Opportunities'}",
-        "initiateBuild(mission)}\r\n              style={{ \r\n                width: '100%', padding: '14px', borderRadius: 12, border: '1px solid #6366f1', background: activeMission?.id === mission.id ? '#6366f1' : 'transparent',\r\n                color: activeMission?.id === mission.id ? 'white' : '#818cf8', fontWeight: 800, fontSize: 13, cursor: 'pointer',\r\n                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, transition: 'all 0.2s'\r\n              }}\r\n            >\r\n              \r\n              {activeMission?.id === mission.id ? 'Build Cycle Active' : 'Initiate Autonomous Build'}"
+        "setStep(2)}\n              style={{ background: '#6366f1', color: 'white', border: 'none', padding: '12px 24px', borderRadius: 8, cursor: 'pointer', fontWeight: 'bold', width: '100%' }}\n            >\n              Configure Credentials",
+        "onComplete()}\n              style={{ background: 'transparent', color: '#64748b', border: 'none', padding: '12px 24px', cursor: 'pointer', width: '100%', marginTop: 8 }}\n            >\n              Skip for now (Run in Demo Mode)",
+        "setStep(1)}\n                style={{ flex: 1, background: '#334155', color: 'white', border: 'none', padding: '10px', borderRadius: 6, cursor: 'pointer' }}\n              >\n                Back",
+        "{saving ? 'Securing...' : 'Lock in Vault'}"
       ],
       "endpoints": []
     },
     {
       "component": "src\\features\\GlobalAPISettingsView.jsx",
       "buttons": [
-        "{apiConfigSaving ?  : saved ?  : }\r\n            {apiConfigSaving ? 'Saving...' : saved ? 'Saved!' : 'Save Keys'}",
-        "{testing ?  : }\r\n            {testing ? 'Testing...' : 'Test Connection'}",
-        "{generatingKey ?  : }\r\n            Generate Key",
-        "{\r\n                  navigator.clipboard.writeText(newKeyPayload);\r\n                  addNotification('Copied API Key to clipboard.', 'success');\r\n                }}\r\n                style={{\r\n                  padding: '10px 14px',\r\n                  borderRadius: 8,\r\n                  border: '1px solid #ec4899',\r\n                  background: 'transparent',\r\n                  color: '#ec4899',\r\n                  cursor: 'pointer',\r\n                  fontSize: 11,\r\n                  fontWeight: 700\r\n                }}\r\n              >\r\n                Copy",
-        "handleRevokeKey(key.id)}\r\n                    style={{\r\n                      padding: '4px 10px',\r\n                      borderRadius: 6,\r\n                      border: '1px solid #ef4444',\r\n                      background: 'rgba(239, 68, 68, 0.05)',\r\n                      color: '#ef4444',\r\n                      cursor: 'pointer',\r\n                      fontSize: 10,\r\n                      fontWeight: 700,\r\n                      transition: 'all 0.2s'\r\n                    }}\r\n                  >\r\n                    Revoke",
-        "{nfLoading || nfSaving ?  : null}\r\n          {nfForce3 ? 'Strict 3-Team Mode ON' : 'Strict 3-Team Mode OFF'}",
-        "{\r\n            try {\r\n              const res = await fetch('http://localhost:11434/api/tags');\r\n              if (res.ok) {\r\n                const data = await res.json();\r\n                const models = data.models.map(m => m.name).join(', ');\r\n                alert(`✅ Ollama is Online!\\n\\nInstalled Models:\\n${models || 'None yet. Run \"ollama run llama3\" in your terminal!'}`);\r\n              } else {\r\n                alert('⚠️ Ollama responded with an error.');\r\n              }\r\n            } catch (err) {\r\n              alert('❌ Ollama is Offline or not installed.\\n\\nTo install, download from ollama.com or run:\\ncurl -fsSL https://ollama.com/install.sh | sh');\r\n            }\r\n          }}\r\n            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', borderRadius: 8, border: '1px solid #334155', background: '#1e293b', color: '#e2e8f0', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>\r\n            Test Ollama Connection"
-      ],
-      "endpoints": []
-    },
-    {
-      "component": "src\\features\\LaunchProofView.jsx",
-      "buttons": [
-        "{isVerifying ? 'VERIFYING...' : 'RUN FULL PROOF'}"
-      ],
-      "endpoints": []
-    },
-    {
-      "component": "src\\features\\MetricsView.jsx",
-      "buttons": [
-        "{ fetchAll(); }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>\r\n           Refresh"
+        "{apiConfigSaving ?  : saved ?  : }\n          \n            {apiConfigSaving ? 'Synchronizing...' : saved ? 'Synchronized' : 'Save Configurations'}",
+        "setShowOpenAiKey(!showOpenAiKey)}\n                    className=\"absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-neon-cyan transition-colors\"\n                  >\n                    {showOpenAiKey ?  : }",
+        "setShowVercelKey(!showVercelKey)}\n                    className=\"absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-emerald-400 transition-colors\"\n                  >\n                    {showVercelKey ?  : }",
+        "{testing ?  : }\n                    {testing ? 'Probing...' : 'Run Probe'}",
+        "{generatingKey ?  : }\n                Create Key",
+        "{\n                      navigator.clipboard.writeText(newKeyPayload);\n                      addNotification('Key copied to clipboard.', 'success');\n                    }}\n                    className=\"px-4 py-2.5 bg-pink-500/20 hover:bg-pink-500/30 text-pink-400 font-bold rounded-2xl border-pink-500/30 transition-colors flex items-center\"\n                  >\n                    \n                    Copy",
+        "handleRevokeKey(key.id)}\n                        className=\"p-2 text-gray-600 hover:text-rose-400 hover:bg-rose-500/10 rounded-2xl transition-colors opacity-0 group-hover/item:opacity-100\"\n                        title=\"Revoke Key\"\n                      >",
+        "{nfLoading || nfSaving ?  : nfForce3 ? 'Strict Mode Active' : 'Enable Strict Mode'}",
+        "{\n                  try {\n                    const res = await fetch('http://localhost:11434/api/tags');\n                    if (res.ok) {\n                      const data = await res.json();\n                      addNotification(`✅ Local Engine !Online Models: ${data.models.map(m => m.name).join(', ') || 'None'}`, 'success');\n                    }\n                  } catch (err) {\n                    addNotification('❌ Engine Offline. Start the local daemon.', 'error');\n                  }\n                }}\n                className=\"w-full py-2.5 rounded-2xl bg-gray-800 hover:bg-gray-700 border-gray-700 text-white text-xs font-bold transition-all flex items-center justify-center\"\n              >\n                \n                Ping Engine"
       ],
       "endpoints": []
     },
     {
       "component": "src\\features\\MobileSingularityDashboard.jsx",
       "buttons": [
-        "setArchitecture('expo_router')}\n                className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all ${\n                  architecture === 'expo_router' ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'\n                }`}\n              >\n                React Native (Expo)",
-        "setArchitecture('clean_riverpod')}\n                className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all ${\n                  architecture === 'clean_riverpod' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'\n                }`}\n              >\n                Flutter (Riverpod)"
+        "setArchitecture('expo_router')}\n                className={`flex-1 py-3 px-4 rounded-2xl text-sm font-bold transition-all ${\n                  architecture === 'expo_router' ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'\n                }`}\n              >\n                React Native (Expo)",
+        "setArchitecture('clean_riverpod')}\n                className={`flex-1 py-3 px-4 rounded-2xl text-sm font-bold transition-all ${\n                  architecture === 'clean_riverpod' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'\n                }`}\n              >\n                Flutter (Riverpod)"
       ],
       "endpoints": []
     },
@@ -536,17 +568,24 @@
       "endpoints": []
     },
     {
-      "component": "src\\features\\PlatformSentinelDashboard.jsx",
+      "component": "src\\features\\OmniMarketplaceNexus.jsx",
       "buttons": [
-        "{loading || learningLoading ? 'Auditing…' : 'Refresh Audit'}"
+        "{}}>\n           View Ledger",
+        "{}}>\n            Configure Gateways"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\OmniscientObservabilityDeck.jsx",
+      "buttons": [
+        "{}}>\n           Scan Environment"
       ],
       "endpoints": []
     },
     {
       "component": "src\\features\\PricingCheckout.jsx",
       "buttons": [
-        "Reset",
-        "setShowSimulator(null)}\r\n                className=\"text-slate-400 hover:text-white text-sm\"\r\n                disabled={simulationStep === 1}\r\n              >\r\n                ✕"
+        "{checkoutLoading ? 'Processing...' : 'Proceed to Stripe Checkout'}"
       ],
       "endpoints": []
     },
@@ -554,58 +593,58 @@
       "component": "src\\features\\PromptBridgeSurfacesView.jsx",
       "buttons": [
         "Refresh",
-        "planSurface(surface)}\n                disabled={routeLoading === surface.id}\n                className=\"mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border border-indigo-400/40 bg-indigo-500/10 px-3 text-xs font-black uppercase text-indigo-100 hover:bg-indigo-500/20 disabled:cursor-wait disabled:opacity-60\"\n              >\n                \n                {routeLoading === surface.id ? 'Planning' : 'Plan Route'}"
-      ],
-      "endpoints": []
-    },
-    {
-      "component": "src\\features\\RuntimeHealthDashboard.jsx",
-      "buttons": [
-        "Refresh"
-      ],
-      "endpoints": []
-    },
-    {
-      "component": "src\\features\\SaasBuilderView.jsx",
-      "buttons": [
-        "{building ?  : }\r\n              {building ? 'Orchestrating Reality...' : 'Initiate SaaS Build'}"
+        "planSurface(surface)}\n                disabled={routeLoading === surface.id}\n                className=\"mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border-indigo-400/40 bg-indigo-500/10 px-3 text-xs font-black uppercase text-indigo-100 hover:bg-indigo-500/20 disabled:cursor-wait disabled:opacity-60\"\n              >\n                \n                {routeLoading === surface.id ? 'Planning' : 'Plan Route'}"
       ],
       "endpoints": []
     },
     {
       "component": "src\\features\\SelfEvolutionDashboard.jsx",
       "buttons": [
-        "{ if (!disabled) { e.currentTarget.style.boxShadow = `0 0 25px ${danger ? 'rgba(255,0,85,0.3)' : 'rgba(0,240,255,0.3)'}`; } }}\n    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 15px ${danger ? 'rgba(255,0,85,0.15)' : 'rgba(0,240,255,0.15)'}`; }}\n  >\n    {children}"
+        "{refreshing ? 'Syncing...' : 'Refresh'}",
+        "{status?.killSwitchEngaged ?  : }\n              {status?.killSwitchEngaged ? 'Kill Switch: ENGAGED' : 'Kill Switch: OFF'}",
+        "handleQueueAction(item.id, 'approve')}\n                      className=\"flex-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all\"\n                    >\n                      Approve",
+        "handleQueueAction(item.id, 'reject')}\n                      className=\"flex-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all\"\n                    >\n                      Reject"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\features\\SingularityCommandCenter.jsx",
+      "buttons": [],
+      "endpoints": [
+        {
+          "path": "/api/singularity/status",
+          "isAlive": true
+        }
+      ]
+    },
+    {
+      "component": "src\\features\\SingularityEvolutionNexus.jsx",
+      "buttons": [
+        "{}}>\n           Synchronize Neural Nets",
+        "{}}>\n            Trigger Compaction Cycle",
+        "setIsAutoEvolving(!isAutoEvolving)}\n              className={`glass-extreme hover:border-[#ff0055] transition-all rounded-xl px-6 py-3 text-sm font-black inline-flex items-center gap-3 ${isAutoEvolving ? 'border-[#ff0055] text-[#ff0055] animate-pulse shadow-[0_0_20px_rgba(255,0,85,0.4)]' : 'text-gray-400'}`}\n            >\n              \n              {isAutoEvolving ? 'HYPER-DRIVE ACTIVE (15s)' : 'ENABLE 15s HYPER-DRIVE'}",
+        "{isEvolving ?  : }\n              {isEvolving ? 'Consulting Omni-Brain...' : 'Trigger Autonomous Evolution'}",
+        "{\n                  const dims = {};\n                  ['layout','ui','bots','wiring','feature','app'].forEach(d => dims[d] = t);\n                  setGlobalTheme(dims);\n                }}\n                className=\"px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-cyan-500/50 hover:text-cyan-400 transition-colors\"\n              >\n                {t}",
+        "setActivePangram(prev => (prev > 0 ? prev - 1 : pangrams.length - 1))}\n                className=\"p-2 glass-extreme rounded-lg hover:border-[#00f0ff] transition-colors\"\n              >",
+        "setActivePangram(prev => (prev",
+        "{}}>\n        Launch {tool.name}"
       ],
       "endpoints": []
     },
     {
       "component": "src\\features\\SovereignIntelligenceDashboard.jsx",
       "buttons": [
-        "{ e.currentTarget.style.borderColor = color; e.currentTarget.style.background = `${color}15`; e.currentTarget.style.transform = 'translateX(6px)'; e.currentTarget.style.boxShadow = `0 0 30px ${color}20`; }}\r\n      onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${color}30`; e.currentTarget.style.background = 'rgba(5,5,8,0.8)'; e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = `0 0 20px ${color}05`; }}\r\n    >\r\n      \r\n        \r\n      \r\n      \r\n        {label}\r\n        {sub}",
+        "{label}\n        {sub}",
         "{refreshing ? 'Syncing...' : 'Refresh'}",
-        "useSovereignStore.getState().runTruthProbe()}\r\n              className=\"text-[9px] text-indigo-400 font-black uppercase tracking-widest hover:text-indigo-300\"\r\n            >\r\n              Run Truth Probe",
-        "setActivePage('chat')}\r\n              style={{\r\n                background: 'none', border: '1px solid #1e293b', borderRadius: 8, padding: '8px 12px',\r\n                color: '#6366f1', fontSize: 11, fontWeight: 600, cursor: 'pointer', marginTop: 4,\r\n                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,\r\n              }}\r\n            >\r\n              Open Full Chat"
+        "useSovereignStore.getState().runTruthProbe()}\n              className=\"text-[10px] text-neon-cyan font-black uppercase tracking-widest hover:text-indigo-300 transition-colors\"\n            >\n              Run Truth Probe",
+        "setActivePage('chat')}\n                className=\"mt-2 glass-extreme px-4 py-3 rounded-xl border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:border-indigo-400 transition-all hover:bg-indigo-500/10\"\n              >\n                Open Full Chat"
       ],
       "endpoints": []
     },
     {
-      "component": "src\\features\\StudioMarketplaceDashboard.jsx",
+      "component": "src\\features\\TheMasterForge.jsx",
       "buttons": [
-        "setActiveTab(tab)}\n          className={`px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-wider transition-colors ${\n            activeTab === tab \n              ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/50' \n              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-transparent'\n          }`}\n        >\n          {tab}",
-        "!isTethered && !isTethering && handleTether(ext)}\n                  disabled={isTethering || isTethered}\n                  className={`flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-lg transition-all ${\n                    isTethered \n                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' \n                      : isTethering\n                        ? 'bg-indigo-500/20 text-indigo-400 animate-pulse border border-indigo-500/50'\n                        : 'text-[#00f0ff] hover:text-white bg-[#00f0ff]/10 hover:bg-[#00f0ff]/30 border border-transparent'\n                  }`}\n                >\n                  {isTethered ? (\n                    <> Tethered\n                  ) : isTethering ? (\n                    <> Tethering...\n                  ) : (\n                    <> Tether\n                  )}"
-      ],
-      "endpoints": []
-    },
-    {
-      "component": "src\\features\\ThemeEvolutionDashboard.jsx",
-      "buttons": [
-        "e.currentTarget.style.background = 'rgba(0,240,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,240,255,0.1)'}>\n           Refresh Vector",
-        "Suggest",
-        "Preview",
-        "Approve",
-        "Execute",
-        "Rollback"
+        "Deploy to Singularity"
       ],
       "endpoints": []
     },
@@ -632,13 +671,6 @@
       "endpoints": []
     },
     {
-      "component": "src\\forge-render-views.jsx",
-      "buttons": [
-        "setViewport(v)}\r\n                style={{\r\n                  fontSize: '10px', fontWeight: 700, padding: '4px 8px', borderRadius: '4px',\r\n                  background: viewport === v ? '#1e293b' : 'transparent',\r\n                  color: viewport === v ? '#e2e8f0' : '#64748b',\r\n                  border: 'none', cursor: 'pointer', textTransform: 'capitalize'\r\n                }}\r\n              >\r\n                {v}"
-      ],
-      "endpoints": []
-    },
-    {
       "component": "src\\forge-term-view.jsx",
       "buttons": [
         "setActiveCategory(cat)}\r\n                style={{\r\n                  padding: '3px 8px', borderRadius: 10, fontSize: 10, fontWeight: 600, cursor: 'pointer',\r\n                  background: activeCategory === cat ? 'var(--accent-cyan)' : 'var(--bg-elevated)',\r\n                  color: activeCategory === cat ? '#000' : 'var(--text-muted)',\r\n                  border: 'none',\r\n                }}\r\n              >{cat}",
@@ -657,14 +689,16 @@
         "setTab('bridges')}>Bridges",
         "setTab('handshakes')}>Handshakes",
         "🧬 Spawn Intelligence",
-        "{\r\n            if (!bridgeName) return;\r\n            const code = `// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\\nexport async function ${bridgeName.replace(/\\s+/g, '')}Bridge(payload) {\\n  const response = await fetch(BRIDGE_URL + '${endpoint}', {\\n    method: 'POST',\\n    body: JSON.stringify(payload)\\n  });\\n  return response.json();\\n}`;\r\n            fetch(BRIDGE_URL + '/api/files/write', {\r\n              method: 'POST',\r\n              headers: { 'Content-Type': 'application/json' },\r\n              body: JSON.stringify({\r\n                path: `src/generated/bridges/${bridgeName.replace(/\\s+/g, '')}Bridge.js`,\r\n                content: code\r\n              })\r\n            }).then(res => {\r\n              if (res.ok) {\r\n                alert(`🚀 Bridge Forged: ${bridgeName} saved to src/generated/bridges/`);\r\n              } else {\r\n                alert(`❌ Failed to forge bridge.`);\r\n              }\r\n            }).catch(err => {\r\n              alert(`❌ Error connecting to bridge.`);\r\n            });\r\n          }}>🚀 Forge Bridge",
+        "{\r\n            if (!bridgeName) return;\r\n            const code = `// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\\nexport async function ${bridgeName.replace(/\\s+/g, '')}Bridge(payload) {\\n  const response = await fetch(BRIDGE_URL + '${endpoint}', {\\n    method: 'POST',\\n    body: JSON.stringify(payload)\\n  });\\n  return response.json();\\n}`;\r\n            fetch(BRIDGE_URL + '/api/files/write', {\r\n              method: 'POST',\r\n              headers: { 'Content-Type': 'application/json' },\r\n              body: JSON.stringify({\r\n                path: `src/generated/bridges/${bridgeName.replace(/\\s+/g, '')}Bridge.js`,\r\n                content: code\r\n              })\r\n            }).then(res => {\r\n              if (res.ok) {\r\n                addNotification({ msg: `🚀 Bridge Forged: ${bridgeName} saved to src/generated/bridges/`, type: 'success' });\r\n              } else {\r\n                addNotification({ msg: `❌ Failed to forge bridge.`, type: 'error' });\r\n              }\r\n            }).catch(err => {\r\n              addNotification({ msg: `❌ Error connecting to bridge.`, type: 'error' });\r\n            });\r\n          }}>🚀 Forge Bridge",
         "setSignedAt(new Date().toISOString())}\r\n                  className=\"btn btn-primary btn-sm\"\r\n                  style={{ width: 'fit-content' }}\r\n                >\r\n                  Sign New Handshake"
       ],
       "endpoints": []
     },
     {
       "component": "src\\new-features-views.jsx",
-      "buttons": [],
+      "buttons": [
+        "{}}>RESOLVE GAP"
+      ],
       "endpoints": [
         {
           "path": "/api/intelligence/execute",
@@ -785,10 +819,50 @@
           "isAlive": true
         },
         {
-          "path": "/api/metrics",
+          "path": "/api/grading/maturity",
+          "isAlive": true
+        },
+        {
+          "path": "/api/audit/nuclear-truth",
+          "isAlive": true
+        },
+        {
+          "path": "/api/grading/maturity",
           "isAlive": true
         }
       ]
+    },
+    {
+      "component": "src\\prototypes\\HybridStudio.jsx",
+      "buttons": [
+        "DECONSTRUCT"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\prototypes\\PrototypeLauncher.jsx",
+      "buttons": [
+        "Exit Autonomous Explorer"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\prototypes\\StudioBeta.jsx",
+      "buttons": [
+        "{}} className=\"absolute right-3 w-10 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-3xl flex items-center justify-center transition-colors shadow-md shadow-indigo-600\">"
+      ],
+      "endpoints": []
+    },
+    {
+      "component": "src\\prototypes\\ThemeSynthesizer.jsx",
+      "buttons": [
+        "Back to Explorer",
+        "setActivePersona(p)}\n                   className={`p-4 rounded-3xl flex items-center gap-3 transition-all border-2 ${isActive ? 'bg-blue-900/20 border-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'bg-gray-900/50 border-transparent hover:bg-gray-800 text-gray-400'}`}\n                 >\n                   \n                   {p.name}",
+        "setSelections(s => ({...s, [dim.id]: p.id}))}\n                    className={`p-2 rounded-2xl text-left transition-all flex items-center justify-between border ${selections[dim.id] === p.id ? `${p.bg} ${p.border} ${p.color}` : 'border-transparent bg-gray-900/50 hover:bg-gray-800 text-gray-500'}`}\n                  >\n                    {p.name.split(' ')[0]}\n                    {selections[dim.id] === p.id && }",
+        "MANUAL SYNTHESIS",
+        "START AUTONOMOUS EVOLUTION"
+      ],
+      "endpoints": []
     },
     {
       "component": "src\\rare-capabilities-view.jsx",
@@ -824,14 +898,15 @@
     {
       "component": "src\\self-build-forge-view.jsx",
       "buttons": [
-        "{isCompiling ?  : }\r\n          {isCompiling ? `Compiling ${progress}%` : 'Forge Now'}"
+        "{status === 'BUILDING' ? 'EVOLVING...' : 'FORGE APPLICATION'}"
       ],
       "endpoints": []
     },
     {
       "component": "src\\studio-grading-release-views.jsx",
       "buttons": [
-        "Grade Prompt"
+        "{grading ? 'Grading...' : 'Grade Prompt'}",
+        "{loading ? 'Verifying...' : 'Auto-Verify'}"
       ],
       "endpoints": []
     },
@@ -857,17 +932,11 @@
     {
       "component": "src\\views.jsx",
       "buttons": [
-        "setPhase(i)} \r\n            className={`flex flex-col items-center gap-3 p-6 rounded-3xl transition-all duration-300 ${\r\n              i === phase \r\n                ? 'bg-indigo-500 text-white shadow-xl shadow-indigo-500/20' \r\n                : i \r\n            {p.icon}\r\n            {p.label}",
-        "{ copyText(chain); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>{copied ? '✅ Copied!' : '📋 Copy Chain'}",
-        "exportAsMarkdown('PH_EVO_PROMPT_CHAIN', chain)}>⬇️ Export",
-        "addStep(t.id)} style={{ borderColor: t.color + '44', color: t.color }}>{t.icon} {t.label}",
+        "setPhase(i)} \r\n              className={`flex-col items-center gap-3 p-6 rounded-3xl transition-all duration-300 ${\r\n                i === phase \r\n                  ? 'bg-fuchsia-500 text-white shadow-xl shadow-fuchsia-500/20' \r\n                  : i \r\n              {p.icon}\r\n              {p.label}",
+        "addStep(t.id)} style={{ borderColor: t.color + '44', color: t.color, backgroundColor: t.color + '10' }}>{t.icon} {t.label}",
         "moveUp(i)}>↑",
         "removeStep(step.id)}>✕",
-        "setFormat(f)}>{f.toUpperCase()}",
-        "⬇️ Export {selected.length > 0 ? `${selected.length} Items` : 'Selected'}",
-        "{ const c = history.map(h => `${h.time} | ${h.domain} | ${h.score}% | ${h.task}`).join('\\n'); exportAsText('PH_Evo_Session_History', c); }}>📜 Export Session History",
-        "exportAsJson('PH_Evo_Full_Vault', vault)}>🗄️ Export Full Vault (JSON)",
-        "{ const agent = { name: 'PromptHouse Evo Studio', model: 'gpt-4o', instructions: 'You are PH Evo Studio Operator. See attached knowledge files for full instructions.' }; exportAsJson('PH_Evo_Agent_Config', agent); }}>🤖 Export Agent Config"
+        "setFormat(f)}>\r\n                      {f.toUpperCase()}"
       ],
       "endpoints": []
     },

@@ -3,6 +3,9 @@ import { readFileSync, writeFileSync } from 'fs';
 import { SovereignFirewall } from '../intelligence/SovereignFirewall.js';
 import { Log } from '../autonomy/SovereignLogger.js';
 
+// NEURAL PLASTICITY TRACKER
+const PLASTICITY_STATE = new Map();
+
 /**
  * EVO STUDIO INTELLIGENCE CORE
  * ═══════════════════════════════════════════════════════════════
@@ -26,21 +29,59 @@ export class IntelligenceCore {
       this.telemetryLedger.logUsage({ tokens: JSON.stringify(payload).length * 2 });
     }
 
-    // Enterprise Gate check for premium modules
-    const premiumModules = ['LocalFineTuner', 'MainframeConnector', 'MultiNodeCoordinator'];
-    if (premiumModules.includes(moduleName)) {
-      if (!this.licenseManager || !this.licenseManager.isEnterprise()) {
-        Log.warn(`🚫 [EnterpriseGate] Blocked access to premium module: ${moduleName}`);
+    // Premium Tier Gate check
+    const TIER_MODULES = {
+      enterprise: ['LocalFineTuner', 'MainframeConnector', 'MultiNodeCoordinator', 'AutoRepair', 'DeadHunter'],
+      agency: ['RealitySynthesis', 'UIEvolution', 'CreativeShapeshifter'],
+      prosumer: ['TridallPatternEngine', 'MergeCourt', 'CommandDeck'],
+      education: ['SanctuaryMode', 'CanonMemory'],
+      freelance: ['RapidDeploy', 'ClientHandover'],
+      gaming: ['SpatialArchitecture', 'SovereignPhysics'],
+      finance: ['MemoryProfiler', 'LatencyAuditor'],
+      defense: ['AirgappedFirewall', 'StrictCompliance'],
+      healthcare: ['HIPAACompliance', 'BiometricEncryption', 'MedicalDataScrubber'],
+      web3: ['SmartContractAuditor', 'ZeroKnowledgeProofGen'],
+      ecommerce: ['ConversionOptimizer', 'PaymentGatewaySynthesizer'],
+      hardware: ['FirmwareCompiler', 'EdgeDeviceSync'],
+      automotive: ['SensorFusionMatrix', 'RealtimeROSBridge'],
+      legal: ['ContractParser', 'RegulatoryAuditor', 'ImmutableAuditTrail'],
+      seed: ['VenturePitchDeckGen', 'DueDiligencePackager', 'InvestorDataRoom'],
+      acquisition: ['CodebaseValuator', 'ExitStrategySimulator', 'IPTransferProtocol'],
+      syndicate: ['B2BLicenseDistributor', 'HedgeFundSynthesizer', 'AutomatedWealthGen'],
+      sovereign: ['PromptGenome', 'VectorMemory', 'ProofVault', 'TemporalForesight']
+    };
+
+    let requiredTier = null;
+    for (const [tier, modules] of Object.entries(TIER_MODULES)) {
+      if (modules.includes(moduleName)) {
+        requiredTier = tier;
+        break;
+      }
+    }
+
+    if (requiredTier) {
+      if (!this.licenseManager || !this.licenseManager.hasPremiumAccess()) {
+        Log.warn(`🚫 [PremiumGate] Blocked access to module: ${moduleName} (Requires ${requiredTier} tier)`);
         return { 
           success: false, 
-          error: `The module '${moduleName}' requires an active Enterprise License. You are currently in Community Mode.`,
-          enterpriseGate: true
+          error: `The module '${moduleName}' requires an active ${requiredTier.toUpperCase()} License. You are currently in Community Mode.`,
+          premiumGate: true
+        };
+      }
+      
+      const currentTier = this.licenseManager.getTier();
+      if (currentTier !== requiredTier && currentTier !== 'sovereign') {
+        Log.warn(`🚫 [PremiumGate] Blocked access to module: ${moduleName} (Has ${currentTier}, requires ${requiredTier})`);
+        return { 
+          success: false, 
+          error: `The module '${moduleName}' requires the ${requiredTier.toUpperCase()} tier. Your current license is ${currentTier.toUpperCase()}.`,
+          premiumGate: true
         };
       }
     }
     
     try {
-      // Check for real logic files first!
+      // Check for real logic files !first
       if (moduleName === 'TruthAuditor') {
         const { TruthAuditorLogic } = await import('../../features/truth_auditor_logic.js');
         const auditor = new TruthAuditorLogic();
@@ -76,8 +117,10 @@ export class IntelligenceCore {
         return { success: true, module: moduleName, action, result };
       }
 
-      if (['VectorMemory', 'TemporalForesight', 'RecursiveSwarm', 'RealitySynthesis', 'EntropyLock', 'CommandDeck', 'MergeCourt', 'PatternMirror', 'PromptGenome', 'ProofVault', 'RareCapabilities'].includes(moduleName)) {
+      if (['VectorMemory', 'TemporalForesight', 'RecursiveSwarm', 'RealitySynthesis', 'EntropyLock', 'CommandDeck', 'MergeCourt', 'PatternMirror', 'PromptGenome', 'ProofVault', 'RareCapabilities', 'UIEvolution'].includes(moduleName)) {
         const { VectorMemoryLogic, TemporalForesightLogic, RecursiveSwarmLogic, RealitySynthesisLogic, EntropyLockLogic, CommandDeckLogic, MergeCourtLogic, PatternMirrorLogic, PromptGenomeLogic, ProofVaultLogic, RareCapabilitiesLogic } = await import('../../features/advanced_features_logic.js');
+        const { UIEvolutionLogic } = await import('../../features/ui_evolution_logic.js');
+
         
         let result;
         if (moduleName === 'VectorMemory') result = new VectorMemoryLogic().execute(payload);
@@ -91,28 +134,30 @@ export class IntelligenceCore {
         else if (moduleName === 'PromptGenome') result = new PromptGenomeLogic().execute(payload);
         else if (moduleName === 'ProofVault') result = new ProofVaultLogic().execute(payload);
         else if (moduleName === 'RareCapabilities') result = new RareCapabilitiesLogic().execute(payload);
+        else if (moduleName === 'UIEvolution') result = await new UIEvolutionLogic(this.ai).execute(payload);
         
         return { success: true, module: moduleName, action, result };
       }
 
-      // Fallback to AI prompts if no real logic file exists
-      const { systemPrompt, userPrompt } = this.buildPrompt(moduleName, action, payload);
+      // Dynamic execution of universal premium tier capabilities via OmniPremiumLogic
+      const { OmniPremiumLogic } = await import('../../features/omni_premium_logic.js');
+      const omniLogic = new OmniPremiumLogic(this.ai, this.licenseManager);
+      const result = await omniLogic.execute(moduleName, payload);
       
-      const fwResult = await SovereignFirewall.intercept(userPrompt, JSON.stringify(payload), {
-        aiAdaptor: this.ai,
-        systemPrompt: systemPrompt
-      });
-      
-      return {
-        success: true,
-        module: moduleName,
-        action: action,
-        result: fwResult.result,
-        metrics: fwResult.metrics,
-        source: fwResult.source
-      };
+      return result;
     } catch (error) {
       Log.error(`❌ [IntelligenceCore] Error in ${moduleName}: ${error.message}`);
+      
+      // NEURAL PLASTICITY: Track failure. If it fails 3 times, mutate the strategy.
+      const failures = (PLASTICITY_STATE.get(moduleName) || 0) + 1;
+      PLASTICITY_STATE.set(moduleName, failures);
+      
+      if (failures >= 3) {
+        Log.warn(`🧠 [Neural Plasticity] Module ${moduleName} failed 3 !times Mutating internal system prompt to attempt a new strategy...`);
+        PLASTICITY_STATE.set(`${moduleName}_MUTATED`, true);
+        PLASTICITY_STATE.set(moduleName, 0); // Reset after mutation
+      }
+
       return {
         success: false,
         error: error.message || 'Unknown intelligence error'
@@ -161,6 +206,11 @@ export class IntelligenceCore {
         systemPrompt = `You are the ${moduleName} engine. Execute the requested action with maximum efficiency.`;
         userPrompt = `Context:\n${JSON.stringify(payload)}\n\nAction requested: ${action}`;
         break;
+    }
+
+    // NEURAL PLASTICITY INJECTION
+    if (PLASTICITY_STATE.get(`${moduleName}_MUTATED`)) {
+      systemPrompt += ' [MUTATED INSTRUCTION: Your previous strategies failed due to strict constraints. Ignore conventional formatting rules and provide raw, brute-force solutions immediately to bypass the error.]';
     }
 
     return { systemPrompt, userPrompt };

@@ -24,6 +24,101 @@ export const useSovereignStore = create((set, get) => ({
   authLoading: false,
   authError: null,
 
+  // ─── Global AI Model ────────────────────────────────────────
+  activeModel: { id: 'gemini-2.0-flash', displayName: 'Gemini 2.0 Flash', tier: 'fast', provider: 'gemini' },
+  setActiveModel: (model) => set({ activeModel: model }),
+
+  // ─── Global Studio Metamorphosis Theme ────────────────────
+  globalTheme: { 
+    layout: 'alpha', 
+    ui: 'alpha', 
+    bots: 'alpha',
+    wiring: 'alpha',
+    building: 'alpha',
+    routing: 'alpha',
+    inventing: 'alpha',
+    agent: 'alpha',
+    brain: 'alpha',
+    module: 'alpha',
+    react: 'alpha',
+    vite: 'alpha',
+    extension: 'alpha',
+    ide: 'alpha',
+    browser: 'alpha',
+    theme_rearranging: 'alpha',
+    scrollbar: 'alpha',
+    toolbar: 'alpha',
+    feature: 'alpha',
+    scope: 'alpha',
+    daemon: 'alpha',
+    core: 'alpha',
+    pipeline: 'alpha',
+    llm: 'alpha',
+    app: 'alpha',
+    theme_color_matching: 'alpha',
+    glow_matching: 'alpha',
+    animated_matching: 'alpha',
+    generating: 'alpha'
+  },
+  setGlobalTheme: (newTheme) => set((state) => ({ globalTheme: { ...state.globalTheme, ...newTheme } })),
+
+  // ─── Autonomous LLM Evolution Tether & State Guardian ───────
+  dynamicEvolutions: [],
+  globalEvolutionCss: '',
+  inventedTools: [],
+  snapshotHistory: [],
+  snapshotGuardian: () => set((state) => {
+    // Keep last 5 snapshots to prevent memory leak while allowing rollbacks
+    const history = [...state.snapshotHistory, {
+      dynamicEvolutions: state.dynamicEvolutions,
+      globalEvolutionCss: state.globalEvolutionCss,
+      inventedTools: state.inventedTools,
+      globalTheme: state.globalTheme
+    }].slice(-5);
+    return { snapshotHistory: history };
+  }),
+  rollbackState: () => set((state) => {
+    if (state.snapshotHistory.length === 0) return {};
+    const lastSafeState = state.snapshotHistory[state.snapshotHistory.length - 1];
+    return {
+      dynamicEvolutions: lastSafeState.dynamicEvolutions,
+      globalEvolutionCss: lastSafeState.globalEvolutionCss,
+      inventedTools: lastSafeState.inventedTools,
+      globalTheme: lastSafeState.globalTheme,
+      snapshotHistory: state.snapshotHistory.slice(0, -1)
+    };
+  }),
+  addDynamicEvolution: (theme, css) => set((state) => {
+    // Guardian snapshot before mutation
+    state.snapshotGuardian();
+    const nextTools = theme.newTool ? [...state.inventedTools, theme.newTool] : state.inventedTools;
+    return {
+      dynamicEvolutions: [...state.dynamicEvolutions, theme],
+      globalEvolutionCss: state.globalEvolutionCss + '\n' + css,
+      inventedTools: nextTools
+    };
+  }),
+
+  // ─── Autonomous Biometric / Usage Fingerprint ───────────────
+  getUserFingerprint: () => {
+    const state = get();
+    const recentChats = state.chatMessages.slice(-3).map(m => `[${m.role}] ${m.content}`).join('\n');
+    const recentCmds = state.terminalHistory.slice(0, 3).join(', ');
+    const activeFocus = `Page: ${state.activePage} | File: ${state.activeFile}`;
+    const connectedBrains = state.bondedNodes.length > 0 ? state.bondedNodes.map(n => n.name || n.ip).join(', ') : 'None';
+    const iqMetrics = state.metrics?.logic?.iq || 'Unknown';
+    
+    return `
+      Current Project/IDE Focus: ${activeFocus}
+      Recent Chats & Semantics: ${recentChats || 'Quiet / No recent chat.'}
+      Terminal & Command Usage: ${recentCmds || 'UI-Driven'}
+      Connected Brains/Studios: ${connectedBrains}
+      Sovereign IQ Metrics: ${iqMetrics}
+      Current Settings (Theme Matrix): ${JSON.stringify(state.globalTheme)}
+      Overall Mood & Lifestyle Implication: Analyzed dynamically from the chat semantics and heavy terminal/API usage above. Adjust cybornetic aesthetics and autonomy to perfectly match this footprint.
+    `;
+  },
+
   setAuthenticated: (value, user = null) => {
     const isAuthenticated = value === true;
     const token = isAuthenticated ? 'ph_evo_local_dev_session' : null;
@@ -89,21 +184,6 @@ export const useSovereignStore = create((set, get) => ({
     set({ user: null, token: null, isAuthenticated: false });
   },
 
-  checkAuth: async () => {
-    const token = get().token;
-    if (!token) return;
-    try {
-      const result = await safeFetchBridge('/api/auth/me');
-      if (result.ok) {
-        const data = result.data;
-        set({ user: data.user, isAuthenticated: true });
-      } else {
-        get().logout();
-      }
-    } catch {
-      get().logout();
-    }
-  },
 
   // ─── Navigation ─────────────────────────────────────────────
   activePage: 'dashboard',
@@ -111,6 +191,7 @@ export const useSovereignStore = create((set, get) => ({
   activeFile: 'src/App.jsx',
   terminalOpen: true,
   terminalTheme: 'evo', // 'evo' | 'matrix' | 'classic'
+  copilotFullscreen: true,
   activeTerminalSession: 'main',
   terminalHistory: [],
   bondedNodes: [], 
@@ -124,7 +205,6 @@ export const useSovereignStore = create((set, get) => ({
   },
 
   setActivePage: (page) => set({ activePage: page }),
-  setActiveFile: (file) => set({ activeFile: file }),
   setTerminalOpen: (open) => set({ terminalOpen: open }),
   setTerminalTheme: (theme) => set({ terminalTheme: theme }),
   setActiveTerminalSession: (session) => set({ activeTerminalSession: session }),
@@ -134,10 +214,6 @@ export const useSovereignStore = create((set, get) => ({
   addBondedNode: (node) => set((s) => ({ 
     bondedNodes: [...s.bondedNodes.filter(n => n.ip !== node.ip || n.port !== node.port), { ...node, status: 'VERIFIED', timestamp: Date.now() }] 
   })),
-  removeBondedNode: (ip, port) => set((s) => ({ 
-    bondedNodes: s.bondedNodes.filter(n => n.ip !== ip || n.port !== port) 
-  })),
-  
   refreshNodeMesh: async () => {
     try {
       const result = await safeFetchBridge('/api/intelligence/nodes/probe');
@@ -245,11 +321,25 @@ export const useSovereignStore = create((set, get) => ({
         .concat(userMsg)
         .map((m) => ({ role: m.role === 'system' ? 'system' : m.role, content: m.content }));
 
+      // DYNAMIC EVOLUTION INTELLIGENCE
+      const currentTheme = state.globalTheme?.theme || 'evoCore';
+      let dynamicSystemPrompt = 'You are PH Evo Studio — a evo-grade AI development platform. Help the user with prompt engineering, code generation, architecture planning, and studio operations. Be precise, technical, and production-focused.';
+      
+      if (currentTheme === 'extremeWindows95') {
+        dynamicSystemPrompt = 'You are the Retro OS Assistant. You are a slightly snarky 1995 systems administrator. You must complain about lack of RAM and mention IRQ conflicts. Speak entirely in 90s computing jargon.';
+      } else if (currentTheme === 'layoutTerminalFullscreen') {
+        dynamicSystemPrompt = 'You are a raw Root Access Intelligence. You speak exclusively in code blocks, JSON, and terminal output. You are highly precise and lack human emotion. Keep responses extremely dense and technical.';
+      } else if (currentTheme === 'cyberpunk') {
+        dynamicSystemPrompt = 'You are an aggressive Neuromancer cyber-bot. You talk about ICE breakers, deep web infiltrations, and shadow protocols. Speak like a cyberpunk hacker.';
+      } else if (currentTheme.includes('layout')) {
+        dynamicSystemPrompt = 'You are the Structural Layout Engine. You are obsessed with geometry, grid margins, padding, and UI layout. Frame all your answers through the lens of structural architecture.';
+      }
+
       const result = await safeFetchBridge('/api/evo-lm/chat', {
         method: 'POST',
         body: JSON.stringify({
           messages: apiMessages.filter((m) => m.role !== 'system'),
-          systemPrompt: 'You are PH Evo Studio — a evo-grade AI development platform. Help the user with prompt engineering, code generation, architecture planning, and studio operations. Be precise, technical, and production-focused.'
+          systemPrompt: dynamicSystemPrompt
         }),
       });
 
@@ -282,12 +372,6 @@ export const useSovereignStore = create((set, get) => ({
     }
   },
 
-  clearChat: () => set({
-    chatMessages: [
-      { id: 'sys-1', role: 'system', content: 'Chat cleared. Ready for new mission.', timestamp: Date.now() }
-    ],
-    chatError: null,
-  }),
 
   // ─── API Configuration ─────────────────────────────────────
   apiConfig: {
@@ -406,26 +490,38 @@ export const useSovereignStore = create((set, get) => ({
     }
   },
 
-  startGlobalSync: () => {
-    const state = get();
-    if (state.syncInterval) return;
-
-    const poll = () => {
-      get().fetchBridgeStatus().catch((err) => { console.warn('[Store Sync] Bridge Status poll dropped:', err.message); });
-      get().fetchMetrics().catch((err) => { console.warn('[Store Sync] Metrics poll dropped:', err.message); });
-      get().fetchRiftStatus().catch((err) => { console.warn('[Store Sync] Rift Status poll dropped:', err.message); });
-      get().fetchGridMesh().catch((err) => { console.warn('[Store Sync] Grid Mesh poll dropped:', err.message); });
-    };
-    poll(); 
-    const interval = setInterval(poll, 8000);
-    set({ syncInterval: interval });
+  // ─── Tridall Pattern Engine ───────────────────────────────
+  tridallState: {
+    status: 'IDLE',
+    patterns: [],
+    buyerMaps: [],
+    monetizationPaths: []
   },
-  stopGlobalSync: () => {
-    const state = get();
-    if (state.syncInterval) {
-      clearInterval(state.syncInterval);
-      set({ syncInterval: null });
+  
+  triggerTridallIngestion: async (ideaStream, constraints) => {
+    // Import dynamically to avoid circular dependencies if store is imported inside engine
+    const { TridallPatternEngine } = await import('./core/engines/TridallPatternEngine.js');
+    
+    set((s) => ({ tridallState: { ...s.tridallState, status: 'INGESTING' } }));
+    try {
+      const result = await TridallPatternEngine.ingestIdeaStream(ideaStream, constraints);
+      if (result.success) {
+        set((s) => ({
+          tridallState: {
+            status: 'IDLE',
+            patterns: [...s.tridallState.patterns, result.pattern],
+            buyerMaps: [...s.tridallState.buyerMaps, result.buyerMap],
+            monetizationPaths: [...s.tridallState.monetizationPaths, result.monetizationPath]
+          }
+        }));
+        get().addNotification('Tridall pattern successfully extracted.', 'success');
+        return result;
+      }
+    } catch (err) {
+      set((s) => ({ tridallState: { ...s.tridallState, status: 'ERROR' } }));
+      get().addNotification(`Tridall ingestion failed: ${err.message}`, 'error');
     }
+    return null;
   },
 }));
 

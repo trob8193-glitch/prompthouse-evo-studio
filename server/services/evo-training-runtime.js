@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { buildEvoLlmDataset, evaluateEvoLlmDataset, getEvoTrainStatus } from '../../src/core/evo-llm/index.js';
+import { addTrainingJob } from '../../src/core/api/training_job_queue.js';
 
 const DATA_DIR = (rootDir) => path.join(rootDir, '.prompthouse-data');
 const TRAINING_DIR = (rootDir) => path.join(rootDir, '.evo-llm', 'training-data');
@@ -177,11 +178,37 @@ export function captureTrainingEvent({ rootDir = process.cwd(), capture = {} } =
     }]
   });
 
+  // ─── AUTO-QUEUE TRAINING JOB ─────────────────────────────────
+  // When the dataset reaches sufficient quality, automatically queue
+  // a fine-tuning job into the TrainingJobQueue. The job will only
+  // execute if OPENAI_API_KEY is set and a real fileId is provided.
+  let queuedJob = null;
+  if (ingest.evaluation && ingest.evaluation.datasetQualityScore >= 90 && ingest.totalExamples >= 10) {
+    try {
+      const datasetFile = ingest.manifest?.trainFile || ingest.file;
+      queuedJob = addTrainingJob({
+        captureId: id,
+        source: event.source,
+        datasetFile,
+        totalExamples: ingest.totalExamples,
+        datasetQualityScore: ingest.evaluation.datasetQualityScore,
+        // fileId must be set by the user or upload step before execution
+        fileId: event.openaiFileId || null,
+        model: event.model || 'gpt-4o-mini-2024-07-18',
+        createdAt: new Date().toISOString()
+      });
+    } catch (e) {
+      // Queue is non-critical — log but don't fail the capture
+      console.warn('[TrainingCapture] Auto-queue failed:', e.message);
+    }
+  }
+
   return {
     success: true,
     truthState: 'TRAINING_CAPTURE_RECORDED',
     capture: event,
-    ingest
+    ingest,
+    queuedJob
   };
 }
 

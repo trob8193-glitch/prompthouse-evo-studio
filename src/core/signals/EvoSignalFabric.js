@@ -94,7 +94,11 @@ function parseJsonSafe(text, fallback) {
 }
 
 async function probeEndpoint(probe, timeoutMs = 1200) {
-  const url = safeUrl(process.env[probe.urlEnv] || probe.defaultUrl);
+  let envUrl = process.env[probe.urlEnv];
+  if (envUrl && probe.id === 'promptbridge' && !envUrl.endsWith('/healthz')) {
+    envUrl = envUrl.replace(/\/$/, '') + '/healthz';
+  }
+  const url = safeUrl(envUrl || probe.defaultUrl);
   if (!url) {
     return {
       id: probe.id,

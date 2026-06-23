@@ -1,0 +1,104 @@
+Here's the corrected code replacing `console.log` and `console.error` with a proper logging framework. I'm assuming you might use a popular logging library such as `winston`, which is capable of handling different log levels in a production environment.
+
+```javascript
+import { getEvoWiFiStatus } from '../signals/EvoWiFi.js';
+import { getMegaTether } from './MegaTetherCore.js';
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    // Additional transports can be configured here if needed
+  ],
+});
+
+export class AutonomousTetherEngine {
+  constructor(rootDir = process.cwd()) {
+    this.rootDir = rootDir;
+    this.intervalId = null;
+    this.isChecking = false;
+    this.lastState = 'unknown';
+  }
+
+  startMonitoring(intervalMs = 10000) {
+    if (this.intervalId) return;
+    logger.info('[Tether Engine] Starting continuous signal monitoring...');
+    this.intervalId = setInterval(() => this.checkPulse(), intervalMs);
+    // Initial check immediately
+    this.checkPulse();
+  }
+
+  stopMonitoring() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+      logger.info('[Tether Engine] Monitoring stopped.');
+    }
+  }
+
+  async checkPulse() {
+    if (this.isChecking) return;
+    this.isChecking = true;
+
+    try {
+      const status = await getEvoWiFiStatus(this.rootDir);
+
+      const currentState = status.promptBridgeReachable ? 'online' : 'offline';
+      
+      if (this.lastState !== currentState) {
+        if (this.lastState !== 'unknown') {
+          logger.info(`[Tether Engine] State transition detected: ${this.lastState} -> ${currentState}`);
+        }
+        this.lastState = currentState;
+
+        const tether = getMegaTether();
+        if (tether) {
+          await tether.broadcast('tether_engine', 'network_status_change', {
+            previousState: this.lastState,
+            currentState,
+            status
+          });
+        }
+      }
+
+      if (currentState === 'offline') {
+        await this.handleOfflineState(status);
+      }
+    } catch (err) {
+      logger.error('[Tether Engine] Pulse check failed:', { error: err.message });
+    } finally {
+      this.isChecking = false;
+    }
+  }
+
+  async handleOfflineState(status) {
+    const tether = getMegaTether();
+    if (tether) {
+      await tether.broadcast('tether_engine', 'recovery_attempt', {
+        action: 'queue_all_tasks',
+        reason: 'Bridge is offline. Autonomous recovery shifting to offline queue.',
+        timestamp: new Date().toISOString()
+      });
+    }
+    logger.warn('[Tether Engine] Shifting to offline-queue mode. Receipts will be logged.');
+  }
+}
+
+// Singleton export
+let globalEngine = null;
+
+export function initializeAutonomousTetherEngine(rootDir = process.cwd()) {
+  if (!globalEngine) {
+    globalEngine = new AutonomousTetherEngine(rootDir);
+    globalEngine.startMonitoring();
+  }
+  return globalEngine;
+}
+```
+
+This implementation uses `winston` to handle all the logging in your `AutonomousTetherEngine` code. Make sure you have `winston` installed in your project by running `npm install winston`.

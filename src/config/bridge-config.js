@@ -38,9 +38,31 @@ export function buildBridgeUrl(path = '') {
 
 /**
  * Performs a fetch to the bridge with built-in safety, timeouts,
- * and structured error responses.
+ * structured error responses, and an Omni-Bridge Circuit Breaker.
  */
+let circuitState = 'CLOSED'; // CLOSED, OPEN, HALF_OPEN
+let failureCount = 0;
+let nextTryTime = 0;
+const FAILURE_THRESHOLD = 3;
+const RESET_TIMEOUT_MS = 15000;
+
 export async function safeFetchBridge(path, options = {}) {
+  // CIRCUIT BREAKER PRE-CHECK
+  if (circuitState === 'OPEN') {
+    if (Date.now() > nextTryTime) {
+      circuitState = 'HALF_OPEN';
+      console.warn(`[Omni-Bridge] Circuit Breaker HALF-OPEN. Testing connection to ${path}...`);
+    } else {
+      return {
+        ok: false,
+        status: 503,
+        data: null,
+        error: '[Circuit Breaker OPEN] Omni-Bridge is actively rejecting traffic to protect UI thread.',
+        truthState: 'DISCONNECTED'
+      };
+    }
+  }
+
   const { timeout = 8000, ...fetchOptions } = options;
   const url = buildBridgeUrl(path);
 
@@ -72,6 +94,21 @@ export async function safeFetchBridge(path, options = {}) {
       data = await response.text();
     }
 
+    if (!response.ok && response.status >= 500) {
+      failureCount++;
+      if (failureCount >= FAILURE_THRESHOLD && circuitState === 'CLOSED') {
+        circuitState = 'OPEN';
+        nextTryTime = Date.now() + RESET_TIMEOUT_MS;
+        console.error(`[Omni-Bridge] CIRCUIT BREAKER TRIPPED! 500 errors exceeded. Traffic halted for 15s.`);
+      }
+    } else if (response.ok) {
+      if (circuitState === 'HALF_OPEN' || failureCount > 0) {
+        circuitState = 'CLOSED';
+        failureCount = 0;
+        console.info(`[Omni-Bridge] Circuit Breaker CLOSED. Network restored.`);
+      }
+    }
+
     return {
       ok: response.ok,
       status: response.status,
@@ -80,6 +117,13 @@ export async function safeFetchBridge(path, options = {}) {
       truthState: data?.truth_label || 'UNVERIFIED'
     };
   } catch (err) {
+    failureCount++;
+    if (failureCount >= FAILURE_THRESHOLD && circuitState === 'CLOSED') {
+      circuitState = 'OPEN';
+      nextTryTime = Date.now() + RESET_TIMEOUT_MS;
+      console.error(`[Omni-Bridge] CIRCUIT BREAKER TRIPPED! Network timeouts exceeded. Traffic halted for 15s.`);
+    }
+
     return {
       ok: false,
       status: null,

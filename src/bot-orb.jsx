@@ -33,7 +33,7 @@ export default function BotOrb({ mode = 'IDLE', resonance = 0.99 }) {
           scale: mode === 'ACTIVE' ? 1.2 : 1,
           boxShadow: isPulsing ? "0 0 40px rgba(99, 102, 241, 0.4)" : "0 0 20px rgba(99, 102, 241, 0.2)"
         }}
-        className="w-32 h-32 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full relative z-10 flex items-center justify-center overflow-hidden"
+        className="w-32 h-32 bg-linear-to-br from-indigo-500 to-purple-600 rounded-full relative z-10 flex items-center justify-center overflow-hidden"
       >
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
         <div className="w-16 h-16 bg-white/20 rounded-full blur-2xl animate-pulse" />
@@ -46,13 +46,13 @@ export default function BotOrb({ mode = 'IDLE', resonance = 0.99 }) {
             initial={{ scale: 0.8, opacity: 0.5 }}
             animate={{ scale: 2, opacity: 0 }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="absolute w-32 h-32 border border-indigo-400/30 rounded-full"
+            className="absolute w-32 h-32 border-indigo-400/30 rounded-full"
           />
         )}
       </AnimatePresence>
 
       <div className="absolute -bottom-8 text-center w-full">
-        <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Sentience Stable</div>
+        <div className="text-[10px] font-black text-neon-cyan uppercase tracking-widest">Sentience Stable</div>
         <div className="text-[8px] text-slate-500 uppercase mt-1">Resonance {resonance}</div>
       </div>
     </div>
@@ -93,5 +93,4 @@ export const BotBus = {
   },
 };
 
-export const BOT_EMOJI = {};
-export const BOT_AVATARS = {};
+

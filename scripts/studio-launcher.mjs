@@ -24,29 +24,7 @@ ${c.cyan}${c.bold}==================================================${c.reset}
 // 23 Daemon Definitions
 const daemons = [
   { name: 'Vite',          cmd: 'npm', args: ['run', 'dev'],                color: c.cyan, group: 'Core' },
-  { name: 'Bridge',        cmd: 'npm', args: ['run', 'bridge'],             color: c.blue, group: 'Core' },
-  { name: 'Singularity',   cmd: 'npm', args: ['run', 'singularity'],        color: c.magenta, group: 'Core' },
-  { name: 'Crucible',      cmd: 'npm', args: ['run', 'crucible'],           color: c.red, group: 'Core' },
-  { name: 'Sentinel',      cmd: 'npm', args: ['run', 'sentinel:daemon'],    color: c.yellow, group: 'Core' },
-  { name: 'Convergence',   cmd: 'npm', args: ['run', 'convergence:daemon'], color: c.green, group: 'Core' },
-  { name: 'Evolution',     cmd: 'node', args: ['scripts/evolution-daemon.mjs'], color: c.magenta, group: 'Evo' },
-  { name: 'AI Daemon',     cmd: 'npm', args: ['run', 'ai:daemon'],          color: c.cyan, group: 'Evo' },
-  { name: 'Audit',         cmd: 'npm', args: ['run', 'audit:platform:daemon'], color: c.yellow, group: 'Audit' },
-  { name: 'WD:Frontend',   cmd: 'npm', args: ['run', 'watchdog:frontend'],  color: c.white, group: 'Watchdog' },
-  { name: 'WD:Middle',     cmd: 'npm', args: ['run', 'watchdog:middleend'], color: c.white, group: 'Watchdog' },
-  { name: 'WD:Bridge',     cmd: 'npm', args: ['run', 'watchdog:bridgeend'], color: c.white, group: 'Watchdog' },
-  { name: 'WD:Backend',    cmd: 'npm', args: ['run', 'watchdog:backend'],   color: c.white, group: 'Watchdog' },
-  { name: 'WD:API',        cmd: 'npm', args: ['run', 'watchdog:api-fallback'], color: c.white, group: 'Watchdog' },
-  { name: 'WD:UIMatrix',   cmd: 'npm', args: ['run', 'watchdog:ui-matrix'], color: c.white, group: 'Watchdog' },
-  { name: 'Self-Invent',   cmd: 'npm', args: ['run', 'self:invent'],        color: c.green, group: 'Evo' },
-  { name: 'OmniRouter',    cmd: 'npm', args: ['run', 'omni:orchestrator'],  color: c.blue, group: 'Core' },
-  { name: 'PluginInst.', cmd: 'node', args: ['scripts/plugin-installer-daemon.mjs'], color: c.cyan, group: 'Evo' },
-  { name: 'Antigravity',   cmd: 'npm', args: ['run', 'antigravity'],        color: c.cyan, group: 'Core' },
-  { name: 'MarketBrain',   cmd: 'npm', args: ['run', 'marketing:daemon'],   color: c.magenta, group: 'Market' },
-  { name: 'SeedRound',     cmd: 'npm', args: ['run', 'seed:daemon'],        color: c.green, group: 'Market' },
-  { name: 'Mobile',        cmd: 'npm', args: ['run', 'mobile:daemon'],      color: c.blue, group: 'Evo' },
-  { name: 'Ingestion',     cmd: 'npm', args: ['run', 'ingestion:daemon'],   color: c.yellow, group: 'Evo' },
-  { name: 'Sing.Builder',  cmd: 'npm', args: ['run', 'singularity:build:daemon'], color: c.magenta, group: 'Core' }
+  { name: 'Bridge',        cmd: 'npm', args: ['run', 'bridge'],             color: c.blue, group: 'Core' }
 ];
 
 const processes = new Map();
@@ -124,12 +102,10 @@ function spawnDaemon(daemon) {
 
 // Staggered Boot Sequence
 const isLite = process.argv.includes('--lite');
-const activeDaemons = isLite 
-  ? daemons.filter(d => ['Vite', 'Bridge', 'OmniRouter', 'Singularity'].includes(d.name))
-  : daemons;
+const activeDaemons = daemons;
 
 if (isLite) {
-  console.log(`${c.yellow}${c.bold}LITE MODE ACTIVE: Skipping heavy background daemons to conserve IDE resources.${c.reset}`);
+  console.log(`${c.yellow}${c.bold}LITE MODE ACTIVE (Deprecated).${c.reset}`);
 }
 
 let delay = 0;

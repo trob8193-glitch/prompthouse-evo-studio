@@ -88,7 +88,10 @@ const COMMAND_CATALOG = [
   { id: 'cost', label: 'Cost Firewall', command: 'npm run cost', session: 'main', description: 'Triggers Cost Firewall v2 summary.', tags: ['cost', 'metrics', 'firewall'] },
   { id: 'maturity-check', label: 'Maturity Check', command: 'npm run maturity:check', session: 'main', description: 'Evaluates studio maturity score.', tags: ['maturity', 'score', 'iq'] },
   { id: 'layer-ops', label: 'Layer Ops', command: 'npm run layer:ops', session: 'main', description: 'Verifies health of SQLite and vector memories.', tags: ['layer', 'ops', 'database'] },
-  { id: 'egit-status', label: 'E-Git Status', command: 'npm run egit:status', session: 'main', description: 'Hooks into evolutionary git manager to check file states.', tags: ['egit', 'git', 'status'] }
+  { id: 'egit-status', label: 'E-Git Status', command: 'npm run egit:status', session: 'main', description: 'Hooks into evolutionary git manager to check file states.', tags: ['egit', 'git', 'status'] },
+  { id: 'kernel-status', label: 'Kernel Status', command: 'evo kernel status', session: 'main', description: 'Polls the ExecutionKernelV2 state machine.', tags: ['kernel', 'status', 'execution'] },
+  { id: 'failover-trigger', label: 'Trigger Failover', command: 'evo failover trigger', session: 'main', description: 'Simulates primary adapter failure to test Sovereign Resilience.', tags: ['failover', 'resilience', 'test'] },
+  { id: 'evo-train', label: 'Evo LLM Training', command: 'evo train', session: 'main', description: 'Triggers the Evo LLM orchestrator to fine-tune local models.', tags: ['train', 'llm', 'fine-tune'] }
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -104,9 +107,11 @@ const shellStyles = `
 }
 
 @keyframes evoTitleShimmer {
-  0%   { background-position: -200% center; text-shadow: 0 0 10px rgba(0,240,255,0.3); }
-  50%  { text-shadow: 0 0 20px rgba(236,72,153,0.6); }
-  100% { background-position: 200% center; text-shadow: 0 0 10px rgba(0,240,255,0.3); }
+  0%   { background-position: -200% center; text-shadow: 0 0 10px var(--glow-c1); }
+  25%  { text-shadow: 0 0 15px var(--glow-c2); }
+  50%  { background-position: 0% center; text-shadow: 0 0 20px var(--glow-c3); }
+  75%  { text-shadow: 0 0 15px var(--glow-c4); }
+  100% { background-position: 200% center; text-shadow: 0 0 10px var(--glow-c1); }
 }
 
 @keyframes evoPulseOrb {
@@ -140,12 +145,12 @@ const shellStyles = `
 }
 
 .evo-shell-title {
-  background: linear-gradient(90deg, #818cf8, #00f0ff, #ec4899, #10b981, #818cf8);
+  background: linear-gradient(90deg, var(--glow-c1), var(--glow-c2), var(--glow-c3), var(--glow-c4), var(--glow-c1));
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: evoTitleShimmer 4s linear infinite;
+  animation: evoTitleShimmer var(--glow-speed, 4s) linear infinite;
 }
 
 .evo-pulse-orb {
@@ -224,7 +229,7 @@ const shellStyles = `
 }
 `;
 
-export function Terminal() {
+export function Terminal({ sidebarMode = false }) {
   const { 
     terminalOpen, 
     setTerminalOpen, 
@@ -240,8 +245,23 @@ export function Terminal() {
     addBondedNode,
     bondedNodes,
     metrics,
-    sendChatMessage
+    sendChatMessage,
+    bridgeStatus,
+    singularityActive,
+    globalTheme
   } = useSovereignStore();
+  
+  const ideTheme = globalTheme?.ide || 'alpha';
+
+  const getAuraStyle = () => {
+    if (singularityActive) {
+      return { filter: 'drop-shadow(0 0 10px currentColor)', animation: 'pulse 2s infinite' };
+    }
+    if (bridgeStatus === 'error' || bridgeStatus === 'disconnected') {
+      return { filter: 'drop-shadow(0 0 10px #fb7185)', animation: 'pulse 3s infinite' };
+    }
+    return { filter: 'drop-shadow(0 0 10px currentColor)', animation: 'pulse 4s infinite' };
+  };
 
   const themeConfigs = {
     evo: { accent: '#818cf8', logBg: 'rgba(5,5,12,0.6)' },
@@ -382,14 +402,15 @@ export function Terminal() {
     <>
       <style>{shellStyles}</style>
       <div 
-        className={`evo-shell-container w-full ${isFullscreen ? 'flex-1' : ''} flex flex-col z-40 shrink-0 relative overflow-hidden transition-all duration-500 ease-in-out`}
+        className={`evo-shell-container w-full ${isFullscreen || sidebarMode ? 'flex-1' : ''} flex-col gap-4 z-40 shrink-0 relative overflow-hidden transition-all duration-500 ease-in-out`}
         style={{ 
-          background: 'linear-gradient(180deg, rgba(5,5,12,0.98), rgba(2,2,8,0.99))',
-          height: isFullscreen ? '100%' : (terminalOpen ? 340 : 40),
-          minHeight: isFullscreen ? '100%' : (terminalOpen ? 340 : 40),
+          background: ideTheme === 'zeta' ? '#fff' : ideTheme === 'gamma' ? '#1a0033' : ideTheme === 'theta' ? 'rgba(0,0,0,0.8)' : 'linear-gradient(180deg, rgba(5,5,12,0.98), rgba(2,2,8,0.99))',
+          height: (isFullscreen || sidebarMode) ? '100%' : (terminalOpen ? 340 : 40),
+          minHeight: (isFullscreen || sidebarMode) ? '100%' : (terminalOpen ? 340 : 40),
           borderRadius: 0,
-          borderTop: '1px solid rgba(0,240,255,0.4)',
-          boxShadow: terminalOpen ? '0 -10px 30px rgba(0,0,0,0.5)' : 'none'
+          borderTop: ideTheme === 'zeta' ? '4px solid #000' : ideTheme === 'gamma' ? '2px solid #ff00ff' : '1px solid rgba(0,240,255,0.4)',
+          boxShadow: terminalOpen ? (ideTheme === 'gamma' ? '0 -10px 30px rgba(255,0,255,0.5)' : '0 -10px 30px rgba(0,0,0,0.5)') : 'none',
+          filter: ideTheme === 'zeta' ? 'grayscale(100%)' : 'none'
         }}
       >
         {/* Minimized Overlay - Only visible when collapsed */}
@@ -403,10 +424,10 @@ export function Terminal() {
           <span className="evo-shell-title" style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase' }}>
             EvoShell Master Control
           </span>
-          <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Radio size={10} style={{ color: '#10b981' }} />
-            <span style={{ fontSize: 8, color: '#475569', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase' }}>STANDBY</span>
-            <ChevronUp size={14} className="text-[#475569] group-hover:text-[#818cf8] transition-colors" />
+          <span className="evo-icon-glow" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Radio size={10} style={{ color: 'inherit' }} />
+            <span style={{ fontSize: 8, color: 'inherit', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase' }}>STANDBY</span>
+            <ChevronUp size={14} style={{ color: 'inherit' }} />
           </span>
         </button>
 
@@ -432,7 +453,7 @@ export function Terminal() {
             </div>
             
             {/* Pane Tabs */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 2, background: 'rgba(0,0,0,0.4)', padding: 3, borderRadius: 6, border: '1px solid rgba(255,255,255,0.04)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, paddingLeft: 10 }}>
               {['Terminal', 'Output', 'Debug Console', 'Ports'].map((pane) => {
                 const paneId = pane.toLowerCase().split(' ')[0];
                 return (
@@ -440,11 +461,11 @@ export function Terminal() {
                     key={pane}
                     onClick={() => setActivePane(paneId)}
                     style={{
-                      padding: '4px 10px', borderRadius: 4, fontSize: 10, fontWeight: 700,
-                      border: 'none', cursor: 'pointer', transition: 'all 0.2s',
-                      background: activePane === paneId ? tc.accent : 'transparent',
-                      color: activePane === paneId ? '#000' : '#94a3b8',
-                      boxShadow: activePane === paneId ? `0 0 12px ${tc.accent}40` : 'none'
+                      padding: '4px 0', fontSize: 10, fontWeight: 700,
+                      border: 'none', borderBottom: activePane === paneId ? `2px solid ${tc.accent}` : '2px solid transparent',
+                      cursor: 'pointer', transition: 'all 0.2s',
+                      background: 'transparent',
+                      color: activePane === paneId ? '#fff' : '#94a3b8',
                     }}
                   >
                     {pane}
@@ -480,133 +501,31 @@ export function Terminal() {
             <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.06)' }} />
 
             {/* Action Buttons */}
-            {[
-              { icon: Zap, title: 'Debug with AI', onClick: debugWithAI, hoverColor: '#ec4899' },
-              { icon: Copy, title: 'Copy Output', onClick: copyToClipboard },
-              { icon: Download, title: 'Download Logs', onClick: downloadLogs },
-              { icon: Trash2, title: 'Clear Session', onClick: () => clearTerminal(activeTerminalSession), hoverColor: '#f43f5e' },
-              { icon: isFullscreen ? Minimize2 : Maximize2, title: 'Fullscreen', onClick: () => setIsFullscreen(!isFullscreen) },
-              { icon: ChevronDown, title: 'Minimize', onClick: () => setTerminalOpen(false) }
-            ].map((btn, i) => (
-              <button
-                key={i}
-                onClick={btn.onClick}
-                title={btn.title}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#475569', transition: 'color 0.15s', display: 'flex' }}
-                onMouseEnter={e => e.currentTarget.style.color = btn.hoverColor || tc.accent}
-                onMouseLeave={e => e.currentTarget.style.color = '#475569'}
-              >
-                <btn.icon size={14} />
-              </button>
-            ))}
+            <div className="evo-icon-glow" style={{ display: 'flex', gap: 12 }}>
+              {[
+                { icon: Zap, title: 'Debug with AI', onClick: debugWithAI },
+                { icon: Copy, title: 'Copy Output', onClick: copyToClipboard },
+                { icon: Download, title: 'Download Logs', onClick: downloadLogs },
+                { icon: Trash2, title: 'Clear Session', onClick: () => clearTerminal(activeTerminalSession) },
+                { icon: isFullscreen ? Minimize2 : Maximize2, title: 'Fullscreen', onClick: () => setIsFullscreen(!isFullscreen) },
+                { icon: ChevronDown, title: 'Minimize', onClick: () => setTerminalOpen(false) }
+              ].map((btn, i) => (
+                <button
+                  key={i}
+                  onClick={btn.onClick}
+                  title={btn.title}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', transition: 'color 0.15s', display: 'flex' }}
+                >
+                  <btn.icon size={14} />
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* ══ PANE CONTENT ══ */}
         {activePane === 'terminal' && (
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-            {/* Session Tabs */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(0,0,0,0.25)', padding: '6px 20px', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-              <span style={{ fontSize: 8, fontWeight: 800, color: '#475569', letterSpacing: '0.1em', textTransform: 'uppercase', marginRight: 8 }}>SESSIONS:</span>
-              {Object.keys(terminalSessions).map((session) => (
-                <button
-                  key={session}
-                  onClick={() => setActiveTerminalSession(session)}
-                  style={{
-                    padding: '4px 10px', borderRadius: 4, fontSize: 8, fontWeight: 800,
-                    letterSpacing: '0.15em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    background: activeTerminalSession === session ? tc.accent : 'rgba(0,0,0,0.4)',
-                    color: activeTerminalSession === session ? '#000' : '#475569',
-                    boxShadow: activeTerminalSession === session ? `0 0 12px ${tc.accent}40` : 'none'
-                  }}
-                >
-                  {session}
-                </button>
-              ))}
-            </div>
-
-            {/* ══ STATS BAR ══ */}
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 10, padding: '4px 20px',
-              background: 'rgba(0,0,0,0.25)',
-              borderBottom: '1px solid rgba(255,255,255,0.03)'
-            }}>
-              {[
-                { icon: Activity, color: '#818cf8', label: 'Latency', value: metrics?.latency ? `${parseFloat(metrics.latency).toFixed(0)}ms` : '4ms' },
-                { icon: Shield, color: '#10b981', label: 'Bonding', value: bondedNodes.length > 0 ? `${bondedNodes.length} Nodes` : 'Standalone' },
-                { icon: Zap, color: '#f59e0b', label: 'Power', value: metrics ? 'Optimal' : 'Standby' },
-                { icon: Layers, color: '#818cf8', label: 'Session', value: activeTerminalSession.toUpperCase() },
-                { icon: Radio, color: '#10b981', label: 'Bridge', value: 'Connected' }
-              ].map((stat, i) => (
-                <div key={i} className="evo-stat-badge" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <stat.icon size={9} style={{ color: stat.color }} />
-                  <span style={{ fontSize: 7, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#475569' }}>
-                    {stat.label}:
-                  </span>
-                  <span style={{ fontSize: 7, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#64748b' }}>
-                    {stat.value}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* ══ COMMAND DECK ══ */}
-            <div style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', background: 'rgba(0,0,0,0.2)' }}>
-              <div style={{ padding: '8px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <button
-                  onClick={() => setCatalogOpen(v => !v)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',
-                    borderRadius: 6, fontSize: 9, fontWeight: 900, letterSpacing: '0.15em', textTransform: 'uppercase',
-                    border: `1px solid ${tc.accent}30`, color: tc.accent, background: 'transparent', cursor: 'pointer',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.background = `${tc.accent}15`; e.currentTarget.style.borderColor = `${tc.accent}60`; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = `${tc.accent}30`; }}
-                >
-                  <Command size={11} />
-                  Command Deck {filteredCommands.length}/{COMMAND_CATALOG.length}
-                  {catalogOpen ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
-                </button>
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.3)' }}>
-                  <Search size={11} style={{ color: '#334155' }} />
-                  <input
-                    type="text"
-                    value={catalogFilter}
-                    onChange={e => setCatalogFilter(e.target.value)}
-                    placeholder="Filter commands..."
-                    aria-label="Filter command catalog"
-                    style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 10, color: '#cbd5e1', fontFamily: 'inherit' }}
-                  />
-                </div>
-              </div>
-
-              {catalogOpen && (
-                <div style={{ padding: '0 20px 10px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 6, maxHeight: 180, overflowY: 'auto' }}>
-                  {filteredCommands.map(item => (
-                    <button
-                      key={item.id}
-                      onClick={() => runCatalogCommand(item)}
-                      disabled={executing}
-                      className="evo-cmd-card"
-                      style={executing ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
-                    >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: 9, color: tc.accent, fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{item.label}</span>
-                        <span style={{ fontSize: 7, color: '#334155', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{item.session}</span>
-                      </div>
-                      <div style={{ marginTop: 4, fontSize: 9, color: '#475569', lineHeight: 1.3 }}>{item.description}</div>
-                      <div style={{ marginTop: 4, fontFamily: 'monospace', fontSize: 9, color: '#34d399', opacity: 0.8 }}>{item.command}</div>
-                    </button>
-                  ))}
-                  {filteredCommands.length === 0 && (
-                    <div style={{ gridColumn: '1/-1', fontSize: 10, color: '#334155', padding: '12px 0' }}>No commands match this filter.</div>
-                  )}
-                </div>
-              )}
-            </div>
-
             {/* ══ TERMINAL OUTPUT ══ */}
             <div 
               ref={scrollRef}

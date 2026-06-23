@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Brain, Zap, Shield, Globe, Activity, 
   Layers, Lock, Database, Terminal, 
-  CheckCircle, AlertTriangle, TrendingUp, Search
+  CheckCircle, AlertTriangle, TrendingUp, Search, GitMerge, ShieldAlert
 } from 'lucide-react';
 import { Card, Button, StatusBadge, IconButton } from './components/primitives.jsx';
 
@@ -44,7 +44,7 @@ export function VectorMemoryView() {
 
   return (
     <div className="space-y-8">
-      <Card className="p-10 bg-gradient-to-br from-indigo-950/20 to-black/40">
+      <Card className="p-10 bg-linear-to-br from-indigo-950/20 to-black/40">
         <div className="flex items-center gap-4 mb-8">
           <div className="p-4 bg-indigo-500/10 rounded-2xl text-indigo-400">
             <Brain size={32} />
@@ -337,28 +337,9 @@ export function TruthAuditorView() {
     const runAudit = async () => {
       setLoading(true);
       try {
-        const sampleLedger = [
-          { id: '1', asset: 'TruthGate.js', reference: 'origin' },
-          { id: '2', asset: 'engine.js', reference: 'local' },
-          { id: '3', asset: 'ghost.js', reference: '' } // Should trigger hallucination detection
-        ];
-        
-        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            module: 'TruthAuditor',
-            action: 'audit',
-            payload: { ledger: sampleLedger }
-          })
-        });
-        
+        const response = await fetch(`${BRIDGE_URL}/api/audit/nuclear-truth`);
         const data = await response.json();
-        if (data.success) {
-          setAuditResult(data.result);
-        } else {
-          Log.error('Audit failed:', data.error);
-        }
+        setAuditResult(data);
       } catch (e) {
         Log.error('Audit failed:', e);
       } finally {
@@ -368,46 +349,82 @@ export function TruthAuditorView() {
     runAudit();
   }, []);
 
+  const results = auditResult?.results || [];
+
   return (
-    <div className="space-y-8">
-      <Card className="p-0 overflow-hidden">
-        <div className="p-8 border-b border-slate-800 bg-slate-900/20 flex justify-between items-center">
-          <h3 className="text-xs font-black text-white uppercase tracking-widest">Truth Verification Registry</h3>
-          {loading ? (
-            <StatusBadge status="executing" label="AUDITING..." />
-          ) : (
-            <StatusBadge status={auditResult?.integrity ? "verified" : "error"} label={auditResult?.integrity ? "AUDIT_PASSED" : "AUDIT_FAILED"} />
-          )}
+    <div className="space-y-8 animate-in fade-in duration-500">
+      <Card className="p-0 overflow-hidden bg-black/60 backdrop-blur-3xl border border-white/10 shadow-[0_0_50px_rgba(0,240,255,0.05)]">
+        <div className="p-8 border-b border-white/10 bg-linear-to-r from-cyan-950/30 to-indigo-950/30 flex justify-between items-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay" />
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="p-3 bg-cyan-500/10 rounded-2xl text-cyan-400 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+              <Shield size={24} className={loading ? "animate-pulse" : ""} />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">Nuclear Truth Registry</h3>
+              <p className="text-[10px] text-cyan-500/70 uppercase tracking-widest font-mono">Structural Integrity Audit</p>
+            </div>
+          </div>
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="text-right mr-4">
+              <div className="text-xs text-white/50 uppercase font-bold tracking-widest">Score</div>
+              <div className={`text-2xl font-black ${auditResult?.integrity === 100 ? 'text-emerald-400 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]' : 'text-amber-400'}`}>
+                {loading ? '...' : `${auditResult?.integrity || 0}%`}
+              </div>
+            </div>
+            {loading ? (
+              <StatusBadge status="executing" label="SCANNING MATRIX..." />
+            ) : (
+              <StatusBadge status={auditResult?.integrity === 100 ? "verified" : "error"} label={auditResult?.integrity === 100 ? "AUDIT_PASSED" : "DRIFT_DETECTED"} />
+            )}
+          </div>
         </div>
-        <div className="p-8">
-          <table className="w-full text-left">
+        
+        <div className="p-8 relative">
+          {loading && (
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-linear-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_10px_rgba(0,240,255,0.8)] animate-[scan_2s_ease-in-out_infinite]" />
+          )}
+          <table className="w-full text-left border-collapse relative z-10">
             <thead>
-              <tr className="text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-800">
-                <th className="pb-4">Logic Asset</th>
-                <th className="pb-4">Status</th>
-                <th className="pb-4">Integrity</th>
+              <tr className="text-[10px] font-black text-cyan-500/50 uppercase tracking-[0.2em] border-b border-white/5">
+                <th className="pb-4 font-mono">Logic Asset</th>
+                <th className="pb-4 font-mono">Status</th>
+                <th className="pb-4 font-mono text-right">Integrity Gate</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/50">
-              <tr className="group hover:bg-white/5 transition-all">
-                <td className="py-4 font-mono text-xs text-white">TruthGate.js</td>
-                <td className="py-4"><StatusBadge status="verified" label="SEALED" /></td>
-                <td className="py-4 text-xs text-emerald-400 font-bold">Passed</td>
-              </tr>
-               <tr className="group hover:bg-white/5 transition-all">
-                <td className="py-4 font-mono text-xs text-white">engine.js</td>
-                <td className="py-4"><StatusBadge status="verified" label="SIGNED" /></td>
-                <td className="py-4 text-xs text-emerald-400 font-bold">Passed</td>
-              </tr>
-              {!loading && auditResult?.hallucinations && (
-                <tr className="group hover:bg-white/5 transition-all">
-                  <td className="py-4 font-mono text-xs text-red-400">ghost.js</td>
-                  <td className="py-4"><StatusBadge status="error" label="HALLUCINATION" /></td>
-                  <td className="py-4 text-xs text-red-400 font-bold">Failed</td>
-                </tr>
+            <tbody className="divide-y divide-white/5">
+              {results.length === 0 && !loading && (
+                 <tr><td colSpan="3" className="py-8 text-center text-white/40 text-xs font-mono uppercase tracking-widest">No assets scanned</td></tr>
               )}
+              {loading && results.length === 0 && (
+                 <tr><td colSpan="3" className="py-8 text-center text-cyan-500/50 text-xs font-mono uppercase tracking-widest animate-pulse">Initializing deep scan...</td></tr>
+              )}
+              {results.map((item, i) => (
+                <tr key={i} className="group hover:bg-white/2 transition-colors duration-300">
+                  <td className="py-4 font-mono text-xs text-white/90 group-hover:text-cyan-300 transition-colors">{item.module}</td>
+                  <td className="py-4">
+                    <StatusBadge 
+                      status={item.truth_state === 'VERIFIED' ? 'verified' : 'error'} 
+                      label={item.truth_state} 
+                    />
+                  </td>
+                  <td className="py-4 text-xs font-bold text-right">
+                    <span className={item.status === 'PRESENT' ? 'text-emerald-400' : 'text-red-400'}>
+                      {item.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
+          
+          {!loading && auditResult?.integrity < 100 && (
+            <div className="mt-8 flex justify-end">
+              <button className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 text-red-400 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(239,68,68,0.1)] active:scale-95 flex items-center gap-2">
+                <Zap size={14} /> Resolve Anomalies
+              </button>
+            </div>
+          )}
         </div>
       </Card>
     </div>
@@ -497,7 +514,7 @@ export function CommandDeckView() {
 
 export function OmegaRealityView() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[500px] bg-gradient-to-br from-black via-indigo-950/20 to-black rounded-[40px] border border-white/10 shadow-2xl overflow-hidden relative">
+    <div className="flex flex-col items-center justify-center min-h-[500px] bg-linear-to-br from-black via-indigo-950/20 to-black rounded-[40px] border border-white/10 shadow-2xl overflow-hidden relative">
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
       <div className="relative z-10 text-center space-y-8">
         <div className="text-9xl text-white font-black drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">∞</div>
@@ -514,12 +531,13 @@ export function OmegaRealityView() {
 export function MergeCourtView() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [overriding, setOverriding] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${BRIDGE}/api/intelligence/execute`, {
+        const response = await fetch(`${BRIDGE_URL}/api/intelligence/execute`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -543,31 +561,94 @@ export function MergeCourtView() {
 
   const conflicts = data?.conflicts || [];
 
+  const handleOverride = async (conflictId, selectedRoute) => {
+    setOverriding(true);
+    // Simulate API call for override
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setOverriding(false);
+  };
+
   return (
-    <Card className="p-8 border-cyan-500/30 bg-cyan-500/5">
-      <div className="flex items-center gap-4 mb-6">
-        <GitMerge className="text-cyan-400" size={28} />
-        <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Merge Court</h3>
+    <Card className="p-0 overflow-hidden bg-black/60 backdrop-blur-3xl border border-white/10 shadow-[0_0_50px_rgba(0,240,255,0.05)] animate-in fade-in duration-500">
+      <div className="p-8 border-b border-white/10 bg-linear-to-r from-cyan-950/30 to-indigo-950/30 flex justify-between items-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay" />
+        <div className="relative z-10 flex items-center gap-4">
+          <div className="p-3 bg-cyan-500/10 rounded-2xl text-cyan-400 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <GitMerge size={24} className={loading ? "animate-pulse" : ""} />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-white uppercase tracking-tighter drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">Merge Court</h3>
+            <p className="text-[10px] text-cyan-500/70 uppercase tracking-widest font-mono">Autonomous Conflict Resolution</p>
+          </div>
+        </div>
+        <div className="relative z-10 flex items-center gap-4">
+           {loading ? (
+             <StatusBadge status="executing" label="ANALYZING..." />
+           ) : conflicts.length === 0 ? (
+             <StatusBadge status="verified" label="ZERO_CONFLICTS" />
+           ) : (
+             <StatusBadge status="error" label={`${conflicts.length} DISPUTES_ACTIVE`} />
+           )}
+        </div>
       </div>
-      <p className="text-slate-500 text-sm mb-6 font-mono">Autonomous conflict resolution for multi-agent logic branches.</p>
-      {loading ? (
-        <div className="p-12 border-2 border-dashed border-cyan-500/10 rounded-3xl text-center text-slate-600 font-mono text-[10px] uppercase tracking-widest">
-          Analyzing Conflicts...
-        </div>
-      ) : conflicts.length === 0 ? (
-        <div className="p-12 border-2 border-dashed border-cyan-500/10 rounded-3xl text-center text-slate-600 font-mono text-[10px] uppercase tracking-widest">
-          {data?.message || 'Zero Conflicts Detected in Active Reality'}
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {conflicts.map((conflict, index) => (
-            <div key={index} className="p-4 bg-black/30 border border-red-500/30 rounded-lg">
-              <div className="text-xs font-bold text-white">{conflict.file}</div>
-              <div className="text-[10px] text-slate-500 font-mono">{conflict.reason}</div>
-            </div>
-          ))}
-        </div>
-      )}
+      
+      <div className="p-8 relative">
+        {loading ? (
+          <div className="p-12 border-2 border-dashed border-cyan-500/10 rounded-3xl text-center text-cyan-500/50 font-mono text-[10px] uppercase tracking-widest animate-pulse">
+            Analyzing QuadBrain Conflicts...
+          </div>
+        ) : conflicts.length === 0 ? (
+          <div className="p-12 border-2 border-dashed border-cyan-500/10 rounded-3xl text-center text-emerald-400/50 font-mono text-[10px] uppercase tracking-widest">
+            {data?.message || 'Zero Conflicts Detected in Active Reality'}
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {conflicts.map((conflict, index) => (
+              <div key={index} className="p-6 bg-black/40 border border-white/10 rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                <div className="flex justify-between items-start mb-4 border-b border-white/5 pb-4">
+                   <div>
+                     <div className="text-sm font-bold text-white mb-1">{conflict.file}</div>
+                     <div className="text-[10px] text-red-400 font-mono tracking-widest uppercase bg-red-400/10 px-2 py-1 rounded inline-block">{conflict.reason || 'Logic Deviation Detected'}</div>
+                   </div>
+                   <div className="text-right">
+                     <div className="text-[10px] text-white/50 uppercase tracking-widest">Arbiter Confidence</div>
+                     <div className={`text-lg font-black ${conflict.confidence > 0.8 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                        {Math.round((conflict.confidence || 0) * 100)}%
+                     </div>
+                   </div>
+                </div>
+                
+                <div className="mb-4">
+                  <div className="text-[10px] text-white/50 uppercase tracking-widest mb-2 font-mono">Proposed Resolution</div>
+                  <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-xs text-white/80 font-mono leading-relaxed whitespace-pre-wrap">
+                    {conflict.merged_content || conflict.resolution}
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center mt-6 pt-4 border-t border-white/5">
+                  <div className="text-[10px] text-slate-500 uppercase tracking-widest">Manual Override Required?</div>
+                  <div className="flex gap-3">
+                    <button 
+                      onClick={() => handleOverride(conflict.id, 'arbiter')}
+                      disabled={overriding}
+                      className="px-6 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
+                    >
+                      Accept Arbiter
+                    </button>
+                    <button 
+                      onClick={() => handleOverride(conflict.id, 'founder')}
+                      disabled={overriding}
+                      className="px-6 py-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-500/50 text-amber-400 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
+                    >
+                      Founder Override
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </Card>
   );
 }
@@ -667,7 +748,7 @@ export function PromptGenomeView() {
   const drift = data?.drift || 0;
 
   return (
-    <Card className="p-8 bg-gradient-to-br from-indigo-950/20 to-black/40">
+    <Card className="p-8 bg-linear-to-br from-indigo-950/20 to-black/40">
       <div className="flex items-center gap-4 mb-6">
         <Database className="text-indigo-400" size={28} />
         <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Prompt Genome</h3>
@@ -837,6 +918,4 @@ const MissionPill = ({ label, status }) => (
   </div>
 );
 
-// Icon Fallbacks (if missing from lucide-react imports)
-function GitMerge(props) { return <Activity {...props} />; }
-function ShieldAlert(props) { return <Shield {...props} />; }
+// Icon Fallbacks removed — GitMerge and ShieldAlert are imported from lucide-react

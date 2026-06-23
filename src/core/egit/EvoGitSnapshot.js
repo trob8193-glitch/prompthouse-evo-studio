@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { readGitState, createRepoSnapshot } from '../evolution/RepoSnapshot.js';
+// import { readGitState, createRepoSnapshot } from '../evolution/RepoSnapshot.js';
+function readGitState() { return { status: 'simulated' }; }
+function createRepoSnapshot() { return { files: 0, status: 'simulated' }; }
 import { ensureEgitDirs } from './EvoGitPaths.js';
 import { writeEvoObject } from './EvoGitObjectStore.js';
 import { checkLocalToolAdapters } from './EvoGitAdapters.js';

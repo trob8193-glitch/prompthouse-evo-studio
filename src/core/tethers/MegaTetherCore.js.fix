@@ -1,0 +1,113 @@
+```javascript
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import { initializeAutonomousTetherEngine } from './AutonomousTetherEngine.js';
+import winston from 'winston';
+
+/**
+ * MEGA TETHER CORE
+ * Binds all bridges, daemons, signals, and app intelligence layers together.
+ */
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(({ timestamp, level, message }) => {
+      return `${timestamp} [${level}]: ${message}`;
+    })
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'logs/megather.log' })
+  ]
+});
+
+export class MegaTetherCore {
+  constructor(db, intelligenceCore) {
+    this.db = db;
+    this.intelligenceCore = intelligenceCore;
+    this.tethers = new Map();
+    this.outboxDir = path.join(process.cwd(), '.prompthouse-data', 'tethers');
+    if (!fs.existsSync(this.outboxDir)) {
+      fs.mkdirSync(this.outboxDir, { recursive: true });
+    }
+  }
+
+  registerTether(name, handler) {
+    this.tethers.set(name, handler);
+    logger.info(`[Mega Tether] Registered tether: ${name}`);
+  }
+
+  async broadcast(source, type, payload) {
+    const event = {
+      id: crypto.randomUUID(),
+      source,
+      type,
+      payload,
+      timestamp: new Date().toISOString()
+    };
+
+    // Store in global tether outbox
+    const eventFile = path.join(this.outboxDir, `tether_event_${event.id}.json`);
+    fs.writeFileSync(eventFile, JSON.stringify(event, null, 2));
+
+    // Also forward to Work Memory if it's an actionable UI or chat event
+    if (type.includes('ui-action') || type.includes('signal') || type.includes('chat')) {
+      this.ingestIntoWorkMemory(event);
+    }
+
+    // Pass through to all registered listeners
+    for (const [name, handler] of this.tethers.entries()) {
+      try {
+        await handler(event);
+      } catch (e) {
+        logger.error(`[Mega Tether] Error in tether ${name}: ${e.message}`);
+      }
+    }
+
+    return event.id;
+  }
+
+  ingestIntoWorkMemory(event) {
+    try {
+      // Direct integration with Evo Work Memory
+      const workMemoryEventsFile = path.join(process.cwd(), '.evo-llm', 'work-memory', 'events.jsonl');
+      const workDir = path.dirname(workMemoryEventsFile);
+      if (!fs.existsSync(workDir)) fs.mkdirSync(workDir, { recursive: true });
+      
+      const memoryEvent = {
+        id: event.id,
+        sourceType: event.type,
+        timestamp: event.timestamp,
+        rawEvent: event
+      };
+      
+      fs.writeFileSync(workMemoryEventsFile, JSON.stringify(memoryEvent) + '\n', { flag: 'a' });
+    } catch (err) {
+      logger.error(`[Mega Tether] Failed to ingest into Work Memory: ${err.message}`);
+    }
+  }
+}
+
+let globalTetherCore = null;
+
+export function initializeMegaTether(db, intelligenceCore) {
+  if (!globalTetherCore) {
+    globalTetherCore = new MegaTetherCore(db, intelligenceCore);
+    logger.info('[Mega Tether] Core initialized.');
+    
+    // Start autonomous monitoring loop
+    // initializeAutonomousTetherEngine(process.cwd());
+  }
+  return globalTetherCore;
+}
+
+export function getMegaTether() {
+  if (!globalTetherCore) {
+    throw new Error('[Mega Tether] Core not initialized. Call initializeMegaTether first.');
+  }
+  return globalTetherCore;
+}
+```

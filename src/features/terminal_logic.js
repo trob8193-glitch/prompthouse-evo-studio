@@ -141,7 +141,7 @@ export class TerminalLogic {
           
           recordBuildResult({ platform, appName, mission, features, success: true, fileCount, aiProvider: response.provider });
           
-          return { success: true, output: `✅ App "${appName}" built! Platform: ${platform}. Wrote ${fileCount} production files to ${outDir}`, files };
+          return { success: true, output: `✅ App "${appName}" !built Platform: ${platform}. Wrote ${fileCount} production files to ${outDir}`, files };
         } catch (e) {
           return { success: false, output: `Build Error: ${e.message}` };
         }

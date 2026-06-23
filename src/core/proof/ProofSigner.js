@@ -40,6 +40,7 @@ export function verifyProofSignature(value = {}) {
     valid: expected === value.signature,
     truthState: expected === value.signature ? 'PROOF_SIGNATURE_VALID' : 'PROOF_SIGNATURE_MISMATCH',
     expected,
-    actual: value.signature
+    actual: value.signature,
+    verifiedAt: new Date().toISOString()
   };
 }

@@ -21,8 +21,8 @@ const EmojiGallery = () => {
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {images.map((img, index) => (
-          <div key={index} className="group relative bg-slate-800 rounded-xl overflow-hidden border border-slate-700 transition-all duration-300 hover:border-cyan-500 hover:shadow-lg hover:shadow-cyan-500/10">
-            <div className="aspect-square overflow-hidden bg-slate-900 flex items-center justify-center p-4">
+          <div key={index} className="group relative bg-black/40 backdrop-blur-md rounded-3xl overflow-hidden border-cyan-500/30 transition-all duration-300 hover:border-cyan-500 hover:shadow-lg hover:shadow-cyan-500/10">
+            <div className="aspect-square overflow-hidden glass-extreme border-neon-glow flex items-center justify-center p-4">
               <img 
                 src={img.src} 
                 alt={img.title} 

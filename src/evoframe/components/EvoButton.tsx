@@ -49,7 +49,7 @@ export const EvoButton: React.FC<EvoButtonProps> = ({
 
   if (isValid === false) {
     return (
-      <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-lg flex items-center gap-3 grayscale opacity-50 cursor-not-allowed">
+      <div className="p-3 bg-rose-500/10 border-rose-500/30 rounded-lg flex items-center gap-3 grayscale opacity-50 cursor-not-allowed">
         <AlertTriangle size={14} className="text-rose-500" />
         <span className="text-[10px] text-rose-500 font-black uppercase tracking-widest">Command Blocked: {command}</span>
       </div>
@@ -59,7 +59,7 @@ export const EvoButton: React.FC<EvoButtonProps> = ({
   const baseStyles = "px-4 py-2 rounded-lg font-black uppercase tracking-widest text-[11px] transition-all flex items-center gap-2";
   const variants = {
     primary: "bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20",
-    secondary: "bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700",
+    secondary: "bg-slate-800 text-slate-300 hover:bg-slate-700 border-slate-700",
     danger: "bg-rose-600 text-white hover:bg-rose-500 shadow-lg shadow-rose-600/20"
   };
 

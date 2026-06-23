@@ -1,31 +1,28 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 
-import { Log } from '../src/core/autonomy/SovereignLogger.js';
+console.log('[AI Loop] Engaging Infinite Evolution Daemon...');
+console.log('[AI Loop] The studio will now autonomously pack, review, and train every 10 minutes.');
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, '..');
-
-const run = (command) => {
-  Log.info(`
-▶ Running: ${command}`);
-  execSync(command, { cwd: root, stdio: 'inherit' });
-};
-
-try {
-  run('node scripts/ai_context_pack.mjs');
-  
+function runCycle() {
+  console.log('\n--- STARTING AUTONOMOUS CYCLE ---');
   try {
-    run('node scripts/ai_review_openai.mjs');
-  } catch (apiErr) {
-    Log.info('\n⚠️ [AI_Loop] OpenAI API failed or exhausted. Falling back to Local Core...');
-    run('node scripts/ai_review_local.mjs');
+    console.log('> Running Context Pack...');
+    execSync('node scripts/ai_context_pack.mjs', { stdio: 'inherit' });
+    
+    console.log('> Running AI Review...');
+    execSync('node scripts/ai_review_openai.mjs', { stdio: 'inherit' });
+    
+    console.log('> Running AI Self-Train...');
+    execSync('node scripts/ai_self_train.mjs', { stdio: 'inherit' });
+    
+    console.log('--- CYCLE COMPLETE. SLEEPING. ---');
+  } catch (e) {
+    console.error('[AI Loop] Cycle encountered an error:', e.message);
   }
-  
-  run('node scripts/ai_self_train.mjs');
-  Log.info('\n✅ ai:loop completed: review output posted, training capture sent, evo runtime activated.');
-} catch (err) {
-  Log.error('\n❌ ai:loop failed:', err.message || err);
-  process.exit(1);
 }
+
+// Run immediately once
+runCycle();
+
+// Then run every 10 minutes (600,000 ms)
+setInterval(runCycle, 600000);

@@ -80,7 +80,18 @@ function bondIdeConfigs() {
 
   ensureDir(path.join(cwd, '.idea'));
 
-  return ['vscode', 'cursor', 'windsurf', 'webstorm', 'zed', 'codex', 'antigravity'];
+  // Bond the Gemini x Opus God-Tier agents
+  const primeAgentDir = path.join(cwd, '.prompthouse-data', 'prime-agent');
+  ensureDir(primeAgentDir);
+  writeIdeFile(path.join(primeAgentDir, 'prime-bond.json'), JSON.stringify({
+    runtime: 'gemini-opus-runtime.js',
+    ideModel: 'gemini-opus-ide-model.mjs',
+    tetherStatus: 'ACTIVE',
+    tokenRef: tokenEnvName,
+    capabilities: ['Paradox Core', 'Cursor Composer', 'Windsurf Flow', 'o1 Deep Reasoning']
+  }, null, 2));
+
+  return ['vscode', 'cursor', 'windsurf', 'webstorm', 'zed', 'codex', 'antigravity', 'gemini-opus-prime'];
 }
 
 const token = createIdeToken();

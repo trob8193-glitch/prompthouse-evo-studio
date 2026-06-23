@@ -277,6 +277,24 @@ CREATE TABLE IF NOT EXISTS semantic_vectors (
   vector_json TEXT NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS witness_telemetry (
+  id TEXT PRIMARY KEY,
+  type TEXT NOT NULL,
+  subject_key TEXT,
+  payload_json TEXT NOT NULL,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS reviews_ledger (
+  id TEXT PRIMARY KEY,
+  module_id TEXT NOT NULL,
+  author TEXT DEFAULT 'Gatekeeper',
+  status TEXT NOT NULL,
+  score INTEGER DEFAULT 0,
+  details_json TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 `;
 
 export function initDatabase() {

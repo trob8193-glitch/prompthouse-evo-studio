@@ -20,6 +20,7 @@ function createMockApp() {
   return {
     get(route, handler) { routes.set(`GET ${route}`, handler); },
     post(route, handler) { routes.set(`POST ${route}`, handler); },
+    delete(route, handler) { routes.set(`DELETE ${route}`, handler); },
     has(method, route) { return routes.has(`${method} ${route}`); },
   };
 }

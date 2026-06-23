@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { BRIDGE_URL } from './config/bridge-config.js';
+import { useSovereignStore } from './store.js';
 
 export function EvoExchangeView() {
   const [recipes, setRecipes] = useState([]);
@@ -43,7 +44,7 @@ export function EvoExchangeView() {
           <div className="page-title">🏪 Evo Exchange</div>
           <div className="page-subtitle">Private marketplace for your tools, agents, and templates. Gated until Commerce Rail is live.</div>
         </div>
-        <button className="btn btn-secondary btn-sm" onClick={() => alert('Publishing to public exchange requires Enterprise Sovereignty.')}>
+        <button className="btn btn-secondary btn-sm" onClick={() => useSovereignStore.getState().addNotification({ msg: 'Publishing to public exchange requires Enterprise Sovereignty.', type: 'warning' })}>
           🌐 Go Public
         </button>
       </div>
@@ -82,7 +83,7 @@ export function EvoExchangeView() {
               </div>
               <div className="flex-between" style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid var(--border-dim)' }}>
                 <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--accent-gold)' }}>$0.00</span>
-                <button className="btn btn-secondary btn-sm" disabled>🔒 Blocked</button>
+                <button className="bg-[#f5c842] text-black font-bold py-1 px-3 rounded shadow-[0_0_15px_rgba(245,200,66,0.3)] text-xs uppercase" onClick={() => console.log('Selling module...')}>Sell Module</button>
               </div>
             </div>
           </div>

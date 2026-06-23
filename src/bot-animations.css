@@ -307,3 +307,47 @@
   0%, 100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 10px rgba(100,255,255,0.4)); }
   50% { transform: scale(1.05) translateY(-4px); filter: drop-shadow(0 0 20px rgba(100,255,255,0.8)) brightness(1.2); }
 }
+
+@keyframes lightning-flash {
+  0%, 100% { opacity: 0; transform: scale(0.9) rotate(0deg); }
+  2% { opacity: 1; transform: scale(1.15) rotate(10deg); filter: brightness(2) contrast(1.5); }
+  4% { opacity: 0; transform: scale(1) rotate(-5deg); }
+  6% { opacity: 0.9; transform: scale(1.1) rotate(15deg); filter: brightness(1.8) contrast(2); }
+  8% { opacity: 0; }
+  30% { opacity: 0; }
+  32% { opacity: 0.7; transform: scale(1.05) rotate(-10deg); filter: brightness(1.5); }
+  34% { opacity: 0; }
+}
+
+.animate-lightning-strike-1 {
+  animation: lightning-flash 3.5s infinite ease-in-out;
+  background: 
+    linear-gradient(90deg, transparent 48%, var(--zap-color-1) 49%, var(--zap-color-1) 51%, transparent 52%),
+    linear-gradient(45deg, transparent 48%, var(--zap-color-1) 49%, var(--zap-color-1) 51%, transparent 52%);
+  mix-blend-mode: screen;
+}
+
+.animate-lightning-strike-2 {
+  animation: lightning-flash 4.2s infinite ease-in-out;
+  animation-delay: 1.5s;
+  background: 
+    linear-gradient(0deg, transparent 49%, var(--zap-color-2) 49.5%, var(--zap-color-2) 50.5%, transparent 51%),
+    linear-gradient(-45deg, transparent 49%, var(--zap-color-2) 49.5%, var(--zap-color-2) 50.5%, transparent 51%);
+  mix-blend-mode: color-dodge;
+}
+
+@keyframes eye-idle-green-pulse {
+  0%, 100% { filter: hue-rotate(90deg) drop-shadow(0 0 8px rgba(16, 185, 129, 0.6)) brightness(1); }
+  50% { filter: hue-rotate(90deg) drop-shadow(0 0 16px rgba(16, 185, 129, 0.9)) brightness(1.2); }
+}
+.eye-idle-green {
+  animation: eye-idle-green-pulse 3s ease-in-out infinite;
+}
+
+@keyframes eye-flash {
+  0%, 100% { filter: hue-rotate(130deg) drop-shadow(0 0 10px rgba(0, 240, 255, 0.8)) brightness(1.5); opacity: 1; }
+  50% { filter: hue-rotate(130deg) drop-shadow(0 0 20px rgba(0, 240, 255, 1)) brightness(2); opacity: 0.8; }
+}
+.animate-eye-flash {
+  animation: eye-flash 0.5s ease-in-out infinite;
+}

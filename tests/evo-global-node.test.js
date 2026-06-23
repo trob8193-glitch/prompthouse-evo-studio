@@ -1,7 +1,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   buildGlobalContributionPacket,
@@ -10,6 +10,19 @@ import {
   runEvoTrainPlan,
   submitGlobalContributionPacket
 } from '../src/core/evo-llm/index.js';
+
+import { execSync } from 'child_process';
+
+vi.mock('child_process', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    execSync: vi.fn((cmd, opts) => {
+      if (cmd.includes('git')) return 'mocked-git-output';
+      return actual.execSync(cmd, opts);
+    })
+  };
+});
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'ph-global-node-'));
@@ -112,7 +125,7 @@ describe('Evo LLM global node and BYOK training', () => {
     const blocked = await submitGlobalContributionPacket({ rootDir, packetId: packetResult.packet.packetId });
     expect(blocked.receipt.truthState).toBe('GLOBAL_HUB_SUBMISSION_BLOCKED');
     expect(blocked.receipt.blockers).toContain('Contribution packet must be signed before hub submission.');
-  });
+  }, 15000);
 
   it('submits signed packets to a configured hub without persisting the hub token', async () => {
     const rootDir = tempRoot();

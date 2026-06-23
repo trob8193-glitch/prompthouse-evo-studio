@@ -2,6 +2,9 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Stripe from 'stripe';
+import { hardenProcess, createDaemonHeartbeat } from './daemon-hardener.mjs';
+
+hardenProcess('holding-company-daemon');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');

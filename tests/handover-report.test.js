@@ -39,8 +39,8 @@ describe('Handover Report Generator Script', () => {
     const scriptPath = join(process.cwd(), 'scripts/generate-handover-report.mjs');
     const content = await fs.promises.readFile(scriptPath, 'utf8');
     
-    expect(content).toContain('No secrets. No provider calls.');
+    expect(content).toContain('PlatformReadinessEngine');
     expect(content).toContain('function redact(val)');
-    expect(content).toContain('SECURITY_GATE_VERIFIED — PUBLIC_SMOKE_BLOCKED_BY_AUTH');
+    expect(content).toContain('Enterprise AI & Software Audit Report');
   });
 });

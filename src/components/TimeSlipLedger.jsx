@@ -55,12 +55,65 @@ export function TimeSlipLedger() {
             {idx !== commits.length - 1 && <div style={{ position: 'absolute', left: 7, top: 20, bottom: -16, width: 2, background: '#1e293b' }} />}
             
             <div style={{ 
+
+export function TimeSlipLedger() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [commits, setCommits] = useState([]);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      fetch(BRIDGE_URL + '/api/commits')
+        .then(res => res.json())
+        .then(data => setCommits(data))
+        .catch(err => Log.error(err));
+    }
+  }, [isOpen]);
+
+  if (!isOpen) {
+    return (
+      <div 
+        onClick={() => setIsOpen(true)}
+        style={{
+          position: 'absolute', top: '50%', right: 0, transform: 'translateY(-50%)',
+          background: '#1e293b', border: '1px solid #334155', borderRight: 'none',
+          padding: '12px 8px', borderRadius: '8px 0 0 8px', cursor: 'pointer',
+          color: '#94a3b8', zIndex: 40, display: 'flex', flexDirection: 'column', gap: 8,
+        }}>
+        <History size={16} />
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      position: 'absolute', top: 0, right: 0, bottom: 0, width: 280,
+      background: '#0f172a', borderLeft: '1px solid #1e293b',
+      zIndex: 40, display: 'flex', flexDirection: 'column',
+    }}>
+      <div style={{
+        padding: '16px', borderBottom: '1px solid #1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#f1f5f9', fontWeight: 700, fontSize: 13 }}>
+          <History size={16} color="#6366f1" /> TIME-SLIP LEDGER
+        </div>
+        <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}>
+          &times;
+        </button>
+      </div>
+
+      <div style={{ padding: 16, flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {commits.map((commit, idx) => (
+          <div key={commit.id} style={{ display: 'flex', gap: 12, position: 'relative' }}>
+            {idx !== commits.length - 1 && <div style={{ position: 'absolute', left: 7, top: 20, bottom: -16, width: 2, background: '#1e293b' }} />}
+            
+            <div style={{ 
               width: 16, height: 16, borderRadius: '50%', background: '#0f172a', border: '2px solid #6366f1',
               display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, marginTop: 2,
             }} />
             
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 12, color: '#f1f5f9', fontWeight: 600, marginBottom: 4 }}>{commit.msg}</div>
+              <button onClick={() => console.log('Exporting slip...')} style={{ background: 'none', border: 'none', padding: 0, fontSize: 10, color: '#64748b', display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}><Download size={10}/> Export</button>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 10, color: '#64748b' }}>
                 <span style={{ fontFamily: 'monospace', color: '#3b82f6' }}>{commit.id}</span>
                 <span>•</span>
@@ -73,7 +126,7 @@ export function TimeSlipLedger() {
                 style={{
                 marginTop: 8, background: '#1e293b', border: '1px solid #334155', borderRadius: 4,
                 padding: '4px 8px', fontSize: 10, color: '#64748b', display: 'flex', alignItems: 'center', gap: 4, cursor: 'not-allowed',
-              }}>
+              }} onClick={() => console.log('Reverting to commit', commit.id)}>
                 <Rewind size={10} /> Revert to {commit.id}
               </button>
             </div>

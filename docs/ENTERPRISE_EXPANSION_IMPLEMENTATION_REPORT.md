@@ -98,7 +98,7 @@ npm run enterprise:full-proof
 `generated_apis/enterprise_architecture_routes.js` exists, but `promptbridge-server.js` still needs direct import and registration verified or patched safely:
 
 ```js
-import registerEnterpriseArchitectureRoutes from './generated_apis/enterprise_architecture_routes.js';
+import registerEnterpriseArchitectureRoutes from "./generated_apis/enterprise_architecture_routes.js";
 registerEnterpriseArchitectureRoutes(app);
 ```
 

@@ -97,7 +97,7 @@ export function RealExecutionView() {
             </div>
           )}
           {queue.map(job => (
-            <div key={job.id} className="flex items-center justify-between p-3 bg-black/20 border border-slate-800/50 rounded-lg">
+            <div key={job.id} className="flex items-center justify-between p-3 bg-black/20 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]/50 rounded-2xl">
               <div className="flex-1">
                 <div className="text-xs text-slate-300 font-bold">{job.name}</div>
                 <div className="text-[10px] text-slate-600 font-mono">{job.id} • {job.domain} • {job.module}</div>

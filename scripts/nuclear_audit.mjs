@@ -4,6 +4,9 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { hardenProcess, createDaemonHeartbeat } from './daemon-hardener.mjs';
+
+hardenProcess('nuclear_audit');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');

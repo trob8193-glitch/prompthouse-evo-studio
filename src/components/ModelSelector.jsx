@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSovereignStore } from '../store.js';
 
 /**
  * PH EVO STUDIO — AI MODEL SELECTOR
@@ -26,12 +27,16 @@ const PROVIDER_ICONS = {
   custom: '⬢',
 };
 
-export default function ModelSelector() {
+export default function ModelSelector({ dropUp = false, variant = 'default' }) {
   const [models, setModels] = useState({});
-  const [activeModel, setActiveModel] = useState(null);
+  const activeModel = useSovereignStore(s => s.activeModel);
+  const setActiveModel = useSovereignStore(s => s.setActiveModel);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const dropdownRef = useRef(null);
+
+  const globalTheme = useSovereignStore(s => s.globalTheme);
+  const activeThemeId = globalTheme?.theme || 'evoCore';
 
   useEffect(() => {
     fetchModels();
@@ -95,7 +100,8 @@ export default function ModelSelector() {
           { id: 'zed-ai-omnibonded', displayName: 'Zed AI (Omni-Bonded)', tier: 'fast', online: true },
         ],
       });
-      setActiveModel({ id: 'gemini-2.0-flash', displayName: 'Gemini 2.0 Flash', tier: 'fast', provider: 'gemini' });
+      // We don't overwrite activeModel here anymore unless the backend sent an activeModel override
+      if (data && data.activeModel) setActiveModel(data.activeModel);
     } finally {
       setLoading(false);
     }
@@ -128,7 +134,25 @@ export default function ModelSelector() {
     );
   }
 
+  // ─── OMNI-EVOLUTION THEME OVERRIDES ───
+  if (activeThemeId === 'extremeWindows95') {
+    return (
+      <div style={{...styles.trigger, background: '#c0c0c0', border: '2px solid', borderTopColor: '#fff', borderLeftColor: '#fff', borderRightColor: '#808080', borderBottomColor: '#808080', color: '#000', borderRadius: 0}}>
+        <span style={{fontWeight: 'bold'}}>GPT-1.0 (Retro) 56k Modem</span>
+      </div>
+    );
+  }
+  if (activeThemeId === 'layoutTerminalFullscreen') {
+    return (
+      <div style={{...styles.trigger, background: '#000', border: '1px solid #0f0', color: '#0f0', borderRadius: 0, fontFamily: 'monospace'}}>
+        <span>[ROOT_HACK_MODEL_v9]</span>
+      </div>
+    );
+  }
+
   const activeTier = activeModel ? TIER_BADGES[activeModel.tier] : TIER_BADGES.fast;
+
+  const isCopilot = variant === 'copilot';
 
   return (
     <div ref={dropdownRef} style={styles.container}>
@@ -138,18 +162,23 @@ export default function ModelSelector() {
         onClick={() => setIsOpen(!isOpen)}
         style={{
           ...styles.trigger,
-          borderColor: isOpen ? activeTier.color : 'rgba(255,255,255,0.1)',
+          borderColor: isOpen ? activeTier.color : (isCopilot ? 'var(--hologram-color-40)' : 'rgba(255,255,255,0.1)'),
+          background: isCopilot ? 'transparent' : 'rgba(255,255,255,0.04)',
+          color: isCopilot ? 'var(--hologram-color)' : '#e0e0e0',
+          boxShadow: isCopilot && isOpen ? `0 0 15px ${activeTier.color}40` : (isCopilot ? '0 0 8px var(--hologram-color-20)' : 'none'),
+          textShadow: isCopilot ? '0 0 5px var(--hologram-color)' : 'none',
         }}
       >
         <span style={styles.triggerIcon}>{activeTier.icon}</span>
-        <span style={styles.triggerText}>
+        <span style={{...styles.triggerText, fontFamily: isCopilot ? 'monospace' : 'inherit', letterSpacing: isCopilot ? '0.05em' : '0.02em'}}>
           {activeModel ? activeModel.displayName : 'Select Model'}
         </span>
         <span
           style={{
             ...styles.tierBadge,
-            background: activeTier.color + '22',
+            background: isCopilot ? 'transparent' : activeTier.color + '22',
             color: activeTier.color,
+            border: isCopilot ? `1px solid ${activeTier.color}80` : 'none',
           }}
         >
           {activeTier.label}
@@ -159,11 +188,20 @@ export default function ModelSelector() {
 
       {/* Dropdown Panel */}
       {isOpen && (
-        <div style={styles.dropdown}>
-          <div style={styles.dropdownHeader}>Select AI Model</div>
+        <div style={{
+          ...styles.dropdown,
+          top: dropUp ? 'auto' : 'calc(100% + 6px)',
+          bottom: dropUp ? 'calc(100% + 6px)' : 'auto',
+          transformOrigin: dropUp ? 'bottom right' : 'top left',
+          animation: dropUp ? 'fadeInUp 0.15s ease-out' : 'fadeInDown 0.15s ease-out',
+          background: isCopilot ? 'rgba(5, 5, 8, 0.95)' : 'rgba(18, 18, 24, 0.98)',
+          border: isCopilot ? '1px solid var(--hologram-color-40)' : '1px solid rgba(255,255,255,0.08)',
+          boxShadow: isCopilot ? '0 0 20px var(--hologram-color-20)' : '0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)',
+        }}>
+          <div style={{...styles.dropdownHeader, color: isCopilot ? 'var(--hologram-color-60)' : 'rgba(255,255,255,0.35)', borderBottom: isCopilot ? '1px solid var(--hologram-color-20)' : '1px solid rgba(255,255,255,0.06)'}}>Select AI Model</div>
           {Object.entries(models).map(([provider, providerModels]) => (
             <div key={provider}>
-              <div style={styles.providerHeader}>
+              <div style={{...styles.providerHeader, color: isCopilot ? 'var(--hologram-color-80)' : 'rgba(255,255,255,0.5)'}}>
                 <span style={styles.providerIcon}>{PROVIDER_ICONS[provider] || '●'}</span>
                 {provider.charAt(0).toUpperCase() + provider.slice(1)}
               </div>
@@ -177,20 +215,24 @@ export default function ModelSelector() {
                     onClick={() => selectModel(model.id)}
                     style={{
                       ...styles.modelOption,
+                      fontFamily: isCopilot ? 'monospace' : 'inherit',
                       background: isActive
-                        ? 'rgba(255,255,255,0.08)'
+                        ? (isCopilot ? 'var(--hologram-color-20)' : 'rgba(255,255,255,0.08)')
                         : 'transparent',
                       borderLeft: isActive
-                        ? `3px solid ${tier.color}`
+                        ? `3px solid ${isCopilot ? 'var(--hologram-color)' : tier.color}`
                         : '3px solid transparent',
+                      color: isCopilot ? (isActive ? '#fff' : 'var(--hologram-color-80)') : '#d4d4d4',
+                      textShadow: isCopilot && isActive ? '0 0 5px var(--hologram-color)' : 'none',
                     }}
                   >
                     <span style={styles.modelName}>{model.displayName}</span>
                     <span
                       style={{
                         ...styles.tierBadgeSmall,
-                        background: tier.color + '22',
+                        background: isCopilot ? 'transparent' : tier.color + '22',
                         color: tier.color,
+                        border: isCopilot ? `1px solid ${tier.color}80` : 'none',
                       }}
                     >
                       {tier.label} {tier.icon}
@@ -198,7 +240,7 @@ export default function ModelSelector() {
                     {!model.online && (
                       <span style={styles.offlineBadge}>Offline</span>
                     )}
-                    {isActive && <span style={styles.checkmark}>✓</span>}
+                    {isActive && <span style={{...styles.checkmark, color: isCopilot ? 'var(--hologram-color)' : '#00e676'}}>✓</span>}
                   </button>
                 );
               })}

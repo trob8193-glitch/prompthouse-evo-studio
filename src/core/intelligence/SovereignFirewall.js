@@ -2,6 +2,8 @@ import { ContextCompactor } from './ContextCompactor.js';
 import { SemanticRouter } from './SemanticRouter.js';
 import { ShadowCache } from './ShadowCache.js';
 import { SyntaxSandbox } from './SyntaxSandbox.js';
+import { LocalVectorDB } from '../memory/LocalVectorDB.js';
+import { SHADOW_FORGE } from '../autonomy/ShadowForge.js';
 
 /**
  * EVO STUDIO FIREWALL
@@ -50,6 +52,18 @@ export class SovereignFirewall {
     const router = new SemanticRouter();
     const route = router.determineRoute(prompt, compactedContext);
     
+    // [RAG SHADOW MEMORY] Inject local codebase knowledge
+    if (route.provider === 'local') {
+      try {
+        const vdb = new LocalVectorDB();
+        const results = await vdb.search(prompt, 2);
+        if (results && results.length > 0) {
+          compactedContext = "[RAG CONTEXT]\n" + results.map(r => `File: ${r.metadata?.path || r.id}\n${r.text}`).join('\n\n') + "\n[END RAG CONTEXT]\n\n" + compactedContext;
+        }
+      } catch (e) {
+        console.warn('[FIREWALL] RAG Vector Search failed:', e.message);
+      }
+    }
 
     // 4. Execution 
     let generatedResponse = await this._executeModel(prompt, compactedContext, route, aiAdaptor, systemPrompt);
@@ -90,20 +104,45 @@ export class SovereignFirewall {
   static async _executeModel(prompt, context, route, aiAdaptor, systemPrompt) {
     if (route.provider === 'local') {
       try {
-        const response = await fetch('http://localhost:11434/api/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: route.model,
-            prompt: `System: ${systemPrompt}\n\nContext:\n${context}\n\nUser: ${prompt}`,
-            stream: false
-          }),
-          signal: AbortSignal.timeout(30000)
-        });
-        if (response.ok) {
+        // [NATIVE TOOL CALLING] Instruct the local model to use ShadowForge
+        const enhancedSystemPrompt = `${systemPrompt}\n\n[Sovereign Sandbox]: If you need to test code for infinite loops or syntax before giving it to the user, output exactly this JSON format: {"action":"test_mutation","fileId":"test_name","logic":"<code to test>"}.`;
+        
+        let responseContent = '';
+        let toolAttempts = 0;
+        let currentPrompt = `System: ${enhancedSystemPrompt}\n\nContext:\n${context}\n\nUser: ${prompt}`;
+
+        while (toolAttempts < 2) {
+          const response = await fetch('http://localhost:11434/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: route.model,
+              prompt: currentPrompt,
+              stream: false
+            }),
+            signal: AbortSignal.timeout(30000)
+          });
+          if (!response.ok) throw new Error('Local inference failed');
           const data = await response.json();
-          return data.response;
+          responseContent = data.response;
+
+          // Check if the model attempted Native Tool Calling
+          try {
+            const parsed = JSON.parse(responseContent.trim());
+            if (parsed.action === 'test_mutation') {
+              console.log(`[FIREWALL] Local Model invoked Tool: test_mutation`);
+              const success = await SHADOW_FORGE.shadowBuild(parsed.fileId || 'temp', parsed.logic || '');
+              toolAttempts++;
+              const resultMessage = success ? 'Tool Result: The code compiled and is safe. Now provide your final answer to the user.' : 'Tool Result: The code FAILED syntax or AST checks. Please fix the errors and output either the fixed JSON or the final answer.';
+              currentPrompt += `\nAssistant: ${responseContent}\nSystem: ${resultMessage}`;
+              continue;
+            }
+          } catch(e) {
+            // Not a JSON tool call, just regular output
+            break;
+          }
         }
+        return responseContent;
       } catch (err) {
         console.warn('[FIREWALL] Local model failed, falling back to OpenAI...', err.message);
         route.provider = 'openai'; // Fallback

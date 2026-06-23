@@ -99,12 +99,12 @@ export function PromptLinkView() {
   ];
 
   return (
-    <div className="flex-col animate-in">
+    <div className="flex-col gap-4 animate-in">
       {/* Header */}
-      <div className="flex-between" style={{ marginBottom: 16 }}>
+      <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
-          <div className="page-title">🔗 PromptLink / PromptBridge</div>
-          <div className="page-subtitle">Provider registry, handshake status, and live browser capture feed.</div>
+          <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🔗 PromptLink / PromptBridge</div>
+          <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Provider registry, handshake status, and live browser capture feed.</div>
         </div>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <div style={{
@@ -115,7 +115,7 @@ export function PromptLinkView() {
           }}>
             {bridgeStatus === null ? '⏳ Checking...' : bridgeStatus.connected ? `🟢 LIVE (${bridgeStatus.latency}ms)` : '🔴 OFFLINE'}
           </div>
-          <button className="btn btn-primary btn-sm" onClick={doHandshake} disabled={handshaking}>
+          <button className="glass-extreme shadow-[0_0_15px_rgba(0,240,255,0.2)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={doHandshake} disabled={handshaking}>
             {handshaking ? '⏳ Syncing...' : '🤝 Re-Handshake'}
           </button>
         </div>
@@ -124,7 +124,7 @@ export function PromptLinkView() {
       {/* Tabs */}
       <div className="tabs-bar" style={{ marginBottom: 16 }}>
         {TABS.map(t => (
-          <button key={t.id} className={`tab-btn ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>
+          <button key={t.id} className={`tab-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>
             {t.label}
           </button>
         ))}
@@ -136,7 +136,7 @@ export function PromptLinkView() {
           {registry.map(provider => (
             <div
               key={provider.id}
-              className="card"
+              className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl"
               style={{
                 cursor: 'pointer',
                 border: `1px solid ${selectedProvider?.id === provider.id ? 'var(--accent-gold)' : 'var(--border-dim)'}`,
@@ -144,7 +144,7 @@ export function PromptLinkView() {
               }}
               onClick={() => setSelectedProvider(provider)}
             >
-              <div className="card-body" style={{ padding: 16 }}>
+              <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ padding: 16 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
                   <div>
                     <div style={{ fontWeight: 800, fontSize: 14 }}>{provider.displayName}</div>
@@ -172,7 +172,7 @@ export function PromptLinkView() {
 
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button
-                    className="btn btn-sm"
+                    className="glass-extreme active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
                     onClick={e => { e.stopPropagation(); toggleProvider(provider); }}
                     style={{
                       background: provider.enabled ? 'rgba(74,222,128,0.2)' : 'var(--bg-elevated)',
@@ -183,7 +183,7 @@ export function PromptLinkView() {
                   >
                     {provider.enabled ? '🟢 Enabled' : '⚫ Disabled'}
                   </button>
-                  <button className="btn btn-sm btn-secondary" onClick={e => { e.stopPropagation(); testProvider(provider); }}>
+                  <button className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary" onClick={e => { e.stopPropagation(); testProvider(provider); }}>
                     🔑 Test Gate
                   </button>
                 </div>
@@ -195,9 +195,9 @@ export function PromptLinkView() {
 
       {/* Handshake Tab */}
       {activeTab === 'handshake' && (
-        <div className="card">
-          <div className="card-header"><div className="card-title">🤝 PromptBridge Handshake & PromptLink Sync</div></div>
-          <div className="card-body flex-col">
+        <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">🤝 PromptBridge Handshake & PromptLink Sync</div></div>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex-col gap-4">
             {bridgeStatus && (
               <div style={{ padding: 16, background: 'var(--bg-void)', borderRadius: 10, fontFamily: 'var(--font-mono)', fontSize: 12 }}>
                 <div style={{ color: bridgeStatus.connected ? '#4ade80' : '#f87171', fontWeight: 800, marginBottom: 8 }}>
@@ -220,9 +220,9 @@ export function PromptLinkView() {
 
       {/* Bridge Capsules */}
       {activeTab === 'capsules' && (
-        <div className="card">
-          <div className="card-header"><div className="card-title">📦 Browser Capture Feed (ForgeCapuses)</div></div>
-          <div className="card-body">
+        <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">📦 Browser Capture Feed (ForgeCapuses)</div></div>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body">
             {bridgeCapsules.length === 0 ? (
               <div className="empty-state"><div className="empty-icon">📦</div><div className="empty-title">No captures yet</div><div className="empty-sub">Use Ctrl+Shift+P on any page or right-click → Capture to Studio</div></div>
             ) : bridgeCapsules.map(c => (
@@ -238,9 +238,9 @@ export function PromptLinkView() {
 
       {/* Proof Receipts */}
       {activeTab === 'receipts' && (
-        <div className="card">
-          <div className="card-header"><div className="card-title">🛡️ Bridge Proof Receipts</div></div>
-          <div className="card-body">
+        <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">🛡️ Bridge Proof Receipts</div></div>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body">
             {proofReceipts.length === 0 ? (
               <div className="empty-state"><div className="empty-icon">🛡️</div><div className="empty-title">No receipts yet</div></div>
             ) : proofReceipts.map(r => (
@@ -256,9 +256,9 @@ export function PromptLinkView() {
 
       {/* Logs Tab */}
       {activeTab === 'logs' && (
-        <div className="card" style={{ background: '#030408' }}>
-          <div className="card-header"><div className="card-title">📋 PromptLink Activity Log</div></div>
-          <div className="card-body" style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>
+        <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ background: '#030408' }}>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">📋 PromptLink Activity Log</div></div>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>
             {logs.length === 0 && <div style={{ color: 'var(--text-dim)' }}>// Awaiting events...</div>}
             {logs.map((l, i) => (
               <div key={i} style={{

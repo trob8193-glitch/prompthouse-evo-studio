@@ -22,16 +22,26 @@ export const useWitnessStore = create((set, get) => ({
 
   logPrompt: (p) => {
     const subjectKey = get().subjectKey;
+    const payload = { ...p, subjectKey };
     set((state) => ({ 
-      prompts: [{ ...p, subjectKey }, ...state.prompts].slice(0, 50) 
+      prompts: [payload, ...state.prompts].slice(0, 50) 
     }));
+    safeFetchBridge('/api/witness/telemetry', {
+      method: 'POST',
+      body: JSON.stringify({ type: 'PROMPT', subjectKey, payload })
+    }).catch(e => console.warn('Failed to persist prompt telemetry:', e));
   },
 
   logTrace: (t) => {
     const subjectKey = get().subjectKey;
+    const payload = { ...t, subjectKey };
     set((state) => ({ 
-      traces: [{ ...t, subjectKey }, ...state.traces].slice(0, 100) 
+      traces: [payload, ...state.traces].slice(0, 100) 
     }));
+    safeFetchBridge('/api/witness/telemetry', {
+      method: 'POST',
+      body: JSON.stringify({ type: 'TRACE', subjectKey, payload })
+    }).catch(e => console.warn('Failed to persist trace telemetry:', e));
   },
 
   logRealization: async (realization) => {
@@ -55,9 +65,41 @@ export const useWitnessStore = create((set, get) => ({
     }
   },
 
-  updateTruth: (filePath, report) => set((state) => ({
-    truth_scores: { ...state.truth_scores, [filePath]: report }
-  })),
+  updateTruth: (filePath, report) => {
+    const subjectKey = get().subjectKey;
+    set((state) => ({
+      truth_scores: { ...state.truth_scores, [filePath]: report }
+    }));
+    safeFetchBridge('/api/witness/telemetry', {
+      method: 'POST',
+      body: JSON.stringify({ type: 'TRUTH_SCORE', subjectKey, payload: { filePath, report } })
+    }).catch(e => console.warn('Failed to persist truth score telemetry:', e));
+  },
+
+  fetchHistory: async () => {
+    try {
+      const [promptsRes, tracesRes, truthRes] = await Promise.all([
+        safeFetchBridge('/api/witness/telemetry?type=PROMPT'),
+        safeFetchBridge('/api/witness/telemetry?type=TRACE&limit=100'),
+        safeFetchBridge('/api/witness/telemetry?type=TRUTH_SCORE')
+      ]);
+      
+      const truth_scores = {};
+      if (truthRes?.data?.logs) {
+        truthRes.data.logs.forEach(log => {
+          if (log.filePath && log.report) truth_scores[log.filePath] = log.report;
+        });
+      }
+
+      set({ 
+        prompts: promptsRes?.data?.logs || [],
+        traces: tracesRes?.data?.logs || [],
+        truth_scores: Object.keys(truth_scores).length > 0 ? truth_scores : get().truth_scores
+      });
+    } catch (e) {
+      console.warn('[WitnessStore] Failed to fetch history:', e.message);
+    }
+  },
 
   runDoctorScan: async () => {
     try {

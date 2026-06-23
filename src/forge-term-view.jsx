@@ -180,12 +180,12 @@ export function ForgeTermView() {
   };
 
   return (
-    <div className="flex-col animate-in" style={{ height: 'calc(100vh - 80px)' }}>
+    <div className="flex-col gap-4 animate-in" style={{ height: 'calc(100vh - 80px)' }}>
       {/* Header */}
-      <div className="flex-between" style={{ marginBottom: 16 }}>
+      <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
-          <div className="page-title">⚡ ForgeTerm</div>
-          <div className="page-subtitle">Virtual safe-mode terminal. Real execution via PromptBridge.</div>
+          <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">⚡ ForgeTerm</div>
+          <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Virtual safe-mode terminal. Real execution via PromptBridge.</div>
         </div>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <div style={{
@@ -201,9 +201,9 @@ export function ForgeTermView() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 16, flex: 1, minHeight: 0 }}>
         {/* Command Templates Panel */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <div className="card-header" style={{ padding: '12px 16px' }}>
-            <div className="card-title" style={{ fontSize: 13 }}>Command Templates</div>
+        <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header" style={{ padding: '12px 16px' }}>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title" style={{ fontSize: 13 }}>Command Templates</div>
           </div>
           <div style={{ display: 'flex', gap: 4, padding: '8px 12px', flexWrap: 'wrap', borderBottom: '1px solid var(--border-dim)' }}>
             {categories.map(cat => (
@@ -241,7 +241,7 @@ export function ForgeTermView() {
         </div>
 
         {/* Terminal Panel */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', background: '#030408' }}>
+        <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', background: '#030408' }}>
           {/* Output */}
           <div
             ref={termRef}
@@ -266,12 +266,12 @@ export function ForgeTermView() {
                 ⚠️ APPROVAL REQUIRED: <strong>{pendingApproval}</strong>
               </div>
               <button
-                className="btn btn-sm"
+                className="glass-extreme active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
                 onClick={() => { sendToBridge(pendingApproval); setPendingApproval(null); }}
                 style={{ background: '#fb923c', color: '#000', fontWeight: 800 }}
               >Approve & Execute</button>
               <button
-                className="btn btn-sm btn-secondary"
+                className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary"
                 onClick={() => { log('warn', 'Command cancelled by user.'); setPendingApproval(null); }}
               >Cancel</button>
             </div>
@@ -297,12 +297,12 @@ export function ForgeTermView() {
               autoFocus
             />
             <button
-              className="btn btn-sm btn-primary"
+              className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-primary"
               onClick={() => { runCommand(input); setInput(''); }}
               style={{ minWidth: 80 }}
             >Run ↵</button>
             <button
-              className="btn btn-sm btn-secondary"
+              className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary"
               onClick={() => setHistory([{ type: 'system', text: 'Cleared.' }])}
             >Clear</button>
           </div>

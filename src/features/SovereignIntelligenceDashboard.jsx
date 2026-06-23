@@ -1,50 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, Cpu, HardDrive, Clock, Zap, MessageSquare, ArrowRight, RefreshCw, Wifi, WifiOff } from 'lucide-react';
+import { Activity, Cpu, HardDrive, Clock, Zap, MessageSquare, ArrowRight, RefreshCw, Wifi, Hexagon, Leaf, Sparkles, Cloud, MonitorPlay, Disc, Server, Radio, Database, Dna, Bot, Cog, Wrench, Compass, Flame, Square, Hash, AlignJustify, Maximize, Scan, Grid, Focus, Target, Star, Moon, Orbit, Circle, Sun, Wind, SunDim, Gamepad, Ghost, Coins, Sword } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
 import { motion } from 'framer-motion';
 import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 import { safeFetchBridge } from '../config/bridge-config.js';
 
-/**
- * PH EVO STUDIO — DASHBOARD (ENTERPRISE GRADE)
- * ═══════════════════════════════════════════════════════════════
- * Live metrics from backend, bridge health, quick actions.
- */
-
 function MetricCard({ icon: Icon, label, value, sub, color = '#00f0ff', pulse = false }) {
   return (
-    <div style={{
-      background: 'rgba(5,5,8,0.8)', border: `1px solid ${color}30`, borderRadius: 20, padding: '22px 26px',
-      display: 'flex', alignItems: 'flex-start', gap: 16,
-      backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
-      boxShadow: `0 0 30px ${color}10`,
-      transition: 'all 0.4s cubic-bezier(0.2,0.8,0.2,1)',
-      position: 'relative',
-      overflow: 'hidden'
-    }}
-    onMouseEnter={(e) => { e.currentTarget.style.borderColor = color; e.currentTarget.style.boxShadow = `0 0 40px ${color}30`; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-    onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${color}30`; e.currentTarget.style.boxShadow = `0 0 30px ${color}10`; e.currentTarget.style.transform = 'translateY(0)'; }}
+    <div 
+      className="glass-extreme rounded-4xl border-cyan-500/20 p-6 flex-col items-start gap-4 transition-all duration-500 hover:border-cyan-400 hover:shadow-[0_0_40px_rgba(0,240,255,0.15)] hover:-translate-y-1 relative overflow-hidden bg-black/40 backdrop-blur-2xl"
+      style={{ '--glow-color': color }}
     >
-      <div style={{
-        position: 'absolute', top: -50, left: -50, width: 100, height: 100, background: color, filter: 'blur(60px)', opacity: 0.15, pointerEvents: 'none'
-      }} />
-      <div style={{
-        width: 48, height: 48, borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: `${color}15`, border: `1px solid ${color}40`, flexShrink: 0,
-        boxShadow: `0 0 20px ${color}30`,
-      }}>
-        <Icon size={20} color={color} style={{ filter: `drop-shadow(0 0 8px ${color})` }} />
+      <div className="absolute -top-10 -left-10 w-32 h-32 blur-[50px] opacity-20 pointer-events-none" style={{ background: color }} />
+      
+      <div className="w-12 h-12 rounded-2xl flex items-center justify-center border-cyan-500/40 shadow-[0_0_20px_rgba(0,240,255,0.1)] z-10" style={{ background: `${color}15` }}>
+        <Icon size={24} color={color} style={{ filter: `drop-shadow(0 0 8px ${color})` }} />
       </div>
-      <div style={{ flex: 1, minWidth: 0, position: 'relative', zIndex: 1 }}>
-        <div style={{ fontSize: 10, fontWeight: 900, color: color, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 8, opacity: 0.9 }}>
+
+      <div className="flex-1 min-w-0 relative z-10">
+        <div className="text-[10px] font-black uppercase tracking-[0.2em] mb-2 opacity-90" style={{ color: color }}>
           {label}
         </div>
-        <div style={{ fontSize: 26, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1, textShadow: `0 0 20px ${color}50` }}>
+        <div className="text-3xl font-black text-white tracking-tighter leading-none mb-2" style={{ textShadow: `0 0 20px ${color}50` }}>
           {value}
         </div>
-        {sub && <div style={{ fontSize: 11, color: '#b4b4c4', marginTop: 8, fontWeight: 600, letterSpacing: '0.02em' }}>{sub}</div>}
+        {sub && <div className="text-xs text-slate-400 font-bold tracking-wider">{sub}</div>}
       </div>
-      {pulse && <div style={{ width: 10, height: 10, borderRadius: '50%', background: color, boxShadow: `0 0 15px ${color}, 0 0 30px ${color}`, animation: 'pulse 1.5s infinite', marginTop: 4 }} />}
+
+      {pulse && <div className="absolute top-6 right-6 w-3 h-3 rounded-full animate-pulse shadow-[0_0_15px_currentColor]" style={{ background: color, color: color }} />}
     </div>
   );
 }
@@ -53,30 +36,16 @@ function QuickAction({ icon: Icon, label, sub, onClick, color = '#8a2be2' }) {
   return (
     <button
       onClick={onClick}
-      style={{
-        background: 'rgba(5,5,8,0.8)', border: `1px solid ${color}30`, borderRadius: 20, padding: '20px 24px',
-        display: 'flex', alignItems: 'center', gap: 16, cursor: 'pointer', width: '100%',
-        transition: 'all 0.4s cubic-bezier(0.2,0.8,0.2,1)', textAlign: 'left',
-        backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
-        boxShadow: `0 0 20px ${color}05`,
-        position: 'relative',
-        overflow: 'hidden'
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.borderColor = color; e.currentTarget.style.background = `${color}15`; e.currentTarget.style.transform = 'translateX(6px)'; e.currentTarget.style.boxShadow = `0 0 30px ${color}20`; }}
-      onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${color}30`; e.currentTarget.style.background = 'rgba(5,5,8,0.8)'; e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = `0 0 20px ${color}05`; }}
+      className="glass-extreme border-cyan-500/30 rounded-2xl p-5 flex items-center gap-4 cursor-pointer w-full text-left backdrop-blur-2xl transition-all hover:border-cyan-400 hover:translate-x-2 group relative overflow-hidden"
     >
-      <div style={{
-        width: 44, height: 44, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: `${color}15`, border: `1px solid ${color}40`, flexShrink: 0,
-        boxShadow: `0 0 15px ${color}30`,
-      }}>
-        <Icon size={18} color={color} style={{ filter: `drop-shadow(0 0 8px ${color})` }} />
+      <div className="w-10 h-10 rounded-xl flex items-center justify-center border-cyan-500/40 shadow-[0_0_20px_rgba(0,240,255,0.05)] z-10" style={{ background: `${color}15` }}>
+        <Icon size={18} color={color} />
       </div>
-      <div style={{ flex: 1, minWidth: 0, position: 'relative', zIndex: 1 }}>
-        <div style={{ fontSize: 14, fontWeight: 800, color: '#ffffff', letterSpacing: '0.02em', textShadow: `0 0 10px rgba(255,255,255,0.2)` }}>{label}</div>
-        <div style={{ fontSize: 11, color: '#b4b4c4', marginTop: 4, fontWeight: 600, letterSpacing: '0.02em' }}>{sub}</div>
+      <div className="flex-1 min-w-0 relative z-10">
+        <div className="text-sm font-black text-white tracking-wider group-hover:text-cyan-300 transition-colors">{label}</div>
+        <div className="text-[10px] text-slate-400 mt-1 font-bold uppercase tracking-widest">{sub}</div>
       </div>
-      <ArrowRight size={16} color={color} style={{ opacity: 0.7 }} />
+      <ArrowRight size={16} color={color} className="opacity-50 group-hover:opacity-100 transition-opacity" />
     </button>
   );
 }
@@ -94,7 +63,6 @@ export function SovereignIntelligenceDashboard() {
   useEffect(() => {
     fetchMetrics();
   }, [fetchMetrics]);
-
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -117,14 +85,9 @@ export function SovereignIntelligenceDashboard() {
         <button 
           onClick={handleRefresh}
           disabled={refreshing}
-          style={{
-            background: 'rgba(0,240,255,0.1)', border: '1px solid rgba(0,240,255,0.3)', borderRadius: 8, padding: '6px 12px',
-            color: '#00f0ff', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-            display: 'flex', alignItems: 'center', gap: 6, cursor: refreshing ? 'wait' : 'pointer',
-            transition: 'all 0.3s',
-          }}
+          className="glass-extreme px-4 py-2 rounded-xl border-cyan-500/30 text-neon-cyan text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:bg-cyan-500/10 transition-all hover:scale-105"
         >
-          <RefreshCw size={12} className={refreshing ? 'animate-spin' : ''} />
+          <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
           {refreshing ? 'Syncing...' : 'Refresh'}
         </button>
       }
@@ -133,123 +96,84 @@ export function SovereignIntelligenceDashboard() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        style={{ display: 'flex', flexDirection: 'column', gap: 32, position: 'relative' }}
+        className="flex-col gap-8 relative z-10"
       >
-        {/* Singularity Ambient Glow */}
-        <div style={{ position: 'absolute', top: '-20%', left: '-10%', width: '120%', height: '120%', pointerEvents: 'none', opacity: 0.2, zIndex: 0 }}>
-          <div style={{ position: 'absolute', top: '25%', left: '25%', width: 500, height: 500, background: '#00f0ff', borderRadius: '50%', filter: 'blur(150px)', mixBlendMode: 'screen' }} />
-          <div style={{ position: 'absolute', top: '33%', right: '25%', width: 600, height: 600, background: '#8a2be2', borderRadius: '50%', filter: 'blur(180px)', mixBlendMode: 'screen' }} />
+        {/* Asymmetrical Bento Box Grid for Core Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-min gap-6 [&>*:nth-child(1)]:col-span-1 lg:[&>*:nth-child(1)]:col-span-2 [&>*:nth-child(1)]:row-span-2 [&>*:nth-child(4)]:col-span-1 lg:[&>*:nth-child(4)]:col-span-2 [&>*:nth-child(5)]:row-span-2">
+          <MetricCard
+            icon={Wifi}
+            label="Bridge Status"
+            value={bridgeStatus === 'connected' ? 'Online' : 'Offline'}
+            sub={bridgeData?.version || 'Not connected'}
+            color={bridgeStatus === 'connected' ? '#22c55e' : '#ef4444'}
+            pulse={bridgeStatus === 'connected'}
+          />
+          <MetricCard
+            icon={Clock}
+            label="Uptime"
+            value={formatUptime(metrics?.uptime)}
+            sub="Server process"
+            color="#f59e0b"
+          />
+          <MetricCard
+            icon={Cpu}
+            label="CPU Usage"
+            value={metrics?.cpu_usage?.user ? `${(metrics.cpu_usage.user / 1000000).toFixed(1)}s` : '—'}
+            sub="User time"
+            color="#8b5cf6"
+          />
+          <MetricCard
+            icon={HardDrive}
+            label="Heap Memory"
+            value={metrics?.memory?.heapUsed ? `${(metrics.memory.heapUsed / 1024 / 1024).toFixed(1)} MB` : '—'}
+            sub={metrics?.memory?.rss ? `RSS: ${(metrics.memory.rss / 1024 / 1024).toFixed(1)} MB` : ''}
+            color="#06b6d4"
+          />
+          <MetricCard
+            icon={Activity}
+            label="Avg Latency"
+            value={metrics?.latency ? `${parseFloat(metrics.latency).toFixed(1)}ms` : '—'}
+            sub="Request average"
+            color="#f43f5e"
+          />
+          <MetricCard
+            icon={Zap}
+            label="Cache Hit Rate"
+            value={metrics?.cache?.hitRate !== undefined ? `${metrics.cache.hitRate.toFixed(0)}%` : '—'}
+            sub={metrics?.cache ? `${metrics.cache.hits} hits / ${metrics.cache.misses} misses` : ''}
+            color="#10b981"
+          />
+          <MetricCard
+            icon={Bot}
+            label="Swarm Fleet"
+            value={metrics?.swarm_size || bridgeData?.swarm?.active_nodes || 0}
+            sub="Live Agent Nodes"
+            color="#6366f1"
+          />
         </div>
 
-
-      {/* Metric Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20, marginBottom: 28 }}>
-        <MetricCard
-          icon={bridgeStatus === 'connected' ? Wifi : WifiOff}
-          label="Bridge Status"
-          value={bridgeStatus === 'connected' ? 'Online' : 'Offline'}
-          sub={bridgeData?.version || 'Not connected'}
-          color={bridgeStatus === 'connected' ? '#22c55e' : '#ef4444'}
-          pulse={bridgeStatus === 'connected'}
-        />
-        <MetricCard
-          icon={Clock}
-          label="Uptime"
-          value={formatUptime(metrics?.uptime)}
-          sub="Server process"
-          color="#f59e0b"
-        />
-        <MetricCard
-          icon={Cpu}
-          label="CPU Usage"
-          value={metrics?.cpu_usage?.user ? `${(metrics.cpu_usage.user / 1000000).toFixed(1)}s` : '—'}
-          sub="User time"
-          color="#8b5cf6"
-        />
-        <MetricCard
-          icon={HardDrive}
-          label="Heap Memory"
-          value={metrics?.memory?.heapUsed ? `${(metrics.memory.heapUsed / 1024 / 1024).toFixed(1)} MB` : '—'}
-          sub={metrics?.memory?.rss ? `RSS: ${(metrics.memory.rss / 1024 / 1024).toFixed(1)} MB` : ''}
-          color="#06b6d4"
-        />
-        <MetricCard
-          icon={Activity}
-          label="Avg Latency"
-          value={metrics?.latency ? `${parseFloat(metrics.latency).toFixed(1)}ms` : '—'}
-          sub="Request average"
-          color="#f43f5e"
-        />
-        <MetricCard
-          icon={Zap}
-          label="Cache Hit Rate"
-          value={metrics?.cache?.hitRate !== undefined ? `${metrics.cache.hitRate.toFixed(0)}%` : '—'}
-          sub={metrics?.cache ? `${metrics.cache.hits} hits / ${metrics.cache.misses} misses` : ''}
-          color="#10b981"
-        />
-        <MetricCard
-          icon={RefreshCw}
-          label="Evolution Cycles"
-          value={bridgeData?.evolution_cycles || '0'}
-          sub="Self-evolution passes"
-          color="#6366f1"
-        />
-        <MetricCard
-          icon={Activity}
-          label="Evo Studio IQ"
-          value={metrics?.logic?.iq ? metrics.logic.iq.toLocaleString() : '—'}
-          sub={`Baseline: ${metrics?.logic?.total_lines || 0} LOC`}
-          color="#10b981"
-        />
-      </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {[
-            { label: 'Evo Studio IQ', value: metrics?.logic?.iq ? metrics.logic.iq.toLocaleString() : 'N/A', trend: 'LIVE', icon: Zap, color: 'text-indigo-400' },
-            { label: 'Logic Density', value: metrics?.logic?.density || 'N/A', trend: 'PHYSICAL', icon: Cpu, color: 'text-emerald-400' },
-            { label: 'Sync Latency', value: metrics?.latency ? `${metrics.latency}ms` : '0ms', trend: 'ZERO-D', icon: Clock, color: 'text-amber-400' },
-            { label: 'Foundry Load', value: metrics?.memory?.heapUsed ? (metrics.memory.heapUsed / 1024 / 1024).toFixed(1) + 'MB' : 'N/A', trend: 'STABLE', icon: Activity, color: 'text-rose-400' },
-          ].map((stat, i) => (
-            <motion.div
-              key={i}
-              whileHover={{ y: -5, scale: 1.02 }}
-              className="p-6 bg-black/40 border border-slate-800 rounded-2xl relative overflow-hidden group"
-            >
-              <div className={`absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity ${stat.color}`}>
-                <stat.icon size={48} />
-              </div>
-              <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">{stat.label}</div>
-              <div className="text-2xl font-black text-white tracking-tighter mb-1">{stat.value}</div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] text-emerald-500 font-black uppercase">{stat.trend}</span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* API Truth Status */}
-        <div className="p-6 bg-black/40 border border-slate-800 rounded-3xl mt-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Evo Studio API Mesh</div>
+        {/* API Truth Status Bento Block */}
+        <div className="glass-extreme border-cyan-500/30 shadow-[0_0_30px_rgba(0,240,255,0.05)] rounded-4xl p-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="text-xs text-cyan-500/70 font-black uppercase tracking-widest">Evo Studio API Mesh</div>
             <button 
               onClick={() => useSovereignStore.getState().runTruthProbe()}
-              className="text-[9px] text-indigo-400 font-black uppercase tracking-widest hover:text-indigo-300"
+              className="text-[10px] text-neon-cyan font-black uppercase tracking-widest hover:text-indigo-300 transition-colors"
             >
               Run Truth Probe
             </button>
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {Object.entries(bridgeData?.probes || { 
               openai: { status: 'UNKNOWN' }, 
               gemini: { status: 'UNKNOWN' }, 
               stripe: { status: 'UNKNOWN' } 
             }).map(([name, info]) => (
-              <div key={name} className="p-3 bg-slate-900/50 border border-slate-800 rounded-xl flex items-center justify-between">
-                <span className="text-[10px] text-slate-400 font-bold uppercase">{name}</span>
-                <div className="flex items-center gap-2">
-                  <div className={`w-1.5 h-1.5 rounded-full ${info.status === 'VERIFIED' ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : info.status === 'MISSING' ? 'bg-slate-600' : 'bg-rose-500'}`} />
-                  <span className={`text-[9px] font-black uppercase ${info.status === 'VERIFIED' ? 'text-emerald-500' : info.status === 'MISSING' ? 'text-slate-600' : 'text-rose-500'}`}>
+              <div key={name} className="p-4 glass-extreme border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-2xl flex items-center justify-between group hover:border-cyan-400 transition-all">
+                <span className="text-xs text-slate-300 font-black uppercase tracking-wider">{name}</span>
+                <div className="flex items-center gap-3">
+                  <div className={`w-2 h-2 rounded-full ${info.status === 'VERIFIED' ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : info.status === 'MISSING' ? 'bg-slate-600' : 'bg-rose-500 shadow-[0_0_10px_#ef4444]'}`} />
+                  <span className={`text-[10px] font-black uppercase tracking-widest ${info.status === 'VERIFIED' ? 'text-emerald-500' : info.status === 'MISSING' ? 'text-slate-600' : 'text-rose-500'}`}>
                     {info.status}
                   </span>
                 </div>
@@ -257,99 +181,76 @@ export function SovereignIntelligenceDashboard() {
             ))}
           </div>
         </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 28 }}>
-        {/* Quick Actions */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
-            Quick Actions
+        {/* Foundry Mastery Roadmap */}
+        <div className="glass-extreme border-cyan-500/30 shadow-[0_0_30px_rgba(0,240,255,0.05)] rounded-4xl p-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="text-xs text-cyan-500/70 font-black uppercase tracking-widest">Foundry Mastery Roadmap</div>
+            <div className="text-[10px] text-emerald-400 font-black uppercase tracking-widest bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 animate-pulse">Phase 6 Active: Sovereignty</div>
           </div>
-          <QuickAction
-            icon={MessageSquare}
-            label="Open AI Chat"
-            sub="Start a new production mission with your OpenAI API"
-            onClick={() => setActivePage('chat')}
-            color="#6366f1"
-          />
-          <QuickAction
-            icon={Zap}
-            label="Prompt Registry"
-            sub="Browse and manage your prompt stacks"
-            onClick={() => setActivePage('prompt-registry')}
-            color="#f59e0b"
-          />
-          <QuickAction
-            icon={RefreshCw}
-            label="Run Maintenance Cycle"
-            sub="Execute a full self-healing maintenance pass"
-            onClick={runMaintenance}
-            color="#10b981"
-          />
-          <QuickAction
-            icon={Zap}
-            label="Trigger Evolution Cycle"
-            sub="Execute physical logic evolution & compaction"
-            onClick={async () => {
-              try {
-                const res = await safeFetchBridge('/api/study/initiate', {
-                  method: 'POST',
-                  body: JSON.stringify({ protocolId: 'DREAM_CYCLE' })
-                });
-                
-                if (!res.ok) throw new Error(res.error || 'Failed to initiate study');
-                
-                useSovereignStore.getState().addNotification(`Evolution Cycle Complete: ${res.data?.signature}`, 'success');
-              } catch (err) {
-                useSovereignStore.getState().addNotification(`Evolution Cycle Failed: ${err.message}`, 'error');
-              }
-            }}
-            color="#6366f1"
-          />
-          <QuickAction
-            icon={Activity}
-            label="View Metrics"
-            sub="Detailed performance monitoring dashboard"
-            onClick={() => setActivePage('metrics')}
-            color="#8b5cf6"
-          />
-        </div>
-
-        {/* Recent Chat */}
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>
-            Recent Chat Activity
-          </div>
-          <div style={{
-            background: '#111827', border: '1px solid #1e293b', borderRadius: 14, padding: 16,
-            display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 300, overflow: 'auto',
-          }}>
-            {chatMessages.slice(-5).map((msg) => (
-              <div key={msg.id} style={{
-                padding: '10px 14px', borderRadius: 10,
-                background: msg.role === 'user' ? 'rgba(99,102,241,0.08)' : 'rgba(255,255,255,0.02)',
-                border: `1px solid ${msg.role === 'user' ? 'rgba(99,102,241,0.15)' : '#1e293b'}`,
-              }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: msg.role === 'user' ? '#818cf8' : '#475569', textTransform: 'uppercase', marginBottom: 4 }}>
-                  {msg.role === 'user' ? 'You' : msg.role === 'system' ? 'System' : 'AI'}
-                </div>
-                <div style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5, whiteSpace: 'pre-wrap', overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: 60 }}>
-                  {msg.content.slice(0, 200)}{msg.content.length > 200 ? '...' : ''}
+          
+          <div className="flex flex-col md:flex-row gap-4 relative">
+            <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800/50 -translate-y-1/2 hidden md:block rounded-full" />
+            
+            {[
+              { phase: 1, name: 'Handshake', status: 'COMPLETED', icon: Wifi },
+              { phase: 2, name: 'Seeding', status: 'COMPLETED', icon: Database },
+              { phase: 3, name: 'Engineering', status: 'COMPLETED', icon: Wrench },
+              { phase: 4, name: 'Registry', status: 'COMPLETED', icon: Server },
+              { phase: 5, name: 'Evolution', status: 'COMPLETED', icon: Dna },
+              { phase: 6, name: 'Sovereignty', status: 'ACTIVE', icon: Sparkles }
+            ].map((step, i) => (
+              <div key={step.phase} className="flex-1 relative z-10">
+                <div className={`p-4 rounded-2xl border backdrop-blur-xl transition-all ${step.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]' : step.status === 'ACTIVE' ? 'bg-cyan-500/20 border-cyan-400 shadow-[0_0_30px_rgba(0,240,255,0.2)] scale-105' : 'bg-black/40 border-white/5 opacity-50'}`}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${step.status === 'COMPLETED' ? 'bg-emerald-500/20 text-emerald-400' : step.status === 'ACTIVE' ? 'bg-cyan-500/20 text-cyan-400 animate-pulse' : 'bg-white/5 text-slate-400'}`}>
+                      <step.icon size={14} />
+                    </div>
+                    <div>
+                      <div className="text-[9px] font-black uppercase tracking-widest text-slate-400">Phase {step.phase}</div>
+                      <div className={`text-sm font-black tracking-wider ${step.status === 'COMPLETED' ? 'text-emerald-300' : step.status === 'ACTIVE' ? 'text-cyan-300' : 'text-slate-300'}`}>{step.name}</div>
+                    </div>
+                  </div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: step.status === 'COMPLETED' ? '#10b981' : step.status === 'ACTIVE' ? '#00f0ff' : '#64748b' }}>
+                    {step.status}
+                  </div>
                 </div>
               </div>
             ))}
-            <button
-              onClick={() => setActivePage('chat')}
-              style={{
-                background: 'none', border: '1px solid #1e293b', borderRadius: 8, padding: '8px 12px',
-                color: '#6366f1', fontSize: 11, fontWeight: 600, cursor: 'pointer', marginTop: 4,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-              }}
-            >
-              Open Full Chat <ArrowRight size={12} />
-            </button>
           </div>
         </div>
-      </div>
+
+        {/* Action and Log Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="flex-col gap-4">
+            <div className="text-[10px] font-black text-cyan-500/70 uppercase tracking-widest mb-2 pl-2">Quick Actions</div>
+            <QuickAction icon={MessageSquare} label="Open AI Chat" sub="Start a new production mission" onClick={() => setActivePage('chat')} color="#6366f1" />
+            <QuickAction icon={Zap} label="Prompt Registry" sub="Browse and manage your prompt stacks" onClick={() => setActivePage('prompt-registry')} color="#f59e0b" />
+            <QuickAction icon={RefreshCw} label="Run Maintenance Cycle" sub="Execute a full self-healing pass" onClick={runMaintenance} color="#10b981" />
+            <QuickAction icon={Activity} label="View Metrics" sub="Detailed performance dashboard" onClick={() => setActivePage('metrics')} color="#8b5cf6" />
+          </div>
+
+          <div>
+            <div className="text-[10px] font-black text-cyan-500/70 uppercase tracking-widest mb-4 pl-2">Recent Chat Activity</div>
+            <div className="glass-extreme border-cyan-500/30 rounded-4xl p-6 flex-col gap-4 max-h-[400px] overflow-auto custom-scrollbar">
+              {chatMessages.slice(-5).map((msg) => (
+                <div key={msg.id} className="p-4 rounded-xl border-cyan-500/10 bg-black/40">
+                  <div className="text-[9px] font-black uppercase tracking-widest mb-2" style={{ color: msg.role === 'user' ? '#00f0ff' : '#8b5cf6' }}>
+                    {msg.role === 'user' ? 'You' : msg.role === 'system' ? 'System' : 'AI'}
+                  </div>
+                  <div className="text-xs text-slate-300 leading-relaxed font-mono whitespace-pre-wrap truncate max-h-[60px]">
+                    {msg.content}
+                  </div>
+                </div>
+              ))}
+              <button
+                onClick={() => setActivePage('chat')}
+                className="mt-2 glass-extreme px-4 py-3 rounded-xl border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:border-indigo-400 transition-all hover:bg-indigo-500/10"
+              >
+                Open Full Chat <ArrowRight size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
       </motion.div>
     </IDEPageLayout>
   );

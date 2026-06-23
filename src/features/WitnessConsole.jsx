@@ -10,15 +10,22 @@ import './WitnessConsole.css';
  */
 
 import { safeFetchBridge } from '../config/bridge-config.js';
+import { useSovereignStore } from '../store.js';
 
 export const WitnessConsole = () => {
   const { 
     is_hud_open, active_mode, setMode, prompts, traces, truth_scores, 
     active_state, toggleHud, snapshotState, health_status, is_healing,
-    runDoctorScan, triggerEvoDoctor, triggerEvoEngineer, triggerEvoUIEngineer
+    runDoctorScan, triggerEvoDoctor, triggerEvoEngineer, triggerEvoUIEngineer, fetchHistory
   } = useWitnessStore();
+  const globalTheme = useSovereignStore((s) => s.globalTheme);
+  const brainTheme = globalTheme?.brain || 'alpha';
   const [glitchText, setGlitchText] = useState('SOVEREIGN_WITNESS_ACTIVE');
   const [studyRunning, setStudyRunning] = useState(false);
+
+  useEffect(() => {
+    fetchHistory();
+  }, [fetchHistory]);
 
   const runStudyProtocol = async (protocol) => {
     if (studyRunning) return;
@@ -41,20 +48,20 @@ export const WitnessConsole = () => {
   };
 
   if (!is_hud_open) return (
-    <button className="witness-toggle-btn" onClick={toggleHud}>
+    <button className="witness-toggle-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95" onClick={toggleHud}>
       <span className="pulse-dot"></span> WITNESS_HUD
     </button>
   );
 
   return (
-    <div className="witness-overlay-container">
-      <div className="witness-hud-panel glassmorphic">
+    <div className={`witness-overlay-container theme-${brainTheme}`}>
+      <div className={`witness-hud-panel glassmorphic ${brainTheme === 'zeta' ? 'border-4 border-black rounded-none bg-white filter grayscale' : brainTheme === 'gamma' ? 'border-4 border-fuchsia-500 rounded-none bg-[#1a0033]' : brainTheme === 'theta' ? 'border-none rounded-[50px] shadow-[inset_0_0_100px_rgba(200,0,255,0.2)] bg-black/80' : ''}`}>
         <div className="hud-header">
           <div className="hud-title">
             <span className="evo-logo">PH_EVO</span> // {glitchText}
           </div>
           <div className="hud-controls">
-            <button className="hud-close-btn" onClick={toggleHud}>×</button>
+            <button className="hud-close-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95" onClick={toggleHud}>×</button>
           </div>
         </div>
 
@@ -88,7 +95,7 @@ export const WitnessConsole = () => {
           {active_mode === 'PROMPT_PACKET' && (
             <div className="prompt-viewer scroll-area">
               {prompts.map(p => (
-                <div key={p.id} className="prompt-card">
+                <div key={p.id} className="prompt-glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
                   <div className="prompt-meta">CHANNEL: {p.type} | ID: {p.id.slice(0, 8)}</div>
                   <pre className="code-block prompt-raw">{p.payload}</pre>
                   <div className="prompt-response-label">RESPONSE_DNA:</div>
@@ -108,7 +115,7 @@ export const WitnessConsole = () => {
                     <p>{health_status.driftCount} DISCOVERED_FAULTS</p>
                   </div>
                   <button 
-                    className={`doctor-btn ${is_healing ? 'healing' : ''}`}
+                    className={`doctor-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${is_healing ? 'healing' : ''}`}
                     onClick={() => triggerEvoDoctor()}
                     disabled={is_healing}
                   >
@@ -132,7 +139,7 @@ export const WitnessConsole = () => {
                   <div className="no-nodes">NO_ACTIVE_NODES_IN_MEMORY. RUN_SCAN_TO_POPULATE.</div>
                 ) : (
                   Object.entries(truth_scores).map(([path, report]) => (
-                    <div key={path} className={`node-card ${report.severity === 'CRITICAL' ? 'unhealthy' : 'healthy'}`}>
+                    <div key={path} className={`node-glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl ${report.severity === 'CRITICAL' ? 'unhealthy' : 'healthy'}`}>
                       <div className="node-icon">
                         {report.severity === 'CRITICAL' ? <AlertTriangle className="warning-symbol" /> : <Heart />}
                       </div>
@@ -146,7 +153,7 @@ export const WitnessConsole = () => {
                 )}
               </div>
               
-              <button className="full-scan-btn" onClick={() => runDoctorScan()}>
+              <button className="full-scan-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95" onClick={() => runDoctorScan()}>
                 RUN_FULL_DIAGNOSTIC_SCAN
               </button>
             </div>
@@ -175,7 +182,7 @@ export const WitnessConsole = () => {
                 ].map(p => (
                   <button 
                     key={p} 
-                    className={`protocol-btn ${p === 'NUCLEAR_AUDIT' ? 'truth-primary' : p === 'SCORCH_EARTH' ? 'danger-zone' : ''}`}
+                    className={`protocol-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${p === 'NUCLEAR_AUDIT' ? 'truth-primary' : p === 'SCORCH_EARTH' ? 'danger-zone' : ''}`}
                     onClick={() => runStudyProtocol(p)}
                     disabled={studyRunning}
                   >

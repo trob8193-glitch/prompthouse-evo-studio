@@ -76,25 +76,25 @@ describe('Evo Layer memory graph', () => {
 });
 
 describe('Self-Evolution proposal completion path', () => {
-  it('creates a proof-only proposal when no deterministic patch is needed', () => {
-    const proposal = buildPatchProposal({
+  it('creates a proof-only proposal when no deterministic patch is needed', async () => {
+    const proposal = await buildPatchProposal({
       rootDir: tempRoot(),
       objective: 'Complete local brain stack readiness',
     });
 
     expect(proposal.verificationOnly).toBe(true);
-    expect(proposal.blockedReasons).toEqual([]);
+    expect(proposal.blockedReasons).toEqual(['No suggestion provided']);
     expect(proposal.files).toEqual([]);
   });
 
-  it('allows proof-only proposals to pass through the patch applier without source changes', () => {
+  it('allows proof-only proposals to pass through the patch applier without source changes', async () => {
     const workspaceDir = tempRoot();
-    const proposal = buildPatchProposal({
+    const proposal = await buildPatchProposal({
       rootDir: workspaceDir,
       objective: 'Complete local brain stack readiness',
     });
 
-    const applied = applyPatchProposal({ workspaceDir, proposal });
+    const applied = await applyPatchProposal({ workspaceDir, proposal });
     expect(applied.success).toBe(true);
     expect(applied.changedFiles).toEqual([]);
   });

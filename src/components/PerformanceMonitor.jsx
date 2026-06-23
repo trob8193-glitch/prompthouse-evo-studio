@@ -14,8 +14,8 @@ export const PerformanceMonitor = () => {
   };
 
   const MetricCard = ({ title, value, unit, icon: Icon, color, max = 100 }) => (
-    <div className="card">
-      <div className="card-body">
+    <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+      <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body">
         <div className="flex items-center justify-between mb-2">
           <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">{title}</span>
           <Icon size={16} className={color} />
@@ -42,7 +42,7 @@ export const PerformanceMonitor = () => {
         <h2 className="module-title">
           <Activity className="text-indigo-500 drop-shadow-md" /> System Performance
         </h2>
-        <div className="text-[10px] text-cyan-400 font-bold bg-cyan-900/30 border border-cyan-500/30 px-3 py-1 rounded-full uppercase tracking-wider">Live Profile: ACTIVE</div>
+        <div className="text-[10px] text-cyan-400 font-bold bg-cyan-900/30 border-cyan-500/30 px-3 py-1 rounded-full uppercase tracking-wider">Live Profile: ACTIVE</div>
       </div>
 
       <div className="evo-grid">
@@ -52,9 +52,9 @@ export const PerformanceMonitor = () => {
         <MetricCard title="Requests" value={metrics.rps} unit="/s" icon={Database} color="text-indigo-500" max={5} />
       </div>
 
-      <div className="mt-6 card p-6 border-l-2 border-l-indigo-500">
+      <div className="mt-6 glass-extreme rounded-3xl border-neon-glow shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl p-6 border-l-2 border-l-indigo-500">
         <h3 className="text-xs font-bold mb-4 flex items-center gap-2 uppercase tracking-widest text-slate-300">
-          <Database size={14} className="text-indigo-400" /> Optimization Proof
+          <Database size={14} className="text-neon-cyan" /> Optimization Proof
         </h3>
         <div className="space-y-4">
           <div className="flex justify-between text-xs">

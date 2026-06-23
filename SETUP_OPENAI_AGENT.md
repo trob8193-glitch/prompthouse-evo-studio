@@ -5,6 +5,7 @@
 Your PromptHouse Evo agent on OpenAI can be deployed two ways:
 
 ### Option 1: Modern Agents API (Recommended)
+
 Uses the new `@openai/agents` SDK for stateful, tool-using agents.
 
 ```bash
@@ -12,6 +13,7 @@ npm run create:agent:modern
 ```
 
 ### Option 2: Classic Assistants API (Legacy)
+
 Uses the traditional OpenAI Assistants with code interpreter.
 
 ```bash
@@ -39,13 +41,16 @@ npm run create:agent:classic
 ## What Gets Created
 
 ### Agent Identity
+
 - **Name**: PromptHouse Evo Studio
 - **Model**: gpt-5.5 (agents) or gpt-4-turbo (assistants)
 - **Role**: Sovereign intelligence engine for prompt generation, code synthesis, and proof verification
 - **Tools**: Code interpreter, file handling, knowledge retrieval
 
 ### System Prompt
+
 The agent receives a comprehensive instructions file that covers:
+
 - 11 core operational modules
 - Truth state tracking (known, inferred, blocked, built, verified)
 - Domain constraints (dev, business, legal, creative)
@@ -57,6 +62,7 @@ The agent receives a comprehensive instructions file that covers:
 ## Running the Setup
 
 ### Step 1: Verify Your API Key
+
 ```powershell
 cd C:\Users\Noname\.gemini\antigravity\scratch\prompthouse-evo-studio
 $env:OPENAI_API_KEY
@@ -65,12 +71,14 @@ $env:OPENAI_API_KEY
 Expected: Your OpenAI key (no output means it's not set)
 
 If missing, update `.env`:
+
 ```
 OPENAI_API_KEY=<YOUR_OPENAI_API_KEY_HERE>
 OPENAI_MODEL=gpt-5.5
 ```
 
 ### Step 2: Create the Agent
+
 ```powershell
 # For modern Agents API (recommended):
 npm run create:agent:modern
@@ -80,7 +88,9 @@ npm run create:agent:classic
 ```
 
 ### Step 3: Capture the Agent ID
+
 The script will output:
+
 ```
 ✅ Successfully created the PromptHouse Evo Studio Agent!
 
@@ -90,13 +100,16 @@ ID: agent_abc123xyz...
 **IMPORTANT**: Save this ID. You'll use it to interact with the agent.
 
 ### Step 4: Store the Agent ID
+
 Create `.env.agent`:
+
 ```
 AGENT_ID=agent_abc123xyz...
 OPENAI_API_KEY=<YOUR_OPENAI_API_KEY_HERE>
 ```
 
 ### Step 5: Test the Agent
+
 ```powershell
 npm run test:agent
 ```
@@ -108,6 +121,7 @@ npm run test:agent
 Once created, interact with your agent via:
 
 ### Chat Endpoint (Express bridge)
+
 ```
 POST /api/agent/chat
 Body: {
@@ -117,16 +131,17 @@ Body: {
 ```
 
 ### Direct OpenAI SDK
+
 ```javascript
-import { Agent } from '@openai/agents';
+import { Agent } from "@openai/agents";
 
 const agent = new Agent({
   apiKey: process.env.OPENAI_API_KEY,
-  agentId: process.env.AGENT_ID
+  agentId: process.env.AGENT_ID,
 });
 
 const response = await agent.run({
-  message: "Create a production React component"
+  message: "Create a production React component",
 });
 ```
 
@@ -135,18 +150,22 @@ const response = await agent.run({
 ## Troubleshooting
 
 ### Error: "401 Unauthorized"
+
 - ❌ API key expired or invalid
 - ✅ Fix: Generate new key at https://platform.openai.com/api-keys
 
 ### Error: "Agent model not available"
+
 - ❌ gpt-5.5 not available in your region/plan
 - ✅ Fallback: Use `gpt-4-turbo` or `gpt-4`
 
 ### Error: "Tools not supported"
+
 - ❌ Your OpenAI plan doesn't support agents/tools
 - ✅ Fix: Upgrade to GPT-4 API access via billing settings
 
 ### Agent runs but gives vague responses
+
 - ❌ System prompt isn't being applied
 - ✅ Fix: Verify instructions file was uploaded, check agent settings on platform.openai.com
 
@@ -154,14 +173,14 @@ const response = await agent.run({
 
 ## Files Generated
 
-| File | Purpose |
-|------|---------|
-| `.env` | API key & model (do NOT commit) |
-| `.env.agent` | Agent ID storage (do NOT commit) |
-| `openai-agent-modern.js` | Create/manage Agents API agent |
-| `openai-agent-classic.js` | Create/manage Assistants API agent |
-| `agent-runtime.js` | Runtime for agent interactions |
-| `public/agent-playground.html` | Web UI to test agent |
+| File                           | Purpose                            |
+| ------------------------------ | ---------------------------------- |
+| `.env`                         | API key & model (do NOT commit)    |
+| `.env.agent`                   | Agent ID storage (do NOT commit)   |
+| `openai-agent-modern.js`       | Create/manage Agents API agent     |
+| `openai-agent-classic.js`      | Create/manage Assistants API agent |
+| `agent-runtime.js`             | Runtime for agent interactions     |
+| `public/agent-playground.html` | Web UI to test agent               |
 
 ---
 
@@ -182,4 +201,3 @@ const response = await agent.run({
 - **OpenAI Assistants API**: https://platform.openai.com/docs/assistants
 - **Agent Playground**: http://localhost:5173/agent-playground
 - **Truth State Reference**: See `RELEASE_CHECKLIST.md`
-

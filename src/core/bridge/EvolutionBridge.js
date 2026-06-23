@@ -8,7 +8,7 @@ import { BRIDGE_URL } from '../../config/bridge-config.js';
  */
 
 export class EvolutionBridge {
-  constructor(apiBaseUrl = BRIDGE_URL {
+  constructor(apiBaseUrl = BRIDGE_URL) {
     this.apiBaseUrl = apiBaseUrl;
   }
 

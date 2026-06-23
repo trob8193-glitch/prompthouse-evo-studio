@@ -1,0 +1,27 @@
+{
+  "name": "prompthouse-evo-studio-vscode",
+  "displayName": "PromptHouse Evo Studio Extension",
+  "description": "Bonds VS Code directly to the Sovereign Intelligence Engine",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onCommand:prompthouse.dispatch"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "prompthouse.dispatch",
+        "title": "PromptHouse: Dispatch to Studio"
+      }
+    ]
+  },
+  "scripts": {
+    "package": "vsce package"
+  }
+}

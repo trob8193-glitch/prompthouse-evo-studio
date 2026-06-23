@@ -1,122 +1,86 @@
 import fs from 'fs';
 import path from 'path';
 
-function fileContains(rootDir, relPath, pattern) {
-  const full = path.join(rootDir, relPath);
-  if (!fs.existsSync(full)) return false;
-  return pattern.test(fs.readFileSync(full, 'utf8'));
-}
+const OBJECTIVE_HISTORY_FILE = () => path.join(process.cwd(), '.prompthouse-data', 'evolution', 'objective_history.jsonl');
 
-function routeExists(rootDir, route) {
-  const routeFiles = [
-    'promptbridge-server.js',
-    'server/routes/studio-core.routes.js',
-    'generated_apis/evo_llm_routes.js',
-    'generated_apis/engine_dashboard_routes.js',
+/**
+ * Selects the next autonomous evolution objective based on:
+ * - Recent failure memory (what keeps breaking)
+ * - Current stability scores (what's weakest)
+ * - Evolution run history (what hasn't been touched)
+ * - Focus area weights from settings
+ */
+export function selectAutonomousObjective(options = {}) {
+  const {
+    focusAreas = [],
+    failureMemory = [],
+    recentRuns = [],
+    stabilityScores = {}
+  } = options;
+
+  const categories = [
+    { id: 'source_integrity', weight: 1.0, label: 'Source Code Integrity' },
+    { id: 'training_runtime', weight: 0.9, label: 'Training Runtime Optimization' },
+    { id: 'css_evolution', weight: 0.8, label: 'CSS/Theme Evolution' },
+    { id: 'architecture_hardening', weight: 0.7, label: 'Architecture Hardening' },
+    { id: 'performance', weight: 0.6, label: 'Performance Optimization' },
+    { id: 'security', weight: 0.5, label: 'Security Audit' }
   ];
-  return routeFiles.some((relPath) => fileContains(rootDir, relPath, new RegExp(route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))));
-}
 
-function fileExists(rootDir, relPath) {
-  return fs.existsSync(path.join(rootDir, relPath));
-}
-
-export function selectAutonomousObjective({ rootDir = process.cwd(), memory = [], focusAreas = [] } = {}) {
-  const candidates = [];
-
-  if (fileContains(rootDir, 'src/self-implementation-policy.js', /(OMNIPOTENT|S\+\+\+\+|FULFILLED|100% functional|resonance)/)) {
-    candidates.push({
-      objective: 'Remove unverified self-evolution language and replace it with truth-gated policy states',
-      category: 'truth_cleanup',
-      risk: 'LOW',
-      impact: 90,
-      confidence: 95,
-    });
+  // Boost weight for categories with recent failures
+  const failureCounts = {};
+  for (const failure of failureMemory) {
+    const cat = failure.category || 'source_integrity';
+    failureCounts[cat] = (failureCounts[cat] || 0) + 1;
   }
 
-  if (fileContains(rootDir, 'src/store.js', /const BRIDGE_URL = 'http:\/\/127\.0\.0\.1:3001';/)) {
-    candidates.push({
-      objective: 'Replace hardcoded bridge URL with env-aware Vite fallback',
-      category: 'config',
-      risk: 'LOW',
-      impact: 80,
-      confidence: 90,
-    });
-  }
+  // Boost weight for focused areas
+  const focusSet = new Set(focusAreas);
 
-  if (fileContains(rootDir, 'scripts/ai_self_train.mjs', /\/api\/training-capture|\/api\/evo-runtime\/activate/)
-    && (!routeExists(rootDir, '/api/training-capture') || !routeExists(rootDir, '/api/evo-runtime/activate'))) {
-    candidates.push({
-      objective: 'Wire AI self-training capture and Evo runtime activation routes end to end',
-      category: 'training_runtime',
-      risk: 'MEDIUM',
-      impact: 95,
-      confidence: 92,
-    });
-  }
+  // Score each category
+  const scored = categories.map(cat => {
+    let score = cat.weight;
+    if (failureCounts[cat.id]) score += failureCounts[cat.id] * 0.3;
+    if (focusSet.has(cat.id)) score += 0.5;
+    if (stabilityScores[cat.id] !== undefined) score += (1.0 - stabilityScores[cat.id]) * 0.4;
 
-  if (fileContains(rootDir, 'src/core/evo-llm/EvoLlmTrainingOrchestrator.js', /PROVIDER_FINE_TUNE_JOB_QUEUED/)
-    || fileContains(rootDir, 'src/core/evo-llm/EvoLlmOrchestratorRun.js', /BLOCKED_PROVIDER_TRAINING_NOT_EXECUTED/)) {
-    candidates.push({
-      objective: 'Upgrade Evo LLM provider training from blocked or simulated states to proof-gated fine-tune job receipts',
-      category: 'provider_training',
-      risk: 'HIGH',
-      impact: 90,
-      confidence: 88,
-    });
-  }
+    // Detect missing features in workspace
+    if (options.rootDir && cat.id === 'training_runtime') {
+      const aiTrainScript = path.join(options.rootDir, 'scripts/ai_self_train.mjs');
+      const routesFile = path.join(options.rootDir, 'server/routes/studio-core.routes.js');
+      if (fs.existsSync(aiTrainScript)) {
+        score += 2.0; // Boost training runtime if script exists but maybe routes are missing
+      }
+    }
 
-  if (fileExists(rootDir, 'scripts/audit-route-drift.mjs')) {
-    candidates.push({
-      objective: 'Run route drift proof and repair missing bridge contracts before release',
-      category: 'route_integrity',
-      risk: 'LOW',
-      impact: 72,
-      confidence: 90,
-    });
-  }
+    // Penalize recently-run categories
+    const recentCount = recentRuns.filter(r => r.suggestion?.category === cat.id).length;
+    score -= recentCount * 0.1;
 
-  if (fileExists(rootDir, 'scripts/dead-surface-audit.mjs')) {
-    candidates.push({
-      objective: 'Run dead-surface audit and repair unreachable UI commands',
-      category: 'ui_integrity',
-      risk: 'LOW',
-      impact: 68,
-      confidence: 90,
-    });
-  }
-
-  if (fileExists(rootDir, '_quarantine')) {
-    candidates.push({
-      objective: 'Review quarantined source movement and produce a proof-gated cleanup or restoration plan',
-      category: 'source_integrity',
-      risk: 'MEDIUM',
-      impact: 85,
-      confidence: 84,
-    });
-  }
-
-  if (candidates.length === 0) {
-    candidates.push({
-      objective: 'Run watch-mode scan and update self-evolution receipt ledger without mutating files',
-      category: 'diagnostics',
-      risk: 'LOW',
-      impact: 20,
-      confidence: 100,
-    });
-  }
-
-  const focus = new Set(focusAreas || []);
-  const scored = candidates.map(candidate => {
-    const recurrence = memory.find(item => candidate.objective.toLowerCase().includes(String(item.pattern || '').toLowerCase()));
-    const recurrenceScore = recurrence ? Math.max(0, recurrence.successfulFixes - recurrence.failedFixes) * 5 : 0;
-    const focusBonus = focus.has(candidate.category) ? 10 : 0;
-    const riskPenalty = candidate.risk === 'LOW' ? 0 : candidate.risk === 'MEDIUM' ? 20 : 50;
-    return {
-      ...candidate,
-      score: candidate.impact + candidate.confidence + recurrenceScore + focusBonus - riskPenalty,
-    };
+    return { ...cat, score: Math.max(0, score) };
   });
 
-  return scored.sort((a, b) => b.score - a.score)[0];
+  scored.sort((a, b) => b.score - a.score);
+  const selected = scored[0];
+
+  // Log selection
+  const historyEntry = {
+    selectedAt: new Date().toISOString(),
+    category: selected.id,
+    score: selected.score,
+    alternatives: scored.slice(1, 3).map(s => ({ id: s.id, score: s.score }))
+  };
+
+  try {
+    const dir = path.dirname(OBJECTIVE_HISTORY_FILE());
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(OBJECTIVE_HISTORY_FILE(), JSON.stringify(historyEntry) + '\n', { flag: 'a', encoding: 'utf8' });
+  } catch {}
+
+  return {
+    category: selected.id,
+    label: selected.label,
+    score: selected.score,
+    reasoning: `Selected based on: weight=${selected.weight}, failures=${failureCounts[selected.id] || 0}, focused=${focusSet.has(selected.id)}`
+  };
 }

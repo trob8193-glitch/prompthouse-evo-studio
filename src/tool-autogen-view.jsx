@@ -64,11 +64,11 @@ export function ToolAutogenView() {
   }, [intent, selectedType, bridgeLive]);
 
   return (
-    <div className="flex-col animate-in">
-      <div className="flex-between" style={{ marginBottom: 16 }}>
+    <div className="flex-col gap-4 animate-in">
+      <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
-          <div className="page-title">🪄 Tool Autogenerator</div>
-          <div className="page-subtitle">Generate custom tools, agents, adapters, and extensions from intent prompts.</div>
+          <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🪄 Tool Autogenerator</div>
+          <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Generate custom tools, agents, adapters, and extensions from intent prompts.</div>
         </div>
         <div style={{ padding: '6px 14px', borderRadius: 20, fontSize: 11, fontWeight: 800,
           background: bridgeLive ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)',
@@ -80,16 +80,16 @@ export function ToolAutogenView() {
 
       <div className="tabs-bar" style={{ marginBottom: 16 }}>
         {[{ id: 'generate', label: '🪄 Generate' }, { id: 'vault', label: `📦 Vault (${recipes.length})` }].map(t => (
-          <button key={t.id} className={`tab-btn ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>{t.label}</button>
+          <button key={t.id} className={`tab-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>{t.label}</button>
         ))}
       </div>
 
       {activeTab === 'generate' && (
         <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 16 }}>
           {/* Tool Type Picker */}
-          <div className="card">
-            <div className="card-header"><div className="card-title" style={{ fontSize: 13 }}>Tool Type</div></div>
-            <div className="card-body" style={{ padding: 8 }}>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title" style={{ fontSize: 13 }}>Tool Type</div></div>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ padding: 8 }}>
               {TOOL_TYPES.map(t => (
                 <button key={t.id} onClick={() => setSelectedType(t.id)}
                   style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 12px', borderRadius: 8, marginBottom: 4,
@@ -104,11 +104,11 @@ export function ToolAutogenView() {
           </div>
 
           {/* Generator */}
-          <div className="card">
-            <div className="card-header"><div className="card-title">Describe Your Tool Intent</div></div>
-            <div className="card-body flex-col">
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Describe Your Tool Intent</div></div>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex-col gap-4">
               <div className="field">
-                <label className="field-label">What should this tool do? (be specific)</label>
+                <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">What should this tool do? (be specific)</label>
                 <textarea className="field-textarea" rows={5}
                   ghostInput="e.g. Create a PromptLink adapter that routes any Flutter code-generation request to a local Ollama model with fallback to GPT-4o-mini..."
                   value={intent} onChange={e => setIntent(e.target.value)} />
@@ -116,7 +116,7 @@ export function ToolAutogenView() {
               <div style={{ padding: '10px 14px', background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.2)', borderRadius: 8, fontSize: 11, color: '#fb923c', marginBottom: 12 }}>
                 ⚠️ All generated tools are marked <strong>draft/template</strong>. Owner approval required before publishing or deploying.
               </div>
-              <button className="btn btn-primary" onClick={generate} disabled={generating || !intent.trim()}>
+              <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={generate} disabled={generating || !intent.trim()}>
                 {generating ? '⏳ Generating...' : `🪄 Generate ${TOOL_TYPES.find(t => t.id === selectedType)?.label || 'Tool'}`}
               </button>
 
@@ -148,9 +148,9 @@ export function ToolAutogenView() {
       )}
 
       {activeTab === 'vault' && (
-        <div className="card">
-          <div className="card-header"><div className="card-title">📦 Tool Recipe Vault</div></div>
-          <div className="card-body">
+        <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">📦 Tool Recipe Vault</div></div>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body">
             {recipes.length === 0 ? (
               <div className="empty-state"><div className="empty-icon">📦</div><div className="empty-title">No recipes yet</div><div className="empty-sub">Generate your first tool above</div></div>
             ) : recipes.map(r => (

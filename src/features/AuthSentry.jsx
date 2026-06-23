@@ -19,7 +19,7 @@ export const AuthSentry = ({ children }) => {
 
   const signInPanel = (
     <div className="auth-sentry-overlay">
-      <div className="auth-sentry-card">
+      <div className="auth-sentry-glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
         <div className="auth-sentry-header">
           <div className="auth-sentry-logo">
             <span className="logo-icon">PH</span>

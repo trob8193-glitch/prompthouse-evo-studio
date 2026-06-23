@@ -106,7 +106,7 @@ export class BlendedEvolutionSystem {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
-        }).catch(() => {});
+        }).catch((e) => { Log.debug(`\x1b[33m⚠️ Broadcast failed for ${target.url}: ${e.message}\x1b[0m`); });
       } catch (e) {}
     });
 
@@ -127,7 +127,7 @@ export class BlendedEvolutionSystem {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(ingestPayload)
-      }).catch(() => {});
+      }).catch((e) => { Log.debug(`\x1b[33m⚠️ Signal ingestion failed: ${e.message}\x1b[0m`); });
     } catch (e) {}
   }
 }

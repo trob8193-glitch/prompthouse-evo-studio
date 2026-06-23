@@ -306,7 +306,7 @@ The agent will automatically detect and load this skill on its next invocation.
 # Blueprint: ${ext.displayName}
 # Truth State: ${bp.truthState || 'READY'}
 
-FROM llama3
+FROM qwen3.6
 
 PARAMETER temperature 0.7
 PARAMETER top_p 0.9

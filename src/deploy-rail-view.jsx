@@ -32,11 +32,11 @@ export function DeployRailView() {
   }, [config]);
 
   return (
-    <div className="flex-col animate-in">
-      <div className="flex-between" style={{ marginBottom: 16 }}>
+    <div className="flex-col gap-4 animate-in">
+      <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
-          <div className="page-title">🛤️ DeployRail</div>
-          <div className="page-subtitle">Evo Studio deployment pipeline. Test → Build → Secret Check → Preview → Production.</div>
+          <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🛤️ DeployRail</div>
+          <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Evo Studio deployment pipeline. Test → Build → Secret Check → Preview → Production.</div>
         </div>
         <div className="badge badge-gold">
           LIVE-RUN MODE
@@ -45,11 +45,11 @@ export function DeployRailView() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 16 }}>
         <div className="flex-col gap-16">
-          <div className="card">
-            <div className="card-header"><div className="card-title">Deploy Config</div></div>
-            <div className="card-body flex-col">
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Deploy Config</div></div>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex-col gap-4">
               <div className="field">
-                <label className="field-label">Provider</label>
+                <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Provider</label>
                 <select className="field-select" value={config.provider} onChange={e => setConfig(c => ({...c, provider: e.target.value}))}>
                   <option value="vercel">Vercel</option>
                   <option value="netlify">Netlify</option>
@@ -58,7 +58,7 @@ export function DeployRailView() {
                 </select>
               </div>
               <div className="field">
-                <label className="field-label">Mode</label>
+                <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Mode</label>
                 <div style={{ fontSize: 11, color: '#f5c842', padding: 8, background: 'rgba(245,200,66,0.08)', border: '1px solid rgba(245,200,66,0.25)', borderRadius: 4 }}>
                   Live-run execution is always enabled.
                 </div>
@@ -75,7 +75,7 @@ export function DeployRailView() {
                 ⚠️ Live production requires provider tokens in .env and owner approval.
               </div>
               <button 
-                className="btn btn-primary" 
+                className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" 
                 style={{ marginTop: 12 }}
                 onClick={startDeploy}
                 disabled={status === 'deploying'}
@@ -86,23 +86,23 @@ export function DeployRailView() {
           </div>
           
           {receipt && (
-            <div className="card">
-              <div className="card-header"><div className="card-title">Deploy Receipt</div></div>
-              <div className="card-body" style={{ fontSize: 11 }}>
-                <div className="flex-between"><span>ID:</span> <span style={{ fontFamily: 'var(--font-mono)' }}>{receipt.id?.slice(0, 8)}</span></div>
-                <div className="flex-between"><span>Stage:</span> <span className="badge badge-violet">{receipt.stage}</span></div>
-                <div className="flex-between"><span>Status:</span> <span style={{ color: receipt.status === 'blocked' ? '#f87171' : '#4ade80' }}>{receipt.status}</span></div>
-                <div className="flex-between"><span>Approval:</span> <span>{receipt.approvalRequired ? 'REQUIRED' : 'GRANTED'}</span></div>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+              <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Deploy Receipt</div></div>
+              <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ fontSize: 11 }}>
+                <div className="flex items-center justify-between"><span>ID:</span> <span style={{ fontFamily: 'var(--font-mono)' }}>{receipt.id?.slice(0, 8)}</span></div>
+                <div className="flex items-center justify-between"><span>Stage:</span> <span className="badge badge-violet">{receipt.stage}</span></div>
+                <div className="flex items-center justify-between"><span>Status:</span> <span style={{ color: receipt.status === 'blocked' ? '#f87171' : '#4ade80' }}>{receipt.status}</span></div>
+                <div className="flex items-center justify-between"><span>Approval:</span> <span>{receipt.approvalRequired ? 'REQUIRED' : 'GRANTED'}</span></div>
               </div>
             </div>
           )}
         </div>
 
-        <div className="card" style={{ background: '#030408', border: '1px solid #333' }}>
-          <div className="card-header" style={{ borderBottom: '1px solid #222' }}>
-            <div className="card-title" style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#4ade80' }}>Deploy Log Output</div>
+        <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ background: '#030408', border: '1px solid #333' }}>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header" style={{ borderBottom: '1px solid #222' }}>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title" style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#4ade80' }}>Deploy Log Output</div>
           </div>
-          <div className="card-body" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#94a3b8', height: 400, overflowY: 'auto' }}>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#94a3b8', height: 400, overflowY: 'auto' }}>
             {log.length === 0 && <div style={{ color: '#444' }}>// Awaiting deployment...</div>}
             {log.map((line, i) => (
               <div key={i} style={{ marginBottom: 4, color: line.includes('PASS') ? '#4ade80' : line.includes('BLOCKED') ? '#f87171' : 'inherit' }}>

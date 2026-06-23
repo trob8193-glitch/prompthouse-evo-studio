@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-06-12T17:47:42.713Z",
-  "lastPlanId": "evo_train_plan_1781286462545",
+  "updatedAt": "2026-06-21T00:41:07.080Z",
+  "lastPlanId": "evo_train_plan_1782002467079",
   "truthState": "PROVIDER_TRAINING_PLAN_BLOCKED",
   "provider": "openai",
   "risk": "HIGH"

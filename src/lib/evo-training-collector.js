@@ -146,7 +146,7 @@ export async function exportTrainingJSONL() {
 }
 
 // ─── Push to Bridge for Global Training ───────────────────────
-export async function pushTrainingToBridge(bridgeUrl = BRIDGE_URL {
+export async function pushTrainingToBridge(bridgeUrl = BRIDGE_URL) {
   const pending = await getAllTrainingExamples({ limit: 1000 });
   const unexported = pending.filter(e => !e.exported);
   if (unexported.length === 0) return { pushed: 0 };

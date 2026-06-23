@@ -17,8 +17,8 @@ import React from 'react';
 
 export const ${name} = () => {
   return (
-    <div className="p-6 bg-slate-900 text-white rounded-xl shadow-xl border border-slate-800">
-      <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+    <div className="p-6 bg-slate-900 text-white rounded-xl shadow-xl border-slate-800">
+      <h2 className="text-2xl font-bold mb-4 bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
         ${name}
       </h2>
       <ul className="space-y-2">

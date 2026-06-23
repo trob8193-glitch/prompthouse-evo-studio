@@ -146,7 +146,7 @@ async function runBrowserProof() {
     await page.waitForLoadState('networkidle', { timeout: 30000 }).catch(() => {});
 
     const clickedPages = [];
-    for (const label of ['Settings & API', 'Deployment Center', 'Cost Firewall', 'Theme Evolution', 'Launch Proof']) {
+    for (const label of ['Evo Command', 'Neural Topology', 'Quantum Deck', 'Omni-Tether Matrix', 'Void Terminal']) {
       await clickButtonByText(page, label);
       await page.waitForTimeout(300);
       clickedPages.push(label);

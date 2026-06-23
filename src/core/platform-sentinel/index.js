@@ -222,7 +222,7 @@ export class PlatformGateRunner {
     }
   }
   run({ includeHeavy = false } = {}) {
-    const commands = includeHeavy ? PLATFORM_REQUIRED_COMMANDS : PLATFORM_REQUIRED_COMMANDS.filter(command => !['test', 'build', 'architecture_audit'].includes(command.id));
+    const commands = includeHeavy ? PLATFORM_REQUIRED_COMMANDS : PLATFORM_REQUIRED_COMMANDS.filter(command => [!'test', 'build', 'architecture_audit'].includes(command.id));
     return commands.map(command => this.runCommand(command));
   }
 }

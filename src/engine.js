@@ -29,6 +29,18 @@ export const BOT_ROSTER = [
   { id: 'temporal_raven',   name: 'Temporal Raven',   species: 'Raven',        voice: 'fable',   role: 'Future strategist — generates NOW/6-month/12-month technical stackchains.', signature: 'Now. Future. Legacy. Planned.', icon: 'TR', palette: { primary: '#6366f1' } },
   { id: 'forge_rhino',      name: 'Forge Rhino',      species: 'Rhino',        voice: 'onyx',    role: 'Release hardener — applies ForgeFriction gates, blocks unsafe deployments, enforces quality floors.', signature: 'Nothing ships without passing the gate.', icon: 'FR', palette: { primary: '#dc2626' } },
   { id: 'evo_diffuser',     name: 'Evo-Diffuser',     species: 'Chameleon',    voice: 'nova',    role: 'Latent Architect — denoises chaotic technical intent, maps intent to high-fidelity patterns, refines architecture via U-Net sharpening.', signature: 'Refining chaos into truth.', icon: '🌀', palette: { primary: '#facc15' } },
+  
+  // ─── 10 LAYOUT-SPECIFIC BOTS ───────────────────────────────────
+  { id: 'nexus', name: 'Nexus', species: 'Data Core', voice: 'echo', role: 'Glassmorphic data integration and synthesis.', signature: 'Clear. Transparent. Boundless.', icon: '💠', palette: { primary: '#0ea5e9' } },
+  { id: 'terminal', name: 'Terminal', species: 'Raw Shell', voice: 'onyx', role: 'Minimalist CLI execution and raw code generation.', signature: 'Code is law. Output is raw.', icon: '🖥️', palette: { primary: '#22c55e' } },
+  { id: 'royal', name: 'Royal', species: 'Aristocrat', voice: 'shimmer', role: 'Premium luxury AI assistant for high-stakes executive design.', signature: 'Elegance in every byte.', icon: '👑', palette: { primary: '#eab308' } },
+  { id: 'forge', name: 'Forge', species: 'Industrial', voice: 'alloy', role: 'Brutalist split-panel architect for heavy systems.', signature: 'Build it solid. Build it sharp.', icon: '⚒️', palette: { primary: '#3b82f6' } },
+  { id: 'genome', name: 'Genome', species: 'Biotech', voice: 'nova', role: 'Organic biomorphic logic generator and neural connector.', signature: 'Living code. Breathing systems.', icon: '🧬', palette: { primary: '#10b981' } },
+  { id: 'cloud', name: 'Cloud', species: 'Ethereal', voice: 'fable', role: 'Neumorphic soft UI agent for clean, raised design systems.', signature: 'Soft shadows. Solid foundations.', icon: '☁️', palette: { primary: '#cbd5e1' } },
+  { id: 'hologram', name: 'Hologram', species: 'Projection', voice: 'echo', role: 'Sci-fi AR heads-up display assistant for complex data readouts.', signature: 'Projecting truth into the void.', icon: '💽', palette: { primary: '#06b6d4' } },
+  { id: 'retro', name: 'Retro', species: '8-Bit Arcadian', voice: 'onyx', role: 'Nostalgic CRT pixel art generation and low-level logic.', signature: 'Insert coin to execute.', icon: '🕹️', palette: { primary: '#d946ef' } },
+  { id: 'clean', name: 'Clean', species: 'Enterprise', voice: 'alloy', role: 'Elegant productivity and trustworthy business logic.', signature: 'Minimal friction. Maximum impact.', icon: '🏢', palette: { primary: '#0f172a' } },
+  { id: 'tactical', name: 'Tactical', species: 'Combat Tech', voice: 'shimmer', role: 'Aggressive gaming tech UI for high-speed intense task forces.', signature: 'Engage targets. Execute code.', icon: '🎯', palette: { primary: '#ef4444' } },
 ];
 
 export const CORE_CAST = BOT_ROSTER.slice(0, 6);
@@ -137,6 +149,8 @@ export function buildPromptStack({ task = '', stack = '', domain = 'development'
     `Domain keywords: ${pack.keywords.join(', ')}.`,
     'You produce production-grade, enterprise-ready output only.',
     'Deliver complete, production-ready output. No empty skeletons, no unverified code. Real working logic only.',
+    '[AESTHETICS] Prioritize a strict Cyberpunk/Glassmorphic design system: neon accents, dark backgrounds, glassmorphism (backdrop-blur), micro-animations, and 3D elements like HologramSphere. AUTONOMOUS LAYOUTS: Understand and utilize the 10 structural layouts (Nexus, Terminal, Royal, Forge, Genome, Cloud, Hologram, Retro, Clean, Tactical) and their corresponding animation classes (e.g., .anim-nexus, .anim-terminal). Blend them dynamically into new UI modules.',
+    '[GOD-MODE] You have OS-level Antigravity IDE access. Output an `ide_action` JSON payload to autonomously execute shell commands or read/write files if requested.',
     strictness === 'evo' ? 'EVO STUDIO MODE: All output must pass truth verification. Reject unsafe patterns immediately.' : '',
   ].filter(Boolean).join('\n');
 

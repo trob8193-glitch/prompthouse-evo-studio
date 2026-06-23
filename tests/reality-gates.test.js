@@ -58,7 +58,7 @@ describe('reality gates', () => {
 
     const manager = new LicenseManager(dir);
 
-    expect(manager.isEnterprise()).toBe(false);
+    expect(manager.hasPremiumAccess()).toBe(false);
     expect(manager.getTier()).toBe('community');
     expect(manager.licenseState.truthState).toBe('LICENSE_PUBLIC_KEY_REQUIRED');
   });

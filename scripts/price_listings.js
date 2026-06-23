@@ -28,7 +28,7 @@ try {
     // Adjust based on title keyword
     if (title.includes('advanced') || title.includes('pro') || title.includes('core')) {
       price += 50;
-    } else if (title.includes('test') || title.includes('mock') || title.includes('stub')) {
+    } else if (title.includes('test') || title.includes('simulated') || title.includes('bypassed')) {
       price = 5; // keep cheap testing items cheap
     }
 

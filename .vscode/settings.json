@@ -10,5 +10,12 @@
     "titleBar.activeBackground": "#020617",
     "titleBar.activeForeground": "#818CF8"
   },
-  "terminal.integrated.defaultProfile.windows": "PowerShell"
+  "python.terminal.useEnvFile": true,
+  "python.envFile": "${workspaceFolder}/.env",
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "workbench.editorAssociations": {
+    "*.copilotmd": "vscode.markdown.preview.editor",
+    "*.svg": "default",
+    "*.sprite": "d2rmodding.spriteViewer"
+  }
 }

@@ -65,9 +65,16 @@ import { RealExecutionPipeline } from './lib/execution/pipeline.js';
 import { registerCommerceMarketplaceRoutes } from './src/routes/commerce_marketplace_routes.js';
 import { registerStudioMarketplaceRoutes } from './server/routes/studio_marketplace_routes.js';
 import { attachSseTransport } from './src/core/mcp/McpServerDaemon.mjs';
+import { executeIdeAction } from './src/core/mcp/McpClientConnector.mjs';
 import { registerRealTimeIngestRoutes } from './server/routes/realtime-ingest.routes.js';
 import { registerMobileEngineRoutes } from './generated_apis/mobile_engine_routes.js';
 import { registerTrainingQueueRoutes } from './generated_apis/training_queue_routes.js';
+import registerCredentialVaultRoutes from './server/routes/credential_vault_routes.js';
+import registerVercelOrchestratorRoutes from './server/routes/vercel_orchestrator_routes.js';
+import { registerGitBridgeRoutes } from './server/routes/git-bridge.routes.js';
+import { registerSingularityCompletionRoutes } from './server/routes/singularity-completion.routes.js';
+import { registerEvolutionRoutes } from './server/routes/evolution.routes.js';
+import { registerOmnibotMobileRoutes } from './generated_apis/omnibot_mobile_routes.js';
 
 // Import our core engines
 import { UniversalAIAdaptor } from './lib/ai/UniversalAIAdaptor.js';
@@ -75,6 +82,7 @@ import { SelfMaintenance } from './src/core/automation/self_maintenance.js';
 import { StripeAdaptor } from './lib/commerce/StripeAdaptor.js';
 import { FoundryOrchestrator } from './lib/foundry/FoundryOrchestrator.js';
 import { TruthGate } from './src/core/truth/TruthGate.js';
+import { maintenanceDaemon } from './src/core/autonomy/SelfMaintenanceDaemon.js';
 
 // Hybrid Quad System Imports
 import { ModelRouter } from './src/core/gateway/modelRouter.js';
@@ -110,6 +118,15 @@ import { initializeMegaTether } from './src/core/tethers/MegaTetherCore.js';
 import { hasExplicitOwnerApproval, getApprovalBlockReason } from './src/owner-approval.js';
 import { runNuclearTruthAudit } from './src/core/audit/NuclearTruthAudit.js';
 import { QuadBrainEvolutionDaemon } from './src/core/daemons/QuadBrainEvolutionDaemon.js';
+import { getOmniOrchestrator } from './src/core/daemons/omni/OmniOrchestrator.mjs';
+import { ConvergenceDaemon } from './src/core/daemons/convergence/ConvergenceDaemon.mjs';
+import { SingularityCore } from './src/core/daemons/singularity/SingularityCore.mjs';
+import { PlatformSentinelDaemon } from './src/core/daemons/sentinel/PlatformSentinelDaemon.mjs';
+import { CrucibleDaemon } from './src/core/daemons/crucible/CrucibleDaemon.mjs';
+import { FrontendWatchdog } from './src/core/daemons/watchdogs/FrontendWatchdog.mjs';
+import { BackendWatchdog } from './src/core/daemons/watchdogs/BackendWatchdog.mjs';
+import { BridgeendWatchdog } from './src/core/daemons/watchdogs/BridgeendWatchdog.mjs';
+import { MiddleendWatchdog } from './src/core/daemons/watchdogs/MiddleendWatchdog.mjs';
 
 const runtimeBridgePort = process.env.BRIDGE_PORT;
 dotenv.config({ override: true });
@@ -122,8 +139,12 @@ initDatabase();
 ensureAuthSchema();
 ensureGatewayBootstrapData();
 ensureEvolutionSchema();
+maintenanceDaemon.start();
+
+import { initErrorTracking, sentryErrorHandler } from './server/middleware/errorTracking.js';
 
 const app = express();
+initErrorTracking(app);
 app.set('trust proxy', 1);
 app.use(express.json({ limit: '10mb' }));
 app.use(cors({
@@ -132,14 +153,13 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Hardened Security Headers (Edge Deployment Configured)
-app.use((req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-  next();
-});
+// Hardened Security Headers, CSRF, and Tracing
+import { securityHeaders, csrfGenerate, requestTracing } from './server/middleware/security.js';
+app.use(requestTracing);
+app.use(securityHeaders);
+// Note: csrfVerify should be applied per route or globally depending on architecture
+// For now, we add the generator so the headers exist.
+app.use(csrfGenerate);
 
 // Production API Rate Limiting
 app.use((req, res, next) => {
@@ -278,20 +298,58 @@ registerEvoWiFiRoutes(app);
 registerEvoBondsRoutes(app);
 registerBrainRouterRoutes(app);
 registerCommerceMarketplaceRoutes(app);
+registerCredentialVaultRoutes(app);
+registerVercelOrchestratorRoutes(app);
 registerStudioMarketplaceRoutes(app);
 registerMobileEngineRoutes(app);
 registerTrainingQueueRoutes(app);
+registerGitBridgeRoutes(app);
+registerSingularityCompletionRoutes(app);
+registerEvolutionRoutes(app);
+registerOmnibotMobileRoutes(app);
 
 // Attach the Global MCP SSE Endpoints
 attachSseTransport(app);
 
+app.post('/api/ide-action', async (req, res) => {
+  try {
+    const { actionName, args } = req.body;
+    if (!actionName) return res.status(400).json({ success: false, error: "actionName is required" });
+    
+    console.log(`[IDE Bridge] Forwarding action '${actionName}' to Antigravity IDE...`);
+    const result = await executeIdeAction(actionName, args || {});
+    res.json({ success: true, result });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 app.use('/api/launch-pilot', launchPilotRoutes);
 
+
+// Track active swarm nodes via heartbeat
+let activeDaemonNodes = new Map();
+
+app.post('/api/swarm/heartbeat', (req, res) => {
+  const { nodeId, status, timestamp } = req.body;
+  if (nodeId) {
+    activeDaemonNodes.set(nodeId, { status, timestamp: timestamp || Date.now() });
+  }
+  res.json({ success: true });
+});
 
 // Alias for dashboard compatibility
 app.get('/status', (req, res) => {
   const ledgerStats = db.prepare('SELECT SUM(iq_gain) as total_gain FROM sovereign_ledger').get();
   const gain = ledgerStats.total_gain || 0;
+  const swarmIds = process.env.SWARM_IDS ? process.env.SWARM_IDS.split(',') : [];
+  
+  // Clean up stale daemon nodes (older than 15s)
+  const now = Date.now();
+  for (const [id, node] of activeDaemonNodes.entries()) {
+    if (now - node.timestamp > 15000) activeDaemonNodes.delete(id);
+  }
+
   res.json({ 
     success: true, 
     status: 'PromptBridge Operational', 
@@ -299,6 +357,9 @@ app.get('/status', (req, res) => {
     iq_metrics: {
       baseline: 165000000,
       sovereign_gain: gain
+    },
+    swarm: {
+      active_nodes: Math.max(swarmIds.length, process.env.AGENT_ID ? 1 : 0) + activeDaemonNodes.size
     }
   });
 });
@@ -362,6 +423,7 @@ function requireSubscription(req, res, next) {
 app.post('/api/intelligence/execute', requireSubscription, async (req, res) => {
   try {
     const { module, action, payload } = req.body;
+    console.log(`[ROUTE] /api/intelligence/execute called with module=${module}, action=${action}, payload=`, payload);
     const result = await intelligenceCore.executeAction(module, action, payload);
     res.json(result);
   } catch (error) {
@@ -373,6 +435,13 @@ app.get('/api/metrics', (req, res) => {
   const ledgerStats = db.prepare('SELECT SUM(iq_gain) as total_gain, COUNT(*) as action_count FROM sovereign_ledger').get();
   const iq_gain = ledgerStats.total_gain || 0;
   const baseline = 165000000; // 165M baseline
+  const swarmIds = process.env.SWARM_IDS ? process.env.SWARM_IDS.split(',') : [];
+  
+  // Clean up stale daemon nodes (older than 15s)
+  const now = Date.now();
+  for (const [id, node] of activeDaemonNodes.entries()) {
+    if (now - node.timestamp > 15000) activeDaemonNodes.delete(id);
+  }
   
   res.json({ 
     success: true, 
@@ -382,7 +451,8 @@ app.get('/api/metrics', (req, res) => {
       density: ((baseline + iq_gain) / 1000000).toFixed(2),
       iq: baseline + iq_gain,
       action_count: ledgerStats.action_count
-    }
+    },
+    swarm_size: Math.max(swarmIds.length, process.env.AGENT_ID ? 1 : 0) + activeDaemonNodes.size
   });
 });
 
@@ -552,9 +622,27 @@ const promptCompressor = new PromptCompressor();
 
 const megaTether = initializeMegaTether(db, intelligenceCore);
 
-// Initialize Autonomous Evolution Daemon
-const evolutionDaemon = new QuadBrainEvolutionDaemon(process.cwd());
-evolutionDaemon.start(300000); // 5 minutes
+import { TrainingLoopDaemon } from './server/daemons/TrainingLoopDaemon.js';
+
+// Initialize Autonomous Evolution Daemon with AI Adaptor
+const evolutionDaemon = new QuadBrainEvolutionDaemon(process.cwd(), ai);
+
+// Initialize Training Loop Daemon
+const trainingDaemon = new TrainingLoopDaemon(process.cwd());
+
+// OmniOrchestrator: Register and start all daemons
+const orchestrator = getOmniOrchestrator();
+orchestrator.registerDaemon('evolution', evolutionDaemon);
+orchestrator.registerDaemon('training', trainingDaemon);
+orchestrator.registerDaemon('convergence', new ConvergenceDaemon());
+orchestrator.registerDaemon('singularity', new SingularityCore());
+orchestrator.registerDaemon('sentinel', new PlatformSentinelDaemon());
+orchestrator.registerDaemon('crucible', new CrucibleDaemon());
+orchestrator.registerDaemon('watchdog_frontend', new FrontendWatchdog());
+orchestrator.registerDaemon('watchdog_backend', new BackendWatchdog());
+orchestrator.registerDaemon('watchdog_bridgeend', new BridgeendWatchdog());
+orchestrator.registerDaemon('watchdog_middleend', new MiddleendWatchdog());
+orchestrator.startAll();
 
 // Global Savings Ledger
 let globalFirewallSavings = {
@@ -1081,8 +1169,12 @@ app.post('/v1/chat/completions', validateEvoApiKey, async (req, res) => {
   }
 });
 
+import { setupWebSocketBridge } from './server/services/websocket-bridge.js';
+
 const httpServer = createServer(app);
 const hiveMind = new HiveMindProtocol(httpServer);
+const wsBridge = setupWebSocketBridge(httpServer);
+app.set('wsBridge', wsBridge);
 
 // --- Remote Mobile Push Notification Tunnel ---
 let connectedPhones = [];
@@ -1104,6 +1196,8 @@ app.post('/api/push-notification', (req, res) => {
   res.json({ success: true, pushedTo: connectedPhones.length });
 });
 // ----------------------------------------------
+app.use(sentryErrorHandler);
+
 
 httpServer.listen(port, '0.0.0.0', () => {
   console.log(`PromptBridge Server & Hive Mind Swarm Node listening on http://0.0.0.0:${port}`);

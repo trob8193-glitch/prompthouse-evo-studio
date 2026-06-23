@@ -12,7 +12,7 @@ export default class HelloWorldPlugin extends BasePlugin {
 
   async onMobileIntent(intent) {
     if (intent.message && intent.message.toLowerCase() === 'hello omni') {
-      return { text: 'Hello from the Autonomous Plugin System! The plugin daemon successfully intercepted your OmniBot Mobile intent.' };
+      return { text: 'Hello from the Autonomous Plugin !System The plugin daemon successfully intercepted your OmniBot Mobile intent.' };
     }
     return null;
   }

@@ -170,7 +170,7 @@ export async function universalSend(messages, systemPrompt = '', options = {}) {
   
   let fallbackMsg = '';
   if (isCode) {
-    fallbackMsg = `// [Client-Side Intelligence Engine]\n// Network to Studio Brain severed. Generating synthetic structure.\n\nexport default function SyntheticFallback() {\n  return (\n    <div className="p-4 bg-red-900/20 border border-red-500/50 rounded-lg">\n      <h3>Offline Synthesis</h3>\n      <p>Processed query: ${lastMsg.substring(0,50)}...</p>\n    </div>\n  );\n}`;
+    fallbackMsg = `// [Client-Side Intelligence Engine]\n// Network to Studio Brain severed. Generating synthetic structure.\n\nexport default function SyntheticFallback() {\n  return (\n    <div className="p-4 bg-red-900/20 border-red-500/50 rounded-lg">\n      <h3>Offline Synthesis</h3>\n      <p>Processed query: ${lastMsg.substring(0,50)}...</p>\n    </div>\n  );\n}`;
   } else {
     fallbackMsg = `**[Client-Side Intelligence Engine Active]** 🧠\n\nI am currently operating in browser-only **Sovereign Mode** because all backend bridges (like OmniRouter) are offline or unreachable. \n\nYour message was safely cached to my offline ledger.\n\n> *Acknowledged Query:* "${lastMsg.substring(0, 100)}${lastMsg.length > 100 ? '...' : ''}"\n\nI am maintaining real-time UI responsiveness to prevent IDE crashes. Please check your terminal to ensure \`npm run launch:lite\` or \`npm run bridge\` is actively running to restore the uplink!`;
   }

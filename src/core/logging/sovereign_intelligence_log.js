@@ -22,6 +22,7 @@ export function summarizeSovereignIntelligenceLog(logPath = DEFAULT_LOG_PATH) {
     path: logPath,
     count: records.length,
     latest: records[records.length - 1] || null,
+    summarizedAt: new Date().toISOString()
   };
 }
 

@@ -1,4 +1,7 @@
 import { checkLocalToolAdapters, checkApiAdapters, summarizeToolReadiness, writeDaemonReceipt } from '../src/core/egit/index.js';
+import { hardenProcess, createDaemonHeartbeat } from './daemon-hardener.mjs';
+
+hardenProcess('antigravity-daemon');
 
 console.log('Antigravity adapter daemon starting with receipts.');
 

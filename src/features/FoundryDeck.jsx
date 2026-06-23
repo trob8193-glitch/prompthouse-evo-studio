@@ -23,14 +23,14 @@ export const FoundryDeck = () => {
         </div>
       }
     >
-      <div className="w-full h-[calc(100vh-250px)] relative border border-slate-700/50 rounded-xl overflow-hidden shadow-2xl">
+      <div className="w-full h-[calc(100vh-250px)] relative border-cyan-500/30/50 rounded-3xl overflow-hidden shadow-2xl">
         <iframe 
           src={foundryUrl}
           className="w-full h-full border-none bg-slate-950"
           title="Evogenage Foundry"
         />
         
-        <div className="absolute bottom-4 right-4 p-3 bg-black/80 border border-amber-500/40 rounded-lg shadow-2xl pointer-events-none">
+        <div className="absolute bottom-4 right-4 p-3 bg-black/80 border-amber-500/40 rounded-2xl shadow-2xl pointer-events-none">
           <p className="text-[10px] text-amber-500/80 italic font-mono">
             "DriftGuard: VERIFIED. Logic Parity: 100%."
           </p>

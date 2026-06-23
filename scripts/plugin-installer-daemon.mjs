@@ -3,6 +3,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import { Log } from '../src/core/autonomy/SovereignLogger.js';
+import { hardenProcess, createDaemonHeartbeat } from './daemon-hardener.mjs';
+
+hardenProcess('plugin-installer-daemon');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');

@@ -18,6 +18,7 @@
   --bg-surface-mid: rgba(15, 15, 22, 0.5);
   --bg-elevated: rgba(20, 20, 28, 0.7);
   --bg-card: rgba(12, 12, 16, 0.55);
+  --bg-glass-heavy: rgba(10, 10, 15, 0.85);
   
   --border-subtle: rgba(255, 255, 255, 0.04);
   --border-dim: rgba(255, 255, 255, 0.08);
@@ -123,8 +124,9 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
 .sidebar {
   width: 240px; min-width: 240px;
   background: var(--bg-surface);
-  backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  
   border-right: 1px solid var(--border-dim);
   display: flex; flex-direction: column;
   padding: 0;
@@ -232,7 +234,8 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
 .readiness-score-num { font-size: 32px; font-weight: 900; color: var(--text-primary); line-height: 1; font-family: var(--font-mono); text-shadow: 0 0 20px rgba(255,255,255,0.2); }
 .readiness-grade {
   font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: var(--radius-full); margin-bottom: 4px;
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px); 
   text-transform: uppercase; letter-spacing: 1px;
 }
 .grade-evo { background: var(--accent-gold-dim); color: var(--accent-gold); border: 1px solid rgba(255,170,0,0.3); box-shadow: 0 0 12px var(--accent-gold-dim); }
@@ -249,7 +252,8 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
   padding: 24px 32px; border-bottom: 1px solid var(--border-dim);
   display: flex; align-items: center; justify-content: space-between;
   background: var(--bg-surface);
-  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px); 
   margin: 16px 16px 0 16px;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
@@ -262,8 +266,9 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
 /* ── CARDS ── */
 .card {
   background: rgba(12, 12, 18, 0.5);
-  backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-xl);
   overflow: hidden;
@@ -296,8 +301,9 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
 }
 .module-container {
   background: rgba(8, 8, 12, 0.6);
-  backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px);
+  
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: var(--radius-2xl);
   overflow: hidden;
@@ -333,6 +339,7 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
 .field-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.5px; text-transform: uppercase; }
 .field-input, .field-textarea, .field-select {
   background: rgba(5, 5, 8, 0.6);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-md);
@@ -388,6 +395,7 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
 .btn-secondary {
   background: rgba(255, 255, 255, 0.03); color: var(--text-secondary);
   border-color: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 }
 .btn-secondary:hover { 
@@ -402,6 +410,7 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
 .btn-sm { padding: 6px 11px; font-size: 12px; }
 .btn-icon {
   padding: 8px; border-radius: var(--radius-md);
+  
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
@@ -411,6 +420,7 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
   display: flex; gap: 2px; background: var(--bg-surface);
   border-radius: var(--radius-md); padding: 3px;
   border: 1px solid var(--border-dim);
+  
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
 }
@@ -425,6 +435,7 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
 
 /* ── PROMPT BLOCK ── */
 .prompt-block {
+  
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   background: var(--bg-void);
@@ -1563,31 +1574,7 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
   border-color: var(--bot-accent);
   background: rgba(34, 211, 238, 0.08);
   transform: translateY(-2px);
-  -webkit-box-shadow: 0 4px 12px rgba(34, 211, 238, 0.12);
-  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.12);
 }
-
-/* [EVO-DAEMON] Improve the visual hierarchy and premium feel by adding a subtle box shadow to the main container elements across the application. This will help in distinguishing sections and adding depth. */
-.main-container { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-
-/* [EVO-DAEMON] Improve the visual hierarchy by increasing the contrast of headings to make them stand out more prominently against the background. */
-h1, h2, h3 { color: #333333; }
-
-/* [EVO-DAEMON] Add consistent padding to all components to improve spacing and visual hierarchy. */
-.component { padding: 16px; }
-
-/* [EVO-DAEMON] Improve the visual hierarchy and premium feel by adding a subtle box-shadow to cards or panels, enhancing depth and focus. */
-.card, .panel { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-
-/* [EVO-DAEMON] Improve the visual hierarchy by increasing the contrast of primary buttons to make them more distinguishable and visually appealing. */
-.primary-button { background-color: #007bff; color: #ffffff; }
-
-/* [EVO-DAEMON] Improve visual hierarchy by increasing the contrast of headings to make them stand out more and enhance readability. */
-h1, h2, h3 { color: #333; }
-
-/* [EVO-DAEMON] Improve the visual hierarchy and premium feel by adding a subtle box-shadow to all card components, enhancing their separation from the background. */
-.card { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-
 /* [EVO-DAEMON] Improve the visual hierarchy and premium feel by adding a subtle box-shadow to the main content area. This will help in distinguishing the main content from the background, adding depth and focus. */
 .main-content { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
 
@@ -1611,3 +1598,152 @@ h1, h2, h3 { color: #333; }
 /* Auto-evolved */
 .blended-engine-active { display: block; }
 
+
+/* [EVO-ENGINE] Improve the spacing between UI elements to enhance visual hierarchy and readability. */
+.interstitial-wrapper { margin: 16px 0; }
+
+
+@keyframes particle-float {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+}
+.animate-particle-float { animation: particle-float 5s linear infinite; }
+
+@keyframes particle-float-right {
+  0% { transform: translate(0, 0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translate(120vw, -100vh) scale(0.5); opacity: 0; }
+}
+@keyframes particle-float-left {
+  0% { transform: translate(0, 0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translate(-120vw, -100vh) scale(0.5); opacity: 0; }
+}
+.animate-particle-float-right { animation: particle-float-right 5s linear infinite; }
+.animate-particle-float-left { animation: particle-float-left 5s linear infinite; }
+
+@keyframes hologram-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-hologram-float {
+  animation: hologram-float 4s ease-in-out infinite;
+}
+
+@keyframes projector-flicker {
+  0% { opacity: 0.6; transform: translateX(-50%) scale(1); filter: blur(20px) brightness(1); }
+  25% { opacity: 0.8; transform: translateX(-50%) scale(1.02); filter: blur(15px) brightness(1.2); }
+  50% { opacity: 0.5; transform: translateX(-50%) scale(0.98); filter: blur(25px) brightness(0.9); }
+  75% { opacity: 0.85; transform: translateX(-50%) scale(1.01); filter: blur(18px) brightness(1.1); }
+  100% { opacity: 0.6; transform: translateX(-50%) scale(1); filter: blur(20px) brightness(1); }
+}
+
+.animate-projector-flicker {
+  animation: projector-flicker 8s ease-in-out infinite alternate;
+}
+
+@keyframes projector-pulse {
+  0%, 100% { opacity: 0.2; transform: translateX(-50%) scaleY(1); }
+  50% { opacity: 0.4; transform: translateX(-50%) scaleY(1.05); }
+}
+
+.animate-projector-pulse {
+  animation: projector-pulse 4s ease-in-out infinite;
+}
+
+.hologram-text-glow {
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor, 0 0 40px currentColor;
+  mix-blend-mode: screen;
+}
+
+.hologram-text-glow-accent {
+  text-shadow: 0 0 15px var(--hologram-color), 0 0 30px var(--hologram-color), 0 0 45px var(--hologram-color);
+  color: var(--hologram-color) !important;
+  mix-blend-mode: screen;
+}
+
+/* [EVO-ENGINE] Improve visual hierarchy and spacing within the interstitial wrapper to enhance user experience. */
+.interstitial-wrapper { display: flex; justify-content: center; align-items: center; padding: 2rem; }
+
+/* ── 10 ANIMATED LAYOUTS ── */
+
+@keyframes layout-nexus-breathe {
+  0%, 100% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.2), inset 0 0 10px rgba(34, 211, 238, 0.1); border-color: rgba(34, 211, 238, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(34, 211, 238, 0.5), inset 0 0 20px rgba(34, 211, 238, 0.2); border-color: rgba(34, 211, 238, 0.6); }
+}
+.anim-nexus { animation: layout-nexus-breathe 4s ease-in-out infinite; }
+
+@keyframes layout-terminal-flicker {
+  0% { opacity: 1; }
+  95% { opacity: 1; }
+  96% { opacity: 0.8; }
+  97% { opacity: 1; }
+  98% { opacity: 0.5; }
+  99% { opacity: 1; text-shadow: 0 0 10px #22c55e; }
+  100% { opacity: 1; }
+}
+.anim-terminal { animation: layout-terminal-flicker 5s infinite; }
+
+@keyframes layout-royal-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.anim-royal {
+  background: linear-gradient(90deg, rgba(234, 179, 8, 0.05) 25%, rgba(234, 179, 8, 0.15) 50%, rgba(234, 179, 8, 0.05) 75%);
+  background-size: 200% auto;
+  animation: layout-royal-shimmer 6s linear infinite;
+}
+
+@keyframes layout-forge-shake {
+  0%, 100% { transform: translate(0, 0); }
+  1% { transform: translate(-1px, 1px); }
+  2% { transform: translate(1px, -1px); }
+  3% { transform: translate(0, 0); }
+}
+.anim-forge { animation: layout-forge-shake 8s infinite; }
+
+@keyframes layout-genome-pulse {
+  0%, 100% { border-radius: 40px; }
+  25% { border-radius: 45px 35px 40px 30px; }
+  50% { border-radius: 35px 45px 30px 40px; }
+  75% { border-radius: 30px 40px 45px 35px; }
+}
+.anim-genome { animation: layout-genome-pulse 10s ease-in-out infinite; }
+
+@keyframes layout-cloud-float {
+  0%, 100% { transform: translateY(0); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+  50% { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
+}
+.anim-cloud { animation: layout-cloud-float 6s ease-in-out infinite; }
+
+@keyframes layout-hologram-glitch {
+  0%, 100% { transform: translateX(0); filter: hue-rotate(0deg); }
+  5% { transform: translateX(-2px); filter: hue-rotate(90deg); }
+  10% { transform: translateX(2px); filter: hue-rotate(0deg); }
+  15% { transform: translateX(0); }
+}
+.anim-hologram { animation: layout-hologram-glitch 12s infinite; }
+
+@keyframes layout-retro-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+.anim-retro { animation: layout-retro-bounce 2s steps(2, end) infinite; }
+
+@keyframes layout-clean-slide {
+  0% { opacity: 0.95; background-position: top left; }
+  50% { opacity: 1; background-position: bottom right; }
+  100% { opacity: 0.95; background-position: top left; }
+}
+.anim-clean { animation: layout-clean-slide 10s ease-in-out infinite; }
+
+@keyframes layout-tactical-strobe {
+  0%, 100% { border-left-color: rgba(239, 68, 68, 0.4); }
+  50% { border-left-color: rgba(239, 68, 68, 1); box-shadow: -5px 0 15px rgba(239, 68, 68, 0.4); }
+}
+.anim-tactical { animation: layout-tactical-strobe 2s ease-in-out infinite; }

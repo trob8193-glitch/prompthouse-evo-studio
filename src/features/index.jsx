@@ -4,6 +4,8 @@ import { StateView } from '../components/primitives.jsx';
 import { SovereignTabs } from '../components/SovereignTabs.jsx';
 
 import { CodeForgeView, MobileArchView, MissionControlView, ChainBuilderView, ExportLabView } from '../views.jsx';
+import layoutSchema from '../config/layout-schema.json';
+import { COMPONENT_REGISTRY } from '../core/ui/ComponentRegistry.jsx';
 import { IntentAnalyzerView, PromptDNAView, TemplateLibraryView, AutoRepairView, LiveChatView } from '../ai-views.jsx';
 import { BotStageView, AgentCtlView, MasterPromptVaultView } from '../v3-views.jsx';
 import { ProofLedgerView, CanonMemoryView, WitnessConsoleView, DeadSurfaceHunterView, MaturityScoreView, ForgePipelineView } from '../proof-os-views.jsx';
@@ -11,6 +13,7 @@ import { AutonomousBuilderView } from '../autonomous-views.jsx';
 import { AutonomousSelfBuildCommandCenter } from '../autonomous-command-center.jsx';
 import { EvoCopilotSidebar } from "../evo-copilot-sidebar.jsx";
 import { RealExecutionView } from '../real-execution-views.jsx';
+export { default as ShadowTelemetryDashboard } from './ShadowTelemetryDashboard.jsx';
 import { VectorMemoryView, TemporalForesightView, RecursiveSwarmView, EntropyLockView, RealitySynthesisView, TruthAuditorView, CommandDeckView, MergeCourtView, PatternMirrorView, PromptGenomeView, DeadHunterView, SingularityCoreView, ProofVaultView, OmegaRealityView, SovereignFinalityView } from '../new-features-views.jsx';
 import { AgentBridgeView } from '../agent-bridge-views.jsx';
 import { PerformanceMonitor } from '../components/PerformanceMonitor.jsx';
@@ -38,19 +41,13 @@ import { BotRosterView } from '../v3-views.jsx';
 import { SovereignIntelligenceDashboard } from './SovereignIntelligenceDashboard.jsx';
 import { ExtensionCockpitView } from './ExtensionCockpitView.jsx';
 import { GlobalAPISettingsView } from './GlobalAPISettingsView.jsx';
-import { EvoEyesView } from './EvoEyesView.jsx';
-import { AutonomousSelfView } from './AutonomousSelfView.jsx';
-import { FeatureFoundryView } from './FeatureFoundryView.jsx';
 import EmojiGallery from './EmojiGallery.jsx';
-import SelfEvolutionDashboard from './SelfEvolutionDashboard.jsx';
-import CostFirewallDashboard from './CostFirewallDashboard.jsx';
-import ThemeEvolutionDashboard from './ThemeEvolutionDashboard.jsx';
 import ModuleMaturityDashboard from './ModuleMaturityDashboard.jsx';
-import EvoLlmTrainingDashboard from './EvoLlmTrainingDashboard.jsx';
 import { SelfBuildForgeView } from '../self-build-forge-view.jsx';
 import { ForgeRenderConsoleView } from '../forge-render-views.jsx';
 import { ProofToValueView } from '../proof-to-value-view.jsx';
-
+import SaasBuilderView from './SaasBuilderView.jsx';
+import { EvoEyesView } from './EvoEyesView.jsx';
 
 // ─── SCREEN TEMPLATES ────────────────────────────────────────────────────────
 
@@ -69,10 +66,10 @@ const itemVariants = {
 
 function ScreenTemplate({ title, subtitle, children, state = 'idle', errorMsg }) {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex-col gap-4 h-full">
       <header className="mb-(--space-24) border-b border-[rgba(255,255,255,0.05)] pb-6 relative">
         <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-[rgba(0,240,255,0.3)] to-transparent opacity-50"></div>
-        <h1 className="font-(--text-page-title) text-(--text-primary)" style={{ textShadow: '0 0 15px rgba(0,240,255,0.2)' }}>{title}</h1>
+        <h1 className="font-(--text-text-2xl font-black bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2) text-(--text-primary)" style={{ textShadow: '0 0 15px rgba(0,240,255,0.2)' }}>{title}</h1>
         {subtitle && <p className="font-medium text-(--text-secondary) mt-2 tracking-wide">{subtitle}</p>}
       </header>
       
@@ -103,7 +100,7 @@ export function StudioDashboard() {
     <ScreenTemplate title="Studio Dashboard" subtitle="Operator overview, active work, and performance metrics.">
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-(--space-24)">
         <PerformanceMonitor />
-        <div className="flex flex-col gap-6">
+        <div className="flex-col gap-6">
           <AutonomousSelfBuildCommandCenter />
           <AutonomousBuilderView />
         </div>
@@ -140,7 +137,7 @@ export function EvoCastRouter() {
 export function FeatureFoundry() {
   return (
     <ScreenTemplate title="Feature Foundry" subtitle="Autonomous SaaS Genesis Loop.">
-      <FeatureFoundryView />
+      <SaasBuilderView />
     </ScreenTemplate>
   );
 }
@@ -177,54 +174,25 @@ export function ExecutionQueue() {
 }
 
 export function ProofConsole() {
+  const schema = layoutSchema.dashboards['proof-console'];
+  if (!schema) return <ScreenTemplate title="Proof Console" subtitle="Schema not found." />;
+  
+  const tabs = schema.tabs.map(tab => ({
+    id: tab.id,
+    label: tab.label,
+    component: (
+      <div className="space-y-6">
+        {tab.components.map((compName, idx) => {
+          const CompEl = COMPONENT_REGISTRY[compName];
+          return CompEl ? React.cloneElement(CompEl, { key: idx }) : <div key={idx} className="text-red-500">Component {compName} not found</div>;
+        })}
+      </div>
+    )
+  }));
+
   return (
-    <ScreenTemplate title="Proof Console" subtitle="Multi-layer truth verification, Evo LLM training, self-evolution, cost firewall, theme evolution, module maturity, and immutable memory auditing.">
-      <SovereignTabs tabs={[
-        { id: 'ledger', label: 'Ledger & Memory', component: (
-          <div className="space-y-6">
-            <ProofLedgerView />
-            <CanonMemoryView />
-          </div>
-        )},
-        { id: 'module-maturity', label: 'Module Maturity', component: (
-          <div className="space-y-6">
-            <ModuleMaturityDashboard />
-          </div>
-        )},
-        { id: 'evo-llm', label: 'Evo LLM Training', component: (
-          <div className="space-y-6">
-            <EvoLlmTrainingDashboard />
-          </div>
-        )},
-        { id: 'self-evolution', label: 'Self-Evolution', component: (
-          <div className="space-y-6">
-            <SelfEvolutionDashboard />
-          </div>
-        )},
-        { id: 'cost-firewall', label: 'Cost Firewall', component: (
-          <div className="space-y-6">
-            <CostFirewallDashboard />
-          </div>
-        )},
-        { id: 'theme-evolution', label: 'Theme Evolution', component: (
-          <div className="space-y-6">
-            <ThemeEvolutionDashboard />
-          </div>
-        )},
-        { id: 'auditor', label: 'Truth Auditor', component: (
-          <div className="space-y-6">
-            <TruthAuditorView />
-            <WitnessConsoleView />
-          </div>
-        )},
-        { id: 'vault', label: 'Proof Vault', component: (
-          <div className="space-y-6">
-            <MaturityScoreView />
-            <ProofVaultView />
-            <ProofToValueView />
-          </div>
-        )}
-      ]} />
+    <ScreenTemplate title="Proof Console" subtitle="Multi-layer truth verification, orchestrated dynamically by the Layout Mutation Engine.">
+      <SovereignTabs tabs={tabs} />
     </ScreenTemplate>
   );
 }
@@ -389,7 +357,7 @@ export function SovereignControl() {
       <SovereignTabs tabs={[
         { id: 'intel', label: 'Intelligence Deck', component: (
           <div className="space-y-6">
-            <AutonomousSelfView />
+            {/* <AutonomousSelfView /> */}
             <EmojiGallery />
             <SovereignIntelligenceDashboard />
             <CommandDeckView />
@@ -412,4 +380,4 @@ export function SovereignControl() {
     </ScreenTemplate>
   );
 }
-export { EvoEyesView, SovereignIntelligenceDashboard, ExtensionCockpitView, GlobalAPISettingsView, SelfBuildForgeView, ForgeRenderConsoleView, ProofToValueView };
+export { SovereignIntelligenceDashboard, ExtensionCockpitView, GlobalAPISettingsView, SelfBuildForgeView, ForgeRenderConsoleView, ProofToValueView };

@@ -56,7 +56,7 @@ async function sendChatMessage(messages, systemPrompt = '', botId = null) {
   }
 
   // Try Evo LM via Ollama
-  const ollamaModels = ['evo-lm', 'llama3', 'mistral', 'phi3'];
+  const ollamaModels = ['evo-lm', 'qwen3.6', 'mistral', 'phi3'];
   for (const model of ollamaModels) {
     try {
       const ollamaMessages = systemPrompt

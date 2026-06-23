@@ -173,7 +173,7 @@
       "expired": [],
       "contested": [],
       "hasDeadlockRisk": false,
-      "generatedAt": "2026-06-12T18:48:17.801Z"
+      "generatedAt": "2026-06-23T21:56:33.305Z"
     }
   },
   "externalGates": [
@@ -189,6 +189,6 @@
     }
   ],
   "localGaps": [],
-  "generatedAt": "2026-06-12T18:48:17.801Z",
-  "receiptPath": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.evo-layer\\daemon-proof\\daemon-readiness-1781290097802.json"
+  "generatedAt": "2026-06-23T21:56:33.305Z",
+  "receiptPath": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.evo-layer\\daemon-proof\\daemon-readiness-1782251793307.json"
 }

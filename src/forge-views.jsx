@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useEvoStore } from './store.js';
+import { useEvoStore, useSovereignStore } from './store.js';
 import { BRIDGE_URL } from './config/bridge-config.js';
 
 // ── EVO STUDIO FORGE: THE INVENTION LAYER ───────────────────
@@ -31,6 +31,7 @@ export function ForgeLabView() {
 }
 
 function AgentArchitect() {
+  const addNotification = useSovereignStore(s => s.addNotification);
   const [name, setName] = useState('');
   const [role, setRole] = useState('Architect');
   const [dna, setDna] = useState('');
@@ -66,14 +67,14 @@ function AgentArchitect() {
       })
     }).then(res => {
       if (res.ok) {
-        alert(`🦁 Intelligence Spawned: ${name} is now in your Vault.`);
+        addNotification({ msg: `🦁 Intelligence Spawned: ${name} is now in your Vault.`, type: 'success' });
         setName(''); setDna('');
         setLogs(['[SYS] Neural lattice initialized.', '[SYS] Awaiting DNA input...']);
       } else {
-        alert(`❌ Failed to save intelligence.`);
+        addNotification({ msg: `❌ Failed to save intelligence.`, type: 'error' });
       }
     }).catch(err => {
-      alert(`❌ Error connecting to bridge.`);
+      addNotification({ msg: `❌ Error connecting to bridge.`, type: 'error' });
     });
   };
 
@@ -123,6 +124,7 @@ function AgentArchitect() {
 }
 
 function BridgeInventionLab() {
+  const addNotification = useSovereignStore(s => s.addNotification);
   const [bridgeName, setBridgeName] = useState('');
   const [endpoint, setEndpoint] = useState('/api/new-bridge');
   
@@ -154,12 +156,12 @@ function BridgeInventionLab() {
               })
             }).then(res => {
               if (res.ok) {
-                alert(`🚀 Bridge Forged: ${bridgeName} saved to src/generated/bridges/`);
+                addNotification({ msg: `🚀 Bridge Forged: ${bridgeName} saved to src/generated/bridges/`, type: 'success' });
               } else {
-                alert(`❌ Failed to forge bridge.`);
+                addNotification({ msg: `❌ Failed to forge bridge.`, type: 'error' });
               }
             }).catch(err => {
-              alert(`❌ Error connecting to bridge.`);
+              addNotification({ msg: `❌ Error connecting to bridge.`, type: 'error' });
             });
           }}>🚀 Forge Bridge</button>
         </div>

@@ -31,8 +31,8 @@
       "name": "cursor",
       "status": "missing",
       "lastSeen": null,
-      "totalExecutions": 10,
-      "successes": 10,
+      "totalExecutions": 117,
+      "successes": 117,
       "failures": 0,
       "blocked": 0,
       "successRate": 100,
@@ -110,8 +110,8 @@
     "name": "cursor",
     "status": "missing",
     "lastSeen": null,
-    "totalExecutions": 10,
-    "successes": 10,
+    "totalExecutions": 117,
+    "successes": 117,
     "failures": 0,
     "blocked": 0,
     "successRate": 100,
@@ -132,5 +132,5 @@
     "trustScore": 0,
     "health": "WEAK"
   },
-  "generatedAt": "2026-06-11T19:01:02.802Z"
+  "generatedAt": "2026-06-14T03:09:51.042Z"
 }

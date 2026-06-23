@@ -2,28 +2,6 @@ import React from 'react';
 import { Activity, AlertTriangle, CheckCircle2, FileJson, RefreshCw, ShieldCheck, Trophy } from 'lucide-react';
 import { safeFetchBridge } from '../config/bridge-config.js';
 import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
-const card = {
-  background: 'rgba(15,23,42,0.82)',
-  border: '1px solid rgba(56,189,248,0.22)',
-  borderRadius: 18,
-  padding: 18,
-  boxShadow: '0 18px 60px rgba(0,0,0,0.28)'
-};
-
-const button = {
-  border: '1px solid rgba(56,189,248,0.35)',
-  background: 'rgba(8,47,73,0.35)',
-  color: '#cffafe',
-  borderRadius: 12,
-  padding: '10px 12px',
-  fontSize: 12,
-  fontWeight: 850,
-  cursor: 'pointer',
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: 8
-};
-
 function Badge({ value, tone = 'cyan' }) {
   const colors = {
     green: ['rgba(22,163,74,0.18)', '#86efac', 'rgba(34,197,94,0.32)'],
@@ -45,7 +23,7 @@ function gradeTone(grade) {
 
 function Stat({ label, value, icon: Icon, tone = 'cyan' }) {
   return (
-    <div style={card}>
+    <div className="glass-extreme rounded-3xl border-neon-glow p-5">
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#94a3b8', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.08em' }}>
         {Icon && <Icon size={15} />} {label}
       </div>
@@ -102,14 +80,14 @@ export default function ModuleMaturityDashboard() {
       description="Grades every major studio module against the 14-point production checklist."
       actions={
         <>
-          <button style={button} onClick={refresh} disabled={busy}><RefreshCw size={15} /> Refresh</button>
-          <button style={button} onClick={writeReceipt} disabled={busy}><FileJson size={15} /> Write Receipt</button>
+          <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={refresh} disabled={busy}><RefreshCw size={15} /> Refresh</button>
+          <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={writeReceipt} disabled={busy}><FileJson size={15} /> Write Receipt</button>
         </>
       }
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20, color: '#e2e8f0' }}>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 14 }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-min gap-6 [&>*:nth-child(1)]:col-span-1 lg:[&>*:nth-child(1)]:col-span-2 [&>*:nth-child(1)]:row-span-2 [&>*:nth-child(4)]:col-span-1 lg:[&>*:nth-child(4)]:col-span-2 [&>*:nth-child(5)]:row-span-2" style={{ }}>
         <Stat label="Average Maturity" value={`${avg}%`} icon={Trophy} tone={avgTone} />
         <Stat label="Modules Scanned" value={report?.moduleCount || 0} icon={Activity} tone="cyan" />
         <Stat label="A/B Modules" value={`${report?.summary?.a || 0}/${report?.summary?.b || 0}`} icon={ShieldCheck} tone="green" />
@@ -119,7 +97,7 @@ export default function ModuleMaturityDashboard() {
       {message && <div style={{ color: message.startsWith('ERROR') ? '#fecaca' : '#a5f3fc', fontSize: 12, fontWeight: 850 }}>{message}</div>}
 
       <div style={{ display: 'grid', gridTemplateColumns: '0.9fr 1.1fr', gap: 16 }}>
-        <div style={card}>
+        <div className="glass-extreme rounded-3xl border-neon-glow p-5">
           <h2 style={{ margin: 0, fontSize: 16, fontWeight: 900 }}>Modules</h2>
           <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
             {modules.map(module => (
@@ -134,7 +112,7 @@ export default function ModuleMaturityDashboard() {
           </div>
         </div>
 
-        <div style={card}>
+        <div className="glass-extreme rounded-3xl border-neon-glow p-5">
           <h2 style={{ margin: 0, fontSize: 16, fontWeight: 900 }}>{selected?.name || 'No module selected'}</h2>
           {selected && <>
             <div style={{ display: 'flex', gap: 10, marginTop: 12, flexWrap: 'wrap' }}>
@@ -144,7 +122,7 @@ export default function ModuleMaturityDashboard() {
             </div>
 
             <h3 style={{ margin: '18px 0 8px', fontSize: 13, fontWeight: 900 }}>14-Point Checklist</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+            <div className="grid grid-cols-1 lg:grid-cols-3 auto-rows-min gap-6 [&>*:nth-child(1)]:col-span-1 lg:[&>*:nth-child(1)]:col-span-2" style={{ }}>
               {Object.entries(selected.checks).map(([key, passed]) => {
                 const label = report?.checklist?.find(item => item.key === key)?.label || key;
                 return <div key={key} style={{ background: '#020617', border: `1px solid ${passed ? 'rgba(34,197,94,.25)' : 'rgba(245,158,11,.28)'}`, borderRadius: 10, padding: 10, display: 'flex', gap: 8, alignItems: 'center' }}>{passed ? <CheckCircle2 size={14} color="#86efac" /> : <AlertTriangle size={14} color="#fde68a" />}<span style={{ color: passed ? '#dcfce7' : '#fde68a', fontSize: 11, fontWeight: 750 }}>{label}</span></div>;
@@ -163,7 +141,7 @@ export default function ModuleMaturityDashboard() {
         </div>
       </div>
 
-      <div style={card}>
+      <div className="glass-extreme rounded-3xl border-neon-glow p-5">
         <h2 style={{ margin: 0, fontSize: 16, fontWeight: 900 }}>Top Blockers</h2>
         <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
           {blockers.length === 0 && <p style={{ color: '#86efac', fontSize: 12 }}>No maturity blockers detected by static scan.</p>}

@@ -1,0 +1,142 @@
+{
+  "id": "daemon_adapter-health-engine_adapter_health_report_created_1781406590920",
+  "daemonId": "adapter-health-engine",
+  "event": "adapter_health_report_created",
+  "payload": {
+    "truthState": "ADAPTER_HEALTH_REPORT_CREATED",
+    "adapters": [
+      {
+        "name": "ollama",
+        "status": "missing",
+        "lastSeen": null,
+        "totalExecutions": 0,
+        "successes": 0,
+        "failures": 0,
+        "blocked": 0,
+        "successRate": null,
+        "avgDurationMs": null,
+        "trustScore": 0,
+        "health": "WEAK"
+      },
+      {
+        "name": "vscode",
+        "status": "missing",
+        "lastSeen": null,
+        "totalExecutions": 0,
+        "successes": 0,
+        "failures": 0,
+        "blocked": 0,
+        "successRate": null,
+        "avgDurationMs": null,
+        "trustScore": 0,
+        "health": "WEAK"
+      },
+      {
+        "name": "cursor",
+        "status": "missing",
+        "lastSeen": null,
+        "totalExecutions": 117,
+        "successes": 117,
+        "failures": 0,
+        "blocked": 0,
+        "successRate": 100,
+        "avgDurationMs": 0,
+        "trustScore": 50,
+        "health": "WEAK"
+      },
+      {
+        "name": "openai",
+        "status": "missing",
+        "lastSeen": null,
+        "totalExecutions": 0,
+        "successes": 0,
+        "failures": 0,
+        "blocked": 0,
+        "successRate": null,
+        "avgDurationMs": null,
+        "trustScore": 0,
+        "health": "WEAK"
+      },
+      {
+        "name": "git",
+        "status": "missing",
+        "lastSeen": null,
+        "totalExecutions": 0,
+        "successes": 0,
+        "failures": 0,
+        "blocked": 0,
+        "successRate": null,
+        "avgDurationMs": null,
+        "trustScore": 0,
+        "health": "WEAK"
+      },
+      {
+        "name": "filesystem",
+        "status": "missing",
+        "lastSeen": null,
+        "totalExecutions": 0,
+        "successes": 0,
+        "failures": 0,
+        "blocked": 0,
+        "successRate": null,
+        "avgDurationMs": null,
+        "trustScore": 0,
+        "health": "WEAK"
+      },
+      {
+        "name": "stripe",
+        "status": "missing",
+        "lastSeen": null,
+        "totalExecutions": 0,
+        "successes": 0,
+        "failures": 0,
+        "blocked": 0,
+        "successRate": null,
+        "avgDurationMs": null,
+        "trustScore": 0,
+        "health": "WEAK"
+      },
+      {
+        "name": "vercel",
+        "status": "missing",
+        "lastSeen": null,
+        "totalExecutions": 0,
+        "successes": 0,
+        "failures": 0,
+        "blocked": 0,
+        "successRate": null,
+        "avgDurationMs": null,
+        "trustScore": 0,
+        "health": "WEAK"
+      }
+    ],
+    "strongest": {
+      "name": "cursor",
+      "status": "missing",
+      "lastSeen": null,
+      "totalExecutions": 117,
+      "successes": 117,
+      "failures": 0,
+      "blocked": 0,
+      "successRate": 100,
+      "avgDurationMs": 0,
+      "trustScore": 50,
+      "health": "WEAK"
+    },
+    "weakest": {
+      "name": "ollama",
+      "status": "missing",
+      "lastSeen": null,
+      "totalExecutions": 0,
+      "successes": 0,
+      "failures": 0,
+      "blocked": 0,
+      "successRate": null,
+      "avgDurationMs": null,
+      "trustScore": 0,
+      "health": "WEAK"
+    },
+    "generatedAt": "2026-06-14T03:09:50.914Z"
+  },
+  "createdAt": "2026-06-14T03:09:50.920Z"
+}

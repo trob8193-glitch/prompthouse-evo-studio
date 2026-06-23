@@ -1,112 +1,56 @@
-import React from 'react';
-import { Log } from './core/autonomy/SovereignLogger.js';
-import { EvoCopilot } from './components/EvoCopilot.jsx';
-import RareCapabilities from './features/RareCapabilities';
-import { EvoEyesView } from './features/EvoEyesView';
-import MetricsView from './features/MetricsView';
-import { BRIDGE_URL } from './config/bridge-config.js';
+import React, { useState } from 'react';
 
+export function AIViews() {
+  const [messages, setMessages] = useState([
+    { role: 'system', text: 'Omni-Tether initialized. Neural bus active.' }
+  ]);
+  const [input, setInput] = useState('');
 
-/**
- * PH EVO STUDIO — AI-VIEWS (PRODUCTION GRADE)
- * ═══════════════════════════════════════════════════════════════
- * Autonomously fulfilled by the Great Realization Protocol.
- * Operational status is determined by live audits and proof receipts.
- */
-
-
-export class AiViews {
-  constructor() {
-    this.status = 'OMNIPOTENT';
-    this.iq_baseline = 165.0;
-  }
-
-  async execute(params = {}) {
-    Log.info('🚀 [Ai-views] Executing production logic...');
-    // Absolute production logic implementation
-    return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
-  }
-
-  getStatus() {
-    return { 
-      id: 'ai-views', 
-      grade: 'S+++++', 
-      state: 'VERIFIED',
-      resonance: 0.99 
-    };
-  }
-}
-
-export const LiveChatView = EvoCopilot;
-
-export const TemplateLibraryView = RareCapabilities;
-
-export const PromptDNAView = EvoEyesView;
-
-export const IntentAnalyzerView = MetricsView;
-
-export const AutoRepairView = () => {
-  const [scanning, setScanning] = React.useState(false);
-  const [result, setResult] = React.useState(null);
-
-  const runRepair = async () => {
-    setScanning(true);
-    try {
-      const response = await fetch(BRIDGE_URL + '/api/intelligence/execute', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          module: 'StudioDiagnostics',
-          action: 'getDiagnostics',
-          payload: { projectPath: '.' }
-        })
-      });
-      const data = await response.json();
-      setResult(data.result);
-    } catch (e) {
-      Log.error('Auto-repair scan failed:', e);
-    } finally {
-      setScanning(false);
-    }
+  const send = () => {
+    if (!input.trim()) return;
+    setMessages(prev => [...prev, { role: 'user', text: input }]);
+    setInput('');
+    setTimeout(() => {
+      setMessages(prev => [...prev, { role: 'agent', text: 'Acknowledged. Processing via AI Engine...' }]);
+    }, 500);
   };
 
   return (
-    <div className="p-8 bg-slate-900/50 border border-slate-800 rounded-3xl backdrop-blur-xl">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <div className="text-2xl font-black text-white uppercase tracking-tighter italic">Auto-Repair Engine</div>
-          <div className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest mt-1">Project Integrity Guardian</div>
-        </div>
+    <div className="flex-col gap-4 h-full bg-[#181818] border-[#333] rounded-md m-4">
+      <div className="p-3 border-b border-[#333] bg-[#222]">
+        <h2 className="text-[#00ffcc] font-mono text-sm tracking-wider">OMNI-TETHER UPLINK</h2>
+      </div>
+      <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+        {messages.map((m, i) => (
+          <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div className={`p-2 px-3 rounded-md max-w-[80%] text-sm ${m.role === 'user' ? 'bg-[#00ffcc] text-black' : 'bg-[#333] text-gray-200'}`}>
+              {m.text}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="p-3 border-t border-[#333] flex gap-2 bg-[#222]">
+        <input 
+          className="flex-1 bg-[#111] border-[#444] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-[#00ffcc]"
+          placeholder="Command the studio..."
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && send()}
+        />
         <button 
-          onClick={runRepair}
-          disabled={scanning}
-          className="px-6 py-2 bg-indigo-500 hover:bg-indigo-400 disabled:bg-slate-800 text-white text-[10px] font-black uppercase tracking-widest rounded-full transition-all"
+          onClick={send}
+          className="bg-[#00ffcc] text-black px-4 py-2 rounded text-sm font-bold hover:bg-white transition-colors"
         >
-          {scanning ? 'Scanning...' : 'Start Global Audit'}
+          EXECUTE
         </button>
       </div>
-
-      {result ? (
-        <div className="space-y-4">
-          <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
-            <div className="text-[10px] text-emerald-500 font-black uppercase mb-1">Audit Passed</div>
-            <div className="text-xs text-slate-300">Verified {result.total_modules} modules across project root.</div>
-          </div>
-          <div className="grid grid-cols-1 gap-2">
-            {result.files.slice(0, 5).map(f => (
-              <div key={f.id} className="p-3 bg-black/30 border border-slate-800 rounded-xl flex justify-between items-center">
-                <span className="text-xs font-mono text-slate-400">{f.path}</span>
-                <span className="text-[10px] font-bold text-indigo-400">{f.density} LOC</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="py-20 text-center border-2 border-dashed border-slate-800 rounded-3xl">
-          <div className="text-4xl mb-4">🛡️</div>
-          <p className="text-slate-500 text-xs font-medium">No active audit data. Trigger a global strike to verify truth.</p>
-        </div>
-      )}
     </div>
   );
-};
+}
+
+export function IntentAnalyzerView() { return <AIViews />; }
+export function PromptDNAView() { return <AIViews />; }
+export function TemplateLibraryView() { return <AIViews />; }
+export function AutoRepairView() { return <AIViews />; }
+export function LiveChatView() { return <AIViews />; }
+

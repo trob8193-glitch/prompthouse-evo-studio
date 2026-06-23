@@ -5,7 +5,7 @@ import { useSovereignStore } from './store.js';
 // Restored View Imports
 import EvoCopilot from './components/EvoCopilot.jsx';
 import RareCapabilities from './features/RareCapabilities';
-import { EvoEyesView } from './features/EvoEyesView';
+// Vision migrated to Nexus
 
 import { Log } from './core/autonomy/SovereignLogger.js';
 
@@ -32,13 +32,13 @@ export default function V3Views() {
         >
           {activeTab === 'chat' && <EvoCopilot />}
           {activeTab === 'capabilities' && <RareCapabilities />}
-          {activeTab === 'vision' && <EvoEyesView />}
+          {activeTab === 'vision' && <div className="text-white p-4 glass-extreme border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-3xl backdrop-blur-xl">Vision Engine (Migrated to SingularityNexus)</div>}
           
           {activeTab === 'orchard' && (
             <div className="flex items-center justify-center h-full">
               <div className="text-center">
                 <div className="text-4xl font-black text-white uppercase tracking-tighter mb-4 italic">The Orchard</div>
-                <div className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Connectome Active • Syncing Forest</div>
+                <div className="text-[10px] text-neon-cyan font-bold uppercase tracking-widest">Connectome Active • Syncing Forest</div>
               </div>
             </div>
           )}
@@ -59,17 +59,17 @@ export const BotStageView = () => {
       </div>
       <div className="module-content">
         <div className="evo-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
-          <div className="card p-6 border border-slate-800/50 hover:border-emerald-500/30">
+          <div className="glass-extreme rounded-3xl bg-black/40 backdrop-blur-xl p-6 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]/50 hover:border-emerald-500/30">
             <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">Active Thread</div>
             <div className="text-lg font-mono text-emerald-400">foundry_orchestrator.js:L127</div>
           </div>
-          <div className="card p-6 border border-slate-800/50 hover:border-emerald-500/30">
+          <div className="glass-extreme rounded-3xl bg-black/40 backdrop-blur-xl p-6 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]/50 hover:border-emerald-500/30">
             <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">Cycles Completed</div>
             <div className="text-2xl font-black text-white">{metrics?.uptime ? Math.floor(metrics.uptime / 60) : 0}</div>
           </div>
         </div>
-        <div className="mt-4 p-4 card border-l-2 border-l-indigo-500 bg-indigo-500/5">
-          <div className="text-[10px] text-indigo-400 font-black uppercase tracking-widest mb-1">Reality Log</div>
+        <div className="mt-4 glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] backdrop-blur-xl border-l-2 border-l-indigo-500 bg-indigo-500/5">
+          <div className="text-[10px] text-neon-cyan font-black uppercase tracking-widest mb-1">Reality Log</div>
           <div className="text-xs text-indigo-300/70 font-medium tracking-wide">System state synchronized with Bridge 127.0.0.1:3001. No drift markers detected.</div>
         </div>
       </div>
@@ -107,19 +107,19 @@ export const MasterPromptVaultView = () => {
     <div className="module-container border-t-2 border-t-indigo-500">
       <div className="module-header">
         <h2 className="module-title">Master Prompt Vault</h2>
-        <div className={`text-[10px] font-black uppercase px-3 py-1 rounded-full border ${isSyncing ? 'bg-indigo-900/50 text-indigo-400 border-indigo-500/30 animate-pulse' : 'bg-emerald-900/30 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]'}`}>
+        <div className={`text-[10px] font-black uppercase px-3 py-1 rounded-full border ${isSyncing ? 'bg-indigo-900/50 text-neon-cyan border-indigo-500/30 animate-pulse' : 'bg-emerald-900/30 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]'}`}>
           {isSyncing ? 'SYNCING...' : 'VERIFIED'}
         </div>
       </div>
       <div className="module-content">
       {error ? (
-        <div className="text-xs text-rose-300/80 border border-rose-500/20 bg-rose-500/5 rounded-xl p-3 mb-4">
+        <div className="text-xs text-rose-300/80 border-rose-500/20 bg-rose-500/5 rounded-3xl p-3 mb-4">
           Vault load failed: {error}
         </div>
       ) : null}
       <div className="space-y-4">
         {(prompts.length > 0 ? prompts : []).map((item) => (
-          <div key={item} className="flex items-center justify-between p-4 bg-black/20 border border-slate-800/50 rounded-xl hover:border-indigo-500/30 transition-colors cursor-pointer group">
+          <div key={item} className="flex items-center justify-between p-4 bg-black/20 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]/50 rounded-3xl hover:border-indigo-500/30 transition-colors cursor-pointer group">
             <span className="text-slate-400 font-bold text-sm group-hover:text-white transition-colors">{item}</span>
             <span className="text-[9px] font-black uppercase px-2 py-1 rounded bg-emerald-900/50 text-emerald-400">
               LOCKED
@@ -138,18 +138,18 @@ export const MasterPromptVaultView = () => {
 export const AgentCtlView = () => {
   const bridgeData = useSovereignStore((s) => s.bridgeData);
   return (
-    <div className="p-8 bg-slate-900/50 border border-slate-800 rounded-3xl backdrop-blur-xl">
+    <div className="p-8 glass-extreme border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-3xl backdrop-blur-xl">
       <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-6">Agent Control Deck</h2>
       <div className="p-6 bg-indigo-600 rounded-2xl shadow-2xl shadow-indigo-500/20 mb-6">
         <div className="text-xs text-indigo-100 font-bold uppercase mb-1">Evo Studio IQ</div>
         <div className="text-4xl font-black text-white">{(bridgeData?.iq_metrics?.baseline / 1000000 || 2.0).toFixed(1)}M</div>
       </div>
       <div className="space-y-3">
-        <div className="flex items-center justify-between p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+        <div className="flex items-center justify-between p-3 bg-emerald-500/10 border-emerald-500/20 rounded-2xl">
           <span className="text-xs text-emerald-400 font-bold">Autonomous Builder</span>
           <span className="text-[10px] text-emerald-500 font-black uppercase">Active</span>
         </div>
-        <div className="flex items-center justify-between p-3 bg-slate-800/50 border border-slate-700/50 rounded-lg opacity-50">
+        <div className="flex items-center justify-between p-3 bg-black/40 backdrop-blur-md border-cyan-500/30/50 rounded-2xl opacity-50">
           <span className="text-xs text-slate-400 font-bold">NightForge Daemon</span>
           <span className="text-[10px] text-slate-500 font-black uppercase">Idle</span>
         </div>
@@ -160,12 +160,12 @@ export const AgentCtlView = () => {
 
 export const BotRosterView = () => {
   return (
-    <div className="p-8 bg-slate-900/50 border border-slate-800 rounded-3xl backdrop-blur-xl">
+    <div className="p-8 glass-extreme border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-3xl backdrop-blur-xl">
       <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-6">Bot Roster</h2>
       <div className="grid grid-cols-3 gap-4">
         {['Foundry', 'Architect', 'Sentinel'].map((bot) => (
-          <div key={bot} className="aspect-square bg-black/40 rounded-2xl border border-slate-800 flex flex-col items-center justify-center p-4">
-            <div className="w-10 h-10 rounded-full bg-slate-800 mb-3 border border-slate-700" />
+          <div key={bot} className="aspect-square bg-black/40 rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex-col gap-4 items-center justify-center p-4">
+            <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md mb-3 border-cyan-500/30" />
             <div className="text-[10px] text-white font-black uppercase tracking-wider">{bot}</div>
             <div className="text-[8px] text-slate-500 font-bold mt-1 uppercase">v1.0.4</div>
           </div>

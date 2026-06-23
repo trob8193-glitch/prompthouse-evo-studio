@@ -36,11 +36,11 @@ export const DESIGN_SYSTEM = {
       base: 'px-6 py-2.5 rounded-xl font-black transition-all active:scale-95',
       variants: {
         primary: 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-500/20',
-        ghost: 'bg-white/5 text-slate-400 hover:bg-white/10 border border-white/10'
+        ghost: 'bg-white/5 text-slate-400 hover:bg-white/10 border-white/10'
       }
     },
     Card: {
-      base: 'bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden backdrop-blur-xl'
+      base: 'bg-slate-900/50 border-slate-800 rounded-2xl overflow-hidden backdrop-blur-xl'
     },
     StateWrapper: {
       loading: 'animate-pulse bg-slate-800/50 rounded-lg',
@@ -52,6 +52,6 @@ export const DESIGN_SYSTEM = {
   // SCREEN TEMPLATES
   templates: {
     dashboard: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-8',
-    screen_shell: 'min-h-screen bg-slate-950 text-slate-100 flex flex-col'
+    screen_shell: 'min-h-screen bg-slate-950 text-slate-100 flex-col'
   }
 };

@@ -13,8 +13,8 @@ export function Card({ children, className, onClick }) {
     <div 
       onClick={onClick}
       className={cn(
-        "bg-[var(--bg-card)] border border-[var(--border-dim)] rounded-[var(--radius-xl)] p-6 shadow-[var(--shadow-md)]",
-        onClick && "cursor-pointer hover:border-[var(--primary-glow)] hover:shadow-[0_0_20px_var(--primary-dim)] transition-all duration-300",
+        "bg-(--bg-card) border-(--border-dim) rounded-xl p-6 shadow-(--shadow-md)",
+        onClick && "cursor-pointer hover:border-(--primary-glow) hover:shadow-[0_0_20px_var(--primary-dim)] transition-all duration-300",
         className
       )}
     >
@@ -25,9 +25,9 @@ export function Card({ children, className, onClick }) {
 
 export function Panel({ children, className, title }) {
   return (
-    <div className={cn("bg-[var(--bg-surface)] backdrop-blur-xl border border-[var(--border-mid)] rounded-[var(--radius-lg)] overflow-hidden shadow-[var(--shadow-lg)]", className)}>
+    <div className={cn("bg-(--bg-surface) backdrop-blur-xl border-(--border-mid) rounded-lg overflow-hidden shadow-(--shadow-lg)", className)}>
       {title && (
-        <div className="px-6 py-4 border-b border-[var(--border-dim)] font-bold text-white tracking-widest uppercase text-sm bg-[var(--bg-surface-top)]">
+        <div className="px-6 py-4 border-b border-(--border-dim) font-bold text-white tracking-widest uppercase text-sm bg-(--bg-surface-top)">
           {title}
         </div>
       )}
@@ -49,13 +49,13 @@ export function Button({
   onClick, 
   className 
 }) {
-  const base = "inline-flex items-center justify-center font-bold uppercase tracking-widest rounded-[var(--radius-md)] transition-all duration-300 min-h-[44px] min-w-[44px] relative overflow-hidden group";
+  const base = "inline-flex items-center justify-center font-bold uppercase tracking-widest rounded-md transition-all duration-300 min-h-[44px] min-w-[44px] relative overflow-hidden group";
   
   const variants = {
-    primary: "bg-gradient-to-r from-[var(--accent-violet)] to-[var(--accent-cyan)] text-white hover:shadow-[0_0_20px_var(--accent-cyan-glow)] border border-white/20",
-    secondary: "bg-[var(--bg-elevated)] text-white border border-[var(--border-mid)] hover:border-[var(--primary)] hover:bg-[var(--primary-dim)] hover:text-[var(--primary)]",
-    destructive: "bg-gradient-to-r from-red-600 to-red-900 text-white hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] border border-red-500/30",
-    ghost: "bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-white"
+    primary: "bg-linear-to-r from-(--accent-violet) to-(--accent-cyan) text-white hover:shadow-[0_0_20px_var(--accent-cyan-glow)] border-white/20",
+    secondary: "bg-(--bg-elevated) text-white border-(--border-mid) hover:border-(--primary) hover:bg-(--primary-dim) hover:text-(--primary)",
+    destructive: "bg-linear-to-r from-red-600 to-red-900 text-white hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] border-red-500/30",
+    ghost: "bg-transparent text-(--text-secondary) hover:bg-(--bg-elevated) hover:text-white"
   };
 
   const sizes = {
@@ -86,15 +86,15 @@ export function Button({
 
 export function IconButton({ icon: Icon, onClick, variant = 'ghost', className, label }) {
   const variants = {
-    primary: "bg-[var(--primary)] text-black hover:bg-white shadow-[0_0_15px_var(--primary-dim)]",
-    ghost: "bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-white",
-    surface: "bg-[var(--bg-elevated)] text-white border border-[var(--border-dim)] hover:border-[var(--primary)] hover:text-[var(--primary)]"
+    primary: "bg-(--primary) text-black hover:bg-white shadow-[0_0_15px_var(--primary-dim)]",
+    ghost: "bg-transparent text-(--text-secondary) hover:bg-(--bg-elevated) hover:text-white",
+    surface: "bg-(--bg-elevated) text-white border-(--border-dim) hover:border-(--primary) hover:text-(--primary)"
   };
 
   return (
     <button 
       onClick={onClick} 
-      className={cn("w-[44px] h-[44px] rounded-[var(--radius-md)] flex items-center justify-center transition-all duration-300", variants[variant], className)}
+      className={cn("w-[44px] h-[44px] rounded-md flex items-center justify-center transition-all duration-300", variants[variant], className)}
       aria-label={label}
       title={label}
     >
@@ -119,7 +119,7 @@ export function StatusBadge({ status, label }) {
 
   return (
     <span 
-      className="inline-flex items-center px-3 py-1 rounded-[var(--radius-full)] text-[10px] font-bold uppercase tracking-widest border transition-all"
+      className="inline-flex items-center px-3 py-1 rounded-(--radius-full) text-[10px] font-bold uppercase tracking-widest border transition-all"
       style={{ 
         backgroundColor: style.bg, 
         color: style.color, 
@@ -146,12 +146,12 @@ export function StateView({ state = 'idle', title, message, actionLabel, onActio
   const current = config[state];
 
   return (
-    <div className="flex flex-col items-center justify-center p-12 text-center border border-[var(--border-dim)] border-dashed rounded-[var(--radius-xl)] bg-[var(--bg-surface)] backdrop-blur-md">
+    <div className="flex-col gap-4 items-center justify-center p-12 text-center border-(--border-dim) border-dashed rounded-xl bg-(--bg-surface) backdrop-blur-md">
       <div className="text-4xl mb-6 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">{current.icon}</div>
       <h3 className="font-bold tracking-widest uppercase mb-4" style={{ color: current.color }}>
         {title || state.toUpperCase()}
       </h3>
-      <p className="text-sm text-[var(--text-secondary)] mb-8 max-w-md leading-relaxed">
+      <p className="text-sm text-(--text-secondary) mb-8 max-w-md leading-relaxed">
         {message || `The system is currently in a ${state} state.`}
       </p>
       {onAction && actionLabel && (

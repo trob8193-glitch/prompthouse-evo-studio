@@ -1,86 +1,124 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { writeDaemonReceipt, createEvoGitSnapshot } from '../../egit/index.js';
+import url from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, '../../../..');
+const STATE_FILE = () => path.join(process.cwd(), '.prompthouse-data', 'daemons', 'omni_state.json');
+const KILL_SWITCH = () => path.join(process.cwd(), '.prompthouse-data', 'evolution', '.evolution-kill-switch');
 
-console.log('🌌 [OMNI-ORCHESTRATOR] Initializing receipt-backed Omni-Orchestrator daemon...');
-
-const bots = [
-  { botId: 1, name: 'Architect', role: 'System Design', status: 'IDLE' },
-  { botId: 2, name: 'Builder', role: 'Feature Forging', status: 'IDLE' },
-  { botId: 3, name: 'Refactor', role: 'Code Optimization', status: 'IDLE' },
-  { botId: 4, name: 'UI Designer', role: 'Interface Synthesis', status: 'IDLE' },
-  { botId: 12, name: 'Sentinel', role: 'Platform Defense', status: 'IDLE' },
-  { botId: 21, name: 'Antigravity', role: 'Meta-Evolution', status: 'IDLE' }
-];
-
-function botRosterState() {
-  const botFile = path.join(rootDir, 'src', 'bot-characters.jsx');
-  return {
-    botFile,
-    botFilePresent: fs.existsSync(botFile),
-    declaredBots: bots.length,
-    bots
-  };
+function ensureDir() {
+  const dir = path.dirname(STATE_FILE());
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 }
 
-writeDaemonReceipt({
-  rootDir,
-  daemonId: 'omni-orchestrator',
-  action: 'startup',
-  truthState: 'STARTED',
-  details: botRosterState(),
-  claims: ['daemon_started', 'bot_roster_checked']
-});
-
-let cycleCount = 0;
-
-setInterval(() => {
-  cycleCount++;
-  console.log(`\n🌌 [OMNI-ORCHESTRATOR] --- RECEIPT CYCLE ${cycleCount} ---`);
-
-  try {
-    const tasks = [
-      { botId: 1, task: 'Audit build stability and routing integrity', status: 'QUEUED' },
-      { botId: 12, task: 'Scan for dead surfaces and unverified claims', status: 'QUEUED' },
-      { botId: 21, task: 'Check Antigravity adapter readiness', status: 'QUEUED' },
-      { botId: 3, task: 'Review watchdog memory posture', status: 'QUEUED' }
-    ];
-
-    const snapshot = createEvoGitSnapshot({ rootDir, label: `omni_cycle_${cycleCount}`, includeAdapters: true });
-    const receipt = writeDaemonReceipt({
-      rootDir,
-      daemonId: 'omni-orchestrator',
-      action: 'cycle_dispatch_plan',
-      truthState: 'PLAN_RECORDED',
-      details: {
-        cycleCount,
-        tasks: tasks.map(task => ({
-          ...task,
-          bot: bots.find(bot => bot.botId === task.botId) || null
-        })),
-        snapshotId: snapshot.id,
-        snapshotObjectId: snapshot.objectId
-      },
-      claims: ['dispatch_plan_recorded', 'snapshot_created']
-    });
-
-    console.log(`🧾 [OMNI-ORCHESTRATOR] Receipt written: ${receipt.id}`);
-  } catch (err) {
-    const receipt = writeDaemonReceipt({
-      rootDir,
-      daemonId: 'omni-orchestrator',
-      action: 'cycle_error',
-      truthState: 'ERROR_RECORDED',
-      details: { cycleCount, error: err.message },
-      claims: ['error_recorded']
-    });
-    console.error('❌ [OMNI-ORCHESTRATOR] Error receipt:', receipt.id, err.message);
+/**
+ * OMNI ORCHESTRATOR
+ * Master coordinator for all daemons. Manages scheduling, enforces
+ * the evolution kill switch, and provides unified daemon status.
+ */
+export class OmniOrchestrator {
+  constructor() {
+    this.daemons = new Map();
+    this.intervalId = null;
+    this.heartbeatCount = 0;
   }
-}, 20000);
 
-console.log('🌌 [OMNI-ORCHESTRATOR] Receipt-backed loop active.');
+  registerDaemon(name, daemon) {
+    this.daemons.set(name, daemon);
+    console.log(`[OmniOrchestrator] Registered daemon: ${name}`);
+  }
+
+  startAll() {
+    if (fs.existsSync(KILL_SWITCH())) {
+      console.log('[OmniOrchestrator] Kill switch engaged. Not starting daemons.');
+      return;
+    }
+
+    for (const [name, daemon] of this.daemons) {
+      try {
+        if (typeof daemon.start === 'function') daemon.start();
+        console.log(`[OmniOrchestrator] Started: ${name}`);
+      } catch (err) {
+        console.error(`[OmniOrchestrator] Failed to start ${name}:`, err.message);
+      }
+    }
+
+    // Heartbeat monitor
+    this.intervalId = setInterval(() => this.heartbeat(), 30000);
+    this.saveState();
+  }
+
+  stopAll() {
+    for (const [name, daemon] of this.daemons) {
+      try {
+        if (typeof daemon.stop === 'function') daemon.stop();
+      } catch {}
+    }
+    if (this.intervalId) { clearInterval(this.intervalId); this.intervalId = null; }
+    this.saveState();
+    console.log('[OmniOrchestrator] All daemons stopped.');
+  }
+
+  heartbeat() {
+    if (fs.existsSync(KILL_SWITCH())) {
+      console.log('[OmniOrchestrator] Kill switch detected during heartbeat. Stopping all.');
+      this.stopAll();
+      return;
+    }
+
+    this.heartbeatCount++;
+    const statuses = {};
+    for (const [name, daemon] of this.daemons) {
+      try {
+        statuses[name] = typeof daemon.getStatus === 'function' ? daemon.getStatus() : { active: true };
+      } catch {
+        statuses[name] = { active: false, error: 'Status check failed' };
+      }
+    }
+
+    this.saveState(statuses);
+
+    // Broadcast to MegaTether
+    import('../../tethers/MegaTetherCore.js').then(({ getMegaTether }) => {
+      try {
+        const tether = getMegaTether();
+        if (tether) tether.broadcast('omni_orchestrator', 'daemon_heartbeat', { statuses, heartbeat: this.heartbeatCount });
+      } catch {}
+    }).catch(() => {});
+  }
+
+  saveState(statuses = null) {
+    ensureDir();
+    const state = {
+      active: this.intervalId !== null,
+      daemonCount: this.daemons.size,
+      daemons: Array.from(this.daemons.keys()),
+      heartbeatCount: this.heartbeatCount,
+      killSwitchEngaged: fs.existsSync(KILL_SWITCH()),
+      statuses: statuses || {},
+      updatedAt: new Date().toISOString()
+    };
+    fs.writeFileSync(STATE_FILE(), JSON.stringify(state, null, 2), 'utf8');
+  }
+
+  getStatus() {
+    if (fs.existsSync(STATE_FILE())) {
+      try { return JSON.parse(fs.readFileSync(STATE_FILE(), 'utf8')); } catch {}
+    }
+    return { active: false, daemonCount: 0 };
+  }
+}
+
+let globalOrchestrator = null;
+
+export function getOmniOrchestrator() {
+  if (!globalOrchestrator) globalOrchestrator = new OmniOrchestrator();
+  return globalOrchestrator;
+}
+
+export function run() {
+  const orchestrator = getOmniOrchestrator();
+  orchestrator.startAll();
+  return orchestrator;
+}
+
+if (process.argv[1] === url.fileURLToPath(import.meta.url)) run();

@@ -128,14 +128,14 @@ export function NightForgeView() {
   }, [forceThreeProviderTeam, log, refreshStatus]);
 
   return (
-    <div className="flex-col animate-in">
-      <div className="flex-between" style={{ marginBottom: 16 }}>
+    <div className="flex-col gap-4 animate-in">
+      <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
-          <div className="page-title">NightForge Daemon</div>
-          <div className="page-subtitle">Live diagnostics cycle with cost-guarded multi-provider team run and Evo LM training capture.</div>
+          <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">NightForge Daemon</div>
+          <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Live diagnostics cycle with cost-guarded multi-provider team run and Evo LM training capture.</div>
           <div style={{ marginTop: 8 }}>
             <button
-              className="btn btn-secondary btn-sm"
+              className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
               onClick={toggleForceMode}
               disabled={savingForceMode}
             >
@@ -148,10 +148,10 @@ export function NightForgeView() {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
-          <button className={`btn btn-sm ${active ? 'btn-danger' : 'btn-primary'}`} onClick={toggleDaemon}>
+          <button className={`glass-extreme active:scale-95 glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm ${active ? 'glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-danger' : 'glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-primary'}`} onClick={toggleDaemon}>
             {active ? 'Stop Daemon' : 'Start Daemon'}
           </button>
-          <button className="btn btn-secondary btn-sm" onClick={runCycle} disabled={running}>
+          <button className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={runCycle} disabled={running}>
             {running ? 'Running...' : 'Run Manual Cycle'}
           </button>
         </div>
@@ -159,9 +159,9 @@ export function NightForgeView() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 16 }}>
         <div className="flex-col gap-16">
-          <div className="card" style={{ marginBottom: 12 }}>
-            <div className="card-header"><div className="card-title">Daemon Runtime</div></div>
-            <div className="card-body" style={{ fontSize: 12, display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ marginBottom: 12 }}>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Daemon Runtime</div></div>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ fontSize: 12, display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>
               <div>Active: <strong>{daemonState?.active ? 'YES' : 'NO'}</strong></div>
               <div>Running: <strong>{daemonState?.running ? 'YES' : 'NO'}</strong></div>
               <div>Interval: <strong>{daemonState?.intervalMinutes || '—'} min</strong></div>
@@ -173,9 +173,9 @@ export function NightForgeView() {
             </div>
           </div>
 
-          <div className="card" style={{ marginBottom: 12 }}>
-            <div className="card-header"><div className="card-title">Cost Dashboard</div></div>
-            <div className="card-body" style={{ fontSize: 12, display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ marginBottom: 12 }}>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Cost Dashboard</div></div>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ fontSize: 12, display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>
               <div>Today cycles: <strong>{metrics?.cyclesToday ?? 0}</strong></div>
               <div>Today credits: <strong>{metrics?.creditsToday ?? 0}</strong></div>
               <div>External calls: <strong>{metrics?.externalCallsToday ?? 0}</strong></div>
@@ -191,14 +191,14 @@ export function NightForgeView() {
           </div>
 
           {proposal ? (
-            <div className="card">
-              <div className="card-header">
-                <div className="flex-between">
-                  <div className="card-title">Latest Cycle Plan</div>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+              <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
+                <div className="flex items-center justify-between">
+                  <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Latest Cycle Plan</div>
                   <span className="badge badge-dim">ID: {proposal.id?.slice(0, 14)}</span>
                 </div>
               </div>
-              <div className="card-body flex-col gap-16">
+              <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex-col gap-16">
                 <div>
                   <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 8, color: 'var(--text-secondary)' }}>SCANNED ITEMS</div>
                   <div className="flex-col gap-4">
@@ -212,8 +212,8 @@ export function NightForgeView() {
                   <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 8, color: 'var(--text-secondary)' }}>PROPOSED ACTIONS</div>
                   <div className="flex-col gap-8">
                     {(proposal.proposedActions || []).map((p, i) => (
-                      <div key={i} className="card" style={{ background: 'var(--bg-void)', padding: 12, borderLeft: `4px solid ${tone(p.priority)}` }}>
-                        <div className="flex-between" style={{ marginBottom: 4 }}>
+                      <div key={i} className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ background: 'var(--bg-void)', padding: 12, borderLeft: `4px solid ${tone(p.priority)}` }}>
+                        <div className="flex items-center justify-between" style={{ marginBottom: 4 }}>
                           <span style={{ fontWeight: 800, fontSize: 12 }}>{String(p.action || 'action').replace(/_/g, ' ')}</span>
                           <span className="badge badge-dim" style={{ fontSize: 9 }}>{p.priority || 'LOW'}</span>
                         </div>
@@ -253,9 +253,9 @@ export function NightForgeView() {
           )}
         </div>
 
-        <div className="card" style={{ background: '#030408' }}>
-          <div className="card-header"><div className="card-title">Daemon Logs</div></div>
-          <div className="card-body" style={{ height: 460, overflowY: 'auto', fontFamily: 'var(--font-mono)', fontSize: 10 }}>
+        <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ background: '#030408' }}>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Daemon Logs</div></div>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ height: 460, overflowY: 'auto', fontFamily: 'var(--font-mono)', fontSize: 10 }}>
             {logs.length === 0 && <div style={{ color: '#444' }}>// daemon idle</div>}
             {logs.map((l, i) => (
               <div key={i} style={{ marginBottom: 6, color: l.type === 'success' ? '#4ade80' : l.type === 'warn' ? '#f5c842' : l.type === 'error' ? '#f87171' : '#94a3b8' }}>

@@ -25,6 +25,7 @@ export function estimateCompressionStats({ originalText = '', compressedText = '
 export function estimateRequestTokens({ messages = [], expectedOutputTokens = 800 } = {}) {
   return {
     inputTokens: estimateMessagesTokens(messages),
-    outputTokens: Number(expectedOutputTokens || 0)
+    outputTokens: Number(expectedOutputTokens || 0),
+    estimatedAt: new Date().toISOString()
   };
 }

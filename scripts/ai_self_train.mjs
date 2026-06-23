@@ -1,135 +1,61 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
-import fetch from 'node-fetch';
-
+import { UniversalAIAdaptor } from '../lib/ai/UniversalAIAdaptor.js';
+import { OnlineLearningManager } from '../src/core/evolution/OnlineLearningManager.js';
 import dotenv from 'dotenv';
-import { Log } from '../src/core/autonomy/SovereignLogger.js';
-import { createOwnerApprovalEnvelope } from '../src/owner-approval.js';
+dotenv.config();
 
-dotenv.config({ override: true });
+const TARGET_DIR = path.resolve(process.cwd(), 'src/features');
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, '..');
-const configPath = path.join(root, '.ai', 'config', 'bridge.config.json');
-const outboxDir = path.join(root, '.ai', 'outbox');
+async function runSelfTraining() {
+  console.log('[AI Self-Train] Booting Self-Reflection Engine...');
+  
+  const userKey = process.env.OPENAI_API_KEY;
+  const adaptor = new UniversalAIAdaptor({ openai: userKey });
+  
+  const learningManager = new OnlineLearningManager();
+  learningManager.initialize();
 
-const loadConfig = () => {
-  if (!fs.existsSync(configPath)) {
-    throw new Error(`Missing ai bridge config at ${configPath}`);
-  }
-  return JSON.parse(fs.readFileSync(configPath, 'utf8'));
-};
+  const files = fs.readdirSync(TARGET_DIR).filter(f => f.endsWith('.jsx'));
+  console.log(`[AI Self-Train] Scanning ${files.length} active feature surfaces...`);
 
-const fetchJson = async (url, body) => {
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  const payload = await res.json().catch(() => null);
-  if (!res.ok) {
-    const errMsg = payload?.error || payload?.message || res.statusText;
-    throw new Error(`Request failed ${res.status} ${errMsg}`);
-  }
-  return payload;
-};
+  let learnedRules = 0;
 
-const readFileSafe = (filePath) => {
-  try {
-    return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : '';
-  } catch {
-    return '';
-  }
-};
+  for (const file of files) {
+    const fullPath = path.join(TARGET_DIR, file);
+    const code = fs.readFileSync(fullPath, 'utf8');
 
-const ensureDir = (dir) => {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-};
+    // Only process a sample to save time/tokens if the file is massive
+    const codeSample = code.length > 3000 ? code.slice(0, 3000) + '...' : code;
 
-const main = async () => {
-  const config = loadConfig();
-  ensureDir(outboxDir);
+    console.log(`Analyzing: ${file} ...`);
 
-  Log.info('📦 Creating context pack...');
-  execSync('node scripts/ai_context_pack.mjs', { cwd: root, stdio: 'inherit' });
+    try {
+      const response = await adaptor.generateResponse([
+        { role: 'user', content: `Analyze this React component from PromptHouse Evo Studio. Identify the core structural patterns, CSS grid strategies, 'glass-extreme' class usage, and visual layout logic used here. 
+        
+Also, specifically analyze the Chameleon Theme UI Architecture if present (e.g., dynamic COPILOT_THEMES mappings, radical color palettes, unique font families, pulsing glows, and absolute structural morphing). 
+        
+Synthesize this into a strict 1-sentence evolutionary heuristic rule for future code generation. The rule MUST reinforce that Evo should ALWAYS generate 100% distinct, immersive themes (like Cyberpunk, Vaporwave, Terminal) rather than generic dark/light modes.\n\nCode:\n${codeSample}` }
+      ], "You are Evo's structural memory encoder.", { provider: 'openai', model: 'gpt-4o' });
 
-  const reviewPath = path.join(root, config.reviewOutputPath);
-  const nextPassPath = path.join(root, config.antigravityPromptOutputPath);
-  const checklistPath = path.join(root, config.repairChecklistOutputPath);
-
-  const review = readFileSafe(reviewPath).trim();
-  const nextPass = readFileSafe(nextPassPath).trim();
-  const checklist = readFileSafe(checklistPath).trim();
-
-  if (!review || !nextPass) {
-    throw new Error('Required review or next-pass output is missing; run ai:review first.');
+      if (response.success && response.message) {
+        await learningManager.ingestKnowledgeChunk({
+          id: `self_train_${file}_${Date.now()}`,
+          source: `Autonomous_Scan_${file}`,
+          signal_strength: 0.9,
+          context_summary: `HEURISTIC FOR ${file}: ` + response.message
+        });
+        learnedRules++;
+        console.log(`[AI Self-Train] Synthesized rule for ${file}`);
+      }
+    } catch (e) {
+      console.warn(`[AI Self-Train] Failed to analyze ${file}: ${e.message}`);
+    }
   }
 
-  const bridgeUrl = process.env.BRIDGE_URL || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || ((globalThis.process?.env?.BRIDGE_URL) || (globalThis.process?.env?.VITE_BRIDGE_URL) || (globalThis.process?.env?.BRIDGE_URL || globalThis.process?.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001')))))));
-  const capture = {
-    id: `training_${Date.now()}`,
-    source: 'ai_self_train.mjs',
-    project: path.basename(root),
-    model: process.env.OPENAI_MODEL || config.fallbackModel,
-    reviewPath: config.reviewOutputPath,
-    nextPassPath: config.antigravityPromptOutputPath,
-    checklistPath: config.repairChecklistOutputPath,
-    summary: review.slice(0, 3000),
-    next_pass_excerpt: nextPass.split('\n').slice(0, 120).join('\n'),
-    checklist: checklist.split('\n').slice(0, 120).join('\n'),
-    createdAt: new Date().toISOString()
-  };
+  console.log(`\n[AI Self-Train] SUCCESS: Engine shut down.`);
+  console.log(`[AI Self-Train] Injected ${learnedRules} new evolutionary heuristics into the OnlineLearningManager.`);
+}
 
-  Log.info(`🔁 Posting training capture to ${bridgeUrl}/api/training-capture`);
-  await fetchJson(`${bridgeUrl}/api/training-capture`, capture);
-
-  const runId = capture.id;
-  const approval = createOwnerApprovalEnvelope({
-    granted: true,
-    actor: 'studio_owner',
-    scope: 'self_implementation',
-    receiptId: `OAR-SELF-TRAIN-${Date.now()}`,
-    grantedAt: new Date().toISOString()
-  });
-
-  Log.info(`🚀 Activating local evo runtime at ${bridgeUrl}/api/evo-runtime/activate`);
-  await fetchJson(`${bridgeUrl}/api/evo-runtime/activate`, { source: capture.source, runId });
-
-  Log.info(`🛠️ Requesting self-implementation cycle at ${bridgeUrl}/api/self-implementation/cycle`);
-  const implementationResult = await fetchJson(`${bridgeUrl}/api/self-implementation/cycle`, {
-    applyFixes: true,
-    runTests: true,
-    runBuild: true,
-    source: capture.source,
-    runId,
-    ownerApproval: approval
-  });
-
-  const reportContent = [
-    `# AI Self-Training Report`,
-    `Generated: ${new Date().toISOString()}`,
-    `Bridge: ${bridgeUrl}`,
-    `Training capture: ${capture.id}`,
-    `Model: ${capture.model}`,
-    '',
-    `## Review Snapshot`,
-    review.slice(0, 4000),
-    '',
-    `## Next-Pass Summary`,
-    nextPass.split('\n').slice(0, 120).join('\n'),
-    '',
-    `## Implementation Result`,
-    JSON.stringify(implementationResult, null, 2)
-  ].join('\n');
-
-  const reportPath = path.join(outboxDir, 'ai-self-train-report.md');
-  fs.writeFileSync(reportPath, reportContent, 'utf8');
-  Log.info(`✅ Training cycle complete. Report written to ${reportPath}`);
-};
-
-main().catch((err) => {
-  Log.error('❌ ai_self_train failed:', err.message || err);
-  process.exit(1);
-});
+runSelfTraining().catch(console.error);

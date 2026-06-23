@@ -7,6 +7,7 @@ import { useSovereignStore } from '../store.js';
 import { universalSend } from '../lib/universal-transport.js';
 import { ALL_BOT_ROSTER } from '../engine.js';
 import { BRIDGE_URL } from '../config/bridge-config.js';
+import AutonomousAgentRoster from '../components/AutonomousAgentRoster.jsx';
 
 function bridgeUrl(path) {
   const configured = import.meta.env.VITE_PROMPTBRIDGE_URL;
@@ -31,6 +32,7 @@ export default function OmniBotRemote() {
   const activeFile = useSovereignStore((s) => s.activeFile);
   const fileContent = useSovereignStore((s) => s.fileContent);
   const addTerminalLogs = useSovereignStore((s) => s.addTerminalLogs);
+  const addNotification = useSovereignStore((s) => s.addNotification);
 
   const currentBot = ALL_BOT_ROSTER.find(b => b.id === selectedBot) || ALL_BOT_ROSTER[0];
 
@@ -65,7 +67,7 @@ export default function OmniBotRemote() {
               text: `[STUDIO PUSH NOTIFICATION]\n${data.message}` 
             }]);
           } catch (err) {
-            console.error('Failed to parse push notification:', err);
+            void('Failed to parse push notification:', err);
           }
         };
 
@@ -74,11 +76,11 @@ export default function OmniBotRemote() {
           if (!mounted) return;
           const delay = Math.min(2000 * Math.pow(2, retryCount), 30000);
           retryCount++;
-          console.log(`[OmniBot] SSE disconnected. Reconnecting in ${delay}ms...`);
+          void(`[OmniBot] SSE disconnected. Reconnecting in ${delay}ms...`);
           reconnectTimeout = setTimeout(connectSSE, delay);
         };
       } catch (err) {
-         console.error('Failed to initialize SSE:', err);
+         void('Failed to initialize SSE:', err);
       }
     };
 
@@ -125,7 +127,7 @@ export default function OmniBotRemote() {
             await handleSend(null, data.text, true);
           }
         } catch (err) {
-          console.error("Transcription error", err);
+          void("Transcription error", err);
           setSending(false);
         } finally {
           stream.getTracks().forEach(track => track.stop());
@@ -135,8 +137,8 @@ export default function OmniBotRemote() {
       mediaRecorder.start();
       setIsRecording(true);
     } catch (err) {
-      console.error("Microphone access denied:", err);
-      alert("Microphone access required to speak to the bots.");
+      void("Microphone access denied:", err);
+      addNotification({ msg: "Microphone access required to speak to the bots.", type: 'error' });
     }
   };
 
@@ -202,7 +204,7 @@ export default function OmniBotRemote() {
             audio.play();
           }
         } catch (voiceErr) {
-          console.error('Failed to play voice:', voiceErr);
+          void('Failed to play voice:', voiceErr);
         }
       }
 
@@ -230,12 +232,12 @@ export default function OmniBotRemote() {
 
     if (!inline && match) {
       return (
-        <div className="relative group my-4 rounded-xl overflow-hidden border border-gray-800 shadow-2xl">
+        <div className="relative group my-4 rounded-3xl overflow-hidden border-gray-800 shadow-2xl">
           <div className="flex items-center justify-between px-4 py-2 bg-[#1a1a1f] border-b border-gray-800">
             <span className="text-xs font-mono text-gray-400">{language}</span>
             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
               {language === 'bash' || language === 'shell' ? (
-                  <button onClick={handleRunTerminal} className="flex items-center px-3 py-1 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 rounded text-xs font-bold transition-colors">
+                  <button onClick={handleRunTerminal} className="flex items-center px-3 py-1 bg-blue-500/10 text-neon-cyan hover:bg-blue-500/20 rounded text-xs font-bold transition-colors">
                       <Play className="w-3 h-3 mr-1" /> Run in Terminal
                   </button>
               ) : (
@@ -262,7 +264,7 @@ export default function OmniBotRemote() {
       icon={BrainCircuit}
       actions={
         <div className="flex items-center gap-2">
-          <div className="flex bg-[#0c0c0f] rounded-lg border border-[rgba(255,255,255,0.05)] p-1 overflow-hidden shrink-0">
+          <div className="flex bg-[#0c0c0f] rounded-2xl border-[rgba(255,255,255,0.05)] p-1 overflow-hidden shrink-0">
             <select 
               value={selectedBot}
               onChange={(e) => setSelectedBot(e.target.value)}
@@ -276,16 +278,19 @@ export default function OmniBotRemote() {
               ))}
             </select>
           </div>
-          <div className="flex items-center gap-2 text-slate-500 bg-slate-900 px-2 py-1.5 rounded border border-slate-800">
+          <div className="flex items-center gap-2 text-slate-500 glass-extreme px-2 py-1.5 rounded border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]">
             <Cpu size={14} />
             <span className="text-xs font-bold">Studio Brain</span>
           </div>
         </div>
       }
     >
-    <div className="flex flex-col h-[calc(100vh-200px)] w-full bg-[#050505] text-white font-sans overflow-hidden rounded-xl border border-slate-800" style={{ '--accent-color': currentBot.palette?.primary || '#10b981' }}>
-
-      {/* Chat Area */}
+    <div className="app-wrapper flex-col gap-4 h-[calc(100vh-200px)] w-full bg-[#050505] text-white font-sans overflow-hidden rounded-3xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]" style={{ '--accent-color': currentBot.palette?.primary || '#10b981' }}>
+      
+      <main className="flex-col h-full relative" style={{ flex: 1, overflow: 'hidden' }}>
+        <AutonomousAgentRoster />
+        
+        {/* Chat Area */}
       <div 
         ref={scrollRef}
         className="flex-1 overflow-y-auto p-6 space-y-6 bg-linear-to-b from-transparent to-[rgba(16,185,129,0.02)] pb-24"
@@ -294,16 +299,16 @@ export default function OmniBotRemote() {
           const botPalette = m.bot?.palette?.primary || currentBot.palette?.primary || '#10b981';
           return (
             <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[85%] rounded-2xl p-5 text-sm shadow-xl ${
+              <div className={`card max-w-[85%] rounded-2xl p-5 text-sm shadow-xl ${
                 m.role === 'user' 
-                  ? 'bg-indigo-600 text-white rounded-tr-sm border border-indigo-500/50' 
-                  : 'bg-[#111116] text-slate-200 rounded-tl-sm border border-slate-800/80'
+                  ? 'bg-indigo-600 text-white rounded-tr-sm border-indigo-500/50' 
+                  : 'bg-[#111116] text-slate-200 rounded-tl-sm border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]/80'
               }`}>
                 {m.role === 'system' && (
-                  <div className="flex items-center gap-2 mb-3 border-b border-slate-800/50 pb-2" style={{ color: botPalette }}>
+                  <div className="flex items-center gap-2 mb-3 border-b border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]/50 pb-2" style={{ color: botPalette }}>
                     {m.pluginIntercept && (
-                      <div className="flex items-center gap-1.5 mr-2 px-2 py-0.5 bg-indigo-500/20 text-indigo-300 text-[10px] uppercase font-black tracking-wider rounded border border-indigo-500/30">
-                        <Zap size={10} className="text-indigo-400" />
+                      <div className="flex items-center gap-1.5 mr-2 px-2 py-0.5 bg-indigo-500/20 text-indigo-300 text-[10px] uppercase font-black tracking-wider rounded border-indigo-500/30">
+                        <Zap size={10} className="text-neon-cyan" />
                         Plugin Handled: {m.handledBy}
                       </div>
                     )}
@@ -312,7 +317,14 @@ export default function OmniBotRemote() {
                     ) : (
                         <Zap size={14} className="opacity-70" />
                     )}
-                    <span className="text-[10px] font-black uppercase tracking-widest">{m.bot?.name || 'Evo System'}</span>
+                    <div className="flex-col gap-4 ml-1">
+                      <span className="text-[10px] font-black uppercase tracking-widest">{m.bot?.name || 'Evo System'}</span>
+                      {m.bot?.generatingTheme && (
+                        <span className="text-[8px] uppercase tracking-widest text-neon-cyan font-bold opacity-80">
+                          {m.bot.generatingTheme} • {m.bot.generatingPlan}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 )}
                 
@@ -331,7 +343,7 @@ export default function OmniBotRemote() {
         })}
         {sending && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] rounded-2xl p-4 text-sm bg-[#111116] text-slate-400 rounded-tl-sm border border-slate-800 flex items-center gap-3">
+            <div className="max-w-[85%] rounded-2xl p-4 text-sm bg-[#111116] text-slate-400 rounded-tl-sm border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex items-center gap-3">
               <Loader2 size={16} className="animate-spin" style={{ color: currentBot.palette?.primary || '#10b981' }} />
               <span className="text-xs font-mono tracking-wide">Transmitting to {currentBot.name}...</span>
             </div>
@@ -343,12 +355,12 @@ export default function OmniBotRemote() {
       <div className="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-[#050505] via-[#050505] to-transparent pt-8">
         <form 
           onSubmit={handleSend}
-          className="flex items-center gap-2 bg-[#111116] p-2 rounded-full border border-slate-700 shadow-2xl focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all max-w-4xl mx-auto"
+          className="flex items-center gap-2 bg-[#111116] p-2 rounded-full border-cyan-500/30 shadow-2xl focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all max-w-4xl mx-auto"
         >
           <button 
             type="button" 
             onClick={toggleRecording}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 ${isRecording ? 'bg-red-500/20 text-red-500 animate-pulse' : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-800'}`}
+            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 ${isRecording ? 'bg-red-500/20 text-red-500 animate-pulse' : 'bg-black/40 backdrop-blur-md border-white/5/50 text-slate-400 hover:text-white hover:bg-black/40 backdrop-blur-md border-white/5'}`}
           >
             <Mic size={18} />
           </button>
@@ -365,13 +377,15 @@ export default function OmniBotRemote() {
           <button 
             type="submit"
             disabled={(!input?.trim() && !isRecording) || sending}
-            className="w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 disabled:opacity-50"
+            className="btn btn-primary w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 disabled:opacity-50"
             style={{ backgroundColor: currentBot.palette?.primary || '#4f46e5' }}
           >
             <Send size={16} className="text-[#050505] ml-0.5" />
           </button>
         </form>
       </div>
+      
+      </main>
     </div>
     </IDEPageLayout>
   );

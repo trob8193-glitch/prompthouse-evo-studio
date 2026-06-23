@@ -2,13 +2,13 @@ import { Log } from '../autonomy/SovereignLogger.js';
 import { SelfForge } from '../autonomy/SelfForge.js';
 import { BRIDGE_URL } from '../../config/bridge-config.js';
 
-const BRIDGE_URL = typeof process !== 'undefined' && process.env?.PROMPTBRIDGE_URL
+const ACTIVE_BRIDGE_URL = typeof process !== 'undefined' && process.env?.PROMPTBRIDGE_URL
   ? process.env.PROMPTBRIDGE_URL
   : BRIDGE_URL;
 
 async function recordHealingProbe(filePath) {
   try {
-    await fetch(`${BRIDGE_URL}/api/evo-ledger/log`, {
+    await fetch(`${ACTIVE_BRIDGE_URL}/api/evo-ledger/log`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

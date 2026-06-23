@@ -1,74 +1,118 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { EvoCoreConvergenceAmplifier } from '../../convergence-amplifier/index.js';
+import url from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, '../../../../');
-const enginePath = path.join(rootDir, 'src/core/convergence-amplifier/index.js');
-const proofDir = path.join(rootDir, 'proof_receipts');
+const STATE_FILE = () => path.join(process.cwd(), '.prompthouse-data', 'daemons', 'convergence_state.json');
 
-if (!fs.existsSync(proofDir)) fs.mkdirSync(proofDir, { recursive: true });
+function ensureDir() {
+  const dir = path.dirname(STATE_FILE());
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+}
 
-console.log('💎 [CONVERGENCE-AMPLIFIER] Initializing Active Daemon Loop...');
+/**
+ * CONVERGENCE DAEMON
+ * Periodically checks all subsystem health, computes a convergence score,
+ * and broadcasts the result through MegaTether.
+ */
+export class ConvergenceDaemon {
+  constructor() {
+    this.intervalId = null;
+    this.isRunning = false;
+  }
 
-const engine = new EvoCoreConvergenceAmplifier();
+  start(intervalMs = 30000) {
+    if (this.intervalId) return;
+    console.log(`[ConvergenceDaemon] Starting with ${intervalMs}ms interval.`);
+    this.intervalId = setInterval(() => this.tick(), intervalMs);
+    this.tick();
+  }
 
-let cycle = 0;
+  stop() {
+    if (this.intervalId) { clearInterval(this.intervalId); this.intervalId = null; }
+    console.log('[ConvergenceDaemon] Stopped.');
+  }
 
-setInterval(() => {
-    cycle++;
-    console.log(`\n💎 [CONVERGENCE-AMPLIFIER] --- AMPLIFICATION CYCLE ${cycle} ---`);
-    
+  async tick() {
+    if (this.isRunning) return;
+    this.isRunning = true;
     try {
-        const state = engine.run();
-        console.log(`💎 [CONVERGENCE-AMPLIFIER] Truth Label: ${state.truthLabel}`);
-        console.log(`💎 [CONVERGENCE-AMPLIFIER] Scanning ${state.amplificationTargets.length} targets...`);
+      const checks = {
+        bridgeServer: await this.checkBridge(),
+        database: this.checkDatabase(),
+        evolutionDaemon: this.checkEvolution(),
+        fileSystem: this.checkFileSystem()
+      };
 
-        // Sort by score ascending so we focus on the lowest scoring target to improve it
-        const pendingTargets = [...state.amplificationTargets].filter(t => t.score < 100).sort((a, b) => a.score - b.score);
-        
-        if (pendingTargets.length > 0) {
-            const target = pendingTargets[0];
-            console.log(`🚀 [CONVERGENCE-AMPLIFIER] Executing Cross-Daemon Target: ${target.title} (Current Score: ${target.score})`);
-            
-            // Execute the work autonomously
-            if (target.id === 'buyer-proof-pack') {
-                const proofPackPath = path.join(proofDir, 'buyer_proof_pack.json');
-                fs.writeFileSync(proofPackPath, JSON.stringify({
-                    generatedAt: new Date().toISOString(),
-                    status: 'PLATFORM_READY',
-                    canonicalAuthorities: state.canonicalModuleMap,
-                    signature: 'EvoCore Convergence Amplifier',
-                    verified: true
-                }, null, 2));
-                console.log(`📦 [CONVERGENCE-AMPLIFIER] Generated Buyer-Ready Proof Pack covering all 15 active Daemons at ${proofPackPath}`);
-            } else if (target.id === 'productize-platform-sentinel' || target.id === 'platform-sentinel-product') {
-                console.log(`🛡️ [CONVERGENCE-AMPLIFIER] Scanning Platform Sentinel APIs for public release constraints...`);
-                // Simulate packaging work
-            } else {
-                console.log(`⚙️ [CONVERGENCE-AMPLIFIER] Synthesizing structural logic for ${target.id}...`);
-            }
+      const passing = Object.values(checks).filter(Boolean).length;
+      const total = Object.keys(checks).length;
+      const score = Math.round((passing / total) * 100);
 
-            // Self-Improvement: Inject +2 to the score directly into the source code of the engine
-            const engineSource = fs.readFileSync(enginePath, 'utf8');
-            const scoreRegex = new RegExp(`(id:\\s*'${target.id}'[\\s\\S]*?score:\\s*)(\\d+)`, 'g');
-            
-            const newScore = Math.min(100, target.score + 4);
-            const updatedSource = engineSource.replace(scoreRegex, `$1${newScore}`);
-            
-            if (updatedSource !== engineSource) {
-                fs.writeFileSync(enginePath, updatedSource, 'utf8');
-                console.log(`🔥 [CONVERGENCE-AMPLIFIER] Target [${target.id}] score dynamically upgraded to ${newScore} in Source Code!`);
-            }
-        } else {
-            console.log(`🏆 [CONVERGENCE-AMPLIFIER] All Targets at 100%. Platform Amplification Maximized.`);
-        }
-        
+      const state = {
+        score,
+        checks,
+        passing,
+        total,
+        converged: score >= 75,
+        checkedAt: new Date().toISOString()
+      };
+
+      ensureDir();
+      fs.writeFileSync(STATE_FILE(), JSON.stringify(state, null, 2), 'utf8');
+
+      // Broadcast to MegaTether
+      try {
+        const { getMegaTether } = await import('../../tethers/MegaTetherCore.js');
+        const tether = getMegaTether();
+        if (tether) await tether.broadcast('convergence_daemon', 'convergence_check', state);
+      } catch {}
+
     } catch (err) {
-        console.error('❌ [CONVERGENCE-AMPLIFIER] Error:', err.message);
+      console.error('[ConvergenceDaemon] Tick error:', err.message);
+    } finally {
+      this.isRunning = false;
     }
-}, 12000);
+  }
 
-console.log('💎 [CONVERGENCE-AMPLIFIER] Online and dynamically rewriting core scores...');
+  async checkBridge() {
+    try {
+      const port = process.env.BRIDGE_PORT || '3001';
+      const res = await fetch(`http://127.0.0.1:${port}/healthz`, { signal: AbortSignal.timeout(2000) });
+      return res.ok;
+    } catch { return false; }
+  }
+
+  checkDatabase() {
+    try {
+      const dbPath = path.join(process.cwd(), 'prompthouse.db');
+      return fs.existsSync(dbPath);
+    } catch { return false; }
+  }
+
+  checkEvolution() {
+    try {
+      const statePath = path.join(process.cwd(), '.prompthouse-data', 'evolution', 'daemon_state.json');
+      if (!fs.existsSync(statePath)) return false;
+      const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+      return state.active === true || state.cycleCount > 0;
+    } catch { return false; }
+  }
+
+  checkFileSystem() {
+    return fs.existsSync(path.join(process.cwd(), 'src')) && fs.existsSync(path.join(process.cwd(), 'package.json'));
+  }
+
+  getStatus() {
+    if (fs.existsSync(STATE_FILE())) {
+      try { return JSON.parse(fs.readFileSync(STATE_FILE(), 'utf8')); } catch {}
+    }
+    return { score: 0, converged: false };
+  }
+}
+
+export function run() {
+  const daemon = new ConvergenceDaemon();
+  daemon.start();
+  return daemon;
+}
+
+if (process.argv[1] === url.fileURLToPath(import.meta.url)) run();

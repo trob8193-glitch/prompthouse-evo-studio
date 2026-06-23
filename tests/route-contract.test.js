@@ -67,6 +67,15 @@ describe('Route Contract', () => {
         allRoutes = allRoutes.concat(extractExpressRoutes(source));
       }
     }
+    
+    const routesDir = join(ROOT, 'server', 'routes');
+    if (existsSync(routesDir)) {
+      const files = readdirSync(routesDir).filter((f) => f.endsWith('.js'));
+      for (const file of files) {
+        const source = readFileSync(join(routesDir, file), 'utf8');
+        allRoutes = allRoutes.concat(extractExpressRoutes(source));
+      }
+    }
 
     const coverage = compareEndpointCoverage(readmeEndpoints, allRoutes);
 

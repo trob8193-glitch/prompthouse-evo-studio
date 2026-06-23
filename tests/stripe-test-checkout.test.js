@@ -50,4 +50,16 @@ describe('Stripe Test Checkout Service', () => {
     expect(result.id).toBe('cs_test_123');
     expect(result.url).toContain('checkout.stripe.com');
   });
+
+  it('test key allows fixed-price audit checkout proof generation', async () => {
+    vi.stubEnv('STRIPE_SECRET_KEY', 'sk_test_123');
+    const result = await createStripeTestCheckoutSession({ 
+      amount: 1500000, 
+      productName: 'Enterprise AI & Software Audit',
+      ownerApproval: { granted: true, scope: 'commerce', receiptId: 'test-audit' } 
+    });
+    expect(result.ok).toBe(true);
+    expect(result.id).toBe('cs_test_123');
+    expect(result.receipt.truthState).toBe('PROVEN');
+  });
 });

@@ -2,6 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
+import { hardenProcess, createDaemonHeartbeat } from './daemon-hardener.mjs';
+
+hardenProcess('mobile-singularity-daemon');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.join(__dirname, '..', '.prompthouse-data');

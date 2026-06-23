@@ -1,212 +1,241 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Activity, AlertTriangle, Brain, CheckCircle2, PauseCircle, PlayCircle, RefreshCw, Shield, Square, Zap } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Shield, Activity, RefreshCw, Power, PowerOff, CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-react';
 import { safeFetchBridge } from '../config/bridge-config.js';
 import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
 
-function Badge({ value, tone = 'cyan' }) {
-  const colors = {
-    green: { bg: 'rgba(0,255,136,0.12)', color: '#00ff88', border: 'rgba(0,255,136,0.3)', glow: 'rgba(0,255,136,0.2)' },
-    red: { bg: 'rgba(255,0,85,0.12)', color: '#ff0055', border: 'rgba(255,0,85,0.3)', glow: 'rgba(255,0,85,0.2)' },
-    amber: { bg: 'rgba(245,158,11,0.12)', color: '#f59e0b', border: 'rgba(245,158,11,0.3)', glow: 'rgba(245,158,11,0.2)' },
-    cyan: { bg: 'rgba(0,240,255,0.12)', color: '#00f0ff', border: 'rgba(0,240,255,0.3)', glow: 'rgba(0,240,255,0.2)' },
-  };
-  const c = colors[tone] || colors.cyan;
+function Panel({ title, icon: Icon, color = '#00f0ff', children, action }) {
   return (
-    <span style={{
-      background: c.bg, color: c.color, border: `1px solid ${c.border}`,
-      borderRadius: 999, padding: '4px 12px', fontSize: 10, fontWeight: 900,
-      textTransform: 'uppercase', letterSpacing: '0.1em',
-      boxShadow: `0 0 12px ${c.glow}`,
+    <section style={{
+      background: 'rgba(5,5,8,0.8)',
+      border: `1px solid ${color}33`,
+      borderRadius: 24,
+      padding: 24,
+      marginBottom: 20,
+      backdropFilter: 'blur(20px)',
+      boxShadow: `0 0 30px ${color}15`,
+      position: 'relative',
+      overflow: 'hidden',
     }}>
-      {value || 'UNKNOWN'}
-    </span>
-  );
-}
-
-function Stat({ label, value, icon: Icon }) {
-  return (
-    <div style={{
-      background: 'rgba(5,5,8,0.8)', border: '1px solid rgba(0,240,255,0.2)', borderRadius: 20, padding: 20,
-      backdropFilter: 'blur(20px)', boxShadow: '0 0 20px rgba(0,240,255,0.05)', transition: 'all 0.3s',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#8a8a9a', fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-        {Icon && <Icon size={14} color="#00f0ff" style={{ filter: 'drop-shadow(0 0 5px #00f0ff)' }} />} {label}
+      <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, borderRadius: '50%', background: color, filter: 'blur(120px)', opacity: 0.08, pointerEvents: 'none' }} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <h2 style={{
+          margin: 0,
+          fontSize: 15,
+          fontWeight: 900,
+          color: '#fff',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          textShadow: `0 0 15px ${color}60`,
+          position: 'relative',
+          zIndex: 1,
+        }}>
+          {Icon && <Icon size={18} color={color} style={{ filter: `drop-shadow(0 0 8px ${color})` }} />}
+          {title}
+        </h2>
+        {action && <div style={{ position: 'relative', zIndex: 1 }}>{action}</div>}
       </div>
-      <div style={{ marginTop: 12, fontSize: 24, fontWeight: 900, color: '#fff', textShadow: '0 0 15px rgba(0,240,255,0.3)' }}>{value}</div>
-    </div>
+      <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
+    </section>
   );
 }
 
-const ActionButton = ({ children, danger, disabled, onClick }) => (
-  <button
-    disabled={disabled}
-    onClick={onClick}
-    style={{
-      border: `1px solid ${danger ? 'rgba(255,0,85,0.4)' : 'rgba(0,240,255,0.3)'}`,
-      background: danger ? 'rgba(255,0,85,0.1)' : 'rgba(0,240,255,0.08)',
-      color: danger ? '#ff0055' : '#00f0ff',
-      borderRadius: 14, padding: '10px 16px', fontSize: 12, fontWeight: 800,
-      cursor: disabled ? 'wait' : 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
-      textTransform: 'uppercase', letterSpacing: '0.05em',
-      boxShadow: `0 0 15px ${danger ? 'rgba(255,0,85,0.15)' : 'rgba(0,240,255,0.15)'}`,
-      transition: 'all 0.3s', opacity: disabled ? 0.5 : 1,
-    }}
-    onMouseEnter={(e) => { if (!disabled) { e.currentTarget.style.boxShadow = `0 0 25px ${danger ? 'rgba(255,0,85,0.3)' : 'rgba(0,240,255,0.3)'}`; } }}
-    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 15px ${danger ? 'rgba(255,0,85,0.15)' : 'rgba(0,240,255,0.15)'}`; }}
-  >
-    {children}
-  </button>
-);
+export function SelfEvolutionDashboard() {
+  const [status, setStatus] = useState(null);
+  const [runs, setRuns] = useState([]);
+  const [queue, setQueue] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-const SectionCard = ({ title, children }) => (
-  <div style={{
-    background: 'rgba(5,5,8,0.8)', border: '1px solid rgba(0,240,255,0.2)', borderRadius: 24, padding: 24,
-    backdropFilter: 'blur(20px)', boxShadow: '0 0 30px rgba(0,240,255,0.05)',
-    position: 'relative', overflow: 'hidden',
-  }}>
-    <div style={{ position: 'absolute', top: -60, right: -60, width: 200, height: 200, borderRadius: '50%', background: '#00f0ff', filter: 'blur(120px)', opacity: 0.06, pointerEvents: 'none' }} />
-    <h2 style={{ margin: 0, fontSize: 15, fontWeight: 900, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em', textShadow: '0 0 15px rgba(0,240,255,0.4)', position: 'relative', zIndex: 1 }}>{title}</h2>
-    <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
-  </div>
-);
+  const fetchData = async () => {
+    setRefreshing(true);
+    try {
+      const [sRes, rRes, qRes] = await Promise.all([
+        safeFetchBridge('/api/evolution/status'),
+        safeFetchBridge('/api/evolution/runs?limit=10'),
+        safeFetchBridge('/api/evolution/queue')
+      ]);
+      if (sRes.ok) setStatus(sRes.data);
+      if (rRes.ok) setRuns(rRes.data.runs || []);
+      if (qRes.ok) setQueue(qRes.data.queue || []);
+    } catch (e) {
+      console.error('Failed to fetch evolution data', e);
+    }
+    setTimeout(() => setRefreshing(false), 500);
+  };
 
-export default function SelfEvolutionDashboard() {
-  const [status, setStatus] = React.useState(null);
-  const [receipts, setReceipts] = React.useState([]);
-  const [memory, setMemory] = React.useState([]);
-  const [approvals, setApprovals] = React.useState([]);
-  const [objective, setObjective] = React.useState('Remove unverified self-evolution language and verify proof-gated safety.');
-  const [busy, setBusy] = React.useState(false);
-  const [message, setMessage] = React.useState('');
-
-  const refresh = React.useCallback(async () => {
-    const [statusRes, receiptsRes, memoryRes, approvalsRes] = await Promise.all([
-      safeFetchBridge('/api/self-evolution/status'),
-      safeFetchBridge('/api/self-evolution/receipts?limit=12'),
-      safeFetchBridge('/api/self-evolution/memory'),
-      safeFetchBridge('/api/self-evolution/approval-queue')
-    ]);
-    if (statusRes.ok) setStatus(statusRes.data.status || statusRes.data);
-    if (receiptsRes.ok) setReceipts(receiptsRes.data.receipts || []);
-    if (memoryRes.ok) setMemory(memoryRes.data.memory || []);
-    if (approvalsRes.ok) setApprovals(approvalsRes.data.approvals || []);
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
   }, []);
 
-  React.useEffect(() => { refresh(); }, [refresh]);
-
-  const run = async (path, body = {}) => {
-    setBusy(true);
-    setMessage('Running...');
+  const handleToggleKillSwitch = async () => {
+    if (!status) return;
+    const isEngaged = status.killSwitchEngaged;
+    const endpoint = isEngaged ? '/api/evolution/kill-switch/release' : '/api/evolution/kill-switch/engage';
+    
     try {
-      const result = await safeFetchBridge(path, { method: 'POST', timeout: 240000, body: JSON.stringify(body) });
-      setMessage(result.ok ? `PASS: ${result.data.truthState || result.data.result?.truthState || 'OK'}` : `ERROR: ${result.error}`);
-      await refresh();
-    } finally {
-      setBusy(false);
-    }
+      const res = await safeFetchBridge(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'Manual toggle from dashboard' })
+      });
+      if (res.ok) fetchData();
+    } catch (e) {}
   };
 
-  const last = status?.lastRun || status?.status?.lastRun || receipts[0] || null;
-  const truthState = status?.truthState || status?.status?.truthState || last?.truthState || 'NOT_STARTED';
-  const daemon = status?.daemon || null;
-  const killSwitch = daemon?.killSwitch || null;
+  const handleQueueAction = async (id, action) => {
+    try {
+      const res = await safeFetchBridge(`/api/evolution/queue/${id}/${action}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: `Owner ${action}` })
+      });
+      if (res.ok) fetchData();
+    } catch (e) {}
+  };
 
   return (
     <IDEPageLayout
-      title="Self-Evolution Control"
-      description="Proof-gated repair cycles, sandbox patching, rollback receipts, daemon controls."
+      title="Evolution Command Center"
+      description="Real-time control and monitoring of the autonomous background mutation engine."
+      icon={Shield}
       actions={
-        <ActionButton onClick={refresh} disabled={busy}><RefreshCw size={14} /> Refresh</ActionButton>
+        <button 
+          onClick={fetchData}
+          disabled={refreshing}
+          className="glass-extreme px-4 py-2 rounded-xl border-cyan-500/30 text-neon-cyan text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:bg-cyan-500/10 transition-all"
+        >
+          <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
+          {refreshing ? 'Syncing...' : 'Refresh'}
+        </button>
       }
     >
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-        style={{ display: 'flex', flexDirection: 'column', gap: 20, color: '#e2e8f0' }}
-      >
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 16 }}>
-        <Stat label="Truth State" value={<Badge value={truthState} tone={truthState.includes('PASS') || truthState === 'ROLLED_BACK' ? 'green' : truthState.includes('FAIL') ? 'red' : 'cyan'} />} icon={Shield} />
-        <Stat label="Recent Runs" value={receipts.length} icon={Activity} />
-        <Stat label="Memory Patterns" value={memory.length} icon={Brain} />
-        <Stat label="Approval Queue" value={approvals.length} icon={AlertTriangle} />
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr .8fr', gap: 20 }}>
-        <SectionCard title="Run Cycle">
-          <textarea
-            value={objective}
-            onChange={(e) => setObjective(e.target.value)}
-            style={{
-              marginTop: 16, width: '100%', minHeight: 86,
-              background: 'rgba(0,0,0,0.4)', color: '#b4b4c4',
-              border: '1px solid rgba(0,240,255,0.15)', borderRadius: 14, padding: 14,
-              resize: 'vertical', fontSize: 13, fontWeight: 600, lineHeight: 1.5,
-              outline: 'none',
-            }}
-            onFocus={(e) => { e.target.style.borderColor = 'rgba(0,240,255,0.4)'; e.target.style.boxShadow = '0 0 20px rgba(0,240,255,0.1)'; }}
-            onBlur={(e) => { e.target.style.borderColor = 'rgba(0,240,255,0.15)'; e.target.style.boxShadow = 'none'; }}
-          />
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 16 }}>
-            <ActionButton disabled={busy} onClick={() => run('/api/self-evolution/propose', { objective })}><Zap size={14} /> Propose</ActionButton>
-            <ActionButton disabled={busy} onClick={() => run('/api/self-evolution/apply-sandbox', { objective })}><Shield size={14} /> Sandbox</ActionButton>
-            <ActionButton disabled={busy} onClick={() => run('/api/self-evolution/proof', { objective, runTests: true, runBuild: true, allowRollback: true })}><CheckCircle2 size={14} /> Proof</ActionButton>
-            <ActionButton disabled={busy} onClick={() => run('/api/self-evolution/daemon/run-once', {})}><Activity size={14} /> Auto Run Once</ActionButton>
-          </div>
-          {message && <div style={{ marginTop: 14, color: message.startsWith('ERROR') ? '#ff0055' : '#00ff88', fontSize: 12, fontWeight: 800, textShadow: message.startsWith('ERROR') ? '0 0 10px rgba(255,0,85,0.3)' : '0 0 10px rgba(0,255,136,0.3)' }}>{message}</div>}
-        </SectionCard>
-
-        <SectionCard title="Daemon & Kill Switch">
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 16 }}>
-            <ActionButton disabled={busy} onClick={() => run('/api/self-evolution/daemon/start', { autonomyLevel: 2, intervalMinutes: 60 })}><PlayCircle size={14} /> Start</ActionButton>
-            <ActionButton disabled={busy} onClick={() => run('/api/self-evolution/daemon/stop', {})}><PauseCircle size={14} /> Stop</ActionButton>
-            <ActionButton danger disabled={busy} onClick={() => run('/api/self-evolution/kill-switch', { reason: 'Manual dashboard safety stop' })}><Square size={14} /> Kill</ActionButton>
-            <ActionButton disabled={busy} onClick={() => run('/api/self-evolution/kill-switch/release', { reason: 'Manual dashboard release' })}><PlayCircle size={14} /> Release</ActionButton>
-          </div>
-          <div style={{ marginTop: 16, fontSize: 12, color: '#8a8a9a', lineHeight: 2 }}>
-            <div>Enabled: <Badge value={String(daemon?.enabled ?? false)} tone={daemon?.enabled ? 'green' : 'amber'} /></div>
-            <div style={{ marginTop: 8 }}>Kill Switch: <Badge value={killSwitch?.engaged ? 'ENGAGED' : 'CLEAR'} tone={killSwitch?.engaged ? 'red' : 'green'} /></div>
-          </div>
-        </SectionCard>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-        <SectionCard title="Recent Receipts">
-          <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {receipts.length === 0 && <p style={{ color: '#8a8a9a', fontSize: 13 }}>No receipts yet.</p>}
-            {receipts.map((item) => (
-              <div key={item.id} style={{
-                background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(0,240,255,0.1)', borderRadius: 14, padding: 14,
-                transition: 'all 0.2s',
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center' }}>
-                  <b style={{ fontSize: 12, color: '#fff' }}>{item.id}</b>
-                  <Badge value={item.truthState} tone={item.truthState === 'PROOF_PASSED' || item.truthState === 'ROLLED_BACK' ? 'green' : 'cyan'} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        {/* DAEMON STATUS */}
+        <Panel 
+          title="Daemon Status" 
+          icon={Activity} 
+          color={status?.killSwitchEngaged ? '#ef4444' : status?.active ? '#10b981' : '#f59e0b'}
+          action={
+            <button 
+              onClick={handleToggleKillSwitch}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all"
+              style={{
+                borderColor: status?.killSwitchEngaged ? 'rgba(239, 68, 68, 0.5)' : 'rgba(16, 185, 129, 0.5)',
+                color: status?.killSwitchEngaged ? '#ef4444' : '#10b981',
+                backgroundColor: status?.killSwitchEngaged ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)'
+              }}
+            >
+              {status?.killSwitchEngaged ? <PowerOff size={14} /> : <Power size={14} />}
+              {status?.killSwitchEngaged ? 'Kill Switch: ENGAGED' : 'Kill Switch: OFF'}
+            </button>
+          }
+        >
+          {status ? (
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
+                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">State</div>
+                <div className="text-xl font-black text-white flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${status.active ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                  {status.active ? 'ACTIVE' : 'IDLE'}
                 </div>
-                <div style={{ marginTop: 8, color: '#8a8a9a', fontSize: 12, fontWeight: 600 }}>{item.objective}</div>
+              </div>
+              <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
+                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Cycle Count</div>
+                <div className="text-xl font-black text-white">{status.cycleCount || 0}</div>
+              </div>
+              <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
+                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Total Evolutions</div>
+                <div className="text-xl font-black text-emerald-400">{status.totalEvolutions || 0}</div>
+              </div>
+              <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
+                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Consecutive Fails</div>
+                <div className={`text-xl font-black ${status.consecutiveFailures > 0 ? 'text-rose-400' : 'text-white'}`}>
+                  {status.consecutiveFailures || 0}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="text-sm text-slate-400 flex items-center gap-2"><RefreshCw size={14} className="animate-spin" /> Loading status...</div>
+          )}
+        </Panel>
+
+        {/* APPROVAL QUEUE */}
+        <Panel title="Approval Queue" icon={AlertCircle} color="#f59e0b">
+          {queue.length === 0 ? (
+            <div className="text-sm text-slate-400 flex items-center gap-2 italic">
+              <CheckCircle size={16} className="text-emerald-500/50" /> No pending approvals.
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {queue.map(item => (
+                <div key={item.id} className="bg-black/40 p-4 rounded-2xl border border-amber-500/20 flex flex-col gap-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="text-xs font-black text-amber-400 mb-1">Pending Architecture Change</div>
+                      <div className="text-sm text-white">{item.suggestion?.description || 'Unknown proposal'}</div>
+                    </div>
+                    <div className="text-[10px] text-slate-500 font-mono">{item.id.slice(0,8)}</div>
+                  </div>
+                  <div className="flex gap-2 mt-2">
+                    <button 
+                      onClick={() => handleQueueAction(item.id, 'approve')}
+                      className="flex-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                    >
+                      Approve
+                    </button>
+                    <button 
+                      onClick={() => handleQueueAction(item.id, 'reject')}
+                      className="flex-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </Panel>
+
+      </div>
+
+      {/* RECENT RUNS */}
+      <Panel title="Recent Mutations Ledger" icon={Clock} color="#8b5cf6">
+        {runs.length === 0 ? (
+          <div className="text-sm text-slate-400 italic">No runs recorded yet.</div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {runs.map(run => (
+              <div key={run.id} className="bg-black/30 p-4 rounded-2xl border border-white/5 flex items-center justify-between group hover:border-indigo-500/30 transition-all">
+                <div className="flex items-center gap-4">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${run.applied ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
+                    {run.applied ? <CheckCircle size={16} /> : <XCircle size={16} />}
+                  </div>
+                  <div>
+                    <div className="text-xs text-slate-400 font-mono mb-1">{new Date(run.startedAt).toLocaleTimeString()} • {run.id.slice(0,8)}</div>
+                    <div className="text-sm text-white font-medium">{run.suggestion || 'Background evaluation cycle'}</div>
+                    <div className={`text-[10px] font-black uppercase tracking-widest mt-1 ${run.applied ? 'text-emerald-500' : 'text-slate-500'}`}>
+                      {run.truthState}
+                    </div>
+                  </div>
+                </div>
+                {run.shadowBuildResult && !run.applied && (
+                  <div className="text-xs text-rose-400 bg-rose-500/10 px-3 py-1 rounded-lg border border-rose-500/20">
+                    Shadow Build Failed
+                  </div>
+                )}
               </div>
             ))}
           </div>
-        </SectionCard>
+        )}
+      </Panel>
 
-        <SectionCard title="Evolution Memory">
-          <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {memory.length === 0 && <p style={{ color: '#8a8a9a', fontSize: 13 }}>No memory patterns yet.</p>}
-            {memory.slice(0, 8).map((item) => (
-              <div key={item.pattern} style={{
-                background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(138,43,226,0.15)', borderRadius: 14, padding: 14,
-              }}>
-                <b style={{ fontSize: 12, color: '#fff' }}>{item.pattern}</b>
-                <div style={{ marginTop: 8, color: '#8a8a9a', fontSize: 12, fontWeight: 600 }}>
-                  Success: {item.successfulFixes || 0} · Failed: {item.failedFixes || 0} · Risk: {item.risk || 'LOW'}
-                </div>
-              </div>
-            ))}
-          </div>
-        </SectionCard>
-      </div>
-      </motion.div>
     </IDEPageLayout>
   );
 }
+
+export default SelfEvolutionDashboard;

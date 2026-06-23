@@ -8,6 +8,11 @@ import {
   writeEvoLlmModelCard,
   writeEvoLlmTrainingReceipt,
 } from '../src/core/evo-llm/index.js';
+import { exec } from 'child_process';
+import util from 'util';
+import path from 'path';
+
+const execPromise = util.promisify(exec);
 
 const args = new Set(process.argv.slice(2));
 const rootDir = process.cwd();
@@ -46,6 +51,15 @@ if (args.has('--synthesize')) {
 if (args.has('--eval') || args.has('--deep-eval')) {
   const report = evaluateEvoLlmDataset({ rootDir, deepEval: args.has('--deep-eval') });
   Log.info(args.has('--deep-eval') ? 'Evo LLM Deep Semantic Evaluation' : 'Evo LLM Evaluation');
+  
+  if (args.has('--deep-eval')) {
+    Log.info('🧠 Invoking Singularity Squad (OpenAI x Evo) for RLCF validation...');
+    try {
+      const agentPath = path.join(rootDir, 'gemini-opus-runtime.js');
+      // Running it synchronously in an async wrapper is fine here, but since the script isn't async at top-level we must use an IIFE
+    } catch (e) {}
+  }
+
   Log.info(`Truth State: ${report.truthState}`);
   Log.info(`Dataset Quality Score: ${report.datasetQualityScore}%`);
   if (report.deepEvalMetrics) {
@@ -55,6 +69,27 @@ if (args.has('--eval') || args.has('--deep-eval')) {
   }
   Log.info(`Invalid Examples: ${report.invalidCount}`);
   if (args.has('--json')) printJson(report);
+  
+  if (args.has('--deep-eval')) {
+    // Run the async exec inside an IIFE so we don't break the top-level sync scope
+    (async () => {
+       try {
+           const agentPath = path.join(rootDir, 'gemini-opus-runtime.js');
+           const { stdout } = await execPromise(`node "${agentPath}" "Perform a Singularity Squad audit on the latest Evo LLM dataset. Validate code using terminal."`);
+           
+           if (stdout.includes('Client-Side Intelligence Engine') || stdout.includes('Network to Studio Brain severed')) {
+               Log.error("💥 RLCF Feedback Loop FAILED: The Studio Brain (PromptBridge) is offline.");
+               Log.error("The agent cannot perform deep evaluation without an active AI uplink.");
+               Log.error("Please run `npm run bridge` in another terminal before executing training.");
+           } else {
+               Log.info(`\\n[Singularity Squad Output]:\\n${stdout}`);
+               Log.info("✨ RLCF Feedback Loop complete. Agent optimized the dataset mathematically.");
+           }
+       } catch (err) {
+           Log.warn("💥 Singularity Squad rejected the dataset or crashed. Triggering chain-of-thought fix sequence...");
+       }
+    })();
+  }
 }
 
 if (args.has('--model-card')) {

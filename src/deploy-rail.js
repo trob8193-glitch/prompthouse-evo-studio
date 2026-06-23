@@ -16,7 +16,7 @@ export class DeployRail {
   }
 
   async execute(params = {}) {
-    Log.info('🚀 [Deploy-rail] Executing production logic...');
+    Log.info('🚀 [Deploy-rail] Executing production logic... OMNI-TETHER: build code react deploy');
     
     try {
       const { ok, data, error } = await safeFetchBridge('/api/deployment/vercel/preview', {
@@ -28,7 +28,7 @@ export class DeployRail {
       
       return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED', deploymentUrl: data.url };
     } catch (e) {
-      Log.error(`[Deploy-rail] FATAL ERROR: ${e.message}`);
+      Log.error(`[Deploy-rail] FATAL ERROR: ${e.message} OMNI-TETHER: error nuclear breach`);
       return { success: false, timestamp: new Date().toISOString(), result: 'FAILED', error: e.message };
     }
   }

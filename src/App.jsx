@@ -1,5 +1,6 @@
 import React from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary.jsx';
+import AutonomousSelfRepairBoundary from './components/AutonomousSelfRepairBoundary.jsx';
 import TopBar from './components/TopBar.jsx';
 import { Navigation } from './components/Navigation.jsx';
 import { useSovereignStore } from './store.js';
@@ -35,17 +36,18 @@ import DeploymentCenterView from './features/DeploymentCenterView.jsx';
 import LaunchProofView from './features/LaunchProofView.jsx';
 import PromptBridgeSurfacesView from './features/PromptBridgeSurfacesView.jsx';
 import {
-  SelfEvolutionDashboard,
   CostFirewallDashboard,
   ReviewLedgerView,
   ProofDocsView
 } from './features/GovernanceCockpit.jsx';
+import { SelfEvolutionDashboard } from './features/SelfEvolutionDashboard.jsx';
 
 // Existing feature screens from features/index.jsx
 import {
   WorkspaceShell, PromptRegistry, ExecutionQueue,
   ProofConsole, ForgeLabs, EvoDuelArena, AIGeneratorHub,
-  GradingAndRelease, CommerceCore, FeatureFoundry, EvoCastRouter
+  GradingAndRelease, CommerceCore, FeatureFoundry, EvoCastRouter,
+  ShadowTelemetryDashboard
 } from './features/index.jsx';
 
 import EvoDiffuserDashboard from './features/EvoDiffuserDashboard.jsx';
@@ -131,6 +133,20 @@ export const PAGE_MAP = {
   'deploy-rail': DeployRailView,
   'commerce-rail': CommerceRailView,
   'ai-prompt-gen': AIPromptGeneratorView,
+  'shadow-telemetry': ShadowTelemetryDashboard,
+
+  // Layout schema mappings
+  'sovereign-command-nexus': SovereignIntelligenceDashboard,
+  'neural-topology-grid': EvoPulseGridView,
+  'quantum-hologram-deck': PromptBridgeSurfacesView,
+  'omni-tether-matrix': ConnectionManager,
+  'void-terminal': ForgeTermView,
+  'omni-split-forge': SaasBuilderView,
+  'the-forge': ForgeLabs,
+  'prompt-engine-room': PromptRegistry,
+  'agent-command-roster': AIGeneratorHub,
+  'nuclear-proof-os': ProofCenterView,
+  'omni-marketplace-nexus': AppMarket,
 };
 
 function PageRenderer() {
@@ -242,8 +258,9 @@ export default function App() {
   }
 
   return (
-    <ErrorBoundary fallbackMessage="The studio encountered a critical error.">
-      <AuthSentry>
+    <AutonomousSelfRepairBoundary>
+      <ErrorBoundary fallbackMessage="The studio encountered a critical error.">
+        <AuthSentry>
         <div style={{
           display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw',
           background: 'var(--bg-void)', color: 'var(--text-primary)', fontFamily: 'var(--font-sans)',
@@ -252,7 +269,7 @@ export default function App() {
           <PromptHouseCopyGuard />
           {singularityActive && <WitnessConsole />}
           <SingularityEngineOverlay />
-          <TopBar />
+          {/* <TopBar /> */}
 
           <button 
             onClick={() => setSingularityActive(true)} 
@@ -265,7 +282,7 @@ export default function App() {
           <EvoEyes />
 
           <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-            <Navigation />
+            <div style={{ zIndex: 9999 }}><Navigation /></div>
 
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
               <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
@@ -282,35 +299,29 @@ export default function App() {
                       pointerEvents: 'none', zIndex: 0
                     }} />
                     <PageRenderer />
+                    {/* Evo Copilot Overlay (Chat UI + Projector Base) */}
+                    <EvoCopilot />
                   </div>
                 </main>
 
-                {/* Right Chat Sidebar */}
+                {/* Right Terminal Sidebar */}
                 <div style={{
                   width: 380, borderLeft: '1px solid rgba(255,255,255,0.06)',
-                  background: 'rgba(5,5,8,0.7)', display: 'flex', flexDirection: 'column',
+                  background: '#01050a', display: 'flex', flexDirection: 'column',
                   overflow: 'hidden', zIndex: 2
                 }}>
-                  <div style={{
-                    padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)',
-                    fontSize: 10, fontWeight: 800, color: '#4a4a5e', textTransform: 'uppercase',
-                    letterSpacing: '0.2em'
-                  }}>
-                    Evo Copilot
-                  </div>
                   <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-                    <EvoCopilot />
+                    <Terminal sidebarMode={true} />
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Terminal Panel */}
-              <Terminal />
             </div>
           </div>
           <NotificationToasts />
         </div>
       </AuthSentry>
     </ErrorBoundary>
+    </AutonomousSelfRepairBoundary>
   );
 }

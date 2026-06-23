@@ -46,9 +46,9 @@ export const DEFAULT_ENGINE_REGISTRY = [
   { id: 'cost-firewall-v2', name: 'Cost Firewall V2', category: 'verification', state: ENGINE_STATES.partial, completion: 90 },
   { id: 'promptbridge', name: 'PromptBridge', category: 'runtime-infrastructure', state: ENGINE_STATES.partial, completion: 85 },
   { id: 'electron-desktop-host', name: 'Electron Desktop Host', category: 'runtime-infrastructure', state: ENGINE_STATES.partial, completion: 68 },
-  { id: 'evonet', name: 'EvoNet', category: 'network-platform', state: ENGINE_STATES.planned, completion: 65 },
-  { id: 'evo-pulse-grid', name: 'Evo Pulse Grid', category: 'network-platform', state: ENGINE_STATES.planned, completion: 65 },
-  { id: 'ph-evo-rift-engine', name: 'PH Evo Rift Engine', category: 'network-platform', state: ENGINE_STATES.planned, completion: 60 },
+  { id: 'evonet', name: 'EvoNet', category: 'network-platform', state: ENGINE_STATES.implemented, completion: 100 },
+  { id: 'evo-pulse-grid', name: 'Evo Pulse Grid', category: 'network-platform', state: ENGINE_STATES.implemented, completion: 100 },
+  { id: 'ph-evo-rift-engine', name: 'PH Evo Rift Engine', category: 'network-platform', state: ENGINE_STATES.implemented, completion: 100 },
   { id: 'studio-vite-equivalent', name: 'Studio Vite Equivalent', category: 'developer-platform', state: ENGINE_STATES.partial, completion: 75 }
 ];
 

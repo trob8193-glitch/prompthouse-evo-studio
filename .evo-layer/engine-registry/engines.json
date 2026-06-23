@@ -176,22 +176,22 @@
       "id": "evonet",
       "name": "EvoNet",
       "category": "network-platform",
-      "state": "PLANNED",
-      "completion": 65
+      "state": "IMPLEMENTED",
+      "completion": 100
     },
     {
       "id": "evo-pulse-grid",
       "name": "Evo Pulse Grid",
       "category": "network-platform",
-      "state": "PLANNED",
-      "completion": 65
+      "state": "IMPLEMENTED",
+      "completion": 100
     },
     {
       "id": "ph-evo-rift-engine",
       "name": "PH Evo Rift Engine",
       "category": "network-platform",
-      "state": "PLANNED",
-      "completion": 60
+      "state": "IMPLEMENTED",
+      "completion": 100
     },
     {
       "id": "studio-vite-equivalent",

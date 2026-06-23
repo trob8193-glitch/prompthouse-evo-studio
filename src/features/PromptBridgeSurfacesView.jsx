@@ -72,12 +72,12 @@ function truthTone(value) {
   if (normalized.includes('BLOCKED') || normalized.includes('ERROR')) {
     return 'border-red-500/40 bg-red-500/10 text-red-200';
   }
-  return 'border-slate-700 bg-slate-900/70 text-slate-300';
+  return 'border-cyan-500/30 glass-extreme border-neon-glow/70 text-slate-300';
 }
 
 function Badge({ children, tone }) {
   return (
-    <span className={`inline-flex min-h-7 items-center rounded-md border px-2.5 py-1 text-[11px] font-bold uppercase ${tone || 'border-slate-700 bg-slate-900 text-slate-300'}`}>
+    <span className={`inline-flex min-h-7 items-center rounded-md border px-2.5 py-1 text-[11px] font-bold uppercase ${tone || 'border-cyan-500/30 glass-extreme border-neon-glow text-slate-300'}`}>
       {children}
     </span>
   );
@@ -208,36 +208,36 @@ export default function PromptBridgeSurfacesView() {
           type="button"
           onClick={load}
           disabled={loading}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-cyan-400/40 bg-cyan-400/10 px-4 text-sm font-bold text-cyan-100 hover:bg-cyan-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border-cyan-400/40 bg-cyan-400/10 px-4 text-sm font-bold text-cyan-100 hover:bg-cyan-400/20 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
           Refresh
         </button>
       }
     >
-    <div className="flex flex-col gap-6">
+    <div className="flex-col gap-6">
 
       {error && (
-        <div className="flex items-start gap-3 rounded-md border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-100">
-          <AlertTriangle size={18} className="mt-0.5 flex-shrink-0" />
+        <div className="flex items-start gap-3 rounded-md border-red-500/40 bg-red-500/10 p-4 text-sm text-red-100">
+          <AlertTriangle size={18} className="mt-0.5 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       <section className="grid gap-3 md:grid-cols-4">
-        <div className="rounded-md border border-slate-800 bg-slate-950/70 p-4">
+        <div className="rounded-md border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] bg-slate-950/70 p-4">
           <p className="text-xs font-bold uppercase text-slate-500">TriBrain</p>
           <p className="mt-2 text-xl font-black text-white">{triStatus?.truthLabel || 'Loading'}</p>
         </div>
-        <div className="rounded-md border border-slate-800 bg-slate-950/70 p-4">
+        <div className="rounded-md border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] bg-slate-950/70 p-4">
           <p className="text-xs font-bold uppercase text-slate-500">Enabled Brains</p>
           <p className="mt-2 text-xl font-black text-white">{statusCounts.enabled}</p>
         </div>
-        <div className="rounded-md border border-slate-800 bg-slate-950/70 p-4">
+        <div className="rounded-md border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] bg-slate-950/70 p-4">
           <p className="text-xs font-bold uppercase text-slate-500">Available Now</p>
           <p className="mt-2 text-xl font-black text-white">{statusCounts.available}</p>
         </div>
-        <div className="rounded-md border border-slate-800 bg-slate-950/70 p-4">
+        <div className="rounded-md border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] bg-slate-950/70 p-4">
           <p className="text-xs font-bold uppercase text-slate-500">Quad Surfaces</p>
           <p className="mt-2 text-xl font-black text-white">{statusCounts.quadSurfaces}</p>
         </div>
@@ -254,11 +254,11 @@ export default function PromptBridgeSurfacesView() {
           return (
             <article
               key={surface.id}
-              className={`rounded-md border bg-slate-950/70 p-4 transition-colors ${active ? 'border-cyan-400/60' : 'border-slate-800 hover:border-slate-700'}`}
+              className={`rounded-md border bg-slate-950/70 p-4 transition-colors ${active ? 'border-cyan-400/60' : 'border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] hover:border-cyan-500/30'}`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-3">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md border border-slate-700 bg-slate-900 text-cyan-200">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border glass-extreme border-neon-glow text-cyan-200">
                     <Icon size={19} />
                   </div>
                   <div className="min-w-0">
@@ -269,7 +269,7 @@ export default function PromptBridgeSurfacesView() {
                 {available ? <CheckCircle2 size={18} className="text-emerald-300" /> : <ShieldCheck size={18} className="text-amber-300" />}
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-4 flex-wrap gap-2">
                 <Badge tone={available ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200' : 'border-amber-500/40 bg-amber-500/10 text-amber-200'}>
                   {available ? 'Ready' : 'Gated'}
                 </Badge>
@@ -287,7 +287,7 @@ export default function PromptBridgeSurfacesView() {
                 type="button"
                 onClick={() => planSurface(surface)}
                 disabled={routeLoading === surface.id}
-                className="mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border border-indigo-400/40 bg-indigo-500/10 px-3 text-xs font-black uppercase text-indigo-100 hover:bg-indigo-500/20 disabled:cursor-wait disabled:opacity-60"
+                className="mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border-indigo-400/40 bg-indigo-500/10 px-3 text-xs font-black uppercase text-indigo-100 hover:bg-indigo-500/20 disabled:cursor-wait disabled:opacity-60"
               >
                 <Send size={14} />
                 {routeLoading === surface.id ? 'Planning' : 'Plan Route'}
@@ -298,7 +298,7 @@ export default function PromptBridgeSurfacesView() {
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-        <div className="rounded-md border border-slate-800 bg-slate-950/70 p-5">
+        <div className="rounded-md border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] bg-slate-950/70 p-5">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-black uppercase text-slate-500">QuadBrain Surface Route</p>
@@ -315,7 +315,7 @@ export default function PromptBridgeSurfacesView() {
           </div>
         </div>
 
-        <div className="rounded-md border border-slate-800 bg-slate-950/70 p-5">
+        <div className="rounded-md border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] bg-slate-950/70 p-5">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-black uppercase text-slate-500">TriBrain Plan</p>
@@ -328,12 +328,12 @@ export default function PromptBridgeSurfacesView() {
             {triPlan?.selectedResponse?.summary || triPlan?.summary || 'Choose a surface to ask PromptBridge for a route plan.'}
           </p>
 
-          <div className="mt-4 rounded-md border border-slate-800 bg-slate-900/60 p-4">
+          <div className="mt-4 rounded-md border shadow-[0_0_15px_rgba(0,240,255,0.05)] glass-extreme border-neon-glow/60 p-4">
             <p className="text-xs font-black uppercase text-slate-500">Next Actions</p>
             <ul className="mt-3 space-y-2 text-sm text-slate-300">
               {(triPlan?.selectedResponse?.nextActions || triPlan?.nextActions || ['Route a surface to populate the current plan.']).map((item) => (
                 <li key={item} className="flex gap-2">
-                  <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-cyan-300" />
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -348,9 +348,9 @@ export default function PromptBridgeSurfacesView() {
 
 function RouteFact({ label, value }) {
   return (
-    <div className="rounded-md border border-slate-800 bg-slate-900/60 p-3">
+    <div className="rounded-md border shadow-[0_0_15px_rgba(0,240,255,0.05)] glass-extreme border-neon-glow/60 p-3">
       <p className="text-[11px] font-black uppercase text-slate-500">{label}</p>
-      <p className="mt-1 break-words text-sm font-bold text-slate-100">{value}</p>
+      <p className="mt-1 wrap-break-word text-sm font-bold text-slate-100">{value}</p>
     </div>
   );
 }

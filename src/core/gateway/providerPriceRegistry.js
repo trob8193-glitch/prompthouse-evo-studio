@@ -3,7 +3,7 @@ const USD_PER_MILLION = 1_000_000;
 const DEFAULT_PRICES = Object.freeze({
   local: {
     'evo-lm': { inputPerMillion: 0, outputPerMillion: 0, currency: 'usd' },
-    llama3: { inputPerMillion: 0, outputPerMillion: 0, currency: 'usd' },
+    'qwen3.6': { inputPerMillion: 0, outputPerMillion: 0, currency: 'usd' },
   },
   openai: {
     'gpt-4o-mini': { inputPerMillion: 0.15, outputPerMillion: 0.60, currency: 'usd' },

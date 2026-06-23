@@ -5,9 +5,9 @@ export function evaluateEvoLlmTrainingCostGate({ provider = 'local-dataset', exa
     return {
       provider,
       allowed: true,
-      truthState: 'LOCAL_DATASET_COST_SAFE',
       estimatedCostUsd: 0,
-      note: 'Local dataset preparation does not call an external model provider.'
+      note: 'Local dataset preparation does not call an external model provider.',
+      evaluatedAt: new Date().toISOString()
     };
   }
 
@@ -26,6 +26,7 @@ export function evaluateEvoLlmTrainingCostGate({ provider = 'local-dataset', exa
     provider,
     allowed: result?.decision !== 'BLOCK',
     truthState: result?.decision === 'BLOCK' ? 'COST_FIREWALL_BLOCKED' : 'COST_FIREWALL_ALLOWED',
-    costFirewall: result
+    costFirewall: result,
+    evaluatedAt: new Date().toISOString()
   };
 }

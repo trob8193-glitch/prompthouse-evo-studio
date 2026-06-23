@@ -89,7 +89,7 @@ const report = {
     success: selfEvolution.success,
     truthState: selfEvolution.truthState,
     lastRun: summarizeEvolutionRun(selfEvolution.lastRun),
-    recentRuns: selfEvolution.recentRuns.slice(0, 5).map(summarizeEvolutionRun),
+    recentRuns: (selfEvolution.recentRuns || []).slice(0, 5).map(summarizeEvolutionRun),
     policy: selfEvolution.policy,
   },
   spineCore: {

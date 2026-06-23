@@ -16,23 +16,23 @@ export const CommandGraph = ({ bridgeUrl = BRIDGE_URL }) => {
   }, [bridgeUrl]);
 
   return (
-    <div className="p-6 bg-slate-900 border border-slate-800 rounded-2xl">
+    <div className="p-6 glass-extreme border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-2xl">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold">CommandGraph</h2>
         <span className={`text-xs font-bold px-2 py-1 rounded-full ${
           state.status === 'active' ? 'bg-emerald-500/20 text-emerald-400' :
           state.status === 'error' ? 'bg-red-500/20 text-red-400' :
-          'bg-slate-800 text-slate-400'
+          'bg-black/40 backdrop-blur-md border-white/5 text-slate-400'
         }`}>
           {state.status.toUpperCase()}
         </span>
       </div>
       {state.error && (
-        <div className="text-xs text-red-400 bg-red-500/10 p-3 rounded-lg border border-red-500/20">
+        <div className="text-xs text-red-400 bg-red-500/10 p-3 rounded-2xl border-red-500/20">
           {state.error}
         </div>
       )}
-      <div className="mt-4 font-mono text-xs text-slate-400 bg-black/50 p-3 rounded-lg">
+      <div className="mt-4 font-mono text-xs text-slate-400 bg-black/50 p-3 rounded-2xl">
         SOVEREIGN_BUILD: VERIFIED | CYCLE: {new Date().toLocaleDateString()}
       </div>
     </div>

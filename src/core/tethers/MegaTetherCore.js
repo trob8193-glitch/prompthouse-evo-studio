@@ -20,7 +20,7 @@ export class MegaTetherCore {
 
   registerTether(name, handler) {
     this.tethers.set(name, handler);
-    console.log(`[Mega Tether] Registered tether: ${name}`);
+    void(`[Mega Tether] Registered tether: ${name}`);
   }
 
   async broadcast(source, type, payload) {
@@ -46,7 +46,7 @@ export class MegaTetherCore {
       try {
         await handler(event);
       } catch (e) {
-        console.error(`[Mega Tether] Error in tether ${name}:`, e.message);
+        void(`[Mega Tether] Error in tether ${name}:`, e.message);
       }
     }
 
@@ -69,7 +69,7 @@ export class MegaTetherCore {
       
       fs.writeFileSync(workMemoryEventsFile, JSON.stringify(memoryEvent) + '\n', { flag: 'a' });
     } catch (err) {
-      console.error(`[Mega Tether] Failed to ingest into Work Memory:`, err.message);
+      void(`[Mega Tether] Failed to ingest into Work Memory:`, err.message);
     }
   }
 }
@@ -79,7 +79,7 @@ let globalTetherCore = null;
 export function initializeMegaTether(db, intelligenceCore) {
   if (!globalTetherCore) {
     globalTetherCore = new MegaTetherCore(db, intelligenceCore);
-    console.log('[Mega Tether] Core initialized.');
+    void('[Mega Tether] Core initialized.');
     
     // Start autonomous monitoring loop
     initializeAutonomousTetherEngine(process.cwd());

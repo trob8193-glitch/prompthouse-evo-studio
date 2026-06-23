@@ -1,214 +1,126 @@
 import fs from 'fs';
 import path from 'path';
-import { spawn } from 'child_process';
-import { fileURLToPath } from 'url';
-import { deepAuditFile, deepAuditDirectory } from '../../../../scripts/deep-audit.mjs';
-import { repairFile } from '../../../../scripts/gemini-repair.mjs';
+import url from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, '../../../..');
-const srcDir = path.join(rootDir, 'src');
-const logDir = path.join(rootDir, 'proof_receipts', 'singularity_logs');
+const STATE_FILE = () => path.join(process.cwd(), '.prompthouse-data', 'daemons', 'singularity_state.json');
 
-if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
-
-// ═══════════════════════════════════════════════════════════════
-//  SINGULARITY CORE v2 — REAL AI-POWERED SELF-EVOLUTION
-//  Phase 1: AST-based deep audit (not regex)
-//  Phase 2: Gemini AI-powered repair (not string replacement)
-//  Phase 3: Real test execution
-//  Phase 4: Auto-commit or auto-rollback
-//  Phase 5: Sealed proof receipt per cycle
-// ═══════════════════════════════════════════════════════════════
-
-const CYCLE_INTERVAL_MS = 120 * 1000; // Every 2 minutes (respect API rate limits)
-const MAX_REPAIRS_PER_CYCLE = 3; // Don't burn through API quota
-let cycleCount = 0;
-const allowAutonomousRepair = process.env.PH_ALLOW_SELF_REPAIR === 'true';
-
-function log(level, msg) {
-  const ts = new Date().toISOString();
-  const colors = {
-    INFO: '\x1b[36m',
-    WARN: '\x1b[33m',
-    FIX: '\x1b[32m',
-    SCAN: '\x1b[35m',
-    ERROR: '\x1b[31m',
-    SINGULARITY: '\x1b[97m\x1b[45m',
-  };
-  const color = colors[level] || '\x1b[0m';
-  process.stdout.write(`${color}[${level}]\x1b[0m ${msg}\n`);
-  fs.appendFileSync(path.join(logDir, 'singularity_v2.log'), `[${ts}] [${level}] ${msg}\n`);
+function ensureDir() {
+  const dir = path.dirname(STATE_FILE());
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 }
 
-// ─── PHASE 3: SELF-TEST ────────────────────────────────────────
-function selfTest() {
-  return new Promise((resolve) => {
-    const testProc = spawn('npx', ['vitest', 'run', '--passWithNoTests', '--reporter=dot'], {
-      cwd: rootDir,
-      shell: true,
-      stdio: 'pipe',
-    });
-
-    let output = '';
-    testProc.stdout.on('data', (d) => { output += d.toString(); });
-    testProc.stderr.on('data', (d) => { output += d.toString(); });
-
-    testProc.on('close', (code) => {
-      resolve({ passed: code === 0, output: output.slice(-300) });
-    });
-
-    setTimeout(() => {
-      testProc.kill();
-      resolve({ passed: true, output: 'Test timed out — assumed pass' });
-    }, 45000);
-  });
-}
-
-// ─── PHASE 4: SELF-COMMIT ──────────────────────────────────────
-function selfCommit(message) {
-  return new Promise((resolve) => {
-    if (process.env.PH_ALLOW_SELF_GIT_COMMIT !== 'true') {
-      log('WARN', 'Self-commit skipped. Set PH_ALLOW_SELF_GIT_COMMIT=true to allow autonomous commits.');
-      resolve(false);
-      return;
-    }
-
-    const gitAdd = spawn('git', ['add', '-A'], { cwd: rootDir, shell: true, stdio: 'pipe' });
-    gitAdd.on('close', () => {
-      const gitCommit = spawn('git', ['commit', '-m', `[SINGULARITY-v2] ${message}`, '--no-verify'], {
-        cwd: rootDir,
-        shell: true,
-        stdio: 'pipe',
-      });
-      gitCommit.on('close', (code) => {
-        if (code === 0) log('SINGULARITY', `Auto-committed: ${message}`);
-        resolve(code === 0);
-      });
-    });
-  });
-}
-
-function selfRollback() {
-  return new Promise((resolve) => {
-    if (process.env.PH_ALLOW_SELF_GIT_ROLLBACK !== 'true') {
-      log('WARN', 'Self-rollback skipped. Set PH_ALLOW_SELF_GIT_ROLLBACK=true to allow autonomous rollback.');
-      resolve();
-      return;
-    }
-
-    const proc = spawn('git', ['checkout', '--', '.'], { cwd: rootDir, shell: true, stdio: 'pipe' });
-    proc.on('close', () => {
-      log('WARN', 'Rolled back all uncommitted changes.');
-      resolve();
-    });
-  });
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  THE SINGULARITY LOOP v2
-// ═══════════════════════════════════════════════════════════════
-async function singularityCycle() {
-  cycleCount++;
-  log('SINGULARITY', `═══ CYCLE ${cycleCount} INITIATED (v2 — Deep Audit + Gemini AI) ═══`);
-
-  // Phase 1: Deep AST Audit
-  log('SCAN', 'Running AST-based deep semantic audit on src/ (including src/core/daemons)...');
-  let auditReport;
-  try {
-    auditReport = deepAuditDirectory(srcDir);
-  } catch (e) {
-    log('ERROR', `Deep audit failed: ${e.message}`);
-    auditReport = { totalFiles: 0, averageScore: 100, criticalViolations: [], warnings: [], filesWithIssues: [] };
+/**
+ * SINGULARITY CORE DAEMON
+ * Orchestrates the singularity training loop — collects interaction data,
+ * builds training samples, and feeds them to the OnlineLearningManager.
+ */
+export class SingularityCore {
+  constructor() {
+    this.intervalId = null;
+    this.isRunning = false;
+    this.cycleCount = 0;
   }
 
-  log('SCAN', `Cross-Daemon Matrix included in scan. Audited ${auditReport.totalFiles} files | Avg Score: ${auditReport.averageScore}/100 | Critical: ${auditReport.criticalViolations.length}`);
+  start(intervalMs = 60000) {
+    if (this.intervalId) return;
+    console.log(`[SingularityCore] Training loop starting with ${intervalMs}ms interval.`);
+    this.intervalId = setInterval(() => this.tick(), intervalMs);
+    this.tick();
+  }
 
-  // Phase 2: AI-Powered Repair (only critical violations, capped per cycle)
-  let repairsThisCycle = 0;
-  const criticalFiles = auditReport.filesWithIssues
-    .filter((f) => f.violations.some((v) => v.severity === 'critical'))
-    .slice(0, MAX_REPAIRS_PER_CYCLE);
+  stop() {
+    if (this.intervalId) { clearInterval(this.intervalId); this.intervalId = null; }
+  }
 
-  for (const fileResult of criticalFiles) {
-    const filePath = path.resolve(rootDir, fileResult.file);
-    if (!fs.existsSync(filePath)) continue;
-
-    const issuesSummary = fileResult.violations
-      .filter((v) => v.severity === 'critical')
-      .map((v) => `${v.rule}: ${v.description} (line ${v.line})`)
-      .join('; ');
-
-    log('FIX', `Repairing ${fileResult.file}: ${issuesSummary}`);
-
+  async tick() {
+    if (this.isRunning) return;
+    this.isRunning = true;
     try {
-      if (!allowAutonomousRepair) {
-        log('WARN', 'Autonomous file repair blocked. Set PH_ALLOW_SELF_REPAIR=true to allow provider-backed rewrites.');
-        break;
-      }
+      // Collect interaction data from sovereign_broadcast.log
+      const logPath = path.join(process.cwd(), 'sovereign_broadcast.log');
+      let newEntries = 0;
 
-      const result = await repairFile(filePath, issuesSummary);
-      if (result.success) {
-        repairsThisCycle++;
-        log('FIX', `✅ ${fileResult.file} repaired by Gemini AI (backup saved)`);
-      } else {
-        log('WARN', `Repair skipped for ${fileResult.file}: ${result.error}`);
-        if (result.error && (result.error.includes('All AI providers failed') || result.error.includes('429') || /quota|exhausted/i.test(result.error))) {
-          log('ERROR', 'API Quota and local fallbacks exhausted. Tripping circuit breaker for this repair cycle.');
-          break;
+      if (fs.existsSync(logPath)) {
+        const stat = fs.statSync(logPath);
+        // Only process if log has content and is recent (modified in last 5 min)
+        if (stat.size > 0 && (Date.now() - stat.mtimeMs) < 300000) {
+          try {
+            const { OnlineLearningManager } = await import('../../evolution/OnlineLearningManager.js');
+            const learner = new OnlineLearningManager();
+
+            // Read last 20 lines
+            const content = fs.readFileSync(logPath, 'utf8');
+            const lines = content.trim().split('\n').slice(-20);
+
+            for (const line of lines) {
+              if (line.includes('[EXTERNAL IDE UPLINK]') || line.includes('[SOVEREIGN UPLINK]')) {
+                await learner.ingestKnowledgeChunk({
+                  id: `singularity_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+                  source: 'singularity_training',
+                  signal_strength: 0.7,
+                  context_summary: line.slice(0, 500)
+                });
+                newEntries++;
+              }
+            }
+          } catch {}
         }
       }
-    } catch (e) {
-      log('ERROR', `Repair crashed for ${fileResult.file}: ${e.message}`);
+
+      // Collect from work memory events
+      const workMemoryPath = path.join(process.cwd(), '.evo-llm', 'work-memory', 'events.jsonl');
+      if (fs.existsSync(workMemoryPath)) {
+        try {
+          const { OnlineLearningManager } = await import('../../evolution/OnlineLearningManager.js');
+          const learner = new OnlineLearningManager();
+          const events = fs.readFileSync(workMemoryPath, 'utf8').trim().split('\n').slice(-10);
+          for (const line of events) {
+            try {
+              const event = JSON.parse(line);
+              if (event.sourceType && !event._ingested) {
+                await learner.ingestKnowledgeChunk({
+                  id: `work_mem_${event.id || Date.now()}`,
+                  source: 'work_memory',
+                  signal_strength: 0.6,
+                  context_summary: `[WorkMemory] ${event.sourceType}: ${JSON.stringify(event.rawEvent || {}).slice(0, 300)}`
+                });
+                newEntries++;
+              }
+            } catch {}
+          }
+        } catch {}
+      }
+
+      this.cycleCount++;
+      const state = {
+        active: true,
+        cycleCount: this.cycleCount,
+        lastTickAt: new Date().toISOString(),
+        entriesIngested: newEntries
+      };
+
+      ensureDir();
+      fs.writeFileSync(STATE_FILE(), JSON.stringify(state, null, 2), 'utf8');
+
+    } catch (err) {
+      console.error('[SingularityCore] Tick error:', err.message);
+    } finally {
+      this.isRunning = false;
     }
   }
 
-  // Phase 3: Test after repairs
-  if (repairsThisCycle > 0) {
-    log('SCAN', `Applied ${repairsThisCycle} AI repairs. Running verification tests...`);
-    const testResult = await selfTest();
-
-    if (testResult.passed) {
-      // Phase 4: Commit
-      await selfCommit(`AI-repaired ${repairsThisCycle} critical file(s) — Cycle #${cycleCount}`);
-    } else {
-      log('ERROR', `Tests failed after repair: ${testResult.output.slice(-100)}`);
-      await selfRollback();
+  getStatus() {
+    if (fs.existsSync(STATE_FILE())) {
+      try { return JSON.parse(fs.readFileSync(STATE_FILE(), 'utf8')); } catch {}
     }
+    return { active: false, cycleCount: 0 };
   }
-
-  // Phase 5: Sealed Receipt
-  const receipt = {
-    version: 2,
-    cycle: cycleCount,
-    timestamp: new Date().toISOString(),
-    audit: {
-      totalFiles: auditReport.totalFiles,
-      averageScore: auditReport.averageScore,
-      criticalViolations: auditReport.criticalViolations.length,
-      warnings: auditReport.warnings.length,
-    },
-    repairs: repairsThisCycle,
-    repairMethod: 'gemini-2.0-flash',
-  };
-  fs.writeFileSync(path.join(logDir, `cycle_v2_${cycleCount}.json`), JSON.stringify(receipt, null, 2));
-
-  log('SINGULARITY', `═══ CYCLE ${cycleCount} COMPLETE — Score: ${auditReport.averageScore}/100 | Repairs: ${repairsThisCycle} ═══\n`);
 }
 
-// ═══════════════════════════════════════════════════════════════
-//  IGNITION
-// ═══════════════════════════════════════════════════════════════
-log('SINGULARITY', '');
-log('SINGULARITY', '╔═══════════════════════════════════════════════════════════════╗');
-log('SINGULARITY', '║   S I N G U L A R I T Y   C O R E   v 2                     ║');
-log('SINGULARITY', '║   AST Deep Audit • Gemini AI Repair • Real Tests • Auto-Git  ║');
-log('SINGULARITY', '║   No regex. No string replacement. Real intelligence.        ║');
-log('SINGULARITY', '╚═══════════════════════════════════════════════════════════════╝');
-log('SINGULARITY', '');
-log('SINGULARITY', `Cycle interval: ${CYCLE_INTERVAL_MS / 1000}s | Max repairs/cycle: ${MAX_REPAIRS_PER_CYCLE}`);
-log('SINGULARITY', 'Beginning first cycle...\n');
+export function run() {
+  const core = new SingularityCore();
+  core.start();
+  return core;
+}
 
-singularityCycle();
-setInterval(singularityCycle, CYCLE_INTERVAL_MS);
+if (process.argv[1] === url.fileURLToPath(import.meta.url)) run();

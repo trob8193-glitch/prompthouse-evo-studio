@@ -57,19 +57,19 @@ export default function MobileSingularityDashboard() {
       title="Mobile Singularity Hub"
       description="Autonomously compile your web-based SaaS platforms into fully native iOS and Android applications. Choose your target architecture and let the intelligence core do the rest."
     >
-      <div className="flex flex-1 gap-8 h-full">
+      <div className="flex-1 gap-8 h-full">
         {/* Left Column: Configuration */}
-        <div className="w-1/3 flex flex-col gap-6">
-          <Card className="bg-[#121214] border-gray-800 p-6 flex flex-col gap-4">
+        <div className="w-1/3 flex-col gap-6">
+          <Card className="bg-[#121214] border-gray-800 p-6 flex-col gap-4">
             <h2 className="text-sm font-bold text-gray-300 uppercase flex items-center gap-2">
               <Cpu className="w-4 h-4 text-purple-400" /> Source Application
             </h2>
-            <div className="flex flex-col gap-2">
+            <div className="flex-col gap-2">
               {portfolioApps.map(app => (
                 <div 
                   key={app.id}
                   onClick={() => setSelectedApp(app.id)}
-                  className={`p-4 rounded-xl border cursor-pointer transition-all ${
+                  className={`p-4 rounded-3xl border cursor-pointer transition-all ${
                     selectedApp === app.id 
                       ? 'border-indigo-500 bg-indigo-900/20' 
                       : 'border-gray-800 bg-black/40 hover:border-gray-600'
@@ -82,14 +82,14 @@ export default function MobileSingularityDashboard() {
             </div>
           </Card>
 
-          <Card className="bg-[#121214] border-gray-800 p-6 flex flex-col gap-4">
+          <Card className="bg-[#121214] border-gray-800 p-6 flex-col gap-4">
             <h2 className="text-sm font-bold text-gray-300 uppercase flex items-center gap-2">
               <Zap className="w-4 h-4 text-yellow-400" /> Target Architecture
             </h2>
             <div className="flex gap-2">
               <button 
                 onClick={() => setArchitecture('expo_router')}
-                className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all ${
+                className={`flex-1 py-3 px-4 rounded-2xl text-sm font-bold transition-all ${
                   architecture === 'expo_router' ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                 }`}
               >
@@ -97,7 +97,7 @@ export default function MobileSingularityDashboard() {
               </button>
               <button 
                 onClick={() => setArchitecture('clean_riverpod')}
-                className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all ${
+                className={`flex-1 py-3 px-4 rounded-2xl text-sm font-bold transition-all ${
                   architecture === 'clean_riverpod' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                 }`}
               >
@@ -121,7 +121,7 @@ export default function MobileSingularityDashboard() {
         </div>
 
         {/* Right Column: Terminal Execution */}
-        <Card className="flex-1 bg-[#050505] border-gray-800 flex flex-col p-0 overflow-hidden font-mono text-sm relative">
+        <Card className="flex-1 bg-[#050505] border-gray-800 flex-col gap-4 p-0 overflow-hidden font-mono text-sm relative">
           <div className="bg-gray-900 border-b border-gray-800 p-3 flex items-center gap-3">
             <Terminal className="w-4 h-4 text-emerald-400" />
             <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Compiler Terminal</span>
@@ -142,7 +142,7 @@ export default function MobileSingularityDashboard() {
               ))
             )}
             {isCompiling && (
-              <div className="flex items-center gap-2 text-indigo-400 animate-pulse mt-4">
+              <div className="flex items-center gap-2 text-neon-cyan animate-pulse mt-4">
                 <div className="w-2 h-4 bg-indigo-400"></div> Processing AST transformation...
               </div>
             )}

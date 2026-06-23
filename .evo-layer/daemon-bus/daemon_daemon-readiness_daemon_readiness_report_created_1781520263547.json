@@ -1,0 +1,10 @@
+{
+  "id": "daemon_daemon-readiness_daemon_readiness_report_created_1781520263547",
+  "daemonId": "daemon-readiness",
+  "event": "daemon_readiness_report_created",
+  "payload": {
+    "truthState": "LOCAL_DAEMON_STACK_READY",
+    "localCompletion": 100
+  },
+  "createdAt": "2026-06-15T10:44:23.548Z"
+}

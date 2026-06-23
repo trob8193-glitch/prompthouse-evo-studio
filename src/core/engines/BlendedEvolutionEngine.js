@@ -18,8 +18,9 @@ function loadEnv(rootDir) {
 }
 
 export class BlendedEvolutionEngine {
-  constructor(rootDir = process.cwd()) {
+  constructor(rootDir = process.cwd(), aiAdaptor = null) {
     this.rootDir = rootDir;
+    this.aiAdaptor = aiAdaptor;
   }
 
   resolveCssTargetFile(targetFile) {
@@ -85,23 +86,29 @@ export class BlendedEvolutionEngine {
     
     const env = loadEnv(this.rootDir);
     try {
-      const apiKey = env.GEMINI_API_KEY || process.env.GEMINI_API_KEY;
-      if (apiKey === 'simulated_bypass' || !apiKey) {
+      const apiKey = env.OPENAI_API_KEY || process.env.OPENAI_API_KEY;
+      if (!apiKey || apiKey === 'simulated_bypass') {
         Log.info('\x1b[33m⚠️ Using simulated phantom rewrite success due to bypassed keys.\x1b[0m');
         // Simulated execution
         return false;
       }
 
-      const rewriteRes = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: `${rewritePrompt}\n\n${readResult.content}` }] }]
-        })
-      });
-      
-      const rewriteData = await rewriteRes.json();
-      const newContent = rewriteData.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (this.aiAdaptor) {
+        const rewriteData = await this.aiAdaptor.generateResponse([{ role: 'user', content: `${rewritePrompt}\n\n${readResult.content}` }], '', { model: 'gpt-4o-mini' });
+        newContent = rewriteData.message;
+      } else {
+        const rewriteRes = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [{ role: 'user', content: `${rewritePrompt}\n\n${readResult.content}` }]
+          })
+        });
+        
+        const rewriteData = await rewriteRes.json();
+        newContent = rewriteData.choices?.[0]?.message?.content;
+      }
       
       if (newContent) {
         const writeRes = adaptor.writeFile(targetPath, newContent);
@@ -120,7 +127,7 @@ export class BlendedEvolutionEngine {
              Log.info(`\x1b[33m⚠️ Rollback complete. Phantom file discarded. Math snapshot preserved.\x1b[0m`);
              return false;
            } else {
-             Log.info(`\x1b[32m🛡️ Build verified! Auto-merging from Phantom Sandbox into main repository.\x1b[0m`);
+             Log.info(`\x1b[32m🛡️ Build !verified Auto-merging from Phantom Sandbox into main repository.\x1b[0m`);
              const commitRes = adaptor.commit(suggestion.targetFile);
              if (commitRes.success) {
                 const finalContent = fs.readFileSync(targetPath, 'utf8');
@@ -148,25 +155,14 @@ export class BlendedEvolutionEngine {
 
   async runIntelligenceCycle(spatialData) {
     const env = loadEnv(this.rootDir);
-    const apiKey = env.GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+    const apiKey = env.OPENAI_API_KEY || process.env.OPENAI_API_KEY;
 
-    if (apiKey === 'simulated_bypass' || env.OPENAI_API_KEY === 'simulated_bypass') {
-      Log.info('\x1b[32m✅ Using simulated AI response for evolution cycle to bypass quota/key errors.\x1b[0m');
-      return {
-        targetFile: "src/index.css",
-        description: "Simulated autonomous evolution improvement",
-        cssRule: "\n/* Auto-evolved */\n.blended-engine-active { display: block; }\n",
-        componentChange: null,
-        architectureChange: null
-      };
-    }
-
-    if (!apiKey) {
-      Log.error('\x1b[31m❌ No GEMINI_API_KEY found in .env\x1b[0m');
+    if (!apiKey || apiKey === 'simulated_bypass') {
+      Log.error('\x1b[31m❌ No OPENAI_API_KEY found in .env\x1b[0m');
       return null;
     }
 
-    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+    const url = 'https://api.openai.com/v1/chat/completions';
     const systemPrompt = `You are the QuadBrain Systems Architect analyzing a spatial map of a React application and its underlying intelligence network.
 The spatial map contains exact bounding rectangles of every UI element, alongside real-time Wi-Fi topology, active bonds, and Global Hub status.
 Your job: identify ONE specific, actionable CSS, React, or Architecture improvement.
@@ -182,33 +178,45 @@ Rules: No markdown fences. No explanations outside the JSON. Only one change per
 Focus on: spacing, visual hierarchy, micro-animations, or strengthening QuadBrain resilience (e.g., tether logic, offline fallbacks).`;
 
     const body = {
-      system_instruction: { parts: [{ text: systemPrompt }] },
-      contents: [{
-        role: 'user',
-        parts: [{ text: `Spatial map data:\n${JSON.stringify(spatialData, null, 2).slice(0, 6000)}` }],
-      }],
-      generationConfig: { temperature: 0.3, maxOutputTokens: 1024 },
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Spatial map data:\n${JSON.stringify(spatialData, null, 2).slice(0, 6000)}` }
+      ],
+      temperature: 0.3,
+      max_tokens: 1024,
     };
 
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-        body: JSON.stringify(body),
-      });
+      if (this.aiAdaptor) {
+        const response = await this.aiAdaptor.generateResponse([{ role: 'user', content: `Spatial map data:\n${JSON.stringify(spatialData, null, 2).slice(0, 6000)}` }], systemPrompt, { model: 'gpt-4o-mini' });
+        const text = response.message;
+        if (!text) throw new Error('Empty response');
 
-      const data = await response.json();
-      if (data.error) throw new Error(data.error.message);
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('No JSON in response');
 
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) throw new Error('Empty response');
+        return JSON.parse(jsonMatch[0]);
+      } else {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+          body: JSON.stringify(body),
+        });
 
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error('No JSON in response');
+        const data = await response.json();
+        if (data.error) throw new Error(data.error.message);
 
-      return JSON.parse(jsonMatch[0]);
+        const text = data.choices?.[0]?.message?.content;
+        if (!text) throw new Error('Empty response');
+
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('No JSON in response');
+
+        return JSON.parse(jsonMatch[0]);
+      }
     } catch (e) {
-      Log.error(`\x1b[33m⚠️ Gemini call failed: ${e.message}.\x1b[0m`);
+      Log.error(`\x1b[33m⚠️ AI Intelligence generation failed: ${e.message}.\x1b[0m`);
     }
 
     return null;

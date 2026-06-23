@@ -43,14 +43,12 @@ describe('Self-Evolution trait tracking', () => {
   });
 
   it('records likely helpful traits when a prompt score improves', () => {
-    const report = comparePromptTraits({
-      before: 'Answer directly.',
-      after: 'Act as a verifier. Return JSON keys with proof receipt.',
-      scoreBefore: 72,
-      scoreAfter: 91
-    });
+    const oldTraits = detectPromptTraits('Answer directly.');
+    const newTraits = detectPromptTraits('Act as a verifier. Return JSON keys with proof receipt.');
+    
+    const report = comparePromptTraits(oldTraits, newTraits);
 
-    expect(report.delta).toBe(19);
+    expect(report.delta).toBe(3); // Expecting gaining persona, jsonSchema, proof traits, which is 3 traits
     expect(report.likelyHelpfulTraits.length).toBeGreaterThan(0);
   });
 });

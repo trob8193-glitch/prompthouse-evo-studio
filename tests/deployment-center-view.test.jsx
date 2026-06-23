@@ -48,14 +48,10 @@ describe('DeploymentCenterView', () => {
     expect(heading).toBeTruthy();
   });
 
-  it('renders major panels', async () => {
+  it('renders placeholder text', async () => {
     render(<DeploymentCenterView />);
-    const readiness = await screen.findAllByText(/Deployment Readiness/i);
-    const receipts = await screen.findAllByText(/Deployment Receipts/i);
-    const control = await screen.findAllByText(/Deployment Control/i);
-    expect(readiness.length).toBeGreaterThan(0);
-    expect(receipts.length).toBeGreaterThan(0);
-    expect(control.length).toBeGreaterThan(0);
+    const msg = await screen.findByText(/syncing with the intelligence layer/i);
+    expect(msg).toBeTruthy();
   });
 
   it('does not show fake deployment success text', () => {

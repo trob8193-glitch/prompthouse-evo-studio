@@ -30,7 +30,7 @@ export function isCommerceAction(path) {
 }
 
 export function isConfigWriteAction(path) {
-  return /\/(config|keys)(\/|$)/i.test(path);
+  return /\/(config|keys|.*git.*)(\/|$)/i.test(path);
 }
 
 export function isFileWriteAction(path) {

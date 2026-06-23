@@ -1,0 +1,33 @@
+{
+  "id": "mem_1781407811952",
+  "type": "execution_result",
+  "data": {
+    "id": "exec_1781407811945",
+    "success": true,
+    "status": "SUCCESS",
+    "task": "refactor dashboard",
+    "adapter": "cursor",
+    "safety": {
+      "allowed": true,
+      "risk": "MEDIUM",
+      "category": "general_command",
+      "approvalRequired": false,
+      "reason": "General execution requires receipt and adapter routing.",
+      "rootDir": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my"
+    },
+    "credentialGate": {
+      "ok": true,
+      "reason": null
+    },
+    "adapterResult": {
+      "success": true,
+      "stdout": "{\n  \"selectedAdapter\": \"cursor\",\n  \"task\": \"refactor dashboard\",\n  \"payload\": {},\n  \"mode\": \"routed_receipt_pending_runtime_bridge\"\n}",
+      "stderr": "",
+      "durationMs": 0,
+      "truthState": "ADAPTER_ROUTED_RUNTIME_BRIDGE_REQUIRED"
+    },
+    "createdAt": "2026-06-14T03:30:11.945Z",
+    "file": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.evo-layer\\execution-results\\exec_1781407811945.json"
+  },
+  "createdAt": "2026-06-14T03:30:11.952Z"
+}

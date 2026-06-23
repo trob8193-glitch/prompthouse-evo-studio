@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BRIDGE_URL } from '../config/bridge-config.js';
+import { useSovereignStore } from '../store.js';
 
 export function SwarmCouncil() {
   const [agents, setAgents] = useState([
@@ -7,6 +8,8 @@ export function SwarmCouncil() {
     { name: 'TruthAuditor', status: 'IDLE' },
     { name: 'MaturityScore', status: 'IDLE' }
   ]);
+  const globalTheme = useSovereignStore((s) => s.globalTheme);
+  const agentTheme = globalTheme?.agent || 'alpha';
 
   useEffect(() => {
     let mounted = true;
@@ -44,20 +47,20 @@ export function SwarmCouncil() {
   }, []);
 
   return (
-    <div className="flex items-center space-x-2 bg-black border border-gray-800 rounded px-3 py-1">
+    <div className="flex items-center space-x-2 bg-black border-gray-800 rounded px-3 py-1">
       <span className="text-xs text-gray-400 mr-2 font-mono">COUNCIL:</span>
       {agents.map((agent, i) => {
         const botImage = agent.name === 'DeadHunter' ? '/bots/vector_wolf.png' : 
                          agent.name === 'TruthAuditor' ? '/bots/cipher_lynx.png' : 
                          '/bots/ledger.png';
         return (
-          <div key={i} className="flex items-center space-x-1.5 bg-gray-900 px-2 py-0.5 rounded-full border border-gray-800">
+          <div key={i} className={`flex items-center space-x-1.5 px-2 py-0.5 border ${agentTheme === 'gamma' ? 'bg-[#2a0044] border-fuchsia-500 rounded-none' : agentTheme === 'zeta' ? 'bg-white border-black border-2 rounded-none' : agentTheme === 'theta' ? 'bg-transparent border-none' : 'bg-gray-900 border-gray-800 rounded-full'}`}>
             <img 
               src={botImage} 
               alt={agent.name} 
-              className={`w-4 h-4 rounded-full ${agent.status === 'VOTING' ? 'ring-1 ring-purple-500 animate-pulse' : ''}`}
+              className={`w-4 h-4 ${agentTheme === 'zeta' ? 'rounded-none border-black filter grayscale' : agentTheme === 'gamma' ? 'rounded-sm' : 'rounded-full'} ${agent.status === 'VOTING' || agent.status === 'HUNTING' ? 'ring-1 ring-purple-500 animate-pulse' : ''}`}
             />
-            <span className={`text-[10px] font-mono ${agent.status === 'VOTING' ? 'text-purple-300' : 'text-gray-400'}`}>
+            <span className={`text-[10px] font-mono ${agent.status === 'VOTING' || agent.status === 'HUNTING' ? 'text-purple-400 font-bold' : agentTheme === 'zeta' ? 'text-black font-black' : 'text-gray-400'}`}>
               {agent.name}
             </span>
           </div>

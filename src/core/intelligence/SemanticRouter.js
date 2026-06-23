@@ -22,7 +22,7 @@ export class SemanticRouter {
     
     // 1. Force Local if explicitly requested
     if (pLow.includes('@local')) {
-      return { provider: 'local', model: 'llama3', reasoning: 'Explicit local flag.' };
+      return { provider: 'local', model: 'qwen3.6', reasoning: 'Explicit local flag.' };
     }
 
     // 2. Check for High-IQ triggers
@@ -35,7 +35,7 @@ export class SemanticRouter {
     // 3. Check for Simple Task triggers
     for (const kw of this.localKeywords) {
       if (pLow.includes(kw)) {
-        return { provider: 'local', model: 'llama3', reasoning: `Triggered local simple keyword: ${kw}` };
+        return { provider: 'local', model: 'qwen3.6', reasoning: `Triggered local simple keyword: ${kw}` };
       }
     }
 
@@ -46,6 +46,6 @@ export class SemanticRouter {
     }
 
     // Default to local to save money if we aren't sure
-    return { provider: 'local', model: 'llama3', reasoning: 'Defaulting to local for savings.' };
+    return { provider: 'local', model: 'qwen3.6', reasoning: 'Defaulting to local for savings.' };
   }
 }

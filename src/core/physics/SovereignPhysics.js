@@ -1,6 +1,5 @@
 
 import { Log } from '../autonomy/SovereignLogger.js';
-
 import { PlatformReadinessEngine } from '../platform-sentinel/index.js';
 
 /**
@@ -62,3 +61,25 @@ export function rankCapabilityField(capabilities = []) {
     return calculateCapabilityGravity(b) - calculateCapabilityGravity(a);
   });
 }
+
+// ─── EXTREME METAMORPHOSIS PHYSICS PROFILES ───────────────────
+export const getPhysicsProfile = (themeDimension) => {
+  switch (themeDimension) {
+    case 'omega':
+      // Violent, explosive spring physics
+      return { tension: 400, friction: 10, mass: 2 };
+    case 'sigma':
+      // Jagged, instant snapping physics
+      return { tension: 1000, friction: 50, mass: 0.5 };
+    case 'delta':
+      // Highly structured, mechanical movement
+      return { tension: 200, friction: 20, mass: 1 };
+    case 'chi':
+      // Fluid, aesthetic, dream-like motion
+      return { tension: 120, friction: 14, mass: 0.8 };
+    case 'alpha':
+    default:
+      // Baseline safe physics
+      return { tension: 170, friction: 26, mass: 1 };
+  }
+};

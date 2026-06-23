@@ -42,14 +42,11 @@ Operator and release status live here:
 
 - `/api/generated-artifact-registry`
 - `/api/bridge-contract-ledger`
-- `/api/build-review-gate`
+
 - `/api/release-spine/status`
-- `/api/project-handshake`
-- `/api/project-handshake/coverage`
 - `/api/prompt-os/packet`
 - `/api/self-implementation/status`
 - `/api/self-implementation/cycle`
-- `/api/studio-os/inspector`
 
 These surfaces distinguish:
 
@@ -78,7 +75,7 @@ Approval shape:
 
 Rules:
 
-- `POST /api/deploy` requires `ownerApproval` for scope `deploy` and `VERCEL_TOKEN`
+- `POST /api/deployment/vercel/preview` requires `ownerApproval` for scope `deploy` and `VERCEL_TOKEN`
 - live commerce execution requires `ownerApproval` for scope `commerce` and `STRIPE_SECRET_KEY`
 - dry-run and local-spec flows remain available, but they do not claim provider-backed completion
 
@@ -163,10 +160,8 @@ Recommended runtime checks:
 ```text
 http://localhost:3001/status
 http://localhost:3001/api/release-spine/status
-http://localhost:3001/api/project-handshake
 http://localhost:3001/api/prompt-os/packet
 http://localhost:3001/api/self-implementation/status
-http://localhost:3001/api/studio-os/inspector
 ```
 
 ## Release Claim Language

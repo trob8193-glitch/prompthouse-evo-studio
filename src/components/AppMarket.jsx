@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Play, Code2, Clock, Globe, ArrowRight, ServerCrash, DollarSign, Wallet, LayoutGrid } from 'lucide-react';
 import { IDEPageLayout } from './layouts/IDEPageLayout.jsx';
 import { BRIDGE_URL } from '../config/bridge-config.js';
+import { useSovereignStore } from '../store.js';
 
 export default function AppMarket() {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [launching, setLaunching] = useState(null);
+    const globalTheme = useSovereignStore((s) => s.globalTheme);
+    const inventing = globalTheme?.inventing || 'alpha';
 
     useEffect(() => {
         fetch(BRIDGE_URL + '/api/portfolio')
@@ -64,11 +67,11 @@ export default function AppMarket() {
 
     const headerActions = (
         <div className="flex items-center gap-4">
-            <button onClick={handleConnectStripe} className="flex items-center space-x-2 text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20 px-4 py-2 rounded-lg border border-indigo-500/20 transition-colors">
+            <button onClick={handleConnectStripe} className="flex items-center space-x-2 text-neon-cyan bg-indigo-500/10 hover:bg-indigo-500/20 px-4 py-2 rounded-2xl border-indigo-500/20 transition-colors">
                 <Wallet className="w-4 h-4" />
                 <span className="font-bold text-[10px] tracking-widest uppercase">Connect Bank</span>
             </button>
-            <div className="flex items-center space-x-2 text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-lg border border-emerald-500/20">
+            <div className="flex items-center space-x-2 text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-2xl border-emerald-500/20">
                 <Globe className="w-4 h-4" />
                 <span className="font-bold text-[10px] tracking-widest uppercase">Proof Gated</span>
             </div>
@@ -96,9 +99,9 @@ export default function AppMarket() {
             icon={LayoutGrid}
             headerActions={headerActions}
         >
-            <div className="overflow-y-auto pb-20 p-2">
+            <div className="overflow-y-auto p-2">
                 {projects.length === 0 ? (
-                    <div className="text-center py-24 border border-dashed border-gray-800 rounded-2xl h-full flex flex-col items-center justify-center">
+                    <div className="text-center py-24 border-dashed border-gray-800 rounded-2xl h-full flex-col gap-4 items-center justify-center">
                         <ServerCrash className="w-12 h-12 text-gray-700 mx-auto mb-4" />
                         <h3 className="text-xl font-bold text-gray-400 mb-2">No Apps Found</h3>
                         <p className="text-gray-600">Your daemons haven't generated any apps yet.</p>
@@ -108,16 +111,16 @@ export default function AppMarket() {
                         {projects.map((project) => (
                             <div 
                                 key={project.id} 
-                                className="group relative bg-[#121214] border border-gray-800 hover:border-emerald-500/50 rounded-2xl p-5 transition-all duration-300 flex flex-col hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]"
+                                className={`group relative border transition-all duration-300 flex-col gap-4 p-5 ${inventing === 'beta' ? 'bg-white/5 border-white/20 rounded-3xl backdrop-blur-xl' : inventing === 'gamma' ? 'bg-[#1a0033] border-fuchsia-500/50 rounded-none shadow-[4px_4px_0_#ff00ff]' : inventing === 'zeta' ? 'bg-white border-black border-4 rounded-none' : inventing === 'theta' ? 'bg-black border-transparent rounded-[40px] shadow-[0_0_30px_rgba(200,0,255,0.15)]' : 'bg-[#121214] border-gray-800 hover:border-emerald-500/50 rounded-2xl hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]'}`}
                             >
                                 {/* Card Top */}
                                 <div className="mb-4">
                                     <div className="flex justify-between items-start">
-                                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 flex items-center justify-center mb-4 shadow-lg group-hover:scale-105 transition-transform">
+                                        <div className="w-12 h-12 rounded-3xl bg-linear-to-br from-gray-800 to-gray-900 border-gray-700 flex items-center justify-center mb-4 shadow-lg group-hover:scale-105 transition-transform">
                                             <Code2 className="w-6 h-6 text-emerald-400" />
                                         </div>
                                     </div>
-                                    <h3 className="text-lg font-bold text-white leading-tight mb-2 capitalize truncate">
+                                    <h3 className={`text-lg font-bold leading-tight mb-2 capitalize truncate ${inventing === 'zeta' ? 'text-black' : 'text-white'}`}>
                                         {project.name}
                                     </h3>
                                     <div className="flex items-center text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -130,12 +133,12 @@ export default function AppMarket() {
                                 <div className="h-px w-full bg-gray-800 my-4" />
 
                                 {/* Actions */}
-                                <div className="mt-auto flex flex-col gap-3">
+                                <div className="mt-auto flex-col gap-3">
                                     <div className="flex gap-3">
                                         <button 
                                             onClick={() => launchApp(project.id)}
                                             disabled={launching === project.id}
-                                            className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 px-4 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50"
+                                            className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 px-4 rounded-3xl flex items-center justify-center transition-colors disabled:opacity-50"
                                         >
                                             {launching === project.id ? (
                                                 <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
@@ -151,14 +154,14 @@ export default function AppMarket() {
                                             onClick={() => launchApp(project.id)}
                                             disabled={launching === project.id}
                                             aria-label={`Open ${project.name}`}
-                                            className="bg-gray-800 hover:bg-gray-700 text-white p-2.5 rounded-xl transition-colors flex items-center justify-center disabled:opacity-50"
+                                            className="bg-gray-800 hover:bg-gray-700 text-white p-2.5 rounded-3xl transition-colors flex items-center justify-center disabled:opacity-50"
                                         >
                                             <ArrowRight className="w-5 h-5" />
                                         </button>
                                     </div>
                                     <button 
                                         onClick={() => handleBuyApp(project.id)}
-                                        className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 font-bold py-2.5 px-4 rounded-xl flex items-center justify-center transition-colors border border-blue-500/30"
+                                        className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-neon-cyan font-bold py-2.5 px-4 rounded-3xl flex items-center justify-center transition-colors border-blue-500/30"
                                     >
                                         <DollarSign className="w-4 h-4 mr-2" />
                                         Buy App ($9.00)

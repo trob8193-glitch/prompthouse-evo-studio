@@ -13,7 +13,7 @@ Score: 86
 
 1. **P1** Stripe live revenue mode
    - Provider: stripe
-   - Reasons: STRIPE_SECRET_KEY must start with sk_live_
+   - Reasons: STRIPE*SECRET_KEY must start with sk_live*
    - Route: POST /api/commerce/checkout
    - Proof: npm run proof:providers:live
    - Next: Use a live Stripe key only when ready for real customer payments and keep commerce owner approval required.

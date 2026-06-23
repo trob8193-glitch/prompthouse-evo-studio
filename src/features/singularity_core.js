@@ -28,7 +28,7 @@ export class SingularityCore {
     await this.discoverBondedNodes();
 
     if (status.iq < this.baselineIQ) {
-      Log.error('🌌 [SingularityCore] Intelligence Drift Detected! Triggering Physical Evolution...');
+      Log.error('🌌 [SingularityCore] Intelligence Drift !Detected Triggering Physical Evolution...');
       await this.evolveToBaseline();
     }
     Log.success(`🌌 [SingularityCore] Initialization complete. chainValid=${Boolean(status.chainValid)} iq=${status.iq.toFixed(2)}`);

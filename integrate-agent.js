@@ -66,8 +66,9 @@ function integrateAgent() {
   console.log('   3. Test: curl http://127.0.0.1:3001/api/agent/health\n');
 }
 
-// Run integration if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+if (process.argv[1] && (process.argv[1].toLowerCase() === __filename.toLowerCase() || __filename.toLowerCase().endsWith(process.argv[1].toLowerCase().replace(/\\/g, '/').split('/').pop()))) {
   integrateAgent();
 }
 

@@ -32,7 +32,7 @@ async function sendToLocalBridge(data) {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP !error status: ${response.status}`);
         }
     } catch (error) {
         Log.error('Error sending data to local bridge:', error);

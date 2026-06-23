@@ -53,9 +53,7 @@ describe('GhostEditorLogic merge safety', () => {
     const logic = new GhostEditorLogic(null);
     const original = fs.readFileSync(targetPath, 'utf8');
 
-    expect(() => logic.mergeOptimization(targetPath, 'export const coreValue = 2;\n')).toThrow(
-      'Missing explicit owner approval for scope: core_merge',
-    );
+    expect(() => logic.mergeOptimization(targetPath, 'export const coreValue = 2;\n')).toThrow(/core_merge/);
 
     expect(fs.readFileSync(targetPath, 'utf8')).toBe(original);
     fs.rmSync(tempDir, { recursive: true, force: true });

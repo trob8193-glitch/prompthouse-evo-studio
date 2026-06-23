@@ -17,6 +17,10 @@ function createMockApp() {
       routes.push({ method: 'POST', path, handler });
       routeMap.set(`POST ${path}`, handler);
     },
+    delete(path, handler) {
+      routes.push({ method: 'DELETE', path, handler });
+      routeMap.set(`DELETE ${path}`, handler);
+    },
     invoke(method, path) {
       const handler = routeMap.get(`${method} ${path}`);
       if (!handler) throw new Error(`Route not found: ${method} ${path}`);

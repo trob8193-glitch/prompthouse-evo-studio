@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { getBridgeUrl } from '../lib/api/config.js';
 import {
   Activity,
   AlertCircle,
@@ -205,8 +206,8 @@ const DOMAIN_ORDER = [
   MODULE_DOMAINS.SELF_INVENT,
 ];
 
-function getDomainModules(domain) {
-  return EVO_PULSE_MODULES.filter((module) => module.domain === domain);
+function getDomainModules(domain, allModules = EVO_PULSE_MODULES) {
+  return allModules.filter((module) => module.domain === domain);
 }
 
 function getAverageScore(modules = EVO_PULSE_MODULES) {
@@ -236,10 +237,27 @@ const topologyEdges = [
   ['Originality Detector + Market Danger Score', 'Self-Evolution Proof Gate Console'],
 ];
 
-const PulseMetric = ({ icon: Icon, label, value, detail }) => (
+const PulseMetric = ({ icon: Icon, label, value, detail }) => {
+  const globalTheme = useSovereignStore((s) => s.globalTheme);
+  const wiring = globalTheme?.wiring || 'alpha';
+  
+  const bgStyle = wiring === 'beta' ? 'rgba(255,255,255,0.05)' : 
+                  wiring === 'gamma' ? '#1a0033' : 
+                  wiring === 'delta' ? 'rgba(2,20,10,0.8)' : 
+                  wiring === 'epsilon' ? '#3e2723' : 
+                  wiring === 'zeta' ? '#ffffff' : 
+                  wiring === 'eta' ? 'rgba(0,40,40,0.8)' : 
+                  wiring === 'theta' ? 'transparent' : 
+                  wiring === 'iota' ? '#ffffff' : 
+                  wiring === 'kappa' ? '#000000' : 'rgba(5,5,8,0.8)';
+                  
+  const borderStyle = wiring === 'zeta' || wiring === 'iota' ? '1px solid #000' : '1px solid rgba(0,240,255,0.2)';
+  const textColor = wiring === 'zeta' || wiring === 'iota' ? '#000' : '#fff';
+
+  return (
   <div style={{
-    background: 'rgba(5,5,8,0.8)', border: '1px solid rgba(0,240,255,0.2)', borderRadius: 20, padding: 16,
-    backdropFilter: 'blur(20px)', boxShadow: '0 0 20px rgba(0,240,255,0.05)', transition: 'all 0.3s'
+    background: bgStyle, border: borderStyle, borderRadius: wiring === 'zeta' ? 0 : 20, padding: 16,
+    backdropFilter: 'blur(20px)', boxShadow: wiring === 'alpha' ? '0 0 20px rgba(0,240,255,0.05)' : 'none', transition: 'all 0.3s'
   }}>
     <div className="flex items-center justify-between">
       <div style={{ background: 'rgba(0,240,255,0.1)', border: '1px solid rgba(0,240,255,0.3)', borderRadius: 12, padding: 8, color: '#00f0ff', boxShadow: '0 0 15px rgba(0,240,255,0.2)' }}>
@@ -250,9 +268,9 @@ const PulseMetric = ({ icon: Icon, label, value, detail }) => (
         <div style={{ fontSize: 9, fontWeight: 900, color: '#00f0ff', textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: 4 }}>{label}</div>
       </div>
     </div>
-    <div style={{ marginTop: 12, fontSize: 10, fontWeight: 600, color: '#b4b4c4', lineHeight: 1.5 }}>{detail}</div>
+    <div style={{ marginTop: 12, fontSize: 10, fontWeight: 600, color: wiring === 'zeta' || wiring === 'iota' ? '#555' : '#b4b4c4', lineHeight: 1.5 }}>{detail}</div>
   </div>
-);
+)};
 
 const ModuleCard = ({ module, index }) => {
   const Icon = module.icon;
@@ -313,8 +331,8 @@ const MiniList = ({ title, items, color }) => (
   </div>
 );
 
-const DomainColumn = ({ domain }) => {
-  const modules = getDomainModules(domain);
+const DomainColumn = ({ domain, modules: allModules }) => {
+  const modules = getDomainModules(domain, allModules);
   const score = getAverageScore(modules);
   const style = DOMAIN_STYLES[domain];
 
@@ -420,9 +438,126 @@ export default function EvoPulseGridView() {
   const riftData = useSovereignStore((s) => s.riftData);
   const gridNodes = useSovereignStore((s) => s.gridNodes);
   const gridRoutes = useSovereignStore((s) => s.gridRoutes);
+  const globalTheme = useSovereignStore((s) => s.globalTheme);
+  const activeThemeId = globalTheme?.theme || 'evoCore';
 
-  const averageScore = getAverageScore();
-  const digest = buildDigest(EVO_PULSE_MODULES.map(({ id, score, status }) => ({ id, score, status })));
+  // TRIDALL STATE
+  const tridallState = useSovereignStore((s) => s.tridallState);
+  const triggerTridallIngestion = useSovereignStore((s) => s.triggerTridallIngestion);
+
+  // ─── LIVE MATURITY DATA FROM BRIDGE ───
+  const [liveMaturity, setLiveMaturity] = useState(null);
+  useEffect(() => {
+    let mounted = true;
+    async function fetchMaturity() {
+      try {
+        const res = await fetch(`${getBridgeUrl()}/api/metrics`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (mounted && data?.maturity?.modules) {
+          setLiveMaturity(data.maturity);
+        }
+      } catch { /* bridge offline — use static fallback */ }
+    }
+    fetchMaturity();
+    const interval = setInterval(fetchMaturity, 10000);
+    return () => { mounted = false; clearInterval(interval); };
+  }, []);
+
+  // Merge live scores into the static module definitions
+  const modules = EVO_PULSE_MODULES.map(mod => {
+    if (!liveMaturity?.modules) return mod;
+    const liveMod = liveMaturity.modules.find(m => m.name === mod.name || m.id === mod.id);
+    if (liveMod) {
+      return { ...mod, score: liveMod.score, status: liveMod.grade === 'A' ? 'ACTIVE' : liveMod.grade === 'B' ? 'PRIMED' : 'NEEDS_WORK' };
+    }
+    return mod;
+  });
+
+  const averageScore = liveMaturity?.averageScore || getAverageScore(modules);
+  const totalProofGates = modules.reduce((sum, m) => sum + (m.gates?.length || 0), 0);
+  const digest = buildDigest(modules.map(({ id, score, status }) => ({ id, score, status })));
+
+  // ─── OMNI-EVOLUTION: TRIDALL PATTERN ENGINE ───
+  if (activeThemeId === 'layoutTerminalFullscreen') {
+    return (
+      <div className="p-8 w-full h-full text-[#0f0] font-mono whitespace-pre-wrap bg-black flex-col">
+        <div>{`[TRIDALL_PATTERN_ENGINE] ACTIVE.
+
+Loading Pattern Modules...
+${EVO_PULSE_MODULES.map(m => `> ${m.name.toUpperCase()} [SCORE: ${m.score}] [STATE: ${m.status}]`).join('\n')}
+`}</div>
+        
+        <div className="mt-8 border-[#0f0] p-4">
+          <div className="mb-4">ENGINE STATUS: {tridallState?.status || 'IDLE'}</div>
+          {tridallState?.patterns?.length > 0 ? (
+            <div>
+              {tridallState.patterns.map((p, i) => (
+                <div key={i} className="mb-4">
+                  &gt; EXTRACTED: {p.concept}
+                  &gt; CONFIDENCE: {p.confidence}%
+                  &gt; BUYER MAP: {tridallState.buyerMaps[i]?.segment}
+                  &gt; MONETIZATION: {tridallState.monetizationPaths[i]?.model}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div>&gt; WAITING FOR PATTERN INGESTION... _</div>
+          )}
+          
+          <button 
+            className="mt-4 px-4 py-2 bg-[#0f0] text-black font-bold hover:bg-white transition-colors"
+            onClick={() => triggerTridallIngestion('Analyze SaaS CRM trends', { time: 'Q4' })}
+            disabled={tridallState?.status === 'INGESTING'}
+          >
+            {tridallState?.status === 'INGESTING' ? 'EXTRACTING...' : 'INITIATE INGESTION'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeThemeId === 'extremeWindows95') {
+    return (
+      <div className="p-8 w-full h-full bg-[#008080]">
+        <div className="w-[800px] bg-[#c0c0c0] border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] flex-col text-black font-sans">
+          <div className="bg-[#000080] text-white px-2 py-1 flex justify-between font-bold">
+            <span>Tridall Pattern Engine v1.0</span>
+            <div className="flex gap-1">
+              <button className="bg-[#c0c0c0] text-black px-1 border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] font-bold pb-1 leading-none" onClick={() => console.log('Window closed')}>X</button>
+            </div>
+          </div>
+          <div className="p-4 grid grid-cols-3 gap-4">
+            {EVO_PULSE_MODULES.map(m => (
+              <div key={m.id} className="bg-white border-2 border-t-[#808080] border-l-[#808080] border-r-white border-b-white p-2 flex items-center gap-2">
+                <div className="w-8 h-8 bg-blue-500" />
+                <span className="text-xs font-bold leading-tight">{m.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeThemeId === 'cyberpunk') {
+    return (
+      <div className="p-8 w-full h-full bg-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,0,0,0.1)_0%,rgba(0,0,0,1)_100%)] pointer-events-none" />
+        <h1 className="text-[#f00] font-black text-6xl tracking-widest uppercase mb-8" style={{textShadow: '0 0 20px #f00'}}>Tridall Shadow Forge</h1>
+        <div className="grid grid-cols-2 gap-4 relative z-10">
+          {EVO_PULSE_MODULES.map(m => (
+            <div key={m.id} className="bg-black border-[#f00]/40 p-4 relative overflow-hidden group hover:border-[#f00] transition-colors">
+              <div className="absolute top-0 left-0 w-full h-1 bg-[#f00] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
+              <div className="text-[#f00] font-mono text-xs mb-2">TARGET: {m.id.toUpperCase()}</div>
+              <div className="text-white font-bold text-lg mb-1">{m.name}</div>
+              <div className="text-[#f00]/60 text-xs">BREACH PROBABILITY: {m.score}%</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <IDEPageLayout
@@ -446,7 +581,7 @@ export default function EvoPulseGridView() {
       <div className="space-y-8 animate-in fade-in duration-500 relative z-10" style={{ paddingBottom: 64 }}>
         <div className="grid grid-cols-3 gap-4 text-center">
           <div style={{ background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 24, padding: 20 }}>
-            <div style={{ fontSize: 36, fontWeight: 900, color: '#fff', lineHeight: 1 }}>12</div>
+            <div style={{ fontSize: 36, fontWeight: 900, color: '#fff', lineHeight: 1 }}>{modules.length}</div>
             <div style={{ fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#8a8a9a', marginTop: 4 }}>Modules</div>
           </div>
           <div style={{ background: 'rgba(0,255,136,0.1)', border: '1px solid rgba(0,255,136,0.3)', borderRadius: 24, padding: 20, boxShadow: '0 0 20px rgba(0,255,136,0.15)' }}>
@@ -460,8 +595,8 @@ export default function EvoPulseGridView() {
         </div>
 
       <div className="grid gap-6 md:grid-cols-4">
-        <PulseMetric icon={Layers3} label="Domains" value="4" detail="Studio, LLM, self-evolve, and self-invent layers fused into one page." />
-        <PulseMetric icon={CheckCircle2} label="Proof Gates" value="36" detail="Each module carries 3 required proof signals before production acceptance." />
+        <PulseMetric icon={Layers3} label="Domains" value={String(DOMAIN_ORDER.length)} detail="Studio, LLM, self-evolve, and self-invent layers fused into one page." />
+        <PulseMetric icon={CheckCircle2} label="Proof Gates" value={String(totalProofGates)} detail="Each module carries 3 required proof signals before production acceptance." />
         <PulseMetric icon={Shield} label="Boundary Mode" value="ON" detail="No invented success, no hidden mutation, no secret values, no unsupported claims." />
         <PulseMetric icon={Zap} label="Status" value="PRIMED" detail="Ready for deeper script, store, and backend bridge wiring in the next repo pass." />
       </div>
@@ -471,7 +606,7 @@ export default function EvoPulseGridView() {
 
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
         {DOMAIN_ORDER.map((domain) => (
-          <DomainColumn key={domain} domain={domain} />
+          <DomainColumn key={domain} domain={domain} modules={modules} />
         ))}
       </div>
       </div>

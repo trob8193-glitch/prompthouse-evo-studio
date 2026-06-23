@@ -7,19 +7,19 @@ export class LicenseManager {
     this.dataDir = dataDir;
     this.licensePath = path.join(dataDir, 'enterprise.lic');
     this.licenseState = {
-      isEnterprise: false,
+      isPremium: false,
       tier: 'community',
       expiresAt: null,
       organization: null,
       truthState: 'COMMUNITY_MODE',
-      reason: 'No enterprise license has been verified.'
+      reason: 'No premium license has been verified.'
     };
     this.verifyLicense();
   }
 
-  setCommunityMode(reason = 'No enterprise license has been verified.', truthState = 'COMMUNITY_MODE') {
+  setCommunityMode(reason = 'No premium license has been verified.', truthState = 'COMMUNITY_MODE') {
     this.licenseState = {
-      isEnterprise: false,
+      isPremium: false,
       tier: 'community',
       expiresAt: null,
       organization: null,
@@ -46,13 +46,20 @@ export class LicenseManager {
       const token = fs.readFileSync(this.licensePath, 'utf8').trim();
 
       const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
-      if (decoded.tier !== 'enterprise') {
-        this.setCommunityMode(`License tier "${decoded.tier || 'unknown'}" is not enterprise.`, 'LICENSE_TIER_NOT_ENTERPRISE');
+      
+      const PREMIUM_TIERS = [
+        'enterprise', 'agency', 'prosumer', 'sovereign', 'education', 
+        'freelance', 'gaming', 'finance', 'defense', 'healthcare', 
+        'web3', 'ecommerce', 'hardware', 'automotive', 'legal',
+        'seed', 'acquisition', 'syndicate'
+      ];
+      if (!PREMIUM_TIERS.includes(decoded.tier)) {
+        this.setCommunityMode(`License tier "${decoded.tier || 'unknown'}" is not a recognized premium tier.`, 'LICENSE_TIER_NOT_PREMIUM');
         return;
       }
 
       this.licenseState = {
-        isEnterprise: true,
+        isPremium: true,
         tier: decoded.tier,
         expiresAt: new Date(decoded.exp * 1000),
         organization: decoded.org || null,
@@ -67,17 +74,21 @@ export class LicenseManager {
     }
   }
 
-  isEnterprise() {
-    if (!this.licenseState.isEnterprise) return false;
+  hasPremiumAccess() {
+    if (!this.licenseState.isPremium) return false;
     if (this.licenseState.expiresAt && new Date() > this.licenseState.expiresAt) {
-      global.Log && global.Log.info('🛡️ [LicenseManager] Enterprise License EXPIRED. Downgrading to Community Mode.');
-      this.setCommunityMode('Enterprise license is expired.', 'LICENSE_EXPIRED');
+      global.Log && global.Log.info('🛡️ [LicenseManager] Premium License EXPIRED. Downgrading to Community Mode.');
+      this.setCommunityMode('Premium license is expired.', 'LICENSE_EXPIRED');
       return false;
     }
     return true;
   }
   
   getTier() {
-    return this.isEnterprise() ? this.licenseState.tier : 'community';
+    return this.hasPremiumAccess() ? this.licenseState.tier : 'community';
+  }
+
+  isEnterprise() {
+    return this.hasPremiumAccess() && this.getTier() === 'enterprise';
   }
 }

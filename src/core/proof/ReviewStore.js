@@ -1,36 +1,35 @@
-import fs from 'fs';
-import path from 'path';
+import db from '../db/quad_schema.js';
+import crypto from 'crypto';
 
-export function reviewStoreDir(rootDir = process.cwd()) {
-  return path.join(rootDir, '.prompthouse-data', 'reviews');
-}
-
-export function saveReview({ rootDir = process.cwd(), review } = {}) {
+export function saveReview({ review } = {}) {
   if (!review?.moduleId) throw new Error('Review requires moduleId.');
-  const dir = reviewStoreDir(rootDir);
-  fs.mkdirSync(dir, { recursive: true });
-  const safeName = String(review.moduleId).replace(/[^a-z0-9_-]/gi, '_');
-  const file = path.join(dir, `review-${safeName}-${Date.now()}.json`);
-  fs.writeFileSync(file, JSON.stringify(review, null, 2), 'utf8');
-  return { file, review };
+  const id = crypto.randomUUID();
+  const stmt = db.prepare(`
+    INSERT INTO reviews_ledger (id, module_id, author, status, score, details_json)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `);
+  stmt.run(
+    id,
+    review.moduleId,
+    review.author || 'Gatekeeper',
+    review.status || 'UNVERIFIED',
+    review.score || 0,
+    JSON.stringify(review)
+  );
+  return { id, review };
 }
 
-export function listReviews({ rootDir = process.cwd(), limit = 100 } = {}) {
-  const dir = reviewStoreDir(rootDir);
-  if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir)
-    .filter(file => file.endsWith('.json'))
-    .sort()
-    .slice(-limit)
-    .map(file => {
-      const fullPath = path.join(dir, file);
-      try {
-        return { file: fullPath, review: JSON.parse(fs.readFileSync(fullPath, 'utf8')) };
-      } catch {
-        return null;
-      }
-    })
-    .filter(Boolean);
+export function listReviews({ limit = 100 } = {}) {
+  const stmt = db.prepare('SELECT * FROM reviews_ledger ORDER BY created_at DESC LIMIT ?');
+  return stmt.all(limit).map(row => ({
+    id: row.id,
+    moduleId: row.module_id,
+    author: row.author,
+    status: row.status,
+    score: row.score,
+    createdAt: row.created_at,
+    review: JSON.parse(row.details_json)
+  }));
 }
 
-export default { reviewStoreDir, saveReview, listReviews };
+export default { saveReview, listReviews };

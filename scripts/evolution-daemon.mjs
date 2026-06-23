@@ -1,6 +1,7 @@
 #!/usr/env/bin node
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { hardenProcess, createDaemonHeartbeat } from './daemon-hardener.mjs';
 import { QuadBrainEvolutionDaemon } from '../src/core/daemons/QuadBrainEvolutionDaemon.js';
 import { BlendedEvolutionEngine } from '../src/core/engines/BlendedEvolutionEngine.js';
 
@@ -25,6 +26,8 @@ const args = process.argv.slice(2);
 // If executed directly
 if (process.argv[1] && process.argv[1].endsWith('evolution-daemon.mjs')) {
   if (args.includes('--start')) {
+    hardenProcess('evolution-daemon');
+    createDaemonHeartbeat('evolution-daemon', 60000);
     daemon.start();
     // Keep process alive
     setInterval(() => {}, 1000000);

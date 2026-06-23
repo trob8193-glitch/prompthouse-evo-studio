@@ -29,7 +29,7 @@ export class EnterpriseLicenseManager {
    * Checks if the studio is operating under an Enterprise License.
    * @returns {boolean}
    */
-  isEnterprise() {
+  hasPremiumAccess() {
     const key = this.getEnvValue('PH_ENTERPRISE_LICENSE_KEY');
     
     // For MVP validation, any key starting with "PROMPTHOUSE-ENT-" is considered valid.
@@ -46,8 +46,8 @@ export class EnterpriseLicenseManager {
    * Used to hard-gate critical autonomous daemons.
    */
   enforceEnterprise(featureName) {
-    if (!this.isEnterprise()) {
-      throw new Error(`[LOCKED] ${featureName} requires an active Enterprise License to operate. Please upgrade.`);
+    if (!this.hasPremiumAccess()) {
+      throw new Error(`[LOCKED] ${featureName} requires an active Premium License to operate. Please upgrade.`);
     }
   }
 }

@@ -52,7 +52,9 @@ export function createSelfImplementationState({ capabilities = [] } = {}) {
     active: true,
     policies: {
       noDelete: true,
-      proofRequiredForCompleteClaim: true
+      proofRequiredForCompleteClaim: true,
+      mandateGeneratingParadigms: true, // NEW: All bots must strictly follow their LLM generating themes
+      blockTheoryWithoutCode: true      // NEW: Reject theoretical explanations without source code
     },
     summary: {
       total: capabilities.length

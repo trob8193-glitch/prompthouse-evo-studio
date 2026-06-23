@@ -65,11 +65,11 @@ export function RareCapabilitiesView() {
   const readyCount = artifactsData?.readyCount || moduleArtifacts.filter((item) => item.truthState === 'verified-ready').length;
 
   return (
-    <div className="rare-os-view flex-col animate-in">
-      <div className="flex-between rare-os-titlebar">
+    <div className="rare-os-view flex-col gap-4 animate-in">
+      <div className="flex items-center justify-between rare-os-titlebar">
         <div>
-          <div className="page-title">Rare Capability OS</div>
-          <div className="page-subtitle">Ten installed PromptHouse layers for proof, canon, permissions, extensions, marketplace packets, and receipt-backed memory.</div>
+          <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">Rare Capability OS</div>
+          <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Ten installed PromptHouse layers for proof, canon, permissions, extensions, marketplace packets, and receipt-backed memory.</div>
         </div>
         <div className="rare-os-status-row">
           <span className="badge badge-pink">S+++++ dark lock</span>
@@ -79,17 +79,17 @@ export function RareCapabilitiesView() {
       </div>
 
       <div className="grid-3">
-        <div className="card omnipotent-panel rare-metric-card">
+        <div className="glass-extreme omnipotent-panel rare-metric-glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
           <div className="rare-metric-value">{RARE_CAPABILITIES.length}</div>
           <div className="rare-metric-label">Modules Installed</div>
           <div className="rare-metric-detail">Proof, audit, canon, firewall, market, court, rebuild, score, extension, memory.</div>
         </div>
-        <div className="card omnipotent-panel rare-metric-card">
+        <div className="glass-extreme omnipotent-panel rare-metric-glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
           <div className="rare-metric-value">{averageScore}</div>
           <div className="rare-metric-label">Average Truth Score</div>
           <div className="rare-metric-detail">{readyCount} verified-ready layers on the current mission text.</div>
         </div>
-        <div className="card omnipotent-panel rare-metric-card">
+        <div className="glass-extreme omnipotent-panel rare-metric-glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
           <div className="rare-metric-value">{artifact.risk.toUpperCase()}</div>
           <div className="rare-metric-label">Current Risk Gate</div>
           <div className="rare-metric-detail">External writes, secrets, deploys, payments, and destructive actions stay blocked without proof.</div>
@@ -97,14 +97,14 @@ export function RareCapabilitiesView() {
       </div>
 
       <div className="grid-builder rare-os-workbench">
-        <div className="card">
-          <div className="card-header">
-            <div className="card-title">Mission Kernel</div>
-            <div className="card-desc">All ten modules regenerate from this mission and keep a proof-before-completion boundary.</div>
+        <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Mission Kernel</div>
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-desc">All ten modules regenerate from this mission and keep a proof-before-completion boundary.</div>
           </div>
-          <div className="card-body flex-col">
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex-col gap-4">
             <label className="field">
-              <span className="field-label">Mission</span>
+              <span className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Mission</span>
               <textarea
                 className="field-textarea rare-mission-input"
                 value={mission}
@@ -112,7 +112,7 @@ export function RareCapabilitiesView() {
               />
             </label>
 
-            <div className="field-label">Installed Modules</div>
+            <div className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Installed Modules</div>
             <div className="rare-module-list">
               {RARE_CAPABILITIES.map((capability) => (
                 <button
@@ -133,15 +133,15 @@ export function RareCapabilitiesView() {
           </div>
         </div>
 
-        <div className="card omnipotent-panel rare-artifact-panel" style={{ '--rare-accent': selected.accent }}>
-          <div className="card-header">
-            <div className="flex-between gap-12">
+        <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl omnipotent-panel rare-artifact-panel" style={{ '--rare-accent': selected.accent }}>
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
+            <div className="flex items-center justify-between gap-12">
               <div>
-                <div className="card-title">
+                <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">
                   <span className="rare-selected-icon">{selected.icon}</span>
                   {selected.title}
                 </div>
-                <div className="card-desc">{selected.promise}</div>
+                <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-desc">{selected.promise}</div>
               </div>
               <div className="rare-score-ring" style={{ '--score-percent': `${artifact.score}%` }} aria-label={`Truth score ${artifact.score}`}>
                 <span>{artifact.score}</span>
@@ -149,7 +149,7 @@ export function RareCapabilitiesView() {
             </div>
           </div>
 
-          <div className="card-body flex-col">
+          <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex-col gap-4">
             <div className="rare-badge-row">
               <span className={`badge ${badgeForTruth(artifact.truthState)}`}>{artifact.truthState}</span>
               <span className={`badge ${badgeForRisk(artifact.risk)}`}>{artifact.risk} risk</span>
@@ -157,12 +157,12 @@ export function RareCapabilitiesView() {
             </div>
 
             <div className="rare-summary">
-              <div className="field-label">Why It Is Rare</div>
+              <div className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Why It Is Rare</div>
               <p>{selected.rare}</p>
             </div>
 
             <div className="rare-summary">
-              <div className="field-label">Generated Result</div>
+              <div className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Generated Result</div>
               <p>{artifact.summary}</p>
             </div>
 
@@ -171,7 +171,7 @@ export function RareCapabilitiesView() {
                 <span className="prompt-block-label">{artifact.primaryLabel}</span>
                 <button
                   type="button"
-                  className="btn btn-secondary btn-sm"
+                  className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
                   onClick={() => copyArtifact(artifact.primary, artifact.primaryLabel, setCopied)}
                 >
                   {copied === artifact.primaryLabel ? 'Copied' : 'Copy'}
@@ -182,7 +182,7 @@ export function RareCapabilitiesView() {
 
             <div className="rare-proof-grid">
               <div>
-                <div className="field-label">Proof Gates</div>
+                <div className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Proof Gates</div>
                 <div className="rare-chip-list">
                   {artifact.gates.map((gate) => (
                     <span key={gate} className="rare-proof-chip">{gate}</span>
@@ -190,7 +190,7 @@ export function RareCapabilitiesView() {
                 </div>
               </div>
               <div>
-                <div className="field-label">Receipts</div>
+                <div className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Receipts</div>
                 <div className="rare-chip-list">
                   {artifact.receipts.map((receipt) => (
                     <span key={receipt} className="rare-receipt-chip">{receipt}</span>
@@ -209,7 +209,7 @@ export function RareCapabilitiesView() {
             <button
               key={item.id}
               type="button"
-              className={`card rare-installed-card ${selectedId === item.id ? 'active' : ''}`}
+              className={`glass-extreme rare-installed-glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl ${selectedId === item.id ? 'active' : ''}`}
               style={{ '--rare-accent': capability.accent }}
               onClick={() => setSelectedId(item.id)}
             >

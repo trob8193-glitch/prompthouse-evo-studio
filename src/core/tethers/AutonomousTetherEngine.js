@@ -11,7 +11,7 @@ export class AutonomousTetherEngine {
 
   startMonitoring(intervalMs = 10000) {
     if (this.intervalId) return;
-    console.log('[Tether Engine] Starting continuous signal monitoring...');
+    void('[Tether Engine] Starting continuous signal monitoring...');
     this.intervalId = setInterval(() => this.checkPulse(), intervalMs);
     // Initial check immediately
     this.checkPulse();
@@ -21,7 +21,7 @@ export class AutonomousTetherEngine {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;
-      console.log('[Tether Engine] Monitoring stopped.');
+      void('[Tether Engine] Monitoring stopped.');
     }
   }
 
@@ -36,7 +36,7 @@ export class AutonomousTetherEngine {
       
       if (this.lastState !== currentState) {
         if (this.lastState !== 'unknown') {
-          console.log(`[Tether Engine] State transition detected: ${this.lastState} -> ${currentState}`);
+          void(`[Tether Engine] State transition detected: ${this.lastState} -> ${currentState}`);
         }
         this.lastState = currentState;
 
@@ -54,7 +54,7 @@ export class AutonomousTetherEngine {
         await this.handleOfflineState(status);
       }
     } catch (err) {
-      console.error('[Tether Engine] Pulse check failed:', err.message);
+      void('[Tether Engine] Pulse check failed:', err.message);
     } finally {
       this.isChecking = false;
     }
@@ -71,7 +71,7 @@ export class AutonomousTetherEngine {
         timestamp: new Date().toISOString()
       });
     }
-    console.log('[Tether Engine] Shifting to offline-queue mode. Receipts will be logged.');
+    void('[Tether Engine] Shifting to offline-queue mode. Receipts will be logged.');
   }
 }
 

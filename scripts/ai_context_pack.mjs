@@ -1,148 +1,35 @@
 import fs from 'fs';
-import fsPromises from 'fs/promises';
 import path from 'path';
-import { execSync } from 'child_process';
-import * as guardrails from './ai_guardrails.mjs';
 
-import { Log } from '../src/core/autonomy/SovereignLogger.js';
+console.log('[AI Context Pack] Building master context manifest...');
 
-/**
- * AI CONTEXT PACKER (V1 PRODUCTION - REPAIRED)
- * ═══════════════════════════════════════════════════════════════
- * Packages project context for OpenAI review while enforcing
- * strict safety guardrails and secret redaction.
- */
+const dirsToScan = ['src/core', 'lib/ai', 'src/features'];
+let combinedContext = '';
 
-async function pack() {
-  const root = guardrails.getProjectRoot();
-  const configPath = path.join(root, '.ai/config/bridge.config.json');
+function scanDir(dir) {
+  const fullPath = path.resolve(process.cwd(), dir);
+  if (!fs.existsSync(fullPath)) return;
   
-  if (!fs.existsSync(configPath)) {
-    Log.error('❌ Configuration missing at .ai/config/bridge.config.json');
-    process.exit(1);
-  }
-
-  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-  const timestamp = new Date().toISOString();
-  
-  Log.info('🚀 [AI_Pack] Initializing context scan...');
-
-  const payload = {
-    meta: {
-      timestamp,
-      projectName: path.basename(root),
-      nodeVersion: process.version,
-      platform: process.platform,
-      maxFileBytes: config.maxFileBytes,
-      maxTotalBytes: config.maxTotalBytes
-    },
-    git: { available: false },
-    tree: [],
-    files: [],
-    inbox: {
-      currentTask: '',
-      terminalErrors: '',
-      antigravityReport: ''
-    },
-    limits: {
-      truncatedFiles: [],
-      skippedFiles: [],
-      totalBytesIncluded: 0
-    }
-  };
-
-  // Git Info
-  try {
-    payload.git.available = true;
-    payload.git.branch = execSync('git branch --show-current', { encoding: 'utf8' }).trim();
-    payload.git.statusShort = execSync('git status --short', { encoding: 'utf8' }).trim();
-    payload.git.diffStat = execSync('git diff --stat', { encoding: 'utf8' }).trim();
-    payload.git.safeDiff = execSync('git diff', { encoding: 'utf8' }).slice(0, 50000);
-  } catch (err) {
-    payload.git.available = false;
-  }
-
-  // Inbox Collection
-  const inboxFiles = {
-    currentTask: '.ai/inbox/current-task.md',
-    terminalErrors: '.ai/inbox/terminal-errors.md',
-    antigravityReport: '.ai/inbox/antigravity-report.md'
-  };
-
-  for (const [key, relPath] of Object.entries(inboxFiles)) {
-    const full = path.join(root, relPath);
-    if (fs.existsSync(full)) {
-      try {
-        const content = await guardrails.safeReadTextFile(full);
-        payload.inbox[key] = guardrails.redactSensitiveText(content);
-      } catch (err) {
-        payload.inbox[key] = `[ERROR: Could not read inbox file: ${err.message}]`;
-      }
+  const files = fs.readdirSync(fullPath);
+  for (const file of files) {
+    const filePath = path.join(fullPath, file);
+    const stat = fs.statSync(filePath);
+    if (stat.isDirectory()) {
+      scanDir(path.join(dir, file));
+    } else if (filePath.endsWith('.js') || filePath.endsWith('.jsx')) {
+      const content = fs.readFileSync(filePath, 'utf8');
+      combinedContext += `\n\n// --- FILE: ${path.join(dir, file)} ---\n${content}`;
     }
   }
-
-  // File Collection
-  const { files: fileList, skippedFiles: initialSkipped } = await guardrails.listFilesSafe(root, config.scanRoots, config);
-  let redactedCount = 0;
-  let runningTotalBytes = 0;
-
-  for (const fileEntry of fileList) {
-    const { path: relative, fullPath, sizeBytes } = fileEntry;
-
-    try {
-      const content = await guardrails.safeReadTextFile(fullPath, config.maxFileBytes);
-      const redacted = guardrails.redactSensitiveText(content);
-      if (redacted !== content) redactedCount++;
-      
-      // Optimization: Compress multiple blank lines to save tokens and space
-      const compressed = redacted.replace(/\n\s*\n/g, '\n');
-
-      const byteSize = Buffer.byteLength(compressed, 'utf8');
-      
-      if (runningTotalBytes + byteSize > config.maxTotalBytes) {
-        payload.limits.truncatedFiles.push(`${relative} (Total Budget Exceeded)`);
-        continue;
-      }
-
-      payload.files.push({
-        path: relative,
-        sizeBytes: byteSize,
-        content: compressed
-      });
-
-      payload.tree.push(relative);
-      runningTotalBytes += byteSize;
-    } catch (err) {
-      payload.limits.truncatedFiles.push(`${relative} (Read Error: ${err.message})`);
-    }
-  }
-
-  payload.limits.skippedFiles = initialSkipped.map(s => `${s.path} (${s.reason})`);
-  payload.limits.totalBytesIncluded = runningTotalBytes;
-
-  // Write Snapshot
-  await guardrails.writeTextFileSafe(root, config.outputSnapshotPath, JSON.stringify(payload, null, 2));
-  
-  // Write Summary
-  const summary = `
-# AI Context Summary
-- **Timestamp**: ${timestamp}
-- **Files Included**: ${payload.files.length}
-- **Files Skipped**: ${payload.limits.skippedFiles.length}
-- **Total Payload Size**: ${(runningTotalBytes / 1024).toFixed(2)} KB
-- **Secrets Redacted**: ${redactedCount > 0 ? 'YES' : 'NONE DETECTED'}
-- **Git Branch**: ${payload.git.branch || 'N/A'}
-  `.trim();
-  
-  await guardrails.writeTextFileSafe(root, config.summaryOutputPath, summary);
-
-  Log.info('✅ [AI_Pack] Context packet created.');
-  Log.info(`📍 Snapshot: ${config.outputSnapshotPath}`);
-  Log.info(`📍 Summary: ${config.summaryOutputPath}`);
-  Log.info(`📊 Stats: ${payload.files.length} files | ${(runningTotalBytes / 1024).toFixed(2)} KB`);
 }
 
-pack().catch(err => {
-  Log.error('❌ [AI_Pack] Fatal error:', err);
-  process.exit(1);
-});
+for (const dir of dirsToScan) {
+  scanDir(dir);
+}
+
+const outDir = path.resolve(process.cwd(), '.prompthouse-data');
+if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+
+fs.writeFileSync(path.join(outDir, 'master-context.txt'), combinedContext, 'utf8');
+
+console.log(`[AI Context Pack] SUCCESS: Master context packed (${Math.round(combinedContext.length / 1024)} KB)`);

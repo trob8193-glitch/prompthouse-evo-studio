@@ -42,12 +42,18 @@ export class ShadowForge {
 
     if (!fs.existsSync(this.shadowDir)) fs.mkdirSync(this.shadowDir);
 
-    const shadowPath = path.join(this.shadowDir, `${fileId}.ghost`);
+    const isCss = fileId.includes('_css_') || fileId.endsWith('.css');
+    const ext = isCss ? '.css' : '.js';
+    const shadowPath = path.join(this.shadowDir, `${fileId}.ghost${ext}`);
     fs.writeFileSync(shadowPath, proposedLogic);
 
     // PHYSICAL VALIDATION: Check for syntax errors in the ghost-file
     try {
-      await execFileAsync('node', ['--check', shadowPath]);
+      if (!isCss) {
+        await execFileAsync('node', ['--check', shadowPath]);
+      } else {
+        Log.info(`🎨 [ShadowForge] Bypassing Node syntax check for CSS mutation: ${fileId}`);
+      }
       
       // DEEP VALIDATION: Semantic Traversal
       await this._validateAST(shadowPath, proposedLogic);

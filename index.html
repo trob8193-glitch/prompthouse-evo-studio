@@ -11,6 +11,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   </head>
   <body>
+    <svg width="0" height="0" class="absolute w-0 h-0 pointer-events-none">
+      <defs>
+        <linearGradient id="evo-sliding-gradient" x1="0" y1="0" x2="3" y2="0" gradientUnits="objectBoundingBox">
+          <stop offset="0%" stop-color="var(--glow-c1)" />
+          <stop offset="8.33%" stop-color="var(--glow-c2)" />
+          <stop offset="16.66%" stop-color="var(--glow-c3)" />
+          <stop offset="25%" stop-color="var(--glow-c4)" />
+          <stop offset="33.33%" stop-color="var(--glow-c1)" />
+          <stop offset="41.66%" stop-color="var(--glow-c2)" />
+          <stop offset="50%" stop-color="var(--glow-c3)" />
+          <stop offset="58.33%" stop-color="var(--glow-c4)" />
+          <stop offset="66.66%" stop-color="var(--glow-c1)" />
+          <stop offset="75%" stop-color="var(--glow-c2)" />
+          <stop offset="83.33%" stop-color="var(--glow-c3)" />
+          <stop offset="91.66%" stop-color="var(--glow-c4)" />
+          <stop offset="100%" stop-color="var(--glow-c1)" />
+          <animateTransform attributeName="gradientTransform" type="translate" from="0 0" to="-1 0" dur="var(--glow-speed, 4s)" repeatCount="indefinite" />
+        </linearGradient>
+      </defs>
+    </svg>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

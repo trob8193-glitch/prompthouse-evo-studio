@@ -3,6 +3,9 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 
 import { Log } from '../src/core/autonomy/SovereignLogger.js';
+import { hardenProcess, createDaemonHeartbeat } from './daemon-hardener.mjs';
+
+hardenProcess('audit-platform-daemon');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

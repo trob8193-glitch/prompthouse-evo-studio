@@ -1,0 +1,13 @@
+{
+  "history": [
+    {
+      "cycleNumber": 1,
+      "timestamp": "2026-06-23T22:15:30.410Z",
+      "durationMs": 3567,
+      "intentsGenerated": 24,
+      "criticalIntents": 1,
+      "highIntents": 13,
+      "status": "HEALTHY"
+    }
+  ]
+}

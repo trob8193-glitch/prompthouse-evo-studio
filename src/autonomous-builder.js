@@ -1,19 +1,31 @@
 import { Log } from './core/autonomy/SovereignLogger.js';
 import { BRIDGE_URL } from './config/bridge-config.js';
+import { useSovereignStore } from './store.js';
 
 export { APP_TYPES } from './core/builder/ProjectTemplates.js';
 
 export class AutonomousBuilder {
   constructor() {
-    this.status = 'OMNIPOTENT';
+    this.status = 'ACTIVE';
   }
 
   async execute(params = {}) {
-    return { success: true, timestamp: new Date().toISOString(), result: 'FULFILLED' };
+    const { mission = '', appType = 'react', name = 'untitled-app', features = '' } = params;
+    if (!mission) {
+      return { success: false, timestamp: new Date().toISOString(), error: 'Mission prompt is required' };
+    }
+    Log.info(`🚀 [AutonomousBuilder] Executing build: "${name}" (${appType})`);
+    try {
+      const result = await runBotPipeline(mission, appType, name, features);
+      return { success: true, timestamp: new Date().toISOString(), ...result };
+    } catch (err) {
+      Log.error(`❌ [AutonomousBuilder] Build failed: ${err.message}`);
+      return { success: false, timestamp: new Date().toISOString(), error: err.message };
+    }
   }
 
   getStatus() {
-    return { id: 'autonomous-builder', grade: 'S+++++', state: 'VERIFIED', resonance: 0.99 };
+    return { id: 'autonomous-builder', grade: 'S+++++', state: 'ACTIVE', resonance: 0.99 };
   }
 }
 
@@ -53,11 +65,11 @@ export async function runBotPipeline(mission, appType, name, features) {
 }
 
 export function downloadAsZip() {
-  alert('Files are written directly to your disk in /generated_apps/. Check your project folder.');
+  useSovereignStore.getState().addNotification({ msg: 'Files are written directly to your disk in /generated_apps/. Check your project folder.', type: 'success' });
 }
 
 export function downloadFile() {
-  alert('Files are written directly to your disk.');
+  useSovereignStore.getState().addNotification({ msg: 'Files are written directly to your disk.', type: 'success' });
 }
 
 export async function writeToLocalDisk() {

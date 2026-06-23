@@ -42,7 +42,8 @@ export function normalizeThemePolicy(policy = {}) {
     ...DEFAULT_THEME_POLICY,
     ...policy,
     blockedTargets: policy.blockedTargets || DEFAULT_THEME_POLICY.blockedTargets,
-    allowedScopes: policy.allowedScopes || DEFAULT_THEME_POLICY.allowedScopes
+    allowedScopes: policy.allowedScopes || DEFAULT_THEME_POLICY.allowedScopes,
+    normalizedAt: new Date().toISOString()
   };
 }
 

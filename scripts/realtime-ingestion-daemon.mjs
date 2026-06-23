@@ -3,6 +3,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fetch from 'node-fetch';
 import { Log } from '../src/core/autonomy/SovereignLogger.js';
+import { hardenProcess, createDaemonHeartbeat } from './daemon-hardener.mjs';
+
+hardenProcess('realtime-ingestion-daemon');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');

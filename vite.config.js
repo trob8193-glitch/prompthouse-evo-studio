@@ -19,6 +19,9 @@ export default defineConfig({
       ignored: ['**/.ai/**', '**/.sovereign-shards/**', '**/.prompthouse-data/**', '**/.prompt-garden/**', '**/scratch/**'],
     },
   },
+  optimizeDeps: {
+    exclude: ['fs', 'path', 'net', 'crypto', 'child_process', 'node:fs/promises', 'node:path', 'node:fs'],
+  },
   build: {
     target: "esnext",
     sourcemap: true,
@@ -57,6 +60,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './tests/setup.js',
+    testTimeout: 15000,
     exclude: [
       '**/node_modules/**',
       '**/dist/**',

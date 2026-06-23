@@ -1,189 +1,107 @@
 import fs from 'fs';
 import path from 'path';
-import { assertPathAllowed, requiresOwnerApproval } from './EvolutionPolicy.js';
-import { scoreEvolutionRisk } from './EvolutionRiskScorer.js';
-import { BRIDGE_URL } from '../../config/bridge-config.js';
+import crypto from 'crypto';
+import { SHADOW_FORGE } from '../autonomy/ShadowForge.js';
 
-function safeRead(rootDir, relPath) {
-  const full = path.join(rootDir, relPath);
-  return fs.existsSync(full) ? fs.readFileSync(full, 'utf8') : '';
+const PROPOSALS_DIR = () => path.join(process.cwd(), '.prompthouse-data', 'evolution', 'proposals');
+
+function ensureDir() {
+  const dir = PROPOSALS_DIR();
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 }
 
-function buildEnvBridgePatch(rootDir) {
-  const relPath = 'src/store.js';
-  const current = safeRead(rootDir, relPath);
-  if (!current.includes("")) return null;
-  const proposedContent = current.replace(
-    "",
-    "const BRIDGE_URL = import.meta.env?.VITE_BRIDGE_URL;"
-  );
-  return {
-    path: relPath,
-    operation: 'update',
-    reason: 'Replace hardcoded bridge URL with Vite environment fallback while preserving local default.',
-    proposedContent,
-  };
-}
+/**
+ * Builds a structured patch proposal from a BlendedEvolutionEngine suggestion.
+ * Generates file diffs, verification commands, and rollback instructions.
+ */
+export async function buildPatchProposal(options = {}) {
+  const { suggestion, rootDir = process.cwd(), runId } = options;
+  if (!suggestion) return { verificationOnly: true, blockedReasons: ['No suggestion provided'], files: [] };
 
-function buildTruthLanguagePatch(rootDir) {
-  const relPath = 'src/self-implementation-policy.js';
-  const current = safeRead(rootDir, relPath);
-  if (!current) return null;
-  let next = current
-    .replace(/Autonomously fulfilled by the Great Realization Protocol\.\r?\n \* This module is now 100% functional and production-ready\./g, 'Truth-gated self-implementation policy helpers. Completion claims require receipts.')
-    .replace(/Autonomously fulfilled by the Great Realization Protocol\.\r?\n \* Operational status is determined by live audits and proof receipts\./g, 'Truth-gated self-implementation policy helpers. Completion claims require receipts.')
-    .replace(/this\.status = 'OMNIPOTENT';/g, "this.status = 'POLICY_READY';")
-    .replace(/\r?\n\s*this\.iq_baseline = 165\.0;/g, '')
-    .replace(/result: 'FULFILLED'/g, "result: 'POLICY_CHECKED'")
-    .replace(/grade: 'S\+*'/g, "grade: 'POLICY_GATED'")
-    .replace(/state: 'VERIFIED'/g, "state: 'READY'")
-    .replace(/,\r?\n\s*resonance: 0\.99/g, '');
-  if (next === current) return null;
-  return {
-    path: relPath,
-    operation: 'update',
-    reason: 'Remove unverified self-evolution completion language and replace with receipt-safe policy language.',
-    proposedContent: next,
-  };
-}
-
-function routeExists(rootDir, route) {
-  const files = [
-    'server/routes/studio-core.routes.js',
-    'promptbridge-server.js',
-    'generated_apis/evo_llm_routes.js',
-  ];
-  return files.some((relPath) => safeRead(rootDir, relPath).includes(route));
-}
-
-function buildBridgeContractExpectedRoutesPatch(rootDir) {
-  const relPath = 'src/bridge-contract-ledger.js';
-  const current = safeRead(rootDir, relPath);
-  if (!current) return null;
-  const required = [
-    '/api/training/ingest',
-    '/api/training-capture',
-    '/api/training/stats',
-    '/api/evo-runtime/status',
-    '/api/evo-runtime/activate',
-  ];
-  const missing = required.filter((route) => !current.includes(`'${route}'`));
-  if (missing.length === 0) return null;
-  const anchor = "    '/api/queue/master',";
-  if (!current.includes(anchor)) return null;
-  const proposedContent = current.replace(anchor, [
-    anchor,
-    ...missing.map((route) => `    '${route}',`)
-  ].join('\n'));
-  return {
-    path: relPath,
-    operation: 'update',
-    reason: 'Add self-training and Evo runtime routes to the bridge contract ledger.',
-    proposedContent,
-  };
-}
-
-function buildRouteProofPlanPatch(rootDir) {
-  const relPath = 'docs/self-evolution-readiness.md';
-  const current = safeRead(rootDir, relPath);
-  const content = current || '# Self-Evolution Readiness\n\n';
-  const marker = '## Autonomous Route Integrity';
-  if (content.includes(marker)) return null;
-  const proposedContent = `${content.trim()}\n\n${marker}\n\n- Run \`node scripts/audit-route-drift.mjs\` after route changes.\n- Run \`npm run audit:dead-surfaces\` after UI command changes.\n- Keep provider training in blocked, submitted, pending, or trained-weights states; never claim trained weights until the provider returns a fine-tuned model id.\n`;
-  return {
-    path: relPath,
-    operation: current ? 'update' : 'create',
-    reason: 'Document broader autonomous route/provider proof checks for future self-evolution cycles.',
-    proposedContent,
-  };
-}
-
-function buildVerificationOnlyProposal({ objective }) {
-  return {
-    reason: 'No deterministic source patch matched the objective; run proof gates and record a receipt-backed clean-state result.',
-    verificationOnly: true,
-    expectedImprovement: [
-      'Confirm local proof gates still pass',
-      'Record that no source mutation was required for the requested objective'
-    ],
-    objective: objective || 'Autonomous self-evolution verification cycle'
-  };
-}
-
-export function buildPatchProposal({ runId = `evo_${Date.now()}`, objective = '', rootDir = process.cwd(), diagnostics = null, memory = null, policy = {} } = {}) {
-  const objectiveText = String(objective || '').toLowerCase();
-  const files = [];
-
-  if (objectiveText.includes('bridge url') || objectiveText.includes('hardcoded') || objectiveText.includes('env')) {
-    const patch = buildEnvBridgePatch(rootDir);
-    if (patch) files.push(patch);
-  }
-
-  if (objectiveText.includes('truth') || objectiveText.includes('unverified') || objectiveText.includes('hype') || objectiveText.includes('self')) {
-    const patch = buildTruthLanguagePatch(rootDir);
-    if (patch) files.push(patch);
-  }
-
-  if (objectiveText.includes('training') || objectiveText.includes('runtime') || objectiveText.includes('route') || objectiveText.includes('provider')) {
-    const contractPatch = buildBridgeContractExpectedRoutesPatch(rootDir);
-    if (contractPatch) files.push(contractPatch);
-    const proofPlanPatch = buildRouteProofPlanPatch(rootDir);
-    if (proofPlanPatch) files.push(proofPlanPatch);
-  }
-
-  if (files.length === 0) {
-    if (!routeExists(rootDir, '/api/training-capture') || !routeExists(rootDir, '/api/evo-runtime/activate')) {
-      const contractPatch = buildBridgeContractExpectedRoutesPatch(rootDir);
-      if (contractPatch) files.push(contractPatch);
-    }
-    const truthPatch = buildTruthLanguagePatch(rootDir);
-    if (truthPatch) files.push(truthPatch);
-  }
-
-  const verificationOnly = files.length === 0 ? buildVerificationOnlyProposal({ objective }) : null;
+  const proposalId = runId || crypto.randomUUID();
+  const targetFile = suggestion.targetFile || 'src/index.css';
+  const absolutePath = path.resolve(rootDir, targetFile);
+  const fileExists = fs.existsSync(absolutePath);
 
   const proposal = {
-    id: `proposal_${Date.now()}`,
-    runId,
-    objective: objective || 'Autonomous self-evolution safe cleanup',
-    risk: 'LOW',
-    riskScore: null,
-    expectedImprovement: verificationOnly?.expectedImprovement || ['Reduce unverified completion language', 'Improve deployment environment readiness'],
-    files,
-    verificationOnly: Boolean(verificationOnly),
-    verificationReason: verificationOnly?.reason || null,
-    diagnosticsSummary: diagnostics?.summary || null,
-    memoryHints: memory || null,
-    requiresOwnerApproval: false,
-    blockedReasons: [],
+    id: proposalId,
     createdAt: new Date().toISOString(),
+    targetFile,
+    fileExists,
+    changeType: suggestion.cssRule ? 'css' : suggestion.componentChange ? 'component' : 'architecture',
+    description: suggestion.description || 'No description',
+    blockedReasons: [],
+    files: [],
+    verificationCommands: ['npm run build'],
+    rollbackStrategy: fileExists ? 'restore_from_backup' : 'delete_new_file'
   };
 
-  const risk = scoreEvolutionRisk({ proposal });
-  proposal.risk = risk.level;
-  proposal.riskScore = risk;
-  proposal.requiresOwnerApproval = requiresOwnerApproval(proposal, policy);
-  return validatePatchProposal(proposal, policy);
-}
-
-export function validatePatchProposal(proposal, policy = {}) {
-  if (!proposal || !Array.isArray(proposal.files)) throw new Error('Invalid patch proposal.');
-  if (proposal.files.length === 0) {
-    if (proposal.verificationOnly) {
-      return { ...proposal, blockedReasons: [] };
-    }
-    return { ...proposal, blockedReasons: ['No safe matching patch could be generated for the objective.'] };
+  // Capture current file content for rollback
+  if (fileExists) {
+    const currentContent = fs.readFileSync(absolutePath, 'utf8');
+    proposal.files.push({
+      path: targetFile,
+      action: 'modify',
+      currentHash: crypto.createHash('sha256').update(currentContent).digest('hex'),
+      proposedChange: suggestion.cssRule || suggestion.componentChange || suggestion.architectureChange,
+      currentContentPreview: currentContent.slice(-200)
+    });
+  } else {
+    proposal.files.push({
+      path: targetFile,
+      action: 'create',
+      proposedChange: suggestion.cssRule || suggestion.componentChange || suggestion.architectureChange
+    });
   }
-  const blockedReasons = [...(proposal.blockedReasons || [])];
-  for (const file of proposal.files) {
+
+  // Safety checks
+  if (!suggestion.cssRule && !suggestion.componentChange && !suggestion.architectureChange) {
+    proposal.blockedReasons.push('No actionable change in suggestion');
+  }
+
+  // [SHADOWFORGE TETHER] Validate non-CSS code through ShadowForge before persisting
+  const proposedCode = suggestion.componentChange || suggestion.architectureChange;
+  if (proposedCode && !suggestion.cssRule) {
     try {
-      assertPathAllowed(file.path, policy);
-      if (file.operation !== 'delete' && typeof file.proposedContent !== 'string') {
-        blockedReasons.push(`Missing proposed content for ${file.path}`);
+      const safe = await SHADOW_FORGE.shadowBuild(`proposal_${proposalId}`, proposedCode);
+      if (!safe) {
+        proposal.blockedReasons.push('ShadowForge AST/syntax validation failed');
       }
     } catch (e) {
-      blockedReasons.push(e.message);
+      proposal.blockedReasons.push(`ShadowForge error: ${e.message}`);
     }
   }
-  return { ...proposal, blockedReasons };
+
+  // Persist proposal to disk
+  ensureDir();
+  const proposalPath = path.join(PROPOSALS_DIR(), `proposal_${proposalId}.json`);
+  fs.writeFileSync(proposalPath, JSON.stringify(proposal, null, 2), 'utf8');
+
+  proposal.verificationOnly = proposal.blockedReasons.length > 0;
+  return proposal;
+}
+
+/**
+ * Retrieves a stored proposal by ID.
+ */
+export function getProposal(proposalId) {
+  const proposalPath = path.join(PROPOSALS_DIR(), `proposal_${proposalId}.json`);
+  if (!fs.existsSync(proposalPath)) return null;
+  try { return JSON.parse(fs.readFileSync(proposalPath, 'utf8')); } catch { return null; }
+}
+
+/**
+ * Lists recent proposals.
+ */
+export function listProposals(limit = 20) {
+  ensureDir();
+  const dir = PROPOSALS_DIR();
+  try {
+    return fs.readdirSync(dir)
+      .filter(f => f.startsWith('proposal_') && f.endsWith('.json'))
+      .sort().reverse().slice(0, limit)
+      .map(f => {
+        try { return JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')); } catch { return null; }
+      }).filter(Boolean);
+  } catch { return []; }
 }

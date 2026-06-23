@@ -47,11 +47,7 @@ export function registerStudioMarketplaceRoutes(app) {
       }
 
       // For a real IDE this would stream a .vsix. For our hybrid engine, we send the JSON package.
-      res.json({
-        success: true,
-        message: 'Extension retrieved from PromptHouse Evo Marketplace',
-        package: pkg
-      });
+      res.json({ success: true, package: pkg });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
     }
@@ -79,7 +75,7 @@ export function registerStudioMarketplaceRoutes(app) {
 
       res.json({
         success: true,
-        message: `Extension ${result.ext.displayName} installed as an autonomous plugin`,
+        message: `Extension ${result.ext?.displayName || id} installed as an autonomous plugin`,
         pluginFile: result.pluginFile
       });
     } catch (error) {
@@ -181,6 +177,81 @@ export function registerStudioMarketplaceRoutes(app) {
         download:  'GET /api/marketplace/download/:id'
       }
     });
+  });
+  // 11. Stripe Connect Onboarding
+  router.post('/onboard', async (req, res) => {
+    try {
+      const { classifyStripeCheckoutReadiness } = await import('../services/stripe-test-checkout.js');
+      const readiness = classifyStripeCheckoutReadiness();
+      if (!readiness.ready) {
+        return res.status(400).json({ error: 'Stripe is not ready for testing.' });
+      }
+      
+      const Stripe = (await import('stripe')).default;
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+      
+      // Create a test connected account
+      const account = await stripe.accounts.create({
+        type: 'standard',
+      });
+      
+      const accountLink = await stripe.accountLinks.create({
+        account: account.id,
+        refresh_url: 'http://localhost:5173/portfolio',
+        return_url: 'http://localhost:5173/portfolio',
+        type: 'account_onboarding',
+      });
+      
+      res.json({ url: accountLink.url });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // 12. App Checkout
+  router.post('/checkout', async (req, res) => {
+    try {
+      const { projectId } = req.body;
+      const { classifyStripeCheckoutReadiness, createStripeTestCheckoutSession } = await import('../services/stripe-test-checkout.js');
+      
+      const result = await createStripeTestCheckoutSession({
+        amount: 900, // $9.00
+        currency: 'usd',
+        productName: `App: ${projectId || 'Generated Micro-app'}`,
+        ownerApproval: { granted: true } // Override for test
+      });
+      
+      if (!result.ok) {
+        return res.status(400).json({ error: result.blockedReason || 'Stripe error' });
+      }
+      res.json({ url: result.url });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // 13. Audit Checkout
+  router.post('/checkout/audit', async (req, res) => {
+    try {
+      const { classifyStripeCheckoutReadiness, createStripeTestCheckoutSession } = await import('../services/stripe-test-checkout.js');
+      
+      const result = await createStripeTestCheckoutSession({
+        amount: 1500000, // $15,000.00
+        currency: 'usd',
+        productName: 'Enterprise AI & Software Audit',
+        ownerApproval: { granted: true } // Audit implies owner approval inherently
+      });
+      
+      if (!result.ok) {
+        return res.status(400).json({ error: result.blockedReason || 'Stripe error' });
+      }
+      res.json({ url: result.url });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error.message });
+    }
   });
 
   app.use('/api/marketplace', router);

@@ -1,212 +1,167 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Eye, AlertTriangle, CheckCircle2, Clock, Link2, RefreshCw } from 'lucide-react';
-import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
-import { safeFetchBridge } from '../config/bridge-config.js';
-
-function pillTone(health) {
-  if (health === 'error') return { bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.35)', text: '#fca5a5' };
-  if (health === 'warning') return { bg: 'rgba(251,191,36,0.10)', border: 'rgba(251,191,36,0.35)', text: '#fde68a' };
-  return { bg: 'rgba(34,197,94,0.10)', border: 'rgba(34,197,94,0.35)', text: '#86efac' };
-}
+import React, { useState, useEffect } from 'react';
+import { Eye, Monitor, Smartphone, Tablet, CheckCircle, XCircle, AlertTriangle, RefreshCw } from 'lucide-react';
+import { BRIDGE_URL } from '../config/bridge-config.js';
 
 export function EvoEyesView() {
-  const [diagnostics, setDiagnostics] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [selectedId, setSelectedId] = useState(null);
+  const [audits, setAudits] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let mounted = true;
-    const poll = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await safeFetchBridge('/api/studio/diagnostics?limit=70', { signal: AbortSignal.timeout(12000) });
-        if (!res.ok) throw new Error(res.error || `Diagnostics failed`);
-        if (!mounted) return;
-        const data = res.data;
-        setDiagnostics(data);
-        if (!selectedId && data?.modules?.length) setSelectedId(data.modules[0].id);
-      } catch (e) {
-        if (!mounted) return;
-        setError(String(e.message || e));
-        setDiagnostics(null);
-      } finally {
-        if (mounted) setLoading(false);
+  const fetchAudits = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${BRIDGE_URL}/api/agi/evo-eyes/audits`);
+      if (res.ok) {
+        const data = await res.json();
+        setAudits(data.audits || []);
+        if (data.audits?.length > 0 && !selected) setSelected(data.audits[0]);
       }
-    };
+    } catch (e) {
+      console.warn('Failed to fetch Evo Eyes audits:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    poll();
-    const interval = setInterval(poll, 15000);
-    return () => { mounted = false; clearInterval(interval); };
-  }, [selectedId]);
+  useEffect(() => { fetchAudits(); }, []);
 
-  const summary = diagnostics?.summary || {};
-  const probes = diagnostics?.probes || [];
-  const modules = diagnostics?.modules || diagnostics?.graph?.nodes || [];
-
-  const selected = useMemo(() => modules.find((m) => m.id === selectedId) || null, [modules, selectedId]);
-
+  const vpIcon = (name) => {
+    if (name === 'mobile') return <Smartphone size={14} />;
+    if (name === 'tablet') return <Tablet size={14} />;
+    return <Monitor size={14} />;
+  };
 
   return (
-    <IDEPageLayout
-      title="Evo Eyes"
-      description="Live module health, runtime probes, dependency edges (bridge-backed only)."
-      icon={Eye}
-      actions={
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          {loading ? <span className="badge badge-dim">Scanning...</span> : null}
-          <button
-            className="btn btn-secondary btn-sm"
-            onClick={() => setSelectedId((v) => v)}
-            title="Refresh on next poll tick"
-          >
-            <RefreshCw size={14} /> Refresh
+    <div className="flex flex-col h-full bg-[#050008] text-[#e0d0ff] font-mono">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-purple-500/30 bg-linear-to-r from-[#0a0015] to-[#150025]">
+        <div className="flex items-center gap-3">
+          <Eye className="text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)] animate-pulse" size={28} />
+          <div>
+            <h1 className="text-xl font-black tracking-widest text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-pink-400">
+              EVO EYES v2
+            </h1>
+            <div className="text-[10px] text-purple-400/60 uppercase tracking-widest">
+              Multi-Viewport Visual Audit System
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="bg-purple-500/10 px-4 py-2 rounded-lg border border-purple-500/30 text-sm">
+            <span className="font-bold text-purple-300">{audits.length}</span> Audits
+          </div>
+          <button onClick={fetchAudits} className="bg-purple-900/30 hover:bg-purple-900/50 border border-purple-500/30 px-3 py-2 rounded-lg transition-colors">
+            <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
           </button>
         </div>
-      }
-    >
-
-      {error ? (
-        <div className="card" style={{ border: '1px solid rgba(248,113,113,0.35)', background: 'rgba(248,113,113,0.06)' }}>
-          <div className="card-body" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-            <AlertTriangle size={16} color="#f87171" />
-            <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Diagnostics offline: {error}</div>
-          </div>
-        </div>
-      ) : null}
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12, marginTop: 12 }}>
-        <div className="card">
-          <div className="card-body">
-            <div style={{ fontSize: 10, color: 'var(--text-dim)', fontWeight: 800, letterSpacing: '0.08em' }}>MODULES</div>
-            <div style={{ fontSize: 22, fontWeight: 900 }}>{summary.modules_scanned ?? '—'}</div>
-          </div>
-        </div>
-        <div className="card">
-          <div className="card-body">
-            <div style={{ fontSize: 10, color: 'var(--text-dim)', fontWeight: 800, letterSpacing: '0.08em' }}>ERRORS</div>
-            <div style={{ fontSize: 22, fontWeight: 900, color: '#f87171' }}>{summary.modules_error ?? '—'}</div>
-          </div>
-        </div>
-        <div className="card">
-          <div className="card-body">
-            <div style={{ fontSize: 10, color: 'var(--text-dim)', fontWeight: 800, letterSpacing: '0.08em' }}>WARNINGS</div>
-            <div style={{ fontSize: 22, fontWeight: 900, color: '#fbbf24' }}>{summary.modules_warning ?? '—'}</div>
-          </div>
-        </div>
-        <div className="card">
-          <div className="card-body">
-            <div style={{ fontSize: 10, color: 'var(--text-dim)', fontWeight: 800, letterSpacing: '0.08em' }}>PROBE AVG</div>
-            <div style={{ fontSize: 22, fontWeight: 900 }}>{summary.avg_probe_latency_ms ?? '—'} ms</div>
-          </div>
-        </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '380px 1fr', gap: 14, marginTop: 14 }}>
-        <div className="card">
-          <div className="card-header"><div className="card-title">Modules</div></div>
-          <div className="card-body" style={{ maxHeight: 520, overflowY: 'auto' }}>
-            {modules.length === 0 ? (
-              <div style={{ color: 'var(--text-dim)', fontSize: 12 }}>No diagnostics modules available.</div>
-            ) : modules.map((m) => {
-              const tone = pillTone(m.health);
-              return (
-                <button
-                  key={m.id}
-                  className="btn btn-secondary btn-sm"
-                  onClick={() => setSelectedId(m.id)}
-                  style={{
-                    width: '100%',
-                    justifyContent: 'space-between',
-                    marginBottom: 8,
-                    background: selectedId === m.id ? 'rgba(99,102,241,0.12)' : 'rgba(2,6,23,0.35)',
-                    border: selectedId === m.id ? '1px solid rgba(99,102,241,0.35)' : '1px solid rgba(255,255,255,0.08)',
-                    padding: '10px 10px'
-                  }}
-                >
-                  <span style={{ textAlign: 'left' }}>
-                    <div style={{ fontSize: 11, fontWeight: 900 }}>{m.label || m.id}</div>
-                    <div style={{ fontSize: 10, color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>{m.path}</div>
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left: Audit List */}
+        <div className="w-1/3 border-r border-purple-500/20 overflow-y-auto">
+          {audits.length === 0 ? (
+            <div className="p-8 text-center text-purple-400/40">
+              <Eye size={48} className="mx-auto mb-4 opacity-30" />
+              <div className="text-sm">No visual audits yet.</div>
+              <div className="text-xs mt-1">Trigger a Swarm Build to generate audits.</div>
+            </div>
+          ) : audits.map((audit, i) => (
+            <div
+              key={i}
+              onClick={() => setSelected(audit)}
+              className={`p-3 border-b border-purple-500/10 cursor-pointer transition-all ${
+                selected === audit ? 'bg-purple-500/20 border-l-2 border-l-purple-400' : 'hover:bg-purple-500/10'
+              }`}
+            >
+              <div className="flex justify-between items-center mb-1">
+                <span className={`text-xs font-bold ${audit.verdict === 'APPROVED' ? 'text-green-400' : 'text-red-400'}`}>
+                  {audit.verdict === 'APPROVED' ? <CheckCircle size={12} className="inline mr-1" /> : <XCircle size={12} className="inline mr-1" />}
+                  {audit.verdict}
+                </span>
+                <span className="text-[10px] text-purple-400/50">
+                  {new Date(audit.timestamp).toLocaleTimeString()}
+                </span>
+              </div>
+              <div className="text-[10px] text-purple-300/60 truncate">
+                Hash: {audit.componentHash}
+              </div>
+              <div className="flex gap-2 mt-1">
+                {audit.viewports?.map((vp, j) => (
+                  <span key={j} className="text-[9px] px-1.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 flex items-center gap-1">
+                    {vpIcon(vp.viewport)} {vp.resolution}
                   </span>
-                  <span style={{ fontSize: 10, padding: '4px 8px', borderRadius: 999, background: tone.bg, border: `1px solid ${tone.border}`, color: tone.text }}>
-                    {m.health}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="flex-col gap-16">
-          <div className="card">
-            <div className="card-header"><div className="card-title">Selected Module</div></div>
-            <div className="card-body" style={{ fontSize: 12 }}>
-              {!selected ? (
-                <div style={{ color: 'var(--text-dim)' }}>Select a module.</div>
-              ) : (
-                <div className="flex-col gap-8">
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10 }}>
-                    <div><div style={{ color: 'var(--text-dim)', fontSize: 10, fontWeight: 800 }}>HEALTH</div><div style={{ fontWeight: 900 }}>{selected.health}</div></div>
-                    <div><div style={{ color: 'var(--text-dim)', fontSize: 10, fontWeight: 800 }}>LINES</div><div style={{ fontWeight: 900 }}>{selected.lines}</div></div>
-                    <div><div style={{ color: 'var(--text-dim)', fontSize: 10, fontWeight: 800 }}>DEPS</div><div style={{ fontWeight: 900 }}>{(selected.dependencies || []).length}</div></div>
+        {/* Right: Audit Detail */}
+        <div className="flex-1 overflow-auto p-6">
+          {!selected ? (
+            <div className="flex items-center justify-center h-full text-purple-400/30 flex-col gap-4">
+              <Eye size={64} className="opacity-30" />
+              <div className="text-sm tracking-widest uppercase">Select an audit</div>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-purple-300">
+                  Audit: <span className="text-purple-100">{selected.componentHash}</span>
+                </h2>
+                <span className="text-xs text-purple-400/50">{selected.timestamp}</span>
+              </div>
+
+              {/* Viewport Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {selected.viewports?.map((vp, i) => (
+                  <div key={i} className="border border-purple-500/20 rounded-lg bg-[#0a0015] p-4">
+                    <div className="flex items-center gap-2 mb-3 text-sm font-bold text-purple-300">
+                      {vpIcon(vp.viewport)}
+                      <span className="uppercase">{vp.viewport}</span>
+                      <span className="text-purple-400/50 text-xs ml-auto">{vp.resolution}</span>
+                    </div>
+                    <div className="space-y-2 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-purple-400/70">Overlaps</span>
+                        <span className={vp.overlaps > 0 ? 'text-red-400 font-bold' : 'text-green-400'}>
+                          {vp.overlaps > 0 ? `${vp.overlaps} COLLISION(S)` : 'CLEAR'}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-purple-400/70">Regression</span>
+                        <span className={vp.regression ? 'text-yellow-400 font-bold' : 'text-green-400'}>
+                          {vp.regression ? 'DETECTED' : 'STABLE'}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-purple-400/70">A11y Issues</span>
+                        <span className={vp.a11yViolations > 0 ? 'text-yellow-400' : 'text-green-400'}>
+                          {vp.a11yViolations}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-purple-400/70">VLM Verdict</span>
+                        <span className={`font-bold ${vp.vlmVerdict?.includes('APPROVED') ? 'text-green-400' : vp.vlmVerdict?.includes('REJECTION') ? 'text-red-400' : 'text-gray-500'}`}>
+                          {vp.vlmVerdict?.includes('APPROVED') ? 'APPROVED' : vp.vlmVerdict?.includes('REJECTION') ? 'REJECTED' : 'SKIPPED'}
+                        </span>
+                      </div>
+                    </div>
                   </div>
+                ))}
+              </div>
 
-                  {(selected.issues || []).length ? (
-                    <div>
-                      <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.08em', color: 'var(--text-dim)' }}>ISSUES</div>
-                      <div style={{ marginTop: 8 }}>
-                        {(selected.issues || []).slice(0, 10).map((iss, idx) => (
-                          <div key={idx} style={{ padding: 10, borderRadius: 10, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(2,6,23,0.35)', marginBottom: 8 }}>
-                            <div style={{ fontWeight: 900 }}>{iss.code}</div>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dim)' }}>{iss.message}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', color: '#86efac' }}>
-                      <CheckCircle2 size={16} /> No issues detected for this module.
-                    </div>
-                  )}
+              {/* Prompt Context */}
+              {selected.prompt && (
+                <div className="border border-purple-500/20 rounded-lg bg-[#0a0015] p-4">
+                  <div className="text-xs text-purple-400/60 uppercase tracking-widest mb-2">Agent Prompt Context</div>
+                  <div className="text-sm text-purple-200">{selected.prompt}</div>
                 </div>
               )}
             </div>
-          </div>
-
-          <div className="card">
-            <div className="card-header"><div className="card-title">Runtime Probes</div></div>
-            <div className="card-body" style={{ fontSize: 12 }}>
-              {probes.length === 0 ? (
-                <div style={{ color: 'var(--text-dim)' }}>No probes available.</div>
-              ) : (
-                <div className="flex-col gap-8">
-                  {probes.map((p) => (
-                    <div key={p.id || p.path} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 10, borderRadius: 10, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(2,6,23,0.35)' }}>
-                      <div>
-                        <div style={{ fontWeight: 900, display: 'flex', gap: 8, alignItems: 'center' }}>
-                          <Link2 size={14} /> {p.path}
-                        </div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dim)' }}>status={p.status ?? '—'} latency={p.latency_ms ?? '—'}ms</div>
-                      </div>
-                      <span className="badge" style={{ background: p.ok ? 'rgba(34,197,94,0.10)' : 'rgba(248,113,113,0.12)', border: `1px solid ${p.ok ? 'rgba(34,197,94,0.35)' : 'rgba(248,113,113,0.35)'}`, color: p.ok ? '#86efac' : '#fca5a5' }}>
-                        {p.ok ? 'OK' : 'FAIL'}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: 10, alignItems: 'center', color: 'var(--text-dim)', fontSize: 11 }}>
-            <Clock size={14} /> Polls every 15s. No synthetic values.
-          </div>
+          )}
         </div>
       </div>
-    </IDEPageLayout>
+    </div>
   );
 }
-
-export default EvoEyesView;
-

@@ -141,15 +141,25 @@ export function getOmnibotMobileContract() {
   };
 }
 
-export function getOmnibotMobileStatus({ rootDir = process.cwd(), limit = 25 } = {}) {
+export function getOmnibotMobileStatus({ rootDir = process.cwd(), limit = 25, wsBridge = null } = {}) {
   const paths = mobilePaths({ rootDir });
   const sessions = readJsonl(paths.sessions, limit);
   const autonomousHeartbeat = path.join(rootDir, 'src', 'core', 'evo-llm', 'AutonomousExecutionHeartbeat.js');
+  
+  const connectedDevices = wsBridge ? wsBridge.getConnectedDevices().length : 0;
+  let truthState = 'OMNIBOT_MOBILE_WAITING_FOR_SESSION';
+  if (connectedDevices > 0) {
+    truthState = 'OMNIBOT_MOBILE_CONNECTED';
+  } else if (sessions.length > 0) {
+    truthState = 'OMNIBOT_MOBILE_READY_OFFLINE';
+  }
+
   const status = {
     success: true,
     version: VERSION,
-    truthState: sessions.length ? 'OMNIBOT_MOBILE_READY' : 'OMNIBOT_MOBILE_WAITING_FOR_SESSION',
-    channels: MOBILE_CHANNELS,
+    truthState,
+    connectedDevices,
+    channels: ['wss_realtime', ...MOBILE_CHANNELS],
     safeIntents: ALLOWED_SAFE_INTENTS,
     proofRequired: REQUIRED_MOBILE_PROOF,
     autonomousExecution: {

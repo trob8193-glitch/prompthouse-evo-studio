@@ -39,7 +39,7 @@ export function PreviewAccessDecisionPanel() {
 
   if (error) {
     return (
-      <div className="border border-red-800 bg-red-950 p-4 rounded-md mb-4 text-sm text-red-200">
+      <div className="border-red-800 bg-red-950 p-4 rounded-md mb-4 text-sm text-red-200">
         Error loading Preview Access Status: {error}
       </div>
     );
@@ -47,21 +47,21 @@ export function PreviewAccessDecisionPanel() {
 
   if (!status) {
     return (
-      <div className="border border-gray-800 bg-gray-900 p-4 rounded-md mb-4 text-sm text-gray-400">
+      <div className="border-gray-800 bg-gray-900 p-4 rounded-md mb-4 text-sm text-gray-400">
         Loading Preview Access Status...
       </div>
     );
   }
 
   return (
-    <div className="border border-indigo-800 bg-indigo-950/30 p-4 rounded-md mb-4">
+    <div className="border-indigo-800 bg-indigo-950/30 p-4 rounded-md mb-4">
       <div className="flex justify-between items-start mb-3">
         <h3 className="text-indigo-300 font-semibold text-sm">Preview Access Decision</h3>
         <TruthBadge state={status.accessMode} />
       </div>
 
       <div className="space-y-3 text-sm">
-        <div className="bg-black/40 p-3 rounded border border-indigo-900/50 font-mono text-xs">
+        <div className="bg-black/40 p-3 rounded border-indigo-900/50 font-mono text-xs">
           <div className="grid grid-cols-[120px_1fr] gap-2">
             <div className="text-gray-500">Preview URL:</div>
             <div className="text-indigo-300 break-all">{status.deploymentUrl || 'Not available'}</div>
@@ -71,15 +71,15 @@ export function PreviewAccessDecisionPanel() {
         </div>
 
         {status.accessMode === 'AUTH_PROTECTED' && (
-          <div className="bg-indigo-900/40 p-3 rounded border border-indigo-800/60 text-indigo-200 text-xs">
+          <div className="bg-indigo-900/40 p-3 rounded border-indigo-800/60 text-indigo-200 text-xs">
             <strong>Note:</strong> The HTTP 401 response is caused by Vercel Authentication. This is a valid security gate and not an application failure.
           </div>
         )}
 
         <div className="space-y-2 mt-4">
-          <div className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-2">Recommended Options</div>
+          <div className="text-xs font-semibold text-neon-cyan uppercase tracking-wider mb-2">Recommended Options</div>
           {status.options?.map((opt) => (
-            <div key={opt.id} className={`p-2 rounded border ${opt.recommended ? 'bg-indigo-900/30 border-indigo-700/50' : 'bg-gray-900/50 border-gray-800'} flex flex-col gap-1`}>
+            <div key={opt.id} className={`p-2 rounded border ${opt.recommended ? 'bg-indigo-900/30 border-indigo-700/50' : 'bg-gray-900/50 border-gray-800'} flex-col gap-1`}>
               <div className="flex items-center gap-2">
                 <span className={`w-2 h-2 rounded-full ${opt.recommended ? 'bg-indigo-500' : 'bg-gray-600'}`}></span>
                 <span className="font-semibold text-gray-200 text-xs">{opt.title}</span>

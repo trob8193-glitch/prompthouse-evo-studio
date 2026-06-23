@@ -25,7 +25,7 @@ const initialNodes = [
   {
     id: 'user',
     type: 'input',
-    data: { label: <div className="flex items-center gap-2"><Database className="w-5 h-5 text-blue-400"/> User Input Prompt</div> },
+    data: { label: <div className="flex items-center gap-2"><Database className="w-5 h-5 text-neon-cyan"/> User Input Prompt</div> },
     position: { x: 50, y: 200 },
     style: nodeStyle
   },
@@ -77,7 +77,7 @@ export default function VisualPhysicsEditor() {
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
   return (
-    <div className="flex flex-col h-full bg-[#09090b]">
+    <div className="flex-col gap-4 h-full bg-[#09090b]">
       <div className="p-6 border-b border-gray-800">
         <h1 className="text-3xl font-black text-white">Visual Physics Editor</h1>
         <p className="text-gray-400 mt-2">Node graph for configured studio execution paths and provider-gated rails.</p>
@@ -101,7 +101,7 @@ export default function VisualPhysicsEditor() {
               return '#3f3f46';
             }}
             maskColor="rgba(0,0,0,0.8)"
-            className="bg-black border border-gray-800"
+            className="bg-black border-gray-800"
           />
           <Background variant="dots" gap={24} size={1} color="#3f3f46" />
         </ReactFlow>

@@ -31,7 +31,7 @@ function getAllFiles(dir, ext = '.jsx', fileList = []) {
 
 // 1. Extract backend routes
 const backendRoutes = new Set();
-const backendFiles = [PROMPTBRIDGE_SERVER, ...getAllFiles(GENERATED_APIS_DIR, '.js'), ...getAllFiles(path.join(rootDir, 'server', 'routes'), '.js')];
+const backendFiles = [PROMPTBRIDGE_SERVER, path.join(rootDir, 'agent-integration.js'), ...getAllFiles(GENERATED_APIS_DIR, '.js'), ...getAllFiles(path.join(rootDir, 'server', 'routes'), '.js')];
 
 backendFiles.forEach((file) => {
   if (!fs.existsSync(file)) return;
