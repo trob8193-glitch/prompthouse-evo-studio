@@ -4,6 +4,7 @@
 
 import { TRUTH_STATES } from '../services/truth-labels.js';
 import { getProviderGateStatus } from '../services/provider-gates.js';
+import { buildAgiHealthPulse } from '../services/agi-health-aggregator.js';
 
 export function registerHealthRoutes(app, { routeRegistry }) {
   app.get('/status', (req, res) => {
@@ -32,5 +33,14 @@ export function registerHealthRoutes(app, { routeRegistry }) {
       truthState: TRUTH_STATES.VERIFIED,
       timestamp: new Date().toISOString(),
     });
+  });
+
+  app.get('/api/agi/health', (req, res) => {
+    try {
+      const pulse = buildAgiHealthPulse(process.cwd());
+      res.json(pulse);
+    } catch (e) {
+      res.status(500).json({ error: 'Failed to build AGI health pulse', message: e.message });
+    }
   });
 }
