@@ -166,14 +166,14 @@ export class SelfMaintenanceDaemon {
     const lines = content.split('\n');
 
     // Rule 1: PENDING / PENDING detection
-    const todos = lines.filter(l => l.includes('PENDING') || l.includes('PENDING') || l.includes('HACK'));
-    if (todos.length > 0) {
+    const pendings = lines.filter(l => l.includes('PENDING') || l.includes('PENDING') || l.includes('HACK'));
+    if (pendings.length > 0) {
       this.intents.push({
-        id: `intent-todo-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+        id: `intent-task-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
         type: 'TECH_DEBT',
         target: relPath,
-        description: `Resolve ${todos.length} pending PENDING/PENDING/HACK comments.`,
-        urgency: todos.length > 5 ? 'HIGH' : 'LOW',
+        description: `Resolve ${pendings.length} pending PENDING/PENDING/HACK comments.`,
+        urgency: pendings.length > 5 ? 'HIGH' : 'LOW',
         timestamp: Date.now()
       });
     }

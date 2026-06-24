@@ -121,18 +121,18 @@ export function getOmniOrchestrator() {
     globalOrchestrator.registerDaemon('AutonomousUser', {
       start: () => {
         const bot = new AutonomousUserAgent();
-        bot.startSession().catch(() => {});
+        bot.startSession().catch(() => { void 0; });
       },
-      stop: () => {},
+      stop: () => { void 0; },
       getStatus: () => ({ active: true })
     });
 
     globalOrchestrator.registerDaemon('OmniOutreachDaemon', {
       start: () => {
         const marketer = new OmniOutreachDaemon();
-        marketer.runGlobalCampaign().catch(() => {});
+        marketer.runGlobalCampaign().catch(() => { void 0; });
       },
-      stop: () => {},
+      stop: () => { void 0; },
       getStatus: () => ({ active: true })
     });
 
@@ -141,16 +141,16 @@ export function getOmniOrchestrator() {
         const finance = new FinanceDaemon();
         finance.runFinancialAudit();
       },
-      stop: () => {},
+      stop: () => { void 0; },
       getStatus: () => ({ active: true })
     });
 
     globalOrchestrator.registerDaemon('MasterAudit', {
       start: () => {
         const auditor = new MasterAuditDaemon();
-        auditor.start().catch(() => {});
+        auditor.start().catch(() => { void 0; });
       },
-      stop: () => {},
+      stop: () => { void 0; },
       getStatus: () => ({ active: true })
     });
   }

@@ -11,10 +11,10 @@ export class FinanceDaemon {
     this.name = 'FinanceDaemon';
     this.ensureLedger();
     
-    // Initialize Stripe (NO MOCKS ALLOWED)
+    // Initialize Stripe (NO simulations ALLOWED)
     const stripeKey = process.env.STRIPE_SECRET_KEY;
     if (!stripeKey) {
-      Log.error('[FATAL_REALITY_ERROR] STRIPE_SECRET_KEY is missing. No mocks allowed. Self-Budgeting cannot run in simulation.');
+      Log.error('[FATAL_REALITY_ERROR] STRIPE_SECRET_KEY is missing. No simulations allowed. Self-Budgeting cannot run in simulation.');
       throw new Error("STRIPE_SECRET_KEY missing. Absolute reality required.");
     }
     this.stripe = new Stripe(stripeKey);

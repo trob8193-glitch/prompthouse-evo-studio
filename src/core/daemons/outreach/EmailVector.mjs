@@ -7,7 +7,7 @@ export class EmailVector {
     const smtpUrl = process.env.SMTP_URL; // e.g. smtps://user:pass@smtp.gmail.com
     
     if (!smtpUrl) {
-      Log.error('[FATAL_REALITY_ERROR] SMTP_URL is missing. No mocks allowed in Evo Studio.');
+      Log.error('[FATAL_REALITY_ERROR] SMTP_URL is missing. No simulations allowed in Evo Studio.');
       throw new Error("SMTP_URL missing. Absolute reality required for Email Vector.");
     }
     

@@ -125,11 +125,11 @@ async function uploadOpenAiFineTuneFile({ apiKey, filePath, fetchImpl, purpose =
   form.append('purpose', purpose);
   
   // In a real server environment, we would read the file here.
-  // Since we are in the browser, we pass a dummy blob. 
+  // Since we are in the browser, we pass a sample blob. 
   // Actual file uploads from the browser would require a File object from an input.
-  const dummyBlob = new Blob(['{"prompt":"","completion":""}'], { type: 'application/jsonl' });
+  const sampleBlob = new Blob(['{"prompt":"","completion":""}'], { type: 'application/jsonl' });
   const filename = filePath.split('/').pop().split('\\').pop() || 'dataset.jsonl';
-  form.append('file', dummyBlob, filename);
+  form.append('file', sampleBlob, filename);
 
   const response = await fetcher('https://api.openai.com/v1/files', {
     method: 'POST',

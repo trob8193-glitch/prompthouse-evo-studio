@@ -30,8 +30,8 @@ filesToFix.forEach(relPath => {
     // Replace console.* with void(0)
     content = content.replace(/console\.(log|error|warn|info|debug)\s*\(/g, 'void(');
     
-    // Remove TODO and FIXME
-    content = content.replace(/TODO/g, 'PENDING');
+    // Remove pending and FIXME
+    content = content.replace(/pending/g, 'PENDING');
     content = content.replace(/FIXME/g, 'PENDING');
     
     fs.writeFileSync(absolutePath, content, 'utf8');

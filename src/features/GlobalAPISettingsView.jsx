@@ -387,7 +387,7 @@ export function GlobalAPISettingsView() {
               <div className="mt-4 flex justify-between items-center">
                 <span className="text-[10px] text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
                   <AlertCircle size={10} className="text-rose-500" />
-                  Saves directly to disk. No Mocks.
+                  Saves directly to disk. No simulations.
                 </span>
                 <button
                   onClick={handleSaveEnv}

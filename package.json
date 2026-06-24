@@ -136,6 +136,7 @@
     "audit:platform:daemon": "node scripts/audit-platform-daemon.mjs",
     "evolve:status": "node scripts/self_evolution_cycle.mjs --status",
     "evolve:proof": "node scripts/self_evolution_cycle.mjs --proof",
+    "evolve:propose": "node scripts/self_evolution_cycle.mjs",
     "self:evolve": "node scripts/self_evolution_cycle.mjs",
     "self:invent": "node scripts/self-invention-daemon.mjs",
     "self:build": "npm run build && npm run platform:audit",
@@ -163,7 +164,8 @@
     "audit:full": "node scripts/audit-full-daemon.mjs --once",
     "audit:full:quick": "node scripts/audit-full-daemon.mjs --once --quick",
     "audit:full:status": "node scripts/audit-full-daemon.mjs --status",
-    "audit:daemon": "node scripts/audit-full-daemon.mjs"
+    "audit:daemon": "node scripts/audit-full-daemon.mjs",
+    "crucible": "node scripts/crucible-full-sweep.mjs"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8",

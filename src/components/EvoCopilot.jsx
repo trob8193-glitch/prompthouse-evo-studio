@@ -413,7 +413,7 @@ The frontend will intercept and execute this automatically.`;
   const handleQuickAction = (action) => {
     let prompt = '';
     switch(action) {
-      case 'debt': prompt = 'Scan the current view for technical debt, PENDING markers, mocks, stubs, and propose a concrete NightForge patch to eliminate them.'; break;
+      case 'debt': prompt = 'Scan the current view for technical debt, PENDING markers, simulations, scaffolds, and propose a concrete NightForge patch to eliminate them.'; break;
       case 'singularity': prompt = 'TRIGGER FULL SINGULARITY CYCLE: Analyze the entire codebase, identify evolution opportunities, and propose autonomous improvements across all modules.'; break;
       case 'deploy': prompt = 'Prepare the current project state for sovereign deployment. Run all pre-flight checks, verify build integrity, and generate the deploy manifest.'; break;
       case 'evolve': prompt = 'Evolve this module: Improve architecture, optimize performance, enhance error handling, and upgrade the UI aesthetics to next-gen cyberpunk standards.'; break;
@@ -632,7 +632,7 @@ The frontend will intercept and execute this automatically.`;
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={isRecording ? "Listening..." : `Command ${currentBot.name}...`}
-              className="flex-1 bg-black/40 border border-gray-700/50 text-white placeholder-gray-500 px-4 py-3 outline-none focus:border-indigo-500/50 transition-colors"
+              className="flex-1 bg-black/40 border border-gray-700/50 text-white prompt_template-gray-500 px-4 py-3 outline-none focus:border-indigo-500/50 transition-colors"
               style={{ ...layoutDef.bubbleStyle, borderRadius: layoutDef.bubbleStyle.borderRadius || '12px' }}
               disabled={loading}
             />

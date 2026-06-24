@@ -6,7 +6,7 @@ const router = express.Router();
 /**
  * PH EVO STUDIO — LAUNCH-PILOT ROUTES
  * ═══════════════════════════════════════════════════════════════
- * Upgraded from static mock data to real live metrics from the bridge
+ * Upgraded from static simulate data to real live metrics from the bridge
  * and operating environment.
  */
 

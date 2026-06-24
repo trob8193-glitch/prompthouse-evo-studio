@@ -94,6 +94,12 @@
 
   /* ── HARDENING FIXES ── */
   --hologram-color: #00f0ff;
+  --hologram-color-20: rgba(0, 240, 255, 0.2);
+  --hologram-color-40: rgba(0, 240, 255, 0.4);
+  --hologram-color-60: rgba(0, 240, 255, 0.6);
+  --hologram-color-80: rgba(0, 240, 255, 0.8);
+  --zap-color-1: rgba(255, 255, 255, 0.8);
+  --zap-color-2: rgba(255, 170, 0, 0.8);
   --bg-glass-light: rgba(255, 255, 255, 0.1);
   --glow-c1: #00f0ff;
   --glow-c2: #8a2be2;

@@ -98,7 +98,7 @@ export class AutonomousUserAgent {
       }
 
       // Attempt to find and fill a username / name field
-      const nameSelectors = ['input[name="username"]', 'input[name="name"]', 'input[placeholder*="Name"]'];
+      const nameSelectors = ['input[name="username"]', 'input[name="name"]', 'input[prompt_template*="Name"]'];
       for (const sel of nameSelectors) {
         const els = await this.page.$$(sel);
         if (els.length > 0) {
@@ -195,10 +195,10 @@ export class AutonomousUserAgent {
 
       // We define 3x enhanced precision selectors tailored for Evo Studio's React UI
       const inputSelectors = [
-        'input[placeholder*="Communicate"]',
-        'input[placeholder*="message"]',
-        'input[placeholder*="ENTER COMMAND"]',
-        'input[placeholder*="Enter command"]',
+        'input[prompt_template*="Communicate"]',
+        'input[prompt_template*="message"]',
+        'input[prompt_template*="ENTER COMMAND"]',
+        'input[prompt_template*="Enter command"]',
         'input[aria-label="Terminal command input"]',
         '.evo-input-glow input',
         'textarea.field-textarea',

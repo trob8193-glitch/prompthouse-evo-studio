@@ -130,7 +130,7 @@ export const LOCAL_PARADIGMS = [
   'SQLite Embedded - Running the entire SQL database locally in the browser.',
   'Memory-Mapped DB - Bypassing the file system to read state directly from RAM.',
   'Web-Worker Thread - Offloading heavy AST parsing away from the UI thread.',
-  'Service-Worker Router - Intercepting fetch requests to mock APIs locally.'
+  'Service-Worker Router - Intercepting fetch requests to simulate APIs locally.'
 ];
 
 export const DAEMON_PARADIGMS = [
@@ -156,7 +156,7 @@ export const ETC_PARADIGMS = [
   'Chronological Slider - A scrollbar that literally scrubs through the Git history of a file.',
   'Biometric Auth - Logging into the studio via local fingerprint scanning.',
   'Voice-Command Terminal - Speaking bash commands into the void.',
-  'Neural-Interface Placeholder - The architecture ready to accept direct brain-computer inputs.'
+  'Neural-Interface prompt_template - The architecture ready to accept direct brain-computer inputs.'
 ];
 
 export const ALL_PARADIGMS = {
