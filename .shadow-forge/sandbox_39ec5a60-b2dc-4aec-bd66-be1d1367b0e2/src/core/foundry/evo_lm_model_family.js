@@ -1,0 +1,96 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+import { Log } from '../autonomy/SovereignLogger.js';
+import { BRIDGE_URL } from '../../config/bridge-config.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const MODEL_DEFINITIONS_PATH = path.join(__dirname, 'model_definitions.json');
+const LOCAL_BRIDGE_URL = BRIDGE_URL + '/models';
+const IS_TEST_ENV = process.env.NODE_ENV === 'test' || Boolean(process.env.VITEST);
+
+class EvoLMModelFamily {
+    constructor() {
+        this.models = this.loadModels();
+    }
+
+    loadModels() {
+        if (fs.existsSync(MODEL_DEFINITIONS_PATH)) {
+            const data = fs.readFileSync(MODEL_DEFINITIONS_PATH, 'utf-8');
+            return JSON.parse(data);
+        }
+        return [];
+    }
+
+    saveModels() {
+        if (IS_TEST_ENV) return;
+        fs.writeFileSync(MODEL_DEFINITIONS_PATH, JSON.stringify(this.models, null, 2));
+    }
+
+    async fetchModelsFromServer() {
+        try {
+            const response = await fetch(LOCAL_BRIDGE_URL);
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            this.models = Array.isArray(data) ? data : data.models || [];
+            this.saveModels();
+        } catch (error) {
+            Log.error('Failed to fetch models from server:', error);
+        }
+    }
+
+    addModel(modelDefinition) {
+        this.models.push(modelDefinition);
+        this.saveModels();
+    }
+
+    getModelById(modelId) {
+        return this.models.find(model => model.id === modelId);
+    }
+
+    updateModel(modelId, updatedDefinition) {
+        const index = this.models.findIndex(model => model.id === modelId);
+        if (index !== -1) {
+            this.models[index] = { ...this.models[index], ...updatedDefinition };
+            this.saveModels();
+        } else {
+            throw new Error(`Model with ID ${modelId} not found`);
+        }
+    }
+
+    deleteModel(modelId) {
+        this.models = this.models.filter(model => model.id !== modelId);
+        this.saveModels();
+    }
+
+    getAllModels() {
+        return this.models;
+    }
+}
+
+const modelFamily = new EvoLMModelFamily();
+
+export const addModel = (modelDefinition) => {
+    modelFamily.addModel(modelDefinition);
+};
+
+export const getModelById = (modelId) => {
+    return modelFamily.getModelById(modelId);
+};
+
+export const updateModel = (modelId, updatedDefinition) => {
+    return modelFamily.updateModel(modelId, updatedDefinition);
+};
+
+export const deleteModel = (modelId) => {
+    modelFamily.deleteModel(modelId);
+};
+
+export const getAllModels = () => {
+    return modelFamily.getAllModels();
+};
+
+export const fetchModelsFromServer = async () => {
+    await modelFamily.fetchModelsFromServer();
+};

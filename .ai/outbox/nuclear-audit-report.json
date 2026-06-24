@@ -1,19 +1,13 @@
 {
-  "generatedAt": "2026-06-16T04:58:01.944Z",
+  "generatedAt": "2026-06-24T10:33:24.271Z",
   "bridgeBase": "http://127.0.0.1:3001",
   "truthProbe": {
     "success": true,
     "truthState": "TRUTH_PROBE_READY",
     "results": {
-      "averageScore": 94,
+      "averageScore": 95,
       "moduleCount": 15,
       "blockers": [
-        {
-          "moduleId": "self-evolution",
-          "moduleName": "Self-Evolution Engine",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
         {
           "moduleId": "proof-console",
           "moduleName": "Proof Console",
@@ -23,12 +17,6 @@
         {
           "moduleId": "forge-labs",
           "moduleName": "Forge Labs",
-          "key": "noBannedLanguage",
-          "label": "No fake/dummy/pending language"
-        },
-        {
-          "moduleId": "mobile-controller",
-          "moduleName": "Mobile Controller Hub",
           "key": "noBannedLanguage",
           "label": "No fake/dummy/pending language"
         },
@@ -87,14 +75,8 @@
     "success": true,
     "truthState": "STUDIO_SCAN_CLEAR",
     "total_modules": 15,
-    "averageScore": 94,
+    "averageScore": 95,
     "blockers": [
-      {
-        "moduleId": "self-evolution",
-        "moduleName": "Self-Evolution Engine",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
       {
         "moduleId": "proof-console",
         "moduleName": "Proof Console",
@@ -104,12 +86,6 @@
       {
         "moduleId": "forge-labs",
         "moduleName": "Forge Labs",
-        "key": "noBannedLanguage",
-        "label": "No fake/dummy/pending language"
-      },
-      {
-        "moduleId": "mobile-controller",
-        "moduleName": "Mobile Controller Hub",
         "key": "noBannedLanguage",
         "label": "No fake/dummy/pending language"
       },
@@ -163,10 +139,10 @@
       }
     ],
     "routes": {
-      "total": 227,
+      "total": 199,
       "unresolved": []
     },
-    "checkedAt": "2026-06-16T04:58:27.398Z"
+    "checkedAt": "2026-06-24T10:33:27.215Z"
   },
   "gates": [
     {
@@ -175,14 +151,14 @@
       "required": true,
       "status": "FAILED",
       "error": "Command failed: node scripts/audit-route-drift.mjs",
-      "output": "\"method\": \"POST\",\n      \"path\": \"/api/training/pipeline/approve\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/training/pipeline/plan\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/training/pipeline/promote\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/training/pipeline/rollback\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/training/pipeline/run\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/training/pipeline/status\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"DELETE\",\n      \"path\": \"/api/training/queue/completed\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/training/queue/process\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/training/stats\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/tribrain/contract\",\n      \"file\": \"generated_apis/tribrain_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/tribrain/final-response\",\n      \"file\": \"generated_apis/tribrain_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/tribrain/route\",\n      \"file\": \"generated_apis/tribrain_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/tribrain/status\",\n      \"file\": \"generated_apis/tribrain_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/truth/probe\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/ui-engineer/evolve\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/vault/status\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/vault/store\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/vercel/preview-deploy\",\n      \"file\": \"server/routes/vercel-preview-deploy.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/vercel/readiness\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/vercel/status\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/witness/telemetry\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/witness/telemetry\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/healthz\",\n      \"file\": \"promptbridge-server.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/status\",\n      \"file\": \"promptbridge-server.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/status\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/v1/chat/completions\",\n      \"file\": \"promptbridge-server.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"wsBridge\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    }\n  ],\n  \"unresolvedClientRoutes\": [\n    {\n      \"route\": \"/api/evolution/queue\",\n      \"files\": [\n        \"src\\\\features\\\\SelfEvolutionDashboard.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/evolution/queue/:param/:param\",\n      \"files\": [\n        \"src\\\\features\\\\SelfEvolutionDashboard.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/evolution/runs\",\n      \"files\": [\n        \"src\\\\features\\\\SelfEvolutionDashboard.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/evolution/status\",\n      \"files\": [\n        \"src\\\\features\\\\SelfEvolutionDashboard.jsx\"\n      ]\n    }\n  ],\n  \"hardcodedStoreSidecar\": false\n}\n"
+      "output": "hod\": \"POST\",\n      \"path\": \"/api/tribrain/final-response\",\n      \"file\": \"generated_apis/tribrain_routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/tribrain/route\",\n      \"file\": \"generated_apis/tribrain_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/tribrain/status\",\n      \"file\": \"generated_apis/tribrain_routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/truth/probe\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/api/vercel/preview-deploy\",\n      \"file\": \"server/routes/vercel-preview-deploy.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/vercel/readiness\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/api/vercel/status\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/healthz\",\n      \"file\": \"promptbridge-server.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/status\",\n      \"file\": \"promptbridge-server.js\"\n    },\n    {\n      \"method\": \"GET\",\n      \"path\": \"/status\",\n      \"file\": \"server/routes/studio-core.routes.js\"\n    },\n    {\n      \"method\": \"POST\",\n      \"path\": \"/v1/chat/completions\",\n      \"file\": \"promptbridge-server.js\"\n    }\n  ],\n  \"unresolvedClientRoutes\": [\n    {\n      \"route\": \"/api/audit/nuclear-truth\",\n      \"files\": [\n        \"src\\\\features\\\\RareCapabilities.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/config/env\",\n      \"files\": [\n        \"src\\\\features\\\\GlobalAPISettingsView.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/deploy/vercel\",\n      \"files\": [\n        \"src\\\\components\\\\OwnerApprovalRail.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/doctor/heal\",\n      \"files\": [\n        \"src\\\\features\\\\witnessStore.js\"\n      ]\n    },\n    {\n      \"route\": \"/api/doctor/scan\",\n      \"files\": [\n        \"src\\\\features\\\\witnessStore.js\"\n      ]\n    },\n    {\n      \"route\": \"/api/engineer/evolve\",\n      \"files\": [\n        \"src\\\\features\\\\witnessStore.js\"\n      ]\n    },\n    {\n      \"route\": \"/api/evo-wifi/scan\",\n      \"files\": [\n        \"src\\\\features\\\\ConnectionManager.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/evolution/log-realization\",\n      \"files\": [\n        \"src\\\\features\\\\witnessStore.js\"\n      ]\n    },\n    {\n      \"route\": \"/api/evolution/queue\",\n      \"files\": [\n        \"src\\\\features\\\\SelfEvolutionDashboard.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/evolution/queue/:param/:param\",\n      \"files\": [\n        \"src\\\\features\\\\SelfEvolutionDashboard.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/evolution/runs\",\n      \"files\": [\n        \"src\\\\features\\\\SelfEvolutionDashboard.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/evolution/status\",\n      \"files\": [\n        \"src\\\\features\\\\SelfEvolutionDashboard.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/grading/prompt\",\n      \"files\": [\n        \"src\\\\studio-grading-release-views.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/grading/release-gates\",\n      \"files\": [\n        \"src\\\\studio-grading-release-views.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/omnibond/probe\",\n      \"files\": [\n        \"src\\\\features\\\\OmniBondCommandCenter.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/singularity/status\",\n      \"files\": [\n        \"src\\\\features\\\\SingularityEvolutionNexus.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/stripe/health\",\n      \"files\": [\n        \"src\\\\features\\\\OmniMarketplaceNexus.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/ui-engineer/evolve\",\n      \"files\": [\n        \"src\\\\features\\\\witnessStore.js\"\n      ]\n    },\n    {\n      \"route\": \"/api/vault/status\",\n      \"files\": [\n        \"src\\\\features\\\\FirstRunWizard.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/vault/store\",\n      \"files\": [\n        \"src\\\\features\\\\FirstRunWizard.jsx\"\n      ]\n    },\n    {\n      \"route\": \"/api/witness/telemetry\",\n      \"files\": [\n        \"src\\\\features\\\\witnessStore.js\"\n      ]\n    }\n  ],\n  \"hardcodedStoreSidecar\": false\n}\n"
     },
     {
       "label": "dead surface audit",
       "command": "node scripts/dead-surface-audit.mjs",
       "required": true,
       "status": "PASSED",
-      "output": "{\n  \"success\": true,\n  \"truthState\": \"DEAD_SURFACES_CLEAR\",\n  \"scannedFiles\": 528,\n  \"astGraphSize\": 528,\n  \"violations\": []\n}\n"
+      "output": "{\n  \"success\": true,\n  \"truthState\": \"DEAD_SURFACES_CLEAR\",\n  \"scannedFiles\": 557,\n  \"astGraphSize\": 557,\n  \"violations\": []\n}\n"
     },
     {
       "label": "enterprise static audit",
@@ -190,14 +166,14 @@
       "required": true,
       "status": "FAILED",
       "error": "Command failed: node scripts/enterprise_audit.mjs",
-      "output": "[INFO] [Enterprise Audit] Starting full project scan...\n[INFO] [Enterprise Audit] Found 695 files to audit.\n[INFO] \n[INFO] ENTERPRISE AUDIT REPORT\n[INFO] Total Files: 695\n[INFO] Passed: 694\n[INFO] Failed: 1\n[INFO] Average Score: 99.98/100\n[INFO] \n[INFO] Failures:\n[INFO] - scripts\\lead-generation-daemon.mjs\n[INFO]   Syntax check failed: C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\scripts\\lead-generation-daemon.mjs:138\r\n[INFO] Detailed report saved to .prompthouse-data/enterprise_audit_report.json\n"
+      "output": "[INFO] [Enterprise Audit] Starting full project scan...\n[INFO] [Enterprise Audit] Found 736 files to audit.\n[INFO] \n[INFO] ENTERPRISE AUDIT REPORT\n[INFO] Total Files: 736\n[INFO] Passed: 718\n[INFO] Failed: 18\n[INFO] Average Score: 99.69/100\n[INFO] \n[INFO] Failures:\n[INFO] - src\\agent-bridge-views.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\components\\Dashboard.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\components\\EvoCopilot.jsx\n[INFO]   Contains TODO/FIXME marker.\n[INFO] - src\\components\\TimeSlipLedger.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\components\\Toolbar.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\core\\autonomy\\SelfMaintenanceDaemon.js\n[INFO]   Contains TODO/FIXME marker.\n[INFO]   Contains console logging.\n[INFO] - src\\core\\intelligence\\SovereignFirewall.js\n[INFO]   Contains console logging.\n[INFO] - src\\evo-exchange-view.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\features\\autonomous\\SovereignCommandNexus.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\features\\autonomous\\SynapticForge.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\features\\EvoLayoutDashboard.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\features\\EvoPixelatorDashboard.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\features\\EvoPulseGridView.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\features\\OmniMarketplaceNexus.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\features\\OmniscientObservabilityDeck.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\features\\SingularityEvolutionNexus.jsx\n[INFO]   Contains console logging.\n[INFO] - src\\lib\\liveforge\\liveForgeTemplates.js\n[INFO]   Contains console logging.\n[INFO] - src\\prototypes\\StudioBeta.jsx\n[INFO]   Contains console logging.\n[INFO] Detailed report saved to .prompthouse-data/enterprise_audit_report.json\n"
     },
     {
       "label": "focused route/dead tests",
       "command": "npx vitest run tests/dead-surface-hunter.test.jsx tests/dead-surface-source-audit.test.js tests/navigation-contract.test.jsx tests/route-contract.test.js tests/route-registry.test.js tests/bridge-contract-ledger.test.js tests/studio_core_routes_contract.test.js",
       "required": true,
       "status": "PASSED",
-      "output": "\n\u001b[1m\u001b[30m\u001b[46m RUN \u001b[49m\u001b[39m\u001b[22m \u001b[36mv4.1.5 \u001b[39m\u001b[90mC:/Users/Noname/Documents/Codex/2026-05-03/prompthouse-evo-studio-files-in-my\u001b[39m\n\n \u001b[32m✓\u001b[39m tests/route-contract.test.js \u001b[2m(\u001b[22m\u001b[2m3 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 104\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/route-registry.test.js \u001b[2m(\u001b[22m\u001b[2m6 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 23\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/bridge-contract-ledger.test.js \u001b[2m(\u001b[22m\u001b[2m5 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 202\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/dead-surface-source-audit.test.js \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[33m 729\u001b[2mms\u001b[22m\u001b[39m\n     \u001b[33m\u001b[2m✓\u001b[22m\u001b[39m keeps shipped source free of inert buttons and disconnected links \u001b[33m 719\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/dead-surface-hunter.test.jsx \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[33m 1340\u001b[2mms\u001b[22m\u001b[39m\n     \u001b[33m\u001b[2m✓\u001b[22m\u001b[39m detects dead buttons and disconnected links \u001b[33m 1329\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/studio_core_routes_contract.test.js \u001b[2m(\u001b[22m\u001b[2m3 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 28\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/navigation-contract.test.jsx \u001b[2m(\u001b[22m\u001b[2m6 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[33m 17577\u001b[2mms\u001b[22m\u001b[39m\n\n\u001b[2m Test Files \u001b[22m \u001b[1m\u001b[32m7 passed\u001b[39m\u001b[22m\u001b[90m (7)\u001b[39m\n\u001b[2m      Tests \u001b[22m \u001b[1m\u001b[32m25 passed\u001b[39m\u001b[22m\u001b[90m (25)\u001b[39m\n\u001b[2m   Start at \u001b[22m 00:01:04\n\u001b[2m   Duration \u001b[22m 30.57s\u001b[2m (transform 21.96s, setup 12.34s, import 16.59s, tests 20.00s, environment 63.73s)\u001b[22m\n\n"
+      "output": "\n\u001b[1m\u001b[30m\u001b[46m RUN \u001b[49m\u001b[39m\u001b[22m \u001b[36mv4.1.5 \u001b[39m\u001b[90mC:/Users/Noname/Documents/Codex/2026-05-03/prompthouse-evo-studio-files-in-my\u001b[39m\n\n \u001b[32m✓\u001b[39m tests/route-registry.test.js \u001b[2m(\u001b[22m\u001b[2m6 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 25\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/route-contract.test.js \u001b[2m(\u001b[22m\u001b[2m3 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 55\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/bridge-contract-ledger.test.js \u001b[2m(\u001b[22m\u001b[2m5 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 193\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/dead-surface-source-audit.test.js \u001b[2m(\u001b[22m\u001b[2m1 test\u001b[22m\u001b[2m)\u001b[22m\u001b[33m 460\u001b[2mms\u001b[22m\u001b[39m\n     \u001b[33m\u001b[2m✓\u001b[22m\u001b[39m keeps shipped source free of inert buttons and disconnected links \u001b[33m 451\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m✓\u001b[39m tests/studio_core_routes_contract.test.js \u001b[2m(\u001b[22m\u001b[2m3 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 27\u001b[2mms\u001b[22m\u001b[39m\n\n\u001b[2m Test Files \u001b[22m \u001b[1m\u001b[32m5 passed\u001b[39m\u001b[22m\u001b[90m (5)\u001b[39m\n\u001b[2m      Tests \u001b[22m \u001b[1m\u001b[32m18 passed\u001b[39m\u001b[22m\u001b[90m (18)\u001b[39m\n\u001b[2m   Start at \u001b[22m 05:35:11\n\u001b[2m   Duration \u001b[22m 6.14s\u001b[2m (transform 4.16s, setup 7.90s, import 3.67s, tests 759ms, environment 2ms)\u001b[22m\n\n"
     }
   ],
   "providerEvolution": {

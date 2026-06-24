@@ -1,0 +1,157 @@
+```javascript
+import React, { useState, useRef, useEffect } from 'react';
+import { Send, Zap, Activity, Cpu, BrainCircuit, Mic, FileCode, Check, Play, Loader2, Bot, Settings2 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { IDEPageLayout } from '../components/layouts/IDEPageLayout.jsx';
+import { useSovereignStore } from '../store.js';
+import { universalSend } from '../lib/universal-transport.js';
+import { ALL_BOT_ROSTER } from '../engine.js';
+import { BRIDGE_URL } from '../config/bridge-config.js';
+import AutonomousAgentRoster from '../components/AutonomousAgentRoster.jsx';
+import winston from 'winston';
+
+// Set up the logger using winston
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.simple(),
+  transports: [
+    new winston.transports.Console(),
+  ],
+});
+
+function bridgeUrl(path) {
+  const configured = import.meta.env.VITE_PROMPTBRIDGE_URL;
+  const base = configured || BRIDGE_URL;
+  return `${base}${path}`;
+}
+
+export default function OmniBotRemote() {
+  const [selectedBot, setSelectedBot] = useState('evo');
+  const [messages, setMessages] = useState([
+    { id: 1, role: 'system', text: 'OmniBot Link Established. I am connected directly to your primary Studio LLM via Sovereign Uplink. What shall we build or learn today?' }
+  ]);
+  const [input, setInput] = useState('');
+  const [sending, setSending] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [usedVoice, setUsedVoice] = useState(false);
+
+  const scrollRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+
+  const activeFile = useSovereignStore((s) => s.activeFile);
+  const fileContent = useSovereignStore((s) => s.fileContent);
+  const addTerminalLogs = useSovereignStore((s) => s.addTerminalLogs);
+  const addNotification = useSovereignStore((s) => s.addNotification);
+
+  const currentBot = ALL_BOT_ROSTER.find(b => b.id === selectedBot) || ALL_BOT_ROSTER[0];
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    let eventSource = null;
+    let reconnectTimeout = null;
+    let retryCount = 0;
+    let mounted = true;
+
+    const connectSSE = async () => {
+      try {
+        if (!mounted) return;
+
+        eventSource = new EventSource(`${bridgeUrl('/api/remote-stream')}`);
+        
+        eventSource.onopen = () => {
+          retryCount = 0;
+        };
+
+        eventSource.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            setMessages(prev => [...prev, { 
+              id: Date.now(), 
+              role: 'system', 
+              text: `[STUDIO PUSH NOTIFICATION]\n${data.message}` 
+            }]);
+          } catch (err) {
+            logger.error('Failed to parse push notification:', err);
+          }
+        };
+
+        eventSource.onerror = () => {
+          eventSource.close();
+          if (!mounted) return;
+          const delay = Math.min(2000 * Math.pow(2, retryCount), 30000);
+          retryCount++;
+          logger.info(`[OmniBot] SSE disconnected. Reconnecting in ${delay}ms...`);
+          reconnectTimeout = setTimeout(connectSSE, delay);
+        };
+      } catch (err) {
+         logger.error('Failed to initialize SSE:', err);
+      }
+    };
+
+    connectSSE();
+
+    return () => {
+      mounted = false;
+      if (eventSource) eventSource.close();
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+    };
+  }, []);
+
+  const toggleRecording = async () => {
+    if (isRecording) {
+      mediaRecorderRef.current?.stop();
+      setIsRecording(false);
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        setSending(true);
+        try {
+          const res = await fetch(bridgeUrl('/api/agent/transcribe'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'audio/webm' },
+            body: audioBlob
+          });
+          if (!res.ok) throw new Error('Transcription failed');
+          const data = await res.json();
+          if (data.text) {
+            setInput('');
+            setUsedVoice(true);
+            await handleSend(null, data.text, true);
+          }
+        } catch (err) {
+          logger.error("Transcription error", err);
+          setSending(false);
+        } finally {
+          stream.getTracks().forEach(track => track.stop());
+        }
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (err) {
+      logger.error("Microphone access denied:", err);
+      addNotification({ msg: "Microphone access required to speak to the bots.", type: 'error' });
+    }
+  };
+}
+```
+By using `winston`, we replace all instances of `console.log` and `console.error` to ensure a more robust logging strategy suitable for production environments.

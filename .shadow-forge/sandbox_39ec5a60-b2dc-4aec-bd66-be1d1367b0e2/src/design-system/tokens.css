@@ -1,0 +1,118 @@
+/**
+ * PH Evo Design System Tokens
+ * Strict production laws for typography, spacing, radius, colors, and states.
+ */
+
+:root {
+  /* =========================================
+     COLOR TOKENS (Semantic, not random)
+     ========================================= */
+  --bg-color: #09090b;
+  --surface-color: #18181b;
+  --surface-elevated: #27272a;
+  --surface-muted: #1f1f22;
+  
+  --border-color: #27272a;
+  --border-strong: #3f3f46;
+  
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  
+  --accent-color: #8b5cf6;
+  --accent-muted: rgba(139, 92, 246, 0.2);
+  
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  --info-color: #3b82f6;
+  
+  --proof-verified: #10b981;
+  --state-blocked: #ef4444;
+  --state-pending: #f59e0b;
+  --state-executing: #3b82f6;
+  --state-archived: #71717a;
+
+  /* =========================================
+     SPACING TOKENS (Scale: 0,2,4,8,12,16,20,24,32,40,48,64,80)
+     ========================================= */
+  --space-0: 0px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-80: 80px;
+
+  /* =========================================
+     RADIUS TOKENS
+     ========================================= */
+  --radius-none: 0;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* =========================================
+     TYPOGRAPHY (Inter/Roboto mapping)
+     ========================================= */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --text-display: 800 48px/1.1 var(--font-sans);
+  --text-hero: 800 36px/1.2 var(--font-sans);
+  --text-page-title: 700 24px/1.3 var(--font-sans);
+  --text-section-title: 600 18px/1.4 var(--font-sans);
+  --text-card-title: 600 16px/1.4 var(--font-sans);
+  --text-body: 400 14px/1.5 var(--font-sans);
+  --text-body-small: 400 12px/1.5 var(--font-sans);
+  --text-caption: 400 11px/1.4 var(--font-sans);
+  --text-label: 600 12px/1.2 var(--font-sans); /* Uppercase generally applied via utility */
+  --text-code: 400 13px/1.5 var(--font-mono);
+  --text-status: 700 10px/1.2 var(--font-mono);
+
+  /* =========================================
+     ELEVATION / SHADOW TOKENS
+     ========================================= */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 15px rgba(139, 92, 246, 0.3); /* Restrained glow */
+}
+
+/* =========================================
+   GLOBAL RESET & DEFAULTS
+   ========================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

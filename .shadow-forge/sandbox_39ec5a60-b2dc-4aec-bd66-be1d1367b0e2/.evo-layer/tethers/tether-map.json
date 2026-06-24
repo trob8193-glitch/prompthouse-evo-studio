@@ -1,0 +1,97 @@
+{
+  "version": "1.0.0",
+  "truthState": "TETHER_MAP_SEEDED",
+  "tethers": [
+    {
+      "from": "evo-layer",
+      "to": "evo-git",
+      "type": "source-overlay",
+      "required": true
+    },
+    {
+      "from": "evo-layer",
+      "to": "execution-kernel",
+      "type": "runtime-control",
+      "required": true
+    },
+    {
+      "from": "execution-kernel",
+      "to": "tool-router",
+      "type": "routing",
+      "required": true
+    },
+    {
+      "from": "execution-kernel",
+      "to": "adapter-executor",
+      "type": "execution",
+      "required": true
+    },
+    {
+      "from": "adapter-executor",
+      "to": "adapter-bus",
+      "type": "adapter-awareness",
+      "required": true
+    },
+    {
+      "from": "scheduler-worker",
+      "to": "task-scheduler",
+      "type": "task-claim",
+      "required": true
+    },
+    {
+      "from": "scheduler-worker",
+      "to": "adapter-executor",
+      "type": "task-execution",
+      "required": true
+    },
+    {
+      "from": "scheduler-worker",
+      "to": "memory-graph",
+      "type": "result-memory",
+      "required": true
+    },
+    {
+      "from": "scheduler-worker",
+      "to": "daemon-bus",
+      "type": "event-stream",
+      "required": true
+    },
+    {
+      "from": "runtime-control-center",
+      "to": "memory-graph",
+      "type": "observability",
+      "required": true
+    },
+    {
+      "from": "runtime-control-center",
+      "to": "task-scheduler",
+      "type": "observability",
+      "required": true
+    },
+    {
+      "from": "runtime-control-center",
+      "to": "adapter-bus",
+      "type": "observability",
+      "required": true
+    },
+    {
+      "from": "runtime-control-center",
+      "to": "daemon-bus",
+      "type": "observability",
+      "required": true
+    },
+    {
+      "from": "memory-query-engine",
+      "to": "memory-graph",
+      "type": "query",
+      "required": true
+    },
+    {
+      "from": "autonomous-tether-engine",
+      "to": "engine-registry",
+      "type": "governance",
+      "required": true
+    }
+  ],
+  "generatedAt": "2026-06-11T18:28:22.747Z"
+}

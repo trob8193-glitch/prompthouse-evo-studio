@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { getEvoLlmPaths } from './EvoLlmPaths.js';
 import { EVO_LLM_POLICY, EVO_LLM_REQUIRED_FIELDS, detectUnsupportedClaims, normalizeEvoText } from './EvoLlmPolicy.js';
+import { ALL_PARADIGMS } from '../paradigms.js';
 
 function ensureDir(dir) { fs.mkdirSync(dir, { recursive: true }); }
 function readJsonSafe(file, fallback = null) {
@@ -13,7 +14,8 @@ export function createEvoSeedDataset({ rootDir = process.cwd(), overwrite = fals
   const paths = getEvoLlmPaths({ rootDir });
   ensureDir(paths.training);
   const seedFile = path.join(paths.training, 'seed-examples.json');
-  if (fs.existsSync(seedFile) && !overwrite) return { seedFile, created: false };
+  // Always overwrite to ensure new paradigms are ingested
+  // if (fs.existsSync(seedFile) && !overwrite) return { seedFile, created: false };
   const examples = [
     {
       id: 'production_only_architect_001',
@@ -40,6 +42,26 @@ export function createEvoSeedDataset({ rootDir = process.cwd(), overwrite = fals
       source: 'seed'
     }
   ];
+
+  if (ALL_PARADIGMS) {
+    Object.entries(ALL_PARADIGMS).forEach(([category, paradigms]) => {
+      paradigms.forEach((paradigm, index) => {
+        const [name, ...descParts] = paradigm.split(' - ');
+        const desc = descParts.join(' - ');
+        if (name && desc) {
+          examples.push({
+            id: `paradigm_${category.toLowerCase()}_${index}`,
+            system: 'You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.',
+            instruction: `Define the ${name} paradigm in the context of Evo Studio.`,
+            response: `${name} is an architectural paradigm defined as: ${desc}. It must be used to influence code structure, UI layout, and bot behavior.`,
+            tags: ['omni-paradigm', 'architecture-training'],
+            source: 'seed-paradigms'
+          });
+        }
+      });
+    });
+  }
+
   writeJson(seedFile, examples);
   return { seedFile, created: true, count: examples.length };
 }

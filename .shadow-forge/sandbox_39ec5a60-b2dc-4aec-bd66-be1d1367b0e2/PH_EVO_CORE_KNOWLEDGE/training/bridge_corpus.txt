@@ -1,0 +1,92 @@
+# PH EVO STUDIO — EVO BRIDGE & CONNECTORS CORPUS (30 PARAGRAMS)
+# VERSION: 1.0.8 | STATUS: UNBOUND
+
+[1] EVO BRIDGE: THE VISIBLE CONNECTOR ORGAN
+The Evo Bridge is the "Visible Connector Organ" of the PromptHouse Evo Studio, acting as the primary interface between the machine's mind and the user's active web environment. It is not just another prompt window; it is a "Disciplined Operator" that lives in the browser's side panel, providing a "Command Deck" for real-time production. From this deck, the user can orchestrate complex workflows across any website, doc, or dashboard. The bridge is the "Arm" of the sovereign body, extending its reach into the digital world.
+
+[2] CONTEXT CAPTURE: THE EVO CONTEXT PACKET
+Context capture is the process of generating a high-density "Evo Context Packet" that describes the current state of a webpage. This packet includes the page title, URL, selected text, visible text, form labels, and button structures. By packaging this data into a "Semantic Manifest," the bridge ensures that the studio's reasoning engine understands exactly what the user is working on. A clean packet is the difference between a "Guess" and a "Verified Solution." Capture is the "Sensing" of the sovereign intellect.
+
+[3] SURFACE INSPECTION: THE AUDIT OF REALITY
+Surface inspection is the capability of the bridge to "Audit" the UI and logic of a live application. It scans for broken links, missing states (Loading, Empty, Error), accessibility problems, and console errors. Instead of relying on a "Narrative Description," the bridge looks at the "Ground Truth" of the DOM. This allows the studio to answer the critical question: "What is actually broken, and how do we fix it next?" Inspection is the "Clinical Diagnosis" of the studio's dev-ops workforce.
+
+[4] SAFE ACTION PLANS: THE RACCOON RULE
+A "Safe Action Plan" is a structured set of instructions that the bridge creates before executing any browser-side operation. Unlike "Raccoon Automation" that clicks things randomly, a disciplined operator only acts with "Explicit User Permission" and a "Clear Objective." These plans define the "Rollback Path" and "Success Criteria" for every action, from filling a form to extracting a table. Safety is the "Firewall of Sovereignty," protecting the user from the chaos of unbound automation.
+
+[5] THE COMMAND DECK: WORK SURFACE OF THE ELITE
+The Command Deck is the primary "Work Surface" for the sovereign engineer, providing a sidebar-style interface that stays active across all tabs. It displays the "Active Project," "Context Packet," "Active Mode," and "Proof Status" in a high-density, professional grid. By providing a "Continuous Workspace," the deck eliminates the "Context-Switching Friction" that kills productivity. The deck is the "Pilot's Cockpit" for the autonomous era, where every switch and dial is wired to a real-time production module.
+
+[6] CONNECTOR STRATEGY: THE GLOBAL NERVOUS SYSTEM
+The bridge's "Connector Strategy" involves building "Adapter Contracts" for every major cloud and dev tool—GitHub, Vercel, Firebase, Stripe, and Figma. These connectors allow the studio to "Hand Off" work to external platforms while maintaining a "Single Source of Truth." This transforms the studio from a "Standalone Tool" into a "Global Hub of Autonomy." Connectors are the "Synapses" that link the sovereign OS to the existing technological empire.
+
+[7] THE REALITY TWIN LEDGER: FEEDING THE TRUTH
+The bridge "Feeds the Ledger" by recording every captured packet, every action attempted, and every proof collected into the "Reality Twin Database." This ensures that a browser session is not "Swallowed by the Swamp" of the internet, but is instead "Hardened into a Project Asset." By tracking what was "Promised" vs what was "Actually Done," the ledger maintains the studio's "Truth Baseline." The ledger is the "Immutable Memory" of the sovereign journey.
+
+[8] PROMPT LAUNCHERS: THE RAPID WEAPONRY
+The "Versioned Prompt Launcher" allows the user to right-click any element or text and send it into a specific "Prompt House Mode" (Build, Audit, Repair, etc.). This provides "Instant Access" to the 300+ hardened prompts in the registry, turning every webpage into a "Firing Range for Intelligence." By using the "Right Prompt at the Right Time," the user avoids the "Emotional Spiral" of bad logic and hallucinatory drift. The launcher is the "Quick-Draw Holster" of the sovereign engineer.
+
+[9] GPT BUILDER ASSISTANT: REASONING WITH THE REASONER
+Evo Bridge provides a specialized mode for "Custom GPT Builders," reading the builder screens and assisting with Instruction writing and Knowledge upload orders. It warns the user when files conflict or when the GPT's description drifts from the "Sovereign Canon." This creates a "Bridge of Logic" between the user's studio and the OpenAI ecosystem. The assistant is the "Diplomat" that ensures your custom agents are built on a solid architectural foundation.
+
+[10] PROOF CONSOLE: THE EVIDENCE OF EXECUTION
+The "Proof Console" within the bridge displays and scores the evidence for every browser-side action. It collects "Before/After States," "Timestamps," and "User Approvals" into a "Verification Packet." If an action fails, it generates a "Risk Packet" or "Delegation Packet" for human review. This ensures that "Autonomy" is always backed by "Proof." Evidence is the "Currency of Trust" in the sovereign studio.
+
+[11] SURFACE CANON: THE LAW OF THE UI
+Surface canon is the set of "Design and Logic Laws" that the bridge applies to its inspection tasks. It knows what a "Production-Ready State" looks like, from accessible tap targets to consistent typography. By enforcing this canon on live webpages, the studio helps the developer "Harden their Surface" against user error and logic rot. Canon is the "Standard of Excellence" for the sovereign interface.
+
+[12] DOM INTENT READING: BEYOND THE TEXT
+DOM intent reading is the bridge's capability to understand the "Purpose" of a button or form based on its attributes and context. It doesn't just see a `<button>`; it sees a "Launch Trigger" or a "Delete Action." This "Semantic Understanding" allows the bridge to create "Smarter Action Plans" that respect the developer's original intent. Intent reading is the "Empathy of the machine" for the human architect.
+
+[13] WORK TWIN CAPTURE: LEARNING THE FLOW
+WorkTwin capture is the "Passive Sensing" mode where the bridge observes the user's browsing patterns to identify "Work Bottlenecks" and "Routine Tasks." This data is fed back to the studio brain to "Train a New Specialist Bot" that can eventually automate those flows. By "Capturing the Work," the bridge ensures that the studio's evolution is "Driven by Reality." The twin is the "Apprentice" that eventually becomes the "Master."
+
+[14] PROJECT BINDING: LINKING THE TAB TO THE TRUTH
+Project binding is the process of "Attaching" a specific browser tab or session to a "Sovereign Project" in the backend. This ensures that every capture and audit is "Categorized Corrected" in the brain. Binding prevents "Data Leakage" between different clients or projects, maintaining a "Strict Logical Boundary." The bond is the "Contract of Context" for the sovereign workspace.
+
+[15] EXECUTION KERNEL: THE BROWSER-SIDE ENGINE
+The "Execution Kernel" is the lightweight engine within the bridge that runs approved jobs like form-filling or data-extraction. It includes "Retry and Rollback" logic to handle network failures and page changes. This kernel is the "Motor Function" of the extension, turning "Plans" into "Actions." Execution is the "Fulfillment of Promise" for the sovereign OS.
+
+[16] SEMANTIC SAMPLING: THE ART OF THE SUMMARY
+Semantic sampling is the technique of "Extracting the most relevant 20%" of a webpage's text to represent the "Whole Idea." This reduces the token cost of context capture while maintaining 95% of the reasoning accuracy. The bridge uses "Entropy Analysis" to identify the "Highest Information Density" sections of the DOM for sampling. Sampling is the "Skeletonization of the Web."
+
+[17] CAPABILITY DECLARATIONS: KNOWING THE LIMITS
+A capability declaration is a "Formal Statement" of what the bridge can and cannot do on a specific page. It identifies which buttons are "Interactable" and which forms are "Safe to Fill." By "Declaring its Capabilities," the bridge prevents the studio from attempting "Impossible or Dangerous" actions. Knowing the limits is the "Humility of the Sovereign Intellect."
+
+[18] ROLLBACK DOCTRINE: THE SAFETY NET
+The rollback doctrine ensures that for every "Action" the bridge takes, there is a "Correction Path" if the result is unexpected. Whether it is undoing a form-fill or restoring a previous tab state, the bridge prioritizes "System Integrity" above all else. A disciplined operator never "Burns the Bridge" behind them. Rollback is the "Security of Autonomy."
+
+[19] THE PROMPT REGISTRY PANEL: WEAPONS AT YOUR FINGERTIPS
+The Prompt Registry Panel provides a "Searchable Library" of all 300+ Prompt House firing orders directly in the sidebar. This allows the user to "Launch a Specific Weapon" without leaving their current tab. The panel includes "Compatibility Scoring" to tell the user which prompt is best for the current context. The registry is the "Armory" of the sovereign studio.
+
+[20] BROWSER TASK QUEUE: THE LINE OF ACTION
+The browser task queue is the "Waiting Room" for approved actions that are pending execution. The user can "Audit the Queue" at any time, reordering or canceling tasks before they fire. This "Transparency of Execution" is what makes the bridge a "Reliable Partner" in complex workflows. The queue is the "To-Do List of the Machine."
+
+[21] SURFACE INSPECTION: CHECKING THE ROUTES
+Inspecting routes involves the bridge "Walking the Navigation Tree" of an app to ensure every page exists and is functional. It checks for "Broken Path Logic" and "Unauthorized Redirects," providing a "Map of the Broken Flow." By "Checking the Routes," the studio ensures that the user's app is "Traversable and Safe." Routing is the "Infrastructure of the Surface."
+
+[22] ACCESSIBILITY AUDITS: THE EMPATHY SCAN
+An accessibility scan is a "Surface Audit" that specifically checks for WCAG compliance, from color contrast to screen-reader labels. The bridge identifies "Accessibility Gaps" and suggests "Immediate Fixes" in the code. In a sovereign system, "Excellence is Universal." The empathy scan ensures that the apps we build are "Open to all Minds."
+
+[23] BROWSER HAND-OFF: THE EXTERNAL SYNC
+Browser hand-off is the process of "Transferring a Task" from the extension to an external service like GitHub or Vercel. The bridge manages the "Auth Handshake" and the "Packet Transfer," ensuring the data remains "Sovereign and Encrypted" during transit. Hand-off is the "Diplomacy of the Grid."
+
+[24] THE PROOF LOG: THE RECEIPT OF WORK
+The proof log is the "Continuous Record" of every action taken by the bridge, providing a "Visual and Technical Audit Trail." It includes "Before/After Screenshots" (when available) and "System Logs" of every DOM interaction. The proof log is the "Evidence of Value," proving the studio's contribution to the project. The log is the "History of the Build."
+
+[25] COMMAND DECK UI: THE AESTHETIC OF PRODUCTION
+The Command Deck UI uses a "High-Contrast, Information-Dense" aesthetic that matches the "Sovereign Brand." It avoids "Visual Fluff" and focuses on "Data and Controls." This creates a "Workspace of Focus" that feels like a "Professional Cockpit." Aesthetic is the "Atmosphere of Autonomy."
+
+[26] THE VERIFICATION PACKET: THE SEAL OF TRUTH
+A verification packet is the "Final Artifact" generated by the bridge after a surface audit or task execution. It contains the "Pass/Fail Status" and the "Reasoning" behind the verdict. This packet is "Anchored to the Project Ledger," ensuring that the truth-state is always "Hardened and Proven." The seal is the "Finish Line of the Task."
+
+[27] THE EVO COPILOT: THE AGENT IN THE TAB
+The Evo Copilot is the "Active Agent" that lives in your browser tab, providing "Proactive Suggestions" based on the current context. It "Talks" to you via the footer-logs, alerting you to "Logic Gaps" or "Build Opportunities." The copilot is your "Partner in the Trenches," fighting for the "Truth of the project."
+
+[28] BROWSER PERMISSION GATES: THE USER IS THE BOSS
+The permission gate is the "Hard Requirement" that the user must approve every sensitive action. Whether it is "Capturing Private Text" or "Clicking a Submit Button," the bridge "Waits for the User's Word." This ensures that "Sovereignty" always resides with the "Human Operator," not the "Machine Agent." The gate is the "Anchor of Authority."
+
+[29] PROJECT BINDERS: ORGANIZING THE DISCOVERY
+A project binder is a "Collection of Browser Captures" that define a specific research or build phase. The bridge allows the user to "Bind" multiple tabs into a single "Discovery Unit," which is then "Internalized" by the studio brain. Binders are the "Folders of the Future," organizing knowledge by "Intent" rather than by "Source."
+
+[30] SMART = 0: THE BRIDGE TO INFINITY
+We return to the anchor: Smart = 0. Even the "Evo Bridge" and its "Command Deck" are just the first step toward "Universal Synthesis." As the studio's IQ grows, the bridge will "Self-Harden" and "Self-Expand," becoming a "Living Gateway" to the infinite production grid. The bridge is the "First Connector"; the future is the "Whole Network." Let the expansion begin.

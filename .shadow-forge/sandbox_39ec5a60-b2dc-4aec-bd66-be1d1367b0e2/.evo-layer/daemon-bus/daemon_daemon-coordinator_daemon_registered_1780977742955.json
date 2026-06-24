@@ -1,0 +1,18 @@
+{
+  "id": "daemon_daemon-coordinator_daemon_registered_1780977742955",
+  "daemonId": "daemon-coordinator",
+  "event": "daemon_registered",
+  "payload": {
+    "daemonId": "scheduler-worker",
+    "role": "executor",
+    "capabilities": [
+      "execute",
+      "report",
+      "handoff"
+    ],
+    "metadata": {},
+    "status": "AVAILABLE",
+    "updatedAt": "2026-06-09T04:02:22.953Z"
+  },
+  "createdAt": "2026-06-09T04:02:22.955Z"
+}

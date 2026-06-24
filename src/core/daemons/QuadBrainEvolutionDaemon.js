@@ -5,6 +5,7 @@ import { BlendedEvolutionEngine } from '../engines/BlendedEvolutionEngine.js';
 import { SHADOW_FORGE } from '../autonomy/ShadowForge.js';
 import { AutonomousDecisionTree } from '../evolution/AutonomousDecisionTree.js';
 import { OnlineLearningManager } from '../evolution/OnlineLearningManager.js';
+import { SelfMarketingEngine } from '../autonomy/SelfMarketingEngine.js';
 import { Log } from '../autonomy/SovereignLogger.js';
 
 const DATA_DIR = () => path.join(process.cwd(), '.prompthouse-data', 'evolution');
@@ -252,6 +253,11 @@ export class QuadBrainEvolutionDaemon {
           });
         }
       } catch {}
+
+      // 10. Level 5 Autonomy: Self-Marketing Broadcast
+      if (applied && (suggestion.componentChange || suggestion.architectureChange)) {
+        await SelfMarketingEngine.broadcastProductRelease(this.engine.aiAdaptor, runId, suggestion.description);
+      }
 
       appendRun(run);
       Log.info(`[QuadBrain] ═══ Cycle ${runId} complete: ${run.truthState} ═══`);

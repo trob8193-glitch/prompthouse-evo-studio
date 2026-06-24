@@ -1,16 +1,16 @@
 # Full UI Button-to-Route Matrix
 
-**Generated**: 2026-06-21T00:43:45.286Z
-**Components Scanned**: 187
-**Known Backend Routes**: 340
-**Potential Dead Links Detected**: 0
+**Generated**: 2026-06-24T09:54:26.583Z
+**Components Scanned**: 190
+**Known Backend Routes**: 323
+**Potential Dead Links Detected**: 10
 
 ## Matrix
 
 ### src\agent-bridge-views.jsx
 **Interactive Controls**: 
 - RESCAN_VAULT
-- {}}>CLEAR_RECEIPTS
+- console.log('Clearing receipts...')}>CLEAR_RECEIPTS
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -89,6 +89,7 @@
           >
             
             Open Evo Singularity Engine
+- setMobileMenuOpen(true)} className="text-white p-2">
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -249,8 +250,8 @@
 
 ### src\components\Dashboard.jsx
 **Interactive Controls**: 
-- {}}>_
-- {}}>X
+- console.log('Window minimized')}>_
+- console.log('Window closed')}>X
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -277,8 +278,43 @@
 - Run in Terminal
 - {applied ?  : }
                       {applied ? 'Applied!' : 'Apply to File'}
-- {}} className="text-white/40 hover:text-white transition-colors ml-1">
-- {}} className="text-white/40 hover:text-white transition-colors">
+- setActivePage('settings')}
+              className="p-2 rounded-lg hover:bg-gray-800/70 hover:shadow-lg transition-colors"
+            >
+- {
+                setSelectedBot(bot.id);
+                if (COPILOT_LAYOUTS.some(l => l.id === bot.id)) {
+                  setActiveLayout(bot.id);
+                }
+              }}
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
+                selectedBot === bot.id
+                  ? 'text-white border-transparent shadow-lg'
+                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'
+              }`}
+              style={selectedBot === bot.id ? { backgroundColor: bot.palette?.primary || '#10b981', boxShadow: `0 0 12px ${bot.palette?.primary || '#10b981'}40` } : {}}
+              title={bot.role}
+            >
+              {bot.icon} {bot.name}
+- handleQuickAction('debt')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-gray-800/50 border border-gray-700/40 rounded-xl text-[11px] font-bold text-gray-300 hover:bg-gray-700/50 hover:text-white hover:border-gray-600 transition-all hover:shadow-lg cursor-pointer">
+           Scan Debt
+- handleQuickAction('audit')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-gray-800/50 border border-gray-700/40 rounded-xl text-[11px] font-bold text-gray-300 hover:bg-gray-700/50 hover:text-white hover:border-gray-600 transition-all hover:shadow-lg cursor-pointer">
+           Nuclear Audit
+- handleQuickAction('evolve')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-purple-900/30 border border-purple-500/30 rounded-xl text-[11px] font-bold text-purple-300 hover:bg-purple-800/40 hover:text-purple-100 hover:border-purple-400/50 transition-all hover:shadow-[0_0_12px_rgba(168,85,247,0.2)] cursor-pointer">
+           Evolve Module
+- handleQuickAction('singularity')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-red-900/30 border border-red-500/30 rounded-xl text-[11px] font-bold text-red-300 hover:bg-red-800/40 hover:text-red-100 hover:border-red-400/50 transition-all hover:shadow-[0_0_12px_rgba(239,68,68,0.3)] cursor-pointer">
+           Singularity
+- handleQuickAction('deploy')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-emerald-900/30 border border-emerald-500/30 rounded-xl text-[11px] font-bold text-emerald-300 hover:bg-emerald-800/40 hover:text-emerald-100 hover:border-emerald-400/50 transition-all hover:shadow-[0_0_12px_rgba(16,185,129,0.3)] cursor-pointer">
+           Deploy
+- handleQuickAction('health')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-cyan-900/30 border border-cyan-500/30 rounded-xl text-[11px] font-bold text-cyan-300 hover:bg-cyan-800/40 hover:text-cyan-100 hover:border-cyan-400/50 transition-all hover:shadow-[0_0_12px_rgba(6,182,212,0.3)] cursor-pointer">
+           Suit Health
+- handleQuickAction('evo-eyes')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-violet-900/30 border border-violet-500/30 rounded-xl text-[11px] font-bold text-violet-300 hover:bg-violet-800/40 hover:text-violet-100 hover:border-violet-400/50 transition-all hover:shadow-[0_0_12px_rgba(139,92,246,0.3)] cursor-pointer">
+           Evo Eyes
+- handleQuickAction('swarm')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-amber-900/30 border border-amber-500/30 rounded-xl text-[11px] font-bold text-amber-300 hover:bg-amber-800/40 hover:text-amber-100 hover:border-amber-400/50 transition-all hover:shadow-[0_0_12px_rgba(245,158,11,0.3)] cursor-pointer">
+           Swarm Build
+- {/* Pulse glow (pseudo-element) */}
+              {isRecording && }
+- {loading ?  : }
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -467,9 +503,15 @@
 
 ### src\components\NightForgePanel.jsx
 **Interactive Controls**: 
-- {loading ? 'RUNNING CYCLE...' : 'RUN CYCLE NOW'}
+- {loading ? 'Running...' : 'Force Run'}
+- Force Scan
+- {swarmLoading ? 'SPAWNING SWARM AGENTS...' : 'BUILD VIA SWARM'}
 
-**API Calls Triggered**: (No direct fetch calls detected)
+**API Calls Triggered**:
+- `/api/autonomy/intents` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/agi/health` -> ✅ ALIVE
+- `/api/autonomy/intent/scan` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/evo-lm/swarm-build` -> ❌ DEAD LINK / UNREGISTERED
 
 ---
 
@@ -669,7 +711,10 @@
 **Interactive Controls**: 
 - setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}>
           &times;
-- {}}>
+- setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}>
+          &times;
+- console.log('Exporting slip...')} style={{ background: 'none', border: 'none', padding: 0, fontSize: 10, color: '#64748b', display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}> Export
+- console.log('Reverting to commit', commit.id)}>
                  Revert to {commit.id}
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -678,8 +723,8 @@
 
 ### src\components\Toolbar.jsx
 **Interactive Controls**: 
-- {}}>Run.exe
-- {}}>Options
+- console.log('Executing Run.exe...')}>Run.exe
+- console.log('Opening Options...')}>Options
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -687,47 +732,31 @@
 
 ### src\components\TopBar.jsx
 **Interactive Controls**: 
-- e.currentTarget.style.color = '#00f0ff'}
-          onMouseLeave={(e) => e.currentTarget.style.color = '#737385'}
-        >
-          {sidebarCollapsed ?  : }
+- {sidebarCollapsed ?  : }
 - setShowThemeMenu(!showThemeMenu)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',
-              borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-              color: '#fff', fontSize: 10, fontWeight: 800, letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white text-[10px] font-black tracking-wider hover:bg-white/10 transition-colors"
           >
              METAMORPHOSIS: {globalTheme.layout.toUpperCase()}
 - { 
                     setGlobalTheme({ layout: t, ui: t, bots: t, wiring: t, building: t, routing: t, inventing: t, agent: t, brain: t, module: t }); 
                     setShowThemeMenu(false); 
                   }}
-                  style={{
-                    padding: '8px 12px', textAlign: 'left', borderRadius: 6,
-                    background: globalTheme.layout === t ? 'rgba(0,240,255,0.1)' : 'transparent',
-                    color: globalTheme.layout === t ? '#00f0ff' : '#a0a0b0',
-                    border: 'none', cursor: 'pointer', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em'
-                  }}
+                  className={`px-3 py-2 text-left rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors ${
+                    globalTheme.layout === t ? 'bg-cyan-400/10 text-cyan-400' : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                  }`}
                 >
                   {t} Version
 - setActivePage('proof-console')}
-          style={{ background: 'none', border: 'none', color: '#737385', cursor: 'pointer', padding: 6, display: 'flex', position: 'relative', transition: 'color 0.2s' }}
+          className="relative text-slate-400 hover:text-cyan-400 transition-colors p-1.5"
           aria-label="Notifications"
-          onMouseEnter={(e) => e.currentTarget.style.color = '#00f0ff'}
-          onMouseLeave={(e) => e.currentTarget.style.color = '#737385'}
         >
           
           {notifications.length > 0 && (
             
           )}
 - setActivePage('settings')}
-          style={{ background: 'none', border: 'none', color: '#737385', cursor: 'pointer', padding: 6, display: 'flex', transition: 'color 0.2s' }}
+          className="text-slate-400 hover:text-cyan-400 transition-colors p-1.5"
           aria-label="Settings"
-          onMouseEnter={(e) => e.currentTarget.style.color = '#00f0ff'}
-          onMouseLeave={(e) => e.currentTarget.style.color = '#737385'}
         >
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -746,18 +775,6 @@
 ### src\deploy-rail-view.jsx
 **Interactive Controls**: 
 - {status === 'deploying' ? '🚀 Deploying...' : '🚀 Start Deploy Rail'}
-
-**API Calls Triggered**: (No direct fetch calls detected)
-
----
-
-### src\evo-copilot-sidebar.jsx
-**Interactive Controls**: 
-- setIsOpen(false)} style={{ background:'none', border:'none', color:'var(--text-muted)', cursor:'pointer', fontSize:20 }}>✕
-- handleQuickAction('debt')} className="hover:bg-blue-500" style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer', transition: 'background 0.3s' }}>🛠️ Scan Debt
-- handleQuickAction('tool')} className="hover:bg-blue-500" style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer', transition: 'background 0.3s' }}>🪄 Auto-Tool
-- handleQuickAction('test')} className="hover:bg-blue-500" style={{ whiteSpace: 'nowrap', background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: 16, fontSize: 11, cursor: 'pointer', transition: 'background 0.3s' }}>⚡ Run Fission
-- ↑
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -783,7 +800,7 @@
 - setActiveCategory(c.id)}
           >
             {c.label}
-- {}}>🔒 Blocked
+- console.log('Selling module...')}>Sell Module
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -791,8 +808,12 @@
 
 ### src\features\AuthSentry.jsx
 **Interactive Controls**: 
-- setAuthenticated(true)}>
-            ENTER DEMO MODE
+- {loading ? '...' : mode === 'login' ? 'Sign In' : 'Create Account'}
+- Enter Demo Mode
+- { setMode(mode === 'login' ? 'register' : 'login'); setError(''); }}
+            style={styles.switchLink}
+          >
+            {mode === 'login' ? 'Sign Up' : 'Sign In'}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -800,8 +821,8 @@
 
 ### src\features\autonomous\SovereignCommandNexus.jsx
 **Interactive Controls**: 
-- {}}>INITIATE WIPE
-- {}}>ROUTE TRAFFIC
+- { fetch(`${getBridgeUrl()}/api/evolution/kill-switch/engage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason: 'Manual nexus wipe' }) }).catch(() => {}); }}>INITIATE WIPE
+- { fetch(`${getBridgeUrl()}/status`).then(r => r.json()).then(d => console.log('[Nexus] Route traffic check:', d)).catch(() => {}); }}>ROUTE TRAFFIC
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -809,7 +830,7 @@
 
 ### src\features\autonomous\SynapticForge.jsx
 **Interactive Controls**: 
-- {}}>
+- { const textarea = document.querySelector('textarea'); if (textarea?.value) { console.log('[SynapticForge] Compiling prompt:', textarea.value.substring(0, 100)); } }}>
             COMPILE
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -849,9 +870,17 @@
 
 ### src\features\EvoDiffuserDashboard.jsx
 **Interactive Controls**: 
-- {}}> EXPORT ASSET
+- { if (imageResult?.url) window.open(imageResult.url, '_blank'); }}> EXPORT ASSET
 
 **API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\features\EvoEyesView.jsx
+**Interactive Controls**: (No static buttons found)
+
+**API Calls Triggered**:
+- `/api/agi/evo-eyes/audits` -> ❌ DEAD LINK / UNREGISTERED
 
 ---
 
@@ -861,8 +890,8 @@
                       aria-pressed={previewExpanded}
                       className="text-[#737385] hover:text-[#00f0ff] transition-colors"
                     >
-- {}}> EXPORT
-- {}}>DEPLOY TO FORGE
+- { if (result?.code) { navigator.clipboard.writeText(result.code); console.log('[EvoLayout] Code copied to clipboard'); } }}> EXPORT
+- { console.log('[EvoLayout] Deploying to Forge:', result?.code?.substring(0, 100)); }}>DEPLOY TO FORGE
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -874,8 +903,8 @@
                       className={`flex-1 py-2 px-3 rounded-2xl text-xs font-bold border transition-all ${bitDepth === b ? 'bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.2)]' : 'bg-[#0a0a10] border-white/10 text-[#737385] hover:border-white/20'}`}
                     >
                       {b}
-- {}}> PNG
-- {}}> SPRITE SHEET
+- { if (imageResult?.url) window.open(imageResult.url, '_blank'); }}> PNG
+- console.log('[EvoPixelator] Exporting sprite sheet...') }> SPRITE SHEET
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -887,7 +916,7 @@
             disabled={tridallState?.status === 'INGESTING'}
           >
             {tridallState?.status === 'INGESTING' ? 'EXTRACTING...' : 'INITIATE INGESTION'}
-- {}}>X
+- console.log('Window closed')}>X
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -945,6 +974,13 @@
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-emerald-400 transition-colors"
                   >
                     {showVercelKey ?  : }
+- setShowEnvMask(!showEnvMask)}
+                className="text-xs px-3 py-1.5 rounded-full bg-gray-900 border border-gray-800 text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+              >
+                {showEnvMask ?  : }
+                {showEnvMask ? 'Mask Active' : 'Raw Output'}
+- {envSaving ?  : }
+                  Inject to Runtime
 - {testing ?  : }
                     {testing ? 'Probing...' : 'Run Probe'}
 - {generatingKey ?  : }
@@ -977,6 +1013,17 @@
               >
                 
                 Ping Engine
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\features\LandingPage.jsx
+**Interactive Controls**: 
+- Enter Studio →
+- Launch Studio Free →
+- {plan.popular ? 'Start Free Trial' : 'Get Started'}
+- Launch Evo Studio →
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -1028,9 +1075,9 @@
 
 ### src\features\OmniMarketplaceNexus.jsx
 **Interactive Controls**: 
-- {}}>
+- { safeFetchBridge('/api/stripe/health').then(d => console.log('[Commerce] Ledger:', d)).catch(() => {}); }}>
            View Ledger
-- {}}>
+- { safeFetchBridge('/api/stripe/health').then(d => console.log('[Commerce] Gateway config:', d)).catch(() => {}); }}>
             Configure Gateways
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -1039,8 +1086,54 @@
 
 ### src\features\OmniscientObservabilityDeck.jsx
 **Interactive Controls**: 
-- {}}>
+- { safeFetchBridge('/api/studio/scan').then(d => console.log('[Observability] Scan:', d)).catch(() => {}); }}>
            Scan Environment
+
+**API Calls Triggered**: (No direct fetch calls detected)
+
+---
+
+### src\features\OnboardingFlow.jsx
+**Interactive Controls**: 
+- setSelectedBot(bot.id)}
+                  style={{
+                    ...s.botCard,
+                    borderColor: selectedBot === bot.id ? bot.palette.primary : 'rgba(255,255,255,0.06)',
+                    background: selectedBot === bot.id ? `${bot.palette.primary}15` : 'rgba(255,255,255,0.02)',
+                    boxShadow: selectedBot === bot.id ? `0 0 20px ${bot.palette.primary}25` : 'none',
+                  }}
+                >
+                  {bot.icon}
+                  {bot.name}
+                  {bot.species}
+- setApiMode(mode.id)}
+                  style={{
+                    ...s.modeBtn,
+                    borderColor: apiMode === mode.id ? '#00f0ff' : 'rgba(255,255,255,0.08)',
+                    background: apiMode === mode.id ? 'rgba(0,240,255,0.08)' : 'rgba(255,255,255,0.02)',
+                  }}
+                >
+                  {mode.icon}
+                  
+                    {mode.label}
+                    {mode.desc}
+- setSelectedTheme(theme.id)}
+                  style={{
+                    ...s.themeCard,
+                    borderColor: selectedTheme === theme.id ? theme.color : 'rgba(255,255,255,0.06)',
+                    background: selectedTheme === theme.id ? `${theme.color}12` : 'rgba(255,255,255,0.02)',
+                    boxShadow: selectedTheme === theme.id ? `0 0 24px ${theme.color}20` : 'none',
+                  }}
+                >
+                  {theme.icon}
+                  {theme.name}
+                  {theme.desc}
+                  {selectedTheme === theme.id && (
+                    ✓
+                  )}
+- ← Back
+- {step === 0 ? 'Get Started →' : 'Continue →'}
+- {completing ? 'Launching...' : '🚀 Launch Studio'}
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -1086,19 +1179,46 @@
 
 ---
 
+### src\features\ShadowTelemetryDashboard.jsx
+**Interactive Controls**: 
+- alert('Intent execution queued via Sovereign Bridge.')}
+              className="bg-[#ff0000]/20 text-[#ff0000] border border-[#ff0000]/50 px-4 py-2 hover:bg-[#ff0000]/40 transition-colors uppercase tracking-widest text-xs font-bold rounded">
+              Approve & Execute
+- setSelectedEvent(null)}
+              className="bg-transparent text-[#ff0000]/50 border border-[#ff0000]/20 px-4 py-2 hover:bg-[#ff0000]/10 transition-colors uppercase tracking-widest text-xs font-bold rounded">
+              Dismiss Intent
+- setIsPolling(!isPolling)}
+              className="bg-[#110000] hover:bg-[#330000] text-[#ff0000] border border-[#ff0000]/50 px-4 py-2 rounded-lg transition-all shadow-[0_0_10px_rgba(255,0,0,0.1)] hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] text-xs uppercase font-bold tracking-wider"
+            >
+              {isPolling ? 'Pause Stream' : 'Resume Stream'}
+- { setStreamType(t); setSelectedEvent(null); setEvents([]); }}
+              className={`px-4 py-2 text-xs font-bold uppercase tracking-widest border-t border-x border-[#ff0000]/30 rounded-t-lg transition-colors ${
+                streamType === t 
+                  ? 'bg-[#0a0000] border-[#ff0000] text-[#ff3333]' 
+                  : 'bg-[#110000] text-[#ff0000]/50 hover:bg-[#220000] border-transparent'
+              }`}
+            >
+              {t.replace('_', ' ')}
+
+**API Calls Triggered**:
+- `/api/witness/telemetry?type=*` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/agi/health` -> ✅ ALIVE
+
+---
+
 ### src\features\SingularityCommandCenter.jsx
 **Interactive Controls**: (No static buttons found)
 
 **API Calls Triggered**:
-- `/api/singularity/status` -> ✅ ALIVE
+- `/api/singularity/status` -> ❌ DEAD LINK / UNREGISTERED
 
 ---
 
 ### src\features\SingularityEvolutionNexus.jsx
 **Interactive Controls**: 
-- {}}>
+- { safeFetchBridge('/api/singularity/status').then(d => console.log('[Singularity] Neural Net Sync:', d)).catch(() => {}); }}>
            Synchronize Neural Nets
-- {}}>
+- { safeFetchBridge('/api/evolution/cycle', { method: 'POST' }).then(d => console.log('[Evo] Compaction cycle:', d)).catch(() => {}); }}>
             Trigger Compaction Cycle
 - setIsAutoEvolving(!isAutoEvolving)}
               className={`glass-extreme hover:border-[#ff0055] transition-all rounded-xl px-6 py-3 text-sm font-black inline-flex items-center gap-3 ${isAutoEvolving ? 'border-[#ff0055] text-[#ff0055] animate-pulse shadow-[0_0_20px_rgba(255,0,85,0.4)]' : 'text-gray-400'}`}
@@ -1119,7 +1239,7 @@
                 className="p-2 glass-extreme rounded-lg hover:border-[#00f0ff] transition-colors"
               >
 - setActivePangram(prev => (prev
-- {}}>
+- { console.log(`[Evolution] Launching module: ${tool.name}`); }}>
         Launch {tool.name}
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -1266,7 +1386,19 @@
 
 ### src\new-features-views.jsx
 **Interactive Controls**: 
-- {}}>RESOLVE GAP
+- alert('Anomaly resolution engine engaged. Commencing automated patching...')}
+                className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 text-red-400 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(239,68,68,0.1)] active:scale-95 flex items-center gap-2">
+                 Resolve Anomalies
+- handleOverride(conflict.id, 'arbiter')}
+                      disabled={overriding}
+                      className="px-6 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
+                    >
+                      Accept Arbiter
+- handleOverride(conflict.id, 'founder')}
+                      disabled={overriding}
+                      className="px-6 py-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-500/50 text-amber-400 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
+                    >
+                      Founder Override
 
 **API Calls Triggered**:
 - `/api/intelligence/execute` -> ✅ ALIVE
@@ -1274,7 +1406,7 @@
 - `/api/intelligence/execute` -> ✅ ALIVE
 - `/api/intelligence/execute` -> ✅ ALIVE
 - `/api/intelligence/execute` -> ✅ ALIVE
-- `/api/intelligence/execute` -> ✅ ALIVE
+- `/api/audit/nuclear-truth` -> ❌ DEAD LINK / UNREGISTERED
 - `/api/intelligence/execute` -> ✅ ALIVE
 - `/api/intelligence/execute` -> ✅ ALIVE
 - `/api/intelligence/execute` -> ✅ ALIVE
@@ -1363,9 +1495,9 @@
 - `/api/proof/count` -> ✅ ALIVE
 - `/api/proof/receipts?limit=60` -> ✅ ALIVE
 - `/api/logs?limit=1` -> ✅ ALIVE
-- `/api/grading/maturity` -> ✅ ALIVE
-- `/api/audit/nuclear-truth` -> ✅ ALIVE
-- `/api/grading/maturity` -> ✅ ALIVE
+- `/api/grading/maturity` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/audit/nuclear-truth` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/grading/maturity` -> ❌ DEAD LINK / UNREGISTERED
 
 ---
 
@@ -1387,7 +1519,8 @@
 
 ### src\prototypes\StudioBeta.jsx
 **Interactive Controls**: 
-- {}} className="absolute right-3 w-10 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-3xl flex items-center justify-center transition-colors shadow-md shadow-indigo-600">
+- console.log('Launching beta...')}>Launch Component Beta
+- console.log('Sending message...')} className="absolute right-3 w-10 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-3xl flex items-center justify-center transition-colors shadow-md shadow-indigo-600">
 
 **API Calls Triggered**: (No direct fetch calls detected)
 

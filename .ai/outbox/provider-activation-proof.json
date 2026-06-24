@@ -1,13 +1,13 @@
 {
-  "ok": false,
+  "ok": true,
   "success": true,
-  "truthState": "PROVIDER_GATED",
+  "truthState": "LOCAL_ONLY",
   "liveRequested": false,
-  "checkedAt": "2026-06-21T00:41:05.446Z",
+  "checkedAt": "2026-06-24T10:10:29.398Z",
   "summary": {
     "totalActions": 4,
-    "readyActions": 3,
-    "blockers": 1
+    "readyActions": 4,
+    "blockers": 0
   },
   "gates": {
     "openai": {
@@ -18,9 +18,9 @@
     },
     "gemini": {
       "envKey": "GEMINI_API_KEY",
-      "configured": false,
-      "truthState": "NEEDS_CREDENTIALS",
-      "redacted": null
+      "configured": true,
+      "truthState": "BUILT",
+      "redacted": "AQ.A****q5Kw"
     },
     "stripe": {
       "envKey": "STRIPE_SECRET_KEY",
@@ -63,9 +63,9 @@
       "action": "ai_provider_probe",
       "envKey": "GEMINI_API_KEY",
       "approvalScope": "provider_probe",
-      "status": "blocked",
-      "truthState": "NEEDS_CREDENTIALS",
-      "message": "GEMINI_API_KEY is required before ai_provider_probe.",
+      "status": "armed_local_only",
+      "truthState": "LOCAL_ONLY",
+      "message": "gemini has credentials; live action was not requested.",
       "readiness": null
     },
     {
@@ -103,21 +103,10 @@
       }
     }
   ],
-  "blockers": [
-    {
-      "provider": "gemini",
-      "action": "ai_provider_probe",
-      "envKey": "GEMINI_API_KEY",
-      "approvalScope": "provider_probe",
-      "status": "blocked",
-      "truthState": "NEEDS_CREDENTIALS",
-      "message": "GEMINI_API_KEY is required before ai_provider_probe.",
-      "readiness": null
-    }
-  ],
+  "blockers": [],
   "receipts": [
     {
-      "id": "rcpt_1782002465443_95v8l",
+      "id": "rcpt_1782295829380_5khid",
       "provider": "openai",
       "action": "ai_provider_probe",
       "status": "armed_local_only",
@@ -125,21 +114,21 @@
       "message": "openai has credentials; live action was not requested.",
       "requestHash": "0228eba87335fbe8",
       "responseHash": "a1e78a38c0520ed4",
-      "createdAt": "2026-06-21T00:41:05.443Z"
+      "createdAt": "2026-06-24T10:10:29.381Z"
     },
     {
-      "id": "rcpt_1782002465444_886vr",
+      "id": "rcpt_1782295829388_dds1k",
       "provider": "gemini",
       "action": "ai_provider_probe",
-      "status": "blocked",
-      "truthState": "NEEDS_CREDENTIALS",
-      "message": "GEMINI_API_KEY is required before ai_provider_probe.",
+      "status": "armed_local_only",
+      "truthState": "LOCAL_ONLY",
+      "message": "gemini has credentials; live action was not requested.",
       "requestHash": "0228eba87335fbe8",
-      "responseHash": "ca53f8c66aa92254",
-      "createdAt": "2026-06-21T00:41:05.445Z"
+      "responseHash": "a1e78a38c0520ed4",
+      "createdAt": "2026-06-24T10:10:29.389Z"
     },
     {
-      "id": "rcpt_1782002465445_s6zq6",
+      "id": "rcpt_1782295829392_196mq",
       "provider": "stripe",
       "action": "stripe_test_checkout",
       "status": "armed_local_only",
@@ -147,10 +136,10 @@
       "message": "stripe has credentials; live action was not requested.",
       "requestHash": "fc221f1271107d8e",
       "responseHash": "46bd5fd6f0460f0d",
-      "createdAt": "2026-06-21T00:41:05.445Z"
+      "createdAt": "2026-06-24T10:10:29.393Z"
     },
     {
-      "id": "rcpt_1782002465446_zr88d",
+      "id": "rcpt_1782295829396_voeqi",
       "provider": "vercel",
       "action": "vercel_preview_deploy",
       "status": "armed_local_only",
@@ -158,7 +147,7 @@
       "message": "vercel has credentials; live action was not requested.",
       "requestHash": "1a9718757f640970",
       "responseHash": "abfae1d6c3f1652e",
-      "createdAt": "2026-06-21T00:41:05.446Z"
+      "createdAt": "2026-06-24T10:10:29.396Z"
     }
   ]
 }

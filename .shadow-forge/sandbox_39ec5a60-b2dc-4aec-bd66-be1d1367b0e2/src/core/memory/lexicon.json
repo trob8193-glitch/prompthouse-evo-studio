@@ -1,0 +1,48 @@
+{
+  "semantic_networks": {
+    "Semantic Network": "Best overall word for connected branching ideas",
+    "Concept Map": "Visual diagram of ideas branching from one concept",
+    "Ontology": "Formal knowledge system of subjects, categories, and relationships",
+    "Taxonomy": "Hierarchical category tree",
+    "Knowledge Graph": "Database-style network of entities and relationships",
+    "Topic Map": "Organized map of topics and associations",
+    "Mind Map": "Brainstorm-style branching idea map",
+    "Lexical Network": "Network of words and their relationships",
+    "Semantic Field": "Group of words related by meaning",
+    "Associative Network": "Ideas connected by association"
+  },
+  "wordplay_patterns": {
+    "Pangram": "Uses every letter of the alphabet at least once (e.g., 'The quick brown fox...')",
+    "Anagram": "Rearranges letters to make a new word/phrase (e.g., listen -> silent)",
+    "Paragram": "Changes one or more letters for a pun or joke (e.g., Swan Lake -> Swine Lake)",
+    "Lipogram": "Writing that deliberately avoids one letter",
+    "Heterogram": "A word/phrase with no repeated letters",
+    "Palindrome": "Reads the same forward and backward (e.g., madam, racecar)",
+    "Semordnilap": "Forms a different word when reversed (e.g., stressed -> desserts)",
+    "Ambigram": "A word/design readable from more than one angle",
+    "Acrostic": "First letters of lines spell a message",
+    "Portmanteau": "Blends parts of words together (e.g., brunch = breakfast + lunch)",
+    "Spoonerism": "Swaps starting sounds of words",
+    "Malapropism": "Wrong similar-sounding word used accidentally"
+  },
+  "ui_design_architecture": {
+    "Design System": "Complete rules and reusable pieces for a product’s UI.",
+    "Component Library": "Organized set of reusable components for design or code.",
+    "Screen Template": "Reusable screen structure.",
+    "Navigation Shell": "Main app frame that holds navigation and nested screens.",
+    "Responsive Layout": "Layout that adapts to phone, tablet, desktop, etc.",
+    "State-Aware UI": "UI that changes based on Default, Loading, Empty, Error, Success, etc. states.",
+    "Design Tokens": "Named values for colors, spacing, fonts, shadows, radius, etc.",
+    "Hierarchy": "Visual importance. Big title first, smaller details second.",
+    "Density": "How much information is packed into a screen.",
+    "Above the Fold": "Content visible before scrolling.",
+    "Design Handoff": "Passing design specs/assets to developers."
+  },
+  "ux_principles": {
+    "User Flow": "The path a user takes to complete something.",
+    "Information Architecture": "How content, pages, tabs, and sections are organized.",
+    "Experience Map": "A visual map of what the user does, thinks, and feels.",
+    "Microinteraction": "Small interaction feedback, like button ripples or heart animations.",
+    "Accessibility": "Designing so people with disabilities can use the app (A11y)."
+  }
+}

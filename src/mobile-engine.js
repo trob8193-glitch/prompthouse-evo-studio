@@ -218,9 +218,9 @@ import {
   ActivityIndicator,
   SafeAreaView,
 } from 'react-native';
-import { use${toPascal(feature)}Store } from '../stores/${feature.toLowerCase()}Store';
+import { use\${toPascal(feature)}Store } from \${"'"}../stores/\${feature.toLowerCase()}Store\${"'"};
 
-export default function ${toPascal(feature)}Screen({ navigation }) {
+export default function \${toPascal(feature)}Screen({ navigation }) {
   const { items, isLoading, error, refresh } = use${toPascal(feature)}Store();
 
   const renderItem = useCallback(({ item }) => (

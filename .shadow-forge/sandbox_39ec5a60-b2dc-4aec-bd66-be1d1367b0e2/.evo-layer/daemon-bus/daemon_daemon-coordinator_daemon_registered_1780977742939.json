@@ -1,0 +1,18 @@
+{
+  "id": "daemon_daemon-coordinator_daemon_registered_1780977742939",
+  "daemonId": "daemon-coordinator",
+  "event": "daemon_registered",
+  "payload": {
+    "daemonId": "singularity-core",
+    "role": "singularity",
+    "capabilities": [
+      "strategy",
+      "planning",
+      "forecast"
+    ],
+    "metadata": {},
+    "status": "AVAILABLE",
+    "updatedAt": "2026-06-09T04:02:22.938Z"
+  },
+  "createdAt": "2026-06-09T04:02:22.939Z"
+}

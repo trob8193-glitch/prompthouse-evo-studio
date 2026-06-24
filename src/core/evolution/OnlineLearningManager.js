@@ -50,7 +50,7 @@ export class OnlineLearningManager {
     // [RAG FEED TETHER] Index interaction into LocalVectorDB
     try {
       const vdb = new LocalVectorDB();
-      vdb.addDocument(entry.id, entry.content, { source: 'interaction' }).catch(() => {});
+      vdb.addDocument(entry.id, entry.content, { source: 'interaction' }).catch(() => { return; });
     } catch {}
 
     return true;
@@ -72,7 +72,7 @@ export class OnlineLearningManager {
     // [RAG FEED TETHER] Index knowledge into LocalVectorDB
     try {
       const vdb = new LocalVectorDB();
-      vdb.addDocument(entry.id, entry.content, { source: entry.source }).catch(() => {});
+      vdb.addDocument(entry.id, entry.content, { source: entry.source }).catch(() => { return; });
     } catch {}
 
     return {

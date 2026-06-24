@@ -5,7 +5,13 @@ import remarkGfm from 'remark-gfm';
 import { useSovereignStore } from '../store.js';
 import { universalSend } from '../lib/universal-transport.js';
 import { ALL_BOT_ROSTER } from '../engine.js';
-import { COPILOT_LAYOUTS } from '../evo-copilot-sidebar.jsx';
+import { EvoHologram } from './EvoHologram.jsx';
+
+const COPILOT_LAYOUTS = [
+  { id: 'nexus', name: 'Nexus Default', bubbleStyle: {} },
+  { id: 'hologram', name: 'Holographic', bubbleStyle: { background: 'rgba(0,0,0,0.5)' } },
+  { id: 'terminal', name: 'Terminal Shell', bubbleStyle: { fontFamily: 'monospace', borderRadius: '0' } }
+];
 import { BRIDGE_URL } from '../config/bridge-config.js';
 import { MODEL_REGISTRY } from '../core/ai/ModelRegistry.js';
 import { Canvas } from '@react-three/fiber';
@@ -671,22 +677,23 @@ The frontend will intercept and execute this automatically.`;
           Shift + Enter for new line â€¢ Live Context Enabled
         </div>
       </div>
-      {/* Inner Canvas for 3D effects (holograms & depth layers) - Temporarily disabled for React 19 compatibility check */}
       <div className="absolute inset-0 backface-hidden pointer-events-none z-0">
-        {/* <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
-          <ambientLight intensity={0.4} />
-          <pointLight position={[10, 10, 10]} intensity={0.8} />
-          <OrbitControls enableDamping={true} dampingFactor={0.1} autoRotate={true} autoRotateSpeed={0.2} enableZoom={false} />
-          <React.Suspense fallback={null}>
-            <HologramSphere />
-          </React.Suspense>
-        </Canvas> */}
+        <React.Suspense fallback={null}>
+          <Canvas camera={{ position: [0, 0, 10], fov: 50 }} style={{ position: 'absolute', inset: 0 }}>
+            <ambientLight intensity={0.4} />
+            <pointLight position={[10, 10, 10]} intensity={0.8} />
+            <OrbitControls enableDamping={true} dampingFactor={0.1} autoRotate={false} enableZoom={false} />
+            <EvoHologram />
+          </Canvas>
+        </React.Suspense>
       </div>
 
-      {/* Global CSS for no-scrollbar, glow, shimmer, pulse */}
       <style dangerouslySetInnerHTML={{__html: `
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .no-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .no-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
+        .no-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+        .no-scrollbar { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.1) transparent; }
         @keyframes shimmer {
           0% { background-position: -200px 0; }
           100% { background-position: 200px 0; }
@@ -702,27 +709,6 @@ The frontend will intercept and execute this automatically.`;
   );
 }
 
-// 3D Hologram Sphere component with glow effect
-function HologramSphere() {
-  const texture = useTexture('https://images.unsplash.com/photo-1549887534-7c6808430793?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60');
-  return (
-    <mesh rotation={[0, 0, 0]} position={[0, 0, -5]} castShadow>
-      <sphereGeometry args={[1.5, 64, 64]} />
-      <meshStandardMaterial
-        map={texture}
-        metalness={0.4}
-        roughness={0.2}
-        emissive="#7b00ff"
-        emissiveIntensity={0.3}
-        transparent
-        opacity={0.6}
-        wireframe={false}
-        color="#00ffe0"
-        envMapIntensity={2}
-      />
-    </mesh>
-  );
-}
 
 // [Autonomous Evolution] FULL LLM mutation applied by PromptHouse Singularity Engine on 2026-06-22T20:44:50.706Z
 export default EvoCopilot;

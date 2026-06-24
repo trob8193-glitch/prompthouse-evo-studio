@@ -1,0 +1,62 @@
+[
+  {
+    "moduleId": "self-evolution",
+    "moduleName": "Self-Evolution Engine",
+    "key": "noBannedLanguage",
+    "label": "No fake/dummy/pending language"
+  },
+  {
+    "moduleId": "cost-firewall",
+    "moduleName": "Cost Firewall V2",
+    "key": "noBannedLanguage",
+    "label": "No fake/dummy/pending language"
+  },
+  {
+    "moduleId": "prompt-registry",
+    "moduleName": "Prompt Registry",
+    "key": "noBannedLanguage",
+    "label": "No fake/dummy/pending language"
+  },
+  {
+    "moduleId": "ai-generator",
+    "moduleName": "AI Generator Hub",
+    "key": "noBannedLanguage",
+    "label": "No fake/dummy/pending language"
+  },
+  {
+    "moduleId": "evo-model-foundry",
+    "moduleName": "Evo Model Foundry",
+    "key": "noBannedLanguage",
+    "label": "No fake/dummy/pending language"
+  },
+  {
+    "moduleId": "commerce-core",
+    "moduleName": "Commerce Core",
+    "key": "noBannedLanguage",
+    "label": "No fake/dummy/pending language"
+  },
+  {
+    "moduleId": "deployment-center",
+    "moduleName": "Deployment Center",
+    "key": "noBannedLanguage",
+    "label": "No fake/dummy/pending language"
+  },
+  {
+    "moduleId": "settings-api",
+    "moduleName": "Settings & API Credentials",
+    "key": "noBannedLanguage",
+    "label": "No fake/dummy/pending language"
+  },
+  {
+    "moduleId": "live-inspector",
+    "moduleName": "Live Inspector & Diagnostics",
+    "key": "noBannedLanguage",
+    "label": "No fake/dummy/pending language"
+  },
+  {
+    "moduleId": "evo-control",
+    "moduleName": "Evo Studio Control",
+    "key": "noBannedLanguage",
+    "label": "No fake/dummy/pending language"
+  }
+]

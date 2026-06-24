@@ -1,13 +1,13 @@
 # Provider Activation Proof
 
-- Truth State: PROVIDER_GATED
+- Truth State: LOCAL_ONLY
 - Live Requested: no
-- Ready Actions: 3/4
-- Blockers: 1
-- Checked At: 2026-06-21T00:41:05.446Z
+- Ready Actions: 4/4
+- Blockers: 0
+- Checked At: 2026-06-24T10:10:29.398Z
 
 ## Actions
 - openai/ai_provider_probe: LOCAL_ONLY (armed_local_only) - openai has credentials; live action was not requested.
-- gemini/ai_provider_probe: NEEDS_CREDENTIALS (blocked) - GEMINI_API_KEY is required before ai_provider_probe.
+- gemini/ai_provider_probe: LOCAL_ONLY (armed_local_only) - gemini has credentials; live action was not requested.
 - stripe/stripe_test_checkout: LOCAL_ONLY (armed_local_only) - stripe has credentials; live action was not requested.
 - vercel/vercel_preview_deploy: LOCAL_ONLY (armed_local_only) - vercel has credentials; live action was not requested.

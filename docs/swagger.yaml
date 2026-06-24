@@ -1,0 +1,33 @@
+openapi: 3.0.0
+info:
+  title: PromptHouse Evo Studio Bridge API
+  version: 1.0.0
+  description: Core backend routes for Evo Studio intelligence and economy.
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /health:
+    get:
+      summary: Health Check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "ok"
+  /stripe/webhook:
+    post:
+      summary: Stripe Webhook Entry Point
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Webhook received successfully

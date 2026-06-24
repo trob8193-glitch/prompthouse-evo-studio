@@ -1,0 +1,105 @@
+{
+  "success": true,
+  "truthState": "LOCAL_ONLY",
+  "liveRequested": false,
+  "checkedAt": "2026-06-14T01:12:27.907Z",
+  "plans": [
+    {
+      "provider": "github",
+      "mode": "local",
+      "knownProvider": true,
+      "envKey": "GITHUB_TOKEN",
+      "approvalScope": "provider_probe",
+      "credentialConfigured": true,
+      "endpoint": "https://api.github.com/user"
+    },
+    {
+      "provider": "openai",
+      "mode": "local",
+      "knownProvider": true,
+      "envKey": "OPENAI_API_KEY",
+      "approvalScope": "provider_probe",
+      "credentialConfigured": true,
+      "endpoint": "https://api.openai.com/v1/models"
+    },
+    {
+      "provider": "stripe",
+      "mode": "local",
+      "knownProvider": true,
+      "envKey": "STRIPE_SECRET_KEY",
+      "approvalScope": "commerce",
+      "credentialConfigured": true,
+      "endpoint": "https://api.stripe.com/v1/account"
+    },
+    {
+      "provider": "vercel",
+      "mode": "local",
+      "knownProvider": true,
+      "envKey": "VERCEL_TOKEN",
+      "approvalScope": "deploy",
+      "credentialConfigured": true,
+      "endpoint": "https://api.vercel.com/v2/user"
+    }
+  ],
+  "probes": [
+    {
+      "id": "hs_1d0f36c3-486",
+      "connectorId": "github-1",
+      "connectorName": "GitHub",
+      "provider": "github",
+      "mode": "local",
+      "timestamp": "2026-06-14T01:12:27.905Z",
+      "status": "connected",
+      "truthState": "LOCAL_ONLY",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": true,
+      "reason": "Local connector contract is reachable; no external provider call was requested."
+    },
+    {
+      "id": "hs_7c18c2dc-326",
+      "connectorId": "openai-1",
+      "connectorName": "OpenAI",
+      "provider": "openai",
+      "mode": "local",
+      "timestamp": "2026-06-14T01:12:27.907Z",
+      "status": "connected",
+      "truthState": "LOCAL_ONLY",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": true,
+      "reason": "Local connector contract is reachable; no external provider call was requested."
+    },
+    {
+      "id": "hs_4681ac28-3a2",
+      "connectorId": "stripe-1",
+      "connectorName": "Stripe",
+      "provider": "stripe",
+      "mode": "local",
+      "timestamp": "2026-06-14T01:12:27.907Z",
+      "status": "connected",
+      "truthState": "LOCAL_ONLY",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": true,
+      "reason": "Local connector contract is reachable; no external provider call was requested."
+    },
+    {
+      "id": "hs_ecb1df84-670",
+      "connectorId": "vercel-1",
+      "connectorName": "Vercel",
+      "provider": "vercel",
+      "mode": "local",
+      "timestamp": "2026-06-14T01:12:27.907Z",
+      "status": "connected",
+      "truthState": "LOCAL_ONLY",
+      "authenticated": false,
+      "external": false,
+      "contractReachable": true,
+      "reason": "Local connector contract is reachable; no external provider call was requested."
+    }
+  ],
+  "providerGates": [],
+  "liveBlockers": [],
+  "localFailures": []
+}

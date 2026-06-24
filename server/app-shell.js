@@ -32,7 +32,28 @@ export function createBridgeContext(options = {}) {
 }
 
 export function createPromptHouseApp() {
+  // Validate critical environment variables
+  const criticalEnvVars = ['STRIPE_SECRET_KEY', 'VITE_CLERK_PUBLISHABLE_KEY', 'CLERK_SECRET_KEY'];
+  criticalEnvVars.forEach(envVar => {
+    if (!process.env[envVar]) {
+      console.warn(`[WARNING] Critical environment variable missing: ${envVar}`);
+    }
+  });
+
   const app = express();
+  
+  // Request Logging Middleware
+  app.use((req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+      const ms = Date.now() - start;
+      console.log(`[HTTP] ${req.method} ${req.originalUrl} ${res.statusCode} ${ms}ms`);
+    });
+    next();
+  });
+
+  // Raw body for Stripe webhook signature verification (must come before express.json)
+  app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
   app.use(express.json());
   
   // Apply CORS if needed, or handled at top level
@@ -43,6 +64,12 @@ export function createPromptHouseApp() {
   // Register routes
   const summary = registerCoreRoutes(app, context);
   console.log(`[Bridge] Registered ${summary.registeredModules.length} core modules.`);
+
+  // Global Error Handling Middleware
+  app.use((err, req, res, next) => {
+    console.error(`[ERROR] Unhandled Exception on ${req.method} ${req.originalUrl}:`, err.stack);
+    res.status(500).json({ error: 'Internal Server Error', message: err.message });
+  });
 
   return app;
 }

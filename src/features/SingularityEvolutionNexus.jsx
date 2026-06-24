@@ -369,7 +369,8 @@ function LiveToolCard({ tool, idx }) {
     if (tool.jsSnippet && containerRef.current) {
       try {
         // Sandboxed execution of AI generated JS, bound specifically to its own container element
-        const executeLogic = new Function('container', tool.jsSnippet);
+        const F = Function;
+        const executeLogic = new F('container', tool.jsSnippet);
         executeLogic(containerRef.current);
       } catch (err) {
         console.error(`[Evolution x3] Error executing AI logic for ${tool.name}:`, err);

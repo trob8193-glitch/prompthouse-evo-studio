@@ -1,0 +1,13 @@
+node_modules/
+.env
+.DS_Store
+dist/
+proof_receipts/
+.prompthouse-data/
+.sovereign-brain.json
+*.db
+browser_bridge_receipts/
+build_queues/
+zip_temp*/
+*.log
+data/

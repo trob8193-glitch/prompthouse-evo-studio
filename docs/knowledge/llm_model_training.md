@@ -44,7 +44,8 @@ trainer.train()
 
 LoRA is a technique that reduces the number of trainable parameters by decomposing weight matrices into low-rank matrices. This approach is particularly useful for fine-tuning large models with limited computational resources.
 
-#### Benefits:
+#### Benefits
+
 - **Efficiency**: Reduces memory and computational requirements.
 - **Scalability**: Enables fine-tuning of very large models on smaller hardware setups.
 
@@ -59,7 +60,8 @@ lora_model.train(train_dataset)
 
 Prompt engineering involves crafting inputs to guide the model's reasoning process. This technique is crucial for tasks requiring complex logic or multi-step reasoning.
 
-#### Techniques:
+#### Techniques
+
 - **Contextual Prompts**: Provide additional context to guide the model.
 - **Chain-of-Thought Prompts**: Encourage the model to break down reasoning into steps.
 
@@ -76,7 +78,8 @@ response = model.generate(prompt)
 
 Running models locally can be achieved using frameworks like WebGPU, Ollama, or custom runtimes. This approach is ideal for scenarios where data privacy is paramount or when low-latency inference is required.
 
-#### Example with WebGPU:
+#### Example with WebGPU
+
 ```javascript
 import { WebGPUModel } from 'webgpu-llm';
 
@@ -110,7 +113,8 @@ response = rag_model.generate("What is the capital of France?")
 
 APIs from providers like OpenAI and Gemini offer access to powerful models that can process large datasets and generate synthetic training data.
 
-#### Example with OpenAI API:
+#### Example with OpenAI API
+
 ```python
 import openai
 
@@ -139,7 +143,8 @@ Self-evolution loops involve using the model's outputs to iteratively refine its
 
 The Dual-Core architecture leverages both local and cloud resources to optimize for cost, latency, and task complexity.
 
-#### Key Strategies:
+#### Key Strategies
+
 - **Task Offloading**: Use cloud resources for computationally intensive tasks.
 - **Local Processing**: Handle sensitive data and low-latency tasks locally.
 - **Dynamic Switching**: Seamlessly switch between local and cloud cores based on real-time analysis of workload and resource availability.

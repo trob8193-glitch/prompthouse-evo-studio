@@ -1,0 +1,164 @@
+{
+  "ok": false,
+  "success": true,
+  "truthState": "PROVIDER_GATED",
+  "liveRequested": false,
+  "checkedAt": "2026-06-21T00:41:05.446Z",
+  "summary": {
+    "totalActions": 4,
+    "readyActions": 3,
+    "blockers": 1
+  },
+  "gates": {
+    "openai": {
+      "envKey": "OPENAI_API_KEY",
+      "configured": true,
+      "truthState": "BUILT",
+      "redacted": "sk-p****MDIA"
+    },
+    "gemini": {
+      "envKey": "GEMINI_API_KEY",
+      "configured": false,
+      "truthState": "NEEDS_CREDENTIALS",
+      "redacted": null
+    },
+    "stripe": {
+      "envKey": "STRIPE_SECRET_KEY",
+      "configured": true,
+      "truthState": "BUILT",
+      "redacted": "sk_t****2crq"
+    },
+    "vercel": {
+      "envKey": "VERCEL_TOKEN",
+      "configured": true,
+      "truthState": "BUILT",
+      "redacted": "vcp_****9j3R"
+    },
+    "auth": {
+      "envKey": "JWT_SECRET",
+      "configured": true,
+      "truthState": "BUILT",
+      "redacted": "4084****5841"
+    },
+    "masterKey": {
+      "envKey": "PH_EVO_MASTER_KEY",
+      "configured": true,
+      "truthState": "BUILT",
+      "redacted": "5aea****ae4f"
+    }
+  },
+  "actions": [
+    {
+      "provider": "openai",
+      "action": "ai_provider_probe",
+      "envKey": "OPENAI_API_KEY",
+      "approvalScope": "provider_probe",
+      "status": "armed_local_only",
+      "truthState": "LOCAL_ONLY",
+      "message": "openai has credentials; live action was not requested.",
+      "readiness": null
+    },
+    {
+      "provider": "gemini",
+      "action": "ai_provider_probe",
+      "envKey": "GEMINI_API_KEY",
+      "approvalScope": "provider_probe",
+      "status": "blocked",
+      "truthState": "NEEDS_CREDENTIALS",
+      "message": "GEMINI_API_KEY is required before ai_provider_probe.",
+      "readiness": null
+    },
+    {
+      "provider": "stripe",
+      "action": "stripe_test_checkout",
+      "envKey": "STRIPE_SECRET_KEY",
+      "approvalScope": "commerce",
+      "status": "armed_local_only",
+      "truthState": "LOCAL_ONLY",
+      "message": "stripe has credentials; live action was not requested.",
+      "readiness": {
+        "ready": true,
+        "truthState": "VERIFIED",
+        "mode": "test"
+      }
+    },
+    {
+      "provider": "vercel",
+      "action": "vercel_preview_deploy",
+      "envKey": "VERCEL_TOKEN",
+      "approvalScope": "deploy",
+      "status": "armed_local_only",
+      "truthState": "LOCAL_ONLY",
+      "message": "vercel has credentials; live action was not requested.",
+      "readiness": {
+        "preview": {
+          "ready": true,
+          "truthState": "VERIFIED"
+        },
+        "production": {
+          "ready": true,
+          "truthState": "VERIFIED",
+          "blockers": []
+        }
+      }
+    }
+  ],
+  "blockers": [
+    {
+      "provider": "gemini",
+      "action": "ai_provider_probe",
+      "envKey": "GEMINI_API_KEY",
+      "approvalScope": "provider_probe",
+      "status": "blocked",
+      "truthState": "NEEDS_CREDENTIALS",
+      "message": "GEMINI_API_KEY is required before ai_provider_probe.",
+      "readiness": null
+    }
+  ],
+  "receipts": [
+    {
+      "id": "rcpt_1782002465443_95v8l",
+      "provider": "openai",
+      "action": "ai_provider_probe",
+      "status": "armed_local_only",
+      "truthState": "LOCAL_ONLY",
+      "message": "openai has credentials; live action was not requested.",
+      "requestHash": "0228eba87335fbe8",
+      "responseHash": "a1e78a38c0520ed4",
+      "createdAt": "2026-06-21T00:41:05.443Z"
+    },
+    {
+      "id": "rcpt_1782002465444_886vr",
+      "provider": "gemini",
+      "action": "ai_provider_probe",
+      "status": "blocked",
+      "truthState": "NEEDS_CREDENTIALS",
+      "message": "GEMINI_API_KEY is required before ai_provider_probe.",
+      "requestHash": "0228eba87335fbe8",
+      "responseHash": "ca53f8c66aa92254",
+      "createdAt": "2026-06-21T00:41:05.445Z"
+    },
+    {
+      "id": "rcpt_1782002465445_s6zq6",
+      "provider": "stripe",
+      "action": "stripe_test_checkout",
+      "status": "armed_local_only",
+      "truthState": "LOCAL_ONLY",
+      "message": "stripe has credentials; live action was not requested.",
+      "requestHash": "fc221f1271107d8e",
+      "responseHash": "46bd5fd6f0460f0d",
+      "createdAt": "2026-06-21T00:41:05.445Z"
+    },
+    {
+      "id": "rcpt_1782002465446_zr88d",
+      "provider": "vercel",
+      "action": "vercel_preview_deploy",
+      "status": "armed_local_only",
+      "truthState": "LOCAL_ONLY",
+      "message": "vercel has credentials; live action was not requested.",
+      "requestHash": "1a9718757f640970",
+      "responseHash": "abfae1d6c3f1652e",
+      "createdAt": "2026-06-21T00:41:05.446Z"
+    }
+  ]
+}

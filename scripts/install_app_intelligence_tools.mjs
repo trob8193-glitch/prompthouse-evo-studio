@@ -120,9 +120,9 @@ if (fs.existsSync(coreIndexPath)) {
 
 if (fs.existsSync(bridgePath)) {
   let bridge = fs.readFileSync(bridgePath, 'utf8');
-  const importAnchor = "import registerExternalConnectorRoutes from './generated_apis/external_connector_routes.js';";
+  const importAnchor = "import registerExternalConnectorRoutes from " + "'./generated_apis/external_connector_routes.js';";
   const registerAnchor = 'registerExternalConnectorRoutes(app, { db });';
-  const importLine = "import registerEvoAppIntelligenceRoutes from './generated_apis/evo_app_intelligence_routes.js';";
+  const importLine = "import registerEvoAppIntelligenceRoutes from " + "'./generated_apis/evo_app_intelligence_routes.js';";
   const registerLine = 'registerEvoAppIntelligenceRoutes(app);';
 
   if (!bridge.includes(importLine)) {

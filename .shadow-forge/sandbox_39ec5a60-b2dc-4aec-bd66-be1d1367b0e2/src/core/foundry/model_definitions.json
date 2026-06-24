@@ -1,0 +1,10 @@
+[
+  {
+    "id": "local-evo-router",
+    "status": "available"
+  },
+  {
+    "id": "local-evo-lm-latest",
+    "status": "trained_local"
+  }
+]

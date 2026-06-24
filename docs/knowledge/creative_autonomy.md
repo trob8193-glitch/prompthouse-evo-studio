@@ -37,16 +37,19 @@ The studio must be equipped to translate high-level, abstract prompts into concr
 ### Principles of Non-Generic, Premium Design
 
 Avoid the "bootstrap look" by embracing:
+
 - **Asymmetry**: Break the grid with intentional misalignments to draw attention.
 - **Custom Shapes**: Generate SVGs on the fly for unique iconography and backgrounds.
 - **Micro-Interactions**: Implement subtle animations that enhance user engagement without overwhelming.
 
 ### Design Techniques
+
 - **Asymmetry**: Use CSS Grid or Flexbox to create layouts that intentionally disrupt symmetry.
 - **SVG Generation**: Utilize libraries like `svg.js` for dynamic SVG creation.
 - **Micro-Interactions**: Implement using CSS animations or JavaScript for interactive feedback.
 
 ### Code Snippet: Asymmetric Layout
+
 ```html
 <div class="asymmetric-layout">
   <div class="item item1">Content A</div>
@@ -71,14 +74,17 @@ Avoid the "bootstrap look" by embracing:
 ### User Profiling for Tailored Designs
 
 To ensure each design is unique:
+
 - **Session Context Analysis**: Monitor user interactions, preferences, and historical data.
 - **Dynamic Style Generation**: Create styles based on user profiles, including color preferences, brand identity, and past interactions.
 
 ### Personalization Strategy
+
 - **Profile Templates**: Develop templates that adapt to user data.
 - **AI-Driven Recommendations**: Use machine learning to suggest design elements that resonate with user profiles.
 
 ### Example: User Profile Template
+
 ```json
 {
   "user_id": "Noname",
@@ -103,6 +109,7 @@ To ensure each design is unique:
 5. **Refinement**: Iterate based on audit feedback.
 
 ### Implementation Example
+
 - **Step 1**: Receive prompt "modern elegance."
 - **Step 2**: Generate mood board with sleek fonts, monochrome palette.
 - **Step 3**: Auto-generate code for a landing page.
@@ -110,6 +117,7 @@ To ensure each design is unique:
 - **Step 5**: Refine animations for smoother transitions.
 
 ### Code Snippet: Mood Board Generation
+
 ```python
 def generate_mood_board(prompt):
     # Example using a color palette API
@@ -127,7 +135,8 @@ def generate_mood_board(prompt):
 
 This guide empowers the PromptHouse Evo Studio to autonomously interpret, design, and personalize creative outputs with precision and flair. By following these principles and leveraging the provided templates and snippets, the studio will consistently deliver unique, premium designs tailored to each user's vision.
 
---- 
+---
+
 ```
 
 This document serves as a foundational guide, providing the necessary tools and frameworks for the PromptHouse Evo Studio to achieve creative autonomy, design excellence, and user-specific uniqueness.

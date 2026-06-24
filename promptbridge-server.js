@@ -75,7 +75,10 @@ import { registerGitBridgeRoutes } from './server/routes/git-bridge.routes.js';
 import { registerSingularityCompletionRoutes } from './server/routes/singularity-completion.routes.js';
 import { registerEvolutionRoutes } from './server/routes/evolution.routes.js';
 import { registerOmnibotMobileRoutes } from './generated_apis/omnibot_mobile_routes.js';
-
+import { registerAuthRoutes } from './server/routes/auth.routes.js';
+import { registerStripeWebhookRoutes } from './server/routes/stripe-webhooks.routes.js';
+import { registerEvoLmRoutes } from './server/routes/evo-lm.routes.js';
+import { registerEnvConfigRoutes } from './server/routes/env-config.routes.js';
 // Import our core engines
 import { UniversalAIAdaptor } from './lib/ai/UniversalAIAdaptor.js';
 import { SelfMaintenance } from './src/core/automation/self_maintenance.js';
@@ -146,13 +149,9 @@ import { initErrorTracking, sentryErrorHandler } from './server/middleware/error
 const app = express();
 initErrorTracking(app);
 app.set('trust proxy', 1);
+// Stripe Webhook MUST use raw body parsing for signature verification
+app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '10mb' }));
-app.use(cors({
-  origin: '*', // Allow all LAN IPs
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
 // Hardened Security Headers, CSRF, and Tracing
 import { securityHeaders, csrfGenerate, requestTracing } from './server/middleware/security.js';
 app.use(requestTracing);
@@ -161,7 +160,16 @@ app.use(securityHeaders);
 // For now, we add the generator so the headers exist.
 app.use(csrfGenerate);
 
-// Production API Rate Limiting
+// Production API Rate Limiting with Garbage Collection
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, data] of RATE_LIMITS.entries()) {
+    if (now > data.resetTime) {
+      RATE_LIMITS.delete(ip);
+    }
+  }
+}, 60000 * 5); // Clean up every 5 minutes
+
 app.use((req, res, next) => {
   const ip = req.ip || req.connection?.remoteAddress || 'unknown';
   const now = Date.now();
@@ -307,6 +315,8 @@ registerGitBridgeRoutes(app);
 registerSingularityCompletionRoutes(app);
 registerEvolutionRoutes(app);
 registerOmnibotMobileRoutes(app);
+registerAuthRoutes(app);
+registerStripeWebhookRoutes(app);
 
 // Attach the Global MCP SSE Endpoints
 attachSseTransport(app);
@@ -609,6 +619,8 @@ const foundry = new FoundryOrchestrator(ai, stripe);
 
 // Register Real-Time Learning Routes
 registerRealTimeIngestRoutes(app, { ai });
+registerEvoLmRoutes(app, { ai });
+registerEnvConfigRoutes(app);
 
 const SANDBOX_DIR = join(DATA_DIR, 'sandbox');
 const saasOrchestrator = new SaasOrchestrator(ai, SANDBOX_DIR);

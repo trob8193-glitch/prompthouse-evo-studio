@@ -108,9 +108,16 @@ ${originalCode}`;
 
       // Syntax check on the mutated file
       try {
-        const { execFileSync: execCheck } = await import('child_process');
-        execCheck(process.execPath, ['--check', fullPath], { stdio: 'pipe', timeout: 5000 });
-        console.log('[Self-Evolution] ✅ Syntax check passed.');
+        const ext = path.extname(fullPath);
+        if (ext === '.js' || ext === '.mjs') {
+          const vm = await import('vm');
+          new vm.Script(evolvedCode);
+          console.log('[Self-Evolution] ✅ VM AST Syntax validation passed.');
+        } else {
+          const { execFileSync: execCheck } = await import('child_process');
+          execCheck(process.execPath, ['--check', fullPath], { stdio: 'pipe', timeout: 5000 });
+          console.log('[Self-Evolution] ✅ Child Process Syntax check passed.');
+        }
       } catch (syntaxErr) {
         console.error(`[Self-Evolution] ❌ SYNTAX ERROR in evolved file: ${String(syntaxErr.stderr || syntaxErr.message).split('\\n')[0]}`);
         validationPassed = false;

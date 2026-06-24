@@ -1,0 +1,8 @@
+{
+  "name": "@prompthouse/evo-git",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "description": "Evo Git Layer 1 Protocol",
+  "dependencies": {}
+}

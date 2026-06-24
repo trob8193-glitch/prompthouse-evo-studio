@@ -72,7 +72,7 @@ for (const [id, file] of Object.entries(files)) requiredFile(id, file);
 
 includesCheck('app-core-export', files.index, "export * from './EvoAppIntelligenceBridge.js';");
 includesCheck('signal-core-export', files.index, "export * from './EvoSignalLearningBridge.js';");
-includesCheck('bridge-app-import', files.bridge, "import registerEvoAppIntelligenceRoutes from './generated_apis/evo_app_intelligence_routes.js';");
+includesCheck('bridge-app-import', files.bridge, "import registerEvoAppIntelligenceRoutes from " + "'./generated_apis/evo_app_intelligence_routes.js';");
 includesCheck('bridge-app-register', files.bridge, 'registerEvoAppIntelligenceRoutes(app);');
 
 for (const file of [files.appRoute, files.appCli, files.signalCli, files.bridge]) syntaxCheck(file);

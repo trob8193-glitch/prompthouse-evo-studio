@@ -1,6 +1,7 @@
 # Precision Cutting, Editing, and Automated 5 Pen Etch a Sketching: A Comprehensive Guide
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Precise Cutting & Editing](#precise-cutting--editing)
    - [Vector Path Manipulation](#vector-path-manipulation)

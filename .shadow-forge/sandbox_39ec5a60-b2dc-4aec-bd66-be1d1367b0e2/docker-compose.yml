@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  promptbridge:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - BRIDGE_PORT=3001
+      - ALLOWED_ORIGINS=https://your-frontend-domain.com
+      - REQUIRE_AUTH=true
+    env_file:
+      - .env
+    volumes:
+      - prompthouse-data:/.prompthouse-data
+    restart: unless-stopped
+
+volumes:
+  prompthouse-data:

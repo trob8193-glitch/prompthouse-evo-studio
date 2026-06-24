@@ -1,1 +1,1 @@
-# Security Audit\n\nNo critical CVEs found.
+# Security Audit\n\nNo critical CVEs found

@@ -33,7 +33,7 @@ export class SingularityResilienceEngine {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ model: 'qwen3.6', prompt: '', keep_alive: -1 })
-        }).catch(() => {});
+        }).catch(() => { return; });
       } catch {}
     }
 

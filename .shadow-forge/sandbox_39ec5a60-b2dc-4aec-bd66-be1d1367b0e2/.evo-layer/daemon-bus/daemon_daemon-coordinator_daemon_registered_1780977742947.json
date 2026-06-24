@@ -1,0 +1,18 @@
+{
+  "id": "daemon_daemon-coordinator_daemon_registered_1780977742947",
+  "daemonId": "daemon-coordinator",
+  "event": "daemon_registered",
+  "payload": {
+    "daemonId": "middleend-watchdog",
+    "role": "watchdog",
+    "capabilities": [
+      "watch",
+      "recover",
+      "alert"
+    ],
+    "metadata": {},
+    "status": "AVAILABLE",
+    "updatedAt": "2026-06-09T04:02:22.946Z"
+  },
+  "createdAt": "2026-06-09T04:02:22.947Z"
+}

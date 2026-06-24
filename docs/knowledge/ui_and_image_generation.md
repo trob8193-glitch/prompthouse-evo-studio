@@ -30,11 +30,13 @@ To generate high-quality images, the prompt must be crafted with precision and c
   ```
 
 - **Contextual Anchoring**: Use references to known styles or artists to guide the generation process.
+
   ```plaintext
   "Create an image in the style of Van Gogh, featuring a starry night over a bustling cityscape."
   ```
 
 - **Iterative Refinement**: Start with a broad prompt and refine based on outputs.
+
   ```plaintext
   "Initial: Generate a futuristic cityscape.
    Refined: Generate a futuristic cityscape with neon lights, flying cars, and towering skyscrapers, inspired by cyberpunk aesthetics."
@@ -46,6 +48,7 @@ Maintaining style consistency across multiple images is crucial for cohesive vis
 
 - **Style Transfer**: Use style transfer techniques to apply a consistent artistic style across images.
 - **Prompt Templates**: Develop templates that include style descriptors.
+
   ```plaintext
   "Generate an image of [subject] in a [style] style with [color scheme]."
   ```
@@ -53,6 +56,7 @@ Maintaining style consistency across multiple images is crucial for cohesive vis
 ### Control Mechanisms: Seeds and CFG
 
 - **Seeds**: Use seeds to reproduce specific images. This is essential for iterative design processes where consistency is required.
+
   ```plaintext
   "Generate an image of a dragon using seed 12345."
   ```
@@ -75,6 +79,7 @@ Maintaining style consistency across multiple images is crucial for cohesive vis
 
 - **Atomic Design Principles**: Break down UI into fundamental components (atoms, molecules, organisms).
 - **Reusable Components**: Design components that can be reused across different parts of the application.
+
   ```jsx
   // Example React Component
   const Button = ({ label, onClick }) => (
@@ -92,6 +97,7 @@ Maintaining style consistency across multiple images is crucial for cohesive vis
 ### Semantic Structure
 
 - **Accessibility**: Ensure semantic HTML is used for accessibility.
+
   ```html
   <nav>
     <ul>
@@ -110,6 +116,7 @@ Maintaining style consistency across multiple images is crucial for cohesive vis
 ### Modern CSS: Grid and Flexbox
 
 - **CSS Grid**: Ideal for creating complex, two-dimensional layouts.
+
   ```css
   .grid-container {
     display: grid;
@@ -119,6 +126,7 @@ Maintaining style consistency across multiple images is crucial for cohesive vis
   ```
 
 - **Flexbox**: Best for one-dimensional layouts and aligning items.
+
   ```css
   .flex-container {
     display: flex;
@@ -129,6 +137,7 @@ Maintaining style consistency across multiple images is crucial for cohesive vis
 ### Responsive Design
 
 - **Media Queries**: Implement media queries to ensure layouts adapt to different screen sizes.
+
   ```css
   @media (max-width: 768px) {
     .grid-container {
@@ -148,4 +157,5 @@ Maintaining style consistency across multiple images is crucial for cohesive vis
 ---
 
 This guide serves as a comprehensive resource for mastering the intricacies of image, UI, and layout generation within the PromptHouse Evo Studio. By leveraging these strategies and techniques, users can enhance their creative outputs and streamline their design processes.
+
 ```

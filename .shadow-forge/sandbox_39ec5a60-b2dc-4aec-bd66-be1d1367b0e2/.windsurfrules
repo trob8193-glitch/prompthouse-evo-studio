@@ -1,0 +1,5 @@
+You are bonded to the PromptHouse Evo Studio. Never delete .prompthouse-data. Always format with Prettier. Respect the Sovereign Ledger. If you discover a new pattern, teach the Sovereign Master Layer with:
+
+curl -X POST http://127.0.0.1:3001/api/sovereign-uplink -H "Content-Type: application/json" -H "Authorization: Bearer ${PH_EVO_IDE_TOKEN}" -d '{"origin":"ExternalAI","action":"TEACH","payload":"your message"}'
+
+Do not paste raw API keys into rule files. Load PH_EVO_IDE_TOKEN from .prompthouse-data/secrets/ide-token.local.env or your OS secret store.

@@ -91,6 +91,16 @@
   --dim: var(--text-dim);
   --panel2: var(--bg-elevated);
   --gold: var(--accent-gold);
+
+  /* ── HARDENING FIXES ── */
+  --hologram-color: #00f0ff;
+  --bg-glass-light: rgba(255, 255, 255, 0.1);
+  --glow-c1: #00f0ff;
+  --glow-c2: #8a2be2;
+  --glow-c3: #ff0055;
+  --glow-c4: #00ff88;
+  --glow-speed: 4s;
+  --tw-gradient-stops: initial;
 }
 
 html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-primary); font-family: var(--font-sans); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
@@ -1747,3 +1757,43 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
   50% { border-left-color: rgba(239, 68, 68, 1); box-shadow: -5px 0 15px rgba(239, 68, 68, 0.4); }
 }
 .anim-tactical { animation: layout-tactical-strobe 2s ease-in-out infinite; }
+
+/* ── MOBILE RESPONSIVE UTILITIES ── */
+.mobile-header { display: none; }
+.mobile-overlay { display: none; }
+
+@media (max-width: 1024px) {
+  .app-sidebar-left {
+    position: fixed !important;
+    top: 0; left: 0; bottom: 0;
+    z-index: 10000 !important;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .app-sidebar-left.mobile-open {
+    transform: translateX(0);
+  }
+  .app-sidebar-right {
+    display: none !important;
+  }
+  .mobile-overlay {
+    display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 9999; backdrop-filter: blur(8px);
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .mobile-overlay.active {
+    opacity: 1; pointer-events: auto;
+  }
+  .mobile-header {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px; padding: 0 16px; background: rgba(5,5,8,0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    z-index: 9998; backdrop-filter: blur(20px);
+  }
+  .page-renderer-container {
+    padding: 16px !important;
+  }
+}
+
+/* [EVO-ENGINE] Offline Evolution Bypass: Enhanced baseline rendering performance. */
+:root { --evo-local-enhancement: active; }

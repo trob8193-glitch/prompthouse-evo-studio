@@ -1,0 +1,2 @@
+/** Fixed Feature: Deployment Sequencer (mod05) **/
+export class DeploymentSequencer { constructor() { this.queue = []; } stage(version) { this.queue.push({ version, status: 'staged', timestamp: Date.now() }); return true; } promote(version) { const item = this.queue.find(i => i.version === version); if (item) item.status = 'production'; return !!item; } }

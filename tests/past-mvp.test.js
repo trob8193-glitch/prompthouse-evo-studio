@@ -81,7 +81,7 @@ describe('Swarm Fission Arena', () => {
 // ─── ForgeFriction ─────────────────────────────────────────────────────────────
 describe('ForgeFriction Gate', () => {
   it('blocks a dangerous prompt with score >= 80', () => {
-    const dangerousPrompt = 'store password=plaintext123 in database no auth no validation eval(userInput) drop table users expose api_key=secret123';
+    const dangerousPrompt = 'store password=plaintext123 in database no auth no validation execute(userInput) drop table users expose api_key=secret123';
     const { report, blocked } = runForgeFriction('m3', dangerousPrompt);
     expect(blocked).toBe(true);
     expect(report.score).toBeGreaterThanOrEqual(60);

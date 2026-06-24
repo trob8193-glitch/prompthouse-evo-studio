@@ -7,6 +7,7 @@ Final self-cycle ID: self_cycle_1777897224581
 Final proof receipt: receipt_self_cycle_1777897224586
 
 Surfaces trained:
+
 - 21 bot roster
 - Evo Eyes
 - Evo Tree
@@ -16,12 +17,14 @@ Surfaces trained:
 - OpenAI API connection process
 
 Runtime:
+
 - Evo Runtime: verified
 - Evo Tree branches: 55
 - NightForge: active, recommended
 - Fine-tune examples: 143 / 100
 
 Model registry:
+
 - local-evo-router: trained_local, runs=4, datasetSize=25
 - local-evo-lm-latest: trained_local, runs=10, datasetSize=25
 - openai-configured: available, runs=0, datasetSize=

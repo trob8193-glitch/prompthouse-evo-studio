@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import url from 'url';
+import { AutonomousUserAgent } from '../AutonomousUserAgent.mjs';
+import { OmniOutreachDaemon } from '../outreach/OmniOutreachDaemon.mjs';
+import { FinanceDaemon } from '../FinanceDaemon.mjs';
+import { MasterAuditDaemon } from '../audit/MasterAuditDaemon.mjs';
 
 const STATE_FILE = () => path.join(process.cwd(), '.prompthouse-data', 'daemons', 'omni_state.json');
 const KILL_SWITCH = () => path.join(process.cwd(), '.prompthouse-data', 'evolution', '.evolution-kill-switch');
@@ -83,7 +87,7 @@ export class OmniOrchestrator {
         const tether = getMegaTether();
         if (tether) tether.broadcast('omni_orchestrator', 'daemon_heartbeat', { statuses, heartbeat: this.heartbeatCount });
       } catch {}
-    }).catch(() => {});
+    }).catch(() => { return; });
   }
 
   saveState(statuses = null) {
@@ -111,7 +115,45 @@ export class OmniOrchestrator {
 let globalOrchestrator = null;
 
 export function getOmniOrchestrator() {
-  if (!globalOrchestrator) globalOrchestrator = new OmniOrchestrator();
+  if (!globalOrchestrator) {
+    globalOrchestrator = new OmniOrchestrator();
+    
+    globalOrchestrator.registerDaemon('AutonomousUser', {
+      start: () => {
+        const bot = new AutonomousUserAgent();
+        bot.startSession().catch(() => {});
+      },
+      stop: () => {},
+      getStatus: () => ({ active: true })
+    });
+
+    globalOrchestrator.registerDaemon('OmniOutreachDaemon', {
+      start: () => {
+        const marketer = new OmniOutreachDaemon();
+        marketer.runGlobalCampaign().catch(() => {});
+      },
+      stop: () => {},
+      getStatus: () => ({ active: true })
+    });
+
+    globalOrchestrator.registerDaemon('FinanceDaemon', {
+      start: () => {
+        const finance = new FinanceDaemon();
+        finance.runFinancialAudit();
+      },
+      stop: () => {},
+      getStatus: () => ({ active: true })
+    });
+
+    globalOrchestrator.registerDaemon('MasterAudit', {
+      start: () => {
+        const auditor = new MasterAuditDaemon();
+        auditor.start().catch(() => {});
+      },
+      stop: () => {},
+      getStatus: () => ({ active: true })
+    });
+  }
   return globalOrchestrator;
 }
 

@@ -1,0 +1,1301 @@
+{
+  "generatedAt": "2026-06-23T07:31:15.072Z",
+  "truthState": "MATURITY_GAPS_FOUND",
+  "averageScore": 95,
+  "moduleCount": 15,
+  "checklist": [
+    {
+      "key": "routeExists",
+      "label": "Route exists"
+    },
+    {
+      "key": "uiPageExists",
+      "label": "UI page exists"
+    },
+    {
+      "key": "pageLoadsGuarded",
+      "label": "Page loads without crash guard"
+    },
+    {
+      "key": "buttonsHaveActions",
+      "label": "Buttons do real actions"
+    },
+    {
+      "key": "actionsCallServices",
+      "label": "Actions call real APIs/services"
+    },
+    {
+      "key": "apisReturnData",
+      "label": "APIs return real data"
+    },
+    {
+      "key": "persistenceHandled",
+      "label": "Data is persisted if needed"
+    },
+    {
+      "key": "errorsHandled",
+      "label": "Errors are handled clearly"
+    },
+    {
+      "key": "testsCoverModule",
+      "label": "Tests cover the module"
+    },
+    {
+      "key": "buildGateCovered",
+      "label": "Build passes gate reference exists"
+    },
+    {
+      "key": "auditGateCovered",
+      "label": "Audit passes gate reference exists"
+    },
+    {
+      "key": "noBannedLanguage",
+      "label": "No fake/dummy/pending language"
+    },
+    {
+      "key": "proofReceiptGenerated",
+      "label": "Proof receipt is generated"
+    },
+    {
+      "key": "userReadableStatus",
+      "label": "User can understand success/failure"
+    }
+  ],
+  "modules": [
+    {
+      "id": "self-evolution",
+      "name": "Self-Evolution Engine",
+      "score": 93,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": false,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [
+        {
+          "key": "noBannedLanguage",
+          "label": "No fake/dummy/pending language"
+        }
+      ],
+      "evidence": {
+        "uiFiles": [
+          "src\\App.jsx",
+          "src\\autonomous-command-center.jsx",
+          "src\\components\\Dashboard.jsx",
+          "src\\components\\Terminal.jsx",
+          "src\\core\\convergence-amplifier\\index.js",
+          "src\\core\\evo-layer\\registry\\EngineRegistry.js",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\core\\platform-sentinel\\index.js",
+          "src\\core\\theme-evolution\\ThemePolicy.js",
+          "src\\features\\EvoPulseGridView.jsx",
+          "src\\features\\GovernanceCockpit.jsx",
+          "src\\features\\SelfEvolutionDashboard.jsx"
+        ],
+        "apiFiles": [
+          "src\\core\\evolution\\index.js",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\core\\platform-sentinel\\index.js",
+          "generated_apis\\engine_dashboard_routes.js"
+        ],
+        "testFiles": [
+          "tests\\autonomous-evolution-engine.test.js",
+          "tests\\autonomous-selector-breadth.test.js",
+          "tests\\brain-stack-contracts.test.js",
+          "tests\\cost-firewall-theme-evolution-ai-generator-verify-studio-maturity.test.js",
+          "tests\\proof_signer.test.js",
+          "tests\\self-maintenance.test.js",
+          "tests\\self_evolution_gatekeeper.test.js",
+          "tests\\studio-autonomous.test.jsx"
+        ],
+        "bannedLanguage": [
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cost-firewall",
+      "name": "Cost Firewall V2",
+      "score": 93,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": false,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [
+        {
+          "key": "noBannedLanguage",
+          "label": "No fake/dummy/pending language"
+        }
+      ],
+      "evidence": {
+        "uiFiles": [
+          "src\\App.jsx",
+          "src\\core\\architecture\\EnterpriseArchitectureContract.js",
+          "src\\core\\convergence-amplifier\\index.js",
+          "src\\core\\evo-layer\\registry\\EngineRegistry.js",
+          "src\\core\\evo-llm\\EvoLlmDataset.js",
+          "src\\core\\evo-llm\\EvoSignalLearningBridge.js",
+          "src\\core\\gateway\\budgetRulesEngine.js",
+          "src\\core\\gateway\\costApprovalQueue.js",
+          "src\\core\\gateway\\costSavingsLedger.js",
+          "src\\core\\gateway\\semanticCache.js",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\core\\mcp\\McpServerDaemon.mjs"
+        ],
+        "apiFiles": [
+          "src\\core\\evo-llm\\EvoLlmCostGate.js",
+          "src\\core\\evo-llm\\EvoLlmDataset.js",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\core\\mcp\\McpServerDaemon.mjs",
+          "src\\core\\platform-sentinel\\index.js",
+          "src\\core\\quadbrain\\QuadBrainContract.js",
+          "src\\features\\CostFirewallDashboard.jsx",
+          "src\\features\\SingularityEvolutionNexus.jsx",
+          "generated_apis\\engine_dashboard_routes.js",
+          "scripts\\cost_firewall_v2_check.mjs",
+          "scripts\\enterprise_architecture_status.mjs"
+        ],
+        "testFiles": [
+          "tests\\brain-stack-contracts.test.js",
+          "tests\\cost-firewall-theme-evolution-ai-generator-verify-studio-maturity.test.js"
+        ],
+        "bannedLanguage": [
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          }
+        ]
+      }
+    },
+    {
+      "id": "theme-evolution",
+      "name": "Theme Evolution Engine",
+      "score": 100,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": true,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [],
+      "evidence": {
+        "uiFiles": [
+          "src\\App.jsx",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\core\\platform-sentinel\\index.js",
+          "src\\core\\theme-evolution\\index.js",
+          "src\\core\\theme-evolution\\ThemeApply.js",
+          "src\\core\\theme-evolution\\ThemeChecks.js",
+          "src\\core\\theme-evolution\\ThemeMemory.js",
+          "src\\core\\theme-evolution\\ThemePolicy.js",
+          "src\\core\\theme-evolution\\ThemeProfiles.js",
+          "src\\core\\theme-evolution\\ThemeSuggestion.js",
+          "src\\features\\SingularityEvolutionNexus.jsx",
+          "src\\features\\ThemeEvolutionDashboard.jsx"
+        ],
+        "apiFiles": [
+          "src\\App.jsx",
+          "src\\core\\engines\\themeEvolution.js",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\core\\platform-sentinel\\index.js",
+          "src\\core\\theme-evolution\\ThemeApply.js",
+          "src\\core\\theme-evolution\\ThemeSuggestion.js",
+          "src\\features\\SingularityEvolutionNexus.jsx",
+          "src\\features\\ThemeEvolutionDashboard.jsx",
+          "generated_apis\\engine_dashboard_routes.js"
+        ],
+        "testFiles": [
+          "tests\\cost-firewall-theme-evolution-ai-generator-verify-studio-maturity.test.js"
+        ],
+        "bannedLanguage": []
+      }
+    },
+    {
+      "id": "nuclear-audit",
+      "name": "Nuclear Static Audit Gates",
+      "score": 100,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": true,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [],
+      "evidence": {
+        "uiFiles": [
+          "src\\core\\autonomy\\SafeAutonomousExecutionKernel.js",
+          "src\\core\\evo-llm\\EvoIntelligenceTetherCore.js",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\core\\omnibot\\OmnibotMobileCore.js",
+          "src\\core\\platform-sentinel\\index.js",
+          "src\\core\\spinecore\\LearningEngines.js",
+          "src\\core\\spinecore\\ProofEngines.js",
+          "src\\core\\terminal\\HardenedCommandGateway.js",
+          "scripts\\audit_intelligence_stack.mjs",
+          "scripts\\install_tether_completion_commands.mjs",
+          "scripts\\omnibot_mobile.mjs",
+          "scripts\\safe_autonomous_execution.mjs"
+        ],
+        "apiFiles": [
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "scripts\\audit-css-vars.mjs",
+          "scripts\\audit-imports.mjs",
+          "scripts\\verify-studio.mjs"
+        ],
+        "testFiles": [
+          "tests\\cost-firewall-theme-evolution-ai-generator-verify-studio-maturity.test.js"
+        ],
+        "bannedLanguage": []
+      }
+    },
+    {
+      "id": "proof-console",
+      "name": "Proof Console",
+      "score": 100,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": true,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [],
+      "evidence": {
+        "uiFiles": [
+          "src\\App.jsx",
+          "src\\core\\extension\\proof_console.js",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\core\\signals\\EvoSignalFabric.js",
+          "src\\core\\ui\\ComponentRegistry.jsx",
+          "src\\extension\\panels\\ProofConsole.jsx",
+          "src\\features\\index.jsx",
+          "src\\features\\super-nodes\\NuclearProofOS.jsx",
+          "src\\new-features-views.jsx",
+          "src\\proof-os-views.jsx"
+        ],
+        "apiFiles": [
+          "src\\AgentBridgeView.jsx",
+          "src\\ai-engine.js",
+          "src\\app\\AppShell.jsx",
+          "src\\App.jsx",
+          "src\\autonomous-command-center.jsx",
+          "src\\bot-avatars.js",
+          "src\\bridge-contract-ledger.js",
+          "src\\cli-bridge.js",
+          "src\\components\\AiProviderProofPanel.jsx",
+          "src\\components\\AppMarket.jsx",
+          "src\\components\\BrowserPreviewVerificationPanel.jsx",
+          "src\\components\\EvoEyes.jsx"
+        ],
+        "testFiles": [
+          "tests\\agent-promptshell-execution.test.js",
+          "tests\\ai-provider-proof-panel.test.jsx",
+          "tests\\archive-missing-modules.test.js",
+          "tests\\brain-stack-contracts.test.js",
+          "tests\\bridge-contract-ledger.test.js",
+          "tests\\dead-surface-hunter.test.jsx",
+          "tests\\deployment-panels.test.jsx",
+          "tests\\deployment-readiness.test.js",
+          "tests\\evo-training-runtime.test.js",
+          "tests\\flutter-bridge-materialization.test.js",
+          "tests\\generated-artifact-registry.test.js",
+          "tests\\handover-report.test.js"
+        ],
+        "bannedLanguage": []
+      }
+    },
+    {
+      "id": "forge-labs",
+      "name": "Forge Labs",
+      "score": 100,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": true,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [],
+      "evidence": {
+        "uiFiles": [
+          "src\\App.jsx",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\features\\index.jsx",
+          "src\\forge-render-views.jsx",
+          "src\\forge-views.jsx",
+          "scripts\\verify-studio.mjs"
+        ],
+        "apiFiles": [
+          "src\\app\\AppShell.jsx",
+          "src\\App.jsx",
+          "src\\autonomous-command-center.jsx",
+          "src\\bridge-contract-ledger.js",
+          "src\\components\\AiProviderProofPanel.jsx",
+          "src\\components\\AutonomousAgentRoster.jsx",
+          "src\\components\\AutonomousSelfRepairBoundary.jsx",
+          "src\\components\\Dashboard.jsx",
+          "src\\components\\ErrorBoundary.jsx",
+          "src\\components\\EvoCopilot.jsx",
+          "src\\components\\EvoCopilot_original.jsx",
+          "src\\components\\HoloAvatar3D.jsx"
+        ],
+        "testFiles": [
+          "tests\\autonomous-evolution-engine.test.js",
+          "tests\\evo-runtime.test.js",
+          "tests\\mutation-route-auditor.test.js",
+          "tests\\past-mvp.test.js",
+          "tests\\security-classifier.test.js",
+          "tests\\self-implementation-policy.test.js",
+          "tests\\studio-autonomous.test.jsx"
+        ],
+        "bannedLanguage": []
+      }
+    },
+    {
+      "id": "mobile-controller",
+      "name": "Mobile Controller Hub",
+      "score": 100,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": true,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [],
+      "evidence": {
+        "uiFiles": [
+          "src\\components\\liveforge\\EvoMobileController.jsx",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\features\\index.jsx",
+          "server\\routes\\emulator.routes.js",
+          "server\\routes\\index.js",
+          "server\\routes\\studio-core.routes.js",
+          "server\\services\\emulator-manager.js",
+          "generated_apis\\promptshell_routes.js",
+          "scripts\\audit-route-drift.mjs"
+        ],
+        "apiFiles": [
+          "src\\components\\liveforge\\EvoMobileController.jsx",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\features\\index.jsx",
+          "server\\routes\\emulator.routes.js",
+          "server\\routes\\index.js",
+          "server\\routes\\studio-core.routes.js",
+          "server\\services\\emulator-manager.js",
+          "generated_apis\\promptshell_routes.js",
+          "scripts\\audit-route-drift.mjs"
+        ],
+        "testFiles": [
+          "tests\\emulator-suite.test.js"
+        ],
+        "bannedLanguage": []
+      }
+    },
+    {
+      "id": "prompt-registry",
+      "name": "Prompt Registry",
+      "score": 93,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": false,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [
+        {
+          "key": "noBannedLanguage",
+          "label": "No fake/dummy/pending language"
+        }
+      ],
+      "evidence": {
+        "uiFiles": [
+          "src\\App.jsx",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\features\\index.jsx",
+          "src\\features\\super-nodes\\PromptEngineRoom.jsx",
+          "src\\v3-views.jsx"
+        ],
+        "apiFiles": [
+          "src\\agent-bridge-views.jsx",
+          "src\\AgentBridgeView.jsx",
+          "src\\ai-engine.js",
+          "src\\ai-prompt-generator-view.jsx",
+          "src\\ai-views.jsx",
+          "src\\App.jsx",
+          "src\\autonomous-builder.js",
+          "src\\autonomous-command-center.jsx",
+          "src\\autonomous-views.jsx",
+          "src\\bridge-contract-ledger.js",
+          "src\\chrome-extension-views.jsx",
+          "src\\cli-bridge.js"
+        ],
+        "testFiles": [
+          "tests\\agent-promptshell-execution.test.js",
+          "tests\\backend-app-shell.test.js",
+          "tests\\brain-stack-contracts.test.js",
+          "tests\\edge-io-audit.test.js",
+          "tests\\flutter-bridge-materialization.test.js",
+          "tests\\generated-artifact-registry.test.js",
+          "tests\\health-routes.test.js",
+          "tests\\iq-ui.test.jsx",
+          "tests\\local-production-sim.test.js",
+          "tests\\mutation-route-auditor.test.js",
+          "tests\\native-prompt-packet.test.js",
+          "tests\\nuclear-truth-audit.test.js"
+        ],
+        "bannedLanguage": [
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ai-generator",
+      "name": "AI Generator Hub",
+      "score": 93,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": false,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [
+        {
+          "key": "noBannedLanguage",
+          "label": "No fake/dummy/pending language"
+        }
+      ],
+      "evidence": {
+        "uiFiles": [
+          "src\\ai-prompt-generator-view.jsx",
+          "src\\App.jsx",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\features\\index.jsx",
+          "src\\features\\super-nodes\\PromptEngineRoom.jsx"
+        ],
+        "apiFiles": [
+          "src\\agent-bridge-views.jsx",
+          "src\\AgentBridgeView.jsx",
+          "src\\ai-engine.js",
+          "src\\ai-prompt-generator-view.jsx",
+          "src\\ai-views.jsx",
+          "src\\app\\AppShell.jsx",
+          "src\\App.jsx",
+          "src\\autonomous-builder.js",
+          "src\\autonomous-command-center.jsx",
+          "src\\autonomous-views.jsx",
+          "src\\bot-characters.jsx",
+          "src\\bot-orb.jsx"
+        ],
+        "testFiles": [
+          "tests\\cost-firewall-theme-evolution-ai-generator-verify-studio-maturity.test.js"
+        ],
+        "bannedLanguage": [
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          }
+        ]
+      }
+    },
+    {
+      "id": "evo-model-foundry",
+      "name": "Evo Model Foundry",
+      "score": 93,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": false,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [
+        {
+          "key": "noBannedLanguage",
+          "label": "No fake/dummy/pending language"
+        }
+      ],
+      "evidence": {
+        "uiFiles": [
+          "src\\App.jsx",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\evo-exchange-view.jsx",
+          "src\\features\\index.jsx",
+          "src\\features\\super-nodes\\PromptEngineRoom.jsx",
+          "src\\pattern-miner-view.jsx"
+        ],
+        "apiFiles": [
+          "src\\AgentBridgeView.jsx",
+          "src\\App.jsx",
+          "src\\autonomous-command-center.jsx",
+          "src\\bridge-contract-ledger.js",
+          "src\\cli-bridge.js",
+          "src\\components\\AutonomousSelfRepairBoundary.jsx",
+          "src\\components\\EvoCopilot.jsx",
+          "src\\components\\EvoCopilot_original.jsx",
+          "src\\components\\ModelSelector.jsx",
+          "src\\components\\SingularityEngineOverlay.jsx",
+          "src\\components\\Terminal.jsx",
+          "src\\components\\Toolbar.jsx"
+        ],
+        "testFiles": [
+          "tests\\archive-missing-modules.test.js",
+          "tests\\autonomous-selector-breadth.test.js",
+          "tests\\evo-api-routing.test.js",
+          "tests\\evo-global-node.test.js",
+          "tests\\evo-llm-provider-training.test.js",
+          "tests\\evo-runtime.test.js",
+          "tests\\evo-training-runtime.test.js",
+          "tests\\iq-ui.test.jsx",
+          "tests\\past-mvp.test.js",
+          "tests\\studio-complements.test.js"
+        ],
+        "bannedLanguage": [
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          }
+        ]
+      }
+    },
+    {
+      "id": "commerce-core",
+      "name": "Commerce Core",
+      "score": 93,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": false,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [
+        {
+          "key": "noBannedLanguage",
+          "label": "No fake/dummy/pending language"
+        }
+      ],
+      "evidence": {
+        "uiFiles": [
+          "src\\App.jsx",
+          "src\\commerce-rail-view.jsx",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\features\\index.jsx"
+        ],
+        "apiFiles": [
+          "src\\App.jsx",
+          "src\\autonomous-command-center.jsx",
+          "src\\bot-characters.jsx",
+          "src\\bridge-contract-ledger.js",
+          "src\\commerce-rail-view.jsx",
+          "src\\commerce-rail.js",
+          "src\\components\\AppMarket.jsx",
+          "src\\components\\BrowserPreviewVerificationPanel.jsx",
+          "src\\components\\StripeCheckoutBrowserVerificationPanel.jsx",
+          "src\\components\\StripeProofPanel.jsx",
+          "src\\components\\StripeTestCheckoutPanel.jsx",
+          "src\\components\\VisualPhysicsEditor.jsx"
+        ],
+        "testFiles": [
+          "tests\\agent-promptshell-execution.test.js",
+          "tests\\backend-app-shell.test.js",
+          "tests\\bridge-contract-ledger.test.js",
+          "tests\\deployment-center-view.test.jsx",
+          "tests\\deployment-panels.test.jsx",
+          "tests\\external-connector-executor.test.js",
+          "tests\\handover-report.test.js",
+          "tests\\handover-routes.test.js",
+          "tests\\mutation-route-auditor.test.js",
+          "tests\\owner-approval-client.test.js",
+          "tests\\owner-approval-panel.test.jsx",
+          "tests\\owner-approval-service.test.js"
+        ],
+        "bannedLanguage": [
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          }
+        ]
+      }
+    },
+    {
+      "id": "deployment-center",
+      "name": "Deployment Center",
+      "score": 93,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": false,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [
+        {
+          "key": "noBannedLanguage",
+          "label": "No fake/dummy/pending language"
+        }
+      ],
+      "evidence": {
+        "uiFiles": [
+          "src\\App.jsx",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\deploy-rail-view.jsx",
+          "src\\features\\DeploymentCenterView.jsx",
+          "src\\features\\index.jsx"
+        ],
+        "apiFiles": [
+          "src\\AgentBridgeView.jsx",
+          "src\\App.jsx",
+          "src\\autonomous-command-center.jsx",
+          "src\\bot-characters.jsx",
+          "src\\components\\AutonomousAgentRoster.jsx",
+          "src\\components\\BrowserPreviewVerificationPanel.jsx",
+          "src\\components\\DeploymentControlPanel.jsx",
+          "src\\components\\DeploymentReadinessPanel.jsx",
+          "src\\components\\DeploymentReceiptsPanel.jsx",
+          "src\\components\\EnvironmentStatusPanel.jsx",
+          "src\\components\\HandoverStatusPanel.jsx",
+          "src\\components\\liveforge\\EvoLiveForgePreview.jsx"
+        ],
+        "testFiles": [
+          "tests\\brain-stack-contracts.test.js",
+          "tests\\deployment-center-view.test.jsx",
+          "tests\\deployment-client.test.js",
+          "tests\\deployment-panels.test.jsx",
+          "tests\\deployment-readiness.test.js",
+          "tests\\deployment-receipt-verifier.test.js",
+          "tests\\deployment-receipts.test.js",
+          "tests\\env-validation.test.js",
+          "tests\\environment-status-panel.test.jsx",
+          "tests\\flutter-bridge-materialization.test.js",
+          "tests\\handover-report.test.js",
+          "tests\\handover-routes.test.js"
+        ],
+        "bannedLanguage": [
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          }
+        ]
+      }
+    },
+    {
+      "id": "settings-api",
+      "name": "Settings & API Credentials",
+      "score": 93,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": false,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [
+        {
+          "key": "noBannedLanguage",
+          "label": "No fake/dummy/pending language"
+        }
+      ],
+      "evidence": {
+        "uiFiles": [
+          "src\\App.jsx",
+          "src\\components\\ProviderCredentialChecklistPanel.jsx",
+          "src\\components\\ProviderStatusPanel.jsx",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\features\\GlobalAPISettingsView.jsx",
+          "src\\features\\index.jsx"
+        ],
+        "apiFiles": [
+          "src\\autonomous-command-center.jsx",
+          "src\\cli-bridge.js",
+          "src\\commerce-rail.js",
+          "src\\components\\AiProviderProofPanel.jsx",
+          "src\\components\\AutonomousSelfRepairBoundary.jsx",
+          "src\\components\\BotAutomationDeck.jsx",
+          "src\\components\\BrowserPreviewVerificationPanel.jsx",
+          "src\\components\\DeploymentControlPanel.jsx",
+          "src\\components\\DeploymentReceiptsPanel.jsx",
+          "src\\components\\EnvironmentStatusPanel.jsx",
+          "src\\components\\EvoCopilot.jsx",
+          "src\\components\\EvoCopilot_original.jsx"
+        ],
+        "testFiles": [
+          "tests\\agent-promptshell-execution.test.js",
+          "tests\\ai-provider-proof-panel.test.jsx",
+          "tests\\ai-provider-routes.test.js",
+          "tests\\ai-provider-status.test.js",
+          "tests\\backend-app-shell.test.js",
+          "tests\\core-routes.test.js",
+          "tests\\deployment-center-view.test.jsx",
+          "tests\\deployment-client.test.js",
+          "tests\\deployment-panels.test.jsx",
+          "tests\\deployment-readiness.test.js",
+          "tests\\deployment-receipt-verifier.test.js",
+          "tests\\deployment-receipts.test.js"
+        ],
+        "bannedLanguage": [
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          }
+        ]
+      }
+    },
+    {
+      "id": "live-inspector",
+      "name": "Live Inspector & Diagnostics",
+      "score": 93,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": false,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [
+        {
+          "key": "noBannedLanguage",
+          "label": "No fake/dummy/pending language"
+        }
+      ],
+      "evidence": {
+        "uiFiles": [
+          "src\\App.jsx",
+          "src\\core\\engines\\IntelligenceCore.js",
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\features\\EvoEyesView.jsx",
+          "src\\features\\index.jsx",
+          "src\\features\\studio_diagnostics_logic.js",
+          "server\\routes\\studio-core.routes.js",
+          "scripts\\audit-imports.mjs"
+        ],
+        "apiFiles": [
+          "src\\ai-engine.js",
+          "src\\App.jsx",
+          "src\\bridge-contract-ledger.js",
+          "src\\components\\BrowserPreviewVerificationPanel.jsx",
+          "src\\components\\Dashboard.jsx",
+          "src\\components\\EvoEyes.jsx",
+          "src\\components\\GodsEyeMap.jsx",
+          "src\\components\\NightForgePanel.jsx",
+          "src\\components\\PerformanceMonitor.jsx",
+          "src\\components\\PulseResourceBar.jsx",
+          "src\\components\\RouteDiagnosticsPanel.jsx",
+          "src\\components\\SingularityEngineOverlay.jsx"
+        ],
+        "testFiles": [
+          "tests\\agent-promptshell-execution.test.js",
+          "tests\\brain-stack-contracts.test.js",
+          "tests\\bridge-config.test.js",
+          "tests\\core-routes.test.js",
+          "tests\\health-routes.test.js",
+          "tests\\mutation-route-auditor.test.js",
+          "tests\\nuclear-truth-audit.test.js",
+          "tests\\proof-center-view.test.jsx",
+          "tests\\route-contract.test.js",
+          "tests\\stripe-account-probe.test.js",
+          "tests\\stripe-health-routes.test.js"
+        ],
+        "bannedLanguage": [
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          }
+        ]
+      }
+    },
+    {
+      "id": "evo-control",
+      "name": "Evo Studio Control",
+      "score": 93,
+      "grade": "A",
+      "checks": {
+        "routeExists": true,
+        "uiPageExists": true,
+        "pageLoadsGuarded": true,
+        "buttonsHaveActions": true,
+        "actionsCallServices": true,
+        "apisReturnData": true,
+        "persistenceHandled": true,
+        "errorsHandled": true,
+        "testsCoverModule": true,
+        "buildGateCovered": true,
+        "auditGateCovered": true,
+        "noBannedLanguage": false,
+        "proofReceiptGenerated": true,
+        "userReadableStatus": true
+      },
+      "missing": [
+        {
+          "key": "noBannedLanguage",
+          "label": "No fake/dummy/pending language"
+        }
+      ],
+      "evidence": {
+        "uiFiles": [
+          "src\\core\\maturity\\ModuleMaturityEngine.js",
+          "src\\features\\index.jsx",
+          "src\\new-features-views.jsx"
+        ],
+        "apiFiles": [
+          "src\\AgentBridgeView.jsx",
+          "src\\ai-engine.js",
+          "src\\app\\AppShell.jsx",
+          "src\\App.jsx",
+          "src\\autonomous-builder.js",
+          "src\\autonomous-command-center.jsx",
+          "src\\autonomous-views.jsx",
+          "src\\bot-avatars.js",
+          "src\\bot-characters.jsx",
+          "src\\bot-orb.jsx",
+          "src\\bridge-contract-ledger.js",
+          "src\\build-review-gate.js"
+        ],
+        "testFiles": [
+          "tests\\agent-promptshell-execution.test.js",
+          "tests\\auth-sentry-demo-mode.test.jsx",
+          "tests\\autonomous-evolution-engine.test.js",
+          "tests\\autonomous-selector-breadth.test.js",
+          "tests\\brain-stack-contracts.test.js",
+          "tests\\cost-firewall-theme-evolution-ai-generator-verify-studio-maturity.test.js",
+          "tests\\edge-io-audit.test.js",
+          "tests\\env-validation.test.js",
+          "tests\\environment-status-panel.test.jsx",
+          "tests\\evo-api-routing.test.js",
+          "tests\\evo-global-node.test.js",
+          "tests\\evo-llm-provider-training.test.js"
+        ],
+        "bannedLanguage": [
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          },
+          {
+            "file": "scripts\\completion-audit.mjs",
+            "word": "todo"
+          }
+        ]
+      }
+    }
+  ],
+  "blockers": [
+    {
+      "moduleId": "self-evolution",
+      "moduleName": "Self-Evolution Engine",
+      "key": "noBannedLanguage",
+      "label": "No fake/dummy/pending language"
+    },
+    {
+      "moduleId": "cost-firewall",
+      "moduleName": "Cost Firewall V2",
+      "key": "noBannedLanguage",
+      "label": "No fake/dummy/pending language"
+    },
+    {
+      "moduleId": "prompt-registry",
+      "moduleName": "Prompt Registry",
+      "key": "noBannedLanguage",
+      "label": "No fake/dummy/pending language"
+    },
+    {
+      "moduleId": "ai-generator",
+      "moduleName": "AI Generator Hub",
+      "key": "noBannedLanguage",
+      "label": "No fake/dummy/pending language"
+    },
+    {
+      "moduleId": "evo-model-foundry",
+      "moduleName": "Evo Model Foundry",
+      "key": "noBannedLanguage",
+      "label": "No fake/dummy/pending language"
+    },
+    {
+      "moduleId": "commerce-core",
+      "moduleName": "Commerce Core",
+      "key": "noBannedLanguage",
+      "label": "No fake/dummy/pending language"
+    },
+    {
+      "moduleId": "deployment-center",
+      "moduleName": "Deployment Center",
+      "key": "noBannedLanguage",
+      "label": "No fake/dummy/pending language"
+    },
+    {
+      "moduleId": "settings-api",
+      "moduleName": "Settings & API Credentials",
+      "key": "noBannedLanguage",
+      "label": "No fake/dummy/pending language"
+    },
+    {
+      "moduleId": "live-inspector",
+      "moduleName": "Live Inspector & Diagnostics",
+      "key": "noBannedLanguage",
+      "label": "No fake/dummy/pending language"
+    },
+    {
+      "moduleId": "evo-control",
+      "moduleName": "Evo Studio Control",
+      "key": "noBannedLanguage",
+      "label": "No fake/dummy/pending language"
+    }
+  ],
+  "summary": {
+    "a": 15,
+    "b": 0,
+    "c": 0,
+    "d": 0,
+    "f": 0
+  }
+}

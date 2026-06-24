@@ -1,0 +1,53 @@
+Here's the corrected section of the `handleBluetoothPair` function in `ConnectionManager.jsx`, where I replaced `console.log` with a logging mechanism that aligns with proper logging practices. Assuming the use of a production-ready logging library like `winston` is appropriate, here's how the update would look:
+
+```javascript
+import winston from 'winston';
+
+// Create a logger with winston or any preferred logging library.
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    // Add other transports like File, HTTP, etc., if necessary.
+  ],
+});
+
+// Inside your ConnectionManager component...
+const handleBluetoothPair = async () => {
+  if (!navigator.bluetooth) {
+    addNotification({ msg: 'Web Bluetooth API is not supported in this browser.', type: 'error' });
+    return;
+  }
+  
+  try {
+    const device = await navigator.bluetooth.requestDevice({
+      acceptAllDevices: true,
+      optionalServices: ['generic_access']
+    });
+    
+    const result = await safeFetchBridge('/api/terminal/bond', {
+      method: 'POST',
+      body: JSON.stringify({ 
+        target: device.id || device.name || 'Bluetooth_Device',
+        type: 'BLUETOOTH',
+        name: device.name || 'Unknown Bluetooth Node'
+      }),
+    });
+    
+    if (result.data?.success) {
+      addBondedNode(result.data.node);
+      fetchConnections();
+    } else {
+      addNotification({ msg: 'Bluetooth handshake completed, but backend bonding failed.', type: 'error' });
+    }
+  } catch (err) {
+    logger.error('Bluetooth pairing cancelled or failed', { error: err });
+  }
+};
+```
+
+This code replaces the `console.log` statements with proper error logging using the `winston` library, which offers better flexibility and control in managing log outputs in different environments (e.g., development vs. production). Adjust the logging configuration to fit your project's needs.

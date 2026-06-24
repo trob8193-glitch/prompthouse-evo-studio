@@ -24,7 +24,7 @@ import { Toolbar } from './components/Toolbar.jsx';
 import { EvoEyes } from './components/EvoEyes.jsx';
 import { GhostEditor } from './components/GhostEditor.jsx';
 import { WitnessConsole } from './features/WitnessConsole.jsx';
-import { Zap } from 'lucide-react';
+import { Zap, Menu, X } from 'lucide-react';
 import { AuthSentry } from './features/AuthSentry.jsx';
 import EvoPulseGridView from './features/EvoPulseGridView.jsx';
 import SingularityEngineOverlay from './components/SingularityEngineOverlay.jsx';
@@ -79,6 +79,8 @@ import { PromptLinkView } from './promptlink-views.jsx';
 import { DeployRailView } from './deploy-rail-view.jsx';
 import { CommerceRailView } from './commerce-rail-view.jsx';
 import { AIPromptGeneratorView } from './ai-prompt-generator-view.jsx';
+import { LandingPage } from './features/LandingPage.jsx';
+import { OnboardingFlow } from './features/OnboardingFlow.jsx';
 
 export const PAGE_MAP = {
   'dashboard': SovereignIntelligenceDashboard,
@@ -193,6 +195,27 @@ export default function App() {
   const singularityActive = useSovereignStore((s) => s.singularityActive);
   const setSingularityActive = useSovereignStore((s) => s.setSingularityActive);
 
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [terminalWidth, setTerminalWidth] = React.useState(380);
+  const [isDraggingTerminal, setIsDraggingTerminal] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!isDraggingTerminal) return;
+    const onMouseMove = (e) => {
+      const newWidth = document.body.clientWidth - e.clientX;
+      if (newWidth > 200 && newWidth < 800) {
+        setTerminalWidth(newWidth);
+      }
+    };
+    const onMouseUp = () => setIsDraggingTerminal(false);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, [isDraggingTerminal]);
+
   React.useEffect(() => {
     const clientId = getEvolutionClientId();
     evolutionClientIdRef.current = clientId;
@@ -257,10 +280,31 @@ export default function App() {
     );
   }
 
+  // ── LANDING PAGE (public, shown via ?landing=1) ────────────────
+  const showLanding = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('landing') === '1';
+  if (showLanding) {
+    return (
+      <LandingPage onEnterStudio={() => {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('landing');
+        window.history.replaceState({}, '', url.toString());
+        window.location.reload();
+      }} />
+    );
+  }
+
   return (
     <AutonomousSelfRepairBoundary>
       <ErrorBoundary fallbackMessage="The studio encountered a critical error.">
         <AuthSentry>
+        {/* ── ONBOARDING (first run) ─────────────────────────────────── */}
+        {(() => {
+          const onboarded = typeof window !== 'undefined' && localStorage.getItem('ph_evo_onboarded') === 'true';
+          if (!onboarded) {
+            return <OnboardingFlow onComplete={() => { window.location.reload(); }} />;
+          }
+          return null;
+        })()}
         <div style={{
           display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw',
           background: 'var(--bg-void)', color: 'var(--text-primary)', fontFamily: 'var(--font-sans)',
@@ -269,7 +313,7 @@ export default function App() {
           <PromptHouseCopyGuard />
           {singularityActive && <WitnessConsole />}
           <SingularityEngineOverlay />
-          {/* <TopBar /> */}
+          <TopBar />
 
           <button 
             onClick={() => setSingularityActive(true)} 
@@ -281,12 +325,30 @@ export default function App() {
 
           <EvoEyes />
 
-          <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-            <div style={{ zIndex: 9999 }}><Navigation /></div>
+          <div className="app-layout-shell" style={{ display: 'flex', flex: 1, overflow: 'hidden', position: 'relative' }}>
+            {/* Mobile Header */}
+            <div className="mobile-header w-full absolute top-0 left-0">
+              <div className="flex items-center gap-3">
+                <button onClick={() => setMobileMenuOpen(true)} className="text-white p-2">
+                  <Menu size={20} />
+                </button>
+                <div className="text-white font-black tracking-widest text-xs">EVO STUDIO</div>
+              </div>
+            </div>
+
+            {/* Mobile Overlay */}
+            <div 
+              className={`mobile-overlay ${mobileMenuOpen ? 'active' : ''}`}
+              onClick={() => setMobileMenuOpen(false)}
+            />
+
+            <div className={`app-sidebar-left ${mobileMenuOpen ? 'mobile-open' : ''}`} style={{ zIndex: 9999 }}>
+              <Navigation />
+            </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-              <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-                <main style={{
+              <div style={{ display: 'flex', flex: 1, overflow: 'hidden', paddingTop: 'max(0px, env(safe-area-inset-top))' }}>
+                <main className="page-renderer-container" style={{
                   flex: 1, overflow: 'hidden', position: 'relative',
                   background: 'var(--bg-void)', display: 'flex', flexDirection: 'column'
                 }}>
@@ -304,9 +366,22 @@ export default function App() {
                   </div>
                 </main>
 
+                {/* Right Terminal Resizer Handle */}
+                <div 
+                  onMouseDown={() => setIsDraggingTerminal(true)}
+                  style={{
+                    width: 6,
+                    cursor: 'ew-resize',
+                    background: isDraggingTerminal ? 'rgba(0,240,255,0.3)' : 'transparent',
+                    zIndex: 10,
+                    position: 'relative'
+                  }}
+                  className="hover:bg-[rgba(0,240,255,0.2)] transition-colors"
+                />
+
                 {/* Right Terminal Sidebar */}
-                <div style={{
-                  width: 380, borderLeft: '1px solid rgba(255,255,255,0.06)',
+                <div className="app-sidebar-right" style={{
+                  width: terminalWidth, borderLeft: '1px solid rgba(255,255,255,0.06)',
                   background: '#01050a', display: 'flex', flexDirection: 'column',
                   overflow: 'hidden', zIndex: 2
                 }}>

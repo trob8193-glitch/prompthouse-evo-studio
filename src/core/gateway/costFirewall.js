@@ -1,4 +1,5 @@
 import db from '../db/quad_schema.js';
+import { SelfBudgetingEngine } from '../autonomy/SelfBudgetingEngine.js';
 
 /**
  * Cost Firewall — Enforces safety, budgets, and credit limits.
@@ -67,6 +68,13 @@ export class CostFirewall {
         void(`[CostFirewall] 🛡️ Successfully scavenged ${recoveredTokens} tokens. Proceeding under compressed budget.`);
         return { allowed: true, scavenged: true, newCost: cost - recoveredTokens };
       }
+      
+      // Dynamic Scavenging failed. Level 5 Autonomy: Attempt Autonomic Budget Refill.
+      const refillSuccess = await SelfBudgetingEngine.attemptAutoRefill(orgId, cost);
+      if (refillSuccess) {
+        return { allowed: true, scavenged: false, newCost: cost };
+      }
+
       throw new Error(`Insufficient credits. Token Scavenging failed to bridge the deficit. Credits: ${credits.credits_remaining}, Cost: ${cost}`);
     }
 

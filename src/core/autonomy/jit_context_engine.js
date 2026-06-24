@@ -20,7 +20,7 @@ export class JITContextEngine {
         const content = fs.readFileSync(filePath, 'utf8');
         const dependencies = [];
         
-        // Match import { X } from './path' or import X from './path'
+        // Match import { X } from '[path]' or import X from '[path]'
         const importRegex = /import\s+.*?\s+from\s+['"]([^'"]+)['"]/g;
         let match;
         

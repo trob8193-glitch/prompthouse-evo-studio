@@ -3,6 +3,7 @@
 Run: missing_file_build_training_1777898289587
 
 ## Built Files
+
 - src/components/ModularDashboard.jsx
 - src/extension/SidePanel.js
 - src/core/automation/RecursiveSwarm.js
@@ -12,6 +13,7 @@ Run: missing_file_build_training_1777898289587
 - tests/archive-missing-modules.test.js
 
 ## Verified Gates
+
 - node --check passed for new JS modules
 - npm audit --audit-level=moderate: 0 vulnerabilities
 - npm test: 13 files / 64 tests passed
@@ -20,6 +22,7 @@ Run: missing_file_build_training_1777898289587
 - OpenAI bridge: provider=openai, model=gpt-5.5, response="Connection check received. API assistant is reachable."
 
 ## Training Receipts
+
 - Training capture: receipt_training_capture_1777898289858
 - Feedback examples added: 8
 - Dataset: missing_file_build_training_1777898289587_dataset
@@ -28,4 +31,5 @@ Run: missing_file_build_training_1777898289587
 - Fine-tune examples: 163
 
 ## Truth Boundary
+
 Extension files were mostly already present under extension_build and public/chrome-extension. The new work adds compatibility import surfaces and safe local evolution helpers. Production deploy and live commerce remain owner-approved external-gated rails.

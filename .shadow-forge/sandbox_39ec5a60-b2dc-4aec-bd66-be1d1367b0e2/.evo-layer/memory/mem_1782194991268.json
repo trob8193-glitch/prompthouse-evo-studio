@@ -1,0 +1,33 @@
+{
+  "id": "mem_1782194991268",
+  "type": "execution_result",
+  "data": {
+    "id": "exec_1782194991257",
+    "success": true,
+    "status": "SUCCESS",
+    "task": "open app cockpit",
+    "adapter": "mcp",
+    "safety": {
+      "allowed": true,
+      "risk": "MEDIUM",
+      "category": "general_command",
+      "approvalRequired": false,
+      "reason": "General execution requires receipt and adapter routing.",
+      "rootDir": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my"
+    },
+    "credentialGate": {
+      "ok": true,
+      "reason": null
+    },
+    "adapterResult": {
+      "success": true,
+      "stdout": "{\n  \"selectedAdapter\": \"mcp\",\n  \"task\": \"open app cockpit\",\n  \"payload\": {},\n  \"mode\": \"routed_receipt_pending_runtime_bridge\"\n}",
+      "stderr": "",
+      "durationMs": 0,
+      "truthState": "ADAPTER_ROUTED_RUNTIME_BRIDGE_REQUIRED"
+    },
+    "createdAt": "2026-06-23T06:09:51.257Z",
+    "file": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.evo-layer\\execution-results\\exec_1782194991257.json"
+  },
+  "createdAt": "2026-06-23T06:09:51.268Z"
+}

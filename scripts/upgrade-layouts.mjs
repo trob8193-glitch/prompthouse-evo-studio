@@ -42,7 +42,7 @@ function processFile(filePath) {
   let newContent = content.replace(match[0], `return (${wrappedContent}${match[2]}`);
 
   // Add the import statement
-  const importStatement = `import { IDEPageLayout } from '../../components/layouts/IDEPageLayout.jsx';\n`;
+  const importStatement = "import { IDEPageLayout } from " + "'../../components/layouts/IDEPageLayout.jsx';\n";
   // Add it after the last import
   const lastImportIndex = newContent.lastIndexOf('import ');
   if (lastImportIndex !== -1) {

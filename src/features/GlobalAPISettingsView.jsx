@@ -40,6 +40,43 @@ export function GlobalAPISettingsView() {
   const [newKeyName, setNewKeyName] = useState('');
   const [generatingKey, setGeneratingKey] = useState(false);
 
+  // Evo.env Box State
+  const [envContent, setEnvContent] = useState('');
+  const [envLoading, setEnvLoading] = useState(false);
+  const [envSaving, setEnvSaving] = useState(false);
+  const [showEnvMask, setShowEnvMask] = useState(false); // Default to raw hacker mode
+
+  const fetchEnvConfig = async () => {
+    setEnvLoading(true);
+    try {
+      const res = await safeFetchBridge('/api/config/env');
+      if (res.ok) {
+        setEnvContent(res.data?.envContent || '');
+      }
+    } catch (e) {
+      console.error('Failed to fetch env:', e);
+    }
+    setEnvLoading(false);
+  };
+
+  const handleSaveEnv = async () => {
+    setEnvSaving(true);
+    try {
+      const res = await safeFetchBridge('/api/config/env', {
+        method: 'POST',
+        body: JSON.stringify({ envContent })
+      });
+      if (res.ok) {
+        addNotification('Evo.env keys saved & injected into runtime!', 'success');
+      } else {
+        addNotification('Failed to save Evo.env: ' + res.error, 'error');
+      }
+    } catch (e) {
+      addNotification('Error saving Evo.env: ' + e.message, 'error');
+    }
+    setEnvSaving(false);
+  };
+
   const fetchPersonalKeys = async () => {
     setLoadingKeys(true);
     try {
@@ -55,6 +92,7 @@ export function GlobalAPISettingsView() {
 
   useEffect(() => {
     fetchPersonalKeys();
+    fetchEnvConfig();
   }, [apiConfig.bridgeUrl]);
 
   const handleGenerateKey = async () => {
@@ -304,6 +342,62 @@ export function GlobalAPISettingsView() {
                   )}
                 </div>
               )}
+            </div>
+          </Card>
+
+          {/* Evo.env Master Box */}
+          <Card className="p-8 bg-[#050508]/80 border-emerald-500/10 shadow-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-colors">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none transition-opacity opacity-50 group-hover:opacity-100" />
+            
+            <div className="flex items-center justify-between mb-4 relative">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-3xl bg-emerald-500/10 flex items-center justify-center border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                  <Database className="text-emerald-400 w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-emerald-400 tracking-tight">Evo.env Master Box</h2>
+                  <p className="text-[10px] text-gray-500 font-mono tracking-widest uppercase">Absolute Reality Storage</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setShowEnvMask(!showEnvMask)}
+                className="text-xs px-3 py-1.5 rounded-full bg-gray-900 border border-gray-800 text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+              >
+                {showEnvMask ? <EyeOff size={12} /> : <Eye size={12} />}
+                {showEnvMask ? 'Mask Active' : 'Raw Output'}
+              </button>
+            </div>
+
+            <div className="relative">
+              {envLoading ? (
+                <div className="h-[300px] flex items-center justify-center bg-[#030305] rounded-3xl border border-gray-800">
+                  <Loader2 className="animate-spin text-emerald-500" />
+                </div>
+              ) : (
+                <textarea
+                  value={envContent}
+                  onChange={(e) => setEnvContent(e.target.value)}
+                  spellCheck="false"
+                  className={`w-full h-[300px] bg-[#030305] border border-gray-800 rounded-3xl p-5 text-sm font-mono leading-relaxed outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all custom-scrollbar ${showEnvMask ? 'text-transparent bg-clip-text' : 'text-emerald-300'}`}
+                  style={showEnvMask ? { textShadow: '0 0 8px rgba(110, 231, 183, 0.5)' } : {}}
+                  placeholder="# OMNI-OUTREACH LIVE CREDENTIALS\n\nSTRIPE_SECRET_KEY=sk_live_...\nSMTP_URL=smtps://user:pass@smtp.gmail.com\nTWITTER_API_KEY=...\nTARGET_INVESTOR_EMAILS=vc@fund.com"
+                />
+              )}
+              
+              <div className="mt-4 flex justify-between items-center">
+                <span className="text-[10px] text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
+                  <AlertCircle size={10} className="text-rose-500" />
+                  Saves directly to disk. No Mocks.
+                </span>
+                <button
+                  onClick={handleSaveEnv}
+                  disabled={envSaving}
+                  className="px-6 py-2.5 rounded-3xl bg-emerald-500 hover:bg-emerald-400 text-black text-sm font-black transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] flex items-center disabled:opacity-50"
+                >
+                  {envSaving ? <Loader2 size={16} className="animate-spin mr-2" /> : <Power size={16} className="mr-2" />}
+                  Inject to Runtime
+                </button>
+              </div>
             </div>
           </Card>
 
