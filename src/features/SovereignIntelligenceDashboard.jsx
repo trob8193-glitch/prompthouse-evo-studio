@@ -38,7 +38,7 @@ function QuickAction({ icon: Icon, label, sub, onClick, color = '#8a2be2' }) {
       onClick={onClick}
       className="glass-extreme border-cyan-500/30 rounded-2xl p-5 flex items-center gap-4 cursor-pointer w-full text-left backdrop-blur-2xl transition-all hover:border-cyan-400 hover:translate-x-2 group relative overflow-hidden"
     >
-      <div className="w-10 h-10 rounded-xl flex items-center justify-center border-cyan-500/40 shadow-[0_0_20px_rgba(0,240,255,0.05)] z-10" style={{ background: `${color}15` }}>
+      <div className="w-10 h-10 rounded-3xl flex items-center justify-center border-cyan-500/40 shadow-[0_0_20px_rgba(0,240,255,0.05)] z-10" style={{ background: `${color}15` }}>
         <Icon size={18} color={color} />
       </div>
       <div className="flex-1 min-w-0 relative z-10">
@@ -85,7 +85,7 @@ export function SovereignIntelligenceDashboard() {
         <button 
           onClick={handleRefresh}
           disabled={refreshing}
-          className="glass-extreme px-4 py-2 rounded-xl border-cyan-500/30 text-neon-cyan text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:bg-cyan-500/10 transition-all hover:scale-105"
+          className="glass-extreme px-4 py-2 rounded-3xl border-cyan-500/30 text-neon-cyan text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:bg-cyan-500/10 transition-all hover:scale-105"
         >
           <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
           {refreshing ? 'Syncing...' : 'Refresh'}
@@ -96,7 +96,7 @@ export function SovereignIntelligenceDashboard() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex-col gap-8 relative z-10"
+        className="flex flex-col gap-4 gap-8 relative z-10"
       >
         {/* Asymmetrical Bento Box Grid for Core Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-min gap-6 [&>*:nth-child(1)]:col-span-1 lg:[&>*:nth-child(1)]:col-span-2 [&>*:nth-child(1)]:row-span-2 [&>*:nth-child(4)]:col-span-1 lg:[&>*:nth-child(4)]:col-span-2 [&>*:nth-child(5)]:row-span-2">
@@ -188,8 +188,8 @@ export function SovereignIntelligenceDashboard() {
             <div className="text-[10px] text-emerald-400 font-black uppercase tracking-widest bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 animate-pulse">Phase 6 Active: Sovereignty</div>
           </div>
           
-          <div className="flex flex-col md:flex-row gap-4 relative">
-            <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800/50 -translate-y-1/2 hidden md:block rounded-full" />
+          <div className="flex flex flex-col gap-4 md:flex-row gap-4 relative">
+            <div className="absolute top-1/2 left-0 w-full h-1 bg-black/40 backdrop-blur-md border border-white/5/50 -translate-y-1/2 hidden md:block rounded-full" />
             
             {[
               { phase: 1, name: 'Handshake', status: 'COMPLETED', icon: Wifi },
@@ -202,7 +202,7 @@ export function SovereignIntelligenceDashboard() {
               <div key={step.phase} className="flex-1 relative z-10">
                 <div className={`p-4 rounded-2xl border backdrop-blur-xl transition-all ${step.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]' : step.status === 'ACTIVE' ? 'bg-cyan-500/20 border-cyan-400 shadow-[0_0_30px_rgba(0,240,255,0.2)] scale-105' : 'bg-black/40 border-white/5 opacity-50'}`}>
                   <div className="flex items-center gap-3 mb-2">
-                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${step.status === 'COMPLETED' ? 'bg-emerald-500/20 text-emerald-400' : step.status === 'ACTIVE' ? 'bg-cyan-500/20 text-cyan-400 animate-pulse' : 'bg-white/5 text-slate-400'}`}>
+                    <div className={`w-8 h-8 rounded-3xl flex items-center justify-center ${step.status === 'COMPLETED' ? 'bg-emerald-500/20 text-emerald-400' : step.status === 'ACTIVE' ? 'bg-cyan-500/20 text-cyan-400 animate-pulse' : 'bg-white/5 text-slate-400'}`}>
                       <step.icon size={14} />
                     </div>
                     <div>
@@ -221,7 +221,7 @@ export function SovereignIntelligenceDashboard() {
 
         {/* Action and Log Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="flex-col gap-4">
+          <div className="flex flex-col gap-4 gap-4">
             <div className="text-[10px] font-black text-cyan-500/70 uppercase tracking-widest mb-2 pl-2">Quick Actions</div>
             <QuickAction icon={MessageSquare} label="Open AI Chat" sub="Start a new production mission" onClick={() => setActivePage('chat')} color="#6366f1" />
             <QuickAction icon={Zap} label="Prompt Registry" sub="Browse and manage your prompt stacks" onClick={() => setActivePage('prompt-registry')} color="#f59e0b" />
@@ -233,7 +233,7 @@ export function SovereignIntelligenceDashboard() {
             <div className="text-[10px] font-black text-cyan-500/70 uppercase tracking-widest mb-4 pl-2">Recent Chat Activity</div>
             <div className="glass-extreme border-cyan-500/30 rounded-4xl p-6 flex-col gap-4 max-h-[400px] overflow-auto custom-scrollbar">
               {chatMessages.slice(-5).map((msg) => (
-                <div key={msg.id} className="p-4 rounded-xl border-cyan-500/10 bg-black/40">
+                <div key={msg.id} className="p-4 rounded-3xl border-cyan-500/10 bg-black/40">
                   <div className="text-[9px] font-black uppercase tracking-widest mb-2" style={{ color: msg.role === 'user' ? '#00f0ff' : '#8b5cf6' }}>
                     {msg.role === 'user' ? 'You' : msg.role === 'system' ? 'System' : 'AI'}
                   </div>
@@ -244,7 +244,7 @@ export function SovereignIntelligenceDashboard() {
               ))}
               <button
                 onClick={() => setActivePage('chat')}
-                className="mt-2 glass-extreme px-4 py-3 rounded-xl border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:border-indigo-400 transition-all hover:bg-indigo-500/10"
+                className="mt-2 glass-extreme px-4 py-3 rounded-3xl border-indigo-500/30 text-neon-cyan text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:border-indigo-400 transition-all hover:bg-indigo-500/10"
               >
                 Open Full Chat <ArrowRight size={14} />
               </button>

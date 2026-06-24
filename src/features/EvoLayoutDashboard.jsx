@@ -26,7 +26,7 @@ export default function EvoLayoutDashboard() {
       
       setTimeout(() => {
         setResult({
-          code: `// Singularity Auto-Generated Layout: ${prompt}\n\nexport default function Layout() {\n  return (\n    <div className="grid grid-cols-12 min-h-screen bg-(--bg-void) text-white">\n      <aside className="col-span-2 bg-(--bg-surface) border-r border-(--border-dim) backdrop-blur-xl" />\n      <main className="col-span-10 flex-col gap-4 relative overflow-hidden">\n        <header className="h-16 border-b border-(--border-dim) bg-(--bg-surface-top) backdrop-blur-md z-10" />\n        <div className="flex-1 p-8 z-0">\n          {/* Content injects here */}\n        </div>\n      </main>\n    </div>\n  );\n}`,
+          code: `// Singularity Auto-Generated Layout: ${prompt}\n\nexport default function Layout() {\n  return (\n    <div className="grid grid-cols-12 min-h-screen bg-(--bg-void) text-white">\n      <aside className="col-span-2 bg-(--bg-surface) border-r border-(--border-dim) backdrop-blur-xl" />\n      <main className="col-span-10 flex flex-col gap-4 gap-4 relative overflow-hidden">\n        <header className="h-16 border-b border-(--border-dim) bg-(--bg-surface-top) backdrop-blur-md z-10" />\n        <div className="flex-1 p-8 z-0">\n          {/* Content injects here */}\n        </div>\n      </main>\n    </div>\n  );\n}`,
           manifest: response
         });
         setGenerating(false);
@@ -79,7 +79,7 @@ export default function EvoLayoutDashboard() {
           </Card>
         </div>
 
-        <Card className={`${previewExpanded ? 'xl:col-span-12' : 'xl:col-span-8'} bg-[#020205]/90 p-0 overflow-hidden min-h-[500px] flex-col gap-4 relative border-[#00f0ff]/20 shadow-[0_0_30px_rgba(0,240,255,0.05)] backdrop-blur-2xl`}>
+        <Card className={`${previewExpanded ? 'xl:col-span-12' : 'xl:col-span-8'} bg-[#020205]/90 p-0 overflow-hidden min-h-[500px] flex flex-col gap-4 gap-4 relative border-[#00f0ff]/20 shadow-[0_0_30px_rgba(0,240,255,0.05)] backdrop-blur-2xl`}>
           <div className="p-5 border-b border-[#00f0ff]/20 bg-[#050508]/60 flex justify-between items-center z-10 backdrop-blur-md">
             <h3 className="text-[10px] font-black text-[#00f0ff] uppercase tracking-widest flex items-center gap-3">
               <Code2 size={14} /> Structural Hologram
@@ -87,9 +87,9 @@ export default function EvoLayoutDashboard() {
             {result && <StatusBadge status="executing" label="BLUEPRINT READY" />}
           </div>
           
-          <div className="flex-1 flex-col gap-4 p-0 relative">
+          <div className="flex-1 flex flex-col gap-4 gap-4 p-0 relative">
             {generating && (
-              <div className="absolute inset-0 bg-[#020205]/80 flex-col gap-4 items-center justify-center z-20 backdrop-blur-md">
+              <div className="absolute inset-0 bg-[#020205]/80 flex flex-col gap-4 gap-4 items-center justify-center z-20 backdrop-blur-md">
                 <div className="relative">
                   <LayoutTemplate className="animate-pulse mb-6 relative z-10" color="#00f0ff" size={56} />
                   <div className="absolute inset-0 bg-[#00f0ff] blur-[30px] opacity-40 animate-pulse" />
@@ -99,7 +99,7 @@ export default function EvoLayoutDashboard() {
             )}
             
             {result ? (
-              <div className="flex-1 flex-col gap-4">
+              <div className="flex-1 flex flex-col gap-4 gap-4">
                 <div className="p-4 bg-[#050508] border-b border-[#00f0ff]/20 flex justify-between items-center">
                   <span className="text-[10px] font-bold text-[#b4b4c4] tracking-widest uppercase">Layout.jsx</span>
                   <div className="flex gap-2">
@@ -122,7 +122,7 @@ export default function EvoLayoutDashboard() {
                 </div>
               </div>
             ) : (
-              !generating && <div className="absolute inset-0 items-center justify-center flex-col gap-6">
+              !generating && <div className="absolute inset-0 items-center justify-center flex flex-col gap-4 gap-6">
                 <Layers size={48} color="#00f0ff" className="opacity-10" />
                 <div className="text-[#4a4a5e] font-bold text-xs uppercase tracking-[0.2em]">Awaiting Architect Command</div>
               </div>

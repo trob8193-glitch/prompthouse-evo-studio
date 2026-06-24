@@ -317,7 +317,7 @@ export default function App() {
 
           <button 
             onClick={() => setSingularityActive(true)} 
-            className="absolute top-16 right-4 z-50 bg-[#00f0ff]/10 text-[#00f0ff] text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl border border-[#00f0ff]/30 hover:bg-[#00f0ff]/20 shadow-[0_0_20px_rgba(0,240,255,0.15)] flex items-center gap-2 group transition-all duration-300"
+            className="absolute top-16 right-4 z-50 bg-[#00f0ff]/10 text-[#00f0ff] text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-3xl border border-[#00f0ff]/30 hover:bg-[#00f0ff]/20 shadow-[0_0_20px_rgba(0,240,255,0.15)] flex items-center gap-2 group transition-all duration-300"
           >
             <Zap size={14} className="group-hover:scale-125 transition-transform" />
             Open Evo Singularity Engine

@@ -66,7 +66,7 @@ const itemVariants = {
 
 function ScreenTemplate({ title, subtitle, children, state = 'idle', errorMsg }) {
   return (
-    <div className="flex-col gap-4 h-full">
+    <div className="flex flex-col gap-4 gap-4 h-full">
       <header className="mb-(--space-24) border-b border-[rgba(255,255,255,0.05)] pb-6 relative">
         <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-[rgba(0,240,255,0.3)] to-transparent opacity-50"></div>
         <h1 className="font-(--text-text-2xl font-black bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2) text-(--text-primary)" style={{ textShadow: '0 0 15px rgba(0,240,255,0.2)' }}>{title}</h1>
@@ -100,7 +100,7 @@ export function StudioDashboard() {
     <ScreenTemplate title="Studio Dashboard" subtitle="Operator overview, active work, and performance metrics.">
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-(--space-24)">
         <PerformanceMonitor />
-        <div className="flex-col gap-6">
+        <div className="flex flex-col gap-4 gap-6">
           <AutonomousSelfBuildCommandCenter />
           <AutonomousBuilderView />
         </div>

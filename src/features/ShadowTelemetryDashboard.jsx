@@ -60,7 +60,7 @@ export default function ShadowTelemetryDashboard() {
   const renderEventDetails = () => {
     if (!selectedEvent) {
       return (
-        <div className="flex-1 flex items-center justify-center flex-col gap-4 text-[#ff0000]/30">
+        <div className="flex-1 flex items-center justify-center flex flex-col gap-4 gap-4 text-[#ff0000]/30">
           <ShieldAlert size={64} className="opacity-50" />
           <div className="tracking-widest uppercase font-bold">Select an event to view details</div>
         </div>
@@ -70,7 +70,7 @@ export default function ShadowTelemetryDashboard() {
     if (streamType === 'INTENT_PROPOSAL') {
       const intent = selectedEvent.payload || selectedEvent;
       return (
-        <div className="flex-1 flex flex-col p-6 gap-6 overflow-auto">
+        <div className="flex-1 flex flex flex-col gap-4 p-6 gap-6 overflow-auto">
           <div className="border border-[#ff0000]/30 bg-[#110000] p-4 rounded shadow-[0_0_15px_rgba(255,0,0,0.1)]">
             <h3 className="text-xl font-bold text-[#ff3333] flex items-center gap-2 mb-2">
               <Brain size={20}/>
@@ -99,13 +99,13 @@ export default function ShadowTelemetryDashboard() {
 
     if (streamType === 'SWARM_SYNTHESIS') {
       return (
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex flex-col gap-4">
           <div className="p-4 border-b border-[#ff0000]/30 bg-[#110000]">
             <div className="text-xs text-[#ff0000]/50 uppercase tracking-widest mb-1">User Prompt</div>
             <div className="text-[#ff9999] text-sm">{selectedEvent.prompt}</div>
           </div>
-          <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-            <div className="flex-1 border-r border-[#ff0000]/30 flex flex-col bg-[#050000]">
+          <div className="flex-1 flex flex flex-col gap-4 md:flex-row overflow-hidden">
+            <div className="flex-1 border-r border-[#ff0000]/30 flex flex flex-col gap-4 bg-[#050000]">
               <div className="p-2 border-b border-[#ff0000]/20 text-[10px] uppercase font-bold text-[#ff3333] flex items-center gap-2 bg-[#220000]">
                 <Layers size={14} /> Merge Court Arbiter Resolution
               </div>
@@ -113,7 +113,7 @@ export default function ShadowTelemetryDashboard() {
                 <pre className="text-xs text-[#ff6666] whitespace-pre-wrap">{selectedEvent.synthesis}</pre>
               </div>
             </div>
-            <div className="w-1/3 flex flex-col bg-[#110000]">
+            <div className="w-1/3 flex flex flex-col gap-4 bg-[#110000]">
                <div className="p-2 border-b border-[#ff0000]/20 text-[10px] uppercase font-bold text-[#ff0000]/70">
                  Swarm Branches
                </div>
@@ -134,7 +134,7 @@ export default function ShadowTelemetryDashboard() {
     if (streamType === 'HEALTH_PULSE' && healthData) {
       const sys = healthData.systems || {};
       return (
-        <div className="flex-1 flex flex-col p-6 gap-6 overflow-auto">
+        <div className="flex-1 flex flex flex-col gap-4 p-6 gap-6 overflow-auto">
           <div className="border border-[#ff0000]/30 bg-[#110000] p-4 rounded shadow-[0_0_15px_rgba(255,0,0,0.1)]">
             <h3 className="text-xl font-bold text-[#ff3333] flex items-center gap-2 mb-4">
               <HeartPulse size={20}/>
@@ -166,7 +166,7 @@ export default function ShadowTelemetryDashboard() {
     // Default: SHADOW_REJECTION
     return (
       <>
-        <div className="p-4 border-b border-[#ff0000]/30 flex flex-col gap-2">
+        <div className="p-4 border-b border-[#ff0000]/30 flex flex flex-col gap-4 gap-2">
           <div className="flex items-center gap-2 text-[#ff3333]">
             <Bug size={18} />
             <h2 className="text-lg font-bold truncate">{selectedEvent.file}</h2>
@@ -177,9 +177,9 @@ export default function ShadowTelemetryDashboard() {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+        <div className="flex-1 flex flex flex-col gap-4 md:flex-row overflow-hidden">
           {/* Rejected Code */}
-          <div className="flex-1 flex flex-col border-r border-[#ff0000]/30 md:border-b-0 border-b">
+          <div className="flex-1 flex flex flex-col gap-4 border-r border-[#ff0000]/30 md:border-b-0 border-b">
             <div className="p-2 border-b border-[#ff0000]/20 bg-[#110000] text-[10px] font-bold uppercase tracking-widest flex items-center justify-between">
               <span>Rejected Payload</span>
               <span className="text-[#ff0000]/50">Attempted Write</span>
@@ -192,7 +192,7 @@ export default function ShadowTelemetryDashboard() {
           </div>
 
           {/* Stack Trace / Feedback */}
-          <div className="flex-1 flex flex-col bg-[#1a0000]">
+          <div className="flex-1 flex flex flex-col gap-4 bg-[#1a0000]">
             <div className="p-2 border-b border-[#ff0000]/20 bg-[#220000] text-[10px] font-bold uppercase tracking-widest text-[#ff9900] flex items-center justify-between">
               <span className="flex items-center gap-2"><TerminalIcon size={12} /> Auto-Feedback Generated</span>
               <span className="bg-[#ff0000] text-black px-2 py-0.5 rounded shadow-[0_0_10px_#ff0000]">SENT TO AI</span>
@@ -209,9 +209,9 @@ export default function ShadowTelemetryDashboard() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-[#050000] text-[#ff3333] font-mono border-t-2 border-[#ff0000]">
+    <div className="flex flex flex-col gap-4 h-full w-full bg-[#050000] text-[#ff3333] font-mono border-t-2 border-[#ff0000]">
       {/* Header */}
-      <div className="flex flex-col bg-[#110000] border-b border-[#ff0000]/30 shadow-[0_0_20px_rgba(255,0,0,0.2)] z-10 relative">
+      <div className="flex flex flex-col gap-4 bg-[#110000] border-b border-[#ff0000]/30 shadow-[0_0_20px_rgba(255,0,0,0.2)] z-10 relative">
         <div className="flex items-center justify-between p-4 pb-2">
           <div className="flex items-center gap-4">
             <ShieldAlert className="text-[#ff0000] drop-shadow-[0_0_10px_#ff0000] animate-pulse" size={28} />
@@ -227,13 +227,13 @@ export default function ShadowTelemetryDashboard() {
           </div>
           
           <div className="flex items-center gap-3">
-            <div className="bg-[#ff0000]/10 px-4 py-2 rounded-lg border border-[#ff0000]/30 flex items-center gap-2 text-sm">
+            <div className="bg-[#ff0000]/10 px-4 py-2 rounded-2xl border border-[#ff0000]/30 flex items-center gap-2 text-sm">
               <Activity size={16} className="text-[#ff0000]" />
               <span className="font-bold">{events.length}</span> Events
             </div>
             <button 
               onClick={() => setIsPolling(!isPolling)}
-              className="bg-[#110000] hover:bg-[#330000] text-[#ff0000] border border-[#ff0000]/50 px-4 py-2 rounded-lg transition-all shadow-[0_0_10px_rgba(255,0,0,0.1)] hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] text-xs uppercase font-bold tracking-wider"
+              className="bg-[#110000] hover:bg-[#330000] text-[#ff0000] border border-[#ff0000]/50 px-4 py-2 rounded-2xl transition-all shadow-[0_0_10px_rgba(255,0,0,0.1)] hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] text-xs uppercase font-bold tracking-wider"
             >
               {isPolling ? 'Pause Stream' : 'Resume Stream'}
             </button>
@@ -265,11 +265,11 @@ export default function ShadowTelemetryDashboard() {
         </div>
 
         {/* Left Column: Event Feed */}
-        <div className="w-1/3 border-r border-[#ff0000]/30 bg-[#0a0000]/90 backdrop-blur-sm flex flex-col z-10">
+        <div className="w-1/3 border-r border-[#ff0000]/30 bg-[#0a0000]/90 backdrop-blur-sm flex flex flex-col gap-4 z-10">
           <div className="p-3 border-b border-[#ff0000]/20 text-xs font-bold tracking-widest uppercase text-[#ff6666] flex items-center justify-between">
             <div className="flex items-center gap-2"><History size={14} /> Event Log</div>
           </div>
-          <div className="flex-1 overflow-y-auto p-2 flex flex-col gap-2 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-2 flex flex flex-col gap-4 gap-2 custom-scrollbar">
             {events.length === 0 ? (
               <div className="p-6 text-center text-[#ff0000]/40 text-sm">
                 No events detected for this stream.
@@ -317,7 +317,7 @@ export default function ShadowTelemetryDashboard() {
         </div>
 
         {/* Right Column: Event Details */}
-        <div className="flex-1 flex flex-col bg-[#050000]/95 z-10">
+        <div className="flex-1 flex flex flex-col gap-4 bg-[#050000]/95 z-10">
           {renderEventDetails()}
         </div>
       </div>

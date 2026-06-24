@@ -213,7 +213,7 @@ export function GlobalAPISettingsView() {
         {/* Antigravity Squad Bond Matrix */}
         <Card className="p-8 bg-[#050508]/90 border-neon-cyan shadow-[0_0_30px_rgba(0,240,255,0.15)] relative overflow-hidden group">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,240,255,0.1)_0%,rgba(0,0,0,0)_80%)] pointer-events-none" />
-          <div className="flex-col md:flex-row items-center gap-6 relative z-10">
+          <div className="flex flex-col gap-4 md:flex-row items-center gap-6 relative z-10">
             <div className="w-24 h-24 rounded-full bg-cyan-900/30 border-2 border-cyan-500 shadow-[0_0_30px_rgba(0,240,255,0.4)] flex items-center justify-center animate-pulse">
               <Shield className="w-12 h-12 text-cyan-400" />
             </div>
@@ -225,15 +225,15 @@ export function GlobalAPISettingsView() {
                 Studio ↔ LLM ↔ API Keys ↔ Singularity Squad ↔ Antigravity
               </p>
               <div className="mt-4 flex-wrap justify-center md:justify-start gap-4">
-                <div className="bg-emerald-500/10 border-emerald-500/30 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2">
+                <div className="bg-emerald-500/10 border-emerald-500/30 text-emerald-400 px-4 py-2 rounded-3xl text-xs font-bold flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.8)] animate-ping" />
                   API Keys Tethered
                 </div>
-                <div className="bg-indigo-500/10 border-indigo-500/30 text-indigo-400 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2">
+                <div className="bg-indigo-500/10 border-indigo-500/30 text-neon-cyan px-4 py-2 rounded-3xl text-xs font-bold flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.8)] animate-ping" />
                   Universal Adaptor Synced
                 </div>
-                <div className="bg-fuchsia-500/10 border-fuchsia-500/30 text-fuchsia-400 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2">
+                <div className="bg-fuchsia-500/10 border-fuchsia-500/30 text-fuchsia-400 px-4 py-2 rounded-3xl text-xs font-bold flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-fuchsia-400 shadow-[0_0_10px_rgba(217,70,239,0.8)] animate-ping" />
                   Singularity Squad Armed
                 </div>
@@ -442,7 +442,7 @@ export function GlobalAPISettingsView() {
                   {testResult.probes && (
                     <div className="grid grid-cols-2 gap-3">
                       {Object.entries(testResult.probes).map(([api, info]) => (
-                        <div key={api} className="p-3 bg-gray-900/50 border-gray-800/50 rounded-2xl flex-col gap-4 justify-center">
+                        <div key={api} className="p-3 bg-gray-900/50 border-gray-800/50 rounded-2xl flex flex-col gap-4 gap-4 justify-center">
                           <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">{api}</div>
                           <div className="flex items-center gap-2">
                             <div className={`w-1.5 h-1.5 rounded-full ${info.status === 'VERIFIED' ? 'bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.5)]' : info.status === 'MISSING' ? 'bg-gray-600' : 'bg-rose-500'}`} />
@@ -567,7 +567,7 @@ export function GlobalAPISettingsView() {
           <div className="grid grid-cols-2 gap-6">
             
             {/* NightForge Mode */}
-            <Card className="p-6 bg-[#050508]/80 border-white/5 shadow-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-colors flex-col gap-4">
+            <Card className="p-6 bg-[#050508]/80 border-white/5 shadow-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-colors flex flex-col gap-4 gap-4">
               <div className="flex items-center gap-3 mb-4 relative">
                 <div className="w-10 h-10 rounded-3xl bg-emerald-500/10 flex items-center justify-center border-emerald-500/20">
                   <Database className="text-emerald-400 w-5 h-5" />
@@ -587,7 +587,7 @@ export function GlobalAPISettingsView() {
             </Card>
 
             {/* Ollama Engine */}
-            <Card className="p-6 bg-[#050508]/80 border-white/5 shadow-2xl relative overflow-hidden group hover:border-orange-500/30 transition-colors flex-col gap-4">
+            <Card className="p-6 bg-[#050508]/80 border-white/5 shadow-2xl relative overflow-hidden group hover:border-orange-500/30 transition-colors flex flex-col gap-4 gap-4">
               <div className="flex items-center gap-3 mb-4 relative">
                 <div className="w-10 h-10 rounded-3xl bg-white flex items-center justify-center shadow-lg">
                   <span className="text-xl">🦙</span>

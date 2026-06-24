@@ -105,7 +105,7 @@ export const ExtensionCockpitView = () => {
             </div>
 
             {/* Panel content varies by selected tab */}
-            <div className="mt-8 p-12 border-2 border-dashed border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-3xl flex-col gap-4 items-center justify-center text-center opacity-50">
+            <div className="mt-8 p-12 border-2 border-dashed border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-3xl flex flex-col gap-4 gap-4 items-center justify-center text-center opacity-50">
               <Layout size={48} className="text-slate-700 mb-4" />
               <h4 className="text-lg font-bold text-slate-500">Autonomous View Component: {activePanel}</h4>
               <p className="text-sm text-slate-600 max-w-sm">Wired to PromptBridge protocol. Real-time DOM interaction and agentic control active in the browser bridge extension.</p>

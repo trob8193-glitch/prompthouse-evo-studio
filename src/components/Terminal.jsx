@@ -402,7 +402,7 @@ export function Terminal({ sidebarMode = false }) {
     <>
       <style>{shellStyles}</style>
       <div 
-        className={`evo-shell-container w-full ${isFullscreen || sidebarMode ? 'flex-1' : ''} flex-col gap-4 z-40 shrink-0 relative overflow-hidden transition-all duration-500 ease-in-out`}
+        className={`evo-shell-container w-full ${isFullscreen || sidebarMode ? 'flex-1' : ''} flex flex-col gap-4 gap-4 z-40 shrink-0 relative overflow-hidden transition-all duration-500 ease-in-out`}
         style={{ 
           background: ideTheme === 'zeta' ? '#fff' : ideTheme === 'gamma' ? '#1a0033' : ideTheme === 'theta' ? 'rgba(0,0,0,0.8)' : 'linear-gradient(180deg, rgba(5,5,12,0.98), rgba(2,2,8,0.99))',
           height: (isFullscreen || sidebarMode) ? '100%' : (terminalOpen ? 340 : 40),

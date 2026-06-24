@@ -15,9 +15,9 @@ export default function HexaGridPangram() {
         {nodes.map(node => {
           const Icon = node.icon;
           return (
-            <div key={node.id} className="relative group flex flex-col items-center justify-center">
+            <div key={node.id} className="relative group flex flex flex-col gap-4 items-center justify-center">
               <div 
-                className="w-32 h-32 flex flex-col items-center justify-center backdrop-blur-md transition-all duration-500 hover:scale-110 z-10 cursor-pointer"
+                className="w-32 h-32 flex flex flex-col gap-4 items-center justify-center backdrop-blur-md transition-all duration-500 hover:scale-110 z-10 cursor-pointer"
                 style={{ 
                   clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
                   backgroundColor: `${node.color}15`,

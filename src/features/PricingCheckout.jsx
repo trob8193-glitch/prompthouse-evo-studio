@@ -91,7 +91,7 @@ export default function PricingCheckout() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-[#050508] text-white p-8 overflow-y-auto">
+    <div className="flex flex flex-col gap-4 h-full w-full bg-[#050508] text-white p-8 overflow-y-auto">
       <div className="text-center mb-16">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -165,7 +165,7 @@ export default function PricingCheckout() {
               ))}
             </div>
 
-            <div className={`w-full py-3 rounded-xl text-center font-bold text-sm transition-all ${
+            <div className={`w-full py-3 rounded-3xl text-center font-bold text-sm transition-all ${
               selectedTier?.id === tier.id 
                 ? 'bg-white text-black' 
                 : 'bg-white/5 text-white hover:bg-white/10'
@@ -196,7 +196,7 @@ export default function PricingCheckout() {
             <button
               onClick={handleCheckout}
               disabled={!approvalEnvelope || checkoutLoading}
-              className={`w-full py-4 rounded-xl font-black text-lg flex items-center justify-center gap-3 transition-all ${
+              className={`w-full py-4 rounded-3xl font-black text-lg flex items-center justify-center gap-3 transition-all ${
                 !approvalEnvelope 
                   ? 'bg-white/5 text-gray-500 cursor-not-allowed'
                   : 'bg-[#00f0ff] text-black hover:bg-white hover:shadow-[0_0_30px_rgba(0,240,255,0.4)]'
@@ -206,13 +206,13 @@ export default function PricingCheckout() {
               <ExternalLink size={20} />
             </button>
           ) : (
-            <div className="text-center p-6 bg-[#00ff88]/10 border border-[#00ff88]/30 rounded-xl">
+            <div className="text-center p-6 bg-[#00ff88]/10 border border-[#00ff88]/30 rounded-3xl">
               <p className="text-[#00ff88] font-bold mb-4">Checkout Session Generated Successfully</p>
               <a 
                 href={checkoutUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-3 bg-[#00ff88] text-black font-bold rounded-xl hover:bg-white transition-colors"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-[#00ff88] text-black font-bold rounded-3xl hover:bg-white transition-colors"
               >
                 Complete Payment <ExternalLink size={16} />
               </a>

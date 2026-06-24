@@ -9,7 +9,7 @@ export default function OmniscientObservabilityDeck() {
       title={<><Activity color="#00ff88" size={18} /> Omniscient Observability Deck</>}
       description="Omni-Fusion Node: Combines Platform Sentinel, Metrics, Runtime Health, Validation, and Trace Logs into a massive observability grid."
       actions={
-        <button className="glass-extreme text-green-400 hover:border-green-400/80 transition-all rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={() => { safeFetchBridge('/api/studio/scan').then(d => void('[Observability] Scan:', d)).catch(() => {}); }}>
+        <button className="glass-extreme text-green-400 hover:border-green-400/80 transition-all rounded-3xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={() => { safeFetchBridge('/api/studio/scan').then(d => void('[Observability] Scan:', d)).catch(() => {}); }}>
           <Search size={14} /> Scan Environment
         </button>
       }

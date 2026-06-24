@@ -99,7 +99,7 @@ export function PromptLinkView() {
   ];
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       {/* Header */}
       <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
@@ -115,7 +115,7 @@ export function PromptLinkView() {
           }}>
             {bridgeStatus === null ? '⏳ Checking...' : bridgeStatus.connected ? `🟢 LIVE (${bridgeStatus.latency}ms)` : '🔴 OFFLINE'}
           </div>
-          <button className="glass-extreme shadow-[0_0_15px_rgba(0,240,255,0.2)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={doHandshake} disabled={handshaking}>
+          <button className="glass-extreme shadow-[0_0_15px_rgba(0,240,255,0.2)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={doHandshake} disabled={handshaking}>
             {handshaking ? '⏳ Syncing...' : '🤝 Re-Handshake'}
           </button>
         </div>
@@ -124,7 +124,7 @@ export function PromptLinkView() {
       {/* Tabs */}
       <div className="tabs-bar" style={{ marginBottom: 16 }}>
         {TABS.map(t => (
-          <button key={t.id} className={`tab-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>
+          <button key={t.id} className={`tab-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>
             {t.label}
           </button>
         ))}
@@ -172,7 +172,7 @@ export function PromptLinkView() {
 
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button
-                    className="glass-extreme active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
+                    className="glass-extreme active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
                     onClick={e => { e.stopPropagation(); toggleProvider(provider); }}
                     style={{
                       background: provider.enabled ? 'rgba(74,222,128,0.2)' : 'var(--bg-elevated)',
@@ -183,7 +183,7 @@ export function PromptLinkView() {
                   >
                     {provider.enabled ? '🟢 Enabled' : '⚫ Disabled'}
                   </button>
-                  <button className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary" onClick={e => { e.stopPropagation(); testProvider(provider); }}>
+                  <button className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary" onClick={e => { e.stopPropagation(); testProvider(provider); }}>
                     🔑 Test Gate
                   </button>
                 </div>

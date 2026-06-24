@@ -48,7 +48,7 @@ export const WitnessConsole = () => {
   };
 
   if (!is_hud_open) return (
-    <button className="witness-toggle-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95" onClick={toggleHud}>
+    <button className="witness-toggle-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95" onClick={toggleHud}>
       <span className="pulse-dot"></span> WITNESS_HUD
     </button>
   );
@@ -61,7 +61,7 @@ export const WitnessConsole = () => {
             <span className="evo-logo">PH_EVO</span> // {glitchText}
           </div>
           <div className="hud-controls">
-            <button className="hud-close-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95" onClick={toggleHud}>×</button>
+            <button className="hud-close-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95" onClick={toggleHud}>×</button>
           </div>
         </div>
 
@@ -115,7 +115,7 @@ export const WitnessConsole = () => {
                     <p>{health_status.driftCount} DISCOVERED_FAULTS</p>
                   </div>
                   <button 
-                    className={`doctor-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${is_healing ? 'healing' : ''}`}
+                    className={`doctor-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${is_healing ? 'healing' : ''}`}
                     onClick={() => triggerEvoDoctor()}
                     disabled={is_healing}
                   >
@@ -153,7 +153,7 @@ export const WitnessConsole = () => {
                 )}
               </div>
               
-              <button className="full-scan-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95" onClick={() => runDoctorScan()}>
+              <button className="full-scan-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95" onClick={() => runDoctorScan()}>
                 RUN_FULL_DIAGNOSTIC_SCAN
               </button>
             </div>
@@ -182,7 +182,7 @@ export const WitnessConsole = () => {
                 ].map(p => (
                   <button 
                     key={p} 
-                    className={`protocol-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${p === 'NUCLEAR_AUDIT' ? 'truth-primary' : p === 'SCORCH_EARTH' ? 'danger-zone' : ''}`}
+                    className={`protocol-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${p === 'NUCLEAR_AUDIT' ? 'truth-primary' : p === 'SCORCH_EARTH' ? 'danger-zone' : ''}`}
                     onClick={() => runStudyProtocol(p)}
                     disabled={studyRunning}
                   >

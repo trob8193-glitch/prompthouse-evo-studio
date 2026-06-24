@@ -62,7 +62,7 @@ export default function TopBar() {
         </button>
 
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-linear-to-br from-cyan-400 to-purple-600 flex items-center justify-center shadow-[0_0_16px_rgba(0,240,255,0.3)] text-sm">
+          <div className="w-8 h-8 rounded-3xl bg-linear-to-br from-cyan-400 to-purple-600 flex items-center justify-center shadow-[0_0_16px_rgba(0,240,255,0.3)] text-sm">
             ⚡
           </div>
           <div>
@@ -133,13 +133,13 @@ export default function TopBar() {
         <div className="relative">
           <button
             onClick={() => setShowThemeMenu(!showThemeMenu)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white text-[10px] font-black tracking-wider hover:bg-white/10 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-white/5 border border-white/10 text-white text-[10px] font-black tracking-wider hover:bg-white/10 transition-colors"
           >
             <LayoutTemplate size={14} /> METAMORPHOSIS: {globalTheme.layout.toUpperCase()}
           </button>
           
           {showThemeMenu && (
-            <div className="absolute top-[120%] right-0 w-48 bg-[#0a0a0f]/95 border border-white/10 rounded-xl p-2 flex flex-col gap-1 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl">
+            <div className="absolute top-[120%] right-0 w-48 bg-[#0a0a0f]/95 border border-white/10 rounded-3xl p-2 flex flex flex-col gap-4 gap-1 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl">
               {['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta', 'iota', 'kappa'].map(t => (
                 <button
                   key={t}

@@ -170,7 +170,7 @@ export function NightForgePanel() {
         <div className="bg-gray-800 border-gray-700 rounded p-3">
           <div className="text-gray-400 mb-2 font-bold uppercase tracking-widest flex justify-between">
             <span>Cycle Engine</span>
-            <button onClick={runNow} disabled={loading} className="text-indigo-400 hover:text-indigo-300">
+            <button onClick={runNow} disabled={loading} className="text-neon-cyan hover:text-indigo-300">
               {loading ? 'Running...' : 'Force Run'}
             </button>
           </div>
@@ -179,7 +179,7 @@ export function NightForgePanel() {
         </div>
 
         {/* Intent Daemon Section */}
-        <div className="bg-gray-800 border-gray-700 rounded p-3 flex flex-col gap-2">
+        <div className="bg-gray-800 border-gray-700 rounded p-3 flex flex flex-col gap-4 gap-2">
           <div className="text-gray-400 font-bold uppercase tracking-widest flex justify-between">
             <span>Intent Daemon v2</span>
             <button onClick={runIntentScan} disabled={loading} className="text-cyan-400 hover:text-cyan-300">
@@ -206,7 +206,7 @@ export function NightForgePanel() {
         </div>
 
         {/* Swarm Orchestrator Section */}
-        <div className="bg-gray-800 border-gray-700 rounded p-3 flex flex-col gap-2">
+        <div className="bg-gray-800 border-gray-700 rounded p-3 flex flex flex-col gap-4 gap-2">
           <div className="text-gray-400 font-bold uppercase tracking-widest">
             Swarm Orchestrator (Merge Court v2)
           </div>

@@ -29,7 +29,7 @@ export default function LocalIntelligenceView() {
           <p className="text-xs text-gray-500 font-mono mt-1">100% OFF-GRID INTELLIGENCE NODE</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex-col gap-4 items-end">
+          <div className="flex flex-col gap-4 gap-4 items-end">
             <span className="text-[10px] text-gray-500 font-mono uppercase tracking-widest">Hardware Daemon</span>
             <span className={`text-xs font-bold ${ollamaStatus === 'ONLINE' ? 'text-[#00ffcc]' : 'text-red-500'}`}>
               {ollamaStatus}

@@ -59,12 +59,12 @@ export default function MobileSingularityDashboard() {
     >
       <div className="flex-1 gap-8 h-full">
         {/* Left Column: Configuration */}
-        <div className="w-1/3 flex-col gap-6">
-          <Card className="bg-[#121214] border-gray-800 p-6 flex-col gap-4">
+        <div className="w-1/3 flex flex-col gap-4 gap-6">
+          <Card className="bg-[#121214] border-gray-800 p-6 flex flex-col gap-4 gap-4">
             <h2 className="text-sm font-bold text-gray-300 uppercase flex items-center gap-2">
               <Cpu className="w-4 h-4 text-purple-400" /> Source Application
             </h2>
-            <div className="flex-col gap-2">
+            <div className="flex flex-col gap-4 gap-2">
               {portfolioApps.map(app => (
                 <div 
                   key={app.id}
@@ -82,7 +82,7 @@ export default function MobileSingularityDashboard() {
             </div>
           </Card>
 
-          <Card className="bg-[#121214] border-gray-800 p-6 flex-col gap-4">
+          <Card className="bg-[#121214] border-gray-800 p-6 flex flex-col gap-4 gap-4">
             <h2 className="text-sm font-bold text-gray-300 uppercase flex items-center gap-2">
               <Zap className="w-4 h-4 text-yellow-400" /> Target Architecture
             </h2>
@@ -121,7 +121,7 @@ export default function MobileSingularityDashboard() {
         </div>
 
         {/* Right Column: Terminal Execution */}
-        <Card className="flex-1 bg-[#050505] border-gray-800 flex-col gap-4 p-0 overflow-hidden font-mono text-sm relative">
+        <Card className="flex-1 bg-[#050505] border-gray-800 flex flex-col gap-4 gap-4 p-0 overflow-hidden font-mono text-sm relative">
           <div className="bg-gray-900 border-b border-gray-800 p-3 flex items-center gap-3">
             <Terminal className="w-4 h-4 text-emerald-400" />
             <span className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Compiler Terminal</span>

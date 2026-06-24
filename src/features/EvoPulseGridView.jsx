@@ -481,7 +481,7 @@ export default function EvoPulseGridView() {
   // ─── OMNI-EVOLUTION: TRIDALL PATTERN ENGINE ───
   if (activeThemeId === 'layoutTerminalFullscreen') {
     return (
-      <div className="p-8 w-full h-full text-[#0f0] font-mono whitespace-pre-wrap bg-black flex-col">
+      <div className="p-8 w-full h-full text-[#0f0] font-mono whitespace-pre-wrap bg-black flex flex-col gap-4">
         <div>{`[TRIDALL_PATTERN_ENGINE] ACTIVE.
 
 Loading Pattern Modules...
@@ -520,7 +520,7 @@ ${EVO_PULSE_MODULES.map(m => `> ${m.name.toUpperCase()} [SCORE: ${m.score}] [STA
   if (activeThemeId === 'extremeWindows95') {
     return (
       <div className="p-8 w-full h-full bg-[#008080]">
-        <div className="w-[800px] bg-[#c0c0c0] border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] flex-col text-black font-sans">
+        <div className="w-[800px] bg-[#c0c0c0] border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] flex flex-col gap-4 text-black font-sans">
           <div className="bg-[#000080] text-white px-2 py-1 flex justify-between font-bold">
             <span>Tridall Pattern Engine v1.0</span>
             <div className="flex gap-1">

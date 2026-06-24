@@ -3,7 +3,7 @@ import { Terminal, Cpu, Zap, Activity, Grid, Layers, X, ShieldAlert } from 'luci
 
 export default function StudioAlpha({ onBack }) {
   return (
-    <div className="w-full h-screen bg-[#050505] text-cyan-400 font-mono overflow-hidden flex-col gap-4" style={{ backgroundImage: 'radial-gradient(circle at center, #1a1a1a 0%, #050505 100%)' }}>
+    <div className="w-full h-screen bg-[#050505] text-cyan-400 font-mono overflow-hidden flex flex-col gap-4 gap-4" style={{ backgroundImage: 'radial-gradient(circle at center, #1a1a1a 0%, #050505 100%)' }}>
       
       {/* HEADER */}
       <div className="h-16 border-b-2 border-cyan-500/30 bg-black/80 flex items-center justify-between px-6 shadow-[0_0_20px_rgba(0,255,255,0.1)]">
@@ -23,7 +23,7 @@ export default function StudioAlpha({ onBack }) {
 
       <div className="flex-1 flex-row overflow-hidden">
         {/* SIDEBAR: BOTS */}
-        <div className="w-80 border-r-2 border-cyan-500/30 bg-black/60 p-4 flex-col gap-4 overflow-y-auto" style={{ boxShadow: 'inset -10px 0 20px rgba(0,0,0,0.5)' }}>
+        <div className="w-80 border-r-2 border-cyan-500/30 bg-black/60 p-4 flex flex-col gap-4 gap-4 overflow-y-auto" style={{ boxShadow: 'inset -10px 0 20px rgba(0,0,0,0.5)' }}>
           <div className="text-[10px] uppercase tracking-widest text-magenta-400 border-b border-magenta-500/30 pb-2 mb-2 flex items-center gap-2">
             <Grid size={12} /> Roster Nodes
           </div>
@@ -49,7 +49,7 @@ export default function StudioAlpha({ onBack }) {
         </div>
 
         {/* MAIN TERMINAL */}
-        <div className="flex-1 p-6 flex-col gap-6 bg-transparent">
+        <div className="flex-1 p-6 flex flex-col gap-4 gap-6 bg-transparent">
           
           <div className="grid grid-cols-3 gap-6 h-48">
             <div className="border-magenta-500/30 bg-magenta-950/10 p-4 relative overflow-hidden group">
@@ -72,12 +72,12 @@ export default function StudioAlpha({ onBack }) {
             </div>
           </div>
 
-          <div className="flex-1 border-cyan-500/30 bg-black flex-col gap-4 relative shadow-[0_0_30px_rgba(0,255,255,0.05)]">
+          <div className="flex-1 border-cyan-500/30 bg-black flex flex-col gap-4 gap-4 relative shadow-[0_0_30px_rgba(0,255,255,0.05)]">
             <div className="h-8 border-b border-cyan-500/30 flex items-center px-4 gap-2 bg-cyan-950/20">
               <Terminal size={14} className="text-cyan-500" />
               <span className="text-[10px] tracking-widest text-cyan-500 uppercase">Interactive Shell</span>
             </div>
-            <div className="flex-1 p-4 overflow-y-auto flex-col gap-2">
+            <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-4 gap-2">
               <div className="text-cyan-600 text-xs">{'>'} Initializing Neural Link... OK</div>
               <div className="text-cyan-600 text-xs">{'>'} Loading Models... [100%]</div>
               <div className="text-white text-sm mt-4 bg-cyan-900/30 p-2 border-l-2 border-cyan-400 inline-block w-max">Hello, Architect. Ready for input.</div>

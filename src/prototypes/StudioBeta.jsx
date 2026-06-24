@@ -3,7 +3,7 @@ import { Home, MessageSquare, Layout, Sparkles, X, ChevronRight } from 'lucide-r
 
 export default function StudioBeta({ onBack }) {
   return (
-    <div className="w-full h-screen bg-white text-slate-800 font-sans overflow-hidden flex-col gap-4 relative" style={{ 
+    <div className="w-full h-screen bg-white text-slate-800 font-sans overflow-hidden flex flex-col gap-4 gap-4 relative" style={{ 
       backgroundImage: 'radial-gradient(circle at 100% 0%, #e0e7ff 0%, #f8fafc 50%, #fdf4ff 100%)' 
     }}>
       
@@ -31,11 +31,11 @@ export default function StudioBeta({ onBack }) {
       <div className="flex-1 flex-row p-10 gap-10 max-w-[1600px] mx-auto w-full overflow-hidden">
         
         {/* SIDEBAR: GLASS WIDGETS */}
-        <div className="w-72 flex-col gap-6">
+        <div className="w-72 flex flex-col gap-4 gap-6">
           <div className="bg-white/60 backdrop-blur-2xl rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-white">
             <button className="bg-purple-500/20 text-purple-400 border border-purple-500/50 hover:bg-purple-500/40 w-full py-2 rounded font-bold uppercase tracking-widest text-xs mb-4" onClick={() => void('Launching beta...')}>Launch Component Beta</button>
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Active Roster</h3>
-            <div className="flex-col gap-3">
+            <div className="flex flex-col gap-4 gap-3">
               {[1,2,3].map(i => (
                 <div key={i} className="group flex items-center gap-3 p-3 rounded-2xl hover:bg-white/80 transition-all cursor-pointer">
                   <div className={`w-10 h-10 rounded-full bg-linear-to-br ${i===1?'from-blue-400 to-indigo-400':i===2?'from-emerald-400 to-teal-400':'from-rose-400 to-orange-400'} shadow-md shrink-0 group-hover:scale-110 transition-transform`}></div>
@@ -48,9 +48,9 @@ export default function StudioBeta({ onBack }) {
             </div>
           </div>
           
-          <div className="bg-white/60 backdrop-blur-2xl rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-white flex-1 flex-col gap-4">
+          <div className="bg-white/60 backdrop-blur-2xl rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-white flex-1 flex flex-col gap-4 gap-4">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">System Health</h3>
-            <div className="flex-1 flex-col justify-center gap-6">
+            <div className="flex-1 flex flex-col gap-4 justify-center gap-6">
               <div>
                 <div className="flex justify-between text-sm mb-1"><span className="font-medium">Compute</span><span className="text-slate-500">45%</span></div>
                 <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-indigo-500 w-[45%] rounded-full"></div></div>
@@ -64,9 +64,9 @@ export default function StudioBeta({ onBack }) {
         </div>
 
         {/* MAIN CHAT */}
-        <div className="flex-1 bg-white/70 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_8px_40px_rgb(0,0,0,0.06)] border-white flex-col gap-4 overflow-hidden relative">
+        <div className="flex-1 bg-white/70 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_8px_40px_rgb(0,0,0,0.06)] border-white flex flex-col gap-4 gap-4 overflow-hidden relative">
           
-          <div className="flex-1 p-8 overflow-y-auto flex-col gap-6">
+          <div className="flex-1 p-8 overflow-y-auto flex flex-col gap-4 gap-6">
             <div className="max-w-[70%] bg-white p-6 rounded-3xl rounded-tl-none shadow-sm border-slate-100">
               <p className="text-slate-700 leading-relaxed">Good morning. The studio environment has been fully initialized and optimized for your glassmorphism workflow. How can I assist you with your design tasks today?</p>
             </div>

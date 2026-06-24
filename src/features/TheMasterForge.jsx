@@ -16,7 +16,7 @@ export default function TheMasterForge() {
       actions={
         <button 
           onClick={handleDeploy}
-          className="glass-extreme text-rose-400 hover:border-rose-400/80 hover:bg-rose-900/20 transition-all rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2"
+          className="glass-extreme text-rose-400 hover:border-rose-400/80 hover:bg-rose-900/20 transition-all rounded-3xl px-4 py-2 text-xs font-black inline-flex items-center gap-2"
         >
           <CloudLightning size={14} /> Deploy to Singularity
         </button>

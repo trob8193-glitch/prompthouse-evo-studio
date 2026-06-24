@@ -5,7 +5,7 @@ export const SovereignTabs = ({ tabs }) => {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
 
   return (
-    <div className="flex-col gap-4 h-full overflow-hidden relative">
+    <div className="flex flex-col gap-4 gap-4 h-full overflow-hidden relative">
       {/* 3D Orbital Dock Container */}
       <div 
         className="flex items-center justify-center p-6 w-full shrink-0 relative z-20"

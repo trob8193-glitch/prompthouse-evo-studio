@@ -38,13 +38,13 @@ export function EvoExchangeView() {
     : recipes.filter(r => (r.type || 'template') === activeCategory);
 
   return (
-    <div className="flex-col animate-in">
-      <div className="flex-between" style={{ marginBottom: 16 }}>
+    <div className="flex flex-col gap-4 animate-in">
+      <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
-          <div className="page-title">🏪 Evo Exchange</div>
-          <div className="page-subtitle">Private marketplace for your tools, agents, and templates. Gated until Commerce Rail is live.</div>
+          <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🏪 Evo Exchange</div>
+          <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Private marketplace for your tools, agents, and templates. Gated until Commerce Rail is live.</div>
         </div>
-        <button className="btn btn-secondary btn-sm" onClick={() => useSovereignStore.getState().addNotification({ msg: 'Publishing to public exchange requires Enterprise Sovereignty.', type: 'warning' })}>
+        <button className="glass-extreme text-fuchsia-400 border border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95 glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={() => useSovereignStore.getState().addNotification({ msg: 'Publishing to public exchange requires Enterprise Sovereignty.', type: 'warning' })}>
           🌐 Go Public
         </button>
       </div>
@@ -53,7 +53,7 @@ export function EvoExchangeView() {
         {categories.map(c => (
           <button 
             key={c.id} 
-            className={`tab-btn ${activeCategory === c.id ? 'active' : ''}`}
+            className={`tab-glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${activeCategory === c.id ? 'active' : ''}`}
             onClick={() => setActiveCategory(c.id)}
           >
             {c.label}
@@ -69,9 +69,9 @@ export function EvoExchangeView() {
             <div className="empty-sub">Capture signals and generate recipes to see them here.</div>
           </div>
         ) : filtered.map(r => (
-          <div key={r.id} className="card bot-card" style={{ '--bot-accent': '#38bdf8' }}>
-            <div className="card-body flex-col gap-12">
-              <div className="flex-between">
+          <div key={r.id} className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl bot-glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ '--bot-accent': '#38bdf8' }}>
+            <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex flex-col gap-4 gap-12">
+              <div className="flex items-center justify-between">
                 <span className="badge badge-cyan">{r.type || 'template'}</span>
                 <span style={{ fontSize: 10, color: 'var(--text-dim)' }}>{r.consentScope || 'private'}</span>
               </div>
@@ -81,7 +81,7 @@ export function EvoExchangeView() {
                   {(r.instructions || r.signature || '').slice(0, 100)}...
                 </div>
               </div>
-              <div className="flex-between" style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid var(--border-dim)' }}>
+              <div className="flex items-center justify-between" style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid var(--border-dim)' }}>
                 <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--accent-gold)' }}>$0.00</span>
                 <button className="bg-[#f5c842] text-black font-bold py-1 px-3 rounded shadow-[0_0_15px_rgba(245,200,66,0.3)] text-xs uppercase" onClick={() => void('Selling module...')}>Sell Module</button>
               </div>
@@ -90,8 +90,8 @@ export function EvoExchangeView() {
         ))}
       </div>
 
-      <div className="card" style={{ marginTop: 24, background: 'rgba(248,113,113,0.05)', border: '1px solid rgba(248,113,113,0.2)' }}>
-        <div className="card-body" style={{ textAlign: 'center', padding: 24 }}>
+      <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ marginTop: 24, background: 'rgba(248,113,113,0.05)', border: '1px solid rgba(248,113,113,0.2)' }}>
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ textAlign: 'center', padding: 24 }}>
           <div style={{ fontSize: 32, marginBottom: 12 }}>🔒</div>
           <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 8 }}>Marketplace Commerce Blocked</div>
           <div style={{ fontSize: 13, color: 'var(--text-secondary)', maxWidth: 500, margin: '0 auto' }}>

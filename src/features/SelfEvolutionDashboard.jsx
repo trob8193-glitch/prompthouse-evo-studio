@@ -106,7 +106,7 @@ export function SelfEvolutionDashboard() {
         <button 
           onClick={fetchData}
           disabled={refreshing}
-          className="glass-extreme px-4 py-2 rounded-xl border-cyan-500/30 text-neon-cyan text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:bg-cyan-500/10 transition-all"
+          className="glass-extreme px-4 py-2 rounded-3xl border-cyan-500/30 text-neon-cyan text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:bg-cyan-500/10 transition-all"
         >
           <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
           {refreshing ? 'Syncing...' : 'Refresh'}
@@ -123,7 +123,7 @@ export function SelfEvolutionDashboard() {
           action={
             <button 
               onClick={handleToggleKillSwitch}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all"
               style={{
                 borderColor: status?.killSwitchEngaged ? 'rgba(239, 68, 68, 0.5)' : 'rgba(16, 185, 129, 0.5)',
                 color: status?.killSwitchEngaged ? '#ef4444' : '#10b981',
@@ -171,9 +171,9 @@ export function SelfEvolutionDashboard() {
               <CheckCircle size={16} className="text-emerald-500/50" /> No pending approvals.
             </div>
           ) : (
-            <div className="flex flex-col gap-3">
+            <div className="flex flex flex-col gap-4 gap-3">
               {queue.map(item => (
-                <div key={item.id} className="bg-black/40 p-4 rounded-2xl border border-amber-500/20 flex flex-col gap-3">
+                <div key={item.id} className="bg-black/40 p-4 rounded-2xl border border-amber-500/20 flex flex flex-col gap-4 gap-3">
                   <div className="flex justify-between items-start">
                     <div>
                       <div className="text-xs font-black text-amber-400 mb-1">Pending Architecture Change</div>
@@ -184,13 +184,13 @@ export function SelfEvolutionDashboard() {
                   <div className="flex gap-2 mt-2">
                     <button 
                       onClick={() => handleQueueAction(item.id, 'approve')}
-                      className="flex-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                      className="flex-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 py-2 rounded-3xl text-[10px] font-black uppercase tracking-widest transition-all"
                     >
                       Approve
                     </button>
                     <button 
                       onClick={() => handleQueueAction(item.id, 'reject')}
-                      className="flex-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                      className="flex-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 py-2 rounded-3xl text-[10px] font-black uppercase tracking-widest transition-all"
                     >
                       Reject
                     </button>
@@ -208,7 +208,7 @@ export function SelfEvolutionDashboard() {
         {runs.length === 0 ? (
           <div className="text-sm text-slate-400 italic">No runs recorded yet.</div>
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex flex-col gap-4 gap-3">
             {runs.map(run => (
               <div key={run.id} className="bg-black/30 p-4 rounded-2xl border border-white/5 flex items-center justify-between group hover:border-indigo-500/30 transition-all">
                 <div className="flex items-center gap-4">
@@ -224,7 +224,7 @@ export function SelfEvolutionDashboard() {
                   </div>
                 </div>
                 {run.shadowBuildResult && !run.applied && (
-                  <div className="text-xs text-rose-400 bg-rose-500/10 px-3 py-1 rounded-lg border border-rose-500/20">
+                  <div className="text-xs text-rose-400 bg-rose-500/10 px-3 py-1 rounded-2xl border border-rose-500/20">
                     Shadow Build Failed
                   </div>
                 )}

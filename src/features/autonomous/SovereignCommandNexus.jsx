@@ -3,7 +3,7 @@ import { getBridgeUrl } from '../../lib/api/config.js';
 
 export default function SovereignCommandNexus() {
   return (
-    <div className="w-full h-full flex-col gap-6 p-6">
+    <div className="w-full h-full flex flex-col gap-4 gap-6 p-6">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-3xl font-black text-neon-cyan tracking-tighter uppercase flex items-center gap-3">
@@ -49,7 +49,7 @@ export default function SovereignCommandNexus() {
         </div>
 
         {/* Side panels */}
-        <div className="col-span-1 flex-col gap-6">
+        <div className="col-span-1 flex flex-col gap-4 gap-6">
           <div className="glass-extreme rounded-3xl p-6 flex-1 relative overflow-hidden border-neon-glow border-t-4 border-t-cyan-400">
              <h3 className="text-sm font-bold text-dim uppercase tracking-widest mb-4">Active Tethers</h3>
              <div className="space-y-4">
@@ -67,7 +67,7 @@ export default function SovereignCommandNexus() {
           
           <div className="glass-extreme rounded-3xl p-6 flex-1 bg-linear-to-br from-indigo-900/20 to-purple-900/20">
              <h3 className="text-sm font-bold text-neon-violet uppercase tracking-widest mb-4">Resilience Core</h3>
-             <div className="h-full flex-col gap-4 items-center justify-center">
+             <div className="h-full flex flex-col gap-4 gap-4 items-center justify-center">
                <div className="text-5xl font-black text-neon-violet mb-2">99.9%</div>
                <div className="text-xs text-dim uppercase">Singularity Integrity</div>
              </div>

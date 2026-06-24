@@ -3,7 +3,7 @@ import { Hexagon, Network, Activity, Globe, X } from 'lucide-react';
 
 export default function StudioDelta({ onBack }) {
   return (
-    <div className="w-full h-screen bg-[#02110c] text-emerald-400 font-sans overflow-hidden flex-col gap-4 relative" style={{ 
+    <div className="w-full h-screen bg-[#02110c] text-emerald-400 font-sans overflow-hidden flex flex-col gap-4 gap-4 relative" style={{ 
       backgroundImage: 'radial-gradient(ellipse at center, #04241a 0%, #010a07 100%)' 
     }}>
       
@@ -11,7 +11,7 @@ export default function StudioDelta({ onBack }) {
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-emerald-900/20 blur-[100px] rounded-full animate-pulse"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-teal-900/20 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
 
-      <div className="relative z-10 flex-col h-full p-6 gap-6">
+      <div className="relative z-10 flex flex-col gap-4 h-full p-6 gap-6">
         
         {/* HEADER */}
         <div className="h-20 bg-[#051c14]/60 backdrop-blur-md rounded-[40px] border-emerald-500/20 flex items-center justify-between px-8 shadow-[0_0_30px_rgba(16,185,129,0.05)]">
@@ -29,10 +29,10 @@ export default function StudioDelta({ onBack }) {
         <div className="flex-1 flex gap-6 overflow-hidden">
           
           {/* SIDEBAR / ORGANISM LIST */}
-          <div className="w-1/4 bg-[#051c14]/40 backdrop-blur-sm rounded-[40px] border-teal-500/10 p-6 flex-col gap-4 shadow-inner overflow-y-auto no-scrollbar">
+          <div className="w-1/4 bg-[#051c14]/40 backdrop-blur-sm rounded-[40px] border-teal-500/10 p-6 flex flex-col gap-4 gap-4 shadow-inner overflow-y-auto no-scrollbar">
             <h2 className="text-sm text-teal-600/80 uppercase tracking-widest mb-6 px-4">Symbiotic Clusters</h2>
             
-            <div className="flex-col gap-4">
+            <div className="flex flex-col gap-4 gap-4">
               {[1,2,3,4].map(i => (
                 <div key={i} className="bg-[#02110c]/80 rounded-[30px] p-4 flex items-center gap-4 cursor-pointer border-transparent hover:border-emerald-500/30 transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.1)] group">
                   <div className="w-14 h-14 rounded-full bg-emerald-950 flex items-center justify-center relative">
@@ -49,7 +49,7 @@ export default function StudioDelta({ onBack }) {
           </div>
 
           {/* MAIN ORGANIC WORKSPACE */}
-          <div className="flex-1 flex-col gap-6">
+          <div className="flex-1 flex flex-col gap-4 gap-6">
             
             {/* GRAPHS / CELLS */}
             <div className="h-1/3 flex gap-6">
@@ -61,15 +61,15 @@ export default function StudioDelta({ onBack }) {
                   <div className="text-sm text-teal-600 tracking-widest uppercase">Neural Cohesion</div>
                 </div>
               </div>
-              <div className="w-1/3 bg-[#051c14]/40 backdrop-blur-sm rounded-[40px] border-teal-500/10 p-8 flex-col gap-4 justify-center items-center">
+              <div className="w-1/3 bg-[#051c14]/40 backdrop-blur-sm rounded-[40px] border-teal-500/10 p-8 flex flex-col gap-4 gap-4 justify-center items-center">
                 <Globe className="text-teal-500 w-12 h-12 mb-4 opacity-50" />
                 <div className="text-emerald-400 text-lg">Global Sync</div>
               </div>
             </div>
 
             {/* FLUID CHAT */}
-            <div className="flex-1 bg-[#051c14]/60 backdrop-blur-md rounded-[40px] border-emerald-500/20 p-8 flex-col gap-4 relative shadow-[inset_0_0_50px_rgba(0,0,0,0.5)]">
-              <div className="flex-1 overflow-y-auto flex-col gap-6 no-scrollbar pb-20">
+            <div className="flex-1 bg-[#051c14]/60 backdrop-blur-md rounded-[40px] border-emerald-500/20 p-8 flex flex-col gap-4 gap-4 relative shadow-[inset_0_0_50px_rgba(0,0,0,0.5)]">
+              <div className="flex-1 overflow-y-auto flex flex-col gap-4 gap-6 no-scrollbar pb-20">
                 <div className="self-start bg-[#02110c] border-emerald-500/20 text-emerald-100 p-5 rounded-[30px] rounded-tl-sm max-w-[70%]">
                   The biomatrix has successfully integrated your request. Neural pathways are routing optimal solutions now.
                 </div>

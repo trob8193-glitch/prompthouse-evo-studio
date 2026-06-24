@@ -78,7 +78,7 @@ const HoloTigerWireframe3D = ({ size = 200 }) => {
           <div className="absolute inset-0 border-[3px] rounded-[40%] mix-blend-screen bg-black/40 backdrop-blur-sm" style={{ borderColor: colorSecondary, transform: `translateZ(${snoutSize/2}px)`, boxShadow: `0 0 15px ${colorGlowSecondary}` }} />
           
           {/* Nose Core */}
-          <div className="absolute bg-fuchsia-400 rounded-lg animate-pulse" style={{ width: '30%', height: '20%', transform: `translateZ(${snoutSize/2 + 5}px) translateY(-30%)`, boxShadow: '0 0 20px #f0abfc' }} />
+          <div className="absolute bg-fuchsia-400 rounded-2xl animate-pulse" style={{ width: '30%', height: '20%', transform: `translateZ(${snoutSize/2 + 5}px) translateY(-30%)`, boxShadow: '0 0 20px #f0abfc' }} />
           
           {/* Whiskers (Left and Right) */}
           {Array.from({ length: 3 }).map((_, i) => (

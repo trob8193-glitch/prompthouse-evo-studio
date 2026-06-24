@@ -65,7 +65,7 @@ export function RareCapabilitiesView() {
   const readyCount = artifactsData?.readyCount || moduleArtifacts.filter((item) => item.truthState === 'verified-ready').length;
 
   return (
-    <div className="rare-os-view flex-col gap-4 animate-in">
+    <div className="rare-os-view flex flex-col gap-4 gap-4 animate-in">
       <div className="flex items-center justify-between rare-os-titlebar">
         <div>
           <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">Rare Capability OS</div>
@@ -171,7 +171,7 @@ export function RareCapabilitiesView() {
                 <span className="prompt-block-label">{artifact.primaryLabel}</span>
                 <button
                   type="button"
-                  className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
+                  className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
                   onClick={() => copyArtifact(artifact.primary, artifact.primaryLabel, setCopied)}
                 >
                   {copied === artifact.primaryLabel ? 'Copied' : 'Copy'}

@@ -77,7 +77,7 @@ export default function VisualPhysicsEditor() {
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
   return (
-    <div className="flex-col gap-4 h-full bg-[#09090b]">
+    <div className="flex flex-col gap-4 gap-4 h-full bg-[#09090b]">
       <div className="p-6 border-b border-gray-800">
         <h1 className="text-3xl font-black text-white">Visual Physics Editor</h1>
         <p className="text-gray-400 mt-2">Node graph for configured studio execution paths and provider-gated rails.</p>

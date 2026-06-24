@@ -9,7 +9,7 @@ export default function OmniMarketplaceNexus() {
       title={<><Globe color="#ffaa00" size={18} /> Omni-Marketplace Nexus</>}
       description="Omni-Fusion Node: Combines Commerce, Module Marketplace, Studio Listings, and SaaS Checkout logic into one master exchange."
       actions={
-        <button className="glass-extreme text-amber-400 hover:border-amber-400/80 transition-all rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={() => { safeFetchBridge('/api/stripe/health').then(d => void('[Commerce] Ledger:', d)).catch(() => {}); }}>
+        <button className="glass-extreme text-amber-400 hover:border-amber-400/80 transition-all rounded-3xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={() => { safeFetchBridge('/api/stripe/health').then(d => void('[Commerce] Ledger:', d)).catch(() => {}); }}>
           <DollarSign size={14} /> View Ledger
         </button>
       }
@@ -62,7 +62,7 @@ export default function OmniMarketplaceNexus() {
                 <span className="text-xs font-black text-green-400 px-3 py-1 rounded-full bg-green-400/10 border-green-400/30">ACTIVE</span>
              </div>
           </div>
-          <button className="w-full mt-6 glass-extreme text-amber-400 hover:border-amber-400/80 transition-all rounded-xl px-4 py-3 text-xs font-black inline-flex items-center justify-center gap-2" onClick={() => { safeFetchBridge('/api/stripe/health').then(d => void('[Commerce] Gateway config:', d)).catch(() => {}); }}>
+          <button className="w-full mt-6 glass-extreme text-amber-400 hover:border-amber-400/80 transition-all rounded-3xl px-4 py-3 text-xs font-black inline-flex items-center justify-center gap-2" onClick={() => { safeFetchBridge('/api/stripe/health').then(d => void('[Commerce] Gateway config:', d)).catch(() => {}); }}>
             Configure Gateways
           </button>
         </div>

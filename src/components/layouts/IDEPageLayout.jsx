@@ -48,7 +48,7 @@ export function IDEPageLayout({ title, description, actions, children, noPadding
               <div className="absolute inset-3 bg-white rounded-full shadow-[0_0_10px_white]" />
             </div>
 
-            <div className="flex-col gap-4">
+            <div className="flex flex-col gap-4 gap-4">
               <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-white via-cyan-100 to-cyan-500 tracking-tight uppercase">
                 {title}
               </div>

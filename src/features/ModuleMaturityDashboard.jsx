@@ -80,8 +80,8 @@ export default function ModuleMaturityDashboard() {
       description="Grades every major studio module against the 14-point production checklist."
       actions={
         <>
-          <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={refresh} disabled={busy}><RefreshCw size={15} /> Refresh</button>
-          <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={writeReceipt} disabled={busy}><FileJson size={15} /> Write Receipt</button>
+          <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-3xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={refresh} disabled={busy}><RefreshCw size={15} /> Refresh</button>
+          <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-3xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={writeReceipt} disabled={busy}><FileJson size={15} /> Write Receipt</button>
         </>
       }
     >

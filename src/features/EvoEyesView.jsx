@@ -32,7 +32,7 @@ export function EvoEyesView() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#050008] text-[#e0d0ff] font-mono">
+    <div className="flex flex flex-col gap-4 h-full bg-[#050008] text-[#e0d0ff] font-mono">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-purple-500/30 bg-linear-to-r from-[#0a0015] to-[#150025]">
         <div className="flex items-center gap-3">
@@ -47,10 +47,10 @@ export function EvoEyesView() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="bg-purple-500/10 px-4 py-2 rounded-lg border border-purple-500/30 text-sm">
+          <div className="bg-purple-500/10 px-4 py-2 rounded-2xl border border-purple-500/30 text-sm">
             <span className="font-bold text-purple-300">{audits.length}</span> Audits
           </div>
-          <button onClick={fetchAudits} className="bg-purple-900/30 hover:bg-purple-900/50 border border-purple-500/30 px-3 py-2 rounded-lg transition-colors">
+          <button onClick={fetchAudits} className="bg-purple-900/30 hover:bg-purple-900/50 border border-purple-500/30 px-3 py-2 rounded-2xl transition-colors">
             <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
           </button>
         </div>
@@ -99,7 +99,7 @@ export function EvoEyesView() {
         {/* Right: Audit Detail */}
         <div className="flex-1 overflow-auto p-6">
           {!selected ? (
-            <div className="flex items-center justify-center h-full text-purple-400/30 flex-col gap-4">
+            <div className="flex items-center justify-center h-full text-purple-400/30 flex flex-col gap-4 gap-4">
               <Eye size={64} className="opacity-30" />
               <div className="text-sm tracking-widest uppercase">Select an audit</div>
             </div>
@@ -115,7 +115,7 @@ export function EvoEyesView() {
               {/* Viewport Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {selected.viewports?.map((vp, i) => (
-                  <div key={i} className="border border-purple-500/20 rounded-lg bg-[#0a0015] p-4">
+                  <div key={i} className="border border-purple-500/20 rounded-2xl bg-[#0a0015] p-4">
                     <div className="flex items-center gap-2 mb-3 text-sm font-bold text-purple-300">
                       {vpIcon(vp.viewport)}
                       <span className="uppercase">{vp.viewport}</span>
@@ -153,7 +153,7 @@ export function EvoEyesView() {
 
               {/* Prompt Context */}
               {selected.prompt && (
-                <div className="border border-purple-500/20 rounded-lg bg-[#0a0015] p-4">
+                <div className="border border-purple-500/20 rounded-2xl bg-[#0a0015] p-4">
                   <div className="text-xs text-purple-400/60 uppercase tracking-widest mb-2">Agent Prompt Context</div>
                   <div className="text-sm text-purple-200">{selected.prompt}</div>
                 </div>

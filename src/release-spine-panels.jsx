@@ -56,7 +56,7 @@ export function PromptPacketAuthorityPanel({ title = 'Native Prompt OS Packet Au
     <SectionCard
       title={title}
       subtitle={subtitle}
-      actions={<button className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={() => setReloadKey((value) => value + 1)}>Refresh</button>}
+      actions={<button className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={() => setReloadKey((value) => value + 1)}>Refresh</button>}
     >
       {loading ? <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Loading packet authority...</div> : null}
       {error ? <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8" style={{ color: 'var(--accent-red)' }}>{error}</div> : null}
@@ -100,7 +100,7 @@ export function ReleaseSpinePanel() {
     <SectionCard
       title="Release Spine"
       subtitle="Operator truth surface for worktree classification, route parity, source truth, and build review."
-      actions={<button className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={() => setReloadKey((value) => value + 1)}>Refresh</button>}
+      actions={<button className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={() => setReloadKey((value) => value + 1)}>Refresh</button>}
     >
       {loading ? <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Loading release spine...</div> : null}
       {error ? <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8" style={{ color: 'var(--accent-red)' }}>{error}</div> : null}

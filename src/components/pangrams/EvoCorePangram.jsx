@@ -12,7 +12,7 @@ export default function EvoCorePangram() {
       </div>
       
       {/* Central Core */}
-      <div className="relative z-10 flex flex-col items-center">
+      <div className="relative z-10 flex flex flex-col gap-4 items-center">
         <div className="w-24 h-24 bg-[#00f0ff]/10 rounded-full flex items-center justify-center backdrop-blur-xl border border-[#00f0ff]/50 shadow-[0_0_40px_rgba(0,240,255,0.4)]">
           <Zap size={40} color="#00f0ff" className="animate-pulse" />
         </div>
@@ -25,11 +25,11 @@ export default function EvoCorePangram() {
       </div>
 
       {/* Telemetry Spokes */}
-      <div className="absolute top-8 left-8 p-4 glass-extreme rounded-xl border border-[#00f0ff]/30">
+      <div className="absolute top-8 left-8 p-4 glass-extreme rounded-3xl border border-[#00f0ff]/30">
         <div className="text-[9px] text-[#00f0ff] font-bold tracking-widest uppercase mb-1">Synapse Load</div>
         <div className="text-xl font-black text-white">42.8 TH/z</div>
       </div>
-      <div className="absolute bottom-8 right-8 p-4 glass-extreme rounded-xl border border-[#00f0ff]/30">
+      <div className="absolute bottom-8 right-8 p-4 glass-extreme rounded-3xl border border-[#00f0ff]/30">
         <div className="text-[9px] text-[#00f0ff] font-bold tracking-widest uppercase mb-1">Memory Matrix</div>
         <div className="text-xl font-black text-white">100% Bound</div>
       </div>

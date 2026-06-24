@@ -69,7 +69,7 @@ export default function SingularityCommandCenter() {
             Live Waterfall Routing
           </h3>
           
-          <div className="flex-col gap-4 space-y-3">
+          <div className="flex flex-col gap-4 gap-4 space-y-3">
             {waterfallRoute.map((nodeId, index) => {
               const node = nodes[nodeId];
               const isActive = index === 0; // In a real dashboard, we'd dynamically track which is currently handling load
@@ -93,7 +93,7 @@ export default function SingularityCommandCenter() {
               }
 
               return (
-                <div key={nodeId} className="flex-col gap-4">
+                <div key={nodeId} className="flex flex-col gap-4 gap-4">
                   <div className={`flex items-center justify-between p-3 rounded-2xl border ${bgColor} ${borderColor} transition-colors duration-500`}>
                     <div className="flex items-center gap-3">
                       <div className={`w-2 h-2 rounded-full ${node.status === 'ONLINE' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]' : node.status === 'ERROR' ? 'bg-red-500 animate-pulse' : 'bg-gray-500'}`} />

@@ -64,20 +64,20 @@ export function WorkTwinVaultView() {
   const statusColors = { private: '#38bdf8', team: '#f5c842', marketplace_candidate: '#4ade80' };
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
           <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🤖 WorkTwin Vault</div>
           <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Browser capture → Pattern → Recipe → Tool. All private. All consented.</div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={mine}>📡 Run Pattern Miner</button>
-          <button className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-primary" onClick={refresh}>↻ Refresh</button>
+          <button className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={mine}>📡 Run Pattern Miner</button>
+          <button className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-primary" onClick={refresh}>↻ Refresh</button>
         </div>
       </div>
 
       <div className="tabs-bar" style={{ marginBottom: 16 }}>
-        {TABS.map(t => <button key={t.id} className={`tab-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>{t.label}</button>)}
+        {TABS.map(t => <button key={t.id} className={`tab-glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>{t.label}</button>)}
       </div>
 
       {activeTab === 'capture' && (
@@ -111,7 +111,7 @@ export function WorkTwinVaultView() {
               <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Context (will be auto-redacted for secrets)</label>
               <textarea className="field-textarea" rows={5} ghostInput="Paste the workflow, prompt, or pattern you want to capture..." value={captureForm.context} onChange={e => setCaptureForm(f => ({ ...f, context: e.target.value }))} />
             </div>
-            <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={capture}>📥 Capture Signal with Consent</button>
+            <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={capture}>📥 Capture Signal with Consent</button>
           </div>
         </div>
       )}
@@ -140,7 +140,7 @@ export function WorkTwinVaultView() {
         <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
           <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
             <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">🔍 Detected Patterns</div>
-            <button className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary" onClick={mine}>Run Miner</button>
+            <button className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary" onClick={mine}>Run Miner</button>
           </div>
           <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body">
             {patterns.length === 0 ? (
@@ -152,7 +152,7 @@ export function WorkTwinVaultView() {
                   <span style={{ fontSize: 11, color: '#f5c842' }}>×{p.frequency} detected</span>
                 </div>
                 {p.examples.map((ex, i) => <div key={i} style={{ fontSize: 11, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginBottom: 2 }}>• {ex}</div>)}
-                <button className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-primary" style={{ marginTop: 8 }} onClick={() => genRecipe(p)}>🪄 Generate Recipe</button>
+                <button className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-primary" style={{ marginTop: 8 }} onClick={() => genRecipe(p)}>🪄 Generate Recipe</button>
               </div>
             ))}
           </div>

@@ -43,7 +43,7 @@ export function ProofLedgerView() {
   }, []);
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="flex justify-between items-center mb-2">
         <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🛡️ Proof-Native Ledger</div>
         <div className="font-mono text-xs text-neon-cyan bg-indigo-900/30 px-3 py-1 rounded border-indigo-500/30">
@@ -95,7 +95,7 @@ export function CanonMemoryView() {
   };
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">📜 Canon-Aware Memory</div>
       <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Graph-backed product canon for locked rules and forbidden drift.</div>
       <div className="grid-builder">
@@ -108,7 +108,7 @@ export function CanonMemoryView() {
                 <span className={`badge ${law.locked ? 'badge-green' : 'badge-dim'}`}>{law.locked ? 'LOCKED' : 'DRAFT'}</span>
                 <span className="badge badge-dim">GLOBAL</span>
               </div>
-              <button className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={() => toggleLock(i)}>
+              <button className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={() => toggleLock(i)}>
                 {law.locked ? 'Unlock' : 'Lock Law'}
               </button>
             </div>
@@ -135,7 +135,7 @@ export function MergeCourtView() {
   };
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">⚖️ Multi-Agent Merge Court</div>
       <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Consensus resolution for agent disagreements.</div>
       <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
@@ -154,7 +154,7 @@ export function MergeCourtView() {
               {resolved ? 'Sovereignty ruled in favor of Verifier. Redux alternative saved to rejected ledger.' : 'Awaiting sovereignty decision...'}
             </p>
             {!resolved ? (
-              <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" style={{ marginTop: 16 }} onClick={handleResolve} disabled={resolving}>
+              <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" style={{ marginTop: 16 }} onClick={handleResolve} disabled={resolving}>
                 {resolving ? 'Enforcing...' : 'Enforce Resolution'}
               </button>
             ) : (
@@ -188,7 +188,7 @@ export function WitnessConsoleView() {
   }, []);
 
   return (
-    <div className="flex-col gap-4 animate-in" style={{ height: 'calc(100vh - 100px)' }}>
+    <div className="flex flex-col gap-4 gap-4 animate-in" style={{ height: 'calc(100vh - 100px)' }}>
       <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">👁️ Runtime Witness Console</div>
       <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Capturing execution traces, UI events, and API calls.</div>
       <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#000', padding: 0 }}>
@@ -250,7 +250,7 @@ export function DeadSurfaceHunterView() {
   };
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🕸️ Dead-Surface Hunter</div>
       <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Scanning for dead buttons, simulated forms, and missing states.</div>
       <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ textAlign: 'center', padding: 48 }}>
@@ -263,7 +263,7 @@ export function DeadSurfaceHunterView() {
             </div>
           ) : 'Audits live DOM for broken routes and handlers.'}
         </div>
-        <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" style={{ marginTop: 24 }} onClick={runScan} disabled={scanning}>
+        <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" style={{ marginTop: 24 }} onClick={runScan} disabled={scanning}>
           {scanning ? 'Scanning...' : 'Run Deep Scan'}
         </button>
       </div>
@@ -306,14 +306,14 @@ export function MaturityScoreView() {
   };
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">📈 Studio Maturity Score</div>
       <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Evaluating proof strength, test coverage, and readiness based on the real Nuclear Truth backend logic.</div>
       <div className="grid-builder">
         <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ textAlign: 'center', borderColor: score === 150 ? '#3b82f6' : score >= 100 ? 'var(--accent-pink)' : '' }}>
           <div style={{ fontSize: 64, fontWeight: 900, color: score === 150 ? '#3b82f6' : score >= 100 ? 'var(--accent-pink)' : score >= 90 ? 'var(--accent-green)' : 'var(--accent-gold)' }}>{recalculating ? '...' : score}</div>
           <div style={{ color: score === 150 ? '#3b82f6' : score >= 100 ? 'var(--accent-pink)' : 'var(--text-muted)', fontWeight: 700 }}>{score === 150 ? 'ABSOLUTE PERFECTION' : score >= 100 ? 'PRODUCTION READY' : 'OVERALL READINESS'}</div>
-          <button className="glass-extreme text-fuchsia-400 border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95" style={{ marginTop: 24 }} onClick={recalculate} disabled={recalculating}>
+          <button className="glass-extreme text-fuchsia-400 border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95" style={{ marginTop: 24 }} onClick={recalculate} disabled={recalculating}>
             {recalculating ? 'Auditing Canon...' : 'Run Maturity Audit'}
           </button>
         </div>
@@ -323,7 +323,7 @@ export function MaturityScoreView() {
             <span>Audit Score</span>
             <span style={{ color: canonAudit.score >= 90 ? 'var(--accent-green)' : 'var(--accent-red)', fontWeight: 700 }}>{canonAudit.score}%</span>
           </div>
-          <div className="flex-col gap-4" style={{ gap: 8 }}>
+          <div className="flex flex-col gap-4 gap-4" style={{ gap: 8 }}>
             {canonAudit.issues.length === 0 ? (
               <div style={{ fontSize: 11, color: 'var(--accent-green)' }}>✅ No structural canon issues detected. Ready.</div>
             ) : (
@@ -382,7 +382,7 @@ export function ForgePipelineView() {
   };
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🛫 Forge-to-Launch Pipeline</div>
       <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">End-to-end launch readiness and truth certificates.</div>
       
@@ -424,7 +424,7 @@ export function ForgePipelineView() {
             {activeStep === 3 && (
               <>
                 <p style={{ color: 'var(--text-secondary)' }}>Analyzing current build for security gaps and canon drift. All API endpoints and state transitions will be audited.</p>
-                <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={runCompliance} disabled={status === 'scanning'}>
+                <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={runCompliance} disabled={status === 'scanning'}>
                   {status === 'scanning' ? 'Running Compliance Audit...' : 'Run Compliance Checks'}
                 </button>
               </>
@@ -432,7 +432,7 @@ export function ForgePipelineView() {
             {activeStep === 4 && status !== 'complete' && (
               <>
                 <p style={{ color: 'var(--text-secondary)' }}>Verification passed. Ready to generate final Truth Certificate and lock build for production deployment.</p>
-                <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={finalizeRelease} disabled={status === 'gated'}>
+                <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={finalizeRelease} disabled={status === 'gated'}>
                   {status === 'gated' ? 'Signing Certificates...' : 'Execute Release Gates'}
                 </button>
               </>
@@ -442,7 +442,7 @@ export function ForgePipelineView() {
                 <div style={{ fontSize: 48, marginBottom: 16 }}>🏆</div>
                 <h3 style={{ color: 'var(--accent-green)' }}>Release Finalized</h3>
                 <p style={{ color: 'var(--text-muted)', marginTop: 8 }}>Your build is now fully evo and production-ready.</p>
-                <button className="glass-extreme text-fuchsia-400 border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95" style={{ marginTop: 20 }} onClick={() => setActiveStep(0)}>Reset Pipeline</button>
+                <button className="glass-extreme text-fuchsia-400 border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95" style={{ marginTop: 20 }} onClick={() => setActiveStep(0)}>Reset Pipeline</button>
               </div>
             )}
           </div>
@@ -477,26 +477,26 @@ export function PatternMirrorView() {
   };
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🪞 Human Pattern Mirror</div>
       <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Editable user pattern profile for tone, risk, and pace. Analyzes drift between Intent and Artifact.</div>
       
       <div className="grid-builder">
-        <div className="flex-col gap-4">
+        <div className="flex flex-col gap-4 gap-4">
           <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
             <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Mirror Settings</div></div>
             <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex-col gap-4">
-              <div className="field"><label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Preferred Tone</label><input className="w-full bg-black/50 border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" defaultValue="Direct, Professional, Zero-fluff" /></div>
+              <div className="field"><label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Preferred Tone</label><input className="w-full bg-black/50 border-cyan-500/30 rounded-3xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" defaultValue="Direct, Professional, Zero-fluff" /></div>
               <div className="field"><label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Risk Tolerance</label><select className="field-select"><option>Strict Verification (Low Risk)</option><option>Rapid Prototyping (High Risk)</option></select></div>
               <div className="field"><label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Decision Style</label><select className="field-select"><option>Consensus Required</option><option>Founder Override</option></select></div>
-              <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={handleUpdate} disabled={updating}>
+              <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={handleUpdate} disabled={updating}>
                 {updating ? 'Recalculating Drift...' : 'Update Mirror Profile'}
               </button>
             </div>
           </div>
         </div>
 
-        <div className="flex-col gap-4">
+        <div className="flex flex-col gap-4 gap-4">
           <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ border: driftScore < 80 ? '1px solid var(--accent-red)' : '1px solid var(--accent-green)' }}>
             <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
               <div className="flex items-center justify-between">
@@ -527,7 +527,7 @@ export function PatternMirrorView() {
 // ── 11. PROMPT GENOME ────────────────────────────────────────────
 export function PromptGenomeView() {
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🧬 Prompt Genome</div>
       <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">DNA schema enforcing Role, Goal, Constraints, and Tools.</div>
       <div className="grid-builder">
@@ -550,7 +550,7 @@ export function CommandDeckView() {
   const setView = useEvoStore(state => state.setActiveView);
   
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🎛️ Studio Command Deck</div>
       <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Unified surface for build, verify, launch, and prove actions.</div>
       <div className="grid-builder" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>

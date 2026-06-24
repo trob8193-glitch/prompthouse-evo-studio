@@ -35,7 +35,7 @@ export function SystemSettings() {
 
 export default function StudioComplementViews() {
   return (
-    <div className="flex-col gap-4 h-full bg-[#181818] border-l border-[#333]">
+    <div className="flex flex-col gap-4 gap-4 h-full bg-[#181818] border-l border-[#333]">
       <div className="p-3 border-b border-[#333] bg-[#222]">
         <h2 className="text-gray-300 font-mono text-sm tracking-wider">COMPLEMENTS</h2>
       </div>

@@ -16,7 +16,7 @@ export function AIViews() {
   };
 
   return (
-    <div className="flex-col gap-4 h-full bg-[#181818] border-[#333] rounded-md m-4">
+    <div className="flex flex-col gap-4 gap-4 h-full bg-[#181818] border-[#333] rounded-md m-4">
       <div className="p-3 border-b border-[#333] bg-[#222]">
         <h2 className="text-[#00ffcc] font-mono text-sm tracking-wider">OMNI-TETHER UPLINK</h2>
       </div>

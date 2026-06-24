@@ -16,7 +16,7 @@ function Badge({ value, tone = 'green' }) {
 
 function Stat({ label, value, sub, icon: Icon }) {
   return (
-    <BentoCard rowSpan={1} className="flex-col gap-4 justify-center">
+    <BentoCard rowSpan={1} className="flex flex-col gap-4 gap-4 justify-center">
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#94a3b8', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.08em' }}>
         {Icon && <Icon size={15} />} {label}
       </div>
@@ -96,7 +96,7 @@ export default function CostFirewallDashboard() {
       title="Cost Firewall Command"
       description="Provider routing, budget gates, profit protection, cache tracking, savings receipts, and claim certification. The wallet gets a helmet. 💸"
       actions={
-        <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={refresh} disabled={busy}><RefreshCw size={15} /> Refresh</button>
+        <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-3xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={refresh} disabled={busy}><RefreshCw size={15} /> Refresh</button>
       }
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20, color: '#e2e8f0' }}>
@@ -106,13 +106,13 @@ export default function CostFirewallDashboard() {
         <Stat label="Cloud Calls Avoided" value={savings.cloudCallsAvoided || 0} icon={ShieldCheck} />
         <Stat label="Pending Reviews" value={pending.length} icon={WalletCards} />
 
-        <BentoCard rowSpan={2} colSpan={2} className="flex-col gap-4">
+        <BentoCard rowSpan={2} colSpan={2} className="flex flex-col gap-4 gap-4">
           <h2 style={{ margin: 0, fontSize: 16, fontWeight: 900 }}>Run Cost Probe</h2>
           <p style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.6 }}>Runs a real gateway estimate and writes a savings receipt. It does not call paid providers unless the rules allow it.</p>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 12 }}>
-            <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" disabled={busy} onClick={() => runEstimate('free')}><Zap size={15} /> Free Plan Probe</button>
-            <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" disabled={busy} onClick={() => runEstimate('paid')}><BarChart3 size={15} /> Paid Plan Probe</button>
-            <button style={{ background: 'rgba(127,29,29,.20)', borderColor: 'rgba(248,113,113,.35)', color: '#fecaca' }} className="glass-extreme hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" disabled={busy} onClick={clearCache}><Trash2 size={15} /> Clear Cache</button>
+            <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-3xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" disabled={busy} onClick={() => runEstimate('free')}><Zap size={15} /> Free Plan Probe</button>
+            <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-3xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" disabled={busy} onClick={() => runEstimate('paid')}><BarChart3 size={15} /> Paid Plan Probe</button>
+            <button style={{ background: 'rgba(127,29,29,.20)', borderColor: 'rgba(248,113,113,.35)', color: '#fecaca' }} className="glass-extreme hover:border-cyan-400/80 transition-all shadow-[0_0_15px_rgba(0,240,255,0.1)] rounded-3xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" disabled={busy} onClick={clearCache}><Trash2 size={15} /> Clear Cache</button>
           </div>
           {message && <div style={{ marginTop: 12, color: message.startsWith('ERROR') ? '#fecaca' : '#86efac', fontSize: 12, fontWeight: 800 }}>{message}</div>}
           {estimate && <pre style={{ marginTop: 12, flex: 1, overflow: 'auto', background: '#020617', border: '1px solid #1e293b', borderRadius: 12, padding: 12, color: '#bbf7d0', fontSize: 11 }}>{JSON.stringify({ allowed: estimate.allowed, route: estimate.route, savings: estimate.receipt }, null, 2)}</pre>}

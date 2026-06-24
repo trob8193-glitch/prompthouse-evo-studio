@@ -101,7 +101,7 @@ export default function AppMarket() {
         >
             <div className="overflow-y-auto p-2">
                 {projects.length === 0 ? (
-                    <div className="text-center py-24 border-dashed border-gray-800 rounded-2xl h-full flex-col gap-4 items-center justify-center">
+                    <div className="text-center py-24 border-dashed border-gray-800 rounded-2xl h-full flex flex-col gap-4 gap-4 items-center justify-center">
                         <ServerCrash className="w-12 h-12 text-gray-700 mx-auto mb-4" />
                         <h3 className="text-xl font-bold text-gray-400 mb-2">No Apps Found</h3>
                         <p className="text-gray-600">Your daemons haven't generated any apps yet.</p>
@@ -111,7 +111,7 @@ export default function AppMarket() {
                         {projects.map((project) => (
                             <div 
                                 key={project.id} 
-                                className={`group relative border transition-all duration-300 flex-col gap-4 p-5 ${inventing === 'beta' ? 'bg-white/5 border-white/20 rounded-3xl backdrop-blur-xl' : inventing === 'gamma' ? 'bg-[#1a0033] border-fuchsia-500/50 rounded-none shadow-[4px_4px_0_#ff00ff]' : inventing === 'zeta' ? 'bg-white border-black border-4 rounded-none' : inventing === 'theta' ? 'bg-black border-transparent rounded-[40px] shadow-[0_0_30px_rgba(200,0,255,0.15)]' : 'bg-[#121214] border-gray-800 hover:border-emerald-500/50 rounded-2xl hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]'}`}
+                                className={`group relative border transition-all duration-300 flex flex-col gap-4 gap-4 p-5 ${inventing === 'beta' ? 'bg-white/5 border-white/20 rounded-3xl backdrop-blur-xl' : inventing === 'gamma' ? 'bg-[#1a0033] border-fuchsia-500/50 rounded-none shadow-[4px_4px_0_#ff00ff]' : inventing === 'zeta' ? 'bg-white border-black border-4 rounded-none' : inventing === 'theta' ? 'bg-black border-transparent rounded-[40px] shadow-[0_0_30px_rgba(200,0,255,0.15)]' : 'bg-[#121214] border-gray-800 hover:border-emerald-500/50 rounded-2xl hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]'}`}
                             >
                                 {/* Card Top */}
                                 <div className="mb-4">
@@ -133,7 +133,7 @@ export default function AppMarket() {
                                 <div className="h-px w-full bg-gray-800 my-4" />
 
                                 {/* Actions */}
-                                <div className="mt-auto flex-col gap-3">
+                                <div className="mt-auto flex flex-col gap-4 gap-3">
                                     <div className="flex gap-3">
                                         <button 
                                             onClick={() => launchApp(project.id)}

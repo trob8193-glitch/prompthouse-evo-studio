@@ -88,38 +88,38 @@ export function AgentBridgeView() {
   };
 
   return (
-    <div className="flex-col animate-in">
+    <div className="flex flex-col gap-4 animate-in">
       <div>
-        <div className="page-title">🌉 Agent Bridge & Universal Logic</div>
-        <div className="page-subtitle">Connect the PH Evo Studio to any platform: ChatGPT, Cursor, Windsurf, or your own Dev Studio.</div>
+        <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🌉 Agent Bridge & Universal Logic</div>
+        <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Connect the PH Evo Studio to any platform: ChatGPT, Cursor, Windsurf, or your own Dev Studio.</div>
       </div>
 
-      <div className="grid-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* OpenAI GPT Bridge */}
-        <div className="card" style={{ border: '1px solid var(--accent-gold)' }}>
-          <div className="card-header">
-            <div className="flex-between">
-              <div className="card-title">🤖 Custom GPT Bridge</div>
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ border: '1px solid var(--accent-gold)' }}>
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
+            <div className="flex items-center justify-between">
+              <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">🤖 Custom GPT Bridge</div>
               <span className="badge badge-gold">OPENAI</span>
             </div>
           </div>
-          <div className="card-body flex-col">
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex flex-col gap-4">
             <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 12 }}>
               Convert your ChatGPT into a PH Evo Operator. Paste these instructions and connect the actions.
             </div>
             
             <div className="field">
-              <label className="field-label">1. Master Instructions (System Prompt)</label>
+              <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">1. Master Instructions (System Prompt)</label>
               <div className="prompt-block" style={{ maxHeight: 120, fontSize: 11 }}>{MASTER_INSTRUCTIONS}</div>
-              <button className="btn btn-secondary btn-sm" onClick={() => { navigator.clipboard.writeText(MASTER_INSTRUCTIONS); setCopied('instr'); setTimeout(()=>setCopied(''),1500); }}>
+              <button className="glass-extreme text-fuchsia-400 border border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95 glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={() => { navigator.clipboard.writeText(MASTER_INSTRUCTIONS); setCopied('instr'); setTimeout(()=>setCopied(''),1500); }}>
                 {copied === 'instr' ? '✅ Copied!' : '📋 Copy Instructions'}
               </button>
             </div>
 
             <div className="field">
-              <label className="field-label">2. OpenAPI Actions (JSON Schema)</label>
+              <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">2. OpenAPI Actions (JSON Schema)</label>
               <div className="prompt-block" style={{ maxHeight: 120, fontSize: 11 }}>{JSON.stringify(OPENAI_ACTIONS, null, 2)}</div>
-              <button className="btn btn-secondary btn-sm" onClick={() => { navigator.clipboard.writeText(JSON.stringify(OPENAI_ACTIONS, null, 2)); setCopied('schema'); setTimeout(()=>setCopied(''),1500); }}>
+              <button className="glass-extreme text-fuchsia-400 border border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95 glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={() => { navigator.clipboard.writeText(JSON.stringify(OPENAI_ACTIONS, null, 2)); setCopied('schema'); setTimeout(()=>setCopied(''),1500); }}>
                 {copied === 'schema' ? '✅ Copied!' : '📋 Copy Actions Schema'}
               </button>
             </div>
@@ -127,14 +127,14 @@ export function AgentBridgeView() {
         </div>
 
         {/* MCP Studio Bridge */}
-        <div className="card" style={{ border: '1px solid var(--accent-cyan)' }}>
-          <div className="card-header">
-            <div className="flex-between">
-              <div className="card-title">🔌 MCP Studio Bridge</div>
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ border: '1px solid var(--accent-cyan)' }}>
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
+            <div className="flex items-center justify-between">
+              <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">🔌 MCP Studio Bridge</div>
               <span className="badge badge-cyan">MCP</span>
             </div>
           </div>
-          <div className="card-body flex-col">
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex flex-col gap-4">
             <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 12 }}>
               Bridge to Cursor, Windsurf, or Claude Desktop using the Model Context Protocol (MCP).
             </div>
@@ -151,20 +151,20 @@ export function AgentBridgeView() {
         </div>
       </div>
 
-      <div className="grid-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Hosting Guide */}
-        <div className="card" style={{ border: '1px solid var(--accent-green)' }}>
-          <div className="card-header">
-            <div className="flex-between">
-              <div className="card-title">🌐 Hosting & Deployment</div>
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ border: '1px solid var(--accent-green)' }}>
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
+            <div className="flex items-center justify-between">
+              <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">🌐 Hosting & Deployment</div>
               <span className="badge badge-green">WEB</span>
             </div>
           </div>
-          <div className="card-body flex-col">
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex flex-col gap-4">
             <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 12 }}>
               Deploy your PromptHouse Evo Studio to the cloud in seconds.
             </div>
-            <div className="flex-col gap-8">
+            <div className="flex flex-col gap-4 gap-8">
               <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                 <span style={{ fontSize: 18 }}>▲</span>
                 <div>
@@ -184,14 +184,14 @@ export function AgentBridgeView() {
         </div>
 
         {/* API Management */}
-        <div className="card" style={{ border: '1px solid var(--accent-violet)' }}>
-          <div className="card-header">
-            <div className="flex-between">
-              <div className="card-title">🔑 API Management</div>
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ border: '1px solid var(--accent-violet)' }}>
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
+            <div className="flex items-center justify-between">
+              <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">🔑 API Management</div>
               <span className="badge badge-violet">KEYS</span>
             </div>
           </div>
-          <div className="card-body flex-col">
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex flex-col gap-4">
             <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 12 }}>
               Manage your coding APIs across different architectures.
             </div>
@@ -210,23 +210,23 @@ export function AgentBridgeView() {
         </div>
       </div>
 
-      <div className="grid-2" style={{ marginBottom: 24 }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" style={{ marginBottom: 24 }}>
         {/* Future Tech Lab — 5 Years Ahead */}
-        <div className="card" style={{ gridColumn: 'span 2', background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(34,211,238,0.1))', border: '1px solid var(--accent-violet)' }}>
-          <div className="card-header">
-            <div className="flex-between">
-              <div className="card-title" style={{ color: 'var(--accent-violet)', fontSize: 18 }}>🧬 Future Tech Lab — V5 Enterprise Concepts</div>
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ gridColumn: 'span 2', background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(34,211,238,0.1))', border: '1px solid var(--accent-violet)' }}>
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
+            <div className="flex items-center justify-between">
+              <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title" style={{ color: 'var(--accent-violet)', fontSize: 18 }}>🧬 Future Tech Lab — V5 Enterprise Concepts</div>
               <span className="badge badge-violet">5 YEARS AHEAD</span>
             </div>
           </div>
-          <div className="card-body">
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body">
             <div style={{ marginBottom: 20, padding: 16, background: 'rgba(139,92,246,0.05)', borderRadius: 12, border: '1px solid rgba(139,92,246,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
                 <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text-primary)' }}>🛡️ Global Ethics Constraint (Hard Lock)</div>
                 <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 4 }}>When enabled, the studio refuses all missions involving unauthorized domains or unsafe code patterns.</div>
               </div>
               <button 
-                className={`btn ${strictEthicsMode ? 'btn-primary' : 'btn-secondary'}`}
+                className={`glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${strictEthicsMode ? 'glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-primary' : 'glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary'}`}
                 onClick={() => setStrictEthicsMode(!strictEthicsMode)}
                 style={{ background: strictEthicsMode ? 'var(--accent-violet)' : 'transparent', borderColor: 'var(--accent-violet)' }}
               >
@@ -243,7 +243,7 @@ export function AgentBridgeView() {
               ].map((f, i) => (
                 <div 
                   key={i} 
-                  className="pack-card" 
+                  className="pack-glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" 
                   style={{ background: 'var(--bg-void)', padding: 16, border: '1px solid rgba(139,92,246,0.2)', cursor: 'pointer', transition: 'all 0.3s ease' }}
                   onClick={() => alert(`Experimental Mode [${f.title}] requested. This V5 feature is currently in "Inferred" state.`)}
                 >
@@ -259,18 +259,18 @@ export function AgentBridgeView() {
       </div>
 
       {/* Logic Documentation */}
-      <div className="card">
-        <div className="card-header">
-          <div className="card-title">🔬 Current Logic Layer</div>
+      <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">🔬 Current Logic Layer</div>
         </div>
-        <div className="card-body">
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body">
           <div className="grid-3">
             {[
               { title: 'Bot Battle (Live)', desc: 'Real-time debate log showing bot disagreements and resolution logic.' },
               { title: 'Neural Trace (Live)', desc: 'Visual node-graph of the 11-module reasoning flow.' },
               { title: 'Enterprise Handoff', desc: 'Signed Certificates of Truth included with every build artifact.' },
             ].map((item, i) => (
-              <div key={i} className="pack-card" style={{ padding: 16 }}>
+              <div key={i} className="pack-glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ padding: 16 }}>
                 <div style={{ fontWeight: 700, marginBottom: 8, color: 'var(--accent-gold)' }}>{item.title}</div>
                 <div style={{ fontSize: 12, color: 'var(--text-dim)', lineHeight: 1.5 }}>{item.desc}</div>
               </div>
@@ -280,8 +280,8 @@ export function AgentBridgeView() {
       </div>
 
       <div className="flex-row gap-8" style={{ marginTop: 12 }}>
-        <button className="btn btn-primary" onClick={() => downloadFile('PH_EVO_MASTER_AGENCY.md', MASTER_INSTRUCTIONS)}>⬇️ Download Master Agency Kit (.md)</button>
-        <button className="btn btn-secondary" onClick={() => downloadFile('PH_EVO_OPENAI_ACTIONS.json', JSON.stringify(OPENAI_ACTIONS, null, 2))}>⬇️ Download API Actions (.json)</button>
+        <button className="glass-extreme text-neon-cyan border border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={() => downloadFile('PH_EVO_MASTER_AGENCY.md', MASTER_INSTRUCTIONS)}>⬇️ Download Master Agency Kit (.md)</button>
+        <button className="glass-extreme text-fuchsia-400 border border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95" onClick={() => downloadFile('PH_EVO_OPENAI_ACTIONS.json', JSON.stringify(OPENAI_ACTIONS, null, 2))}>⬇️ Download API Actions (.json)</button>
       </div>
     </div>
   );

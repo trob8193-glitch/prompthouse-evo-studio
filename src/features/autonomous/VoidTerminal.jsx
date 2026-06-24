@@ -16,7 +16,7 @@ export default function VoidTerminal() {
   }, []);
 
   return (
-    <div className="w-full h-full bg-[#020204] font-mono p-8 flex-col gap-4 relative overflow-hidden">
+    <div className="w-full h-full bg-[#020204] font-mono p-8 flex flex-col gap-4 gap-4 relative overflow-hidden">
       {/* Scanline effect */}
       <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-size-[100%_4px,3px_100%] z-50 opacity-20"></div>
       
@@ -29,7 +29,7 @@ export default function VoidTerminal() {
         <div className="text-xs text-dim uppercase tracking-widest">/dev/void_tty0</div>
       </div>
 
-      <div className="flex-1 overflow-y-auto flex-col gap-2 relative z-10">
+      <div className="flex-1 overflow-y-auto flex flex-col gap-4 gap-2 relative z-10">
         {lines.map((line, i) => (
           <div key={i} className="text-sm">
             <span className="text-green-500 mr-2">root@omnibridge:~$</span>

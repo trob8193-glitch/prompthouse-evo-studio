@@ -126,7 +126,7 @@ export function GhostEditor() {
         </div>
       }
     >
-      <div className="flex-1 bg-[#0d1117] relative p-0 font-mono text-sm overflow-hidden h-full flex-col gap-4 border-none">
+      <div className="flex-1 bg-[#0d1117] relative p-0 font-mono text-sm overflow-hidden h-full flex flex-col gap-4 gap-4 border-none">
         <div className="flex items-center justify-between p-2 bg-black/40 border-b border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] z-20">
           <div className="flex items-center gap-3 px-2">
             <Sparkles size={14} className="text-neon-cyan rotate-180 hover:rotate-0 transition-transform duration-300 ease-in-out animate-pulse" />
@@ -150,7 +150,7 @@ export function GhostEditor() {
         
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-10 transform transition-transform duration-500 ease-out animate-bounce">
-            <div className="flex-col items-center gap-4">
+            <div className="flex flex-col gap-4 items-center gap-4">
               <RefreshCw size={32} className="animate-spin text-indigo-500" />
               <span className="text-[10px] text-neon-cyan font-bold uppercase tracking-widest">Generating Evo Studio Reality...</span>
             </div>

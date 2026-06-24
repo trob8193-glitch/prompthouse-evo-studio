@@ -56,7 +56,7 @@ export default function VoidTelemetryLayout() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#111,#000)]" />
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
       
-      <div className="relative z-10 flex flex-col h-full justify-between">
+      <div className="relative z-10 flex flex flex-col gap-4 h-full justify-between">
         <header className="flex justify-between items-start">
           <div>
             <div className="text-white/30 text-xs">SYS.ID // VOID-77</div>
@@ -82,7 +82,7 @@ export default function VoidTelemetryLayout() {
           ))}
         </div>
 
-        <footer className="text-cyan-500/30 text-[10px] tracking-[0.5em] text-center border-t border-white/5 pt-8 mt-16 font-bold flex flex-col items-center gap-2">
+        <footer className="text-cyan-500/30 text-[10px] tracking-[0.5em] text-center border-t border-white/5 pt-8 mt-16 font-bold flex flex flex-col gap-4 items-center gap-2">
           <div>DEEP SPACE PROTOCOL ENGAGED</div>
           <div className="w-1/3 h-px bg-linear-to-r from-transparent via-cyan-500/50 to-transparent" />
         </footer>

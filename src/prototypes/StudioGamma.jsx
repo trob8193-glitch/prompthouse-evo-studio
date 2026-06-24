@@ -3,7 +3,7 @@ import { Terminal, Gamepad2, Disc, PlaySquare, X, MonitorPlay } from 'lucide-rea
 
 export default function StudioGamma({ onBack }) {
   return (
-    <div className="w-full h-screen bg-[#0a001a] text-purple-400 font-mono overflow-hidden flex-col gap-4 relative" style={{ 
+    <div className="w-full h-screen bg-[#0a001a] text-purple-400 font-mono overflow-hidden flex flex-col gap-4 gap-4 relative" style={{ 
       backgroundImage: 'linear-gradient(180deg, #0a001a 0%, #1a0033 100%)' 
     }}>
       {/* SYNTHWAVE GRID BACKGROUND */}
@@ -18,7 +18,7 @@ export default function StudioGamma({ onBack }) {
         backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #000 2px, #000 4px)'
       }}></div>
 
-      <div className="relative z-10 flex-col gap-4 h-full">
+      <div className="relative z-10 flex flex-col gap-4 gap-4 h-full">
         {/* HEADER */}
         <div className="h-24 border-b-4 border-pink-500 bg-[#1a0033]/90 flex items-center justify-between px-8" style={{ boxShadow: '0 4px 20px rgba(255,0,255,0.3)' }}>
           <div className="flex items-center gap-4">
@@ -34,10 +34,10 @@ export default function StudioGamma({ onBack }) {
 
         <div className="flex-1 p-8 flex gap-8">
           {/* SIDEBAR */}
-          <div className="w-1/4 flex-col gap-8">
-            <div className="flex-1 bg-[#1a0033]/80 border-4 border-purple-500 p-6 flex-col gap-4 shadow-[0_0_30px_rgba(128,0,255,0.2)]">
+          <div className="w-1/4 flex flex-col gap-4 gap-8">
+            <div className="flex-1 bg-[#1a0033]/80 border-4 border-purple-500 p-6 flex flex-col gap-4 gap-4 shadow-[0_0_30px_rgba(128,0,255,0.2)]">
               <h2 className="text-xl font-bold text-orange-400 mb-6 border-b-2 border-orange-500/50 pb-2">ROSTER.SYS</h2>
-              <div className="flex-col gap-4">
+              <div className="flex flex-col gap-4 gap-4">
                 {[1,2,3,4].map(i => (
                   <div key={i} className="flex items-center gap-4 p-3 bg-purple-900/40 border-2 border-purple-500/50 hover:bg-pink-900/40 hover:border-pink-500 cursor-pointer transition-all group">
                     <div className="w-12 h-12 bg-black border-2 border-orange-500 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(255,165,0,0.5)]">
@@ -54,21 +54,21 @@ export default function StudioGamma({ onBack }) {
           </div>
 
           {/* MAIN MODULES */}
-          <div className="flex-1 flex-col gap-8">
+          <div className="flex-1 flex flex-col gap-4 gap-8">
             <div className="h-1/3 flex gap-8">
-              <div className="flex-1 bg-black/80 border-4 border-pink-500 p-6 shadow-[inset_0_0_20px_rgba(255,0,255,0.2)] flex-col gap-4 justify-center items-center relative overflow-hidden">
+              <div className="flex-1 bg-black/80 border-4 border-pink-500 p-6 shadow-[inset_0_0_20px_rgba(255,0,255,0.2)] flex flex-col gap-4 gap-4 justify-center items-center relative overflow-hidden">
                 <div className="text-pink-500 text-xl font-bold mb-2">SYSTEM LOAD</div>
                 <div className="text-6xl font-black text-transparent bg-clip-text bg-linear-to-t from-purple-500 to-orange-500">42%</div>
                 <div className="absolute bottom-0 left-0 w-full h-4 bg-purple-900/50"><div className="h-full bg-pink-500 w-[42%]"></div></div>
               </div>
-              <div className="flex-1 bg-black/80 border-4 border-orange-500 p-6 shadow-[inset_0_0_20px_rgba(255,165,0,0.2)] flex-col gap-4 justify-center items-center">
+              <div className="flex-1 bg-black/80 border-4 border-orange-500 p-6 shadow-[inset_0_0_20px_rgba(255,165,0,0.2)] flex flex-col gap-4 gap-4 justify-center items-center">
                 <div className="text-orange-500 text-xl font-bold mb-2">MODULE STATUS</div>
                 <div className="text-4xl font-black text-white">OPTIMAL</div>
               </div>
             </div>
             
             {/* TERMINAL */}
-            <div className="flex-1 bg-black/90 border-4 border-purple-500 p-6 flex-col gap-4">
+            <div className="flex-1 bg-black/90 border-4 border-purple-500 p-6 flex flex-col gap-4 gap-4">
               <div className="flex-1 font-mono text-lg text-green-400">
                 <p>C:\STUDIO\CORE&gt; INIT NEURAL_NET.EXE</p>
                 <p className="mt-2 text-pink-400">LOADING... [||||||||||  ] 80%</p>

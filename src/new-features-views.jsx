@@ -46,7 +46,7 @@ export function VectorMemoryView() {
     <div className="space-y-8">
       <Card className="p-10 bg-linear-to-br from-indigo-950/20 to-black/40">
         <div className="flex items-center gap-4 mb-8">
-          <div className="p-4 bg-indigo-500/10 rounded-2xl text-indigo-400">
+          <div className="p-4 bg-indigo-500/10 rounded-2xl text-neon-cyan">
             <Brain size={32} />
           </div>
           <div>
@@ -56,21 +56,21 @@ export function VectorMemoryView() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-4 bg-black/30 border border-slate-800 rounded-xl">
+          <div className="p-4 bg-black/30 border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-3xl">
             <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Memories</div>
             <div className="text-xl font-black text-white tracking-tight">{loading ? '...' : data?.memories || 0}</div>
           </div>
-          <div className="p-4 bg-black/30 border border-slate-800 rounded-xl">
+          <div className="p-4 bg-black/30 border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-3xl">
             <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Dimensions</div>
             <div className="text-xl font-black text-white tracking-tight">{loading ? '...' : data?.dimensions || 1536}</div>
           </div>
-          <div className="p-4 bg-black/30 border border-slate-800 rounded-xl">
+          <div className="p-4 bg-black/30 border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-3xl">
             <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Status</div>
             <div className="text-xl font-black text-white tracking-tight">{loading ? '...' : data?.status || 'IDLE'}</div>
           </div>
         </div>
 
-        <div className="mt-10 p-8 bg-black/40 rounded-3xl border border-slate-800 border-dashed text-center">
+        <div className="mt-10 p-8 bg-black/40 rounded-3xl border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] border-dashed text-center">
           <div className="text-4xl mb-4">🧬</div>
           <h3 className="text-white font-bold mb-2">Neural Indexing Active</h3>
           <p className="text-slate-500 text-sm max-w-sm mx-auto">Everything built in this session is being internalized into the local vector memory for perpetual recall.</p>
@@ -188,12 +188,12 @@ export function RecursiveSwarmView() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {agents.map(i => (
           <motion.div key={i} whileHover={{ y: -5 }}>
-            <Card className="p-6 bg-slate-900/40 border-slate-800/50 flex items-center gap-4">
+            <Card className="p-6 glass-extreme border-neon-glow/40 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]/50 flex items-center gap-4">
               <div className="text-3xl">🤖</div>
               <div className="flex-1">
-                <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1">Agent {i}</div>
+                <div className="text-[10px] font-black text-neon-cyan uppercase tracking-widest mb-1">Agent {i}</div>
                 <div className="text-xs font-bold text-white mb-2">SWARM_EXECUTOR_0{i}</div>
-                <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-1 w-full bg-black/40 backdrop-blur-md border border-white/5 rounded-full overflow-hidden">
                   <div className="h-full bg-emerald-500 w-2/3 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                 </div>
               </div>
@@ -236,7 +236,7 @@ export function EntropyLockView() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[400px] text-center space-y-8">
+    <div className="flex flex flex-col gap-4 items-center justify-center min-h-[400px] text-center space-y-8">
       <motion.div 
         animate={{ rotate: 360 }}
         transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
@@ -303,10 +303,10 @@ export function RealitySynthesisView() {
 
         <div className="space-y-6">
           <div className="field">
-            <label className="field-label">Target Visual URL / Identity</label>
+            <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Target Visual URL / Identity</label>
             <div className="flex gap-4">
               <input 
-                className="field-input flex-1" 
+                className="w-full bg-black/50 border border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm flex-1" 
                 ghostInput="https://linear.app/ui-clone" 
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
@@ -318,7 +318,7 @@ export function RealitySynthesisView() {
           </div>
           
           {result && (
-            <div className="mt-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+            <div className="mt-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-3xl">
               <div className="text-xs font-bold text-emerald-400 mb-1">Result</div>
               <p className="text-sm text-white">{result.message}</p>
             </div>
@@ -422,7 +422,7 @@ export function TruthAuditorView() {
             <div className="mt-8 flex justify-end">
               <button 
                 onClick={() => alert('Anomaly resolution engine engaged. Commencing automated patching...')}
-                className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 text-red-400 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(239,68,68,0.1)] active:scale-95 flex items-center gap-2">
+                className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 text-red-400 rounded-3xl text-xs font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(239,68,68,0.1)] active:scale-95 flex items-center gap-2">
                 <Zap size={14} /> Resolve Anomalies
               </button>
             </div>
@@ -471,7 +471,7 @@ export function CommandDeckView() {
       <Card className="p-10">
         <div className="flex justify-between items-center mb-10">
           <div className="flex items-center gap-4">
-            <div className="p-4 bg-indigo-500/10 rounded-2xl text-indigo-400">
+            <div className="p-4 bg-indigo-500/10 rounded-2xl text-neon-cyan">
               <Terminal size={32} />
             </div>
             <div>
@@ -486,7 +486,7 @@ export function CommandDeckView() {
         </div>
 
         <div className="space-y-4">
-          <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-2 w-full bg-black/40 backdrop-blur-md border border-white/5 rounded-full overflow-hidden">
             <motion.div initial={{ width: 0 }} animate={{ width: `${allocation}%` }} className="h-full bg-indigo-500" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
@@ -496,12 +496,12 @@ export function CommandDeckView() {
               <div className="text-sm text-slate-500">No active missions found.</div>
             ) : (
               missions.slice(0, 4).map(mission => (
-                <div key={mission.mission_id} className="p-4 bg-black/30 border border-slate-800 rounded-lg flex justify-between items-center">
+                <div key={mission.mission_id} className="p-4 bg-black/30 border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-2xl flex justify-between items-center">
                   <div>
                     <div className="text-xs font-bold text-white">{mission.title || mission.mission_id}</div>
                     <div className="text-[10px] text-slate-500 font-mono">{mission.mission_id}</div>
                   </div>
-                  <span className={`text-[10px] font-black uppercase ${mission.status === 'executed' ? 'text-emerald-400' : 'text-indigo-400'}`}>
+                  <span className={`text-[10px] font-black uppercase ${mission.status === 'executed' ? 'text-emerald-400' : 'text-neon-cyan'}`}>
                     {mission.status}
                   </span>
                 </div>
@@ -516,7 +516,7 @@ export function CommandDeckView() {
 
 export function OmegaRealityView() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[500px] bg-linear-to-br from-black via-indigo-950/20 to-black rounded-[40px] border border-white/10 shadow-2xl overflow-hidden relative">
+    <div className="flex flex flex-col gap-4 items-center justify-center min-h-[500px] bg-linear-to-br from-black via-indigo-950/20 to-black rounded-[40px] border border-white/10 shadow-2xl overflow-hidden relative">
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
       <div className="relative z-10 text-center space-y-8">
         <div className="text-9xl text-white font-black drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">∞</div>
@@ -622,7 +622,7 @@ export function MergeCourtView() {
                 
                 <div className="mb-4">
                   <div className="text-[10px] text-white/50 uppercase tracking-widest mb-2 font-mono">Proposed Resolution</div>
-                  <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-xs text-white/80 font-mono leading-relaxed whitespace-pre-wrap">
+                  <div className="p-4 bg-white/5 rounded-3xl border border-white/10 text-xs text-white/80 font-mono leading-relaxed whitespace-pre-wrap">
                     {conflict.merged_content || conflict.resolution}
                   </div>
                 </div>
@@ -633,14 +633,14 @@ export function MergeCourtView() {
                     <button 
                       onClick={() => handleOverride(conflict.id, 'arbiter')}
                       disabled={overriding}
-                      className="px-6 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
+                      className="px-6 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400 rounded-2xl text-xs font-black uppercase tracking-widest transition-all"
                     >
                       Accept Arbiter
                     </button>
                     <button 
                       onClick={() => handleOverride(conflict.id, 'founder')}
                       disabled={overriding}
-                      className="px-6 py-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-500/50 text-amber-400 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
+                      className="px-6 py-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-500/50 text-amber-400 rounded-2xl text-xs font-black uppercase tracking-widest transition-all"
                     >
                       Founder Override
                     </button>
@@ -691,21 +691,21 @@ export function PatternMirrorView() {
   return (
     <Card className="p-8 border-indigo-500/30">
       <div className="flex items-center gap-4 mb-6">
-        <Search className="text-indigo-400" size={28} />
+        <Search className="text-neon-cyan" size={28} />
         <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Pattern Mirror</h3>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+        <div className="p-4 bg-white/5 rounded-3xl border border-white/5">
           <div className="text-[10px] font-black text-slate-500 mb-2">Detected Patterns</div>
           {loading ? (
             <div className="text-slate-500 font-mono text-xs">Loading...</div>
           ) : (
             patterns.map((p, i) => (
-              <div key={i} className="text-indigo-400 font-mono text-xs">{p}</div>
+              <div key={i} className="text-neon-cyan font-mono text-xs">{p}</div>
             ))
           )}
         </div>
-        <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+        <div className="p-4 bg-white/5 rounded-3xl border border-white/5">
           <div className="text-[10px] font-black text-slate-500 mb-2">Mirror State</div>
           <div className={`font-mono text-xs ${mirrorState === 'SYNCHRONIZED' ? 'text-emerald-400' : 'text-slate-400'}`}>
             {loading ? '...' : mirrorState}
@@ -752,12 +752,12 @@ export function PromptGenomeView() {
   return (
     <Card className="p-8 bg-linear-to-br from-indigo-950/20 to-black/40">
       <div className="flex items-center gap-4 mb-6">
-        <Database className="text-indigo-400" size={28} />
+        <Database className="text-neon-cyan" size={28} />
         <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Prompt Genome</h3>
       </div>
       <p className="text-slate-500 text-sm mb-6">Ancestral mapping of prompt evolution and performance traits.</p>
       <div className="space-y-2">
-        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+        <div className="h-1.5 w-full bg-black/40 backdrop-blur-md border border-white/5 rounded-full overflow-hidden">
           <div className="h-full bg-indigo-500" style={{ width: `${fitness}%` }} />
         </div>
         <div className="flex justify-between text-[8px] font-mono text-slate-600 uppercase tracking-widest">
@@ -834,7 +834,7 @@ export function SingularityCoreView() {
       <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 4, repeat: Infinity }} className="text-9xl">⚛️</motion.div>
       <div className="space-y-4">
         <h2 className="text-5xl font-black text-white tracking-tighter uppercase italic">Singularity Core</h2>
-        <p className="text-indigo-400 font-mono text-xs uppercase tracking-widest">The engine of infinite intelligence. Operating at 2M+ IQ baseline.</p>
+        <p className="text-neon-cyan font-mono text-xs uppercase tracking-widest">The engine of infinite intelligence. Operating at 2M+ IQ baseline.</p>
       </div>
     </div>
   );
@@ -876,7 +876,7 @@ export function ProofVaultView() {
         <Shield className="text-emerald-400" size={28} />
         <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Proof Vault</h3>
       </div>
-      <div className="p-10 border border-slate-800 rounded-3xl bg-black/40 text-center">
+      <div className="p-10 border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-3xl bg-black/40 text-center">
         <Lock size={48} className="mx-auto text-slate-700 mb-6" />
         <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Vault Status: {data?.status || 'SEALED'}</div>
         <div className="text-xs font-bold text-white mt-2">
@@ -891,7 +891,7 @@ export function SovereignFinalityView() {
   return (
     <div className="p-10 bg-[#09090b] rounded-[40px] border border-indigo-500/20 shadow-[0_0_100px_rgba(99,102,241,0.05)] text-center space-y-8">
        <div className="w-24 h-24 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto">
-          <Shield size={48} className="text-indigo-400" />
+          <Shield size={48} className="text-neon-cyan" />
        </div>
        <div className="space-y-2">
          <h2 className="text-4xl font-black text-white tracking-tighter">EVO STUDIO FINALITY</h2>
@@ -907,16 +907,16 @@ export function SovereignFinalityView() {
 
 // Helper Components
 const StatMini = ({ label, value }) => (
-  <div className="p-6 bg-black/40 rounded-3xl border border-slate-800/80">
+  <div className="p-6 bg-black/40 rounded-3xl border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]/80">
     <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{label}</div>
     <div className="text-2xl font-black text-white">{value}</div>
   </div>
 );
 
 const MissionPill = ({ label, status }) => (
-  <div className="flex items-center justify-between p-4 bg-slate-800/30 rounded-2xl border border-slate-800/50">
+  <div className="flex items-center justify-between p-4 bg-black/40 backdrop-blur-md border border-white/5/30 rounded-2xl border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]/50">
     <span className="text-[10px] font-black text-slate-400 tracking-wider">{label}</span>
-    <span className="text-[10px] font-black text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded">{status}</span>
+    <span className="text-[10px] font-black text-neon-cyan bg-indigo-500/10 px-2 py-1 rounded">{status}</span>
   </div>
 );
 

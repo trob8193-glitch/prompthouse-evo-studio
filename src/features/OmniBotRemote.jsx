@@ -285,9 +285,9 @@ export default function OmniBotRemote() {
         </div>
       }
     >
-    <div className="app-wrapper flex-col gap-4 h-[calc(100vh-200px)] w-full bg-[#050505] text-white font-sans overflow-hidden rounded-3xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]" style={{ '--accent-color': currentBot.palette?.primary || '#10b981' }}>
+    <div className="app-wrapper flex flex-col gap-4 gap-4 h-[calc(100vh-200px)] w-full bg-[#050505] text-white font-sans overflow-hidden rounded-3xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]" style={{ '--accent-color': currentBot.palette?.primary || '#10b981' }}>
       
-      <main className="flex-col h-full relative" style={{ flex: 1, overflow: 'hidden' }}>
+      <main className="flex flex-col gap-4 h-full relative" style={{ flex: 1, overflow: 'hidden' }}>
         <AutonomousAgentRoster />
         
         {/* Chat Area */}
@@ -317,7 +317,7 @@ export default function OmniBotRemote() {
                     ) : (
                         <Zap size={14} className="opacity-70" />
                     )}
-                    <div className="flex-col gap-4 ml-1">
+                    <div className="flex flex-col gap-4 gap-4 ml-1">
                       <span className="text-[10px] font-black uppercase tracking-widest">{m.bot?.name || 'Evo System'}</span>
                       {m.bot?.generatingTheme && (
                         <span className="text-[8px] uppercase tracking-widest text-neon-cyan font-bold opacity-80">
@@ -377,7 +377,7 @@ export default function OmniBotRemote() {
           <button 
             type="submit"
             disabled={(!input?.trim() && !isRecording) || sending}
-            className="btn btn-primary w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 disabled:opacity-50"
+            className="glass-extreme text-neon-cyan border border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95 w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 disabled:opacity-50"
             style={{ backgroundColor: currentBot.palette?.primary || '#4f46e5' }}
           >
             <Send size={16} className="text-[#050505] ml-0.5" />

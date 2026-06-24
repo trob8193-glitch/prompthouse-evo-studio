@@ -164,7 +164,7 @@ export const BotRosterView = () => {
       <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-6">Bot Roster</h2>
       <div className="grid grid-cols-3 gap-4">
         {['Foundry', 'Architect', 'Sentinel'].map((bot) => (
-          <div key={bot} className="aspect-square bg-black/40 rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex-col gap-4 items-center justify-center p-4">
+          <div key={bot} className="aspect-square bg-black/40 rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex flex-col gap-4 gap-4 items-center justify-center p-4">
             <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md mb-3 border-cyan-500/30" />
             <div className="text-[10px] text-white font-black uppercase tracking-wider">{bot}</div>
             <div className="text-[8px] text-slate-500 font-bold mt-1 uppercase">v1.0.4</div>

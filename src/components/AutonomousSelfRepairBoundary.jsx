@@ -67,11 +67,11 @@ Output exactly this JSON format with no markdown wrappers:
   render() {
     if (this.state.hasError) {
       return (
-        <div className="fixed inset-0 bg-black/90 text-white flex flex-col items-center justify-center p-10 font-mono z-9999 overflow-auto">
+        <div className="fixed inset-0 bg-black/90 text-white flex flex flex-col gap-4 items-center justify-center p-10 font-mono z-9999 overflow-auto">
           <h1 className="text-red-500 text-3xl font-black uppercase tracking-widest mb-4 animate-pulse">Sovereign Boundary Tripped</h1>
           <p className="text-gray-400 mb-6">The UI encountered a fatal structural flaw. Engaging autonomous AI self-repair protocols.</p>
           
-          <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-xl text-red-400 text-xs mb-6 max-w-2xl w-full whitespace-pre-wrap">
+          <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-3xl text-red-400 text-xs mb-6 max-w-2xl w-full whitespace-pre-wrap">
             {this.state.error?.toString()}
           </div>
 
@@ -83,7 +83,7 @@ Output exactly this JSON format with no markdown wrappers:
           )}
 
           {this.state.repairPatch && (
-            <div className="bg-[#00f0ff]/10 border border-[#00f0ff]/30 p-4 rounded-xl text-left w-full max-w-2xl">
+            <div className="bg-[#00f0ff]/10 border border-[#00f0ff]/30 p-4 rounded-3xl text-left w-full max-w-2xl">
               <h3 className="text-[#00f0ff] font-bold uppercase mb-2">Automated AI Diagnosis</h3>
               <p className="text-sm text-gray-300 mb-4">{this.state.repairPatch.diagnosis}</p>
               <pre className="text-xs text-green-400 bg-black p-3 rounded overflow-auto whitespace-pre-wrap">

@@ -23,7 +23,7 @@ export const BotAutomationDeck = () => {
   };
 
   const PhaseIndicator = ({ num, label, active }) => (
-    <div className={`flex-col items-center gap-2 ${active ? 'opacity-100' : 'opacity-40'}`}>
+    <div className={`flex flex-col gap-4 items-center gap-2 ${active ? 'opacity-100' : 'opacity-40'}`}>
       <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${active ? 'bg-indigo-500 text-white' : 'bg-black/40 backdrop-blur-md border-white/5 text-slate-400'}`}>
         {num}
       </div>

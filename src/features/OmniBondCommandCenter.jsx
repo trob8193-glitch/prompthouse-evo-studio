@@ -74,7 +74,7 @@ export default function OmniBondCommandCenter() {
         </button>
       }
     >
-      <div className="flex-col gap-4 space-y-10 animate-in fade-in duration-500">
+      <div className="flex flex-col gap-4 gap-4 space-y-10 animate-in fade-in duration-500">
         {/* Status Bar */}
         <div className="flex items-center justify-between bg-black/40 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] p-4 rounded-3xl">
           <div className="flex items-center gap-4">
@@ -93,14 +93,14 @@ export default function OmniBondCommandCenter() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* LEFT: Neural Trace Swarm Visualizer */}
-          <div className="bg-[#0c0c0e] rounded-2xl border-cyan-500/30 overflow-hidden flex-col gap-4 shadow-2xl relative">
+          <div className="bg-[#0c0c0e] rounded-2xl border-cyan-500/30 overflow-hidden flex flex-col gap-4 gap-4 shadow-2xl relative">
             <div className="p-6 border-b border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] bg-linear-to-r from-emerald-500/5 to-transparent flex justify-between items-center z-10 relative">
               <h2 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-3">
                 <Network size={18} className="text-emerald-500" /> Neural Swarm Visualizer
               </h2>
             </div>
             
-            <div className="p-10 flex-1 flex-col gap-4 items-center justify-center min-h-[360px] relative">
+            <div className="p-10 flex-1 flex flex-col gap-4 gap-4 items-center justify-center min-h-[360px] relative">
               {/* Background Energy */}
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,255,136,0.05)_0%,transparent_70%)] pointer-events-none" />
               
@@ -131,7 +131,7 @@ export default function OmniBondCommandCenter() {
           </div>
 
           {/* RIGHT: Live Probe Results */}
-          <div className="bg-[#0c0c0e] rounded-2xl border-cyan-500/30 overflow-hidden flex-col gap-4 shadow-2xl relative">
+          <div className="bg-[#0c0c0e] rounded-2xl border-cyan-500/30 overflow-hidden flex flex-col gap-4 gap-4 shadow-2xl relative">
             <div className="p-6 border-b border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] bg-linear-to-r from-violet-500/5 to-transparent flex justify-between items-center z-10 relative">
               <h2 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-3">
                 <Sparkles size={18} className="text-violet-500" /> Live Tether Probes

@@ -105,7 +105,7 @@ export default function EvoDiffuserDashboard() {
           </Card>
         </div>
 
-        <Card className="xl:col-span-7 bg-[#020205]/90 p-0 overflow-hidden min-h-[500px] flex-col gap-4 relative border-[#8a2be2]/20 shadow-[0_0_30px_rgba(138,43,226,0.05)] backdrop-blur-2xl">
+        <Card className="xl:col-span-7 bg-[#020205]/90 p-0 overflow-hidden min-h-[500px] flex flex-col gap-4 gap-4 relative border-[#8a2be2]/20 shadow-[0_0_30px_rgba(138,43,226,0.05)] backdrop-blur-2xl">
           <div className="p-5 border-b border-[#8a2be2]/20 bg-[#050508]/60 flex justify-between items-center z-10 backdrop-blur-md">
             <h3 className="text-[10px] font-black text-[#8a2be2] uppercase tracking-widest flex items-center gap-3"><ImageIcon size={14} /> Output Canvas</h3>
             {imageResult && <span className="text-[10px] font-black text-[#00ff88] bg-[#00ff88]/10 px-3 py-1 rounded flex items-center gap-2 shadow-[0_0_10px_rgba(0,255,136,0.2)]"><CheckCircle size={10} /> RENDERED</span>}
@@ -113,7 +113,7 @@ export default function EvoDiffuserDashboard() {
           
           <div className="flex-1 flex items-center justify-center p-8 relative">
             {generating && (
-              <div className="absolute inset-0 bg-[#020205]/80 flex-col gap-4 items-center justify-center z-20 backdrop-blur-md">
+              <div className="absolute inset-0 bg-[#020205]/80 flex flex-col gap-4 gap-4 items-center justify-center z-20 backdrop-blur-md">
                 <div className="relative">
                   <Aperture className="animate-spin mb-6 relative z-10" color="#8a2be2" size={56} />
                   <div className="absolute inset-0 bg-[#8a2be2] blur-[30px] opacity-40 animate-pulse" />
@@ -123,7 +123,7 @@ export default function EvoDiffuserDashboard() {
             )}
             
             {imageResult ? (
-              <div className="w-full h-full flex-col gap-4 items-center justify-center relative group p-4">
+              <div className="w-full h-full flex flex-col gap-4 gap-4 items-center justify-center relative group p-4">
                 <div className="relative w-full max-h-[600px] flex justify-center items-center">
                   <div className="absolute inset-0 bg-[#8a2be2] blur-[50px] opacity-20" />
                   <img src={imageResult.url} alt="Generated UI" className="relative z-10 max-w-full max-h-full object-contain rounded-3xl shadow-[0_0_40px_rgba(138,43,226,0.3)] border-[#8a2be2]/40" />
@@ -133,7 +133,7 @@ export default function EvoDiffuserDashboard() {
                 </div>
               </div>
             ) : (
-              !generating && <div className="text-[#4a4a5e] font-bold text-xs uppercase tracking-[0.2em] flex-col items-center gap-6">
+              !generating && <div className="text-[#4a4a5e] font-bold text-xs uppercase tracking-[0.2em] flex flex-col gap-4 items-center gap-6">
                 <ImageIcon size={48} className="opacity-10" color="#8a2be2" />
                 [ DIFFUSER IDLE ]
               </div>

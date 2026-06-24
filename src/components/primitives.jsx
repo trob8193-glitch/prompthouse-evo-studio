@@ -13,7 +13,7 @@ export function Card({ children, className, onClick }) {
     <div 
       onClick={onClick}
       className={cn(
-        "bg-(--bg-card) border-(--border-dim) rounded-xl p-6 shadow-(--shadow-md)",
+        "bg-(--bg-card) border-(--border-dim) rounded-3xl p-6 shadow-(--shadow-md)",
         onClick && "cursor-pointer hover:border-(--primary-glow) hover:shadow-[0_0_20px_var(--primary-dim)] transition-all duration-300",
         className
       )}
@@ -25,7 +25,7 @@ export function Card({ children, className, onClick }) {
 
 export function Panel({ children, className, title }) {
   return (
-    <div className={cn("bg-(--bg-surface) backdrop-blur-xl border-(--border-mid) rounded-lg overflow-hidden shadow-(--shadow-lg)", className)}>
+    <div className={cn("bg-(--bg-surface) backdrop-blur-xl border-(--border-mid) rounded-2xl overflow-hidden shadow-(--shadow-lg)", className)}>
       {title && (
         <div className="px-6 py-4 border-b border-(--border-dim) font-bold text-white tracking-widest uppercase text-sm bg-(--bg-surface-top)">
           {title}
@@ -146,7 +146,7 @@ export function StateView({ state = 'idle', title, message, actionLabel, onActio
   const current = config[state];
 
   return (
-    <div className="flex-col gap-4 items-center justify-center p-12 text-center border-(--border-dim) border-dashed rounded-xl bg-(--bg-surface) backdrop-blur-md">
+    <div className="flex flex-col gap-4 gap-4 items-center justify-center p-12 text-center border-(--border-dim) border-dashed rounded-3xl bg-(--bg-surface) backdrop-blur-md">
       <div className="text-4xl mb-6 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">{current.icon}</div>
       <h3 className="font-bold tracking-widest uppercase mb-4" style={{ color: current.color }}>
         {title || state.toUpperCase()}

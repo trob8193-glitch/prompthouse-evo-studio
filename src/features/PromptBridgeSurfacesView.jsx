@@ -215,7 +215,7 @@ export default function PromptBridgeSurfacesView() {
         </button>
       }
     >
-    <div className="flex-col gap-6">
+    <div className="flex flex-col gap-4 gap-6">
 
       {error && (
         <div className="flex items-start gap-3 rounded-md border-red-500/40 bg-red-500/10 p-4 text-sm text-red-100">

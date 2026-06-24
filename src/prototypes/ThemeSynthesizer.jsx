@@ -237,10 +237,10 @@ export default function ThemeSynthesizer({ onBack }) {
   // We no longer render local HybridStudio. We are the Live Studio !now
 
   return (
-    <div className="min-h-screen bg-[#050508] text-white p-10 flex-col gap-4 font-mono relative overflow-hidden">
+    <div className="min-h-screen bg-[#050508] text-white p-10 flex flex-col gap-4 gap-4 font-mono relative overflow-hidden">
       
       {isTraining && (
-        <div className="absolute inset-0 z-50 bg-black/90 backdrop-blur-md flex-col gap-4 items-center justify-center">
+        <div className="absolute inset-0 z-50 bg-black/90 backdrop-blur-md flex flex-col gap-4 gap-4 items-center justify-center">
           <Dna className="w-24 h-24 text-magenta-500 animate-spin mb-8" style={{ animationDuration: '3s' }} />
           <h2 className="text-3xl font-black tracking-widest mb-4">TRAINING PIPELINE ACTIVE</h2>
           <p className="text-gray-400 mb-8">Extracting & Blending Paradigm Features...</p>
@@ -256,7 +256,7 @@ export default function ThemeSynthesizer({ onBack }) {
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto w-full flex-col gap-4 h-full z-10">
+      <div className="max-w-6xl mx-auto w-full flex flex-col gap-4 gap-4 h-full z-10">
         <div className="flex items-center justify-between mb-12">
           <div>
             <h1 className="text-4xl font-black text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-pink-600 mb-2 tracking-tight flex items-center gap-3">
@@ -273,7 +273,7 @@ export default function ThemeSynthesizer({ onBack }) {
         </div>
 
         {/* USER PERSONA INJECTION */}
-        <div className="bg-[#0a0a0f] border-gray-800 rounded-2xl p-6 mb-8 flex-col gap-4 relative overflow-hidden">
+        <div className="bg-[#0a0a0f] border-gray-800 rounded-2xl p-6 mb-8 flex flex-col gap-4 gap-4 relative overflow-hidden">
            <div className="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
            <h3 className="text-xl font-bold flex items-center gap-2 border-b border-gray-800 pb-4 mb-4 text-gray-300">
              1. Inject Target User Persona <span className="text-sm font-normal text-gray-500 ml-4">(Drives Evolution Probabilities)</span>
@@ -314,11 +314,11 @@ export default function ThemeSynthesizer({ onBack }) {
             { id: 'ide', label: 'IDE', icon: Code2, color: 'text-blue-500' },
             { id: 'browser', label: 'Browser', icon: Globe, color: 'text-indigo-500' },
           ].map(dim => (
-            <div key={dim.id} className="bg-[#0a0a0f] border-gray-800 rounded-3xl p-4 flex-col gap-4 h-[320px]">
+            <div key={dim.id} className="bg-[#0a0a0f] border-gray-800 rounded-3xl p-4 flex flex-col gap-4 gap-4 h-[320px]">
               <h3 className="text-xs font-bold flex items-center gap-2 border-b border-gray-800 pb-2 mb-3 text-gray-300 uppercase tracking-widest">
                 <dim.icon className={dim.color} size={14} /> {dim.label}
               </h3>
-              <div className="flex-col gap-1.5 overflow-y-auto pr-1 flex-1 custom-scrollbar">
+              <div className="flex flex-col gap-4 gap-1.5 overflow-y-auto pr-1 flex-1 custom-scrollbar">
                 {blendedPrototypes.map(p => (
                   <button 
                     key={p.id}

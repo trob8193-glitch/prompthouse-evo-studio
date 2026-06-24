@@ -8,16 +8,16 @@ export function ForgeLabView() {
   const [tab, setTab] = useState('agents');
 
   return (
-    <div className="flex-col">
-      <div className="flex-between">
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center justify-between">
         <div>
-          <div className="page-title">⚒️ The Evo Studio Forge</div>
-          <div className="page-subtitle">Invent new intelligences, bridges, and protocols. Evolutionary development.</div>
+          <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">⚒️ The Evo Studio Forge</div>
+          <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Invent new intelligences, bridges, and protocols. Evolutionary development.</div>
         </div>
         <div className="tabs-bar">
-          <button className={`tab-btn ${tab === 'agents' ? 'active' : ''}`} onClick={() => setTab('agents')}>Agents</button>
-          <button className={`tab-btn ${tab === 'bridges' ? 'active' : ''}`} onClick={() => setTab('bridges')}>Bridges</button>
-          <button className={`tab-btn ${tab === 'handshakes' ? 'active' : ''}`} onClick={() => setTab('handshakes')}>Handshakes</button>
+          <button className={`tab-glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${tab === 'agents' ? 'active' : ''}`} onClick={() => setTab('agents')}>Agents</button>
+          <button className={`tab-glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${tab === 'bridges' ? 'active' : ''}`} onClick={() => setTab('bridges')}>Bridges</button>
+          <button className={`tab-glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95 ${tab === 'handshakes' ? 'active' : ''}`} onClick={() => setTab('handshakes')}>Handshakes</button>
         </div>
       </div>
 
@@ -79,17 +79,17 @@ function AgentArchitect() {
   };
 
   return (
-    <div className="grid-2">
-      <div className="card">
-        <div className="card-header"><div className="card-title">Incorporate New Intelligence</div></div>
-        <div className="card-body flex-col">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Incorporate New Intelligence</div></div>
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex flex-col gap-4">
           <div className="field">
-            <label className="field-label">Agent Name</label>
-            <input className="field-input" value={name} onChange={e => setName(e.target.value)} ghostInput="e.g. Evo Studio Auditor" />
+            <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Agent Name</label>
+            <input className="w-full bg-black/50 border border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" value={name} onChange={e => setName(e.target.value)} ghostInput="e.g. Evo Studio Auditor" />
           </div>
           <div className="field">
-            <label className="field-label">Primary Role</label>
-            <select className="field-input" value={role} onChange={e => setRole(e.target.value)}>
+            <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Primary Role</label>
+            <select className="w-full bg-black/50 border border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" value={role} onChange={e => setRole(e.target.value)}>
               <option>Architect</option>
               <option>Auditor</option>
               <option>Strategist</option>
@@ -98,17 +98,17 @@ function AgentArchitect() {
             </select>
           </div>
           <div className="field">
-            <label className="field-label">Intelligence DNA (System Instructions)</label>
+            <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Intelligence DNA (System Instructions)</label>
             <textarea className="field-textarea" value={dna} onChange={e => setDna(e.target.value)} ghostInput="Define the constraints, truth-logic, and goals of this intelligence..." style={{ minHeight: 200 }} />
           </div>
-          <button className="btn btn-primary" onClick={spawnAgent}>🧬 Spawn Intelligence</button>
+          <button className="glass-extreme text-neon-cyan border border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={spawnAgent}>🧬 Spawn Intelligence</button>
         </div>
       </div>
-      <div className="flex-col">
-        <div className="card" style={{ background: 'var(--bg-void)', border: '1px solid var(--accent-gold)' }}>
-          <div className="card-header"><div className="card-title">Neural Lattice Preview</div></div>
-          <div className="card-body">
-             <div className="font-mono text-xs text-emerald-400 bg-black p-4 rounded-lg h-48 overflow-y-auto space-y-1">
+      <div className="flex flex-col gap-4">
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ background: 'var(--bg-void)', border: '1px solid var(--accent-gold)' }}>
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Neural Lattice Preview</div></div>
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body">
+             <div className="font-mono text-xs text-emerald-400 bg-black p-4 rounded-2xl h-48 overflow-y-auto space-y-1">
                 {logs.map((log, i) => (
                   <div key={i}>\u003E {log}</div>
                 ))}
@@ -129,22 +129,22 @@ function BridgeInventionLab() {
   const [endpoint, setEndpoint] = useState('/api/new-bridge');
   
   return (
-    <div className="flex-col">
-      <div className="card">
-        <div className="card-header"><div className="card-title">Invent New Bridge Architecture</div></div>
-        <div className="card-body flex-col">
+    <div className="flex flex-col gap-4">
+      <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Invent New Bridge Architecture</div></div>
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex flex-col gap-4">
           <div className="field">
-             <label className="field-label">Integration Name</label>
-             <input className="field-input" value={bridgeName} onChange={e => setBridgeName(e.target.value)} ghostInput="e.g. Midjourney Sync" />
+             <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Integration Name</label>
+             <input className="w-full bg-black/50 border border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" value={bridgeName} onChange={e => setBridgeName(e.target.value)} ghostInput="e.g. Midjourney Sync" />
           </div>
           <div className="field">
-             <label className="field-label">Bridge Endpoint</label>
-             <input className="field-input" value={endpoint} onChange={e => setEndpoint(e.target.value)} />
+             <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Bridge Endpoint</label>
+             <input className="w-full bg-black/50 border border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" value={endpoint} onChange={e => setEndpoint(e.target.value)} />
           </div>
           <div className="prompt-block">
              {`// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\nexport async function ${bridgeName.replace(/\s+/g, '')}Bridge(payload) {\n  const response = await fetch(BRIDGE_URL + '${endpoint}', {\n    method: 'POST',\n    body: JSON.stringify(payload)\n  });\n  return response.json();\n}`}
           </div>
-          <button className="btn btn-secondary" onClick={() => {
+          <button className="glass-extreme text-fuchsia-400 border border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95" onClick={() => {
             if (!bridgeName) return;
             const code = `// Bridge DNA Generated for ${bridgeName || 'Unlabeled'}\nexport async function ${bridgeName.replace(/\s+/g, '')}Bridge(payload) {\n  const response = await fetch(BRIDGE_URL + '${endpoint}', {\n    method: 'POST',\n    body: JSON.stringify(payload)\n  });\n  return response.json();\n}`;
             fetch(BRIDGE_URL + '/api/files/write', {
@@ -175,12 +175,12 @@ function HandshakeComposer() {
   const signature = `LOCAL_HANDSHAKE_${signedAt.replace(/[-:.TZ]/g, '').slice(0, 14)}`;
 
   return (
-    <div className="flex-col">
-       <div className="card">
-          <div className="card-header"><div className="card-title">Global Handshake Protocol (GHP) Composer</div></div>
-          <div className="card-body">
-             <div className="flex-col gap-16">
-                <div className="flex-between" style={{ borderBottom: '1px solid var(--border-dim)', paddingBottom: 12 }}>
+    <div className="flex flex-col gap-4">
+       <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Global Handshake Protocol (GHP) Composer</div></div>
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body">
+             <div className="flex flex-col gap-4 gap-16">
+                <div className="flex items-center justify-between" style={{ borderBottom: '1px solid var(--border-dim)', paddingBottom: 12 }}>
                    <div>
                       <div style={{ fontWeight: 800 }}>Standard Evo Studio Handshake</div>
                       <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>v1.0.0-PROMPT-NATIVE</div>
@@ -199,7 +199,7 @@ function HandshakeComposer() {
                 <button
                   type="button"
                   onClick={() => setSignedAt(new Date().toISOString())}
-                  className="btn btn-primary btn-sm"
+                  className="glass-extreme text-neon-cyan border border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95 glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
                   style={{ width: 'fit-content' }}
                 >
                   Sign New Handshake

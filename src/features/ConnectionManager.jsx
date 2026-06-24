@@ -141,10 +141,10 @@ export default function ConnectionManager() {
         </button>
       }
     >
-      <div className="flex-col gap-4 space-y-10 animate-in fade-in duration-500">
+      <div className="flex flex-col gap-4 gap-4 space-y-10 animate-in fade-in duration-500">
       {/* Bonding Input */}
       <div className="bg-linear-to-br from-indigo-500/10 to-transparent p-1 rounded-3xl border-indigo-500/20 shadow-2xl shadow-indigo-500/5">
-        <form onSubmit={handleBond} className="bg-[#0c0c0e] rounded-[10px] p-6 flex-col md:flex-row items-center gap-4">
+        <form onSubmit={handleBond} className="bg-[#0c0c0e] rounded-[10px] p-6 flex flex-col gap-4 md:flex-row items-center gap-4">
           <div className="flex-1 space-y-1 w-full">
             <label className="text-[10px] font-black uppercase tracking-widest text-neon-cyan/70 ml-1">Initiate Handshake (IP or URL)</label>
             <div className="relative group">
@@ -158,7 +158,7 @@ export default function ConnectionManager() {
               <ArrowRight className="absolute right-4 top-3.5 text-slate-700 group-focus-within:text-indigo-500 transition-colors" size={16} />
             </div>
           </div>
-          <div className="flex-col md:flex-row gap-2 md:self-end">
+          <div className="flex flex-col gap-4 md:flex-row gap-2 md:self-end">
             <button 
               type="button"
               onClick={handleWifiScan}

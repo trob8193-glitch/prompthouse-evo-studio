@@ -128,14 +128,14 @@ export function NightForgeView() {
   }, [forceThreeProviderTeam, log, refreshStatus]);
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
           <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">NightForge Daemon</div>
           <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Live diagnostics cycle with cost-guarded multi-provider team run and Evo LM training capture.</div>
           <div style={{ marginTop: 8 }}>
             <button
-              className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
+              className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
               onClick={toggleForceMode}
               disabled={savingForceMode}
             >
@@ -148,17 +148,17 @@ export function NightForgeView() {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
-          <button className={`glass-extreme active:scale-95 glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm ${active ? 'glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-danger' : 'glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-primary'}`} onClick={toggleDaemon}>
+          <button className={`glass-extreme active:scale-95 glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm ${active ? 'glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-danger' : 'glass-extreme text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-primary'}`} onClick={toggleDaemon}>
             {active ? 'Stop Daemon' : 'Start Daemon'}
           </button>
-          <button className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={runCycle} disabled={running}>
+          <button className="glass-extreme shadow-[0_0_15px_rgba(217,70,239,0.1)] active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={runCycle} disabled={running}>
             {running ? 'Running...' : 'Run Manual Cycle'}
           </button>
         </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 16 }}>
-        <div className="flex-col gap-16">
+        <div className="flex flex-col gap-4 gap-16">
           <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ marginBottom: 12 }}>
             <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Daemon Runtime</div></div>
             <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ fontSize: 12, display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>
@@ -201,7 +201,7 @@ export function NightForgeView() {
               <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex-col gap-16">
                 <div>
                   <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 8, color: 'var(--text-secondary)' }}>SCANNED ITEMS</div>
-                  <div className="flex-col gap-4">
+                  <div className="flex flex-col gap-4 gap-4">
                     {(proposal.scannedItems || []).map((s, i) => (
                       <div key={i} style={{ fontSize: 11, color: 'var(--text-muted)' }}>• {s}</div>
                     ))}
@@ -210,7 +210,7 @@ export function NightForgeView() {
 
                 <div>
                   <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 8, color: 'var(--text-secondary)' }}>PROPOSED ACTIONS</div>
-                  <div className="flex-col gap-8">
+                  <div className="flex flex-col gap-4 gap-8">
                     {(proposal.proposedActions || []).map((p, i) => (
                       <div key={i} className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ background: 'var(--bg-void)', padding: 12, borderLeft: `4px solid ${tone(p.priority)}` }}>
                         <div className="flex items-center justify-between" style={{ marginBottom: 4 }}>

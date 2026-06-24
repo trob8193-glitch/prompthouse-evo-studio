@@ -253,12 +253,12 @@ export function EvoCopilot() {
 
     if (!inline && match) {
       return (
-        <div className="relative group my-4 rounded-xl overflow-hidden border border-gray-800 shadow-2xl">
+        <div className="relative group my-4 rounded-3xl overflow-hidden border border-gray-800 shadow-2xl">
           <div className="flex items-center justify-between px-4 py-2 bg-[#1a1a1f] border-b border-gray-800">
             <span className="text-xs font-mono text-gray-400">{language}</span>
             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
               {language === 'bash' || language === 'shell' ? (
-                  <button onClick={handleRunTerminal} className="flex items-center px-3 py-1 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 rounded text-xs font-bold transition-colors">
+                  <button onClick={handleRunTerminal} className="flex items-center px-3 py-1 bg-blue-500/10 text-neon-cyan hover:bg-blue-500/20 rounded text-xs font-bold transition-colors">
                       <Play className="w-3 h-3 mr-1" /> Run in Terminal
                   </button>
               ) : (
@@ -279,13 +279,13 @@ export function EvoCopilot() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#09090b] text-gray-200 border-l border-gray-800/50" style={{ '--accent-color': currentBot.palette?.primary || '#10b981' }}>
+    <div className="flex flex flex-col gap-4 h-full bg-[#09090b] text-gray-200 border-l border-gray-800/50" style={{ '--accent-color': currentBot.palette?.primary || '#10b981' }}>
       
       {/* HEADER */}
       <div className="bg-[#0c0c0f] border-b border-[rgba(255,255,255,0.05)] p-5 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl font-bold text-white shadow-[0_0_15px_rgba(16,185,129,0.15)]" style={{ backgroundColor: currentBot.palette?.primary || '#10b981' }}>
+            <div className="flex items-center justify-center w-10 h-10 rounded-3xl font-bold text-white shadow-[0_0_15px_rgba(16,185,129,0.15)]" style={{ backgroundColor: currentBot.palette?.primary || '#10b981' }}>
               {currentBot.icon?.length <= 2 ? currentBot.icon : <Cpu size={20} />}
             </div>
             <div>
@@ -307,14 +307,14 @@ export function EvoCopilot() {
             <button
               onClick={resetConversation}
               disabled={loading}
-              className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors"
+              className="p-2 hover:bg-gray-800 rounded-2xl text-gray-400 transition-colors"
               title="Reset Context"
             >
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
             </button>
             <button
               onClick={() => setActivePage('settings')}
-              className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors"
+              className="p-2 hover:bg-gray-800 rounded-2xl text-gray-400 transition-colors"
             >
               <Settings2 size={16} />
             </button>
@@ -330,7 +330,7 @@ export function EvoCopilot() {
               className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
                 selectedBot === bot.id
                   ? 'text-white border-transparent shadow-lg'
-                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'
+                  : 'text-slate-400 border-cyan-500/30 hover:border-slate-500 hover:text-slate-200 bg-black/40 backdrop-blur-md border border-white/5/50'
               }`}
               style={selectedBot === bot.id ? { backgroundColor: bot.palette?.primary || '#10b981' } : {}}
               title={bot.role}
@@ -391,8 +391,8 @@ export function EvoCopilot() {
       <div className="p-4 bg-[#0c0c0f] border-t border-gray-800/50">
         {/* Context Badge */}
         {activeFile && (
-          <div className="mb-3 flex items-center px-3 py-1.5 bg-gray-800/50 rounded-lg w-max border border-gray-700/50">
-            <FileCode className="w-3.5 h-3.5 text-blue-400 mr-2" />
+          <div className="mb-3 flex items-center px-3 py-1.5 bg-gray-800/50 rounded-2xl w-max border border-gray-700/50">
+            <FileCode className="w-3.5 h-3.5 text-neon-cyan mr-2" />
             <span className="text-xs text-gray-300">Context active: <span className="font-mono text-emerald-400">{activeFile}</span></span>
           </div>
         )}
@@ -413,7 +413,7 @@ export function EvoCopilot() {
               type="button"
               onClick={toggleRecording}
               disabled={loading}
-              className={`p-3 rounded-xl transition flex items-center justify-center ${
+              className={`p-3 rounded-3xl transition flex items-center justify-center ${
                 isRecording
                   ? 'bg-red-500 hover:bg-red-600 animate-pulse text-white'
                   : 'bg-gray-800 hover:bg-gray-700 text-gray-300'

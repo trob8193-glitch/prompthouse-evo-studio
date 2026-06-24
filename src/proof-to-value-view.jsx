@@ -12,7 +12,7 @@ export function ProofToValueView() {
     <div className="p-6 bg-[#181818] border-[#333] rounded-md m-4">
       <h2 className="text-xl font-bold text-white mb-4">Value Ledger</h2>
       
-      <div className="bg-[#222] p-6 rounded-md border-[#444] mb-6 flex-col gap-4 items-center">
+      <div className="bg-[#222] p-6 rounded-md border-[#444] mb-6 flex flex-col gap-4 gap-4 items-center">
         <div className="text-sm text-gray-400 uppercase tracking-widest mb-2">Total Verified Value</div>
         <div className="text-5xl font-mono text-[#00ffcc]">${totalValue.toLocaleString()}</div>
       </div>

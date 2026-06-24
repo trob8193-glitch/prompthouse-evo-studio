@@ -67,40 +67,40 @@ export function AutonomousBuilderView() {
 
   return (
     <div className="module-container border-t-2 border-t-amber-500">
-      <div className="module-header flex-col items-start gap-1">
+      <div className="module-header flex flex-col gap-4 items-start gap-1">
         <div className="module-title text-amber-500">🤖 Autonomous App Builder</div>
         <div className="text-[11px] text-slate-400 font-medium">Describe your app. The AI generates a complete, production-grade multi-file project — written directly to your disk. React, Flutter, Next.js, or Express API.</div>
       </div>
 
       <div className="module-content">
         {/* Mission Input */}
-        <div className="card">
-          <div className="card-body flex-col gap-4">
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex flex-col gap-4 gap-4">
           <div className="field">
-            <label className="field-label">🎯 Mission — What are we building?</label>
+            <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">🎯 Mission — What are we building?</label>
             <textarea className="field-textarea" value={mission} onChange={e => setMission(e.target.value)}
               ghostInput="Build a task management app with auth, dashboard, task lists, and settings..."
               style={{ minHeight: 80 }} disabled={building} />
           </div>
-          <div className="grid-2" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
             <div className="field">
-              <label className="field-label">App Name</label>
-              <input className="field-input" value={appName} onChange={e => setAppName(e.target.value)}
+              <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">App Name</label>
+              <input className="w-full bg-black/50 border border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" value={appName} onChange={e => setAppName(e.target.value)}
                 ghostInput="my_awesome_app" disabled={building} />
             </div>
             <div className="field">
-              <label className="field-label">Features (comma separated)</label>
-              <input className="field-input" value={features} onChange={e => setFeatures(e.target.value)}
+              <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Features (comma separated)</label>
+              <input className="w-full bg-black/50 border border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" value={features} onChange={e => setFeatures(e.target.value)}
                 ghostInput="home, auth, dashboard, settings" disabled={building} />
             </div>
             <div className="field">
-              <label className="field-label">Platform</label>
+              <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Platform</label>
               <select className="field-select" value={appType} onChange={e => setAppType(e.target.value)} disabled={building}>
                 {APP_TYPES.map(t => <option key={t.id} value={t.id}>{t.icon} {t.name}</option>)}
               </select>
             </div>
           </div>
-          <button className="btn btn-primary" onClick={startBuild} disabled={building || !mission.trim()}
+          <button className="glass-extreme text-neon-cyan border border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={startBuild} disabled={building || !mission.trim()}
             style={{ alignSelf: 'flex-end', minWidth: 200, fontSize: 14 }}>
             {building ? '🔄 Building...' : '🚀 Build App — Full Autonomous'}
           </button>
@@ -111,7 +111,7 @@ export function AutonomousBuilderView() {
       {timeline.length > 0 && (
         <div className="evo-grid mt-4">
           {/* Active Bot Character */}
-          <div className="card flex-col items-center justify-center p-6 min-h-[340px]" style={{
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl flex flex-col gap-4 items-center justify-center p-6 min-h-[340px]" style={{
             background: 'linear-gradient(180deg, rgba(3,5,8,0.8) 0%, rgba(10,14,26,0.8) 100%)',
             border: `1px solid ${activeBot.palette.accent}33`,
             boxShadow: `inset 0 0 40px ${activeBot.palette.accent}10`
@@ -134,8 +134,8 @@ export function AutonomousBuilderView() {
           </div>
 
           {/* Timeline */}
-          <div className="card" ref={timelineRef} style={{ maxHeight: 400, overflow: 'auto', padding: 0 }}>
-            <div className="card-body" style={{ padding: 16 }}>
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" ref={timelineRef} style={{ maxHeight: 400, overflow: 'auto', padding: 0 }}>
+            <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ padding: 16 }}>
               <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 12 }}>
                 BUILD PIPELINE — {timeline.length} step{timeline.length !== 1 ? 's' : ''}
               </div>
@@ -178,26 +178,26 @@ export function AutonomousBuilderView() {
 
       {/* Generated Files */}
       {result && (
-        <div className="card" style={{ border: '1px solid rgba(74,222,128,0.3)' }}>
-          <div className="card-header">
-            <div className="flex-between">
+        <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ border: '1px solid rgba(74,222,128,0.3)' }}>
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header">
+            <div className="flex items-center justify-between">
               <div>
-                <div className="card-title">✅ Build Complete — {result.app.name}</div>
+                <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">✅ Build Complete — {result.app.name}</div>
                 <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 4 }}>
                   {result.fileCount} files · {result.app.type} · {result.app.features.join(', ')}
                 </div>
               </div>
               <div className="flex-row gap-8">
-                <button className="btn btn-secondary" onClick={() => downloadAsZip(result.app)}>
+                <button className="glass-extreme text-fuchsia-400 border border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95" onClick={() => downloadAsZip(result.app)}>
                   📦 Download ZIP
                 </button>
-                <button className="btn btn-primary" onClick={handleWriteToDisk} style={{ background: 'var(--accent-green)' }}>
+                <button className="glass-extreme text-neon-cyan border border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={handleWriteToDisk} style={{ background: 'var(--accent-green)' }}>
                   💾 Write to Local Disk
                 </button>
               </div>
             </div>
           </div>
-          <div className="card-body" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 16 }}>
+          <div className="glass-extreme rounded-3xl border border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 16 }}>
             {/* File tree */}
             <div style={{ borderRight: '1px solid var(--border-dim)', paddingRight: 16 }}>
               <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>
@@ -224,10 +224,10 @@ export function AutonomousBuilderView() {
                       {selectedFile}
                     </div>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <button className="btn btn-secondary btn-sm" onClick={() => {
+                      <button className="glass-extreme text-fuchsia-400 border border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95 glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={() => {
                         navigator.clipboard.writeText(result.app.files[selectedFile]);
                       }}>📋 Copy</button>
-                      <button className="btn btn-secondary btn-sm" onClick={() => {
+                      <button className="glass-extreme text-fuchsia-400 border border-fuchsia-500/30 hover:border-fuchsia-400 transition-all shadow-[0_0_15px_rgba(217,70,239,0.1)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-fuchsia-500/10 hover:scale-[1.02] active:scale-95 glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm" onClick={() => {
                         downloadFile(selectedFile, result.app.files[selectedFile]);
                       }}>💾 Save</button>
                     </div>

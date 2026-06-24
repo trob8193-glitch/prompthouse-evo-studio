@@ -100,14 +100,14 @@ export default function EvoPixelatorDashboard() {
           </Card>
         </div>
 
-        <Card className="xl:col-span-8 bg-[#020205] p-0 overflow-hidden min-h-[500px] flex-col gap-4 relative border-[#00ff88]/20 shadow-[0_0_30px_rgba(0,255,136,0.05)]" style={{ backgroundImage: 'linear-gradient(45deg, #050508 25%, transparent 25%, transparent 75%, #050508 75%, #050508), linear-gradient(45deg, #050508 25%, transparent 25%, transparent 75%, #050508 75%, #050508)', backgroundSize: '20px 20px', backgroundPosition: '0 0, 10px 10px' }}>
+        <Card className="xl:col-span-8 bg-[#020205] p-0 overflow-hidden min-h-[500px] flex flex-col gap-4 gap-4 relative border-[#00ff88]/20 shadow-[0_0_30px_rgba(0,255,136,0.05)]" style={{ backgroundImage: 'linear-gradient(45deg, #050508 25%, transparent 25%, transparent 75%, #050508 75%, #050508), linear-gradient(45deg, #050508 25%, transparent 25%, transparent 75%, #050508 75%, #050508)', backgroundSize: '20px 20px', backgroundPosition: '0 0, 10px 10px' }}>
           <div className="p-4 border-b border-[#00ff88]/20 bg-[#050508]/80 backdrop-blur-md flex justify-between items-center z-10">
             <h3 className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-[#00ff88]"><Eye size={14} /> Viewport Engine</h3>
           </div>
           
           <div className="flex-1 flex items-center justify-center p-8 relative">
             {generating && (
-              <div className="absolute inset-0 bg-[#020205]/80 flex-col gap-4 items-center justify-center z-20 backdrop-blur-sm">
+              <div className="absolute inset-0 bg-[#020205]/80 flex flex-col gap-4 gap-4 items-center justify-center z-20 backdrop-blur-sm">
                 <div className="relative">
                   <Grid className="animate-spin mb-6 relative z-10" color="#00ff88" size={56} />
                   <div className="absolute inset-0 bg-[#00ff88] blur-[30px] opacity-40 animate-pulse" />
@@ -117,7 +117,7 @@ export default function EvoPixelatorDashboard() {
             )}
             
             {result ? (
-              <div className="flex-col gap-4 items-center relative z-10">
+              <div className="flex flex-col gap-4 gap-4 items-center relative z-10">
                 <div className="relative">
                   <div className="absolute inset-0 bg-[#00ff88] blur-[50px] opacity-20" />
                   <img src={result.url} alt="Pixel Art" style={{ imageRendering: 'pixelated' }} className="relative z-10 min-w-[200px] min-h-[200px] bg-black/50 border-[#00ff88]/40 shadow-[0_0_30px_rgba(0,255,136,0.1)] rounded-2xl" />
@@ -128,7 +128,7 @@ export default function EvoPixelatorDashboard() {
                 </div>
               </div>
             ) : (
-              !generating && <div className="text-[#4a4a5e] font-bold text-xs uppercase tracking-[0.2em] flex-col items-center gap-4">
+              !generating && <div className="text-[#4a4a5e] font-bold text-xs uppercase tracking-[0.2em] flex flex-col gap-4 items-center gap-4">
                 <Grid size={48} className="opacity-20" color="#00ff88" />
                 [ QUANTIZER IDLE ]
               </div>

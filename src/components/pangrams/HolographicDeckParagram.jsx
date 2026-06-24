@@ -16,7 +16,7 @@ export default function HolographicDeckParagram() {
         <div className="absolute top-0 left-6 right-6 h-64 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 transform translate-y-4 -translate-z-10 scale-95 opacity-80" />
         
         {/* Card 1 (Front) */}
-        <div className="relative h-64 bg-black/40 backdrop-blur-2xl rounded-2xl border border-[#4ade80]/40 shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-8 flex flex-col justify-between">
+        <div className="relative h-64 bg-black/40 backdrop-blur-2xl rounded-2xl border border-[#4ade80]/40 shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-8 flex flex flex-col gap-4 justify-between">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
               <Layers color="#4ade80" />

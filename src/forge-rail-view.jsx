@@ -26,17 +26,17 @@ export function ForgeRailView() {
   }, [activeRail, log]);
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
           <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🛤️ ForgeRail Console</div>
           <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Route asset generation jobs through specialized render lanes.</div>
         </div>
-        <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={runRail}>⚡ Trigger Rail</button>
+        <button className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" onClick={runRail}>⚡ Trigger Rail</button>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 16 }}>
-        <div className="flex-col gap-8">
+        <div className="flex flex-col gap-4 gap-8">
           {rails.map(r => (
             <button 
               key={r.id}

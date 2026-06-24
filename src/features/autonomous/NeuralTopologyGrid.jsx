@@ -133,7 +133,7 @@ export default function NeuralTopologyGrid() {
   });
 
   return (
-    <div className="w-full h-full p-8 flex-col gap-4 bg-void text-white overflow-hidden relative">
+    <div className="w-full h-full p-8 flex flex-col gap-4 gap-4 bg-void text-white overflow-hidden relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-indigo-900/20 via-black to-black pointer-events-none"></div>
       
       <header className="relative z-10 mb-8 flex items-end justify-between">

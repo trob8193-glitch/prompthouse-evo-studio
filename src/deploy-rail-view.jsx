@@ -32,7 +32,7 @@ export function DeployRailView() {
   }, [config]);
 
   return (
-    <div className="flex-col gap-4 animate-in">
+    <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
           <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🛤️ DeployRail</div>
@@ -44,7 +44,7 @@ export function DeployRailView() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 16 }}>
-        <div className="flex-col gap-16">
+        <div className="flex flex-col gap-4 gap-16">
           <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl">
             <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-header"><div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-title">Deploy Config</div></div>
             <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl-body flex-col gap-4">
@@ -75,7 +75,7 @@ export function DeployRailView() {
                 ⚠️ Live production requires provider tokens in .env and owner approval.
               </div>
               <button 
-                className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" 
+                className="glass-extreme text-neon-cyan border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95" 
                 style={{ marginTop: 12 }}
                 onClick={startDeploy}
                 disabled={status === 'deploying'}

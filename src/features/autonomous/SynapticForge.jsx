@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function SynapticForge() {
   return (
-    <div className="w-full h-full flex-col gap-4 p-8 bg-linear-to-br from-indigo-900/40 via-purple-900/10 to-black overflow-hidden relative">
+    <div className="w-full h-full flex flex-col gap-4 gap-4 p-8 bg-linear-to-br from-indigo-900/40 via-purple-900/10 to-black overflow-hidden relative">
       <div className="absolute inset-0 bg-grid-scan opacity-30 pointer-events-none mix-blend-overlay"></div>
       
       <div className="flex justify-between items-center mb-8 relative z-10">
@@ -18,7 +18,7 @@ export default function SynapticForge() {
 
       <div className="flex-1 flex gap-8 relative z-10">
         {/* Prompt Builder Area */}
-        <div className="flex-2 flex-col gap-4">
+        <div className="flex-2 flex flex-col gap-4 gap-4">
           <div className="text-xs font-bold text-purple-300 uppercase tracking-[0.2em]">Prompt Architecture</div>
           <div className="flex-1 glass-extreme rounded-2xl border-2 border-purple-500/20 p-6 flex-col hover:border-purple-500/50 transition-colors shadow-[inset_0_0_30px_rgba(168,85,247,0.1)]">
             <textarea 
@@ -33,7 +33,7 @@ export default function SynapticForge() {
         </div>
 
         {/* Forge Modules */}
-        <div className="flex-1 flex-col gap-4">
+        <div className="flex-1 flex flex-col gap-4 gap-4">
           <div className="text-xs font-bold text-pink-300 uppercase tracking-[0.2em]">Active Catalysts</div>
           
           <div className="glass-extreme rounded-3xl p-4 border-pink-500/20 hover:border-pink-500/50 cursor-pointer transform hover:translate-x-2 transition-all">

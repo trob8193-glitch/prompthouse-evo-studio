@@ -79,7 +79,7 @@ export function PreviewAccessDecisionPanel() {
         <div className="space-y-2 mt-4">
           <div className="text-xs font-semibold text-neon-cyan uppercase tracking-wider mb-2">Recommended Options</div>
           {status.options?.map((opt) => (
-            <div key={opt.id} className={`p-2 rounded border ${opt.recommended ? 'bg-indigo-900/30 border-indigo-700/50' : 'bg-gray-900/50 border-gray-800'} flex-col gap-1`}>
+            <div key={opt.id} className={`p-2 rounded border ${opt.recommended ? 'bg-indigo-900/30 border-indigo-700/50' : 'bg-gray-900/50 border-gray-800'} flex flex-col gap-4 gap-1`}>
               <div className="flex items-center gap-2">
                 <span className={`w-2 h-2 rounded-full ${opt.recommended ? 'bg-indigo-500' : 'bg-gray-600'}`}></span>
                 <span className="font-semibold text-gray-200 text-xs">{opt.title}</span>

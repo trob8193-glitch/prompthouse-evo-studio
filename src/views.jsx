@@ -42,7 +42,7 @@ export function CodeForgeView() {
 
   return (
     <div className="module-container border-t-2 border-t-cyan-500">
-      <div className="module-header flex-col items-start gap-1">
+      <div className="module-header flex flex-col gap-4 items-start gap-1">
         <div className="module-title text-cyan-500">🏗️ Code Forge</div>
         <div className="text-[11px] text-slate-400 font-medium uppercase tracking-widest">Generate 100% executable Flutter & React Native code.</div>
       </div>
@@ -63,13 +63,13 @@ export function CodeForgeView() {
                 {['flutter_feature','rn_component','zustand_store'].includes(lang) && (
                   <div className="field">
                     <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Feature / Model Identity</label>
-                    <input className="w-full bg-black/50 border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" ghostInput="Auth" value={feature} onChange={e => setFeature(e.target.value)} />
+                    <input className="w-full bg-black/50 border-cyan-500/30 rounded-3xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" ghostInput="Auth" value={feature} onChange={e => setFeature(e.target.value)} />
                   </div>
                 )}
                 {['flutter_pubspec','api_service','flutter_router'].includes(lang) && (
                   <div className="field">
                     <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">App / Service Namespace</label>
-                    <input className="w-full bg-black/50 border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" ghostInput="MyApp" value={appName} onChange={e => setAppName(e.target.value)} />
+                    <input className="w-full bg-black/50 border-cyan-500/30 rounded-3xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" ghostInput="MyApp" value={appName} onChange={e => setAppName(e.target.value)} />
                   </div>
                 )}
                 {lang === 'flutter_feature' && (
@@ -83,7 +83,7 @@ export function CodeForgeView() {
                 {lang === 'api_service' && (
                   <div className="field">
                     <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Core API Endpoint</label>
-                    <input className="w-full bg-black/50 border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" ghostInput="https://api.example.com/v1" value={baseUrl} onChange={e => setBaseUrl(e.target.value)} />
+                    <input className="w-full bg-black/50 border-cyan-500/30 rounded-3xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" ghostInput="https://api.example.com/v1" value={baseUrl} onChange={e => setBaseUrl(e.target.value)} />
                   </div>
                 )}
                 <div className="flex gap-4 pt-4">
@@ -112,7 +112,7 @@ export function CodeForgeView() {
             </div>
           </div>
 
-          <div className="xl:col-span-7 flex-col gap-4 p-0 overflow-hidden bg-black/40 rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]">
+          <div className="xl:col-span-7 flex flex-col gap-4 gap-4 p-0 overflow-hidden bg-black/40 rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]">
             <div className="p-8 border-b shadow-[0_0_15px_rgba(0,240,255,0.05)] flex justify-between items-center glass-extreme border-neon-glow/20">
               <h3 className="text-xs font-black text-white uppercase tracking-widest">Master-Grade Output</h3>
               <StatusBadge status="verified" label="100% EXECUTABLE" />
@@ -154,7 +154,7 @@ flutter test`;
 
   return (
     <div className="module-container border-t-2 border-t-indigo-500">
-      <div className="module-header flex-col items-start gap-1">
+      <div className="module-header flex flex-col gap-4 items-start gap-1">
         <div className="module-title text-indigo-500">📱 Mobile Architect</div>
         <div className="text-[11px] text-slate-400 font-medium uppercase tracking-widest">Choose your architecture paradigm. Get the full scaffold and CLI logic.</div>
       </div>
@@ -184,7 +184,7 @@ flutter test`;
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
           <div className="xl:col-span-5">
-            <div className="h-full flex-col gap-4 p-10 bg-black/40 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-2xl">
+            <div className="h-full flex flex-col gap-4 gap-4 p-10 bg-black/40 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-2xl">
               <h3 className="text-xl font-black text-white mb-8">Architectural Specs</h3>
               <div className="space-y-8 flex-1">
                 <div>
@@ -211,7 +211,7 @@ flutter test`;
               </div>
             </div>
           </div>
-          <div className="xl:col-span-7 bg-black/40 p-0 overflow-hidden rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex-col gap-4">
+          <div className="xl:col-span-7 bg-black/40 p-0 overflow-hidden rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex flex-col gap-4 gap-4">
              <div className="p-8 border-b shadow-[0_0_15px_rgba(0,240,255,0.05)] glass-extreme border-neon-glow/20">
               <h3 className="text-xs font-black text-white uppercase tracking-widest">Paradigm Definition Prompt</h3>
             </div>
@@ -239,13 +239,13 @@ export function MissionControlView() {
 
   return (
     <div className="module-container border-t-2 border-t-fuchsia-500">
-      <div className="module-header flex-col items-start gap-1">
+      <div className="module-header flex flex-col gap-4 items-start gap-1">
         <div className="w-full flex justify-between items-center">
           <div>
             <div className="module-title text-fuchsia-500">🚀 Mission Control</div>
             <div className="text-[11px] text-slate-400 font-medium uppercase tracking-widest mt-1">Intake → Synthesis → Route → Execution → Verification</div>
           </div>
-          <div className="flex-col items-end gap-2">
+          <div className="flex flex-col gap-4 items-end gap-2">
             <span className="text-[10px] font-black text-fuchsia-400 uppercase tracking-widest">Master Workflow Progress</span>
             <div className="flex gap-1.5">
               {MISSION_PHASES.map((_, i) => (
@@ -278,7 +278,7 @@ export function MissionControlView() {
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
           <div className="xl:col-span-5">
-            <div className="p-10 h-full flex-col gap-4 bg-black/40 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-2xl">
+            <div className="p-10 h-full flex flex-col gap-4 gap-4 bg-black/40 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] rounded-2xl">
               <div className="mb-10">
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-3xl">{MISSION_PHASES[phase].icon}</span>
@@ -295,7 +295,7 @@ export function MissionControlView() {
                   </div>
                   <div className="field">
                     <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Executive Owner</label>
-                    <input className="w-full bg-black/50 border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" value={mission.owner} onChange={e => setMission(m => ({ ...m, owner: e.target.value }))} />
+                    <input className="w-full bg-black/50 border-cyan-500/30 rounded-3xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" value={mission.owner} onChange={e => setMission(m => ({ ...m, owner: e.target.value }))} />
                   </div>
                 </>)}
                 
@@ -305,7 +305,7 @@ export function MissionControlView() {
                     <div className="space-y-3">
                       {(mission.known || ['']).map((v, i) => (
                         <div key={i} className="flex gap-3">
-                          <input className="w-full bg-black/50 border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" ghostInput="Verified fact..." value={v} onChange={e => updateArr('known', i, e.target.value)} />
+                          <input className="w-full bg-black/50 border-cyan-500/30 rounded-3xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" ghostInput="Verified fact..." value={v} onChange={e => updateArr('known', i, e.target.value)} />
                           {i === mission.known.length - 1 && <Button className="px-4" variant="secondary" onClick={() => addRow('known')}>+</Button>}
                         </div>
                       ))}
@@ -316,7 +316,7 @@ export function MissionControlView() {
                 {phase === 6 && (<>
                   <div className="field">
                     <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Executive Recommendation</label>
-                    <input className="w-full bg-black/50 border-cyan-500/30 rounded-xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" value={mission.recommended} onChange={e => setMission(m => ({ ...m, recommended: e.target.value }))} ghostInput="Final gate instructions..." />
+                    <input className="w-full bg-black/50 border-cyan-500/30 rounded-3xl px-4 py-3 text-cyan-100 placeholder:text-cyan-900/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all font-mono text-sm" value={mission.recommended} onChange={e => setMission(m => ({ ...m, recommended: e.target.value }))} ghostInput="Final gate instructions..." />
                   </div>
                   <div className="flex gap-4 pt-6">
                     <Button className="flex-1" onClick={() => { copyText(packet); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>
@@ -335,7 +335,7 @@ export function MissionControlView() {
             </div>
           </div>
 
-          <div className="xl:col-span-7 bg-black/40 p-0 overflow-hidden rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex-col gap-4">
+          <div className="xl:col-span-7 bg-black/40 p-0 overflow-hidden rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex flex-col gap-4 gap-4">
             <div className="p-8 border-b shadow-[0_0_15px_rgba(0,240,255,0.05)] glass-extreme border-neon-glow/20 flex justify-between items-center">
               <h3 className="text-xs font-black text-white uppercase tracking-widest">Mission Packet Snapshot</h3>
               <StatusBadge status="pending" label="Evo Studio Draft" />
@@ -368,7 +368,7 @@ export function ChainBuilderView() {
 
   return (
     <div className="module-container border-t-2 border-t-amber-500">
-      <div className="module-header flex-col items-start gap-1">
+      <div className="module-header flex flex-col gap-4 items-start gap-1">
         <div className="w-full flex justify-between items-center">
           <div>
             <div className="module-title text-amber-500">🔗 Prompt Chain Builder</div>
@@ -383,7 +383,7 @@ export function ChainBuilderView() {
 
       <div className="module-content p-6">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
-          <div className="flex-col gap-4 space-y-6">
+          <div className="flex flex-col gap-4 gap-4 space-y-6">
             {/* Step type picker */}
             <div className="bg-black/40 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] p-6 rounded-2xl">
               <h3 className="text-sm font-black text-white uppercase tracking-widest mb-4">Add Step</h3>
@@ -419,7 +419,7 @@ export function ChainBuilderView() {
             })}
           </div>
 
-          <div className="bg-black/40 rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex-col gap-4 overflow-hidden">
+          <div className="bg-black/40 rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex flex-col gap-4 gap-4 overflow-hidden">
             <div className="p-6 border-b shadow-[0_0_15px_rgba(0,240,255,0.05)] glass-extreme border-neon-glow/20">
               <h3 className="text-xs font-black text-white uppercase tracking-widest">Chain Preview</h3>
             </div>
@@ -452,7 +452,7 @@ export function ExportLabView() {
 
   return (
     <div className="module-container border-t-2 border-t-emerald-500">
-      <div className="module-header flex-col items-start gap-1">
+      <div className="module-header flex flex-col gap-4 items-start gap-1">
         <div className="w-full flex justify-between items-center">
           <div>
             <div className="module-title text-emerald-500">📤 Export Lab</div>
@@ -463,13 +463,13 @@ export function ExportLabView() {
 
       <div className="module-content p-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          <div className="bg-black/40 rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex-col gap-4 overflow-hidden">
+          <div className="bg-black/40 rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex flex-col gap-4 gap-4 overflow-hidden">
             <div className="p-6 border-b shadow-[0_0_15px_rgba(0,240,255,0.05)] glass-extreme border-neon-glow/20">
               <h3 className="text-xs font-black text-white uppercase tracking-widest">Select Vault Items</h3>
             </div>
-            <div className="p-6 flex-col gap-4 space-y-2">
+            <div className="p-6 flex flex-col gap-4 gap-4 space-y-2">
               {vault.length === 0 ? (
-                <div className="flex-col gap-4 items-center justify-center p-12 text-slate-500">
+                <div className="flex flex-col gap-4 gap-4 items-center justify-center p-12 text-slate-500">
                   <div className="text-4xl mb-4">🗄️</div>
                   <div className="text-sm font-bold text-white mb-2">Vault is empty</div>
                   <div className="text-xs">Save prompts from the Builder first.</div>
@@ -486,11 +486,11 @@ export function ExportLabView() {
             </div>
           </div>
 
-          <div className="bg-black/40 rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex-col gap-4 overflow-hidden">
+          <div className="bg-black/40 rounded-2xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)] flex flex-col gap-4 gap-4 overflow-hidden">
             <div className="p-6 border-b shadow-[0_0_15px_rgba(0,240,255,0.05)] glass-extreme border-neon-glow/20">
               <h3 className="text-xs font-black text-white uppercase tracking-widest">Export Options</h3>
             </div>
-            <div className="p-6 flex-col gap-4 space-y-6">
+            <div className="p-6 flex flex-col gap-4 gap-4 space-y-6">
               <div className="field">
                 <label className="text-xs font-bold text-cyan-500/70 uppercase tracking-widest mb-1 block">Format</label>
                 <div className="flex gap-2">

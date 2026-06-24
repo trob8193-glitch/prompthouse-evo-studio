@@ -364,7 +364,7 @@ function NodePoint({ node, layer, selected, onClick }) {
 
 function StatItem({ label, value, color = "text-white" }) {
   return (
-    <div className="bg-white/5 border-white/5 rounded-3xl p-3 flex-col gap-4 justify-center">
+    <div className="bg-white/5 border-white/5 rounded-3xl p-3 flex flex-col gap-4 gap-4 justify-center">
       <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1">{label}</span>
       <span className={`text-xs font-black ${color}`}>{value}</span>
     </div>

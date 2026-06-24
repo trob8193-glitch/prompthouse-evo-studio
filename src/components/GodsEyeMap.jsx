@@ -118,7 +118,7 @@ export function GodsEyeMap() {
         {nodes.map((node, index) => (
           <div 
             key={index}
-            className="absolute flex-col gap-4 items-center justify-center transition-all duration-1000"
+            className="absolute flex flex-col gap-4 gap-4 items-center justify-center transition-all duration-1000"
             style={{ left: `${node.x}%`, top: `${node.y}%`, transform: 'translate(-50%, -50%)' }}
           >
             <div

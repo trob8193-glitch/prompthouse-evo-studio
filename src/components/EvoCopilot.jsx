@@ -313,7 +313,7 @@ The frontend will intercept and execute this automatically.`;
         try {
           const actionObj = JSON.parse(code);
           if (applied) {
-             return <div className="p-4 my-4 bg-green-900/30 border border-green-500/50 rounded-xl text-green-400 font-mono text-sm shadow-[0_0_15px_rgba(16,185,129,0.15)]"><Check className="inline w-4 h-4 mr-2" /> Action '{actionObj.action}' executed successfully. Check chat for results.</div>;
+             return <div className="p-4 my-4 bg-green-900/30 border border-green-500/50 rounded-3xl text-green-400 font-mono text-sm shadow-[0_0_15px_rgba(16,185,129,0.15)]"><Check className="inline w-4 h-4 mr-2" /> Action '{actionObj.action}' executed successfully. Check chat for results.</div>;
           }
           // Autonomous execution on render
           useEffect(() => {
@@ -336,14 +336,14 @@ The frontend will intercept and execute this automatically.`;
                });
             }
           }, []);
-          return <div className="p-4 my-4 bg-purple-900/30 border border-purple-500/50 rounded-xl text-purple-400 font-mono text-sm animate-pulse-fast shadow-[0_0_15px_rgba(167,139,250,0.15)]">⚡ Executing God-Mode Action: {actionObj.action}...</div>;
+          return <div className="p-4 my-4 bg-purple-900/30 border border-purple-500/50 rounded-3xl text-purple-400 font-mono text-sm animate-pulse-fast shadow-[0_0_15px_rgba(167,139,250,0.15)]">⚡ Executing God-Mode Action: {actionObj.action}...</div>;
         } catch (e) {
-          return <div className="p-4 my-4 bg-red-900/30 border border-red-500/50 rounded-xl text-red-400 font-mono text-sm">â Œ Invalid IDE action JSON format.</div>;
+          return <div className="p-4 my-4 bg-red-900/30 border border-red-500/50 rounded-3xl text-red-400 font-mono text-sm">â Œ Invalid IDE action JSON format.</div>;
         }
       }
 
       return (
-        <div className="relative group my-4 rounded-xl overflow-hidden border border-gray-800 shadow-2xl backdrop-blur-md">
+        <div className="relative group my-4 rounded-3xl overflow-hidden border border-gray-800 shadow-2xl backdrop-blur-md">
           {/* Holographic overlay with animation */}
           <div className="absolute inset-0 bg-linear-to-r from-purple-400 via-pink-500 to-indigo-600 opacity-20 animate-shimmer" style={{ mixBlendMode: 'overlay', pointerEvents: 'none' }} />
           {/* Particle system (faint floating dots) layer */}
@@ -355,11 +355,11 @@ The frontend will intercept and execute this automatically.`;
             <span className="text-xs font-mono text-gray-400">{language}</span>
             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity scale-95 group-hover:scale-100 origin-top">
               {language === 'bash' || language === 'shell' ? (
-                  <button onClick={handleRunTerminal} className="flex items-center px-3 py-1 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 rounded-lg text-xs font-bold transition-colors shadow-sm hover:shadow-md">
+                  <button onClick={handleRunTerminal} className="flex items-center px-3 py-1 bg-blue-500/10 text-neon-cyan hover:bg-blue-500/20 rounded-2xl text-xs font-bold transition-colors shadow-sm hover:shadow-md">
                       <Play className="w-3 h-3 mr-1" /> Run in Terminal
                   </button>
               ) : (
-                  <button onClick={handleApply} className={`flex items-center px-3 py-1 rounded-lg transition-all font-semibold text-xs ${applied ? 'bg-green-600 text-white' : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'}`}>
+                  <button onClick={handleApply} className={`flex items-center px-3 py-1 rounded-2xl transition-all font-semibold text-xs ${applied ? 'bg-green-600 text-white' : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'}`}>
                       {applied ? <Check className="w-3 h-3 mr-1" /> : <FileCode className="w-3 h-3 mr-1" />}
                       {applied ? 'Applied!' : 'Apply to File'}
                   </button>
@@ -431,7 +431,7 @@ The frontend will intercept and execute this automatically.`;
   const layoutDef = COPILOT_LAYOUTS.find(l => l.id === activeLayout) || COPILOT_LAYOUTS[0];
 
   return (
-    <div className={`flex flex-col h-full bg-[#09090b] text-gray-200 border-l border-gray-800/50 overflow-hidden ${layoutDef.animClass || ''}`} style={{ ...layoutDef.wrapperStyle, border: 'none' }}>
+    <div className={`flex flex flex-col gap-4 h-full bg-[#09090b] text-gray-200 border-l border-gray-800/50 overflow-hidden ${layoutDef.animClass || ''}`} style={{ ...layoutDef.wrapperStyle, border: 'none' }}>
       {/* AGI SUIT STATUS BAR */}
       <div className="flex gap-2 px-4 py-1.5 bg-[#050508] border-t border-gray-800/20 overflow-x-auto no-scrollbar">
         {suitHealth ? (
@@ -449,10 +449,10 @@ The frontend will intercept and execute this automatically.`;
       {/* HEADER */}
       <div className="bg-[#0c0c0f] border-b border-[rgba(255,255,255,0.05)] p-5 backdrop-blur-xl relative">
         {/* Animated glow effect behind header */}
-        <div className="absolute inset-0 bg-linear-to-r from-purple-400 via-pink-500 to-indigo-600 opacity-20 animate-shimmer-fast rounded-xl blur-lg" />
+        <div className="absolute inset-0 bg-linear-to-r from-purple-400 via-pink-500 to-indigo-600 opacity-20 animate-shimmer-fast rounded-3xl blur-lg" />
         <div className="flex items-center justify-between z-10 relative">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-12 h-12 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(16,185,129,0.25)] transition-transform hover:scale-110" style={{ backgroundColor: currentBot.palette?.primary || '#10b981' }}>
+            <div className="flex items-center justify-center w-12 h-12 rounded-3xl font-bold text-white shadow-[0_0_20px_rgba(16,185,129,0.25)] transition-transform hover:scale-110" style={{ backgroundColor: currentBot.palette?.primary || '#10b981' }}>
               {currentBot.icon?.length <= 2 ? <span style={{ fontSize: 24 }}>{currentBot.icon}</span> : <Cpu size={24} />}
             </div>
             <div>
@@ -502,14 +502,14 @@ The frontend will intercept and execute this automatically.`;
             <button
               onClick={resetConversation}
               disabled={loading}
-              className="p-2 rounded-lg hover:bg-gray-800/70 hover:shadow-lg transition-colors"
+              className="p-2 rounded-2xl hover:bg-gray-800/70 hover:shadow-lg transition-colors"
               title="Reset Context"
             >
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
             </button>
             <button
               onClick={() => setActivePage('settings')}
-              className="p-2 rounded-lg hover:bg-gray-800/70 hover:shadow-lg transition-colors"
+              className="p-2 rounded-2xl hover:bg-gray-800/70 hover:shadow-lg transition-colors"
             >
               <Settings2 size={16} />
             </button>
@@ -530,7 +530,7 @@ The frontend will intercept and execute this automatically.`;
               className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
                 selectedBot === bot.id
                   ? 'text-white border-transparent shadow-lg'
-                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'
+                  : 'text-slate-400 border-cyan-500/30 hover:border-slate-500 hover:text-slate-200 bg-black/40 backdrop-blur-md border border-white/5/50'
               }`}
               style={selectedBot === bot.id ? { backgroundColor: bot.palette?.primary || '#10b981', boxShadow: `0 0 12px ${bot.palette?.primary || '#10b981'}40` } : {}}
               title={bot.role}
@@ -562,7 +562,7 @@ The frontend will intercept and execute this automatically.`;
           };
 
           return (
-            <div key={msg.id} className="flex flex-col max-w-[85%] group" style={{ alignSelf: isUser ? 'flex-end' : isSystem ? 'center' : 'flex-start' }}>
+            <div key={msg.id} className="flex flex flex-col gap-4 max-w-[85%] group" style={{ alignSelf: isUser ? 'flex-end' : isSystem ? 'center' : 'flex-start' }}>
               <div className="flex items-center gap-2 mb-1.5 px-1 opacity-60 group-hover:opacity-100 transition-opacity">
                 <span className="text-[10px] font-bold uppercase tracking-wider">{roleName}</span>
                 <span className="text-[9px] text-gray-500">{msg.timestamp?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
@@ -589,28 +589,28 @@ The frontend will intercept and execute this automatically.`;
       </div>
       {/* QUICK ACTION BAR */}
       <div className="flex gap-2 px-4 py-3 bg-[#0a0a0d] border-t border-gray-800/30 overflow-x-auto no-scrollbar">
-        <button onClick={() => handleQuickAction('debt')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-gray-800/50 border border-gray-700/40 rounded-xl text-[11px] font-bold text-gray-300 hover:bg-gray-700/50 hover:text-white hover:border-gray-600 transition-all hover:shadow-lg cursor-pointer">
+        <button onClick={() => handleQuickAction('debt')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-gray-800/50 border border-gray-700/40 rounded-3xl text-[11px] font-bold text-gray-300 hover:bg-gray-700/50 hover:text-white hover:border-gray-600 transition-all hover:shadow-lg cursor-pointer">
           <Scan size={13} /> Scan Debt
         </button>
-        <button onClick={() => handleQuickAction('audit')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-gray-800/50 border border-gray-700/40 rounded-xl text-[11px] font-bold text-gray-300 hover:bg-gray-700/50 hover:text-white hover:border-gray-600 transition-all hover:shadow-lg cursor-pointer">
+        <button onClick={() => handleQuickAction('audit')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-gray-800/50 border border-gray-700/40 rounded-3xl text-[11px] font-bold text-gray-300 hover:bg-gray-700/50 hover:text-white hover:border-gray-600 transition-all hover:shadow-lg cursor-pointer">
           <ShieldCheck size={13} /> Nuclear Audit
         </button>
-        <button onClick={() => handleQuickAction('evolve')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-purple-900/30 border border-purple-500/30 rounded-xl text-[11px] font-bold text-purple-300 hover:bg-purple-800/40 hover:text-purple-100 hover:border-purple-400/50 transition-all hover:shadow-[0_0_12px_rgba(168,85,247,0.2)] cursor-pointer">
+        <button onClick={() => handleQuickAction('evolve')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-purple-900/30 border border-purple-500/30 rounded-3xl text-[11px] font-bold text-purple-300 hover:bg-purple-800/40 hover:text-purple-100 hover:border-purple-400/50 transition-all hover:shadow-[0_0_12px_rgba(168,85,247,0.2)] cursor-pointer">
           <Brain size={13} /> Evolve Module
         </button>
-        <button onClick={() => handleQuickAction('singularity')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-red-900/30 border border-red-500/30 rounded-xl text-[11px] font-bold text-red-300 hover:bg-red-800/40 hover:text-red-100 hover:border-red-400/50 transition-all hover:shadow-[0_0_12px_rgba(239,68,68,0.3)] cursor-pointer">
+        <button onClick={() => handleQuickAction('singularity')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-red-900/30 border border-red-500/30 rounded-3xl text-[11px] font-bold text-red-300 hover:bg-red-800/40 hover:text-red-100 hover:border-red-400/50 transition-all hover:shadow-[0_0_12px_rgba(239,68,68,0.3)] cursor-pointer">
           <Flame size={13} /> Singularity
         </button>
-        <button onClick={() => handleQuickAction('deploy')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-emerald-900/30 border border-emerald-500/30 rounded-xl text-[11px] font-bold text-emerald-300 hover:bg-emerald-800/40 hover:text-emerald-100 hover:border-emerald-400/50 transition-all hover:shadow-[0_0_12px_rgba(16,185,129,0.3)] cursor-pointer">
+        <button onClick={() => handleQuickAction('deploy')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-emerald-900/30 border border-emerald-500/30 rounded-3xl text-[11px] font-bold text-emerald-300 hover:bg-emerald-800/40 hover:text-emerald-100 hover:border-emerald-400/50 transition-all hover:shadow-[0_0_12px_rgba(16,185,129,0.3)] cursor-pointer">
           <Rocket size={13} /> Deploy
         </button>
-        <button onClick={() => handleQuickAction('health')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-cyan-900/30 border border-cyan-500/30 rounded-xl text-[11px] font-bold text-cyan-300 hover:bg-cyan-800/40 hover:text-cyan-100 hover:border-cyan-400/50 transition-all hover:shadow-[0_0_12px_rgba(6,182,212,0.3)] cursor-pointer">
+        <button onClick={() => handleQuickAction('health')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-cyan-900/30 border border-cyan-500/30 rounded-3xl text-[11px] font-bold text-cyan-300 hover:bg-cyan-800/40 hover:text-cyan-100 hover:border-cyan-400/50 transition-all hover:shadow-[0_0_12px_rgba(6,182,212,0.3)] cursor-pointer">
           <HeartPulse size={13} /> Suit Health
         </button>
-        <button onClick={() => handleQuickAction('evo-eyes')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-violet-900/30 border border-violet-500/30 rounded-xl text-[11px] font-bold text-violet-300 hover:bg-violet-800/40 hover:text-violet-100 hover:border-violet-400/50 transition-all hover:shadow-[0_0_12px_rgba(139,92,246,0.3)] cursor-pointer">
+        <button onClick={() => handleQuickAction('evo-eyes')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-violet-900/30 border border-violet-500/30 rounded-3xl text-[11px] font-bold text-violet-300 hover:bg-violet-800/40 hover:text-violet-100 hover:border-violet-400/50 transition-all hover:shadow-[0_0_12px_rgba(139,92,246,0.3)] cursor-pointer">
           <Eye size={13} /> Evo Eyes
         </button>
-        <button onClick={() => handleQuickAction('swarm')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-amber-900/30 border border-amber-500/30 rounded-xl text-[11px] font-bold text-amber-300 hover:bg-amber-800/40 hover:text-amber-100 hover:border-amber-400/50 transition-all hover:shadow-[0_0_12px_rgba(245,158,11,0.3)] cursor-pointer">
+        <button onClick={() => handleQuickAction('swarm')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-amber-900/30 border border-amber-500/30 rounded-3xl text-[11px] font-bold text-amber-300 hover:bg-amber-800/40 hover:text-amber-100 hover:border-amber-400/50 transition-all hover:shadow-[0_0_12px_rgba(245,158,11,0.3)] cursor-pointer">
           <Gauge size={13} /> Swarm Build
         </button>
       </div>
@@ -618,8 +618,8 @@ The frontend will intercept and execute this automatically.`;
       <div className="p-4 bg-[#0c0c0f] border-t border-gray-800/50 relative z-10">
         {/* Context Badge */}
         {activeFile && (
-          <div className="mb-3 flex items-center px-3 py-1.5 bg-gray-800/50 rounded-lg w-max border border-gray-700/50 shadow-lg">
-            <FileCode className="w-3.5 h-3.5 text-blue-400 mr-2" />
+          <div className="mb-3 flex items-center px-3 py-1.5 bg-gray-800/50 rounded-2xl w-max border border-gray-700/50 shadow-lg">
+            <FileCode className="w-3.5 h-3.5 text-neon-cyan mr-2" />
             <span className="text-xs text-gray-300">Context active: <span className="font-mono text-emerald-400">{activeFile}</span></span>
           </div>
         )}
@@ -651,7 +651,7 @@ The frontend will intercept and execute this automatically.`;
               type="button"
               onClick={toggleRecording}
               disabled={loading}
-              className={`p-3 rounded-xl transition flex items-center justify-center relative ${
+              className={`p-3 rounded-3xl transition flex items-center justify-center relative ${
                 isRecording
                   ? 'bg-red-500 hover:bg-red-600 animate-pulse glow-red'
                   : 'bg-gray-800 hover:bg-gray-700 text-gray-300'

@@ -180,7 +180,7 @@ export function ForgeTermView() {
   };
 
   return (
-    <div className="flex-col gap-4 animate-in" style={{ height: 'calc(100vh - 80px)' }}>
+    <div className="flex flex-col gap-4 gap-4 animate-in" style={{ height: 'calc(100vh - 80px)' }}>
       {/* Header */}
       <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
         <div>
@@ -266,12 +266,12 @@ export function ForgeTermView() {
                 ⚠️ APPROVAL REQUIRED: <strong>{pendingApproval}</strong>
               </div>
               <button
-                className="glass-extreme active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
+                className="glass-extreme active:scale-95 text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
                 onClick={() => { sendToBridge(pendingApproval); setPendingApproval(null); }}
                 style={{ background: '#fb923c', color: '#000', fontWeight: 800 }}
               >Approve & Execute</button>
               <button
-                className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary"
+                className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary"
                 onClick={() => { log('warn', 'Command cancelled by user.'); setPendingApproval(null); }}
               >Cancel</button>
             </div>
@@ -297,12 +297,12 @@ export function ForgeTermView() {
               autoFocus
             />
             <button
-              className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-primary"
+              className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-primary"
               onClick={() => { runCommand(input); setInput(''); }}
               style={{ minWidth: 80 }}
             >Run ↵</button>
             <button
-              className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary"
+              className="glass-extreme active:scale-95 active:scale-95-sm text-cyan-100 border-white/10 hover:border-white/30 transition-all rounded-3xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-secondary"
               onClick={() => setHistory([{ type: 'system', text: 'Cleared.' }])}
             >Clear</button>
           </div>

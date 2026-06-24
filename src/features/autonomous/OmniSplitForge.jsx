@@ -3,7 +3,7 @@ import { SplitPaneLayout } from '../../components/layouts/SplitPaneLayout.jsx';
 
 export default function OmniSplitForge() {
   const leftPane = (
-    <div className="w-full h-full bg-[#0d0d0f] p-6 font-mono text-sm text-dim flex-col gap-4">
+    <div className="w-full h-full bg-[#0d0d0f] p-6 font-mono text-sm text-dim flex flex-col gap-4 gap-4">
       <div className="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
         <span className="text-cyan-400 font-bold">src/core/omni.ts</span>
         <div className="flex gap-2">
@@ -18,7 +18,7 @@ export default function OmniSplitForge() {
   );
 
   const rightPane = (
-    <div className="w-full h-full bg-void p-8 flex-col gap-4 items-center justify-center relative overflow-hidden">
+    <div className="w-full h-full bg-void p-8 flex flex-col gap-4 gap-4 items-center justify-center relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-cyan-900/20 via-black to-black pointer-events-none"></div>
       
       <div className="relative z-10 glass-extreme p-12 rounded-full border-neon-glow flex-col items-center animate-pulse-slow">

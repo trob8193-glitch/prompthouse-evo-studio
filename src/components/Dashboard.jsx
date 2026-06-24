@@ -109,7 +109,7 @@ export const StudioDashboard = () => {
     return (
       <div className="flex gap-4 p-8 w-full h-full overflow-x-auto">
         {['Backlog', 'In Progress', 'Sovereign Verification', 'Done'].map((col) => (
-          <div key={col} className="w-80 shrink-0 bg-[#ebecf0] rounded-xl p-4 text-[#172b4d]">
+          <div key={col} className="w-80 shrink-0 bg-[#ebecf0] rounded-3xl p-4 text-[#172b4d]">
             <h3 className="font-bold mb-4 px-2">{col}</h3>
             {[1, 2, 3].map(i => (
               <div key={i} className="bg-white p-3 rounded shadow-sm mb-3 text-sm">
@@ -129,7 +129,7 @@ export const StudioDashboard = () => {
   if (activeThemeId === 'extremeWindows95') {
     return (
       <div className="p-8 w-full h-full">
-        <div className="w-[600px] h-[400px] bg-[#c0c0c0] border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] flex-col text-black font-sans">
+        <div className="w-[600px] h-[400px] bg-[#c0c0c0] border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] flex flex-col gap-4 text-black font-sans">
           <div className="bg-[#000080] text-white px-2 py-1 flex justify-between font-bold">
             <span>C:\\EVO_STUDIO\\SYSTEM</span>
             <div className="flex gap-1">
@@ -142,7 +142,7 @@ export const StudioDashboard = () => {
           </div>
           <div className="p-4 flex gap-8 flex-wrap bg-white flex-1 border-2 border-t-[#808080] border-l-[#808080] border-r-white border-b-white m-2">
             {[1,2,3,4,5,6].map(i => (
-              <div key={i} className="flex-col items-center gap-1 w-16 cursor-pointer">
+              <div key={i} className="flex flex-col gap-4 items-center gap-1 w-16 cursor-pointer">
                 <div className="w-8 h-8 bg-yellow-200 border-yellow-600 shadow-sm flex items-end">
                    <div className="w-full h-1/3 bg-white/50" />
                 </div>

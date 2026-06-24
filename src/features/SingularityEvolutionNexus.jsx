@@ -118,7 +118,7 @@ export default function SingularityEvolutionNexus() {
       title={<><Brain color="#8a2be2" size={18} /> Singularity Evolution Nexus</>}
       description="Omni-Fusion Node: Combines AI LLM Training, Self-Evolution, Theme Matrices, and Spine Core logic into one hyper-dimensional grid."
       actions={
-        <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={() => { safeFetchBridge('/api/singularity/status').then(d => void('[Singularity] Neural Net Sync:', d)).catch(() => {}); }}>
+        <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all rounded-3xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={() => { safeFetchBridge('/api/singularity/status').then(d => void('[Singularity] Neural Net Sync:', d)).catch(() => {}); }}>
           <RefreshCw size={14} /> Synchronize Neural Nets
         </button>
       }
@@ -145,7 +145,7 @@ export default function SingularityEvolutionNexus() {
               <span className="text-xs font-black text-cyan-400 px-3 py-1 rounded-full bg-cyan-400/10 border-cyan-400/30">IDLE</span>
             </div>
           </div>
-          <button className="w-full mt-6 glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all rounded-xl px-4 py-3 text-xs font-black inline-flex items-center justify-center gap-2" onClick={() => { safeFetchBridge('/api/evolution/cycle', { method: 'POST' }).then(d => void('[Evo] Compaction cycle:', d)).catch(() => {}); }}>
+          <button className="w-full mt-6 glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all rounded-3xl px-4 py-3 text-xs font-black inline-flex items-center justify-center gap-2" onClick={() => { safeFetchBridge('/api/evolution/cycle', { method: 'POST' }).then(d => void('[Evo] Compaction cycle:', d)).catch(() => {}); }}>
             Trigger Compaction Cycle
           </button>
         </div>
@@ -176,11 +176,11 @@ export default function SingularityEvolutionNexus() {
             <h2 className="text-sm font-black text-white uppercase tracking-widest">Spine Core Overrides</h2>
           </div>
           <div className="grid grid-cols-2 gap-4">
-             <div className="p-3 rounded-xl border-white/5 bg-white/5">
+             <div className="p-3 rounded-3xl border-white/5 bg-white/5">
                 <div className="text-xs text-gray-400 font-bold uppercase mb-1">Architecture</div>
                 <div className="text-sm text-white font-black">QuadBrain</div>
              </div>
-             <div className="p-3 rounded-xl border-white/5 bg-white/5">
+             <div className="p-3 rounded-3xl border-white/5 bg-white/5">
                 <div className="text-xs text-gray-400 font-bold uppercase mb-1">Theme</div>
                 <div className="text-sm text-white font-black">Cyber-Orbital</div>
              </div>
@@ -194,15 +194,15 @@ export default function SingularityEvolutionNexus() {
             <h2 className="text-sm font-black text-white uppercase tracking-widest">Bonded Agent Mesh</h2>
           </div>
           <div className="space-y-3">
-             <div className="flex justify-between items-center bg-white/5 px-3 py-2 rounded-lg border border-white/10">
+             <div className="flex justify-between items-center bg-white/5 px-3 py-2 rounded-2xl border border-white/10">
                <span className="text-xs font-bold text-gray-300">OpenAI (GPT-4o)</span>
                <span className="text-[10px] text-[#00ff88] font-black border border-[#00ff88]/30 bg-[#00ff88]/10 px-2 py-1 rounded">BONDED</span>
              </div>
-             <div className="flex justify-between items-center bg-white/5 px-3 py-2 rounded-lg border border-white/10">
+             <div className="flex justify-between items-center bg-white/5 px-3 py-2 rounded-2xl border border-white/10">
                <span className="text-xs font-bold text-gray-300">Anthropic (Claude 3)</span>
                <span className="text-[10px] text-[#00ff88] font-black border border-[#00ff88]/30 bg-[#00ff88]/10 px-2 py-1 rounded">BONDED</span>
              </div>
-             <div className="flex justify-between items-center bg-white/5 px-3 py-2 rounded-lg border border-white/10">
+             <div className="flex justify-between items-center bg-white/5 px-3 py-2 rounded-2xl border border-white/10">
                <span className="text-xs font-bold text-gray-300">Local Omni-Brain</span>
                <span className="text-[10px] text-cyan-400 font-black border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 rounded">ACTIVE</span>
              </div>
@@ -224,7 +224,7 @@ export default function SingularityEvolutionNexus() {
           <div className="flex gap-4">
             <button 
               onClick={() => setIsAutoEvolving(!isAutoEvolving)}
-              className={`glass-extreme hover:border-[#ff0055] transition-all rounded-xl px-6 py-3 text-sm font-black inline-flex items-center gap-3 ${isAutoEvolving ? 'border-[#ff0055] text-[#ff0055] animate-pulse shadow-[0_0_20px_rgba(255,0,85,0.4)]' : 'text-gray-400'}`}
+              className={`glass-extreme hover:border-[#ff0055] transition-all rounded-3xl px-6 py-3 text-sm font-black inline-flex items-center gap-3 ${isAutoEvolving ? 'border-[#ff0055] text-[#ff0055] animate-pulse shadow-[0_0_20px_rgba(255,0,85,0.4)]' : 'text-gray-400'}`}
             >
               <Zap size={18} />
               {isAutoEvolving ? 'HYPER-DRIVE ACTIVE (15s)' : 'ENABLE 15s HYPER-DRIVE'}
@@ -233,7 +233,7 @@ export default function SingularityEvolutionNexus() {
             <button 
               onClick={triggerEvolution}
               disabled={isEvolving || isAutoEvolving}
-              className={`glass-extreme hover:border-[#f5c842] transition-all rounded-xl px-6 py-3 text-sm font-black inline-flex items-center gap-3 ${(isEvolving || isAutoEvolving) ? 'opacity-50 cursor-not-allowed' : 'text-[#f5c842]'}`}
+              className={`glass-extreme hover:border-[#f5c842] transition-all rounded-3xl px-6 py-3 text-sm font-black inline-flex items-center gap-3 ${(isEvolving || isAutoEvolving) ? 'opacity-50 cursor-not-allowed' : 'text-[#f5c842]'}`}
             >
               {isEvolving ? <RefreshCw className="animate-spin" size={18} /> : <Zap size={18} />}
               {isEvolving ? 'Consulting Omni-Brain...' : 'Trigger Autonomous Evolution'}
@@ -269,7 +269,7 @@ export default function SingularityEvolutionNexus() {
                      <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: theme.color, boxShadow: `0 0 10px ${theme.glow}` }}></div>
                      {theme.color2 && <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: theme.color2, boxShadow: `0 0 10px ${theme.glow2 || theme.glow}` }}></div>}
                   </div>
-                  <div className="text-xs text-white/80 mt-4 font-mono leading-relaxed bg-black/60 p-2 rounded-lg border border-white/5 backdrop-blur-md">
+                  <div className="text-xs text-white/80 mt-4 font-mono leading-relaxed bg-black/60 p-2 rounded-2xl border border-white/5 backdrop-blur-md">
                     {theme.evolutionaryReason}
                   </div>
                 </div>
@@ -335,13 +335,13 @@ export default function SingularityEvolutionNexus() {
             <div className="flex gap-2">
               <button 
                 onClick={() => setActivePangram(prev => (prev > 0 ? prev - 1 : pangrams.length - 1))}
-                className="p-2 glass-extreme rounded-lg hover:border-[#00f0ff] transition-colors"
+                className="p-2 glass-extreme rounded-2xl hover:border-[#00f0ff] transition-colors"
               >
                 <ChevronLeft size={16} className="text-white" />
               </button>
               <button 
                 onClick={() => setActivePangram(prev => (prev < pangrams.length - 1 ? prev + 1 : 0))}
-                className="p-2 glass-extreme rounded-lg hover:border-[#00f0ff] transition-colors"
+                className="p-2 glass-extreme rounded-2xl hover:border-[#00f0ff] transition-colors"
               >
                 <ChevronRight size={16} className="text-white" />
               </button>
@@ -391,12 +391,12 @@ function LiveToolCard({ tool, idx }) {
       {tool.htmlSnippet && (
         <div 
           ref={containerRef}
-          className="mt-2 mb-4 w-full p-2 bg-black/50 border border-white/5 rounded-xl shadow-inner overflow-hidden"
+          className="mt-2 mb-4 w-full p-2 bg-black/50 border border-white/5 rounded-3xl shadow-inner overflow-hidden"
           dangerouslySetInnerHTML={{ __html: tool.htmlSnippet }}
         />
       )}
 
-      <button className="mt-auto w-full py-2 bg-white/5 hover:bg-[#a78bfa]/20 border border-white/10 hover:border-[#a78bfa]/50 rounded-lg text-[10px] font-black uppercase tracking-widest text-white transition-all shadow-[0_0_10px_rgba(0,0,0,0.5)]" onClick={() => { void(`[Evolution] Launching module: ${tool.name}`); }}>
+      <button className="mt-auto w-full py-2 bg-white/5 hover:bg-[#a78bfa]/20 border border-white/10 hover:border-[#a78bfa]/50 rounded-2xl text-[10px] font-black uppercase tracking-widest text-white transition-all shadow-[0_0_10px_rgba(0,0,0,0.5)]" onClick={() => { void(`[Evolution] Launching module: ${tool.name}`); }}>
         Launch {tool.name}
       </button>
     </div>
