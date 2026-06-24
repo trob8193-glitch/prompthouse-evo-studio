@@ -62,3 +62,6 @@ buildkit_import/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+
+*.db-wal
+*.db-shm
