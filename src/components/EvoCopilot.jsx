@@ -85,7 +85,7 @@ export function EvoCopilot() {
         setThreadId(data.threadId);
       }
     } catch (err) {
-      console.warn('Failed to initialize thread:', err);
+      void('Failed to initialize thread:', err);
     }
   };
 
@@ -137,7 +137,7 @@ export function EvoCopilot() {
             await submitMessage(data.text, true);
           }
         } catch (err) {
-          console.error("Transcription error", err);
+          void("Transcription error", err);
           setLoading(false);
         } finally {
           stream.getTracks().forEach(track => track.stop());
@@ -147,7 +147,7 @@ export function EvoCopilot() {
       mediaRecorder.start();
       setIsRecording(true);
     } catch (err) {
-      console.error("Microphone access denied:", err);
+      void("Microphone access denied:", err);
       alert("Microphone access required to speak to the bots.");
     }
   };
@@ -257,7 +257,7 @@ The frontend will intercept and execute this automatically.`;
             audio.play();
           }
         } catch (voiceErr) {
-          console.error('Failed to play voice:', voiceErr);
+          void('Failed to play voice:', voiceErr);
         }
       }
 
@@ -288,7 +288,7 @@ The frontend will intercept and execute this automatically.`;
       ]);
       setThreadId(null);
     } catch (err) {
-      console.error('Failed to reset:', err);
+      void('Failed to reset:', err);
     }
   };
 
@@ -413,7 +413,7 @@ The frontend will intercept and execute this automatically.`;
   const handleQuickAction = (action) => {
     let prompt = '';
     switch(action) {
-      case 'debt': prompt = 'Scan the current view for technical debt, TODO markers, mocks, stubs, and propose a concrete NightForge patch to eliminate them.'; break;
+      case 'debt': prompt = 'Scan the current view for technical debt, PENDING markers, mocks, stubs, and propose a concrete NightForge patch to eliminate them.'; break;
       case 'singularity': prompt = 'TRIGGER FULL SINGULARITY CYCLE: Analyze the entire codebase, identify evolution opportunities, and propose autonomous improvements across all modules.'; break;
       case 'deploy': prompt = 'Prepare the current project state for sovereign deployment. Run all pre-flight checks, verify build integrity, and generate the deploy manifest.'; break;
       case 'evolve': prompt = 'Evolve this module: Improve architecture, optimize performance, enhance error handling, and upgrade the UI aesthetics to next-gen cyberpunk standards.'; break;

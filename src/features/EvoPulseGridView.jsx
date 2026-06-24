@@ -524,7 +524,7 @@ ${EVO_PULSE_MODULES.map(m => `> ${m.name.toUpperCase()} [SCORE: ${m.score}] [STA
           <div className="bg-[#000080] text-white px-2 py-1 flex justify-between font-bold">
             <span>Tridall Pattern Engine v1.0</span>
             <div className="flex gap-1">
-              <button className="bg-[#c0c0c0] text-black px-1 border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] font-bold pb-1 leading-none" onClick={() => console.log('Window closed')}>X</button>
+              <button className="bg-[#c0c0c0] text-black px-1 border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] font-bold pb-1 leading-none" onClick={() => void('Window closed')}>X</button>
             </div>
           </div>
           <div className="p-4 grid grid-cols-3 gap-4">

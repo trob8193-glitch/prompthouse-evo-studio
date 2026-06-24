@@ -117,8 +117,8 @@ export default function EvoLayoutDashboard() {
                   <pre className="drop-shadow-[0_0_5px_rgba(0,240,255,0.3)]">{result.code}</pre>
                 </div>
                 <div className="p-5 border-t border-[#00f0ff]/20 flex justify-end gap-4 bg-[#050508]/80 backdrop-blur-md">
-                  <button variant="ghost" className="text-[#b4b4c4]! hover:text-white! flex items-center gap-2 text-[10px]" onClick={() => { if (result?.code) { navigator.clipboard.writeText(result.code); console.log('[EvoLayout] Code copied to clipboard'); } }}><Download size={14}/> EXPORT</button>
-                  <button className="bg-[#00f0ff]/20! text-[#00f0ff]! border! border-[#00f0ff]/50! hover:bg-[#00f0ff]/40! shadow-[0_0_15px_rgba(0,240,255,0.2)]" onClick={() => { console.log('[EvoLayout] Deploying to Forge:', result?.code?.substring(0, 100)); }}>DEPLOY TO FORGE</button>
+                  <button variant="ghost" className="text-[#b4b4c4]! hover:text-white! flex items-center gap-2 text-[10px]" onClick={() => { if (result?.code) { navigator.clipboard.writeText(result.code); void('[EvoLayout] Code copied to clipboard'); } }}><Download size={14}/> EXPORT</button>
+                  <button className="bg-[#00f0ff]/20! text-[#00f0ff]! border! border-[#00f0ff]/50! hover:bg-[#00f0ff]/40! shadow-[0_0_15px_rgba(0,240,255,0.2)]" onClick={() => { void('[EvoLayout] Deploying to Forge:', result?.code?.substring(0, 100)); }}>DEPLOY TO FORGE</button>
                 </div>
               </div>
             ) : (

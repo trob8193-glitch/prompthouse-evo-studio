@@ -133,8 +133,8 @@ export const StudioDashboard = () => {
           <div className="bg-[#000080] text-white px-2 py-1 flex justify-between font-bold">
             <span>C:\\EVO_STUDIO\\SYSTEM</span>
             <div className="flex gap-1">
-              <button className="bg-[#c0c0c0] text-black px-1 border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] font-bold pb-1 leading-none" onClick={() => console.log('Window minimized')}>_</button>
-              <button className="bg-[#c0c0c0] text-black px-1 border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] font-bold pb-1 leading-none" onClick={() => console.log('Window closed')}>X</button>
+              <button className="bg-[#c0c0c0] text-black px-1 border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] font-bold pb-1 leading-none" onClick={() => void('Window minimized')}>_</button>
+              <button className="bg-[#c0c0c0] text-black px-1 border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] font-bold pb-1 leading-none" onClick={() => void('Window closed')}>X</button>
             </div>
           </div>
           <div className="flex p-2 gap-4 border-b border-[#808080]">

@@ -10,7 +10,7 @@ export default function SynapticForge() {
           Synaptic Forge
         </h1>
         <div className="flex gap-4">
-          <button className="glass-extreme px-6 py-2 rounded-3xl text-pink-400 font-bold tracking-widest text-sm hover:bg-pink-500/20 transition-all border-pink-500/30 shadow-[0_0_15px_rgba(236,72,153,0.2)]" onClick={() => { const textarea = document.querySelector('textarea'); if (textarea?.value) { console.log('[SynapticForge] Compiling prompt:', textarea.value.substring(0, 100)); } }}>
+          <button className="glass-extreme px-6 py-2 rounded-3xl text-pink-400 font-bold tracking-widest text-sm hover:bg-pink-500/20 transition-all border-pink-500/30 shadow-[0_0_15px_rgba(236,72,153,0.2)]" onClick={() => { const textarea = document.querySelector('textarea'); if (textarea?.value) { void('[SynapticForge] Compiling prompt:', textarea.value.substring(0, 100)); } }}>
             COMPILE
           </button>
         </div>

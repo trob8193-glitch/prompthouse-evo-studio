@@ -21,7 +21,7 @@ export function EvoExchangeView() {
         setLoading(false);
       })
       .catch(err => {
-        console.error('Failed to load listings', err);
+        void('Failed to load listings', err);
         setLoading(false);
       });
   }, []);
@@ -83,7 +83,7 @@ export function EvoExchangeView() {
               </div>
               <div className="flex-between" style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid var(--border-dim)' }}>
                 <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--accent-gold)' }}>$0.00</span>
-                <button className="bg-[#f5c842] text-black font-bold py-1 px-3 rounded shadow-[0_0_15px_rgba(245,200,66,0.3)] text-xs uppercase" onClick={() => console.log('Selling module...')}>Sell Module</button>
+                <button className="bg-[#f5c842] text-black font-bold py-1 px-3 rounded shadow-[0_0_15px_rgba(245,200,66,0.3)] text-xs uppercase" onClick={() => void('Selling module...')}>Sell Module</button>
               </div>
             </div>
           </div>

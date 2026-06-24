@@ -40,7 +40,7 @@ export default function SingularityEvolutionNexus() {
     try {
       const fwRes = await safeFetchBridge('/api/cost-firewall/status');
       if (fwRes && fwRes.data && (fwRes.data.status === 'BLOCKED' || fwRes.data.enforced || fwRes.data.budgetExceeded)) {
-        console.warn("[Cost Firewall V2] Evolution blocked to protect budget.");
+        void("[Cost Firewall V2] Evolution blocked to protect budget.");
         alert("🛡️ COST FIREWALL V2 ENGAGED: API budgets reached. Aborting Hyper-Drive loop to protect ledger.");
         setIsAutoEvolving(false);
         setIsEvolving(false);
@@ -48,7 +48,7 @@ export default function SingularityEvolutionNexus() {
         return;
       }
     } catch (fwErr) {
-      console.warn("[Cost Firewall V2] Verification failed, proceeding...", fwErr);
+      void("[Cost Firewall V2] Verification failed, proceeding...", fwErr);
     }
 
     const prev = dynamicEvolutions.length > 0 ? JSON.stringify(dynamicEvolutions[dynamicEvolutions.length - 1]) : '';
@@ -77,7 +77,7 @@ export default function SingularityEvolutionNexus() {
           structuralLayout: result.theme.structuralLayout
         });
       } else {
-        console.error("Evolution failed:", result.error);
+        void("Evolution failed:", result.error);
         alert(`Autonomous Evolution Failed: ${result.error}. Ensure the AI Bridge is online and API keys are bonded.`);
         setIsAutoEvolving(false); // Kill loop on error
       }
@@ -118,7 +118,7 @@ export default function SingularityEvolutionNexus() {
       title={<><Brain color="#8a2be2" size={18} /> Singularity Evolution Nexus</>}
       description="Omni-Fusion Node: Combines AI LLM Training, Self-Evolution, Theme Matrices, and Spine Core logic into one hyper-dimensional grid."
       actions={
-        <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={() => { safeFetchBridge('/api/singularity/status').then(d => console.log('[Singularity] Neural Net Sync:', d)).catch(() => {}); }}>
+        <button className="glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all rounded-xl px-4 py-2 text-xs font-black inline-flex items-center gap-2" onClick={() => { safeFetchBridge('/api/singularity/status').then(d => void('[Singularity] Neural Net Sync:', d)).catch(() => {}); }}>
           <RefreshCw size={14} /> Synchronize Neural Nets
         </button>
       }
@@ -145,7 +145,7 @@ export default function SingularityEvolutionNexus() {
               <span className="text-xs font-black text-cyan-400 px-3 py-1 rounded-full bg-cyan-400/10 border-cyan-400/30">IDLE</span>
             </div>
           </div>
-          <button className="w-full mt-6 glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all rounded-xl px-4 py-3 text-xs font-black inline-flex items-center justify-center gap-2" onClick={() => { safeFetchBridge('/api/evolution/cycle', { method: 'POST' }).then(d => console.log('[Evo] Compaction cycle:', d)).catch(() => {}); }}>
+          <button className="w-full mt-6 glass-extreme text-neon-cyan hover:border-cyan-400/80 transition-all rounded-xl px-4 py-3 text-xs font-black inline-flex items-center justify-center gap-2" onClick={() => { safeFetchBridge('/api/evolution/cycle', { method: 'POST' }).then(d => void('[Evo] Compaction cycle:', d)).catch(() => {}); }}>
             Trigger Compaction Cycle
           </button>
         </div>
@@ -373,7 +373,7 @@ function LiveToolCard({ tool, idx }) {
         const executeLogic = new F('container', tool.jsSnippet);
         executeLogic(containerRef.current);
       } catch (err) {
-        console.error(`[Evolution x3] Error executing AI logic for ${tool.name}:`, err);
+        void(`[Evolution x3] Error executing AI logic for ${tool.name}:`, err);
       }
     }
   }, [tool.jsSnippet, tool.name]);
@@ -396,7 +396,7 @@ function LiveToolCard({ tool, idx }) {
         />
       )}
 
-      <button className="mt-auto w-full py-2 bg-white/5 hover:bg-[#a78bfa]/20 border border-white/10 hover:border-[#a78bfa]/50 rounded-lg text-[10px] font-black uppercase tracking-widest text-white transition-all shadow-[0_0_10px_rgba(0,0,0,0.5)]" onClick={() => { console.log(`[Evolution] Launching module: ${tool.name}`); }}>
+      <button className="mt-auto w-full py-2 bg-white/5 hover:bg-[#a78bfa]/20 border border-white/10 hover:border-[#a78bfa]/50 rounded-lg text-[10px] font-black uppercase tracking-widest text-white transition-all shadow-[0_0_10px_rgba(0,0,0,0.5)]" onClick={() => { void(`[Evolution] Launching module: ${tool.name}`); }}>
         Launch {tool.name}
       </button>
     </div>

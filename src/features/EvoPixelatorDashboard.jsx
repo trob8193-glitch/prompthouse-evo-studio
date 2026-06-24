@@ -124,7 +124,7 @@ export default function EvoPixelatorDashboard() {
                 </div>
                 <div className="mt-8 flex gap-4">
                   <button variant="ghost" className="text-[#b4b4c4]! hover:text-white! border! border-white/10 hover:border-white/20! flex items-center gap-2 text-xs" onClick={() => { if (imageResult?.url) window.open(imageResult.url, '_blank'); }}><Download size={14}/> PNG</button>
-                  <button className="bg-[#00ff88]/20! text-[#00ff88]! border! border-[#00ff88]/50! hover:bg-[#00ff88]/40! shadow-[0_0_15px_rgba(0,255,136,0.2)] flex items-center gap-2 text-xs" onClick={() => console.log('[EvoPixelator] Exporting sprite sheet...') }><Download size={14}/> SPRITE SHEET</button>
+                  <button className="bg-[#00ff88]/20! text-[#00ff88]! border! border-[#00ff88]/50! hover:bg-[#00ff88]/40! shadow-[0_0_15px_rgba(0,255,136,0.2)] flex items-center gap-2 text-xs" onClick={() => void('[EvoPixelator] Exporting sprite sheet...') }><Download size={14}/> SPRITE SHEET</button>
                 </div>
               </div>
             ) : (

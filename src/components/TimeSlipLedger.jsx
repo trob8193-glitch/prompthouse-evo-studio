@@ -113,7 +113,7 @@ export function TimeSlipLedger() {
             
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 12, color: '#f1f5f9', fontWeight: 600, marginBottom: 4 }}>{commit.msg}</div>
-              <button onClick={() => console.log('Exporting slip...')} style={{ background: 'none', border: 'none', padding: 0, fontSize: 10, color: '#64748b', display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}><Download size={10}/> Export</button>
+              <button onClick={() => void('Exporting slip...')} style={{ background: 'none', border: 'none', padding: 0, fontSize: 10, color: '#64748b', display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}><Download size={10}/> Export</button>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 10, color: '#64748b' }}>
                 <span style={{ fontFamily: 'monospace', color: '#3b82f6' }}>{commit.id}</span>
                 <span>•</span>
@@ -126,7 +126,7 @@ export function TimeSlipLedger() {
                 style={{
                 marginTop: 8, background: '#1e293b', border: '1px solid #334155', borderRadius: 4,
                 padding: '4px 8px', fontSize: 10, color: '#64748b', display: 'flex', alignItems: 'center', gap: 4, cursor: 'not-allowed',
-              }} onClick={() => console.log('Reverting to commit', commit.id)}>
+              }} onClick={() => void('Reverting to commit', commit.id)}>
                 <Rewind size={10} /> Revert to {commit.id}
               </button>
             </div>

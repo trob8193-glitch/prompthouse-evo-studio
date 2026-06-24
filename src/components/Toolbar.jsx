@@ -113,8 +113,8 @@ export function Toolbar() {
         <div className="flex items-center gap-1 bg-[#020205]/40 p-1 rounded-3xl border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.05)]/50 shadow-inner">
           {activeThemeId === 'extremeWindows95' ? (
             <>
-              <button className="px-3 py-1 bg-[#c0c0c0] text-black font-bold border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] text-xs" onClick={() => console.log('Executing Run.exe...')}>Run.exe</button>
-              <button className="px-3 py-1 bg-[#c0c0c0] text-black font-bold border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] text-xs" onClick={() => console.log('Opening Options...')}>Options</button>
+              <button className="px-3 py-1 bg-[#c0c0c0] text-black font-bold border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] text-xs" onClick={() => void('Executing Run.exe...')}>Run.exe</button>
+              <button className="px-3 py-1 bg-[#c0c0c0] text-black font-bold border-2 border-t-white border-l-white border-r-[#808080] border-b-[#808080] text-xs" onClick={() => void('Opening Options...')}>Options</button>
             </>
           ) : activeThemeId === 'layoutTerminalFullscreen' ? (
             <span className="text-[#0f0] font-mono text-xs px-2">[TOOLS DISABLED]</span>

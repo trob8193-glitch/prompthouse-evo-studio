@@ -61,7 +61,7 @@ export class SovereignFirewall {
           compactedContext = "[RAG CONTEXT]\n" + results.map(r => `File: ${r.metadata?.path || r.id}\n${r.text}`).join('\n\n') + "\n[END RAG CONTEXT]\n\n" + compactedContext;
         }
       } catch (e) {
-        console.warn('[FIREWALL] RAG Vector Search failed:', e.message);
+        void('[FIREWALL] RAG Vector Search failed:', e.message);
       }
     }
 
@@ -130,7 +130,7 @@ export class SovereignFirewall {
           try {
             const parsed = JSON.parse(responseContent.trim());
             if (parsed.action === 'test_mutation') {
-              console.log(`[FIREWALL] Local Model invoked Tool: test_mutation`);
+              void(`[FIREWALL] Local Model invoked Tool: test_mutation`);
               const success = await SHADOW_FORGE.shadowBuild(parsed.fileId || 'temp', parsed.logic || '');
               toolAttempts++;
               const resultMessage = success ? 'Tool Result: The code compiled and is safe. Now provide your final answer to the user.' : 'Tool Result: The code FAILED syntax or AST checks. Please fix the errors and output either the fixed JSON or the final answer.';
@@ -144,7 +144,7 @@ export class SovereignFirewall {
         }
         return responseContent;
       } catch (err) {
-        console.warn('[FIREWALL] Local model failed, falling back to OpenAI...', err.message);
+        void('[FIREWALL] Local model failed, falling back to OpenAI...', err.message);
         route.provider = 'openai'; // Fallback
       }
     }

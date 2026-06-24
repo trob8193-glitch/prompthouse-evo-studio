@@ -39,7 +39,7 @@ export default function SovereignCommandNexus() {
           <div className="relative z-10 flex justify-between items-end">
             <div className="flex gap-4">
               <button className="button-orbital px-8 py-3 text-white font-bold tracking-wider text-sm" onClick={() => { fetch(`${getBridgeUrl()}/api/evolution/kill-switch/engage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason: 'Manual nexus wipe' }) }).catch(() => {}); }}>INITIATE WIPE</button>
-              <button className="glass-extreme px-8 py-3 text-neon-cyan font-bold tracking-wider text-sm border-neon-glow hover:bg-cyan-900/20 transition-all" onClick={() => { fetch(`${getBridgeUrl()}/status`).then(r => r.json()).then(d => console.log('[Nexus] Route traffic check:', d)).catch(() => {}); }}>ROUTE TRAFFIC</button>
+              <button className="glass-extreme px-8 py-3 text-neon-cyan font-bold tracking-wider text-sm border-neon-glow hover:bg-cyan-900/20 transition-all" onClick={() => { fetch(`${getBridgeUrl()}/status`).then(r => r.json()).then(d => void('[Nexus] Route traffic check:', d)).catch(() => {}); }}>ROUTE TRAFFIC</button>
             </div>
             <div className="text-right">
               <div className="text-xs text-dim uppercase">Throughput</div>

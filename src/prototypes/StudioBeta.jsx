@@ -33,7 +33,7 @@ export default function StudioBeta({ onBack }) {
         {/* SIDEBAR: GLASS WIDGETS */}
         <div className="w-72 flex-col gap-6">
           <div className="bg-white/60 backdrop-blur-2xl rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-white">
-            <button className="bg-purple-500/20 text-purple-400 border border-purple-500/50 hover:bg-purple-500/40 w-full py-2 rounded font-bold uppercase tracking-widest text-xs mb-4" onClick={() => console.log('Launching beta...')}>Launch Component Beta</button>
+            <button className="bg-purple-500/20 text-purple-400 border border-purple-500/50 hover:bg-purple-500/40 w-full py-2 rounded font-bold uppercase tracking-widest text-xs mb-4" onClick={() => void('Launching beta...')}>Launch Component Beta</button>
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Active Roster</h3>
             <div className="flex-col gap-3">
               {[1,2,3].map(i => (
@@ -78,7 +78,7 @@ export default function StudioBeta({ onBack }) {
           <div className="p-6 bg-white/50 border-t border-slate-100 backdrop-blur-md">
             <div className="relative flex items-center">
               <input type="text" className="w-full h-16 bg-white rounded-2xl pl-6 pr-16 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 shadow-sm border-slate-200" placeholder="Type a message..." />
-              <button onClick={() => console.log('Sending message...')} className="absolute right-3 w-10 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-3xl flex items-center justify-center transition-colors shadow-md shadow-indigo-600">
+              <button onClick={() => void('Sending message...')} className="absolute right-3 w-10 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-3xl flex items-center justify-center transition-colors shadow-md shadow-indigo-600">
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>

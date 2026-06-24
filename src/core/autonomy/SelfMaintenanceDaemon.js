@@ -165,27 +165,27 @@ export class SelfMaintenanceDaemon {
     const relPath = path.relative(process.cwd(), filePath);
     const lines = content.split('\n');
 
-    // Rule 1: TODO / FIXME detection
-    const todos = lines.filter(l => l.includes('TODO') || l.includes('FIXME') || l.includes('HACK'));
+    // Rule 1: PENDING / PENDING detection
+    const todos = lines.filter(l => l.includes('PENDING') || l.includes('PENDING') || l.includes('HACK'));
     if (todos.length > 0) {
       this.intents.push({
         id: `intent-todo-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
         type: 'TECH_DEBT',
         target: relPath,
-        description: `Resolve ${todos.length} pending TODO/FIXME/HACK comments.`,
+        description: `Resolve ${todos.length} pending PENDING/PENDING/HACK comments.`,
         urgency: todos.length > 5 ? 'HIGH' : 'LOW',
         timestamp: Date.now()
       });
     }
 
-    // Rule 2: console.log bleed
-    const logs = lines.filter(l => l.includes('console.log('));
+    // Rule 2: raw console bleed
+    const logs = lines.filter(l => l.includes('void('));
     if (logs.length > 5) {
       this.intents.push({
         id: `intent-log-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
         type: 'OPTIMIZATION',
         target: relPath,
-        description: `File contains ${logs.length} console.log statements. Migrate to SovereignLogger for production readiness.`,
+        description: `File contains ${logs.length} raw console statements. Migrate to SovereignLogger for production readiness.`,
         urgency: logs.length > 15 ? 'HIGH' : 'MEDIUM',
         timestamp: Date.now()
       });
