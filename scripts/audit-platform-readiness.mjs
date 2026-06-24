@@ -132,7 +132,7 @@ async function auditDeadItems() {
 
   try {
     Log.info('  [Dead Surface Hunter] Scanning UI for disconnected buttons/routes...');
-    execSync('npx vitest run tests/dead-surface-hunter.test.jsx', { stdio: 'inherit' });
+    execSync('npx vitest run tests/dead-surface-hunter.test.js', { stdio: 'inherit' });
     logPass('Dead Surface Hunter passed successfully.');
   } catch (err) {
     logFail('Dead Surface Hunter found issues (see above output).');
