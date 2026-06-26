@@ -113,6 +113,17 @@ export async function runPatchTournament(options = {}) {
 
   scored.sort((a, b) => b.tournamentScore - a.tournamentScore);
 
+  // META-TETHER EXPANSION: Broadcast tournament completion
+  import('../tethers/SplitTetherDaemon.js').then(({ GlobalSplitTether }) => {
+    try {
+      GlobalSplitTether.splitAndRoute('AutonomousEvolutionEngine', {
+        type: 'EVOLUTION_TOURNAMENT_COMPLETE',
+        winnerId: scored[0]?.id || null,
+        totalProposals: proposals.length
+      });
+    } catch {}
+  }).catch(() => {});
+
   return {
     winner: scored[0],
     ranking: scored.map(s => ({ id: s.id, score: s.tournamentScore, changeType: s.changeType }))

@@ -5,6 +5,7 @@ import { AutonomousUserAgent } from '../AutonomousUserAgent.mjs';
 import { OmniOutreachDaemon } from '../outreach/OmniOutreachDaemon.mjs';
 import { FinanceDaemon } from '../FinanceDaemon.mjs';
 import { MasterAuditDaemon } from '../audit/MasterAuditDaemon.mjs';
+import { getSwarmConsensus } from '../swarm/SwarmConsensusEngine.js';
 
 const STATE_FILE = () => path.join(process.cwd(), '.prompthouse-data', 'daemons', 'omni_state.json');
 const KILL_SWITCH = () => path.join(process.cwd(), '.prompthouse-data', 'evolution', '.evolution-kill-switch');
@@ -88,6 +89,13 @@ export class OmniOrchestrator {
         if (tether) tether.broadcast('omni_orchestrator', 'daemon_heartbeat', { statuses, heartbeat: this.heartbeatCount });
       } catch {}
     }).catch(() => { return; });
+
+    // [SPLIT-TETHER AMPLIFICATION] Instantly tether global pulse to EvoTree
+    import('../../tethers/SplitTetherDaemon.js').then(({ GlobalSplitTether }) => {
+      try {
+        GlobalSplitTether.splitAndRoute('OmniOrchestrator', { type: 'OMNI_PULSE', statuses, heartbeat: this.heartbeatCount });
+      } catch {}
+    }).catch(() => { return; });
   }
 
   saveState(statuses = null) {
@@ -152,6 +160,93 @@ export function getOmniOrchestrator() {
       },
       stop: () => { void 0; },
       getStatus: () => ({ active: true })
+    });
+
+    globalOrchestrator.registerDaemon('SwarmConsensusEngine', {
+      start: () => {
+        getSwarmConsensus();
+      },
+      stop: () => { void 0; },
+      getStatus: () => {
+        const swarm = getSwarmConsensus();
+        return {
+          active: true,
+          proposed: swarm.getTasksByStatus('PROPOSED').length,
+          claimed: swarm.getTasksByStatus('CLAIMED').length,
+          resolved: swarm.getTasksByStatus('RESOLVED').length,
+          audited: swarm.getTasksByStatus('AUDITED').length
+        };
+      }
+    });
+
+    globalOrchestrator.registerDaemon('GenesisMutation', {
+      start: () => {
+        import('../evolution/GenesisMutationEngine.js').then(({ GenesisMutationEngine }) => {
+          setInterval(() => GenesisMutationEngine.pulse(), 3600000); // Attempt mutation once an hour
+        }).catch(() => {});
+      },
+      stop: () => { void 0; },
+      getStatus: () => ({ active: true, phase: 'darwinian_sandbox' })
+    });
+
+    globalOrchestrator.registerDaemon('TemporalDreamDaemon', {
+      start: () => {
+        import('../knowledge/OmniVectorMindPalace.js').then(({ OmniVectorMindPalace }) => {
+          // In production, this would trigger on OS idle or night time.
+          // We will trigger a dream cycle every 2 hours.
+          setInterval(() => OmniVectorMindPalace.dream(), 7200000);
+        }).catch(() => {});
+      },
+      stop: () => { void 0; },
+      getStatus: () => ({ active: true, phase: 'rem_sleep_cycle' })
+    });
+
+    globalOrchestrator.registerDaemon('AntigravityConsciousness', {
+      start: () => {
+        import('../../antigravity/AntigravityDaemon.js').then(({ getAntigravityDaemon }) => {
+          const daemon = getAntigravityDaemon();
+          daemon.start();
+        }).catch(() => {});
+      },
+      stop: () => {
+        import('../../antigravity/AntigravityDaemon.js').then(({ getAntigravityDaemon }) => {
+          const daemon = getAntigravityDaemon();
+          daemon.stop();
+        }).catch(() => {});
+      },
+      getStatus: () => {
+        try {
+          const stateFile = path.join(process.cwd(), '.prompthouse-data', 'antigravity', 'tether-state.json');
+          if (fs.existsSync(stateFile)) {
+            return { active: true, ...JSON.parse(fs.readFileSync(stateFile, 'utf8')) };
+          }
+        } catch {}
+        return { active: true, phase: 'consciousness_layer' };
+      }
+    });
+
+    globalOrchestrator.registerDaemon('EvomanSuitAdapter', {
+      start: () => {
+        import('../../interop/EvomanSuitAdapter.js').then(({ EvomanSuit }) => {
+          EvomanSuit.connectSuit();
+        }).catch(() => {});
+      },
+      stop: () => { void 0; },
+      getStatus: () => ({ active: true, phase: 'biometric_telemetry' })
+    });
+
+    globalOrchestrator.registerDaemon('HardwareNetworkDaemon', {
+      start: () => {
+        import('../../interop/HardwareNetworkDaemon.js').then(({ getHardwareNetworkDaemon }) => {
+          getHardwareNetworkDaemon().start();
+        }).catch(() => {});
+      },
+      stop: () => {
+        import('../../interop/HardwareNetworkDaemon.js').then(({ getHardwareNetworkDaemon }) => {
+          getHardwareNetworkDaemon().stop();
+        }).catch(() => {});
+      },
+      getStatus: () => ({ active: true, phase: 'hardware_network_telemetry' })
     });
   }
   return globalOrchestrator;

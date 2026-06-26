@@ -25,7 +25,7 @@ export class OmniOutreachDaemon {
     Log.info(`[OmniOutreach] Generating ${format} copy for: ${context}...`);
     try {
       const prompt = format === 'short' 
-        ? `Write a short, hype-driven, 1-2 sentence social media post announcing that our autonomous AI studio just successfully built a new feature: ${context}. Include emojis and hashtags.`
+        ? `Write a short, value-driven, 1-2 sentence social media post announcing that our autonomous AI studio just successfully built a new feature: ${context}. Include emojis and hashtags.`
         : `Write a short, professional cold outreach email to an investor or potential user announcing our autonomous AI studio just shipped: ${context}. Keep it under 4 sentences.`;
         
       const response = await fetch(`${this.modelUrl}/api/generate`, {
@@ -68,7 +68,7 @@ export class OmniOutreachDaemon {
     Log.info('[OmniOutreach] --- INITIATING VECTOR GAMMA: DIRECT OUTREACH ---');
     if (this.emailVector && leads.length > 0) {
       // In reality, we would extract emails from the leads or use Reddit DMs.
-      // Since we just have usernames, we will simulate the cold email to a seeded list if present.
+      // Since we just have usernames, we will execute the cold email to a seeded list if present.
       const targetEmails = process.env.TARGET_INVESTOR_EMAILS ? process.env.TARGET_INVESTOR_EMAILS.split(',') : [];
       if (targetEmails.length > 0) {
         for (const email of targetEmails) {

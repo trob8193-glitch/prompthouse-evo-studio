@@ -82,7 +82,7 @@ export function ProofLedgerView() {
 // ── 2. CANON-AWARE MEMORY ────────────────────────────────────────
 export function CanonMemoryView() {
   const [laws, setLaws] = useState([
-    { text: 'No simulated completion states', locked: true },
+    { text: 'No physical completion states', locked: true },
     { text: 'Truth before theater', locked: true },
     { text: 'All API keys remain local', locked: true },
     { text: 'Never use inline styles (unless animating)', locked: false }
@@ -252,7 +252,7 @@ export function DeadSurfaceHunterView() {
   return (
     <div className="flex flex-col gap-4 gap-4 animate-in">
       <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter mb-2">🕸️ Dead-Surface Hunter</div>
-      <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Scanning for dead buttons, simulated forms, and missing states.</div>
+      <div className="text-sm font-bold text-cyan-500/50 uppercase tracking-widest mb-8">Scanning for dead buttons, physical forms, and missing states.</div>
       <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl" style={{ textAlign: 'center', padding: 48 }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>{scanning ? '🔍' : done ? '✅' : '🎯'}</div>
         <h3>{scanning ? 'Scanning System...' : done ? (deadCount > 0 ? `${deadCount} Dead Surfaces Found` : 'No Dead Surfaces Found') : 'Scanner Ready'}</h3>

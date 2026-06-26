@@ -99,6 +99,7 @@
   --hologram-color-60: rgba(0, 240, 255, 0.6);
   --hologram-color-80: rgba(0, 240, 255, 0.8);
   --zap-color-1: rgba(255, 255, 255, 0.8);
+
   --zap-color-2: rgba(255, 170, 0, 0.8);
   --bg-glass-light: rgba(255, 255, 255, 0.1);
   --glow-c1: #00f0ff;
@@ -107,6 +108,16 @@
   --glow-c4: #00ff88;
   --glow-speed: 4s;
   --tw-gradient-stops: initial;
+}
+
+@keyframes gem-breath {
+  0%, 100% { box-shadow: 0 0 20px rgba(0,240,255,0.2), inset 0 0 10px rgba(0,240,255,0.1); border-color: rgba(0,240,255,0.3); }
+  50% { box-shadow: 0 0 40px rgba(0,240,255,0.5), inset 0 0 20px rgba(0,240,255,0.3); border-color: rgba(0,240,255,0.8); }
+}
+
+@keyframes glass-pulse {
+  0%, 100% { backdrop-filter: blur(24px) brightness(1); }
+  50% { backdrop-filter: blur(32px) brightness(1.2); }
 }
 
 html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-primary); font-family: var(--font-sans); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
@@ -134,7 +145,27 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
 }
 
 /* ── LAYOUT ── */
-.app { display: flex; height: 100vh; overflow: hidden; background: var(--bg-void); }
+@keyframes root-breathe {
+  0%, 100% { box-shadow: inset 0 0 0 rgba(0, 240, 255, 0); }
+  50% { box-shadow: inset 0 0 100px rgba(0, 240, 255, 0.05); }
+}
+
+.app { 
+  display: flex; 
+  height: 100vh; 
+  overflow: hidden; 
+  background: var(--bg-void); 
+  animation: root-breathe 12s infinite ease-in-out;
+  position: relative;
+}
+.app::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.03) 0%, transparent 70%);
+  z-index: 9999;
+}
 
 /* ── SIDEBAR ── */
 .sidebar {
@@ -152,6 +183,7 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
   box-shadow: var(--shadow-md);
   position: relative;
   z-index: 50;
+  animation: glass-pulse 8s infinite alternate;
 }
 .sidebar::before {
   content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -274,6 +306,7 @@ html, body, #root { height: 100%; background: var(--bg-void); color: var(--text-
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
   z-index: 40;
+  animation: glass-pulse 10s infinite alternate;
 }
 .page-title { font-size: 24px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(255,255,255,0.1); }
 .page-subtitle { font-size: 13px; font-weight: 500; color: var(--text-dim); margin-top: 4px; }

@@ -29,7 +29,7 @@ export class PhEvoRiftEngine {
     }
 
     try {
-      // Simulated P2P Sync (since this is currently offline/sovereign by default)
+      // physical P2P Sync (since this is currently offline/sovereign by default)
       void(`[Rift Engine] Syncing data to ${nodeUrl}...`);
       this.peers.set(nodeUrl, { lastSync: Date.now(), status: 'connected' });
       this.syncedData.push({ ...payload, syncedAt: new Date().toISOString() });

@@ -113,6 +113,8 @@ ${originalCode}`;
           const vm = await import('vm');
           new vm.Script(evolvedCode);
           console.log('[Self-Evolution] ✅ VM AST Syntax validation passed.');
+        } else if (ext === '.jsx' || ext === '.tsx') {
+          console.log('[Self-Evolution] ⚠️ Bypassing strict Node syntax check for JSX/TSX file.');
         } else {
           const { execFileSync: execCheck } = await import('child_process');
           execCheck(process.execPath, ['--check', fullPath], { stdio: 'pipe', timeout: 5000 });

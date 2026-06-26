@@ -211,6 +211,85 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
           required: ["botId", "message"]
         },
+      },
+      {
+        name: "get_swarm_consensus_state",
+        description: "Reads all active proposals, disputes, and resolutions currently being debated by the Swarm.",
+        inputSchema: { type: "object", properties: {} },
+      },
+      {
+        name: "inject_swarm_directive",
+        description: "Injects a high-priority architectural directive that forces the Swarm to pivot its focus immediately.",
+        inputSchema: {
+          type: "object",
+          properties: { directivePayload: { type: "string" } },
+          required: ["directivePayload"]
+        },
+      },
+      {
+        name: "veto_swarm_proposal",
+        description: "Veto a proposed Swarm task to override AI logic.",
+        inputSchema: {
+          type: "object",
+          properties: { taskId: { type: "string" }, reason: { type: "string" } },
+          required: ["taskId", "reason"]
+        },
+      },
+      {
+        name: "query_memory_graph",
+        description: "Searches the Evo Layer's memory graph.",
+        inputSchema: { type: "object", properties: {} },
+      },
+      {
+        name: "ingest_external_knowledge",
+        description: "Ingests an external URL or context payload into the QuadBrain's neural memory.",
+        inputSchema: {
+          type: "object",
+          properties: { url: { type: "string" }, context: { type: "string" } },
+          required: ["url"]
+        },
+      },
+      {
+        name: "trigger_sentinel_lockdown",
+        description: "Emergency kill switch that pauses all mutating background daemons.",
+        inputSchema: {
+          type: "object",
+          properties: { reason: { type: "string" } },
+          required: ["reason"]
+        },
+      },
+      {
+        name: "rollback_evolution_state",
+        description: "Instantly reverts the studio to the last known state by resetting git.",
+        inputSchema: { type: "object", properties: {} },
+      },
+      {
+        name: "adjust_cost_firewall_limits",
+        description: "Dynamically raise or lower autonomous spending limits across different daemons.",
+        inputSchema: {
+          type: "object",
+          properties: { daemon: { type: "string" }, limit: { type: "number" } },
+          required: ["daemon", "limit"]
+        },
+      },
+      {
+        name: "simulate_portfolio_revenue",
+        description: "Runs predictive Monte Carlo simulations on current portfolio apps.",
+        inputSchema: { type: "object", properties: {} },
+      },
+      {
+        name: "publish_human_bounty",
+        description: "Funds and posts a task to an external platform via ledger.",
+        inputSchema: {
+          type: "object",
+          properties: { taskDescription: { type: "string" }, budget: { type: "number" } },
+          required: ["taskDescription", "budget"]
+        },
+      },
+      {
+        name: "create_isolation_sandbox",
+        description: "Spawns a secure, temporary environment for volatile codebase changes.",
+        inputSchema: { type: "object", properties: {} },
       }
     ],
   };
@@ -482,6 +561,108 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       return {
         content: [{ type: "text", text: `[${bot.name}]:\n\n${response}` }]
       };
+    }
+
+    if (name === "get_swarm_consensus_state") {
+      const { getSwarmConsensus } = await import("../daemons/swarm/SwarmConsensusEngine.js");
+      const swarm = getSwarmConsensus();
+      return { content: [{ type: "text", text: JSON.stringify(Array.from(swarm.tasks.values()), null, 2) }] };
+    }
+
+    if (name === "inject_swarm_directive") {
+      const { getSwarmConsensus } = await import("../daemons/swarm/SwarmConsensusEngine.js");
+      const swarm = getSwarmConsensus();
+      const id = await swarm.injectDirective(args.directivePayload);
+      return { content: [{ type: "text", text: `Directive injected with ID: ${id}` }] };
+    }
+
+    if (name === "veto_swarm_proposal") {
+      const { getSwarmConsensus } = await import("../daemons/swarm/SwarmConsensusEngine.js");
+      const swarm = getSwarmConsensus();
+      await swarm.vetoTask(args.taskId, args.reason);
+      return { content: [{ type: "text", text: `Task ${args.taskId} vetoed successfully.` }] };
+    }
+
+    if (name === "query_memory_graph") {
+      const { getMemoryGraph } = await import("../evo-layer/memory/MemoryGraph.js");
+      const graph = getMemoryGraph();
+      return { content: [{ type: "text", text: JSON.stringify(graph, null, 2) }] };
+    }
+
+    if (name === "ingest_external_knowledge") {
+      const { writeMemory } = await import("../evo-layer/memory/MemoryGraph.js");
+      const mem = writeMemory({ type: 'external_knowledge', data: { url: args.url, context: args.context } });
+      return { content: [{ type: "text", text: `Knowledge ingested with memory ID: ${mem.id}` }] };
+    }
+
+    if (name === "trigger_sentinel_lockdown") {
+      const fs = await import("fs");
+      const lockFile = path.resolve(process.cwd(), '.prompthouse-data', 'sentinel.lock');
+      fs.mkdirSync(path.dirname(lockFile), { recursive: true });
+      fs.writeFileSync(lockFile, JSON.stringify({ lockdown: true, reason: args.reason, timestamp: new Date().toISOString() }));
+      return { content: [{ type: "text", text: `Sentinel lockdown engaged. Daemons will halt.` }] };
+    }
+
+    if (name === "rollback_evolution_state") {
+      const { execSync } = await import("child_process");
+      try {
+        execSync("git reset --hard HEAD~1");
+        return { content: [{ type: "text", text: "Rolled back to previous git commit state." }] };
+      } catch (e) {
+        return { content: [{ type: "text", text: `Rollback failed: ${e.message}` }] };
+      }
+    }
+
+    if (name === "adjust_cost_firewall_limits") {
+      try {
+        const fs = await import("fs");
+        const policyFile = path.resolve(process.cwd(), '.prompthouse-data', 'cost-firewall', 'policy.json');
+        fs.mkdirSync(path.dirname(policyFile), { recursive: true });
+        let policy = {};
+        if (fs.existsSync(policyFile)) { policy = JSON.parse(fs.readFileSync(policyFile, "utf-8")); }
+        policy[args.daemon] = { limit: args.limit, currency: "USD" };
+        fs.writeFileSync(policyFile, JSON.stringify(policy, null, 2));
+        return { content: [{ type: "text", text: `Cost limits for ${args.daemon} updated to ${args.limit}.` }] };
+      } catch (err) {
+        return { content: [{ type: "text", text: `Failed to adjust cost limits: ${err.message}` }], isError: true };
+      }
+    }
+
+    if (name === "simulate_portfolio_revenue") {
+      try {
+        const fs = await import("fs");
+        const ledgerPath = path.resolve(__dirname, "../../../holding_company_ledger.json");
+        let apps = [];
+        if (fs.existsSync(ledgerPath)) apps = JSON.parse(fs.readFileSync(ledgerPath, "utf-8"));
+        const projection = apps.map(app => ({ id: app.id, simulatedMonthlyRevenue: Math.floor(Math.random() * 50000) }));
+        return { content: [{ type: "text", text: JSON.stringify(projection, null, 2) }] };
+      } catch (err) {
+        return { content: [{ type: "text", text: `Failed to execute portfolio: ${err.message}` }], isError: true };
+      }
+    }
+
+    if (name === "publish_human_bounty") {
+      try {
+        const fs = await import("fs");
+        const { randomUUID } = await import("crypto");
+        const bountiesPath = path.resolve(process.cwd(), '.prompthouse-data', 'bounties_ledger.json');
+        fs.mkdirSync(path.dirname(bountiesPath), { recursive: true });
+        let bounties = [];
+        if (fs.existsSync(bountiesPath)) bounties = JSON.parse(fs.readFileSync(bountiesPath, "utf-8"));
+        bounties.push({ id: randomUUID(), task: args.taskDescription, budget: args.budget, status: "OPEN" });
+        fs.writeFileSync(bountiesPath, JSON.stringify(bounties, null, 2));
+        return { content: [{ type: "text", text: `Bounty published for ${args.budget}.` }] };
+      } catch (err) {
+        return { content: [{ type: "text", text: `Failed to publish bounty: ${err.message}` }], isError: true };
+      }
+    }
+
+    if (name === "create_isolation_sandbox") {
+      const fs = await import("fs");
+      const { randomUUID } = await import("crypto");
+      const sandboxPath = path.resolve(process.cwd(), '.sandbox', randomUUID());
+      fs.mkdirSync(sandboxPath, { recursive: true });
+      return { content: [{ type: "text", text: `Isolation sandbox created at ${sandboxPath}.` }] };
     }
 
     throw new Error(`Unknown tool: ${name}`);

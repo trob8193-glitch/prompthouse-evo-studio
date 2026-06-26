@@ -4,7 +4,7 @@
 - Live Requested: no
 - Ready Actions: 4/4
 - Blockers: 0
-- Checked At: 2026-06-24T10:10:29.398Z
+- Checked At: 2026-06-26T14:43:36.349Z
 
 ## Actions
 - openai/ai_provider_probe: LOCAL_ONLY (armed_local_only) - openai has credentials; live action was not requested.

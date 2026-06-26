@@ -18,7 +18,7 @@ export default function QuantumMatrixPangram() {
             className="bg-[#0ff]/5 border border-[#0ff]/20 rounded-md transition-all duration-1000 hover:bg-[#0ff]/40 hover:scale-110 cursor-pointer"
             style={{ 
               height: '40px',
-              animation: `pulse ${Math.random() * 4 + 2}s infinite alternate`
+              animation: `pulse ${((globalThis.crypto?crypto.getRandomValues(new Uint32Array(1))[0]/4294967295:Date.now()%1000/1000)) * 4 + 2}s infinite alternate`
             }}
           />
         ))}

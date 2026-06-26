@@ -21,6 +21,7 @@ import {
   Cpu,
   Radio
 } from 'lucide-react';
+import { EvoBot } from './EvoBot.jsx';
 
 const BRIDGE_URL = import.meta.env?.VITE_BRIDGE_URL || 'http://127.0.0.1:3001';
 
@@ -404,12 +405,13 @@ export function Terminal({ sidebarMode = false }) {
       <div 
         className={`evo-shell-container w-full ${isFullscreen || sidebarMode ? 'flex-1' : ''} flex flex-col gap-4 gap-4 z-40 shrink-0 relative overflow-hidden transition-all duration-500 ease-in-out`}
         style={{ 
-          background: ideTheme === 'zeta' ? '#fff' : ideTheme === 'gamma' ? '#1a0033' : ideTheme === 'theta' ? 'rgba(0,0,0,0.8)' : 'linear-gradient(180deg, rgba(5,5,12,0.98), rgba(2,2,8,0.99))',
+          background: ideTheme === 'zeta' ? '#fff' : ideTheme === 'gamma' ? '#1a0033' : ideTheme === 'theta' ? 'rgba(0,0,0,0.8)' : 'linear-gradient(180deg, rgba(5,5,12,0.6), rgba(2,2,8,0.8))',
+          backdropFilter: 'blur(32px)',
           height: (isFullscreen || sidebarMode) ? '100%' : (terminalOpen ? 340 : 40),
           minHeight: (isFullscreen || sidebarMode) ? '100%' : (terminalOpen ? 340 : 40),
           borderRadius: 0,
-          borderTop: ideTheme === 'zeta' ? '4px solid #000' : ideTheme === 'gamma' ? '2px solid #ff00ff' : '1px solid rgba(0,240,255,0.4)',
-          boxShadow: terminalOpen ? (ideTheme === 'gamma' ? '0 -10px 30px rgba(255,0,255,0.5)' : '0 -10px 30px rgba(0,0,0,0.5)') : 'none',
+          borderTop: ideTheme === 'zeta' ? '4px solid #000' : ideTheme === 'gamma' ? '2px solid #ff00ff' : '1px solid rgba(0,240,255,0.6)',
+          boxShadow: terminalOpen ? (ideTheme === 'gamma' ? '0 -10px 30px rgba(255,0,255,0.5)' : '0 -20px 40px rgba(0,240,255,0.15), inset 0 2px 10px rgba(255,255,255,0.1)') : 'none',
           filter: ideTheme === 'zeta' ? 'grayscale(100%)' : 'none'
         }}
       >
@@ -446,6 +448,7 @@ export function Terminal({ sidebarMode = false }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <div className="evo-pulse-orb" style={{ width: 6, height: 6, borderRadius: '50%', background: tc.accent }} />
+              <EvoBot size={24} />
               <Cpu size={14} style={{ color: tc.accent }} />
               <span className="evo-shell-title" style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase' }}>
                 EvoShell Master Control

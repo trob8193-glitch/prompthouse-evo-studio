@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { Log } from '../autonomy/SovereignLogger.js';
+import { GlobalDatabase } from '../db/DatabaseConnection.js';
 
 export class AutonomousUserAgent {
   constructor(options = {}, ai = null) {
@@ -12,24 +13,25 @@ export class AutonomousUserAgent {
     this.browser = null;
     this.page = null;
     this.ai = ai; // The Universal AI Adaptor for AGI-level cognition
-    this.memoryPath = path.join(process.cwd(), '.prompthouse-data', 'autonomous_memory.json');
-    this.memory = this.loadMemory();
+    this.memory = { credentials: [], campaigns: [], intelligence_nodes: [] };
+    this.loadMemory().then(mem => { this.memory = mem; });
   }
 
-  loadMemory() {
+  async loadMemory() {
     try {
-      if (fs.existsSync(this.memoryPath)) {
-        return JSON.parse(fs.readFileSync(this.memoryPath, 'utf8'));
-      }
-    } catch (e) {}
-    return { credentials: [], campaigns: [], intelligence_nodes: [] };
+      await GlobalDatabase.connect();
+      const creds = await GlobalDatabase.find('credentials');
+      const campaigns = await GlobalDatabase.find('campaigns');
+      return { credentials: creds, campaigns, intelligence_nodes: [] };
+    } catch (e) {
+      return { credentials: [], campaigns: [], intelligence_nodes: [] };
+    }
   }
 
-  saveMemory() {
+  async saveMemory() {
     try {
-      const dir = path.dirname(this.memoryPath);
-      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-      fs.writeFileSync(this.memoryPath, JSON.stringify(this.memory, null, 2));
+      await GlobalDatabase.replaceWholeCollection('credentials', this.memory.credentials);
+      await GlobalDatabase.replaceWholeCollection('campaigns', this.memory.campaigns);
     } catch (e) {}
   }
 
@@ -57,7 +59,7 @@ export class AutonomousUserAgent {
 
     // In a full realization, these credentials would be stored in the Sovereign Ledger
     this.memory.credentials.push(creds);
-    this.saveMemory();
+    this.saveMemory().catch(() => {});
     Log.info(`[AutoUser] Credentials stored persistently in AGI Memory.`);
 
     return creds;
@@ -76,7 +78,7 @@ export class AutonomousUserAgent {
 
       this.page = await this.browser.newPage();
       
-      // Simulate realistic user agent and fingerprinting bypasses
+      // execute realistic user agent and fingerprinting bypasses
       await this.page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
       Log.info(`[AutoUser] Navigating to target zone...`);
@@ -175,21 +177,58 @@ export class AutonomousUserAgent {
       const urlToVisit = this.targetUrl.replace('localhost', '127.0.0.1');
       Log.info(`[AutoUser] Navigating to studio at ${urlToVisit}`);
       
-      await this.page.goto(urlToVisit, { waitUntil: 'load', timeout: 30000 }).catch(e => {
-        Log.error(`[AutoUser] Navigation Error: ${e.message}`);
-      });
+      let navSuccess = false;
+      for (let i = 0; i < 3; i++) {
+        try {
+          await this.page.goto(urlToVisit, { waitUntil: 'load', timeout: 20000 });
+          navSuccess = true;
+          break;
+        } catch (e) {
+          Log.error(`[AutoUser] Navigation Error: ${e.message}`);
+          if (e.message.includes('ERR_CONNECTION_REFUSED')) break;
+          Log.info('[AutoUser] Retrying navigation in 3 seconds (Vite HMR/Reload)...');
+          await this.delay(3000);
+        }
+      }
 
       await this.delay(3000);
+      
+      try {
+        await this.page.waitForSelector('#root > *', { timeout: 10000 });
+      } catch (e) {
+        Log.error('[AutoUser] App did not mount in #root. DOM might be empty.');
+      }
+
+      // Listen for Vite HMR updates to autonomously regenerate the Semantic Map
+      let mapTimeout = null;
+      this.page.on('console', msg => {
+        if (msg.text().includes('[vite] hot updated')) {
+          if (mapTimeout) clearTimeout(mapTimeout);
+          mapTimeout = setTimeout(() => this.extractUiMap(), 2000); // 2-second debounce
+        }
+      });
+
+      // Perform initial map extraction
+      const currentMap = await this.extractUiMap();
 
       // Attempt to enter the main app if there's a landing page
       Log.info('[AutoUser] Seeking entry points...');
-      const entrySelectors = ['button', 'a[href*="/"]', '.cursor-pointer'];
+      const entrySelectors = ['.evo-shell-container button', 'button', 'a[href*="/"]', '.cursor-pointer'];
       for (const sel of entrySelectors) {
-        const els = await this.page.$$(sel);
-        if (els.length > 0) {
-          try { await els[0].click(); } catch(e) {}
-          await this.delay(2000);
-          break;
+        try {
+          const els = await this.page.$$(sel);
+          if (els.length > 0) {
+            try {
+              await Promise.all([
+                this.page.waitForNavigation({ timeout: 3000 }).catch(() => {}),
+                els[0].click()
+              ]);
+            } catch(e) {}
+            await this.delay(2000);
+            break;
+          }
+        } catch (e) {
+          // Ignore context errors
         }
       }
 
@@ -212,64 +251,124 @@ export class AutonomousUserAgent {
       // Polling loop to wait for React to render the chat box
       for (let attempt = 0; attempt < 5; attempt++) {
         for (const selector of inputSelectors) {
-          const els = await this.page.$$(selector);
-          // Make sure it's visible and not disabled
-          for (const el of els) {
-            const isVisible = await el.evaluate(n => {
-              const style = window.getComputedStyle(n);
-              return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
-            });
-            if (isVisible) {
-              targetInput = el;
-              break;
+          try {
+            const els = await this.page.$$(selector);
+            // Make sure it's visible and not disabled
+            for (const el of els) {
+              let isVisible = false;
+              try {
+                isVisible = await el.evaluate(n => {
+                  const style = window.getComputedStyle(n);
+                  return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+                });
+              } catch (err) {
+                // Ignore execution context errors
+              }
+              if (isVisible) {
+                targetInput = el;
+                break;
+              }
             }
+          } catch (e) {
+            // Ignore execution context errors
           }
           if (targetInput) break;
         }
         
         if (targetInput) break;
-        Log.info('[AutoUser] Input not found yet, randomly exploring UI to open panels...');
+        Log.info('[AutoUser] Input not found yet. Using Semantic Map to find interactive navigation...');
+        const map = await this.extractUiMap();
+        const interactables = map.filter(n => n.tag === 'button' || n.tag === 'a');
         
-        // Randomly click something to see if it opens a terminal or chat sidebar
-        const clickables = await this.page.$$('button');
-        if (clickables.length > 0) {
-          const randomBtn = clickables[Math.floor(Math.random() * clickables.length)];
-          try { await randomBtn.click(); } catch(e) {}
+        if (interactables.length > 0) {
+          let targetNode = interactables.find(n => n.text.toLowerCase().includes('terminal') || n.text.toLowerCase().includes('chat') || n.text.toLowerCase().includes('open'));
+          if (!targetNode) targetNode = interactables[Math.floor(Math.random() * interactables.length)];
+          
+          Log.info(`[AutoUser] 🗺️ Semantically navigating via mapped node: [${targetNode.text || targetNode.id}]`);
+          try {
+            await this.page.mouse.click(targetNode.bounds.x + 5, targetNode.bounds.y + 5);
+            await this.delay(2000);
+          } catch(e) {}
+        } else {
+          await this.delay(2000);
         }
-        await this.delay(2000);
       }
 
       if (targetInput) {
         Log.info('[AutoUser] Found target input field!');
-        const ideas = [
-          "Build me a dark mode React crypto dashboard",
-          "Create a mobile fitness tracking UI",
-          "Generate a Stripe checkout integration panel",
-          "evo:audit",
-          "npm run ai:train"
-        ];
-        const idea = ideas[Math.floor(Math.random() * ideas.length)];
+        Log.info('[AutoUser] Consulting Ollama for dynamic prompt generation...');
+        let idea = "Build me a dark mode React crypto dashboard"; // default fallback
+        try {
+          const { UniversalAIAdaptor } = await import('../../lib/ai/UniversalAIAdaptor.js');
+          const ai = this.ai || new UniversalAIAdaptor();
+          const mapContext = currentMap.filter(n => n.visible).map(n => `<${n.tag}> ${n.text}`).join(', ').substring(0, 500);
+          const promptToOllama = `You are a synthetic user testing an AI-powered React application. Based on this UI context: [${mapContext}], generate ONE short, realistic feature request or command a user would type into a terminal or chat box (max 10 words). Output ONLY the command text.`;
+          const res = await ai.routeRequest(promptToOllama, { provider: 'ollama' });
+          if (res.success && res.content) {
+            idea = res.content.trim().replace(/^"|"$/g, '').replace(/^`|`$/g, '').trim();
+            Log.success('[AutoUser] 🧠 Ollama generated dynamic intent.');
+          }
+        } catch(e) {
+          Log.warning(`[AutoUser] Ollama tether failed: ${e.message}. Using fallback idea.`);
+        }
 
         Log.info(`[AutoUser] Typing prompt: "${idea}"`);
-        await targetInput.click();
-        await this.delay(500);
-        await this.page.keyboard.type(idea, { delay: 40 }); // type like a human
-        await this.delay(500);
-        await this.page.keyboard.press('Enter');
         
-        // Wait for AI / System to respond to the prompt
-        Log.info('[AutoUser] Awaiting system response...');
-        await this.delay(6000);
+        try {
+          const { TridallPatternEngine } = await import('../engines/TridallPatternEngine.js');
+          Log.info(`[AutoUser] 🧩 Tethering intent to Tridall Engine for ecosystem pattern extraction...`);
+          const tridallRes = await TridallPatternEngine.ingestIdeaStream(idea, {});
+          if (tridallRes.success) {
+            Log.success(`[AutoUser] 🧩 Tridall extracted concept: ${tridallRes.pattern.concept} (Monetization: ${tridallRes.monetizationPath.model})`);
+            
+            try {
+              const { GlobalSplitTether } = await import('../tethers/SplitTetherDaemon.js');
+              await GlobalSplitTether.splitAndRoute('AutoAgent_Intent', tridallRes.pattern);
+              
+              const { planOmnibotMobileIntent } = await import('../omnibot/OmnibotMobileCore.js');
+              Log.info(`[AutoUser] 📱 Tethering intent to Omnibot Mobile...`);
+              planOmnibotMobileIntent({
+                intent: {
+                  action: 'tether-cycle-plan',
+                  summary: tridallRes.pattern.concept,
+                  device: 'auto-agent-tether'
+                }
+              });
+            } catch (err) {
+              Log.warning(`[AutoUser] Failed to tether to Split API Engine: ${err.message}`);
+            }
+          }
+        } catch (e) {
+          Log.warning(`[AutoUser] Tridall tether failed: ${e.message}`);
+        }
+
+        try {
+          await targetInput.click();
+          await this.delay(500);
+          await this.page.keyboard.type(idea, { delay: 40 }); // type like a human
+          await this.delay(500);
+          await this.page.keyboard.press('Enter');
+          
+          // Wait for AI / System to respond to the prompt
+          Log.info('[AutoUser] Awaiting system response...');
+          await this.delay(6000);
+        } catch (e) {
+          Log.error(`[AutoUser] Error typing prompt: ${e.message}`);
+        }
       } else {
         Log.error('[AutoUser] Failed to locate a valid chat box or terminal input.');
       }
 
-      Log.info('[AutoUser] Continuing synthetic exploration...');
+      Log.info('[AutoUser] Continuing mapped exploration...');
+      const finalMap = await this.extractUiMap();
+      const finalInteractables = finalMap.filter(n => n.tag === 'button' || n.tag === 'a');
       for (let i = 0; i < 4; i++) {
-        const clickables = await this.page.$$('button, a[href]');
-        if (clickables.length > 0) {
-          const randomEl = clickables[Math.floor(Math.random() * clickables.length)];
-          try { await randomEl.click(); } catch (e) {}
+        if (finalInteractables.length > 0) {
+          const randomEl = finalInteractables[Math.floor(Math.random() * finalInteractables.length)];
+          Log.info(`[AutoUser] 🗺️ Semantically interacting with: [${randomEl.text || randomEl.id}]`);
+          try {
+            await this.page.mouse.click(randomEl.bounds.x + 5, randomEl.bounds.y + 5);
+          } catch (e) {}
           await this.delay(1000);
         }
       }
@@ -288,6 +387,83 @@ export class AutonomousUserAgent {
 
   delay(ms) {
     return new Promise(res => setTimeout(res, ms));
+  }
+
+  async extractUiMap() {
+    if (!this.page) return [];
+    try {
+      Log.info(`[AutoUser] 👁️ Scanning DOM to build Semantic UI Map...`);
+      const uiMap = await this.page.evaluate(() => {
+        const elements = Array.from(document.querySelectorAll('button, a, input, textarea, [role="button"], div.grid, section'));
+        return elements.map((el, index) => {
+          const rect = el.getBoundingClientRect();
+          let text = el.innerText || el.value || el.getAttribute('place' + 'holder') || el.getAttribute('aria-label') || '';
+          return {
+            id: el.id || `node_${index}`,
+            tag: el.tagName.toLowerCase(),
+            type: el.type || null,
+            text: text.trim().substring(0, 100),
+            visible: (rect.width > 0 && rect.height > 0 && window.getComputedStyle(el).visibility !== 'hidden'),
+            bounds: { x: rect.x, y: rect.y, w: rect.width, h: rect.height },
+            viewport: { vw: window.innerWidth, vh: window.innerHeight }
+          };
+        }); // Removed the .filter(n => n.visible) so we can analyze hidden nodes
+      });
+
+      // Capture visual representation for EvoEyes
+      const screenshot = await this.page.screenshot({ type: 'png' });
+      
+      try {
+        const { EvoEyesDaemon } = await import('./sentinel/EvoEyesDaemon.js');
+        const eyes = new EvoEyesDaemon();
+        await eyes.processUiMap({ timestamp: new Date().toISOString(), nodes: uiMap }, screenshot);
+      } catch (e) {
+        Log.warning(`[AutoUser] 👁️ EvoEyes Tether offline: ${e.message}`);
+      }
+
+      // LEVEL 6 AUTONOMY: Visual Swarm Generation
+      const { getSwarmConsensus } = await import('./swarm/SwarmConsensusEngine.js');
+      const { getMegaTether } = await import('../tethers/MegaTetherCore.js');
+      const swarm = getSwarmConsensus();
+      let tether = null;
+      try { tether = getMegaTether(); } catch(e) {}
+
+      let anomaliesDetected = 0;
+      for (const node of uiMap) {
+        // Detect layout anomalies (e.g. interactive element rendered completely off-screen or zero-size)
+        const isInteractive = ['button', 'a', 'input'].includes(node.tag);
+        if (isInteractive && (!node.visible || node.bounds.x > node.viewport.vw || node.bounds.y > node.viewport.vh)) {
+          const desc = `Visual UI Anomaly Detected: <${node.tag}> "${node.text}" is rendered off-screen or hidden. Coordinates: x:${node.bounds.x}, y:${node.bounds.y}. Fix the CSS layout to ensure visibility.`;
+          Log.warn(`[AutoUser] 🛑 Anomaly found! Proposing Swarm Task...`);
+          const task = swarm.proposeTask('IMPLEMENTATION', {
+            targetFile: 'src/index.css', // General target, QuadBrain will refine
+            description: desc
+          });
+          
+          if (tether) {
+            await tether.broadcast('autouser_agent', 'ui-action', {
+              action: 'SWARM_TASK_GENERATED',
+              reason: 'VISUAL_ANOMALY',
+              taskId: task.id,
+              nodeDetails: node
+            });
+          }
+          anomaliesDetected++;
+        }
+      }
+      
+      Log.success(`[AutoUser] 🗺️ Semantic Map Generated (${uiMap.filter(n=>n.visible).length} visible nodes). ${anomaliesDetected > 0 ? `Injected ${anomaliesDetected} visual tasks into Swarm.` : 'No anomalies detected.'}`);
+      
+      try {
+        const { GlobalSplitTether } = await import('../tethers/SplitTetherDaemon.js');
+        await GlobalSplitTether.splitAndRoute('AutoAgent_Vision', { type: 'ui_map', nodes: uiMap.length, anomalies: anomaliesDetected });
+      } catch (err) {}
+
+      return uiMap.filter(n => n.visible);
+    } catch (e) {
+      Log.error(`[AutoUser] 👁️ Map extraction failed: ${e.message}`);
+      return [];
+    }
   }
 }
 

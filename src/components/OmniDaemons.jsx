@@ -19,7 +19,7 @@ export default function OmniDaemons() {
     // Spin up specific daemons based on theme
     if (activeThemeId === 'layoutTerminalFullscreen') {
         daemonRefs.current.terminal = setInterval(() => {
-            const memoryAddr = '0x' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();
+            const memoryAddr = '0x' + Math.floor(((globalThis.crypto?crypto.getRandomValues(new Uint32Array(1))[0]/4294967295:Date.now()%1000/1000))*16777215).toString(16).padStart(6, '0').toUpperCase();
             addTerminalLog(`[ROOT DAEMON] Injecting payload at address ${memoryAddr}. Overriding root protocols...`, 'system', 'main');
         }, 3000);
     } 
@@ -30,7 +30,7 @@ export default function OmniDaemons() {
     }
     else if (activeThemeId === 'layoutCmdCenter') {
         daemonRefs.current.cmdCenter = setInterval(() => {
-            const nodes = Math.floor(Math.random() * 500) + 1000;
+            const nodes = Math.floor(((globalThis.crypto?crypto.getRandomValues(new Uint32Array(1))[0]/4294967295:Date.now()%1000/1000)) * 500) + 1000;
             addTerminalLog(`[DATA_DAEMON] Processing ${nodes} parallel data nodes. Temporal shift active.`, 'info', 'main');
         }, 2000);
     }

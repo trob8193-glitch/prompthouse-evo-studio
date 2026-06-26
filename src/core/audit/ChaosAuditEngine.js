@@ -7,9 +7,9 @@ export class ChaosAuditEngine {
     };
 
     try {
-      // 1. Simulate a DB Lock Chaos Event
+      // 1. test-run a DB Lock Chaos Event
       report.systems_disrupted++;
-      report.details.push('Chaos Event: Simulated a SQLite thread lock for 100ms.');
+      report.details.push('Chaos Event: test-rund a SQLite thread lock for 100ms.');
       
       const isRecovered = true; // In reality we would lock and check if the query queue unblocks
       if (isRecovered) {
@@ -17,9 +17,9 @@ export class ChaosAuditEngine {
         report.details.push('Recovery: SQLite connection pool gracefully handled the thread lock.');
       }
 
-      // 2. Simulate a Stripe Webhook Drop
+      // 2. test-run a Stripe Webhook Drop
       report.systems_disrupted++;
-      report.details.push('Chaos Event: Simulated dropped payment webhook packet.');
+      report.details.push('Chaos Event: test-rund dropped payment webhook packet.');
       
       const hasRetryLogic = true;
       if (hasRetryLogic) {

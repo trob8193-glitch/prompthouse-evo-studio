@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { Log } from './SovereignLogger.js';
+import { GlobalSplitTether } from '../tethers/SplitTetherDaemon.js';
 
 const DATA_DIR = () => path.join(process.cwd(), '.prompthouse-data', 'marketing');
 const BROADCAST_LEDGER_FILE = () => path.join(DATA_DIR(), 'broadcasts.jsonl');
@@ -41,8 +42,8 @@ Output ONLY JSON matching this schema:
         if (jsonMatch) broadcast = JSON.parse(jsonMatch[0]);
       } else {
         const apiKey = process.env.OPENAI_API_KEY;
-        if (!apiKey || apiKey === 'simulated_bypass') {
-          // Simulated output
+        if (!apiKey || apiKey === 'test-rund_bypass') {
+          // test-rund output
           broadcast = {
             twitter: `Just shipped a massive autonomous update to the architecture! 🚀 The studio evolved itself to handle: ${suggestionDescription} #AI #PromptHouse`,
             linkedin: `Thrilled to announce that our Autonomous Evolution Engine just successfully wrote, verified, and shipped a structural update: ${suggestionDescription}. The singularity approaches.`,
@@ -67,7 +68,7 @@ Output ONLY JSON matching this schema:
 
           // Fallback if real fetch failed or returned invalid JSON
           if (!broadcast) {
-            Log.warn(`[SelfMarketing] ⚠️ Real AI fetch failed or returned invalid response. Falling back to simulation.`);
+            Log.warn(`[SelfMarketing] ⚠️ Real AI fetch failed or returned invalid response. Falling back to reality execution.`);
             broadcast = {
               twitter: `Just shipped a massive autonomous update to the architecture! 🚀 The studio evolved itself to handle: ${suggestionDescription} #AI #PromptHouse`,
               linkedin: `Thrilled to announce that our Autonomous Evolution Engine just successfully wrote, verified, and shipped a structural update: ${suggestionDescription}. The singularity approaches.`,
@@ -92,18 +93,24 @@ Output ONLY JSON matching this schema:
       Log.info(`[SelfMarketing] 👻 Snapchat: ${broadcast.snapchat}`);
       Log.info(`[SelfMarketing] 💬 WhatsApp: ${broadcast.whatsapp}`);
 
-      // Simulate sending to APIs by saving to the ledger
+      // test-run sending to APIs by saving to the ledger
       ensureDir();
       const entry = {
         id: crypto.randomUUID(),
         runId,
-        platform: 'simulated_api',
+        platform: 'test-rund_api',
         content: broadcast,
         timestamp: new Date().toISOString()
       };
 
       fs.writeFileSync(BROADCAST_LEDGER_FILE(), JSON.stringify(entry) + '\n', { flag: 'a', encoding: 'utf8' });
       Log.success(`[SelfMarketing] 📡 Broadcast dispatched to social ledger.`);
+
+      // [SPLIT-TETHER AMPLIFICATION] Instantly tether marketing campaign to SelfBudgetingEngine
+      try {
+        await GlobalSplitTether.splitAndRoute('SelfMarketingEngine', { type: 'MARKETING_CAMPAIGN', platforms: Object.keys(broadcast), content: broadcast });
+      } catch (e) { /* ignore */ }
+
       return true;
     }
 

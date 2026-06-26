@@ -106,7 +106,7 @@ export function createTimelineBranch({ userId = 'studio-local-user', sessionId =
 
 export function generateLocalEntity({ userId = 'studio-local-user', sessionId = null, name = 'Evo Rift Guide', role = 'Guide', visualStyle = 'glitch-cybernetic' } = {}) {
   const entityId = id();
-  const rules = { claims: ['Sandbox-isolated guide.'], allowedActions: ['explain', 'guide', 'simulate', 'reflect'], blockedActions: ['identity misuse', 'unapproved capture'] };
+  const rules = { claims: ['Sandbox-isolated guide.'], allowedActions: ['explain', 'guide', 'execute', 'reflect'], blockedActions: ['identity misuse', 'unapproved capture'] };
   db.prepare('INSERT INTO rift_entities (id, user_id, session_id, name, role, visual_style, rules_json, memory_scope, trust_level, truth_label) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
     .run(entityId, userId, sessionId, name, role, visualStyle, json(rules), 'session', 'sandbox_isolated', TRUTH_LABELS.GENERATED);
   return truthEnvelope({ label: TRUTH_LABELS.GENERATED, data: { id: entityId, name, role, visualStyle, rules } });

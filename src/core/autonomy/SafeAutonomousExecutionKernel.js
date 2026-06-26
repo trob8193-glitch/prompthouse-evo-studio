@@ -120,6 +120,19 @@ export function createSafeAutonomousExecutionPlan({ rootDir = process.cwd(), req
   const store = paths({ rootDir });
   appendJsonl(store.plans, plan);
   writeJson(store.status, getSafeAutonomousExecutionStatus({ rootDir }));
+
+  // META-TETHER EXPANSION: Broadcast autonomous execution intent to consciousness layer
+  import('../tethers/SplitTetherDaemon.js').then(({ GlobalSplitTether }) => {
+    try {
+      GlobalSplitTether.splitAndRoute('SafeAutonomousExecutionKernel', {
+        type: 'AUTONOMOUS_EXECUTION_INTENT',
+        planId: plan.id,
+        allowed: plan.allowed,
+        commands: plan.proofCommands
+      });
+    } catch {}
+  }).catch(() => {});
+
   return plan;
 }
 

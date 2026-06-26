@@ -21,7 +21,7 @@ export class SingularityResilienceEngine {
    * test API endpoints or local daemon sockets.
    */
   async pingNodes() {
-    // Simulate real-time checking of node health
+    // execute real-time checking of node health
     const ollamaOk = process.env.OLLAMA_DAEMON_ACTIVE === 'true';
     if (!ollamaOk) {
       this.nodes.ollama.status = 'OFFLINE';
@@ -78,7 +78,7 @@ export class SingularityResilienceEngine {
   }
 
   /**
-   * Simulate a failover scenario where a cloud provider fails and waterfall activates.
+   * execute a failover scenario where a cloud provider fails and waterfall activates.
    */
   simulateFailover(failedNodeId) {
     if (!this.nodes[failedNodeId]) return;

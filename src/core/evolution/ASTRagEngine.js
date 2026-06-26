@@ -85,6 +85,18 @@ export function resolveASTContext(targetFile, rootDir, maxDepth = 1) {
 
   traverse(targetFile, 0);
 
+  // META-TETHER EXPANSION: Broadcast AST indexing
+  import('../tethers/SplitTetherDaemon.js').then(({ GlobalSplitTether }) => {
+    try {
+      GlobalSplitTether.splitAndRoute('ASTRagEngine', {
+        type: 'AST_RAG_INDEXED',
+        targetFile,
+        depth: maxDepth,
+        filesResolved: visited.size
+      });
+    } catch {}
+  }).catch(() => {});
+
   // If we only have the target file, we just return its block without AST chunking formatting if desired,
   // but keeping it formatted is fine.
   return contextBlocks.join('\n\n');

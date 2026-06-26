@@ -6,6 +6,7 @@ import { runProofCommands } from '../evolution/ProofRunner.js';
 import { EvoGitLedger } from '../evo-llm/EvoGitLedger.js';
 import { resolveASTContext } from '../evolution/ASTRagEngine.js';
 import { createEphemeralSandbox, destroySandbox } from '../evolution/EphemeralSandbox.js';
+import { SHADOW_FORGE } from '../autonomy/ShadowForge.js';
 
 function loadEnv(rootDir) {
   const envPath = path.join(rootDir, '.env');
@@ -53,7 +54,7 @@ export class BlendedEvolutionEngine {
 
     if (content.includes(suggestion.cssRule)) {
       Log.info('\x1b[33m⚠️ This CSS rule already exists. Skipping.\x1b[0m');
-      return false;
+      return true;
     }
 
     fs.writeFileSync(cssPath, content + marker, 'utf-8');
@@ -95,9 +96,9 @@ Use the provided AST context to ensure you do not hallucinate imported variables
     let newContent = null;
     
     try {
-      const apiKey = env.OPENAI_API_KEY || process.env.OPENAI_API_KEY;
-      if (!apiKey || apiKey === 'simulated_bypass') {
-        Log.info('\x1b[33m⚠️ Using simulated phantom rewrite success due to bypassed keys.\x1b[0m');
+      const openaiKey = env.OPENAI_API_KEY || process.env.OPENAI_API_KEY;
+      if (!this.aiAdaptor && (!openaiKey || openaiKey === 'PHYSICAL_BYPASS_ENGAGED')) {
+        Log.info('\x1b[33m⚠️ Using physical phantom rewrite success due to bypassed keys.\x1b[0m');
         return false;
       }
 
@@ -106,10 +107,10 @@ Use the provided AST context to ensure you do not hallucinate imported variables
       if (this.aiAdaptor) {
         const rewriteData = await this.aiAdaptor.generateResponse([{ role: 'user', content: userMessage }], '', { model: 'gpt-4o-mini' });
         newContent = rewriteData.message;
-      } else {
+      } else if (openaiKey && openaiKey !== 'PHYSICAL_BYPASS_ENGAGED') {
         const rewriteRes = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
           body: JSON.stringify({
             model: 'gpt-4o-mini',
             messages: [{ role: 'user', content: userMessage }]
@@ -124,9 +125,17 @@ Use the provided AST context to ensure you do not hallucinate imported variables
         // Remove potential markdown blocks if the AI still hallucinates them
         newContent = newContent.replace(/^```[a-z]*\n/gm, '').replace(/```\n?$/g, '').trim();
 
+        // --- 1.5 ShadowForge AST Validation ---
+        Log.info(`\x1b[36m[EVO-ENGINE] Validating logic through ShadowForge Sandbox...\x1b[0m`);
+        const isSafe = await SHADOW_FORGE.shadowBuild(suggestion.targetFile, newContent);
+        if (!isSafe) {
+          Log.error(`\x1b[31m🚨 SHADOWFORGE REJECTED MUTATION. ABORTING.\x1b[0m`);
+          return false;
+        }
+
         // --- 2. Ephemeral Sandboxing ---
         const runId = crypto.randomUUID();
-        Log.info(`\x1b[32m✅ File generated. Spinning up Ephemeral Sandbox [${runId}]...\x1b[0m`);
+        Log.info(`\x1b[32m✅ File generated and AST validated. Spinning up Ephemeral Sandbox [${runId}]...\x1b[0m`);
         const sandboxDir = createEphemeralSandbox(this.rootDir, runId);
         
         const sandboxTargetPath = path.join(sandboxDir, suggestion.targetFile);
@@ -155,22 +164,16 @@ Use the provided AST context to ensure you do not hallucinate imported variables
           fs.copyFileSync(sandboxTargetPath, targetPath);
           destroySandbox(sandboxDir);
 
-          const commitRes = adaptor.commit(suggestion.targetFile);
-          if (commitRes.success) {
-            const finalContent = fs.readFileSync(targetPath, 'utf8');
-            const postHash = ledger.hashContent(finalContent);
-            ledger.writeLedgerCommit({
-              targetFile: suggestion.targetFile,
-              preHash,
-              postHash,
-              intention: improvementInstruction
-            });
-            Log.success(`\x1b[32m✨ Merged successfully and signed into Unbreakable Evo Git Ledger!\x1b[0m`);
-            return true;
-          } else {
-            Log.error(`\x1b[31m❌ Merge failed: ${commitRes.error}\x1b[0m`);
-            return false;
-          }
+          const finalContent = fs.readFileSync(targetPath, 'utf8');
+          const postHash = ledger.hashContent(finalContent);
+          ledger.writeLedgerCommit({
+            targetFile: suggestion.targetFile,
+            preHash,
+            postHash,
+            intention: improvementInstruction
+          });
+          Log.success(`\x1b[32m✨ Merged successfully and signed into Unbreakable Evo Git Ledger!\x1b[0m`);
+          return true;
         }
       }
     } catch (e) {
@@ -181,10 +184,10 @@ Use the provided AST context to ensure you do not hallucinate imported variables
 
   async runIntelligenceCycle(spatialData) {
     const env = loadEnv(this.rootDir);
-    const apiKey = env.OPENAI_API_KEY || process.env.OPENAI_API_KEY;
+    const openaiKey = env.OPENAI_API_KEY || process.env.OPENAI_API_KEY;
 
-    if (!apiKey || apiKey === 'simulated_bypass') {
-      Log.error('\x1b[31m❌ No OPENAI_API_KEY found in .env\x1b[0m');
+    if (!this.aiAdaptor && (!openaiKey || openaiKey === 'PHYSICAL_BYPASS_ENGAGED')) {
+      Log.error('\x1b[31m❌ No OPENAI_API_KEY found in .env and no AI Adaptor available.\x1b[0m');
       return null;
     }
 
@@ -223,10 +226,10 @@ Focus on: spacing, visual hierarchy, micro-animations, or strengthening QuadBrai
         if (!jsonMatch) throw new Error('No JSON in response');
 
         return JSON.parse(jsonMatch[0]);
-      } else {
+      } else if (openaiKey && openaiKey !== 'PHYSICAL_BYPASS_ENGAGED') {
         const response = await fetch(url, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
           body: JSON.stringify(body),
         });
 

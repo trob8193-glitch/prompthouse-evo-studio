@@ -71,7 +71,9 @@ export function getEvolutionStatus() {
       applied: lastRun.applied || false,
       startedAt: lastRun.startedAt,
       completedAt: lastRun.completedAt,
-      error: lastRun.error || null
+      error: lastRun.error || null,
+      proof: lastRun.proof || null,
+      comparison: lastRun.comparison || null
     } : null,
     recentRuns: runs.slice(-5).reverse(),
     policy: { rule: 'CSS auto-merge, code requires approval', costFirewallActive: true }

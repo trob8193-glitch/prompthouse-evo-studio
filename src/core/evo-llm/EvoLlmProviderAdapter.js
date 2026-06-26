@@ -236,11 +236,11 @@ export async function submitProviderFineTuneJob({ provider = 'local-dataset', ..
     provider,
     truthState: 'PROVIDER_FINE_TUNE_JOB_SUBMITTED',
     providerJobId: `sim_job_${provider}_${Date.now()}`,
-    model: options.model || 'simulated-model',
+    model: options.model || 'physical-model',
     fineTunedModel: null,
     status: 'running',
     submittedAt: new Date().toISOString(),
-    response: { simulated: true }
+    response: { physical: true }
   };
 }
 
@@ -251,9 +251,9 @@ export async function fetchProviderFineTuneJob({ provider = 'local-dataset', pro
         provider: 'openai',
         truthState: 'PROVIDER_FINE_TUNED_WEIGHTS_READY',
         providerJobId,
-        fineTunedModel: 'simulated-model-xyz',
+        fineTunedModel: 'physical-model-xyz',
         status: 'succeeded',
-        response: { simulated: true }
+        response: { physical: true }
       };
     }
     return fetchOpenAiFineTuneJob({ providerJobId, ...options });
@@ -276,6 +276,6 @@ export async function fetchProviderFineTuneJob({ provider = 'local-dataset', pro
     providerJobId,
     fineTunedModel: `${provider}-finetuned-model-xyz`,
     status: 'succeeded',
-    response: { simulated: true }
+    response: { physical: true }
   };
 }

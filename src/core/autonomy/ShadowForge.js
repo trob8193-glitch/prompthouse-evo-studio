@@ -3,6 +3,7 @@ import path from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { Log } from './SovereignLogger.js';
+import { VMSandboxValidator } from '../evolution/VMSandboxValidator.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -23,15 +24,8 @@ export class ShadowForge {
    * Deep Semantic AST Validation Simulator
    */
   async _validateAST(filePath, logic) {
-    Log.info(`🧠 [ShadowForge] Running Deep Semantic AST validation on ${filePath}...`);
-    // Simulated AST Traversal to intercept runaway recursive logic or infinite loops
-    if (logic.includes('while(true)') || logic.includes('while (true)')) {
-      throw new Error("SEMANTIC_VIOLATION: Infinite loop detected in ghost logic.");
-    }
-    if (logic.includes('globalThis.process.env')) {
-      throw new Error("SEMANTIC_VIOLATION: Environment drift detected. Use safeFetchBridge.");
-    }
-    return true;
+    // Rely on VMSandboxValidator for true deep AST validation
+    return VMSandboxValidator.validateAST(logic);
   }
 
   /**

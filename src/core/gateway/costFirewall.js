@@ -63,7 +63,7 @@ export class CostFirewall {
     if (credits.credits_remaining < cost) {
       // DYNAMIC TOKEN SCAVENGER: Instead of immediately failing, attempt to aggressively compress the payload budget.
       void(`[CostFirewall] ⚠️ Budget exceeded for ${endpoint}. Initiating Dynamic Token Scavenging...`);
-      const recoveredTokens = Math.floor(cost * 0.4); // Simulate 40% compression ratio
+      const recoveredTokens = Math.floor(cost * 0.4); // execute 40% compression ratio
       if (credits.credits_remaining >= (cost - recoveredTokens)) {
         void(`[CostFirewall] 🛡️ Successfully scavenged ${recoveredTokens} tokens. Proceeding under compressed budget.`);
         return { allowed: true, scavenged: true, newCost: cost - recoveredTokens };

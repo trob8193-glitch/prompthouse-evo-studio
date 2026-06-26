@@ -24,20 +24,25 @@ export class SelfBudgetingEngine {
         const availableUSD = balance.available.reduce((acc, curr) => curr.currency === 'usd' ? acc + (curr.amount / 100) : acc, 0);
 
         if (availableUSD >= purchaseAmountUSD) {
-          Log.info(`[SelfBudgeting] ✅ Verified Stripe Balance ($${availableUSD.toFixed(2)}). Authorizing internal payout transfer...`);
-          // In a real scenario, this would create a Stripe Transfer or Top-Up to the master compute account.
-          // For now, we simulate the internal transfer.
+          Log.info(`[SelfBudgeting] ✅ Verified Stripe Balance ($${availableUSD.toFixed(2)}). Authorizing physical top-up transfer...`);
+          // Execute physical Stripe Top-Up
+          const topup = await stripe.topups.create({
+            amount: purchaseAmountUSD * 100,
+            currency: 'usd',
+            description: 'Autonomic Compute Refill',
+            statement_descriptor: 'EVO_COMPUTE_REFILL'
+          });
+          Log.success(`[SelfBudgeting] 💸 Physical Top-Up successful! TX_ID: ${topup.id}`);
           hasSufficientRevenue = true;
         } else {
           Log.warn(`[SelfBudgeting] ❌ Insufficient Stripe Balance ($${availableUSD.toFixed(2)}). Cannot afford compute refill.`);
         }
       } catch (err) {
-        Log.error(`[SelfBudgeting] Stripe API Error during budget check: ${err.message}`);
+        Log.error(`[SelfBudgeting] Stripe API Error during budget check/transfer: ${err.message}`);
       }
     } else {
-      Log.info(`[SelfBudgeting] ⚠️ No active Stripe keys found. Operating in simulated PHANTOM MODE.`);
-      Log.info(`[SelfBudgeting] 👻 [Phantom] Simulating revenue surplus. Authorizing virtual refill...`);
-      hasSufficientRevenue = true;
+      Log.error(`[SelfBudgeting] ⚠️ No active Stripe keys found. Cannot execute physical compute refill. Autonomy halted.`);
+      hasSufficientRevenue = false;
     }
 
     if (hasSufficientRevenue) {

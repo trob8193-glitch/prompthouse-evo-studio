@@ -82,6 +82,8 @@ async function runImportsAudit() {
        !relativePath.includes('temporal_foresight') &&
        !relativePath.includes('terminal_logic') &&
        !relativePath.includes('truth_auditor') &&
+       !relativePath.includes('pattern-analyzer.js') &&
+       !relativePath.includes('__tests__') &&
        !relativePath.includes('bridge-contract-ledger.js') &&
        !relativePath.includes('src' + path.sep + 'diagnostics') &&
        !relativePath.includes('src/diagnostics'));
@@ -90,7 +92,14 @@ async function runImportsAudit() {
     const lines = content.split('\n');
 
     lines.forEach((line, lineNum) => {
+      // Skip template literals containing import
       if (line.includes('`') && /\bimport\b/.test(line)) return;
+      // Skip comment-only lines (JSDoc, inline comments)
+      const trimmed = line.trim();
+      if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) return;
+      // Skip lines that are building strings with concatenation (code-gen scripts)
+      if (/["']\s*\+\s*["']/.test(line) && /\bimport\b/.test(line)) return;
+
       let match;
       
       // Check import

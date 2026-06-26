@@ -12,7 +12,7 @@ import {
 import { TRUTH_STATES } from '../services/truth-labels.js';
 
 export function registerEmulatorRoutes(app, context = {}) {
-  // Get all local and simulated devices
+  // Get all local and physical devices
   app.get('/api/emulator/list', async (req, res) => {
     try {
       const list = await listLocalDevices();

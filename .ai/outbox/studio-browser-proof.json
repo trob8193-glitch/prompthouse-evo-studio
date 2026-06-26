@@ -1,31 +1,6 @@
 {
-  "success": true,
-  "truthState": "BROWSER_E2E_PROOF_CLEAR",
-  "checkedAt": "2026-06-16T00:28:34.402Z",
-  "previewUrl": "http://127.0.0.1:4173",
-  "bridgeUrl": "http://127.0.0.1:3001",
-  "clickedPages": [
-    "Evo Command",
-    "Neural Topology",
-    "Quantum Deck",
-    "Omni-Tether Matrix",
-    "Void Terminal"
-  ],
-  "apiTruthStates": {
-    "studio": "STUDIO_SCAN_CLEAR",
-    "security": "SECURITY_AUDIT_CLEAR",
-    "providers": "PROVIDER_GATED"
-  },
-  "domSummary": {
-    "title": "PromptHouse Evo Studio",
-    "buttons": 162,
-    "links": 0,
-    "inputs": 4,
-    "rootTextLength": 10680,
-    "visibleTextSample": "⚡\nPromptHouse Evo\nSTUDIO — SINGULARITY\nLOGIC DENSITY:\n165.00 IQ\nSTUDIO IQ:\n165,000,000\nROUTING PORT:\nAUTO_TETHER_555\n⚡\nGemini 2.0 Flash\nFAST\n▼\nCOUNCIL:\nDeadHunter\nTruthAuditor\nMaturityScore\nMETAMORPHOSIS: ALPHA\nBRIDGE ONLINE\nOPEN EVO SINGULARITY ENGINE\nPromptHouse Master Org\nEnterprise Plan\nTHE SINGULARITY\nEvo Command\nNeural Topology\nQuantum Deck\nOmni-Tether Matrix\nVoid Terminal\nOmni Split View\n⚡ SINGULARITY V2.0\nEVO STUDIO\n⚡ ForgeTerm\nVIRTUAL SAFE-MODE TERMINAL. REAL EXECUTION VIA PROMPTBRIDGE."
-  },
-  "consoleErrors": [],
-  "pageErrors": [],
-  "failures": [],
-  "screenshot": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.ai\\outbox\\studio-browser-proof.png"
+  "success": false,
+  "truthState": "BROWSER_E2E_PROOF_BLOCKED",
+  "checkedAt": "2026-06-26T14:46:14.367Z",
+  "error": "Command failed: npm.cmd run build"
 }

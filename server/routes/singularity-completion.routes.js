@@ -38,5 +38,13 @@ router.post('/theme-evolution/runtime', (req, res) => {
 });
 
 export const registerSingularityCompletionRoutes = (app) => {
+  app.get('/api/singularity/status', (req, res) => {
+    res.json({
+      success: true,
+      status: 'BONDED_ACTIVE',
+      squad: 'Singularity Squad is online and ready.',
+      matrix: 'Antigravity Bond Active'
+    });
+  });
   app.use('/api', router);
 };

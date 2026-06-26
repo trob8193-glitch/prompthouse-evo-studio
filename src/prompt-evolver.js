@@ -2,7 +2,7 @@
  * PromptHouse Evo Studio — Prompt Evolver (A/B Testing Engine)
  * Rewrites the 6-layer prompt stack based on pattern analysis.
  * A/B tests the new version against the old. Promotes the winner.
- * No simulated logic. Real experiments with real statistical evaluation.
+ * No physical logic. Real experiments with real statistical evaluation.
  */
 
 import { universalSend } from './lib/universal-transport.js';

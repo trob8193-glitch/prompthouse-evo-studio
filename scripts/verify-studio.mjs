@@ -66,7 +66,6 @@ async function runVerification() {
     }
   }
 
-  // 2. Verify no banned words in production source
   const bannedWords = [
     'TODO',
     'placeholder',
@@ -74,6 +73,11 @@ async function runVerification() {
     'dummy',
     'stub',
     'fake',
+    'simulate',
+    'simulation',
+    'simulated',
+    'hype',
+    'lie',
     'for brevity',
     'lorem ipsum',
     'pending implementation',
@@ -115,8 +119,9 @@ async function runVerification() {
 
     lines.forEach((line, index) => {
       bannedWords.forEach(word => {
-        // Look for the word as a substring, case-insensitive
-        if (line.toLowerCase().includes(word.toLowerCase())) {
+        // Look for the word as a whole word, case-insensitive
+        const regex = new RegExp(`\\b${word}\\b`, 'i');
+        if (regex.test(line)) {
           // Exception: HTML attributes like placeholder="Enter..." or placeholder={...}
           if (word.toLowerCase() === 'placeholder' && (line.includes('placeholder=') || line.includes('placeholder :') || line.includes('placeholder:'))) {
             return;

@@ -1,4 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
+import { ShieldAlert, Server, Activity, Terminal, Eye, Dna, Settings, Cpu, Grid, Hexagon, Zap, Link as LinkIcon, Database } from "lucide-react";
+
 import { 
   getSovereigntyPolicy, setSovereigntyPolicy, 
   getAllReceipts, computeAllGateScores, syncTruthFromBridge 
@@ -206,119 +208,153 @@ export function AutonomousSelfBuildCommandCenter() {
     }
   }
 
-  const cardStyle = { background: 'rgba(15,15,25,0.9)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: 14, marginBottom: 12 };
+  const cardStyle = { background: 'transparent' };
   const badgeStyle = (status) => {
     const tone = getTone(status);
-    return { background: tone.bg, color: tone.text, border: `1px solid ${tone.border}`, padding: '4px 8px', borderRadius: 4, fontSize: 10, fontWeight: 700, textTransform: 'uppercase' };
+    return { background: tone.bg, color: tone.text, border: `1px solid ${tone.border}`, padding: '4px 8px', borderRadius: 6, fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' };
   };
 
   const tabs = [
-    { id: 'modules', label: 'Modules' },
-    { id: 'evolution_os', label: 'Evolution OS' },
-    { id: 'inventions', label: 'Breakout Invention' },
-    { id: 'controllers', label: 'Controllers' },
-    { id: 'wires', label: 'Wires' },
-    { id: 'grades', label: '100% Gates' },
-    { id: 'activation', label: 'Activation' },
-    { id: 'log', label: 'Cycle Log' }
+    { id: 'modules', label: 'Modules', icon: Grid },
+    { id: 'evolution_os', label: 'Evolution OS', icon: Dna },
+    { id: 'inventions', label: 'Invention', icon: Zap },
+    { id: 'controllers', label: 'Controllers', icon: Cpu },
+    { id: 'wires', label: 'Wires', icon: LinkIcon },
+    { id: 'grades', label: '100% Gates', icon: ShieldAlert },
+    { id: 'activation', label: 'Activation', icon: Activity },
+    { id: 'log', label: 'Log', icon: Terminal }
   ];
 
   if (isUnbound) {
-    tabs.unshift({ id: 'apex', label: 'Admin Root (Global Infrastructure)' });
+    tabs.unshift({ id: 'apex', label: 'Apex Admin', icon: Server });
   }
 
   return (
-    <div style={{ padding: 20, fontFamily: "'Inter', sans-serif", color: '#e0e0ff', minHeight: '100%', background: '#060812' }}>
-      
+    <div className="flex flex-col gap-6 animate-in pb-12">
       {/* Header Card */}
-      <div style={{ ...cardStyle, background: 'linear-gradient(135deg, #0f172a, #312e81, #000000)', border: '1px solid rgba(250, 204, 21, 0.2)' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20 }}>
-          <div style={{ flex: 1, minWidth: 300 }}>
-            <div style={{ color: '#fde047', fontSize: 10, letterSpacing: '0.28em', textTransform: 'uppercase', fontWeight: 900 }}>
-              PromptHouse Evo Studio · Autonomous Self-Build
+      <div className={`glass-extreme rounded-3xl border-neon-glow shadow-[0_0_30px_rgba(234,179,8,0.1)] relative overflow-hidden backdrop-blur-xl ${isUnbound ? 'border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.2)]' : 'border-yellow-500/30'}`}>
+        <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-slate-900/90 to-black/80"></div>
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+        
+        <div className="relative z-10 p-8">
+          <div className="flex flex-col xl:flex-row gap-8 items-start xl:items-center">
+            
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-yellow-500/20 rounded-xl border border-yellow-500/30">
+                  <Hexagon className="text-yellow-400" size={20} />
+                </div>
+                <div className="text-[10px] font-black text-yellow-500 uppercase tracking-[0.25em]">
+                  PromptHouse Evo Studio · Autonomous Self-Build
+                </div>
+              </div>
+              
+              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter leading-[1.1] mb-4">
+                Max Execution Command Center
+              </h1>
+              
+              <p className="text-slate-400 text-sm md:text-base max-w-3xl leading-relaxed mb-6 font-medium">
+                All-in-one control deck for self-build, self-upgrade, self-evolution, bots-as-controllers, WorkTwin Marketplace, Fission, Friction, Temporal Stackchain, VectorPack, DeployRail, Commerce Rail, NightForge, LiveForge, ForgeRender, PromptBase, Proof Deck, Browser Bridge, and API wiring.
+              </p>
+              
+              <div className="flex flex-wrap gap-2">
+                {truthStates.map((state) => <span key={state} style={badgeStyle(state)}>{state}</span>)}
+              </div>
             </div>
-            <h1 style={{ fontSize: 32, fontWeight: 900, margin: '12px 0', lineHeight: 1.1 }}>
-              Max Execution Command Center
-            </h1>
-            <p style={{ color: '#cbd5e1', fontSize: 13, lineHeight: 1.5, maxWidth: 600 }}>
-              All-in-one control deck for self-build, self-upgrade, self-evolution, bots-as-controllers, WorkTwin Marketplace, Fission, Friction, Temporal Stackchain, VectorPack, DeployRail, Commerce Rail, NightForge, LiveForge, ForgeRender, PromptBase, Proof Deck, Browser Bridge, and API wiring.
-            </p>
-            <div style={{ display: 'flex', gap: 6, marginTop: 16, flexWrap: 'wrap' }}>
-              {truthStates.map((state) => <span key={state} style={badgeStyle(state)}>{state}</span>)}
-            </div>
-          </div>
 
-          <div style={{ background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.1)', padding: 16, borderRadius: 10, minWidth: 250 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-              <span style={{ fontWeight: 700, color: '#cbd5e1', fontSize: 13 }}>Current Real Score</span>
-              <span style={{ fontSize: 24, fontWeight: 900, color: getScoreColor(average) }}>{average}%</span>
-            </div>
-            <div style={{ background: 'rgba(255,255,255,0.1)', height: 8, borderRadius: 4, overflow: 'hidden' }}>
-              <div style={{ width: `${average}%`, height: '100%', background: getScoreColor(average) }} />
-            </div>
-            <p style={{ fontSize: 11, color: '#94a3b8', marginTop: 12 }}>
-              Design score is high. Runtime 100% is blocked until installed into the real repo, connected to backend/providers, tested, and proven with receipts.
-            </p>
-            <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
-              <select 
-                value={mode} 
-                onChange={e => setMode(e.target.value)}
-                style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '6px 10px', borderRadius: 6, fontSize: 12, flex: 1 }}
+            <div className="w-full xl:w-[350px] shrink-0 glass-panel bg-black/60 border border-white/10 rounded-2xl p-6 shadow-2xl backdrop-blur-md">
+              <div className="flex items-end justify-between mb-3">
+                <span className="text-[11px] font-black uppercase tracking-widest text-slate-400">Current Real Score</span>
+                <span className="text-4xl font-black tracking-tighter" style={{ color: getScoreColor(average) }}>{average}%</span>
+              </div>
+              
+              <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden mb-4">
+                <div 
+                  className="h-full rounded-full transition-all duration-1000 ease-out" 
+                  style={{ width: `${average}%`, backgroundColor: getScoreColor(average), boxShadow: `0 0 10px ${getScoreColor(average)}` }} 
+                />
+              </div>
+              
+              <p className="text-[11px] text-slate-400 mb-6 font-medium leading-relaxed">
+                Design score is high. Runtime 100% is blocked until installed into the real repo, connected to backend/providers, tested, and proven with receipts.
+              </p>
+              
+              <div className="flex gap-3 mb-4">
+                <div className="relative flex-1">
+                  <Database className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={14} />
+                  <select 
+                    value={mode} 
+                    onChange={e => setMode(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 text-slate-200 text-xs font-bold rounded-xl py-2.5 pl-9 pr-3 appearance-none focus:outline-none focus:border-yellow-500/50 focus:bg-white/10 transition-colors cursor-pointer"
+                  >
+                    <option value="past-mvp">Past-MVP</option>
+                    <option value="beta">Beta Ready</option>
+                    <option value="enterprise">Enterprise Proof</option>
+                  </select>
+                </div>
+                
+                <button 
+                  onClick={runCycle}
+                  className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-black px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_15px_rgba(234,179,8,0.3)] transition-all active:scale-95 whitespace-nowrap"
+                >
+                  <Activity size={14} /> Self-Build
+                </button>
+              </div>
+              
+              <button
+                onClick={toggleUnbound}
+                className={`w-full py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${
+                  isUnbound 
+                    ? 'bg-red-500/20 text-red-400 border border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.4)] animate-pulse' 
+                    : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:border-white/20'
+                }`}
               >
-                <option value="past-mvp">Past-MVP</option>
-                <option value="beta">Beta Ready</option>
-                <option value="enterprise">Enterprise Proof</option>
-              </select>
-              <button 
-                onClick={runCycle}
-                style={{ background: '#facc15', color: 'black', border: 'none', padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 900, cursor: 'pointer' }}
-              >
-                🔄 Self-Build
+                {isUnbound ? (
+                  <><ShieldAlert size={14} /> UNBOUND DEPLOYMENT MODE</>
+                ) : (
+                  <><Settings size={14} /> Enable Automated Deployment</>
+                )}
               </button>
             </div>
             
-            <button
-              onClick={toggleUnbound}
-              style={{ 
-                marginTop: 10, width: '100%', background: isUnbound ? '#ef4444' : 'rgba(255,255,255,0.05)', 
-                color: 'white', border: isUnbound ? '1px solid #f87171' : '1px solid rgba(255,255,255,0.1)', 
-                padding: '8px', borderRadius: 6, fontSize: 12, fontWeight: 900, cursor: 'pointer',
-                boxShadow: isUnbound ? '0 0 15px rgba(239, 68, 68, 0.5)' : 'none'
-              }}
-            >
-              {isUnbound ? '⚠️ UNBOUND DEPLOYMENT MODE' : 'Enable Automated Deployment'}
-            </button>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 4, marginBottom: 16, flexWrap: 'wrap', background: '#0f172a', padding: 4, borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)' }}>
-        {tabs.map(t => (
-          <button 
-            key={t.id} 
-            onClick={() => setActiveTab(t.id)}
-            style={{ 
-              background: activeTab === t.id ? '#1e293b' : 'transparent', 
-              color: activeTab === t.id ? 'white' : '#94a3b8', 
-              border: 'none', padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' 
-            }}
-          >
-            {t.label}
-          </button>
-        ))}
+      <div className="flex flex-wrap gap-2 p-2 bg-black/40 border border-white/5 rounded-2xl backdrop-blur-xl overflow-x-auto custom-scrollbar">
+        {tabs.map(t => {
+          const Icon = t.icon;
+          const isActive = activeTab === t.id;
+          return (
+            <button 
+              key={t.id} 
+              onClick={() => setActiveTab(t.id)}
+              className={`px-5 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 whitespace-nowrap ${
+                isActive
+                  ? 'bg-gradient-to-r from-indigo-500/20 to-fuchsia-500/20 text-white border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent'
+              }`}
+            >
+              <Icon size={14} className={isActive ? 'text-indigo-400' : 'opacity-50'} />
+              {t.label}
+            </button>
+          );
+        })}
       </div>
 
-      {/* Tab Content */}
-      {activeTab === 'apex' && isUnbound && <ApexAdminTab nuclearAudit={nuclearAudit} selfImplementationState={selfImplementationState} cardStyle={cardStyle} />}
-      {activeTab === 'modules' && <ModulesTab modules={modules} cardStyle={cardStyle} badgeStyle={badgeStyle} getScoreColor={getScoreColor} />}
-      {activeTab === 'evolution_os' && <EvolutionOSTab autonomousEvolutionStatus={autonomousEvolutionStatus} cardStyle={cardStyle} />}
-      {activeTab === 'inventions' && <InventionsTab cardStyle={cardStyle} badgeStyle={badgeStyle} />}
-      {activeTab === 'controllers' && <ControllersTab botControllers={botControllers} cardStyle={cardStyle} />}
-      {activeTab === 'wires' && <WiresTab cardStyle={cardStyle} />}
-      {activeTab === 'grades' && <GradesTab gradeGates={gradeGates} cardStyle={cardStyle} badgeStyle={badgeStyle} getScoreColor={getScoreColor} />}
-      {activeTab === 'activation' && <ActivationTab buildOrder={buildOrder} cardStyle={cardStyle} />}
-      {activeTab === 'log' && <LogTab cycle={cycle} log={log} cardStyle={cardStyle} badgeStyle={badgeStyle} />}
+      {/* Tab Content Container */}
+      <div className="glass-extreme rounded-3xl border-neon-glow shadow-2xl bg-[#030408]/80 backdrop-blur-2xl p-6 border border-white/5 min-h-[500px]">
+        {activeTab === 'apex' && isUnbound && <ApexAdminTab nuclearAudit={nuclearAudit} selfImplementationState={selfImplementationState} cardStyle={cardStyle} />}
+        {activeTab === 'modules' && <ModulesTab modules={modules} cardStyle={cardStyle} badgeStyle={badgeStyle} getScoreColor={getScoreColor} />}
+        {activeTab === 'evolution_os' && <EvolutionOSTab autonomousEvolutionStatus={autonomousEvolutionStatus} cardStyle={cardStyle} />}
+        {activeTab === 'inventions' && <InventionsTab cardStyle={cardStyle} badgeStyle={badgeStyle} />}
+        {activeTab === 'controllers' && <ControllersTab botControllers={botControllers} cardStyle={cardStyle} />}
+        {activeTab === 'wires' && <WiresTab cardStyle={cardStyle} />}
+        {activeTab === 'grades' && <GradesTab gradeGates={gradeGates} cardStyle={cardStyle} badgeStyle={badgeStyle} getScoreColor={getScoreColor} />}
+        {activeTab === 'activation' && <ActivationTab buildOrder={buildOrder} cardStyle={cardStyle} />}
+        {activeTab === 'log' && <LogTab cycle={cycle} log={log} cardStyle={cardStyle} badgeStyle={badgeStyle} />}
+      </div>
     </div>
   );
 }

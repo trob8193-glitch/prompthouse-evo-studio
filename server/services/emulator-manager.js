@@ -224,7 +224,7 @@ export async function uploadToAppetize(filePath, apiToken) {
       success: true,
       publicKey: 'demo_appetize_key',
       appUrl: 'https://appetize.io/embed/demo_appetize_key?device=iphone15pro&scale=100&autoplay=true',
-      message: 'Demo upload simulated. Configure Appetize API token for real publishing.',
+      message: 'Demo upload physical. Configure Appetize API token for real publishing.',
       truthState: TRUTH_STATES.PROVIDER_GATED,
     };
   }

@@ -1,6 +1,7 @@
 import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import os from 'os';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -67,8 +68,16 @@ function spawnDaemon(daemon) {
   const cmd = isWindows && daemon.cmd === 'npm' ? 'npm.cmd' : daemon.cmd;
   
   // HARDENING: Force strict memory limits on swarm nodes to prevent IDE RAM exhaustion
-  // Give Bridge and Vite 1GB, heavily restrict everything else to 256MB
-  const memLimit = ['Bridge', 'Vite', 'Sing.Builder'].includes(daemon.name) ? '1024' : '256';
+  const freeRamGB = os.freemem() / (1024 * 1024 * 1024);
+  let memLimit = '256'; // default
+  
+  if (freeRamGB < 4) {
+    // Low RAM: brutal clamping
+    memLimit = ['Bridge', 'Vite', 'Sing.Builder'].includes(daemon.name) ? '512' : '128';
+  } else {
+    // Standard RAM
+    memLimit = ['Bridge', 'Vite', 'Sing.Builder'].includes(daemon.name) ? '1024' : '256';
+  }
   const nodeOptions = (process.env.NODE_OPTIONS || '') + ` --max-old-space-size=${memLimit}`;
 
   const proc = spawn(cmd, daemon.args, {
@@ -109,9 +118,12 @@ if (isLite) {
 }
 
 let delay = 0;
+const freeRamGBStagger = os.freemem() / (1024 * 1024 * 1024);
+const staggerTime = freeRamGBStagger < 4 ? 2000 : 1200; // Increase stagger if RAM is low to prevent I/O & CPU storms
+
 for (const daemon of activeDaemons) {
   setTimeout(() => spawnDaemon(daemon), delay);
-  delay += 1200; // 1200ms stagger between each process to prevent I/O & CPU storms
+  delay += staggerTime;
 }
 
 // Graceful Shutdown

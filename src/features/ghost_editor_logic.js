@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { getApprovalBlockReason, hasExplicitOwnerApproval } from '../owner-approval.js';
+import { GlobalSplitTether } from '../core/tethers/SplitTetherDaemon.js';
+import { CognitiveLoadBalancer } from '../core/autonomy/CognitiveLoadBalancer.js';
 
 const BLOCKED_MERGE_PATTERNS = [
   /you exceeded your current quota/i,
@@ -116,6 +118,15 @@ ${originalCode}`;
         fs.unlinkSync(tempPath);
       }
     }
+
+    // [SPLIT-TETHER AMPLIFICATION] Send Ghost Editor state directly to PatchProposalEngine and Analytics
+    try {
+      GlobalSplitTether.splitAndRoute('GhostEditor', { type: 'LIVE_EDITOR_STATE', action: 'merge', absolutePath, code: normalizedCode }).catch(() => {});
+    } catch (e) { /* ignore */ }
+
+    // Register flow event (successful merge)
+    CognitiveLoadBalancer.registerFlowEvent();
+
     return { success: true, message: `Merged optimization into ${path.basename(absolutePath)}` };
   }
 
@@ -139,10 +150,12 @@ ${originalCode}`;
     const extension = path.extname(absolutePath).toLowerCase();
     const isCodeFile = ['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'].includes(extension);
     if (isCodeFile && !CODE_SIGNAL_PATTERN.test(code)) {
+      CognitiveLoadBalancer.registerFrictionEvent(2);
       throw new Error('Ghost merge rejected: payload does not look like executable code');
     }
 
     if (code.length < 16) {
+      CognitiveLoadBalancer.registerFrictionEvent(1);
       throw new Error('Ghost merge rejected: payload is too short to be valid source code');
     }
   }

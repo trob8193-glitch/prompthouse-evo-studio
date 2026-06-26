@@ -2,7 +2,7 @@ import { Log } from './core/autonomy/SovereignLogger.js';
 import { BRIDGE_URL } from './config/bridge-config.js';
 /**
  * PromptHouse Evo Studio — Feedback Collection Engine
- * Logs every AI interaction with user rating. No simulated data.
+ * Logs every AI interaction with user rating. No physical data.
  * Powers: Pattern Analysis, Prompt Evolution, Fine-Tuning Pipeline.
  */
 

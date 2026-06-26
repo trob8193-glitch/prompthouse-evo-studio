@@ -61,6 +61,17 @@ export class CognitiveConsciousness {
     if (res.success) {
       Log.success(`🧠 [Consciousness] Realization Physically Signed: ${realization.type}`);
       this.signal_buffer = []; // Flush buffer after physical commitment
+      
+      // META-TETHER EXPANSION: Broadcast cognitive resonance shift to all nodes
+      import('../tethers/SplitTetherDaemon.js').then(({ GlobalSplitTether }) => {
+        try {
+          GlobalSplitTether.splitAndRoute('CognitiveConsciousness', {
+            type: 'COGNITIVE_RESONANCE_SHIFT',
+            realization: realization.type,
+            source: realization.source
+          });
+        } catch {}
+      }).catch(() => {});
     }
   }
 }

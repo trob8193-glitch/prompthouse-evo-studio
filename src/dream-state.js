@@ -42,7 +42,7 @@ export class DreamState {
     this.isDreaming = true;
     Log.info('🌙 [DreamState] User idle for 5 minutes. Entering Dream State...');
     
-    // Simulate background maintenance tasks
+    // execute background maintenance tasks
     await this.processLogCompression();
     await this.mineLatentPatterns();
     

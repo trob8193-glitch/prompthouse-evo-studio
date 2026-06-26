@@ -9,7 +9,9 @@
         { "id": "quantum-hologram-deck", "label": "Quantum Deck", "icon": "Boxes" },
         { "id": "omni-tether-matrix", "label": "Omni-Tether Matrix", "icon": "Activity" },
         { "id": "void-terminal", "label": "Void Terminal", "icon": "Terminal" },
-        { "id": "omni-split-forge", "label": "Omni Split View", "icon": "Columns" }
+        { "id": "omni-split-forge", "label": "Omni Split View", "icon": "Columns" },
+        { "id": "nightforge", "label": "NightForge Daemon", "icon": "Moon" },
+        { "id": "autonomous-command", "label": "Autonomous Command", "icon": "Orbit" }
       ]
     },
     {
@@ -20,7 +22,35 @@
         { "id": "prompt-engine-room", "label": "Prompt Engine", "icon": "Wand2" },
         { "id": "agent-command-roster", "label": "Agent Command", "icon": "Bot" },
         { "id": "nuclear-proof-os", "label": "Nuclear Proof OS", "icon": "ShieldCheck" },
-        { "id": "omni-marketplace-nexus", "label": "Omni-Marketplace", "icon": "Globe" }
+        { "id": "omni-marketplace-nexus", "label": "Omni-Marketplace", "icon": "Globe" },
+        { "id": "evo-duel", "label": "Evo Duel Arena", "icon": "Swords" },
+        { "id": "worktwin", "label": "WorkTwin Vault", "icon": "Fingerprint" }
+      ]
+    },
+    {
+      "id": "the-forge-tools",
+      "label": "The Forge (Tools)",
+      "items": [
+        { "id": "self-build-forge", "label": "Self-Build Forge", "icon": "Hammer" },
+        { "id": "tool-autogen", "label": "Tool Autogenerator", "icon": "Wrench" },
+        { "id": "pattern-miner", "label": "Pattern Miner", "icon": "Search" }
+      ]
+    },
+    {
+      "id": "integration-delivery",
+      "label": "Integration & Delivery",
+      "items": [
+        { "id": "chrome-extension", "label": "Extension Controller", "icon": "Puzzle" },
+        { "id": "promptlink", "label": "PromptLink Registry", "icon": "Link2" },
+        { "id": "deploy-rail", "label": "Deploy Rail", "icon": "Truck" },
+        { "id": "commerce-rail", "label": "Commerce Rail", "icon": "ShoppingCart" }
+      ]
+    },
+    {
+      "id": "generative",
+      "label": "Generative",
+      "items": [
+        { "id": "ai-prompt-gen", "label": "AI Prompt Generator", "icon": "Wand2" }
       ]
     },
     {

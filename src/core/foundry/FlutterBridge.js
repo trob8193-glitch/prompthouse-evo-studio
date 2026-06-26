@@ -8,6 +8,7 @@
 
 import { Log } from '../autonomy/SovereignLogger.js';
 import { UniversalBridge } from '../interop/UniversalBridge.js';
+import { GlobalSplitTether } from '../tethers/SplitTetherDaemon.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -65,6 +66,12 @@ export class FlutterBridge {
     Log.success(`🐦 [FlutterBridge] Seed materialized in lib/${normalizedSeed.id}.dart`);
 
     const reload = await this.bridge.dispatch('flutter', 'hot-reload');
+
+    // [SPLIT-TETHER AMPLIFICATION] Send Flutter Mobile App Maker event to Copilot and Marketing
+    try {
+      GlobalSplitTether.splitAndRoute('FlutterBridge', { type: 'MOBILE_APP_MAKER', seed: normalizedSeed, targetFile }).catch(() => {});
+    } catch (e) { /* ignore */ }
+
     return {
       artifactPath: targetFile,
       relativeArtifactPath: path.relative(process.cwd(), targetFile),

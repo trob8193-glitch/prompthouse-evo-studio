@@ -1,0 +1,58 @@
+import React from 'react';
+
+const evoBotStyles = `
+@keyframes evoBotDropShadowPulse {
+  0%   { filter: drop-shadow(0 0 10px rgba(99,102,241,0.8)); }
+  25%  { filter: drop-shadow(0 0 15px rgba(0,240,255,1)); }
+  50%  { filter: drop-shadow(0 0 20px rgba(236,72,153,0.9)); }
+  75%  { filter: drop-shadow(0 0 15px rgba(16,185,129,0.8)); }
+  100% { filter: drop-shadow(0 0 10px rgba(99,102,241,0.8)); }
+}
+
+@keyframes evoBotFloat {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50%      { transform: translateY(-3px) scale(1.02); }
+}
+
+.evo-bot-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: evoBotFloat 4s ease-in-out infinite;
+  z-index: 10;
+}
+
+.evo-bot-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Apply the pulsating multi-colored neon glow directly to the hollowed out silhouette */
+  animation: evoBotDropShadowPulse 4s linear infinite;
+  border-radius: 50%;
+}
+
+.evo-bot-hologram-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  /* Apply the panning shimmer gradient overlay to the bot's metallic surface */
+  background: linear-gradient(90deg, rgba(99,102,241,0.4), rgba(0,240,255,0.5), rgba(236,72,153,0.6), rgba(16,185,129,0.4), rgba(99,102,241,0.4));
+  background-size: 300% 100%;
+  mix-blend-mode: color-dodge;
+  pointer-events: none;
+  animation: evoTitleShimmer 4s linear infinite;
+}
+`;
+
+export function EvoBot({ size = 48, className = '' }) {
+  return (
+    <>
+      <style>{evoBotStyles}</style>
+      <div className={`evo-bot-container ${className}`} style={{ width: size, height: size }}>
+        <img src="/evo_bot.png" alt="PH EVO BOT" className="evo-bot-image" />
+        <div className="evo-bot-hologram-overlay" />
+      </div>
+    </>
+  );
+}

@@ -168,7 +168,7 @@ const EVO_PULSE_MODULES = [
     summary: 'Extracts repeated invention patterns, buyer markets, architecture rules, bot roles, monetization paths, and build phases.',
     inputs: ['Idea stream', 'Repeated demands', 'Market hints', 'Build constraints'],
     outputs: ['Product concepts', 'Buyer maps', 'Master prompts', 'Phase plans'],
-    gates: ['Buyer path required', 'MVP core required', 'No value hype'],
+    gates: ['Buyer path required', 'MVP core required', 'No value value'],
     status: 'PRIMED',
   },
   {

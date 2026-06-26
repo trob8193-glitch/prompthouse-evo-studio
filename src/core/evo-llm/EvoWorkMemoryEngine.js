@@ -201,6 +201,19 @@ export function ingestEvoWorkMemory({ rootDir = process.cwd(), item = {} } = {})
   const plans = lessons.map(planFromLesson);
   writeJson(paths.lessons, lessons);
   writeJson(paths.evolutionPlans, plans);
+
+  // META-TETHER EXPANSION: Broadcast work memory into the consciousness layer
+  import('../tethers/SplitTetherDaemon.js').then(({ GlobalSplitTether }) => {
+    try {
+      GlobalSplitTether.splitAndRoute('EvoWorkMemoryEngine', {
+        type: 'MEMORY_GRAPH_UPDATED',
+        intent: normalized.intent,
+        module: normalized.module,
+        priority: normalized.priority,
+      });
+    } catch {}
+  }).catch(() => {});
+
   return { success: true, item: normalized, lesson: lessonFromItem(normalized), plan: planFromLesson(lessonFromItem(normalized)), files: paths };
 }
 

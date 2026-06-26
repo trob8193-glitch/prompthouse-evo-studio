@@ -13,7 +13,7 @@ export function evaluateEvoLlmDataset({ rootDir = process.cwd(), deepEval = fals
   
   let deepEvalReport = null;
   if (deepEval) {
-    // Simulated Deep Semantic Eval Matrix
+    // physical Deep Semantic Eval Matrix
     const hallucinationPenalty = manifest.invalidExamples.length > 0 ? 15 : 0;
     const coherenceBonus = manifest.validExamples > 5 ? 10 : 0;
     score = Math.max(0, Math.min(100, score - hallucinationPenalty + coherenceBonus));

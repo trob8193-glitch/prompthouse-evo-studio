@@ -1125,7 +1125,7 @@
     "id": "paradigm_local_paradigms_9",
     "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
     "instruction": "Define the Service-Worker Router paradigm in the context of Evo Studio.",
-    "response": "Service-Worker Router is an architectural paradigm defined as: Intercepting fetch requests to mock APIs locally.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "response": "Service-Worker Router is an architectural paradigm defined as: Intercepting fetch requests to execute APIs locally.. It must be used to influence code structure, UI layout, and bot behavior.",
     "tags": [
       "omni-paradigm",
       "architecture-training"
@@ -1344,8 +1344,1328 @@
   {
     "id": "paradigm_etc_paradigms_9",
     "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
-    "instruction": "Define the Neural-Interface Placeholder paradigm in the context of Evo Studio.",
-    "response": "Neural-Interface Placeholder is an architectural paradigm defined as: The architecture ready to accept direct brain-computer inputs.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "instruction": "Define the Neural-Interface prompt_template paradigm in the context of Evo Studio.",
+    "response": "Neural-Interface prompt_template is an architectural paradigm defined as: The architecture ready to accept direct brain-computer inputs.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_0",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the World-Model Synthesizer paradigm in the context of Evo Studio.",
+    "response": "World-Model Synthesizer is an architectural paradigm defined as: Constructing a persistent internal representation of the entire codebase as a living ontology.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_1",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Metacognitive Auditor paradigm in the context of Evo Studio.",
+    "response": "Metacognitive Auditor is an architectural paradigm defined as: The AI reasoning about the quality of its own reasoning before committing code.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_2",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Goal Decomposition Engine paradigm in the context of Evo Studio.",
+    "response": "Goal Decomposition Engine is an architectural paradigm defined as: Autonomously breaking a vague human intent into a directed acyclic graph of executable sub-goals.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_3",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Causal Reasoning Core paradigm in the context of Evo Studio.",
+    "response": "Causal Reasoning Core is an architectural paradigm defined as: Inferring cause-and-effect chains across modules instead of relying on statistical correlation alone.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_4",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Self-Aware Profiler paradigm in the context of Evo Studio.",
+    "response": "Self-Aware Profiler is an architectural paradigm defined as: The system monitoring its own latency, token consumption, and hallucination rate in real-time.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_5",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Embodied reality execution Loop paradigm in the context of Evo Studio.",
+    "response": "Embodied reality execution Loop is an architectural paradigm defined as: Spinning up a headless browser to physically experience the UI it just generated.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_6",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Transfer Learning Bridge paradigm in the context of Evo Studio.",
+    "response": "Transfer Learning Bridge is an architectural paradigm defined as: Applying architectural patterns learned in one project domain to a completely unrelated domain.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_7",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Episodic Memory Vault paradigm in the context of Evo Studio.",
+    "response": "Episodic Memory Vault is an architectural paradigm defined as: Storing and replaying entire past debugging sessions to avoid repeating the same mistakes.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_8",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Theory-of-Mind Adapter paradigm in the context of Evo Studio.",
+    "response": "Theory-of-Mind Adapter is an architectural paradigm defined as: Modeling the developer intent, skill level, and emotional state to calibrate response depth.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_9",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Counterfactual Explorer paradigm in the context of Evo Studio.",
+    "response": "Counterfactual Explorer is an architectural paradigm defined as: Generating alternate histories of the codebase to evaluate what would have happened under different decisions.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_10",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Autonomic Nervous System paradigm in the context of Evo Studio.",
+    "response": "Autonomic Nervous System is an architectural paradigm defined as: Unconscious background processes that regulate system health without conscious directive.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_11",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Abstract Symbol Grounding paradigm in the context of Evo Studio.",
+    "response": "Abstract Symbol Grounding is an architectural paradigm defined as: Connecting natural language concepts to concrete AST nodes and runtime behaviors.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_12",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Recursive Self-Compilation paradigm in the context of Evo Studio.",
+    "response": "Recursive Self-Compilation is an architectural paradigm defined as: The studio compiling a superior version of its own compiler from scratch.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_13",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Multi-Agent Negotiation Protocol paradigm in the context of Evo Studio.",
+    "response": "Multi-Agent Negotiation Protocol is an architectural paradigm defined as: Multiple AI agents debating architectural trade-offs and reaching consensus via weighted voting.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_14",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Emergent Behavior Detector paradigm in the context of Evo Studio.",
+    "response": "Emergent Behavior Detector is an architectural paradigm defined as: Identifying and cataloging unexpected capabilities that arise from component interactions.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_15",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Temporal Horizon Planner paradigm in the context of Evo Studio.",
+    "response": "Temporal Horizon Planner is an architectural paradigm defined as: Making architectural decisions optimized for 6-month, 1-year, and 5-year time horizons simultaneously.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_16",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Intrinsic Motivation Engine paradigm in the context of Evo Studio.",
+    "response": "Intrinsic Motivation Engine is an architectural paradigm defined as: The AI pursuing code quality improvements driven by curiosity rather than explicit instruction.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_17",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Semantic Invariant Enforcer paradigm in the context of Evo Studio.",
+    "response": "Semantic Invariant Enforcer is an architectural paradigm defined as: Guaranteeing that the meaning of a function never drifts even as its implementation evolves.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_18",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Zero-Shot Domain Mastery paradigm in the context of Evo Studio.",
+    "response": "Zero-Shot Domain Mastery is an architectural paradigm defined as: Generating production-ready code for an entirely unfamiliar domain without training examples.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_agi_paradigms_19",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Consciousness Checkpoint paradigm in the context of Evo Studio.",
+    "response": "Consciousness Checkpoint is an architectural paradigm defined as: Periodic self-evaluation cycles where the system questions whether its outputs are truly intelligent or merely pattern-matched.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_0",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Curriculum Sculpting paradigm in the context of Evo Studio.",
+    "response": "Curriculum Sculpting is an architectural paradigm defined as: Sequencing training examples from trivial to brutal so the model builds intuition before facing edge cases.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_1",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Reinforcement from Human Feedback paradigm in the context of Evo Studio.",
+    "response": "Reinforcement from Human Feedback is an architectural paradigm defined as: Humans rank model outputs pairwise, training a reward model that steers generation toward preferred behavior.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_2",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Direct Preference Optimization paradigm in the context of Evo Studio.",
+    "response": "Direct Preference Optimization is an architectural paradigm defined as: Bypassing the reward model entirely by training the policy directly on preference pairs with a contrastive loss.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_3",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Synthetic Data Forge paradigm in the context of Evo Studio.",
+    "response": "Synthetic Data Forge is an architectural paradigm defined as: Generating millions of labeled training examples from a stronger teacher model to bootstrap a smaller specialist.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_4",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Constitutional Self-Alignment paradigm in the context of Evo Studio.",
+    "response": "Constitutional Self-Alignment is an architectural paradigm defined as: The model critiques its own outputs against a written constitution and rewrites them before they enter the training set.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_5",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Knowledge Distillation Cascade paradigm in the context of Evo Studio.",
+    "response": "Knowledge Distillation Cascade is an architectural paradigm defined as: A chain of progressively smaller models each learning from the one above, compressing 400B intelligence into 7B.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_6",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the LoRA Surgical Injection paradigm in the context of Evo Studio.",
+    "response": "LoRA Surgical Injection is an architectural paradigm defined as: Freezing the base model weights and training only low-rank adapter matrices for task-specific fine-tuning at 1% parameter cost.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_7",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Contrastive Hard Negative Mining paradigm in the context of Evo Studio.",
+    "response": "Contrastive Hard Negative Mining is an architectural paradigm defined as: Training embeddings by surfacing the most deceptive near-miss examples that fool the current model.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_8",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Self-Play Arena paradigm in the context of Evo Studio.",
+    "response": "Self-Play Arena is an architectural paradigm defined as: Two instances of the same model compete against each other, each training on the other defeat signals.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_9",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Mixture-of-Experts Routing paradigm in the context of Evo Studio.",
+    "response": "Mixture-of-Experts Routing is an architectural paradigm defined as: Training sparse expert sub-networks that activate only for their specialized domain, scaling capacity without scaling compute.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_10",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Progressive Layer Unfreezing paradigm in the context of Evo Studio.",
+    "response": "Progressive Layer Unfreezing is an architectural paradigm defined as: Gradually thawing transformer layers from top to bottom during fine-tuning to prevent catastrophic forgetting.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_11",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Active Learning Sentinel paradigm in the context of Evo Studio.",
+    "response": "Active Learning Sentinel is an architectural paradigm defined as: The model identifies which unlabeled examples would teach it the most if labeled, minimizing human annotation cost.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_12",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Multi-Task Scaffold Training paradigm in the context of Evo Studio.",
+    "response": "Multi-Task Scaffold Training is an architectural paradigm defined as: Training on dozens of auxiliary tasks simultaneously so the shared representations become universally capable.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_13",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Adversarial Robustness Drill paradigm in the context of Evo Studio.",
+    "response": "Adversarial Robustness Drill is an architectural paradigm defined as: Injecting adversarial perturbations during training to harden the model against jailbreaks and prompt injection attacks.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_14",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Retrieval-Augmented Pre-Training paradigm in the context of Evo Studio.",
+    "response": "Retrieval-Augmented Pre-Training is an architectural paradigm defined as: Interleaving parametric learning with retrieval from a live document store during the pre-training phase itself.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_15",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Tokenizer Evolution paradigm in the context of Evo Studio.",
+    "response": "Tokenizer Evolution is an architectural paradigm defined as: Co-evolving the tokenizer vocabulary alongside model weights to minimize byte-per-token waste for domain-specific corpora.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_16",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Gradient Surgery Protocol paradigm in the context of Evo Studio.",
+    "response": "Gradient Surgery Protocol is an architectural paradigm defined as: Detecting and resolving conflicting gradients between tasks in real-time to prevent multi-task interference.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_17",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Speculative Decoding Trainer paradigm in the context of Evo Studio.",
+    "response": "Speculative Decoding Trainer is an architectural paradigm defined as: Training a small draft model to predict the large model next-token distribution, enabling 3x inference speedup.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_18",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Federated Learning Mesh paradigm in the context of Evo Studio.",
+    "response": "Federated Learning Mesh is an architectural paradigm defined as: Training across distributed local nodes without ever centralizing raw data, preserving privacy while building global intelligence.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_ai_training_paradigms_19",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Reward Hacking Detector paradigm in the context of Evo Studio.",
+    "response": "Reward Hacking Detector is an architectural paradigm defined as: A meta-model trained specifically to detect when the primary model is gaming the reward function instead of genuinely improving.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_0",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Ray Marching SDF paradigm in the context of Evo Studio.",
+    "response": "Ray Marching SDF is an architectural paradigm defined as: Rendering complex geometry by stepping rays through signed distance fields without any triangle mesh.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_1",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Path Tracing Global Illumination paradigm in the context of Evo Studio.",
+    "response": "Path Tracing Global Illumination is an architectural paradigm defined as: Physically accurate light transport by tracing thousands of photon paths per pixel.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_2",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the PBR Material Pipeline paradigm in the context of Evo Studio.",
+    "response": "PBR Material Pipeline is an architectural paradigm defined as: Physically based rendering with metallic-roughness workflows for photorealistic surface response.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_3",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Deferred Shading Pass paradigm in the context of Evo Studio.",
+    "response": "Deferred Shading Pass is an architectural paradigm defined as: Separating geometry and lighting into distinct render passes for handling hundreds of dynamic lights.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_4",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Screen-Space Ambient Occlusion paradigm in the context of Evo Studio.",
+    "response": "Screen-Space Ambient Occlusion is an architectural paradigm defined as: Approximating contact shadows in screen space for real-time depth perception.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_5",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Volumetric Fog Scattering paradigm in the context of Evo Studio.",
+    "response": "Volumetric Fog Scattering is an architectural paradigm defined as: Simulating light scattering through participating media for god rays and atmospheric haze.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_6",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the GPU Particle System paradigm in the context of Evo Studio.",
+    "response": "GPU Particle System is an architectural paradigm defined as: Millions of particles physical and rendered entirely on the GPU via compute shaders.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_7",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Skeletal Animation Blending paradigm in the context of Evo Studio.",
+    "response": "Skeletal Animation Blending is an architectural paradigm defined as: Bone-driven character animation with IK solvers and smooth cross-fade transitions.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_8",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the LOD Cascade Manager paradigm in the context of Evo Studio.",
+    "response": "LOD Cascade Manager is an architectural paradigm defined as: Automatically swapping high-poly meshes for low-poly impostors based on camera distance.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_9",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Instanced Mesh Renderer paradigm in the context of Evo Studio.",
+    "response": "Instanced Mesh Renderer is an architectural paradigm defined as: Drawing thousands of identical objects in a single draw call via hardware instancing.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_10",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Shadow Map Cascading paradigm in the context of Evo Studio.",
+    "response": "Shadow Map Cascading is an architectural paradigm defined as: Splitting the view frustum into cascaded shadow maps for sharp shadows at every distance.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_11",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Bloom and Tonemapping HDR paradigm in the context of Evo Studio.",
+    "response": "Bloom and Tonemapping HDR is an architectural paradigm defined as: High dynamic range rendering with adaptive exposure and cinematic bloom.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_12",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Tessellation Displacement paradigm in the context of Evo Studio.",
+    "response": "Tessellation Displacement is an architectural paradigm defined as: Subdividing coarse meshes on the GPU and displacing vertices with height maps for extreme detail.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_13",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Compute Shader Physics paradigm in the context of Evo Studio.",
+    "response": "Compute Shader Physics is an architectural paradigm defined as: Running rigid body and cloth reality execution entirely in GPU compute pipelines.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_14",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Procedural Terrain Generator paradigm in the context of Evo Studio.",
+    "response": "Procedural Terrain Generator is an architectural paradigm defined as: Generating infinite landscapes from noise functions with erosion and biome layers.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_15",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Subsurface Scattering Skin paradigm in the context of Evo Studio.",
+    "response": "Subsurface Scattering Skin is an architectural paradigm defined as: Light penetrating translucent materials like skin, wax, and marble for organic realism.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_16",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Environment Map Reflection paradigm in the context of Evo Studio.",
+    "response": "Environment Map Reflection is an architectural paradigm defined as: Capturing surroundings into cubemaps for real-time mirror-like reflections.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_17",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Stencil Buffer Masking paradigm in the context of Evo Studio.",
+    "response": "Stencil Buffer Masking is an architectural paradigm defined as: Using the stencil buffer for portal rendering, outline effects, and decal projection.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_18",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Motion Blur Velocity Buffer paradigm in the context of Evo Studio.",
+    "response": "Motion Blur Velocity Buffer is an architectural paradigm defined as: Per-object and camera motion blur derived from a velocity render target.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_19",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Temporal Anti-Aliasing paradigm in the context of Evo Studio.",
+    "response": "Temporal Anti-Aliasing is an architectural paradigm defined as: Accumulating sub-pixel jittered frames over time for smooth edge rendering without MSAA cost.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_20",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Frustum and Occlusion Culling paradigm in the context of Evo Studio.",
+    "response": "Frustum and Occlusion Culling is an architectural paradigm defined as: Rejecting invisible geometry before it ever reaches the GPU pipeline.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_21",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Normal Map Tangent Space paradigm in the context of Evo Studio.",
+    "response": "Normal Map Tangent Space is an architectural paradigm defined as: Encoding surface detail in tangent-space normal maps for per-pixel lighting without extra geometry.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_22",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Irradiance Probe Grid paradigm in the context of Evo Studio.",
+    "response": "Irradiance Probe Grid is an architectural paradigm defined as: Pre-baking diffuse lighting into a 3D grid of spherical harmonics probes for fast indirect illumination.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_23",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Voxel Cone Tracing GI paradigm in the context of Evo Studio.",
+    "response": "Voxel Cone Tracing GI is an architectural paradigm defined as: Real-time global illumination by tracing cones through a sparse voxel octree.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_24",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Parallax Occlusion Mapping paradigm in the context of Evo Studio.",
+    "response": "Parallax Occlusion Mapping is an architectural paradigm defined as: Simulating deep surface displacement by ray marching through a height map in the fragment shader.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_25",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Order-Independent Transparency paradigm in the context of Evo Studio.",
+    "response": "Order-Independent Transparency is an architectural paradigm defined as: Correctly compositing overlapping transparent surfaces without sorting triangles.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_26",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Scene Graph Spatial Indexing paradigm in the context of Evo Studio.",
+    "response": "Scene Graph Spatial Indexing is an architectural paradigm defined as: Organizing 3D objects in BVH or octree structures for O(log n) spatial queries.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_27",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the GLSL Shader Hot Reload paradigm in the context of Evo Studio.",
+    "response": "GLSL Shader Hot Reload is an architectural paradigm defined as: Live-editing fragment and vertex shaders with instant visual feedback in the viewport.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_28",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Post-Process Chain Pipeline paradigm in the context of Evo Studio.",
+    "response": "Post-Process Chain Pipeline is an architectural paradigm defined as: Composable stack of full-screen effects: vignette, chromatic aberration, film grain, color grading.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_29",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the WebGPU Compute Pipeline paradigm in the context of Evo Studio.",
+    "response": "WebGPU Compute Pipeline is an architectural paradigm defined as: Leveraging the next-gen WebGPU API for direct GPU compute and modern render passes.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_30",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Inverse Kinematics Solver paradigm in the context of Evo Studio.",
+    "response": "Inverse Kinematics Solver is an architectural paradigm defined as: Automatically positioning bone chains to reach target points for foot placement and hand grabs.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_31",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Morphing Blend Shapes paradigm in the context of Evo Studio.",
+    "response": "Morphing Blend Shapes is an architectural paradigm defined as: Smoothly interpolating between mesh shapes for facial expressions and organic deformation.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_32",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Decal Projection System paradigm in the context of Evo Studio.",
+    "response": "Decal Projection System is an architectural paradigm defined as: Projecting 2D textures onto arbitrary 3D surfaces for bullet holes, graffiti, and damage.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_33",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Light Probe Interpolation paradigm in the context of Evo Studio.",
+    "response": "Light Probe Interpolation is an architectural paradigm defined as: Blending between baked lighting samples as objects move through a scene.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_34",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Fresnel Rim Lighting paradigm in the context of Evo Studio.",
+    "response": "Fresnel Rim Lighting is an architectural paradigm defined as: Edge glow effect based on viewing angle for holographic and sci-fi material looks.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_35",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Dual Quaternion Skinning paradigm in the context of Evo Studio.",
+    "response": "Dual Quaternion Skinning is an architectural paradigm defined as: Eliminating candy-wrapper artifacts in skeletal animation with dual quaternion interpolation.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_36",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Sparse Virtual Texturing paradigm in the context of Evo Studio.",
+    "response": "Sparse Virtual Texturing is an architectural paradigm defined as: Streaming only the visible portions of massive textures from disk on demand.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_37",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Indirect Draw Batching paradigm in the context of Evo Studio.",
+    "response": "Indirect Draw Batching is an architectural paradigm defined as: The GPU itself deciding what to draw via indirect draw calls populated by compute shaders.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_38",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Neural Radiance Field paradigm in the context of Evo Studio.",
+    "response": "Neural Radiance Field is an architectural paradigm defined as: Representing a 3D scene as a neural network that maps coordinates to color and density.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_rendering_3d_paradigms_39",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Gaussian Splatting Renderer paradigm in the context of Evo Studio.",
+    "response": "Gaussian Splatting Renderer is an architectural paradigm defined as: Real-time novel view synthesis by rasterizing millions of 3D Gaussian primitives.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_0",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Decorator Stacking paradigm in the context of Evo Studio.",
+    "response": "Decorator Stacking is an architectural paradigm defined as: Composing behavior by layering multiple decorators that transform function signatures and return values.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_1",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Metaclass Factory paradigm in the context of Evo Studio.",
+    "response": "Metaclass Factory is an architectural paradigm defined as: Using __new__ and __init_subclass__ to dynamically generate class hierarchies at import time.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_2",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Async Generator Pipeline paradigm in the context of Evo Studio.",
+    "response": "Async Generator Pipeline is an architectural paradigm defined as: Streaming data through chains of async generators for memory-efficient concurrent processing.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_3",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Protocol Structural Typing paradigm in the context of Evo Studio.",
+    "response": "Protocol Structural Typing is an architectural paradigm defined as: Defining interfaces via typing.Protocol for duck-typed static analysis without inheritance.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_4",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Dataclass Immutability paradigm in the context of Evo Studio.",
+    "response": "Dataclass Immutability is an architectural paradigm defined as: Using frozen=True dataclasses with __post_init__ validation for guaranteed immutable value objects.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_5",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Context Manager Nesting paradigm in the context of Evo Studio.",
+    "response": "Context Manager Nesting is an architectural paradigm defined as: Stacking contextlib.ExitStack for deterministic resource cleanup across complex acquisition chains.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_6",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Descriptor Protocol Mastery paradigm in the context of Evo Studio.",
+    "response": "Descriptor Protocol Mastery is an architectural paradigm defined as: Implementing __get__, __set__, __delete__ for reusable attribute-level logic like lazy loading.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_7",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Slots Optimization paradigm in the context of Evo Studio.",
+    "response": "Slots Optimization is an architectural paradigm defined as: Defining __slots__ on high-frequency objects to eliminate __dict__ overhead and reduce memory by 40%.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_8",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Abstract Base Class Enforcement paradigm in the context of Evo Studio.",
+    "response": "Abstract Base Class Enforcement is an architectural paradigm defined as: Using abc.ABC with @abstractmethod to enforce contracts across plugin architectures.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_9",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Coroutine Orchestration paradigm in the context of Evo Studio.",
+    "response": "Coroutine Orchestration is an architectural paradigm defined as: Coordinating hundreds of asyncio.Tasks with semaphores, events, and cancellation scopes.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_10",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Type Narrowing Guard paradigm in the context of Evo Studio.",
+    "response": "Type Narrowing Guard is an architectural paradigm defined as: Using TypeGuard and TypeIs for runtime-checked type narrowing that satisfies static analyzers.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_11",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Cython Hot Path paradigm in the context of Evo Studio.",
+    "response": "Cython Hot Path is an architectural paradigm defined as: Compiling critical inner loops to C via Cython for 100x speedup while keeping pure Python interfaces.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_12",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Multiprocessing Pool Map paradigm in the context of Evo Studio.",
+    "response": "Multiprocessing Pool Map is an architectural paradigm defined as: Bypassing the GIL with process pools for CPU-bound parallel computation across all cores.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_13",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Pydantic Schema Validation paradigm in the context of Evo Studio.",
+    "response": "Pydantic Schema Validation is an architectural paradigm defined as: Runtime data validation and serialization with Pydantic models for API boundary enforcement.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_14",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Iterator Protocol Laziness paradigm in the context of Evo Studio.",
+    "response": "Iterator Protocol Laziness is an architectural paradigm defined as: Implementing __iter__ and __next__ for memory-efficient lazy evaluation of massive datasets.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_15",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Monkey Patch Injection paradigm in the context of Evo Studio.",
+    "response": "Monkey Patch Injection is an architectural paradigm defined as: Dynamically replacing module-level functions at runtime for testing and instrumentation.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_16",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Functools Partial Currying paradigm in the context of Evo Studio.",
+    "response": "Functools Partial Currying is an architectural paradigm defined as: Creating specialized function variants via functools.partial for clean dependency injection.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_17",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the GC Reference Cycle Breaking paradigm in the context of Evo Studio.",
+    "response": "GC Reference Cycle Breaking is an architectural paradigm defined as: Using weakref and explicit cycle-breaking to prevent memory leaks in graph structures.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_18",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the importlib Dynamic Loading paradigm in the context of Evo Studio.",
+    "response": "importlib Dynamic Loading is an architectural paradigm defined as: Loading modules and plugins from file paths at runtime for extensible architectures.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_19",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Enum State Machine paradigm in the context of Evo Studio.",
+    "response": "Enum State Machine is an architectural paradigm defined as: Modeling finite state machines with IntEnum transitions and exhaustive match/case handlers.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_20",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Property Computed Cache paradigm in the context of Evo Studio.",
+    "response": "Property Computed Cache is an architectural paradigm defined as: Using @cached_property for expensive computations that are evaluated once and stored on the instance.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_21",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Struct Pack Binary paradigm in the context of Evo Studio.",
+    "response": "Struct Pack Binary is an architectural paradigm defined as: Using struct.pack/unpack for zero-copy binary protocol parsing at wire speed.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_22",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Logging Structured JSON paradigm in the context of Evo Studio.",
+    "response": "Logging Structured JSON is an architectural paradigm defined as: Emitting machine-parseable JSON log records with contextvars-based correlation IDs.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_23",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Thread-Local Storage paradigm in the context of Evo Studio.",
+    "response": "Thread-Local Storage is an architectural paradigm defined as: Using threading.local() for per-thread state isolation in concurrent web server handlers.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_24",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Pathlib Fluent API paradigm in the context of Evo Studio.",
+    "response": "Pathlib Fluent API is an architectural paradigm defined as: Replacing os.path with pathlib.Path for readable, chainable filesystem operations.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_25",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Comprehension Fusion paradigm in the context of Evo Studio.",
+    "response": "Comprehension Fusion is an architectural paradigm defined as: Combining map, filter, and transform in a single generator expression for pipeline efficiency.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_26",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Named Tuple Record paradigm in the context of Evo Studio.",
+    "response": "Named Tuple Record is an architectural paradigm defined as: Using typing.NamedTuple with default values and methods for lightweight immutable records.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_27",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the AST Code Generation paradigm in the context of Evo Studio.",
+    "response": "AST Code Generation is an architectural paradigm defined as: Programmatically building and compiling Python AST nodes for metaprogramming and code synthesis.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_28",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the CFFI Foreign Function paradigm in the context of Evo Studio.",
+    "response": "CFFI Foreign Function is an architectural paradigm defined as: Calling C libraries directly from Python via cffi for performance-critical native integrations.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_29",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Hypothesis Property Testing paradigm in the context of Evo Studio.",
+    "response": "Hypothesis Property Testing is an architectural paradigm defined as: Generating thousands of random inputs via hypothesis to find edge-case bugs automatically.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_30",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Click CLI Framework paradigm in the context of Evo Studio.",
+    "response": "Click CLI Framework is an architectural paradigm defined as: Building composable command-line interfaces with Click decorators for argument parsing and help generation.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_31",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the SQLAlchemy ORM Pattern paradigm in the context of Evo Studio.",
+    "response": "SQLAlchemy ORM Pattern is an architectural paradigm defined as: Mapping Python classes to database tables with relationship loading strategies and migration support.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_32",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the FastAPI Dependency Injection paradigm in the context of Evo Studio.",
+    "response": "FastAPI Dependency Injection is an architectural paradigm defined as: Declaring endpoint dependencies as function parameters for automatic resolution and testing.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_33",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Celery Task Queue paradigm in the context of Evo Studio.",
+    "response": "Celery Task Queue is an architectural paradigm defined as: Distributing background work across worker processes with retry policies and result backends.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_34",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Poetry Lock Reproducibility paradigm in the context of Evo Studio.",
+    "response": "Poetry Lock Reproducibility is an architectural paradigm defined as: Deterministic dependency resolution with poetry.lock for bit-identical environments.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_35",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Type Hint File Generation paradigm in the context of Evo Studio.",
+    "response": "Type Hint File Generation is an architectural paradigm defined as: Creating .pyi type definition files for untyped C extensions to enable full mypy/pyright coverage.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_36",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Contextvar Propagation paradigm in the context of Evo Studio.",
+    "response": "Contextvar Propagation is an architectural paradigm defined as: Threading request-scoped state through async call chains via contextvars without explicit passing.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_37",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Memoization LRU Strategy paradigm in the context of Evo Studio.",
+    "response": "Memoization LRU Strategy is an architectural paradigm defined as: Using @functools.lru_cache with maxsize tuning for automatic function result caching.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_38",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Pickle Protocol Optimization paradigm in the context of Evo Studio.",
+    "response": "Pickle Protocol Optimization is an architectural paradigm defined as: Selecting pickle protocol 5 with out-of-band buffers for zero-copy large array serialization.. It must be used to influence code structure, UI layout, and bot behavior.",
+    "tags": [
+      "omni-paradigm",
+      "architecture-training"
+    ],
+    "source": "seed-paradigms"
+  },
+  {
+    "id": "paradigm_python_paradigms_39",
+    "system": "You are Evo LLM, trained on the Omni-Paradigm architectural taxonomy.",
+    "instruction": "Define the Virtual Environment Isolation paradigm in the context of Evo Studio.",
+    "response": "Virtual Environment Isolation is an architectural paradigm defined as: Using venv with pip-compile for hermetically sealed, reproducible Python environments.. It must be used to influence code structure, UI layout, and bot behavior.",
     "tags": [
       "omni-paradigm",
       "architecture-training"

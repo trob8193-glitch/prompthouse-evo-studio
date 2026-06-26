@@ -37,7 +37,7 @@ export class MegaTetherCore {
     fs.writeFileSync(eventFile, JSON.stringify(event, null, 2));
 
     // Also forward to Work Memory if it's an actionable UI or chat event
-    if (type.includes('ui-action') || type.includes('signal') || type.includes('chat')) {
+    if (type.includes('ui-action') || type.includes('signal') || type.includes('chat') || type.includes('SWARM_')) {
       this.ingestIntoWorkMemory(event);
     }
 

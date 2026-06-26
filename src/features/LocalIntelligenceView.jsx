@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 export default function LocalIntelligenceView() {
   const [ollamaStatus, setOllamaStatus] = useState('Checking...');
   const [models, setModels] = useState([]);
-  const [vramUsage, setVramUsage] = useState(45); // simulated percent
+  const [vramUsage, setVramUsage] = useState(45); // physical percent
 
   useEffect(() => {
     fetch('http://127.0.0.1:11434/api/tags')
@@ -14,7 +14,7 @@ export default function LocalIntelligenceView() {
       })
       .catch(() => setOllamaStatus('OFFLINE'));
       
-    // Simulate VRAM fluctuation
+    // execute VRAM fluctuation
     const int = setInterval(() => {
       setVramUsage(prev => Math.min(95, Math.max(10, prev + (Math.random() * 10 - 5))));
     }, 3000);

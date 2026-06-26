@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BRIDGE_URL } from '../../config/bridge-config.js';
+import { Smartphone, Cloud, RefreshCw, Play, Download, Terminal, UploadCloud, MonitorSmartphone } from 'lucide-react';
 
 export function EvoMobileController({ promptBridgeBaseUrl = BRIDGE_URL }) {
   const [activeTab, setActiveTab] = useState('local-cli');
@@ -18,7 +19,6 @@ export function EvoMobileController({ promptBridgeBaseUrl = BRIDGE_URL }) {
   const [appetizeToken, setAppetizeToken] = useState('');
   const [appetizeStatus, setAppetizeStatus] = useState('Idle');
 
-  // Load local devices
   const refreshLocalDevices = async () => {
     setIsLoadingDevices(true);
     setDeviceError('');
@@ -43,7 +43,6 @@ export function EvoMobileController({ promptBridgeBaseUrl = BRIDGE_URL }) {
     }
   }, [activeTab]);
 
-  // Boot local device
   const handleBootLocalDevice = async (device) => {
     if (!device) return;
     setCliActionStatus(`Booting ${device.name}...`);
@@ -55,13 +54,12 @@ export function EvoMobileController({ promptBridgeBaseUrl = BRIDGE_URL }) {
       });
       const data = await res.json();
       setCliActionStatus(data.message || 'Boot command dispatched.');
-      setTimeout(refreshLocalDevices, 5000); // refresh device list status
+      setTimeout(refreshLocalDevices, 5000);
     } catch (err) {
       setCliActionStatus(`Error: ${err.message}`);
     }
   };
 
-  // Install build
   const handleInstallBuild = async () => {
     if (!selectedLocalDevice) {
       setCliActionStatus('No local device selected.');
@@ -84,7 +82,6 @@ export function EvoMobileController({ promptBridgeBaseUrl = BRIDGE_URL }) {
     }
   };
 
-  // Fetch logcat
   const handleFetchLocalLogs = async () => {
     if (!selectedLocalDevice) return;
     const device = localDevices.find(d => d.id === selectedLocalDevice);
@@ -101,7 +98,6 @@ export function EvoMobileController({ promptBridgeBaseUrl = BRIDGE_URL }) {
     }
   };
 
-  // Cloud Appetize upload
   const handleAppetizeUpload = async () => {
     setAppetizeStatus('Uploading build to cloud device farm...');
     try {
@@ -123,59 +119,100 @@ export function EvoMobileController({ promptBridgeBaseUrl = BRIDGE_URL }) {
   };
 
   return (
-    <div style={styles.shell}>
+    <div className="flex flex-col gap-6 animate-in">
+      
       {/* Navigation Headers */}
-      <div style={styles.navBar}>
-        <button style={activeTab === 'local-cli' ? styles.tabActive : styles.tab} onClick={() => setActiveTab('local-cli')}>Local CLI Emulator Controller</button>
-        <button style={activeTab === 'cloud-appetize' ? styles.tabActive : styles.tab} onClick={() => setActiveTab('cloud-appetize')}>Cloud Appetize.io Streamer</button>
+      <div className="flex gap-4 border-b border-white/10 pb-4">
+        <button 
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all ${
+            activeTab === 'local-cli' 
+              ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]' 
+              : 'bg-transparent text-slate-400 border border-transparent hover:text-slate-200 hover:bg-white/5'
+          }`}
+          onClick={() => setActiveTab('local-cli')}
+        >
+          <Smartphone size={18} />
+          Local CLI Emulator Controller
+        </button>
+        <button 
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all ${
+            activeTab === 'cloud-appetize' 
+              ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.15)]' 
+              : 'bg-transparent text-slate-400 border border-transparent hover:text-slate-200 hover:bg-white/5'
+          }`}
+          onClick={() => setActiveTab('cloud-appetize')}
+        >
+          <Cloud size={18} />
+          Cloud Appetize.io Streamer
+        </button>
       </div>
 
       {activeTab === 'local-cli' && (
-        <div style={styles.tabContent}>
-          <div style={styles.helpTextHeader}>
-            <strong>Control Local Virtual Devices</strong>
-            <p>Discovers and launches virtual machines configured in your local Android Studio or macOS Xcode development environments.</p>
+        <div className="flex flex-col gap-6 animate-in">
+          <div className="glass-extreme rounded-2xl border-l-4 border-l-cyan-500 bg-cyan-950/20 p-4">
+            <div className="text-cyan-100 font-bold mb-1">Control Local Virtual Devices</div>
+            <p className="text-cyan-500/70 text-sm">Discovers and launches virtual machines configured in your local Android Studio or macOS Xcode development environments.</p>
           </div>
 
-          <div style={styles.gridColumns}>
-            <div style={styles.leftGridPanel}>
-              <div style={styles.rowBetween}>
-                <div style={styles.panelTitle}>Detected Local Emulators</div>
-                <button style={styles.refreshBtn} onClick={refreshLocalDevices} disabled={isLoadingDevices}>
-                  {isLoadingDevices ? 'Searching...' : '🔄 Refresh List'}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-6">
+            
+            {/* Left Panel */}
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <div className="text-lg font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter">Detected Local Emulators</div>
+                <button 
+                  className="glass-extreme px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest text-cyan-200 border-white/10 hover:border-white/30 hover:bg-white/5 transition-all flex items-center gap-2"
+                  onClick={refreshLocalDevices} 
+                  disabled={isLoadingDevices}
+                >
+                  <RefreshCw size={14} className={isLoadingDevices ? 'animate-spin' : ''} />
+                  {isLoadingDevices ? 'Searching...' : 'Refresh List'}
                 </button>
               </div>
 
-              {deviceError && <div style={styles.errorBanner}>{deviceError}</div>}
+              {deviceError && (
+                <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-xl text-sm">
+                  {deviceError}
+                </div>
+              )}
 
-              <div style={styles.deviceList}>
+              <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {localDevices.length === 0 ? (
-                  <div style={styles.emptyDevices}>
-                    No local Android AVDs or iOS Simulators discovered.
-                    <p style={{ fontSize: 12, marginTop: 6, opacity: 0.6 }}>Make sure 'emulator' or 'xcrun simctl' are in your system PATH.</p>
+                  <div className="bg-black/50 border border-dashed border-white/10 p-8 rounded-2xl text-center text-slate-400 text-sm flex flex-col items-center gap-3">
+                    <MonitorSmartphone size={32} className="opacity-50" />
+                    <div>
+                      No local Android AVDs or iOS Simulators discovered.
+                      <p className="text-xs mt-2 opacity-60">Make sure 'emulator' or 'xcrun simctl' are in your system PATH.</p>
+                    </div>
                   </div>
                 ) : (
                   localDevices.map(d => (
                     <div
                       key={d.id}
                       onClick={() => setSelectedLocalDevice(d.id)}
-                      style={{
-                        ...styles.deviceItem,
-                        borderColor: selectedLocalDevice === d.id ? '#f5b942' : 'rgba(255,255,255,0.1)'
-                      }}
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                        selectedLocalDevice === d.id 
+                          ? 'bg-cyan-950/30 border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.1)]' 
+                          : 'bg-black/40 border-white/10 hover:border-white/20'
+                      }`}
                     >
-                      <div style={styles.deviceHeaderRow}>
-                        <strong>{d.name}</strong>
-                        <span style={{
-                          ...styles.statusTag,
-                          background: d.status === 'BOOTED' ? 'rgba(34,197,94,0.2)' : 'rgba(239,68,68,0.2)',
-                          color: d.status === 'BOOTED' ? '#4ade80' : '#f87171'
-                        }}>{d.status}</span>
+                      <div className="flex justify-between items-center mb-2">
+                        <strong className="text-slate-200">{d.name}</strong>
+                        <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${
+                          d.status === 'BOOTED' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                        }`}>
+                          {d.status}
+                        </span>
                       </div>
-                      <div style={styles.deviceDetails}>{d.type} ({d.platform})</div>
+                      <div className="text-xs text-slate-400 mb-3">{d.type} ({d.platform})</div>
+                      
                       {d.status === 'SHUTDOWN' && (
-                        <button style={styles.smallActionBtn} onClick={(e) => { e.stopPropagation(); handleBootLocalDevice(d); }}>
-                          🚀 Boot Virtual Machine
+                        <button 
+                          className="w-full py-2 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors"
+                          onClick={(e) => { e.stopPropagation(); handleBootLocalDevice(d); }}
+                        >
+                          <Play size={14} />
+                          Boot Virtual Machine
                         </button>
                       )}
                     </div>
@@ -184,48 +221,55 @@ export function EvoMobileController({ promptBridgeBaseUrl = BRIDGE_URL }) {
               </div>
             </div>
 
-            <div style={styles.rightGridPanel}>
-              <div style={styles.panelTitle}>Build Installer & Telemetry</div>
+            {/* Right Panel */}
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)] bg-black/40 backdrop-blur-xl flex flex-col gap-5">
+              <div className="text-lg font-black text-transparent bg-clip-text bg-linear-to-r from-cyan-300 to-indigo-500 tracking-tighter">Build Installer & Telemetry</div>
 
-              <div style={styles.fieldGroup}>
-                <label style={styles.fieldLabel}>Build Artifact Local Path</label>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Build Artifact Local Path</label>
                 <input
                   type="text"
-                  style={styles.textInput}
+                  className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-cyan-500/50 transition-colors w-full"
                   value={installPath}
                   onChange={e => setInstallPath(e.target.value)}
                 />
-                <span style={styles.fieldHelp}>Absolute path or path relative to studio root pointing to compiled APK/App.</span>
+                <span className="text-[11px] text-slate-500">Absolute path or path relative to studio root pointing to compiled APK/App.</span>
               </div>
 
-              <div style={styles.actionButtonGroup}>
+              <div className="flex gap-3 mt-2">
                 <button
-                  style={styles.primaryActionBtn}
+                  className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-black border-none rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleInstallBuild}
                   disabled={!selectedLocalDevice}
                 >
-                  📥 Install to Booted Simulator
+                  <Download size={16} />
+                  Install to Booted Simulator
                 </button>
                 <button
-                  style={styles.secondaryActionBtn}
+                  className="flex-1 glass-extreme text-slate-200 border-white/10 hover:border-white/30 hover:bg-white/5 rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleFetchLocalLogs}
                   disabled={!selectedLocalDevice}
                 >
-                  📜 Read Native Logs
+                  <Terminal size={16} />
+                  Read Native Logs
                 </button>
               </div>
 
               {cliActionStatus && (
-                <div style={styles.statusConsole}>
-                  <strong>Action Log:</strong>
-                  <pre style={{ margin: '6px 0 0 0', fontFamily: 'monospace', fontSize: 12 }}>{cliActionStatus}</pre>
+                <div className="bg-black/50 border border-cyan-500/20 rounded-xl p-4 mt-2">
+                  <div className="text-xs font-bold text-cyan-500 mb-2 uppercase tracking-wider">Action Log</div>
+                  <pre className="font-mono text-xs text-cyan-300 whitespace-pre-wrap">{cliActionStatus}</pre>
                 </div>
               )}
 
               {localDeviceLogs && (
-                <div style={styles.logStreamConsole}>
-                  <strong>Native Stream:</strong>
-                  <pre style={styles.logsConsoleContent}>{localDeviceLogs}</pre>
+                <div className="bg-slate-950 border border-white/10 rounded-xl p-4 flex flex-col flex-1 max-h-[300px]">
+                  <div className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider flex items-center gap-2">
+                    <Terminal size={14} /> Native Stream
+                  </div>
+                  <div className="flex-1 overflow-y-auto custom-scrollbar">
+                    <pre className="font-mono text-[11px] text-cyan-400 whitespace-pre-wrap">{localDeviceLogs}</pre>
+                  </div>
                 </div>
               )}
             </div>
@@ -234,65 +278,73 @@ export function EvoMobileController({ promptBridgeBaseUrl = BRIDGE_URL }) {
       )}
 
       {activeTab === 'cloud-appetize' && (
-        <div style={styles.tabContent}>
-          <div style={styles.helpTextHeader}>
-            <strong>Cloud Virtualization streaming (Appetize.io)</strong>
-            <p>Packages and streams your application bundle inside an interactive HTML5 cloud virtualization player. Perfect for sharing mobile previews with clients.</p>
+        <div className="flex flex-col gap-6 animate-in">
+          <div className="glass-extreme rounded-2xl border-l-4 border-l-purple-500 bg-purple-950/20 p-4">
+            <div className="text-purple-100 font-bold mb-1">Cloud Virtualization streaming (Appetize.io)</div>
+            <p className="text-purple-400/70 text-sm">Packages and streams your application bundle inside an interactive HTML5 cloud virtualization player. Perfect for sharing mobile previews with clients.</p>
           </div>
 
-          <div style={styles.gridColumns}>
-            <div style={styles.leftGridPanel}>
-              <div style={styles.panelTitle}>Cloud Upload Config</div>
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-6">
+            
+            {/* Left Panel */}
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(168,85,247,0.05)] bg-black/40 backdrop-blur-xl flex flex-col gap-5">
+              <div className="text-lg font-black text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-pink-500 tracking-tighter">Cloud Upload Config</div>
               
-              <div style={styles.fieldGroup}>
-                <label style={styles.fieldLabel}>Appetize.io API Key (Required)</label>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Appetize.io API Key (Required)</label>
                 <input
                   type="password"
                   placeholder="Enter Appetize API token (Simulations disabled)"
-                  style={styles.textInput}
+                  className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-purple-500/50 transition-colors w-full"
                   value={appetizeToken}
                   onChange={e => setAppetizeToken(e.target.value)}
                 />
               </div>
 
-              <div style={styles.fieldGroup}>
-                <label style={styles.fieldLabel}>Build Binary Path</label>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Build Binary Path</label>
                 <input
                   type="text"
-                  style={styles.textInput}
+                  className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-purple-500/50 transition-colors w-full"
                   value={installPath}
                   onChange={e => setInstallPath(e.target.value)}
                 />
               </div>
 
-              <button style={styles.primaryActionBtn} onClick={handleAppetizeUpload}>
-                📤 Package & Stream to Appetize
+              <button 
+                className="w-full bg-purple-500 hover:bg-purple-400 text-black border-none rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2 transition-colors mt-2"
+                onClick={handleAppetizeUpload}
+              >
+                <UploadCloud size={16} />
+                Package & Stream to Appetize
               </button>
 
-              <div style={{ marginTop: 16, fontSize: 13, color: '#f5b942' }}>
+              <div className="mt-2 text-xs font-bold text-purple-400 bg-purple-950/30 p-3 rounded-lg border border-purple-500/20">
                 Status: {appetizeStatus}
               </div>
             </div>
 
-            <div style={styles.rightGridPanel}>
-              <div style={styles.panelTitle}>Interactive Cloud Canvas</div>
+            {/* Right Panel */}
+            <div className="glass-extreme rounded-3xl border-neon-glow p-6 shadow-[0_0_20px_rgba(168,85,247,0.05)] bg-black/40 backdrop-blur-xl flex flex-col items-center justify-center min-h-[600px]">
+              <div className="text-lg font-black text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-pink-500 tracking-tighter self-start mb-6 w-full text-center">Interactive Cloud Canvas</div>
+              
               {appetizeKey === 'demo' ? (
-                <div style={styles.appetizeFrameShell}>
-                  <div style={{ fontSize: 40, marginBottom: 12 }}>📲</div>
-                  <strong>Appetize Stream Deck</strong>
-                  <p style={{ maxWidth: 300, textAlign: 'center', opacity: 0.6, fontSize: 12, marginTop: 8 }}>
+                <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-white/10 rounded-3xl bg-black/20 w-full max-w-sm">
+                  <Smartphone size={48} className="text-purple-500/50 mb-4" />
+                  <strong className="text-slate-300 text-lg">Appetize Stream Deck</strong>
+                  <p className="text-center opacity-60 text-sm mt-3 text-slate-400 leading-relaxed">
                     Upload your build bundle using the configuration on the left to stream it here.
                   </p>
                 </div>
               ) : (
-                <div style={styles.appetizeWrapper}>
+                <div className="flex justify-center bg-black/50 rounded-[2.5rem] p-4 shadow-2xl border border-white/5">
                   <iframe
                     src={`https://appetize.io/embed/${appetizeKey}?device=iphone15pro&scale=100&autoplay=true&orientation=portrait&deviceColor=black`}
                     width="378px"
                     height="800px"
                     frameBorder="0"
                     scrolling="no"
-                    style={{ borderRadius: 16, border: 'none', background: '#000' }}
+                    style={{ borderRadius: '2rem', border: 'none', background: '#000' }}
                   />
                 </div>
               )}
@@ -303,252 +355,3 @@ export function EvoMobileController({ promptBridgeBaseUrl = BRIDGE_URL }) {
     </div>
   );
 }
-
-const styles = {
-  shell: {
-    padding: 16,
-    background: '#0a0f1d',
-    color: '#f8f0de',
-    fontFamily: 'Inter, sans-serif',
-    borderRadius: 20,
-    border: '1px solid rgba(255,255,255,0.08)'
-  },
-  navBar: {
-    display: 'flex',
-    gap: 8,
-    borderBottom: '1px solid rgba(255,255,255,0.1)',
-    paddingBottom: 12,
-    marginBottom: 16
-  },
-  tab: {
-    background: 'transparent',
-    color: '#94a3b8',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: 10,
-    cursor: 'pointer',
-    fontWeight: 600,
-    transition: 'all 0.3s ease'
-  },
-  tabActive: {
-    background: 'rgba(245,185,66,0.15)',
-    color: '#f5b942',
-    border: '1px solid rgba(245,185,66,0.3)',
-    padding: '8px 16px',
-    borderRadius: 10,
-    cursor: 'pointer',
-    fontWeight: 700
-  },
-  tabContent: {
-    animation: 'fadeIn 0.4s ease'
-  },
-  helpTextHeader: {
-    background: 'rgba(245,185,66,0.06)',
-    borderLeft: '4px solid #f5b942',
-    padding: 12,
-    borderRadius: '0 12px 12px 0',
-    marginBottom: 16
-  },
-  gridColumns: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1.2fr',
-    gap: 20
-  },
-  leftGridPanel: {
-    background: '#111827',
-    padding: 16,
-    borderRadius: 20,
-    border: '1px solid rgba(255,255,255,0.06)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 14
-  },
-  rightGridPanel: {
-    background: '#111827',
-    padding: 16,
-    borderRadius: 20,
-    border: '1px solid rgba(255,255,255,0.06)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 16
-  },
-  rowBetween: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  panelTitle: {
-    fontSize: 16,
-    fontWeight: 800,
-    color: '#f8f0de',
-    letterSpacing: '-0.02em'
-  },
-  refreshBtn: {
-    background: '#1e293b',
-    color: '#f8f0de',
-    border: '1px solid rgba(255,255,255,0.15)',
-    borderRadius: 8,
-    padding: '6px 12px',
-    cursor: 'pointer',
-    fontSize: 12,
-    fontWeight: 600
-  },
-  errorBanner: {
-    background: 'rgba(239,68,68,0.15)',
-    color: '#f87171',
-    border: '1px solid rgba(239,68,68,0.3)',
-    padding: 12,
-    borderRadius: 8,
-    fontSize: 13
-  },
-  deviceList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 8,
-    maxHeight: 400,
-    overflowY: 'auto'
-  },
-  emptyDevices: {
-    background: '#070a12',
-    padding: 24,
-    borderRadius: 12,
-    textAlign: 'center',
-    color: '#94a3b8',
-    fontSize: 13,
-    border: '1px dashed rgba(255,255,255,0.1)'
-  },
-  deviceItem: {
-    background: '#070a12',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: 12,
-    padding: 12,
-    cursor: 'pointer',
-    transition: 'all 0.2s ease'
-  },
-  deviceHeaderRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 4
-  },
-  statusTag: {
-    fontSize: 10,
-    padding: '2px 8px',
-    borderRadius: 12,
-    fontWeight: 700
-  },
-  deviceDetails: {
-    fontSize: 12,
-    color: '#94a3b8'
-  },
-  smallActionBtn: {
-    marginTop: 10,
-    width: '100%',
-    background: 'rgba(245,185,66,0.1)',
-    color: '#f5b942',
-    border: '1px solid rgba(245,185,66,0.3)',
-    borderRadius: 6,
-    padding: '6px',
-    fontSize: 12,
-    cursor: 'pointer',
-    fontWeight: 600
-  },
-  fieldGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 6
-  },
-  fieldLabel: {
-    fontSize: 12,
-    fontWeight: 600,
-    color: '#94a3b8'
-  },
-  textInput: {
-    background: '#070a12',
-    color: '#f8f0de',
-    border: '1px solid rgba(255,255,255,0.12)',
-    borderRadius: 8,
-    padding: '10px 12px',
-    fontSize: 13,
-    width: '100%',
-    boxSizing: 'border-box'
-  },
-  fieldHelp: {
-    fontSize: 11,
-    color: '#64748b'
-  },
-  actionButtonGroup: {
-    display: 'flex',
-    gap: 12,
-    marginTop: 8
-  },
-  primaryActionBtn: {
-    flex: 1,
-    background: '#22d3ee',
-    color: '#000',
-    border: 'none',
-    borderRadius: 8,
-    padding: '10px',
-    fontSize: 13,
-    fontWeight: 700,
-    cursor: 'pointer'
-  },
-  secondaryActionBtn: {
-    flex: 1,
-    background: '#1e293b',
-    color: '#f8f0de',
-    border: '1px solid rgba(255,255,255,0.15)',
-    borderRadius: 8,
-    padding: '10px',
-    fontSize: 13,
-    fontWeight: 600,
-    cursor: 'pointer'
-  },
-  statusConsole: {
-    background: '#070a12',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: 8,
-    padding: 12,
-    color: '#f5b942',
-    fontSize: 13,
-    marginTop: 12
-  },
-  logStreamConsole: {
-    background: '#020617',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: 8,
-    padding: 12,
-    marginTop: 12,
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    maxHeight: 300
-  },
-  logsConsoleContent: {
-    margin: '8px 0 0 0',
-    fontFamily: 'monospace',
-    fontSize: 11,
-    color: '#38bdf8',
-    overflowY: 'auto',
-    flex: 1,
-    whiteSpace: 'pre-wrap'
-  },
-  appetizeFrameShell: {
-    flex: 1,
-    background: '#070a12',
-    border: '1px dashed rgba(255,255,255,0.15)',
-    borderRadius: 16,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 500
-  },
-  appetizeWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    background: '#070a12',
-    borderRadius: 16,
-    padding: 16
-  }
-};

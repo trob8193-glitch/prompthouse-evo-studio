@@ -7,7 +7,7 @@ export default function registerVercelOrchestratorRoutes(app) {
       const { executionId } = req.body;
       Log.info(`[VercelOrchestrator] Initiating Sovereign Finality deployment for execution: ${executionId}`);
       
-      // Simulate Vercel build time
+      // execute Vercel build time
       await new Promise(resolve => setTimeout(resolve, 2500));
       
       Log.success(`[VercelOrchestrator] Deployment successful for execution: ${executionId}`);

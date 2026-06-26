@@ -360,7 +360,19 @@ export default function App() {
                       background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,240,255,0.06), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 100%, rgba(138,43,226,0.06), transparent 50%)',
                       pointerEvents: 'none', zIndex: 0
                     }} />
-                    <PageRenderer />
+                    <div style={{
+                      position: 'relative', zIndex: 1, height: '100%',
+                      background: 'rgba(10, 10, 15, 0.4)',
+                      backdropFilter: 'blur(32px)',
+                      borderRadius: '24px',
+                      border: '1px solid rgba(0, 240, 255, 0.1)',
+                      boxShadow: '0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 240, 255, 0.05)',
+                      padding: '24px',
+                      overflow: 'auto',
+                      animation: 'gem-breath 6s infinite ease-in-out'
+                    }}>
+                      <PageRenderer />
+                    </div>
                     {/* Evo Copilot Overlay (Chat UI + Projector Base) */}
                     <EvoCopilot />
                   </div>

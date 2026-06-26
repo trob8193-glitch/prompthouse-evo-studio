@@ -5,7 +5,7 @@
  * multi-file applications. Each template enforces real architecture:
  * routing, state management, API layers, auth, theming, and testing.
  *
- * Nothing simulated. Every generated file must be runnable code.
+ * Nothing test-rund. Every generated file must be runnable code.
  */
 
 // ─── SHARED ARCHITECTURE RULES ──────────────────────────────────

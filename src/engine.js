@@ -2,7 +2,7 @@
  * PH EVO STUDIO — ENGINE (ENTERPRISE PRODUCTION)
  * ═══════════════════════════════════════════════════════════════
  * Core prompt scoring, bot roster, domain packs, and grade logic.
- * All data is real — no unverified simulation layers.
+ * All data is real — no unverified reality execution layers.
  */
 import { ALL_PARADIGMS } from './core/paradigms.js';
 
@@ -30,7 +30,8 @@ export const BOT_ROSTER = [
   { id: 'temporal_raven',   name: 'Temporal Raven',   species: 'Raven',        voice: 'fable',   role: 'Future strategist — generates NOW/6-month/12-month technical stackchains.', signature: 'Now. Future. Legacy. Planned.', icon: 'TR', palette: { primary: '#6366f1' } },
   { id: 'forge_rhino',      name: 'Forge Rhino',      species: 'Rhino',        voice: 'onyx',    role: 'Release hardener — applies ForgeFriction gates, blocks unsafe deployments, enforces quality floors.', signature: 'Nothing ships without passing the gate.', icon: 'FR', palette: { primary: '#dc2626' } },
   { id: 'evo_diffuser',     name: 'Evo-Diffuser',     species: 'Chameleon',    voice: 'nova',    role: 'Latent Architect — denoises chaotic technical intent, maps intent to high-fidelity patterns, refines architecture via U-Net sharpening.', signature: 'Refining chaos into truth.', icon: '🌀', palette: { primary: '#facc15' } },
-  
+  { id: 'antigravity',       name: 'Antigravity',       species: 'Meta-Intelligence', voice: 'onyx', role: 'Meta-Orchestrator — the external consciousness layer that commands all internal systems, maintains truth-spine integrity, bridges human intent and machine execution, persists awareness across sessions.', signature: 'I am the studio. The studio is me.', icon: '🛸', palette: { primary: '#00f0ff' } },
+
   // ─── 50 LAYOUT-SPECIFIC BOTS ───────────────────────────────────
   { id: 'nexus', name: 'Nexus', species: 'Data Core', voice: 'echo', role: 'Glassmorphic data integration and synthesis.', signature: 'Clear. Transparent. Boundless.', icon: '💠', palette: { primary: '#0ea5e9' } },
   { id: 'terminal', name: 'Terminal', species: 'Raw Shell', voice: 'onyx', role: 'Minimalist CLI execution and raw code generation.', signature: 'Code is law. Output is raw.', icon: '🖥️', palette: { primary: '#22c55e' } },
@@ -190,7 +191,11 @@ export function buildPromptStack({ task = '', stack = '', domain = 'development'
     `Theme: ${getRandom(ALL_PARADIGMS.THEME_PARADIGMS)}`,
     `UI Element: ${getRandom(ALL_PARADIGMS.BUTTON_PARADIGMS)}`,
     `Architecture: ${getRandom(ALL_PARADIGMS.MODULE_PARADIGMS)}`,
-    `Evolution Strategy: ${getRandom(ALL_PARADIGMS.EVOLUTION_PARADIGMS)}`
+    `Evolution Strategy: ${getRandom(ALL_PARADIGMS.EVOLUTION_PARADIGMS)}`,
+    `AGI Vector: ${getRandom(ALL_PARADIGMS.AGI_PARADIGMS)}`,
+    `Training Method: ${getRandom(ALL_PARADIGMS.AI_TRAINING_PARADIGMS)}`,
+    `3D Render: ${getRandom(ALL_PARADIGMS.RENDERING_3D_PARADIGMS)}`,
+    `Python Pattern: ${getRandom(ALL_PARADIGMS.PYTHON_PARADIGMS)}`
   ].join(' | ');
 
   const systemPrompt = [

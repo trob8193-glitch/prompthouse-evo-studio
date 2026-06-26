@@ -1,5 +1,6 @@
 import { Log } from '../autonomy/SovereignLogger.js';
 import { StressTester } from '../autonomy/StressTester.js';
+import { GlobalSplitTether } from '../tethers/SplitTetherDaemon.js';
 
 const tester = new StressTester();
 
@@ -11,6 +12,9 @@ const tester = new StressTester();
  */
 
 export class WebWevoWeaver {
+  // [GENESIS MUTATION: 7fa9df94]
+  genesisId = '7fa9df94';
+
   constructor() {
     this.status = 'WEAVING_IN_BACKGROUND';
   }
@@ -51,6 +55,11 @@ export class WebWevoWeaver {
     }
     
     Log.success('🕸️ [WebWevos] Knowledge web synchronized across the forest.');
+
+    // [SPLIT-TETHER AMPLIFICATION] Instantly tether web knowledge to GhostEditor & Copilot
+    try {
+      await GlobalSplitTether.splitAndRoute('WebWevoSwarm', { type: 'BOTS_INTEL', nodes_woven: nodes.length, data: 'forest_sync_complete' });
+    } catch (e) { /* ignore */ }
   }
 
   async connectNode(nodeId) {

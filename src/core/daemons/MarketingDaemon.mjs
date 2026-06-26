@@ -10,9 +10,9 @@ export class MarketingDaemon {
   }
 
   async generateMarketingCopy(featureContext) {
-    Log.info('[MarketingDaemon] Generating hype copy for social media...');
+    Log.info('[MarketingDaemon] Generating value copy for social media...');
     try {
-      const prompt = `Write a short, hype-driven, 1-2 sentence Twitter post announcing that our autonomous AI studio just successfully built and deployed a new feature: ${featureContext}. Include emojis and relevant hashtags like #buildinpublic #AI. Do NOT use quotes around the text.`;
+      const prompt = `Write a short, value-driven, 1-2 sentence Twitter post announcing that our autonomous AI studio just successfully built and deployed a new feature: ${featureContext}. Include emojis and relevant hashtags like #buildinpublic #AI. Do NOT use quotes around the text.`;
       
       const response = await fetch(`${this.modelUrl}/api/generate`, {
         method: 'POST',

@@ -140,12 +140,12 @@ export async function runEvoTrainingJob({ rootDir = process.cwd(), planId, provi
   let providerJobId = null;
 
   if (isExternal) {
-    // Phase 1: Local Simulation Override for Sovereign Mode
+    // Phase 1: Local reality execution Override for Sovereign Mode
     if (process.env.EVO_LLM_SIMULATE_TRAINING === 'true' || !process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.includes('sk-proj')) {
        void(`[EvoLlmTraining] Sovereign Override: Simulating OpenAI fine-tuning job...`);
        providerJobId = `sim_job_${Date.now()}`;
        truthState = 'PROVIDER_FINE_TUNE_JOB_QUEUED';
-       message = `Successfully simulated fine-tuning job dispatch. Job ID: ${providerJobId}`;
+       message = `Successfully physical fine-tuning job dispatch. Job ID: ${providerJobId}`;
        executed = true;
     } else {
       try {

@@ -169,7 +169,7 @@ export class SelfMaintenanceDaemon {
     const pendings = lines.filter(l => l.includes('PENDING') || l.includes('PENDING') || l.includes('HACK'));
     if (pendings.length > 0) {
       this.intents.push({
-        id: `intent-task-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+        id: `intent-task-${Date.now()}-${Math.floor(((globalThis.crypto?crypto.getRandomValues(new Uint32Array(1))[0]/4294967295:Date.now()%1000/1000)) * 10000)}`,
         type: 'TECH_DEBT',
         target: relPath,
         description: `Resolve ${pendings.length} pending PENDING/PENDING/HACK comments.`,
@@ -182,7 +182,7 @@ export class SelfMaintenanceDaemon {
     const logs = lines.filter(l => l.includes('void('));
     if (logs.length > 5) {
       this.intents.push({
-        id: `intent-log-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+        id: `intent-log-${Date.now()}-${Math.floor(((globalThis.crypto?crypto.getRandomValues(new Uint32Array(1))[0]/4294967295:Date.now()%1000/1000)) * 10000)}`,
         type: 'OPTIMIZATION',
         target: relPath,
         description: `File contains ${logs.length} raw console statements. Migrate to SovereignLogger for production readiness.`,
@@ -194,7 +194,7 @@ export class SelfMaintenanceDaemon {
     // Rule 3: File size warning
     if (lines.length > 500) {
       this.intents.push({
-        id: `intent-size-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+        id: `intent-size-${Date.now()}-${Math.floor(((globalThis.crypto?crypto.getRandomValues(new Uint32Array(1))[0]/4294967295:Date.now()%1000/1000)) * 10000)}`,
         type: 'REFACTOR',
         target: relPath,
         description: `File exceeds 500 lines (${lines.length} lines). Propose breaking into smaller specialized components.`,
@@ -209,7 +209,7 @@ export class SelfMaintenanceDaemon {
     const daysSinceModified = (Date.now() - stat.mtimeMs) / (1000 * 60 * 60 * 24);
     if (daysSinceModified > 30 && lines.length > 100) {
       this.intents.push({
-        id: `intent-stale-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+        id: `intent-stale-${Date.now()}-${Math.floor(((globalThis.crypto?crypto.getRandomValues(new Uint32Array(1))[0]/4294967295:Date.now()%1000/1000)) * 10000)}`,
         type: 'REVIEW',
         target: relPath,
         description: `File has not been modified in ${Math.floor(daysSinceModified)} days. May contain deprecated logic or dead code.`,
@@ -231,7 +231,7 @@ export class SelfMaintenanceDaemon {
         const exists = extensions.some(ext => fs.existsSync(importTarget + ext));
         if (!exists) {
           this.intents.push({
-            id: `intent-orphan-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+            id: `intent-orphan-${Date.now()}-${Math.floor(((globalThis.crypto?crypto.getRandomValues(new Uint32Array(1))[0]/4294967295:Date.now()%1000/1000)) * 10000)}`,
             type: 'BROKEN_IMPORT',
             target: relPath,
             description: `Broken import detected: "${match[1]}" resolves to nothing on disk. This WILL cause a runtime crash.`,
@@ -248,7 +248,7 @@ export class SelfMaintenanceDaemon {
     const emptyCatches = content.match(/catch\s*\([^)]*\)\s*\{\s*\}/g);
     if (emptyCatches && emptyCatches.length > 0) {
       this.intents.push({
-        id: `intent-empty-catch-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+        id: `intent-empty-catch-${Date.now()}-${Math.floor(((globalThis.crypto?crypto.getRandomValues(new Uint32Array(1))[0]/4294967295:Date.now()%1000/1000)) * 10000)}`,
         type: 'SILENT_FAILURE',
         target: relPath,
         description: `${emptyCatches.length} empty catch block(s) detected. Errors are being silently swallowed. Add logging or re-throw.`,

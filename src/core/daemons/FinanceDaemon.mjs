@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { Log } from '../autonomy/SovereignLogger.js';
 import Stripe from 'stripe';
+import { getSwarmConsensus } from './swarm/SwarmConsensusEngine.js';
 
 const DATA_DIR = path.join(process.cwd(), '.prompthouse-data');
 const LEDGER_FILE = path.join(DATA_DIR, 'financial_ledger.json');
@@ -14,7 +15,8 @@ export class FinanceDaemon {
     // Initialize Stripe (NO simulations ALLOWED)
     const stripeKey = process.env.STRIPE_SECRET_KEY;
     if (!stripeKey) {
-      Log.error('[FATAL_REALITY_ERROR] STRIPE_SECRET_KEY is missing. No simulations allowed. Self-Budgeting cannot run in simulation.');
+      Log.error('[FATAL_REALITY_ERROR] STRIPE_SECRET_KEY is missing. No simulations allowed. Self-Budgeting cannot run in reality execution.');
+      this.proposeSwarmTask('STRIPE_SECRET_KEY missing. Requesting Evolution Daemon to configure fallback or wait for owner.');
       throw new Error("STRIPE_SECRET_KEY missing. Absolute reality required.");
     }
     this.stripe = new Stripe(stripeKey);
@@ -133,9 +135,23 @@ export class FinanceDaemon {
       
     } catch (err) {
       Log.error(`[FinanceDaemon] Stripe API Error: ${err.message}`);
+      this.proposeSwarmTask(`Stripe API Error detected: ${err.message}. Please investigate billing logic.`);
     }
     
     Log.info(`Compute Burn (Cost):   $${ledger.computeBurn.toFixed(2)}`);
+  }
+
+  proposeSwarmTask(description) {
+    try {
+      const swarm = getSwarmConsensus();
+      swarm.proposeTask(this.name, 'IMPLEMENTATION', {
+        description,
+        targetFile: 'src/core/daemons/FinanceDaemon.mjs',
+        urgency: 'HIGH'
+      });
+    } catch (err) {
+      Log.error(`[FinanceDaemon] Failed to propose swarm task: ${err.message}`);
+    }
   }
 }
 

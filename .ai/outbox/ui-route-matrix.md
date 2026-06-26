@@ -1,16 +1,16 @@
 # Full UI Button-to-Route Matrix
 
-**Generated**: 2026-06-24T09:54:26.583Z
+**Generated**: 2026-06-24T17:55:11.534Z
 **Components Scanned**: 190
-**Known Backend Routes**: 323
-**Potential Dead Links Detected**: 10
+**Known Backend Routes**: 331
+**Potential Dead Links Detected**: 0
 
 ## Matrix
 
 ### src\agent-bridge-views.jsx
 **Interactive Controls**: 
 - RESCAN_VAULT
-- console.log('Clearing receipts...')}>CLEAR_RECEIPTS
+- void('Clearing receipts...')}>CLEAR_RECEIPTS
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -85,7 +85,7 @@
 ### src\App.jsx
 **Interactive Controls**: 
 - setSingularityActive(true)} 
-            className="absolute top-16 right-4 z-50 bg-[#00f0ff]/10 text-[#00f0ff] text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl border border-[#00f0ff]/30 hover:bg-[#00f0ff]/20 shadow-[0_0_20px_rgba(0,240,255,0.15)] flex items-center gap-2 group transition-all duration-300"
+            className="absolute top-16 right-4 z-50 bg-[#00f0ff]/10 text-[#00f0ff] text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-3xl border border-[#00f0ff]/30 hover:bg-[#00f0ff]/20 shadow-[0_0_20px_rgba(0,240,255,0.15)] flex items-center gap-2 group transition-all duration-300"
           >
             
             Open Evo Singularity Engine
@@ -250,8 +250,8 @@
 
 ### src\components\Dashboard.jsx
 **Interactive Controls**: 
-- console.log('Window minimized')}>_
-- console.log('Window closed')}>X
+- void('Window minimized')}>_
+- void('Window closed')}>X
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -279,7 +279,7 @@
 - {applied ?  : }
                       {applied ? 'Applied!' : 'Apply to File'}
 - setActivePage('settings')}
-              className="p-2 rounded-lg hover:bg-gray-800/70 hover:shadow-lg transition-colors"
+              className="p-2 rounded-2xl hover:bg-gray-800/70 hover:shadow-lg transition-colors"
             >
 - {
                 setSelectedBot(bot.id);
@@ -290,27 +290,27 @@
               className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
                 selectedBot === bot.id
                   ? 'text-white border-transparent shadow-lg'
-                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'
+                  : 'text-slate-400 border-cyan-500/30 hover:border-slate-500 hover:text-slate-200 bg-black/40 backdrop-blur-md border border-white/5/50'
               }`}
               style={selectedBot === bot.id ? { backgroundColor: bot.palette?.primary || '#10b981', boxShadow: `0 0 12px ${bot.palette?.primary || '#10b981'}40` } : {}}
               title={bot.role}
             >
               {bot.icon} {bot.name}
-- handleQuickAction('debt')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-gray-800/50 border border-gray-700/40 rounded-xl text-[11px] font-bold text-gray-300 hover:bg-gray-700/50 hover:text-white hover:border-gray-600 transition-all hover:shadow-lg cursor-pointer">
+- handleQuickAction('debt')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-gray-800/50 border border-gray-700/40 rounded-3xl text-[11px] font-bold text-gray-300 hover:bg-gray-700/50 hover:text-white hover:border-gray-600 transition-all hover:shadow-lg cursor-pointer">
            Scan Debt
-- handleQuickAction('audit')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-gray-800/50 border border-gray-700/40 rounded-xl text-[11px] font-bold text-gray-300 hover:bg-gray-700/50 hover:text-white hover:border-gray-600 transition-all hover:shadow-lg cursor-pointer">
+- handleQuickAction('audit')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-gray-800/50 border border-gray-700/40 rounded-3xl text-[11px] font-bold text-gray-300 hover:bg-gray-700/50 hover:text-white hover:border-gray-600 transition-all hover:shadow-lg cursor-pointer">
            Nuclear Audit
-- handleQuickAction('evolve')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-purple-900/30 border border-purple-500/30 rounded-xl text-[11px] font-bold text-purple-300 hover:bg-purple-800/40 hover:text-purple-100 hover:border-purple-400/50 transition-all hover:shadow-[0_0_12px_rgba(168,85,247,0.2)] cursor-pointer">
+- handleQuickAction('evolve')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-purple-900/30 border border-purple-500/30 rounded-3xl text-[11px] font-bold text-purple-300 hover:bg-purple-800/40 hover:text-purple-100 hover:border-purple-400/50 transition-all hover:shadow-[0_0_12px_rgba(168,85,247,0.2)] cursor-pointer">
            Evolve Module
-- handleQuickAction('singularity')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-red-900/30 border border-red-500/30 rounded-xl text-[11px] font-bold text-red-300 hover:bg-red-800/40 hover:text-red-100 hover:border-red-400/50 transition-all hover:shadow-[0_0_12px_rgba(239,68,68,0.3)] cursor-pointer">
+- handleQuickAction('singularity')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-red-900/30 border border-red-500/30 rounded-3xl text-[11px] font-bold text-red-300 hover:bg-red-800/40 hover:text-red-100 hover:border-red-400/50 transition-all hover:shadow-[0_0_12px_rgba(239,68,68,0.3)] cursor-pointer">
            Singularity
-- handleQuickAction('deploy')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-emerald-900/30 border border-emerald-500/30 rounded-xl text-[11px] font-bold text-emerald-300 hover:bg-emerald-800/40 hover:text-emerald-100 hover:border-emerald-400/50 transition-all hover:shadow-[0_0_12px_rgba(16,185,129,0.3)] cursor-pointer">
+- handleQuickAction('deploy')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-emerald-900/30 border border-emerald-500/30 rounded-3xl text-[11px] font-bold text-emerald-300 hover:bg-emerald-800/40 hover:text-emerald-100 hover:border-emerald-400/50 transition-all hover:shadow-[0_0_12px_rgba(16,185,129,0.3)] cursor-pointer">
            Deploy
-- handleQuickAction('health')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-cyan-900/30 border border-cyan-500/30 rounded-xl text-[11px] font-bold text-cyan-300 hover:bg-cyan-800/40 hover:text-cyan-100 hover:border-cyan-400/50 transition-all hover:shadow-[0_0_12px_rgba(6,182,212,0.3)] cursor-pointer">
+- handleQuickAction('health')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-cyan-900/30 border border-cyan-500/30 rounded-3xl text-[11px] font-bold text-cyan-300 hover:bg-cyan-800/40 hover:text-cyan-100 hover:border-cyan-400/50 transition-all hover:shadow-[0_0_12px_rgba(6,182,212,0.3)] cursor-pointer">
            Suit Health
-- handleQuickAction('evo-eyes')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-violet-900/30 border border-violet-500/30 rounded-xl text-[11px] font-bold text-violet-300 hover:bg-violet-800/40 hover:text-violet-100 hover:border-violet-400/50 transition-all hover:shadow-[0_0_12px_rgba(139,92,246,0.3)] cursor-pointer">
+- handleQuickAction('evo-eyes')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-violet-900/30 border border-violet-500/30 rounded-3xl text-[11px] font-bold text-violet-300 hover:bg-violet-800/40 hover:text-violet-100 hover:border-violet-400/50 transition-all hover:shadow-[0_0_12px_rgba(139,92,246,0.3)] cursor-pointer">
            Evo Eyes
-- handleQuickAction('swarm')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-amber-900/30 border border-amber-500/30 rounded-xl text-[11px] font-bold text-amber-300 hover:bg-amber-800/40 hover:text-amber-100 hover:border-amber-400/50 transition-all hover:shadow-[0_0_12px_rgba(245,158,11,0.3)] cursor-pointer">
+- handleQuickAction('swarm')} className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-amber-900/30 border border-amber-500/30 rounded-3xl text-[11px] font-bold text-amber-300 hover:bg-amber-800/40 hover:text-amber-100 hover:border-amber-400/50 transition-all hover:shadow-[0_0_12px_rgba(245,158,11,0.3)] cursor-pointer">
            Swarm Build
 - {/* Pulse glow (pseudo-element) */}
               {isRecording && }
@@ -326,13 +326,13 @@
 - {applied ?  : }
                       {applied ? 'Applied!' : 'Apply to File'}
 - setActivePage('settings')}
-              className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 transition-colors"
+              className="p-2 hover:bg-gray-800 rounded-2xl text-gray-400 transition-colors"
             >
 - setSelectedBot(bot.id)}
               className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition border ${
                 selectedBot === bot.id
                   ? 'text-white border-transparent shadow-lg'
-                  : 'text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-200 bg-slate-800/50'
+                  : 'text-slate-400 border-cyan-500/30 hover:border-slate-500 hover:text-slate-200 bg-black/40 backdrop-blur-md border border-white/5/50'
               }`}
               style={selectedBot === bot.id ? { backgroundColor: bot.palette?.primary || '#10b981' } : {}}
               title={bot.role}
@@ -508,10 +508,10 @@
 - {swarmLoading ? 'SPAWNING SWARM AGENTS...' : 'BUILD VIA SWARM'}
 
 **API Calls Triggered**:
-- `/api/autonomy/intents` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/autonomy/intents` -> ✅ ALIVE
 - `/api/agi/health` -> ✅ ALIVE
-- `/api/autonomy/intent/scan` -> ❌ DEAD LINK / UNREGISTERED
-- `/api/evo-lm/swarm-build` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/autonomy/intent/scan` -> ✅ ALIVE
+- `/api/evo-lm/swarm-build` -> ✅ ALIVE
 
 ---
 
@@ -713,8 +713,8 @@
           &times;
 - setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}>
           &times;
-- console.log('Exporting slip...')} style={{ background: 'none', border: 'none', padding: 0, fontSize: 10, color: '#64748b', display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}> Export
-- console.log('Reverting to commit', commit.id)}>
+- void('Exporting slip...')} style={{ background: 'none', border: 'none', padding: 0, fontSize: 10, color: '#64748b', display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}> Export
+- void('Reverting to commit', commit.id)}>
                  Revert to {commit.id}
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -723,8 +723,8 @@
 
 ### src\components\Toolbar.jsx
 **Interactive Controls**: 
-- console.log('Executing Run.exe...')}>Run.exe
-- console.log('Opening Options...')}>Options
+- void('Executing Run.exe...')}>Run.exe
+- void('Opening Options...')}>Options
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -734,7 +734,7 @@
 **Interactive Controls**: 
 - {sidebarCollapsed ?  : }
 - setShowThemeMenu(!showThemeMenu)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white text-[10px] font-black tracking-wider hover:bg-white/10 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-white/5 border border-white/10 text-white text-[10px] font-black tracking-wider hover:bg-white/10 transition-colors"
           >
              METAMORPHOSIS: {globalTheme.layout.toUpperCase()}
 - { 
@@ -800,7 +800,7 @@
 - setActiveCategory(c.id)}
           >
             {c.label}
-- console.log('Selling module...')}>Sell Module
+- void('Selling module...')}>Sell Module
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -822,7 +822,7 @@
 ### src\features\autonomous\SovereignCommandNexus.jsx
 **Interactive Controls**: 
 - { fetch(`${getBridgeUrl()}/api/evolution/kill-switch/engage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason: 'Manual nexus wipe' }) }).catch(() => {}); }}>INITIATE WIPE
-- { fetch(`${getBridgeUrl()}/status`).then(r => r.json()).then(d => console.log('[Nexus] Route traffic check:', d)).catch(() => {}); }}>ROUTE TRAFFIC
+- { fetch(`${getBridgeUrl()}/status`).then(r => r.json()).then(d => void('[Nexus] Route traffic check:', d)).catch(() => {}); }}>ROUTE TRAFFIC
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -830,7 +830,7 @@
 
 ### src\features\autonomous\SynapticForge.jsx
 **Interactive Controls**: 
-- { const textarea = document.querySelector('textarea'); if (textarea?.value) { console.log('[SynapticForge] Compiling prompt:', textarea.value.substring(0, 100)); } }}>
+- { const textarea = document.querySelector('textarea'); if (textarea?.value) { void('[SynapticForge] Compiling prompt:', textarea.value.substring(0, 100)); } }}>
             COMPILE
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -880,7 +880,7 @@
 **Interactive Controls**: (No static buttons found)
 
 **API Calls Triggered**:
-- `/api/agi/evo-eyes/audits` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/agi/evo-eyes/audits` -> ✅ ALIVE
 
 ---
 
@@ -890,8 +890,8 @@
                       aria-pressed={previewExpanded}
                       className="text-[#737385] hover:text-[#00f0ff] transition-colors"
                     >
-- { if (result?.code) { navigator.clipboard.writeText(result.code); console.log('[EvoLayout] Code copied to clipboard'); } }}> EXPORT
-- { console.log('[EvoLayout] Deploying to Forge:', result?.code?.substring(0, 100)); }}>DEPLOY TO FORGE
+- { if (result?.code) { navigator.clipboard.writeText(result.code); void('[EvoLayout] Code copied to clipboard'); } }}> EXPORT
+- { void('[EvoLayout] Deploying to Forge:', result?.code?.substring(0, 100)); }}>DEPLOY TO FORGE
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -904,7 +904,7 @@
                     >
                       {b}
 - { if (imageResult?.url) window.open(imageResult.url, '_blank'); }}> PNG
-- console.log('[EvoPixelator] Exporting sprite sheet...') }> SPRITE SHEET
+- void('[EvoPixelator] Exporting sprite sheet...') }> SPRITE SHEET
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -916,7 +916,7 @@
             disabled={tridallState?.status === 'INGESTING'}
           >
             {tridallState?.status === 'INGESTING' ? 'EXTRACTING...' : 'INITIATE INGESTION'}
-- console.log('Window closed')}>X
+- void('Window closed')}>X
 
 **API Calls Triggered**: (No direct fetch calls detected)
 
@@ -1075,9 +1075,9 @@
 
 ### src\features\OmniMarketplaceNexus.jsx
 **Interactive Controls**: 
-- { safeFetchBridge('/api/stripe/health').then(d => console.log('[Commerce] Ledger:', d)).catch(() => {}); }}>
+- { safeFetchBridge('/api/stripe/health').then(d => void('[Commerce] Ledger:', d)).catch(() => {}); }}>
            View Ledger
-- { safeFetchBridge('/api/stripe/health').then(d => console.log('[Commerce] Gateway config:', d)).catch(() => {}); }}>
+- { safeFetchBridge('/api/stripe/health').then(d => void('[Commerce] Gateway config:', d)).catch(() => {}); }}>
             Configure Gateways
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -1086,7 +1086,7 @@
 
 ### src\features\OmniscientObservabilityDeck.jsx
 **Interactive Controls**: 
-- { safeFetchBridge('/api/studio/scan').then(d => console.log('[Observability] Scan:', d)).catch(() => {}); }}>
+- { safeFetchBridge('/api/studio/scan').then(d => void('[Observability] Scan:', d)).catch(() => {}); }}>
            Scan Environment
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -1167,11 +1167,11 @@
 - {status?.killSwitchEngaged ?  : }
               {status?.killSwitchEngaged ? 'Kill Switch: ENGAGED' : 'Kill Switch: OFF'}
 - handleQueueAction(item.id, 'approve')}
-                      className="flex-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                      className="flex-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 py-2 rounded-3xl text-[10px] font-black uppercase tracking-widest transition-all"
                     >
                       Approve
 - handleQueueAction(item.id, 'reject')}
-                      className="flex-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                      className="flex-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 py-2 rounded-3xl text-[10px] font-black uppercase tracking-widest transition-all"
                     >
                       Reject
 
@@ -1188,7 +1188,7 @@
               className="bg-transparent text-[#ff0000]/50 border border-[#ff0000]/20 px-4 py-2 hover:bg-[#ff0000]/10 transition-colors uppercase tracking-widest text-xs font-bold rounded">
               Dismiss Intent
 - setIsPolling(!isPolling)}
-              className="bg-[#110000] hover:bg-[#330000] text-[#ff0000] border border-[#ff0000]/50 px-4 py-2 rounded-lg transition-all shadow-[0_0_10px_rgba(255,0,0,0.1)] hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] text-xs uppercase font-bold tracking-wider"
+              className="bg-[#110000] hover:bg-[#330000] text-[#ff0000] border border-[#ff0000]/50 px-4 py-2 rounded-2xl transition-all shadow-[0_0_10px_rgba(255,0,0,0.1)] hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] text-xs uppercase font-bold tracking-wider"
             >
               {isPolling ? 'Pause Stream' : 'Resume Stream'}
 - { setStreamType(t); setSelectedEvent(null); setEvents([]); }}
@@ -1201,7 +1201,7 @@
               {t.replace('_', ' ')}
 
 **API Calls Triggered**:
-- `/api/witness/telemetry?type=*` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/witness/telemetry?type=*` -> ✅ ALIVE
 - `/api/agi/health` -> ✅ ALIVE
 
 ---
@@ -1210,18 +1210,18 @@
 **Interactive Controls**: (No static buttons found)
 
 **API Calls Triggered**:
-- `/api/singularity/status` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/singularity/status` -> ✅ ALIVE
 
 ---
 
 ### src\features\SingularityEvolutionNexus.jsx
 **Interactive Controls**: 
-- { safeFetchBridge('/api/singularity/status').then(d => console.log('[Singularity] Neural Net Sync:', d)).catch(() => {}); }}>
+- { safeFetchBridge('/api/singularity/status').then(d => void('[Singularity] Neural Net Sync:', d)).catch(() => {}); }}>
            Synchronize Neural Nets
-- { safeFetchBridge('/api/evolution/cycle', { method: 'POST' }).then(d => console.log('[Evo] Compaction cycle:', d)).catch(() => {}); }}>
+- { safeFetchBridge('/api/evolution/cycle', { method: 'POST' }).then(d => void('[Evo] Compaction cycle:', d)).catch(() => {}); }}>
             Trigger Compaction Cycle
 - setIsAutoEvolving(!isAutoEvolving)}
-              className={`glass-extreme hover:border-[#ff0055] transition-all rounded-xl px-6 py-3 text-sm font-black inline-flex items-center gap-3 ${isAutoEvolving ? 'border-[#ff0055] text-[#ff0055] animate-pulse shadow-[0_0_20px_rgba(255,0,85,0.4)]' : 'text-gray-400'}`}
+              className={`glass-extreme hover:border-[#ff0055] transition-all rounded-3xl px-6 py-3 text-sm font-black inline-flex items-center gap-3 ${isAutoEvolving ? 'border-[#ff0055] text-[#ff0055] animate-pulse shadow-[0_0_20px_rgba(255,0,85,0.4)]' : 'text-gray-400'}`}
             >
               
               {isAutoEvolving ? 'HYPER-DRIVE ACTIVE (15s)' : 'ENABLE 15s HYPER-DRIVE'}
@@ -1236,10 +1236,10 @@
               >
                 {t}
 - setActivePangram(prev => (prev > 0 ? prev - 1 : pangrams.length - 1))}
-                className="p-2 glass-extreme rounded-lg hover:border-[#00f0ff] transition-colors"
+                className="p-2 glass-extreme rounded-2xl hover:border-[#00f0ff] transition-colors"
               >
 - setActivePangram(prev => (prev
-- { console.log(`[Evolution] Launching module: ${tool.name}`); }}>
+- { void(`[Evolution] Launching module: ${tool.name}`); }}>
         Launch {tool.name}
 
 **API Calls Triggered**: (No direct fetch calls detected)
@@ -1256,7 +1256,7 @@
             >
               Run Truth Probe
 - setActivePage('chat')}
-                className="mt-2 glass-extreme px-4 py-3 rounded-xl border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:border-indigo-400 transition-all hover:bg-indigo-500/10"
+                className="mt-2 glass-extreme px-4 py-3 rounded-3xl border-indigo-500/30 text-neon-cyan text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:border-indigo-400 transition-all hover:bg-indigo-500/10"
               >
                 Open Full Chat
 
@@ -1375,7 +1375,7 @@
             });
           }}>🚀 Forge Bridge
 - setSignedAt(new Date().toISOString())}
-                  className="btn btn-primary btn-sm"
+                  className="glass-extreme text-neon-cyan border border-cyan-500/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-cyan-500/10 hover:scale-[1.02] active:scale-95 glass-extreme text-cyan-100 border border-white/10 hover:border-white/30 transition-all rounded-xl px-6 py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 hover:bg-white/5 hover:scale-[1.02] active:scale-95-sm"
                   style={{ width: 'fit-content' }}
                 >
                   Sign New Handshake
@@ -1387,16 +1387,16 @@
 ### src\new-features-views.jsx
 **Interactive Controls**: 
 - alert('Anomaly resolution engine engaged. Commencing automated patching...')}
-                className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 text-red-400 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(239,68,68,0.1)] active:scale-95 flex items-center gap-2">
+                className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 text-red-400 rounded-3xl text-xs font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(239,68,68,0.1)] active:scale-95 flex items-center gap-2">
                  Resolve Anomalies
 - handleOverride(conflict.id, 'arbiter')}
                       disabled={overriding}
-                      className="px-6 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
+                      className="px-6 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400 rounded-2xl text-xs font-black uppercase tracking-widest transition-all"
                     >
                       Accept Arbiter
 - handleOverride(conflict.id, 'founder')}
                       disabled={overriding}
-                      className="px-6 py-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-500/50 text-amber-400 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
+                      className="px-6 py-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-500/50 text-amber-400 rounded-2xl text-xs font-black uppercase tracking-widest transition-all"
                     >
                       Founder Override
 
@@ -1406,7 +1406,7 @@
 - `/api/intelligence/execute` -> ✅ ALIVE
 - `/api/intelligence/execute` -> ✅ ALIVE
 - `/api/intelligence/execute` -> ✅ ALIVE
-- `/api/audit/nuclear-truth` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/audit/nuclear-truth` -> ✅ ALIVE
 - `/api/intelligence/execute` -> ✅ ALIVE
 - `/api/intelligence/execute` -> ✅ ALIVE
 - `/api/intelligence/execute` -> ✅ ALIVE
@@ -1495,9 +1495,9 @@
 - `/api/proof/count` -> ✅ ALIVE
 - `/api/proof/receipts?limit=60` -> ✅ ALIVE
 - `/api/logs?limit=1` -> ✅ ALIVE
-- `/api/grading/maturity` -> ❌ DEAD LINK / UNREGISTERED
-- `/api/audit/nuclear-truth` -> ❌ DEAD LINK / UNREGISTERED
-- `/api/grading/maturity` -> ❌ DEAD LINK / UNREGISTERED
+- `/api/grading/maturity` -> ✅ ALIVE
+- `/api/audit/nuclear-truth` -> ✅ ALIVE
+- `/api/grading/maturity` -> ✅ ALIVE
 
 ---
 
@@ -1519,8 +1519,8 @@
 
 ### src\prototypes\StudioBeta.jsx
 **Interactive Controls**: 
-- console.log('Launching beta...')}>Launch Component Beta
-- console.log('Sending message...')} className="absolute right-3 w-10 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-3xl flex items-center justify-center transition-colors shadow-md shadow-indigo-600">
+- void('Launching beta...')}>Launch Component Beta
+- void('Sending message...')} className="absolute right-3 w-10 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-3xl flex items-center justify-center transition-colors shadow-md shadow-indigo-600">
 
 **API Calls Triggered**: (No direct fetch calls detected)
 

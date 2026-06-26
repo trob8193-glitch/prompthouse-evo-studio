@@ -4,7 +4,7 @@
  * Professional monetization interface. Connected to StripeAdaptor.
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { CreditCard, Tag, Globe, CheckCircle, AlertTriangle, ExternalLink } from 'lucide-react';
+import { CreditCard, Tag, Globe, CheckCircle, AlertTriangle, ExternalLink, DollarSign, Activity, Package } from 'lucide-react';
 import { createCommerceProduct, createPricingTable } from './commerce-rail.js';
 
 import { Log } from './core/autonomy/SovereignLogger.js';
@@ -45,47 +45,58 @@ export function CommerceRailView() {
   }, [form]);
 
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', animation: 'fadeIn 0.3s ease-out' }}>
-      <header style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: '#f1f5f9', margin: 0 }}>Commerce Rail</h1>
-        <p style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>
-          Generate professional product specs and live Stripe checkout sessions.
-        </p>
-      </header>
+    <div className="flex flex-col gap-6 animate-in pb-12">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-white/10 pb-6 gap-4 shrink-0">
+        <div>
+          <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-emerald-300 to-teal-500 tracking-tighter mb-1 flex items-center gap-2">
+            <CreditCard size={28} className="text-emerald-400" /> Commerce Rail
+          </div>
+          <div className="text-xs font-bold text-emerald-500/50 uppercase tracking-widest">
+            Generate professional product specs and live Stripe checkout sessions.
+          </div>
+        </div>
+      </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 24 }}>
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-6 min-h-0">
         {/* Product Generation */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div style={{ background: '#111827', border: '1px solid #1e293b', borderRadius: 16, padding: 24 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-              <Tag size={18} color="#6366f1" />
-              <h2 style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0', margin: 0 }}>Generate Product Spec</h2>
+        <div className="flex flex-col gap-6">
+          <div className="glass-extreme rounded-3xl border-neon-glow shadow-[0_0_20px_rgba(16,185,129,0.05)] bg-black/40 backdrop-blur-xl flex flex-col overflow-hidden">
+            <div className="bg-white/5 border-b border-white/5 p-5">
+              <div className="text-xs font-black text-slate-300 uppercase tracking-widest flex items-center gap-2">
+                <Tag size={14} className="text-indigo-400" /> Generate Product Spec
+              </div>
             </div>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div>
-                <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 6 }}>Product Name</label>
-                <input 
-                  style={{ width: '100%', padding: '10px 14px', background: '#0f172a', border: '1px solid #1e293b', borderRadius: 8, color: '#f1f5f9', fontSize: 13 }}
-                  value={form.productName} 
-                  onChange={e => setForm(f => ({...f, productName: e.target.value}))} 
-                />
+            <div className="p-6 flex flex-col gap-5">
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Product Name</label>
+                <div className="relative">
+                  <input 
+                    className="w-full bg-black/50 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-emerald-100 focus:outline-none focus:border-emerald-500/50 transition-colors font-bold" 
+                    value={form.productName} 
+                    onChange={e => setForm(f => ({...f, productName: e.target.value}))} 
+                  />
+                  <Package size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500/50" />
+                </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 6 }}>Price (cents)</label>
-                  <input 
-                    style={{ width: '100%', padding: '10px 14px', background: '#0f172a', border: '1px solid #1e293b', borderRadius: 8, color: '#f1f5f9', fontSize: 13 }}
-                    type="number" 
-                    value={form.price} 
-                    onChange={e => setForm(f => ({...f, price: parseInt(e.target.value)}))} 
-                  />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Price (cents)</label>
+                  <div className="relative">
+                    <input 
+                      className="w-full bg-black/50 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-emerald-100 focus:outline-none focus:border-emerald-500/50 transition-colors font-bold" 
+                      type="number" 
+                      value={form.price} 
+                      onChange={e => setForm(f => ({...f, price: parseInt(e.target.value)}))} 
+                    />
+                    <DollarSign size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500/50" />
+                  </div>
                 </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 6 }}>Currency</label>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Currency</label>
                   <select 
-                    style={{ width: '100%', padding: '10px 14px', background: '#0f172a', border: '1px solid #1e293b', borderRadius: 8, color: '#f1f5f9', fontSize: 13 }}
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-emerald-100 focus:outline-none focus:border-emerald-500/50 transition-colors font-bold appearance-none cursor-pointer uppercase tracking-widest" 
                     value={form.currency} 
                     onChange={e => setForm(f => ({...f, currency: e.target.value}))}
                   >
@@ -96,10 +107,10 @@ export function CommerceRailView() {
                 </div>
               </div>
 
-              <div>
-                <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 6 }}>Description</label>
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Description</label>
                 <textarea 
-                  style={{ width: '100%', padding: '10px 14px', background: '#0f172a', border: '1px solid #1e293b', borderRadius: 8, color: '#f1f5f9', fontSize: 13, resize: 'none' }}
+                  className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-emerald-100 focus:outline-none focus:border-emerald-500/50 transition-colors font-bold resize-none custom-scrollbar" 
                   rows={3} 
                   value={form.description} 
                   onChange={e => setForm(f => ({...f, description: e.target.value}))} 
@@ -109,79 +120,96 @@ export function CommerceRailView() {
               <button 
                 onClick={generateProduct} 
                 disabled={loading}
-                style={{ 
-                  width: '100%', padding: '12px', borderRadius: 10, border: 'none', background: '#4f46e5', color: 'white', 
-                  fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
-                }}
+                className={`mt-2 py-4 rounded-xl flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest transition-all shadow-lg active:scale-95 ${
+                  loading
+                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
+                    : 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black shadow-[0_0_20px_rgba(16,185,129,0.3)]'
+                }`}
               >
-                {loading ? <div className="animate-spin" style={{ width: 16, height: 16, border: '2px solid white', borderTopColor: 'transparent', borderRadius: '50%' }} /> : <CreditCard size={16} />}
-                Generate Checkout Session
+                {loading ? <Activity size={16} className="animate-spin" /> : <CreditCard size={16} />}
+                {loading ? 'Generating...' : 'Generate Checkout Session'}
               </button>
             </div>
           </div>
 
           {result && (
-            <div style={{ background: '#111827', border: `1px solid ${result.success ? '#22c55e44' : '#ef444444'}`, borderRadius: 16, padding: 24 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-                {result.success ? <CheckCircle size={18} color="#22c55e" /> : <AlertTriangle size={18} color="#ef4444" />}
-                <h3 style={{ fontSize: 14, fontWeight: 700, color: '#f1f5f9', margin: 0 }}>
+            <div className={`glass-extreme rounded-3xl border-neon-glow shadow-[0_0_20px_rgba(16,185,129,0.05)] bg-black/40 backdrop-blur-xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 border ${result.success ? 'border-green-500/30' : 'border-red-500/30'}`}>
+              <div className="bg-white/5 border-b border-white/5 p-5">
+                <div className={`text-xs font-black uppercase tracking-widest flex items-center gap-2 ${result.success ? 'text-green-400' : 'text-red-400'}`}>
+                  {result.success ? <CheckCircle size={14} /> : <AlertTriangle size={14} />}
                   {result.success ? 'Checkout Ready' : 'Generation Failed'}
-                </h3>
+                </div>
               </div>
               
-              {result.success ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  <div style={{ fontSize: 12, color: '#94a3b8' }}>Session ID: <code style={{ color: '#6366f1' }}>{result.sessionId}</code></div>
-                  <a 
-                    href={result.url} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    style={{ 
-                      padding: '10px 14px', background: '#22c55e', color: 'white', borderRadius: 8, textAlign: 'center', 
-                      fontSize: 12, fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
-                    }}
-                  >
-                    Launch Checkout <ExternalLink size={14} />
-                  </a>
-                  <div style={{ background: '#0f172a', padding: 12, borderRadius: 8, border: '1px solid #1e293b' }}>
-                    <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: 6 }}>Integration Code</label>
-                    <pre style={{ margin: 0, fontSize: 10, color: '#22c55e', overflowX: 'auto' }}>{result.injectionCode}</pre>
+              <div className="p-6">
+                {result.success ? (
+                  <div className="flex flex-col gap-4">
+                    <div className="bg-[#0a0a0f] border border-white/5 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[11px] font-mono">
+                      <span className="text-slate-500 font-bold uppercase tracking-widest shrink-0">Session ID:</span>
+                      <code className="text-indigo-400 font-bold truncate break-all">{result.sessionId}</code>
+                    </div>
+                    
+                    <a 
+                      href={result.url} 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30 transition-all rounded-xl py-3 text-xs font-black uppercase tracking-widest inline-flex items-center justify-center gap-2 active:scale-95 shadow-[0_0_15px_rgba(34,197,94,0.15)]"
+                    >
+                      Launch Checkout <ExternalLink size={14} />
+                    </a>
+                    
+                    <div className="bg-[#0a0a0f] border border-white/5 rounded-xl p-4 flex flex-col gap-2 text-[11px] font-mono">
+                      <label className="text-slate-500 font-bold uppercase tracking-widest text-[9px]">Integration Code</label>
+                      <pre className="text-green-400 m-0 overflow-x-auto custom-scrollbar pb-2">{result.injectionCode}</pre>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div style={{ fontSize: 12, color: '#ef4444' }}>{result.error}</div>
-              )}
+                ) : (
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-[11px] text-red-400 font-mono font-bold leading-relaxed break-words">
+                    {result.error}
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
 
         {/* Pricing Table Preview */}
-        <div style={{ background: '#111827', border: '1px solid #1e293b', borderRadius: 16, padding: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
-            <Globe size={18} color="#10b981" />
-            <h2 style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0', margin: 0 }}>Pricing Table Preview</h2>
+        <div className="glass-extreme rounded-3xl border-neon-glow shadow-[0_0_20px_rgba(16,185,129,0.05)] bg-[#030408] border-2 border-white/5 backdrop-blur-xl flex flex-col overflow-hidden relative min-h-[500px]">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+          
+          <div className="bg-white/5 border-b border-white/5 p-5 relative z-10">
+            <div className="text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+              <Globe size={14} /> Pricing Table Preview
+            </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div className="p-6 flex-1 overflow-y-auto custom-scrollbar relative z-10 flex flex-col gap-5">
             {pricingTable ? pricingTable.tiers.map((tier, i) => (
-              <div key={i} style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: 12, padding: 20 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+              <div key={i} className="bg-black/40 border border-emerald-500/20 hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all rounded-2xl p-6 group shadow-[0_0_15px_rgba(16,185,129,0.05)]">
+                <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 style={{ fontSize: 16, fontWeight: 800, color: '#f1f5f9', margin: 0 }}>{tier.name}</h3>
-                    <div style={{ fontSize: 24, fontWeight: 900, color: '#10b981', marginTop: 4 }}>${(tier.price / 100).toFixed(2)}</div>
+                    <h3 className="text-lg font-black text-slate-200 group-hover:text-white transition-colors tracking-tight mb-1">{tier.name}</h3>
+                    <div className="text-3xl font-black text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.3)]">${(tier.price / 100).toFixed(2)}</div>
                   </div>
-                  <div style={{ padding: '4px 8px', background: '#10b98114', border: '1px solid #10b98144', borderRadius: 6, fontSize: 9, fontWeight: 700, color: '#10b981', textTransform: 'uppercase' }}>Enterprise</div>
+                  <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    Enterprise
+                  </div>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                
+                <div className="flex flex-col gap-3 mt-6">
                   {tier.features.map((f, j) => (
-                    <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: '#94a3b8' }}>
-                      <CheckCircle size={12} color="#10b981" /> {f}
+                    <div key={j} className="flex items-start gap-3 text-[11px] font-bold text-slate-400 group-hover:text-slate-300 transition-colors leading-relaxed">
+                      <CheckCircle size={14} className="text-emerald-500 shrink-0 mt-0.5" /> 
+                      <span>{f}</span>
                     </div>
                   ))}
                 </div>
               </div>
             )) : (
-              <div style={{ padding: 40, textAlign: 'center', color: '#475569', fontSize: 12 }}>Loading pricing data...</div>
+              <div className="h-full flex flex-col items-center justify-center text-center text-slate-400 border border-dashed border-white/10 rounded-3xl p-12 bg-black/20">
+                <Activity size={32} className="animate-spin opacity-50 text-emerald-500 mb-4" />
+                <div className="text-sm font-bold text-slate-300">Loading pricing data...</div>
+              </div>
             )}
           </div>
         </div>

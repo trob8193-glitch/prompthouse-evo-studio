@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { SHADOW_FORGE } from '../autonomy/ShadowForge.js';
+import { GlobalSplitTether } from '../tethers/SplitTetherDaemon.js';
 
 const PROPOSALS_DIR = () => path.join(process.cwd(), '.prompthouse-data', 'evolution', 'proposals');
 
@@ -78,6 +79,12 @@ export async function buildPatchProposal(options = {}) {
   fs.writeFileSync(proposalPath, JSON.stringify(proposal, null, 2), 'utf8');
 
   proposal.verificationOnly = proposal.blockedReasons.length > 0;
+  
+  // [SPLIT-TETHER AMPLIFICATION] Send to Audit & Maintenance
+  try {
+    await GlobalSplitTether.splitAndRoute('PatchProposalEngine', { type: 'EVOLUTION_PATCH', id: proposal.id, payload: proposal });
+  } catch (e) { /* ignore tether routing errors */ }
+
   return proposal;
 }
 

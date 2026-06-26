@@ -1,6 +1,7 @@
 import path from 'path';
 import { readFileSync, existsSync } from 'fs';
 import { Log } from '../../autonomy/SovereignLogger.js';
+import { getSwarmConsensus } from '../swarm/SwarmConsensusEngine.js';
 
 export class MasterAuditDaemon {
   constructor(cwd = process.cwd()) {
@@ -76,6 +77,21 @@ export class MasterAuditDaemon {
       Log.success('[MasterAudit] QuadBrain evolutionary state tracker located. Cognitive core is intact.');
     } else {
       Log.info('[WARNING][MasterAudit] QuadBrain state file not found. System may be un-evolved.');
+    }
+
+    try {
+      const swarm = getSwarmConsensus();
+      const resolvedTasks = swarm.getTasksByStatus('RESOLVED');
+      for (const task of resolvedTasks) {
+        Log.info(`[MasterAudit] 🔍 Auditing SWARM_TASK_RESOLVED: ${task.payload.description}`);
+        task.status = 'AUDITED';
+        task.auditedAt = new Date().toISOString();
+        swarm.tasks.set(task.id, task);
+        swarm.saveState();
+        Log.success(`[MasterAudit] ✅ Task ${task.id} audited and verified safe for ledger commit.`);
+      }
+    } catch (e) {
+      Log.error(`[MasterAudit] Swarm Audit Failed: ${e.message}`);
     }
   }
 }

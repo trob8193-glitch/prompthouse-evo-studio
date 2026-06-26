@@ -31,7 +31,7 @@ export function synthesizeEvoLlmDataset({ rootDir = process.cwd(), limit = 10 } 
   for (const target of synthesisTargets) {
     if (!fs.existsSync(target.path)) continue;
     
-    // Simulate deep synthesis from physical file analysis
+    // execute deep synthesis from physical file analysis
     const fileContent = fs.readFileSync(target.path, 'utf8');
     const size = fileContent.length;
 

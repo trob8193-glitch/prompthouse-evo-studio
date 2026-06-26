@@ -21,7 +21,7 @@ const FEATURES = [
   },
   {
     icon: '💎',
-    title: '120 Architectural Paradigms',
+    title: '240 Architectural Paradigms',
     desc: 'Nexus, Forge, Genome, Hologram, Royal — your interface evolves with your usage patterns.',
     color: '#f59e0b',
   },
@@ -150,7 +150,7 @@ export function LandingPage({ onEnterStudio }) {
             </span>
           </h1>
           <p style={ls.heroSub}>
-            50 specialized AI agents. 120 architectural paradigms. A studio that improves its own codebase overnight.
+            51 sovereign AI agents. 240 architectural paradigms. A studio that improves its own codebase overnight.
             — with a cryptographic audit trail of every decision it makes.
           </p>
           <div style={ls.heroActions}>

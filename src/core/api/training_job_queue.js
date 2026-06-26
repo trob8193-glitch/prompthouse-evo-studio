@@ -50,7 +50,7 @@ class TrainingJobQueue {
             // LIVE OpenAI Training Execution
             const apiKey = process.env.OPENAI_API_KEY;
             if (!apiKey) {
-                throw new Error("FATAL: OPENAI_API_KEY is missing. No simulated training allowed.");
+                throw new Error("FATAL: OPENAI_API_KEY is missing. No test-rund training allowed.");
             }
             if (!job.fileId) {
                 throw new Error("FATAL: Missing real OpenAI training file ID. Cannot use static strings.");

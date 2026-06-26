@@ -8,10 +8,10 @@ import { safeFetchBridge } from '../config/bridge-config.js';
 function MetricCard({ icon: Icon, label, value, sub, color = '#00f0ff', pulse = false }) {
   return (
     <div 
-      className="glass-extreme rounded-4xl border-cyan-500/20 p-6 flex-col items-start gap-4 transition-all duration-500 hover:border-cyan-400 hover:shadow-[0_0_40px_rgba(0,240,255,0.15)] hover:-translate-y-1 relative overflow-hidden bg-black/40 backdrop-blur-2xl"
+      className="glass-extreme rounded-4xl border-cyan-500/20 p-6 flex-col items-start gap-4 transition-all duration-500 hover:border-cyan-400 hover:shadow-[0_0_50px_rgba(0,240,255,0.2)] hover:-translate-y-2 hover:scale-[1.02] relative overflow-hidden bg-black/40 backdrop-blur-3xl animate-gem-breath"
       style={{ '--glow-color': color }}
     >
-      <div className="absolute -top-10 -left-10 w-32 h-32 blur-[50px] opacity-20 pointer-events-none" style={{ background: color }} />
+      <div className="absolute -top-10 -left-10 w-32 h-32 blur-[60px] opacity-30 pointer-events-none" style={{ background: color }} />
       
       <div className="w-12 h-12 rounded-2xl flex items-center justify-center border-cyan-500/40 shadow-[0_0_20px_rgba(0,240,255,0.1)] z-10" style={{ background: `${color}15` }}>
         <Icon size={24} color={color} style={{ filter: `drop-shadow(0 0 8px ${color})` }} />
@@ -36,7 +36,7 @@ function QuickAction({ icon: Icon, label, sub, onClick, color = '#8a2be2' }) {
   return (
     <button
       onClick={onClick}
-      className="glass-extreme border-cyan-500/30 rounded-2xl p-5 flex items-center gap-4 cursor-pointer w-full text-left backdrop-blur-2xl transition-all hover:border-cyan-400 hover:translate-x-2 group relative overflow-hidden"
+      className="glass-extreme border-cyan-500/30 rounded-2xl p-5 flex items-center gap-4 cursor-pointer w-full text-left backdrop-blur-3xl transition-all duration-300 hover:border-cyan-400 hover:translate-x-2 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(0,240,255,0.15)] group relative overflow-hidden animate-gem-breath"
     >
       <div className="w-10 h-10 rounded-3xl flex items-center justify-center border-cyan-500/40 shadow-[0_0_20px_rgba(0,240,255,0.05)] z-10" style={{ background: `${color}15` }}>
         <Icon size={18} color={color} />

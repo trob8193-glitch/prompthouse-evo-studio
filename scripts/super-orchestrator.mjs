@@ -2,6 +2,7 @@ import { spawn, exec } from 'child_process';
 import util from 'util';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const execAsync = util.promisify(exec);
 
@@ -79,15 +80,36 @@ const VERIFICATION_SCRIPTS = [
   'npm run test:agent'
 ];
 
+// Helper to randomly pick a UI component for evolution
+function getRandomUIComponent() {
+  try {
+    const componentsDir = path.join(rootDir, 'src', 'components');
+    const files = fs.readdirSync(componentsDir).filter(f => f.endsWith('.jsx') || f.endsWith('.js') || f.endsWith('.tsx'));
+    if (files.length > 0) {
+      const randomFile = files[Math.floor(Math.random() * files.length)];
+      return `src/components/${randomFile}`;
+    }
+  } catch (e) {
+    log(RED, `Error reading components directory: ${e.message}`);
+  }
+  return 'src/components/Navigation.jsx'; // Safe fallback
+}
+
 // Helper to run a shell command
 async function runScript(cmd) {
-  log(YELLOW, `Executing: ${cmd}`);
+  let finalCmd = cmd;
+  if (cmd === 'npm run self:evolve') {
+    const target = getRandomUIComponent();
+    finalCmd = `node scripts/self_evolution_cycle.mjs ${target}`;
+  }
+
+  log(YELLOW, `Executing: ${finalCmd}`);
   try {
-    const { stdout, stderr } = await execAsync(cmd, { cwd: rootDir });
-    log(GREEN, `Success: ${cmd}`);
+    const { stdout, stderr } = await execAsync(finalCmd, { cwd: rootDir });
+    log(GREEN, `Success: ${finalCmd}`);
     return true;
   } catch (error) {
-    log(RED, `Failed: ${cmd} - Exit code ${error.code}`);
+    log(RED, `Failed: ${finalCmd} - Exit code ${error.code}`);
     return false;
   }
 }

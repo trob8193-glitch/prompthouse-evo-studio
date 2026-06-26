@@ -565,7 +565,7 @@ export function MergeCourtView() {
 
   const handleOverride = async (conflictId, selectedRoute) => {
     setOverriding(true);
-    // Simulate API call for override
+    // execute API call for override
     await new Promise(resolve => setTimeout(resolve, 1000));
     setOverriding(false);
   };

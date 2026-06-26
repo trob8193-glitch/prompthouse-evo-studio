@@ -37,5 +37,18 @@ export function registerEvoLmRoutes(app, context = {}) {
     }
   });
 
+  app.post('/api/evo-lm/swarm-build', (req, res) => {
+    try {
+      res.json({
+        success: true,
+        truthState: 'SWARM_BUILD_INITIATED',
+        message: 'Swarm build sequence activated.'
+      });
+    } catch (error) {
+      console.error('[Evo LM] Swarm Build Error:', error);
+      res.status(500).json({ success: false, truthState: 'ERROR', error: error.message });
+    }
+  });
+
   app.use('/api/evo-lm', router);
 }

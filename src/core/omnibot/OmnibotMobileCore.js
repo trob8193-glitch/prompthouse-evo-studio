@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { EvoIntelligenceTetherCore } from '../evo-llm/EvoIntelligenceTetherCore.js';
 import { evaluateFrontierIntelligenceSafety, writeFrontierSafetyReceipt } from '../evo-llm/FrontierIntelligenceSafetyGate.js';
 import { ingestEvoWorkMemory } from '../evo-llm/EvoWorkMemoryEngine.js';
+import { GlobalSplitTether } from '../tethers/SplitTetherDaemon.js';
 
 const VERSION = '1.2.0';
 
@@ -273,6 +274,12 @@ export function planOmnibotMobileIntent({ rootDir = process.cwd(), intent = {} }
   const planFile = path.join(paths.intentPlans, `${plan.id}.json`);
   writeJson(planFile, plan);
   const receipt = writeOmnibotMobileReceipt({ rootDir, type: 'omnibot_mobile_intent_plan_receipt', payload: { planFile: path.relative(rootDir, planFile), plan } });
+
+  // [SPLIT-TETHER AMPLIFICATION] Broadcast Omnibot mobile intent to Intelligence, Copilot, and FlutterBridge
+  try {
+    GlobalSplitTether.splitAndRoute('OmnibotMobileCore', { type: 'OMNIBOT_MOBILE', intent: normalized, plan }).catch(() => {});
+  } catch (e) { /* ignore */ }
+
   return { success: safetyDecision.allowed, plan, planFile: path.relative(rootDir, planFile), receipt };
 }
 

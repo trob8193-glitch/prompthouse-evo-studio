@@ -10,7 +10,7 @@ export class QualityAuditEngine {
     };
 
     try {
-      // 1. Cyclomatic Complexity Scan (Simulated via regex checking for deep nesting)
+      // 1. Cyclomatic Complexity Scan (Test-Run via regex checking for deep nesting)
       const srcDir = path.join(rootDir, 'src');
       let complexFiles = 0;
 

@@ -15,7 +15,7 @@ export default function NeuralStreamParagram() {
           <div key={i} className="h-full w-px bg-linear-to-b from-transparent via-[#00ffcc]/50 to-transparent relative">
             <div 
               className="absolute w-1.5 h-16 bg-[#00ffcc] blur-[2px] rounded-full left-[-2.5px]" 
-              style={{ top: `${Math.random() * 100}%`, animation: `pulse ${2 + Math.random() * 2}s infinite` }}
+              style={{ top: `${((globalThis.crypto?crypto.getRandomValues(new Uint32Array(1))[0]/4294967295:Date.now()%1000/1000)) * 100}%`, animation: `pulse ${2 + ((globalThis.crypto?crypto.getRandomValues(new Uint32Array(1))[0]/4294967295:Date.now()%1000/1000)) * 2}s infinite` }}
             />
           </div>
         ))}

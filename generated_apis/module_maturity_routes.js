@@ -50,4 +50,18 @@ export default function registerModuleMaturityRoutes(app) {
       fail(res, error);
     }
   });
+  app.get('/api/grading/maturity', (req, res) => {
+    try {
+      const report = runModuleMaturityAudit();
+      ok(res, {
+        grading: {
+          score: report.averageScore,
+          truthState: report.truthState,
+          timestamp: new Date().toISOString()
+        }
+      });
+    } catch (error) {
+      fail(res, error);
+    }
+  });
 }

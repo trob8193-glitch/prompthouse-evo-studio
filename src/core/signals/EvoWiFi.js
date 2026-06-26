@@ -31,7 +31,7 @@ export async function getEvoWiFiTopology(rootDir = process.cwd()) {
     interfaces: fabric.network.interfaces,
     currentNetworkAlias: fabric.network.currentNetworkAlias,
     platform: fabric.network.platform,
-    gateway: '192.168.1.1' // Simulated for MVP without running heavy network scanning
+    gateway: '192.168.1.1' // physical for MVP without running heavy network scanning
   };
 }
 

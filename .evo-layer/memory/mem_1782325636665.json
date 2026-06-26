@@ -1,0 +1,199 @@
+{
+  "id": "mem_1782325636665",
+  "type": "daemon_readiness_report",
+  "data": {
+    "success": true,
+    "truthState": "LOCAL_DAEMON_STACK_READY",
+    "localCompletion": 100,
+    "entrypointCount": 15,
+    "syntaxPassCount": 15,
+    "syntaxChecks": [
+      {
+        "id": "promptbridge",
+        "path": "promptbridge-server.js",
+        "command": "npm run bridge",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "singularity-core",
+        "path": "src/core/daemons/singularity/SingularityCore.mjs",
+        "command": "npm run singularity",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "crucible-daemon",
+        "path": "src/core/daemons/crucible/CrucibleDaemon.mjs",
+        "command": "npm run crucible",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "platform-sentinel",
+        "path": "src/core/daemons/sentinel/PlatformSentinelDaemon.mjs",
+        "command": "npm run sentinel:daemon",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "convergence-daemon",
+        "path": "src/core/daemons/convergence/ConvergenceDaemon.mjs",
+        "command": "npm run convergence:daemon",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "evolution-daemon",
+        "path": "scripts/evolution-daemon.mjs",
+        "command": "node scripts/evolution-daemon.mjs",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "ai-daemon",
+        "path": "scripts/ai_daemon.mjs",
+        "command": "npm run ai:daemon",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "audit-platform-daemon",
+        "path": "scripts/audit-platform-daemon.mjs",
+        "command": "npm run audit:platform:daemon",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "frontend-watchdog",
+        "path": "src/core/daemons/watchdogs/FrontendWatchdog.mjs",
+        "command": "npm run watchdog:frontend",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "middleend-watchdog",
+        "path": "src/core/daemons/watchdogs/MiddleendWatchdog.mjs",
+        "command": "npm run watchdog:middleend",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "bridgeend-watchdog",
+        "path": "src/core/daemons/watchdogs/BridgeendWatchdog.mjs",
+        "command": "npm run watchdog:bridgeend",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "backend-watchdog",
+        "path": "src/core/daemons/watchdogs/BackendWatchdog.mjs",
+        "command": "npm run watchdog:backend",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "self-invention-daemon",
+        "path": "scripts/self-invention-daemon.mjs",
+        "command": "npm run self:invent",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "omni-orchestrator",
+        "path": "src/core/daemons/omni/OmniOrchestrator.mjs",
+        "command": "npm run omni:orchestrator",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "id": "antigravity-daemon",
+        "path": "scripts/antigravity-daemon.mjs",
+        "command": "npm run antigravity",
+        "exists": true,
+        "passed": true,
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "coordination": {
+      "truthState": "COORDINATION_REPORT_CREATED",
+      "daemonCount": 12,
+      "openClaims": 0,
+      "wonClaims": 0,
+      "health": "ACTIVE"
+    },
+    "runtime": {
+      "truthState": "COORDINATION_RUNTIME_REPORT_CREATED",
+      "activeLeases": 0,
+      "expiredLeases": 0,
+      "decisionCount": 0,
+      "deadlocks": {
+        "truthState": "COORDINATION_DEADLOCK_SCAN_CREATED",
+        "expired": [],
+        "contested": [],
+        "hasDeadlockRisk": false,
+        "generatedAt": "2026-06-24T18:27:16.661Z"
+      }
+    },
+    "externalGates": [
+      {
+        "id": "live-daemon-process-supervision",
+        "truthState": "OPERATOR_START_REQUIRED",
+        "reason": "Long-running daemon supervision is proven by the operator starting daemons:all; this proof validates local contracts and entrypoints."
+      },
+      {
+        "id": "live-provider-daemon-actions",
+        "truthState": "PROVIDER_GATED",
+        "reason": "Provider-backed daemon actions require live Stripe/Vercel/OpenAI/JWT environment proof before production execution claims."
+      }
+    ],
+    "localGaps": [],
+    "generatedAt": "2026-06-24T18:27:16.661Z",
+    "receiptPath": "C:\\Users\\Noname\\Documents\\Codex\\2026-05-03\\prompthouse-evo-studio-files-in-my\\.evo-layer\\daemon-proof\\daemon-readiness-1782325636662.json"
+  },
+  "createdAt": "2026-06-24T18:27:16.665Z"
+}
