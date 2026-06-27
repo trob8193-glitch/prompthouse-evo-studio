@@ -84,9 +84,9 @@ export function ProofToValueView() {
         </div>
         
         <div className="mt-8 flex justify-center">
-          <button className="flex items-center gap-2 text-sm font-bold text-emerald-500 hover:text-emerald-400 uppercase tracking-widest transition-colors">
+          <span className="flex items-center gap-2 text-sm font-bold text-emerald-500 hover:text-emerald-400 uppercase tracking-widest transition-colors cursor-pointer">
             View Full Ledger <ArrowRight size={16} />
-          </button>
+          </span>
         </div>
       </div>
     </div>

@@ -2,8 +2,89 @@
   "history": [
     {
       "cycleNumber": 1,
-      "timestamp": "2026-06-26T15:41:54.989Z",
-      "durationMs": 67966,
+      "timestamp": "2026-06-26T17:44:43.603Z",
+      "durationMs": 903,
+      "intentsGenerated": 51,
+      "criticalIntents": 6,
+      "highIntents": 16,
+      "status": "HEALTHY"
+    },
+    {
+      "cycleNumber": 2,
+      "timestamp": "2026-06-26T18:44:58.930Z",
+      "durationMs": 4479,
+      "intentsGenerated": 51,
+      "criticalIntents": 6,
+      "highIntents": 16,
+      "status": "HEALTHY"
+    },
+    {
+      "cycleNumber": 3,
+      "timestamp": "2026-06-26T19:44:56.893Z",
+      "durationMs": 2431,
+      "intentsGenerated": 51,
+      "criticalIntents": 6,
+      "highIntents": 16,
+      "status": "HEALTHY"
+    },
+    {
+      "cycleNumber": 4,
+      "timestamp": "2026-06-26T20:44:57.259Z",
+      "durationMs": 2784,
+      "intentsGenerated": 51,
+      "criticalIntents": 6,
+      "highIntents": 16,
+      "status": "HEALTHY"
+    },
+    {
+      "cycleNumber": 5,
+      "timestamp": "2026-06-26T21:44:56.782Z",
+      "durationMs": 2285,
+      "intentsGenerated": 51,
+      "criticalIntents": 6,
+      "highIntents": 16,
+      "status": "HEALTHY"
+    },
+    {
+      "cycleNumber": 6,
+      "timestamp": "2026-06-26T22:44:57.795Z",
+      "durationMs": 3294,
+      "intentsGenerated": 51,
+      "criticalIntents": 6,
+      "highIntents": 16,
+      "status": "HEALTHY"
+    },
+    {
+      "cycleNumber": 7,
+      "timestamp": "2026-06-26T23:44:55.440Z",
+      "durationMs": 925,
+      "intentsGenerated": 51,
+      "criticalIntents": 6,
+      "highIntents": 16,
+      "status": "HEALTHY"
+    },
+    {
+      "cycleNumber": 8,
+      "timestamp": "2026-06-27T00:44:55.617Z",
+      "durationMs": 1095,
+      "intentsGenerated": 51,
+      "criticalIntents": 6,
+      "highIntents": 16,
+      "status": "HEALTHY"
+    },
+    {
+      "cycleNumber": 9,
+      "timestamp": "2026-06-27T01:44:55.276Z",
+      "durationMs": 742,
+      "intentsGenerated": 51,
+      "criticalIntents": 6,
+      "highIntents": 16,
+      "status": "HEALTHY"
+    },
+    {
+      "cycleNumber": 10,
+      "timestamp": "2026-06-27T02:44:56.279Z",
+      "durationMs": 1736,
       "intentsGenerated": 51,
       "criticalIntents": 6,
       "highIntents": 16,

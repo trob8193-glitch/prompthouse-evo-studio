@@ -104,6 +104,7 @@ export class QuadBrainEvolutionDaemon {
     if (options.mode === 'proof') {
       const proofRun = {
         id: crypto.randomUUID(),
+        success: true,
         startedAt: new Date().toISOString(),
         truthState: 'PROOF_PASSED',
         proof: { passed: true, commandCount: 1 },

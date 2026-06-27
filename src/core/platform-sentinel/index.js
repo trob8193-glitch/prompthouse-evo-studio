@@ -59,6 +59,7 @@ export const ONLINE_REQUIREMENTS = Object.freeze([
     provider: 'stripe',
     severity: 'P1',
     envKey: 'STRIPE_SECRET_KEY',
+    requiredPrefix: 'sk_live_',
     optional: true,
     approvalScope: 'commerce',
     route: 'POST /api/commerce/checkout',

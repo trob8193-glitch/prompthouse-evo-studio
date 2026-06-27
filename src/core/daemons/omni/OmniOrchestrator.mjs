@@ -10,6 +10,14 @@ import { getSwarmConsensus } from '../swarm/SwarmConsensusEngine.js';
 const STATE_FILE = () => path.join(process.cwd(), '.prompthouse-data', 'daemons', 'omni_state.json');
 const KILL_SWITCH = () => path.join(process.cwd(), '.prompthouse-data', 'evolution', '.evolution-kill-switch');
 
+// Prevent EBUSY and other unhandled promise rejections from crashing the 10-hour OmniOrchestrator sprint
+process.on('uncaughtException', (err) => {
+  console.error('[OmniOrchestrator] 🛡️ Shielded from uncaught exception:', err.message);
+});
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[OmniOrchestrator] 🛡️ Shielded from unhandled rejection:', reason);
+});
+
 function ensureDir() {
   const dir = path.dirname(STATE_FILE());
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });

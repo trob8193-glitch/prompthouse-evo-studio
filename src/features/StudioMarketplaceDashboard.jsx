@@ -24,9 +24,9 @@ export default function StudioMarketplaceDashboard() {
             <p className="text-xs text-gray-500">Discover AI Models & Architectures</p>
           </div>
         </div>
-        <button className="flex items-center gap-2 px-3 py-1.5 bg-black/50 border border-[rgba(255,255,255,0.1)] rounded-lg text-xs font-bold text-gray-400 hover:text-white transition-colors">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-black/50 border border-[rgba(255,255,255,0.1)] rounded-lg text-xs font-bold text-gray-400 hover:text-white transition-colors cursor-pointer">
           <Filter size={14} /> Filter
-        </button>
+        </div>
       </div>
 
       <div className="flex-1 p-6 overflow-y-auto custom-scrollbar">
@@ -41,16 +41,16 @@ export default function StudioMarketplaceDashboard() {
                <h3 className="text-2xl font-black text-white mb-1">Omni-Vector Commerce Setup</h3>
                <p className="text-purple-200/60 text-sm max-w-md">Instantly deploys a full-stack Next.js app with Stripe, Supabase, and Tailwind, pre-wired into the truth spine.</p>
              </div>
-             <button className="px-6 py-3 bg-white text-black font-bold rounded-lg shadow-xl shadow-white/10 group-hover/banner:scale-105 transition-transform">
+             <div className="px-6 py-3 bg-white text-black font-bold rounded-lg shadow-xl shadow-white/10 group-hover/banner:scale-105 transition-transform text-center font-sans">
                Install Now
-             </button>
+             </div>
            </div>
         </div>
 
         {/* Plugin Grid */}
         <div className="flex items-center justify-between mb-4">
            <h4 className="text-sm font-bold text-white uppercase tracking-widest">Trending Modules</h4>
-           <a href="#" className="text-xs font-bold text-purple-400 flex items-center gap-1 hover:text-purple-300">View All <ChevronRight size={14} /></a>
+           <span className="text-xs font-bold text-purple-400 flex items-center gap-1 hover:text-purple-300 cursor-pointer">View All <ChevronRight size={14} /></span>
         </div>
         <div className="grid grid-cols-2 gap-4">
           {plugins.map((p, i) => (

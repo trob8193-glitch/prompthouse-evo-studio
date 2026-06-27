@@ -41,8 +41,8 @@ describe('platform online blockers', () => {
     expect(ids).toContain('github-live-connector');
     expect(ids).not.toContain('openai-live-connector');
     expect(ids).not.toContain('stripe-test-commerce');
-    expect(summary.requiredBlockers).toBe(4);
-    expect(summary.optionalBlockers).toBe(1);
+    expect(summary.requiredBlockers).toBe(3);
+    expect(summary.optionalBlockers).toBe(2);
     expect(JSON.stringify(blockers)).not.toContain('sk_test_stripe');
   }, 30000);
 

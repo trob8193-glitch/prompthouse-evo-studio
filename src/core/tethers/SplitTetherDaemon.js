@@ -133,11 +133,23 @@ export class SplitTetherDaemon {
       routes.push('GhostEditor');
     }
 
-    // ── ANTIGRAVITY META-TETHER ──────────────────────────────
-    // Route ALL signals through the Antigravity consciousness layer
-    // so it maintains total awareness of the studio's state.
+    // ── ANTIGRAVITY & INTELLIGENCE CORE META-TETHERS ──────────────────────────────
+    // Route ALL signals through the Antigravity consciousness layer and the main Intelligence Core
+    // so they maintain total awareness of the studio's state.
     if (!routes.includes('AntigravityDaemon')) {
       routes.push('AntigravityDaemon');
+    }
+    if (!routes.includes('IntelligenceCore')) {
+      routes.push('IntelligenceCore');
+    }
+
+    // ── EXTERNAL ECOSYSTEM META-TETHERS ──────────────────────────────
+    // Omni-bond with external IDEs, local AI engines, and the internet
+    const externalTethers = ['CodexIdeBridge', 'CursorNexus', 'VsCodeTelemetry', 'OllamaLocalDaemon', 'GlobalWebScanner'];
+    for (const tether of externalTethers) {
+      if (!routes.includes(tether)) {
+        routes.push(tether);
+      }
     }
 
     // Default fallback

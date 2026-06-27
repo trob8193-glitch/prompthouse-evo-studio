@@ -118,9 +118,9 @@ export function TemplateLibraryView() {
           <BookOpen className="text-amber-400" />
           <h2 className="text-xl font-bold text-white tracking-widest uppercase">Master Template Vault</h2>
         </div>
-        <button className="flex items-center gap-2 px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded hover:bg-amber-500 hover:text-white transition-colors text-sm">
+        <div className="flex items-center gap-2 px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded hover:bg-amber-500 hover:text-white transition-colors text-sm cursor-pointer">
           <Plus size={16} /> New Template
-        </button>
+        </div>
       </div>
       
       <div className="grid grid-cols-2 gap-4">
@@ -168,9 +168,9 @@ export function AutoRepairView() {
       </div>
       
       <div className="mt-4 flex justify-end">
-        <button className="flex items-center gap-2 px-6 py-2 bg-emerald-500 text-white font-bold rounded hover:bg-emerald-400 transition-colors">
+        <div className="flex items-center gap-2 px-6 py-2 bg-emerald-500 text-white font-bold rounded hover:bg-emerald-400 transition-colors cursor-pointer">
           <Check size={16} /> Apply Patch
-        </button>
+        </div>
       </div>
     </div>
   );

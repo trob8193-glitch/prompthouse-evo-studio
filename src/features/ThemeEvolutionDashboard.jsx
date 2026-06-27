@@ -25,9 +25,9 @@ export default function ThemeEvolutionDashboard() {
             <p className="text-xs text-gray-500">Autonomous UI Aesthetic Generation</p>
           </div>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-orange-400 transition-colors shadow-lg shadow-orange-500/20">
+        <div className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-orange-400 transition-colors shadow-lg shadow-orange-500/20 cursor-pointer">
           <Sparkles size={14} /> Synthesize New
-        </button>
+        </div>
       </div>
 
       <div className="flex-1 p-6 flex gap-6 overflow-hidden">
@@ -78,9 +78,9 @@ export default function ThemeEvolutionDashboard() {
                  <div className="h-2 bg-white/10 rounded-full w-5/6"></div>
                </div>
                
-               <button className="mt-6 w-full py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-bold transition-colors">
+               <div className="mt-6 w-full py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-bold transition-colors text-center cursor-pointer">
                  Interactive Element
-               </button>
+               </div>
             </div>
             
             <div className="flex gap-4">

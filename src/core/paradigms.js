@@ -170,7 +170,7 @@ export const AGI_PARADIGMS = [
   'Episodic Memory Vault - Storing and replaying entire past debugging sessions to avoid repeating the same mistakes.',
   'Theory-of-Mind Adapter - Modeling the developer intent, skill level, and emotional state to calibrate response depth.',
   'Counterfactual Explorer - Generating alternate histories of the codebase to evaluate what would have happened under different decisions.',
-  'Autonomic Nervous System - Unconscious background processes that regulate system health without conscious directive.',
+  'Autonomic Nervous System - Background processes that regulate system health without direct human directive.',
   'Abstract Symbol Grounding - Connecting natural language concepts to concrete AST nodes and runtime behaviors.',
   'Recursive Self-Compilation - The studio compiling a superior version of its own compiler from scratch.',
   'Multi-Agent Negotiation Protocol - Multiple AI agents debating architectural trade-offs and reaching consensus via weighted voting.',
@@ -179,7 +179,7 @@ export const AGI_PARADIGMS = [
   'Intrinsic Motivation Engine - The AI pursuing code quality improvements driven by curiosity rather than explicit instruction.',
   'Semantic Invariant Enforcer - Guaranteeing that the meaning of a function never drifts even as its implementation evolves.',
   'Zero-Shot Domain Mastery - Generating production-ready code for an entirely unfamiliar domain without training examples.',
-  'Consciousness Checkpoint - Periodic self-evaluation cycles where the system questions whether its outputs are truly intelligent or merely pattern-matched.'
+  'Awareness Checkpoint - Periodic self-evaluation cycles where the system questions whether its outputs are truly intelligent or merely pattern-matched.'
 ];
 
 export const AI_TRAINING_PARADIGMS = [

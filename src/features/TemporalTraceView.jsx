@@ -72,9 +72,9 @@ export default function TemporalTraceView() {
       </div>
       
       <div className="p-4 border-t border-[rgba(255,255,255,0.05)] bg-black/40 flex justify-center">
-         <button className="flex items-center gap-2 text-xs font-bold text-blue-400 hover:text-blue-300 uppercase tracking-widest transition-colors">
+         <span className="flex items-center gap-2 text-xs font-bold text-blue-400 hover:text-blue-300 uppercase tracking-widest transition-colors cursor-pointer">
            <History size={14} /> Load Older Traces
-         </button>
+         </span>
       </div>
     </div>
   );

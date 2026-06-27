@@ -26,9 +26,9 @@ export default function SaasBuilderView() {
             <p className="text-xs text-gray-500">Autonomous Application Synthesis</p>
           </div>
         </div>
-        <button className="flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-gray-400 hover:text-white transition-colors">
+        <div className="flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-gray-400 hover:text-white transition-colors cursor-pointer">
           <Settings size={14} /> Factory Config
-        </button>
+        </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">

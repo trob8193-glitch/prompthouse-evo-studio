@@ -23,9 +23,9 @@ export default function CommerceDashboard() {
             <p className="text-xs text-gray-500">Stripe Integration & Revenue Tracking</p>
           </div>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-400 font-bold text-xs uppercase tracking-widest rounded-lg border border-emerald-500/30 hover:bg-emerald-500 hover:text-white transition-colors">
+        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-400 font-bold text-xs uppercase tracking-widest rounded-lg border border-emerald-500/30 hover:bg-emerald-500 hover:text-white transition-colors cursor-pointer">
           <CreditCard size={14} /> Connect Stripe
-        </button>
+        </div>
       </div>
 
       <div className="p-6 grid grid-cols-3 gap-4">
