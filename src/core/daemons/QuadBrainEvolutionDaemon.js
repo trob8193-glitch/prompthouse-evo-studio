@@ -42,6 +42,42 @@ function isKillSwitchEngaged() {
   return fs.existsSync(KILL_SWITCH_FILE());
 }
 
+function attachCycleEvidence(run) {
+  return {
+    ...run,
+    evidence: {
+      schemaVersion: 1,
+      lifecycle: [
+        'BUILD',
+        'VERIFY',
+        'OBSERVE',
+        'LEARN',
+        'TRAIN',
+        'IMPROVE',
+        'EVOLVE',
+        'TRANSFORM',
+        'TEST',
+        'RECOVER',
+        'REPEAT'
+      ],
+      recordedAt: new Date().toISOString(),
+      truthState: run.truthState,
+      baseline: run.baseline ? {
+        targetFile: run.baseline.targetFile,
+        targetHash: run.baseline.targetHash,
+        proofPassed: run.baseline.proof?.passed === true
+      } : null,
+      candidate: run.verification ? {
+        targetHash: run.verification.candidateHash,
+        proofPassed: run.verification.proof?.passed === true
+      } : null,
+      comparison: run.comparison || null,
+      rollback: run.rollback || null,
+      learningReceipt: run.learningReceipt?.id || null
+    }
+  };
+}
+
 function appendApprovalQueue(item) {
   ensureDir();
   fs.writeFileSync(APPROVAL_QUEUE_FILE(), JSON.stringify(item) + '\n', { flag: 'a', encoding: 'utf8' });
@@ -174,7 +210,7 @@ export class QuadBrainEvolutionDaemon {
       if (!suggestion) {
         run.truthState = 'NO_SUGGESTION';
         run.completedAt = new Date().toISOString();
-        appendRun(run);
+        appendRun(attachCycleEvidence(run));
         Log.info('[QuadBrain] No suggestion produced. Cycle complete.');
         return run;
       }
@@ -196,7 +232,7 @@ export class QuadBrainEvolutionDaemon {
       if (decision.action === 'REJECT') {
         run.truthState = 'REJECTED';
         run.completedAt = new Date().toISOString();
-        appendRun(run);
+        appendRun(attachCycleEvidence(run));
         Log.warn(`[QuadBrain] Decision: REJECT — ${decision.reason}`);
         return run;
       }
@@ -205,7 +241,7 @@ export class QuadBrainEvolutionDaemon {
       if (decision.action === 'REVIEW') {
         run.truthState = 'QUEUED_FOR_APPROVAL';
         run.completedAt = new Date().toISOString();
-        appendRun(run);
+        appendRun(attachCycleEvidence(run));
         appendApprovalQueue({
           id: runId,
           suggestion,
@@ -233,7 +269,7 @@ export class QuadBrainEvolutionDaemon {
         run.truthState = 'BASELINE_FAILED';
         run.comparison = { promotionEligible: false, reason: 'Existing project did not pass baseline verification.' };
         run.completedAt = new Date().toISOString();
-        appendRun(run);
+        appendRun(attachCycleEvidence(run));
         Log.error('[QuadBrain] Baseline failed. Mutation blocked.');
         return run;
       }
@@ -247,7 +283,7 @@ export class QuadBrainEvolutionDaemon {
         if (!shadowResult) {
           run.truthState = 'SHADOW_BUILD_FAILED';
           run.completedAt = new Date().toISOString();
-          appendRun(run);
+          appendRun(attachCycleEvidence(run));
           Log.error('[QuadBrain] ShadowForge rejected the mutation.');
           return run;
         }
@@ -275,7 +311,7 @@ export class QuadBrainEvolutionDaemon {
           lesson: 'Mutation did not apply. Preserve this failure as a future guard and do not promote.'
         });
         run.learningReceipt = lesson;
-        appendRun(run);
+        appendRun(attachCycleEvidence(run));
         return run;
       }
 
@@ -377,7 +413,7 @@ export class QuadBrainEvolutionDaemon {
         await SelfMarketingEngine.broadcastProductRelease(this.engine.aiAdaptor, runId, suggestion.description);
       }
 
-      appendRun(run);
+      appendRun(attachCycleEvidence(run));
       Log.info(`[QuadBrain] ═══ Cycle ${runId} complete: ${run.truthState} ═══`);
       return run;
 
@@ -385,7 +421,7 @@ export class QuadBrainEvolutionDaemon {
       run.error = err.message;
       run.truthState = 'ERROR';
       run.completedAt = new Date().toISOString();
-      appendRun(run);
+      appendRun(attachCycleEvidence(run));
 
       const state = readState();
       state.consecutiveFailures = (state.consecutiveFailures || 0) + 1;
