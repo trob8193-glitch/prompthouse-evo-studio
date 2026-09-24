@@ -7,6 +7,7 @@ import { AutonomousDecisionTree } from '../evolution/AutonomousDecisionTree.js';
 import { OnlineLearningManager } from '../evolution/OnlineLearningManager.js';
 import { SelfMarketingEngine } from '../autonomy/SelfMarketingEngine.js';
 import { Log } from '../autonomy/SovereignLogger.js';
+import { captureBaseline, verifyPromotion, rollbackToBaseline, learnFromCycle } from '../evolution/EvolutionLifecycleEngine.js';
 
 const DATA_DIR = () => path.join(process.cwd(), '.prompthouse-data', 'evolution');
 const RUNS_FILE = () => path.join(DATA_DIR(), 'runs.jsonl');
@@ -216,8 +217,29 @@ export class QuadBrainEvolutionDaemon {
         return run;
       }
 
-      // 5. ShadowForge ghost-build validation
-      Log.info('[QuadBrain] Phase 3: ShadowForge ghost-build...');
+      // 5. Establish a real baseline before mutation.
+      // No baseline = no defensible improvement claim.
+      const targetFile = suggestion.targetFile || 'src/index.css';
+      Log.info('[QuadBrain] Phase 3: Capturing baseline verification...');
+      const baseline = await captureBaseline({
+        rootDir: this.rootDir,
+        runId,
+        targetFile,
+        commands: ['npm run build']
+      });
+      run.baseline = baseline;
+
+      if (!baseline.proof.passed) {
+        run.truthState = 'BASELINE_FAILED';
+        run.comparison = { promotionEligible: false, reason: 'Existing project did not pass baseline verification.' };
+        run.completedAt = new Date().toISOString();
+        appendRun(run);
+        Log.error('[QuadBrain] Baseline failed. Mutation blocked.');
+        return run;
+      }
+
+      // 6. ShadowForge ghost-build validation
+      Log.info('[QuadBrain] Phase 4: ShadowForge ghost-build...');
       if (suggestion.cssRule) {
         const ghostCode = `/* EVO MUTATION */ ${suggestion.cssRule}`;
         const shadowResult = await SHADOW_FORGE.shadowBuild(`evo_css_${runId.slice(0, 8)}`, ghostCode);
@@ -231,30 +253,80 @@ export class QuadBrainEvolutionDaemon {
         }
       }
 
-      // 6. Apply the mutation
-      Log.info('[QuadBrain] Phase 4: Applying mutation...');
+      // 7. Apply the mutation
+      Log.info('[QuadBrain] Phase 5: Applying mutation...');
       let applied = false;
 
-      if (suggestion.cssRule) {
-        applied = this.engine.applyCssChange(suggestion);
-      }
-
+      if (suggestion.cssRule) applied = this.engine.applyCssChange(suggestion);
       if (suggestion.componentChange || suggestion.architectureChange) {
         applied = await this.engine.applyPhantomChange(suggestion);
       }
 
       run.applied = applied;
-      if (applied) {
-        run.truthState = 'PROOF_PASSED';
-        run.proof = { passed: true, commandCount: 1 };
-        run.comparison = { improved: true };
-        run.receipt = { workspace: { strategy: 'autonomous_mutation' } };
-      } else {
+
+      if (!applied) {
         run.truthState = 'APPLY_FAILED';
+        run.completedAt = new Date().toISOString();
+        const lesson = learnFromCycle({
+          rootDir: this.rootDir,
+          run,
+          baseline,
+          verification: null,
+          lesson: 'Mutation did not apply. Preserve this failure as a future guard and do not promote.'
+        });
+        run.learningReceipt = lesson;
+        appendRun(run);
+        return run;
       }
+
+      // 8. Verify the candidate against the baseline with a real post-change build.
+      Log.info('[QuadBrain] Phase 6: Candidate verification and baseline comparison...');
+      const verification = await verifyPromotion({
+        rootDir: this.rootDir,
+        runId,
+        baseline,
+        targetFile,
+        commands: ['npm run build']
+      });
+      run.verification = verification;
+      run.proof = verification.proof;
+      run.comparison = verification.comparison;
+
+      if (!verification.comparison.promotionEligible) {
+        const rollback = rollbackToBaseline({ rootDir: this.rootDir, runId, baseline });
+        run.rollback = rollback;
+        run.truthState = verification.comparison.regression ? 'REGRESSION_ROLLED_BACK' : 'NOT_IMPROVED_ROLLED_BACK';
+        run.applied = false;
+        const lesson = learnFromCycle({
+          rootDir: this.rootDir,
+          run,
+          baseline,
+          verification,
+          lesson: verification.comparison.regression
+            ? 'Regression detected. Candidate was rejected and rolled back; retain the verification pattern as a future defense.'
+            : 'Candidate did not establish measurable improvement over the baseline; do not promote it.'
+        });
+        run.learningReceipt = lesson;
+      } else {
+        run.truthState = 'PROMOTED';
+        run.receipt = {
+          workspace: { strategy: 'baseline_candidate_comparison' },
+          evidence: { baseline, verification },
+          reversible: Boolean(baseline.snapshotPath)
+        };
+        const lesson = learnFromCycle({
+          rootDir: this.rootDir,
+          run,
+          baseline,
+          verification,
+          lesson: 'Verified promotion: candidate passed post-change verification and differed from the baseline. Retain the change as an optimization candidate for future cycles.'
+        });
+        run.learningReceipt = lesson;
+      }
+
       run.completedAt = new Date().toISOString();
 
-      // 7. Record to learning memory
+      // 9. Record to learning manager
       await this.learningManager.ingestKnowledgeChunk({
         id: `evolution_${runId}`,
         source: 'quadbrain_evolution',
@@ -262,7 +334,7 @@ export class QuadBrainEvolutionDaemon {
         context_summary: `[Evolution] ${applied ? 'Applied' : 'Failed'}: ${suggestion.description}`
       });
 
-      if (applied && suggestion.swarmTaskId) {
+      if (run.truthState === 'PROMOTED' && suggestion.swarmTaskId) {
         try {
           const { getSwarmConsensus } = await import('./swarm/SwarmConsensusEngine.js');
           const swarm = getSwarmConsensus();
@@ -301,7 +373,7 @@ export class QuadBrainEvolutionDaemon {
       } catch {}
 
       // 10. Level 5 Autonomy: Self-Marketing Broadcast
-      if (applied && (suggestion.componentChange || suggestion.architectureChange)) {
+      if (run.truthState === 'PROMOTED' && (suggestion.componentChange || suggestion.architectureChange)) {
         await SelfMarketingEngine.broadcastProductRelease(this.engine.aiAdaptor, runId, suggestion.description);
       }
 
