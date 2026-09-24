@@ -80,9 +80,11 @@ import { DeployRailView } from './deploy-rail-view.jsx';
 import { CommerceRailView } from './commerce-rail-view.jsx';
 import { AIPromptGeneratorView } from './ai-prompt-generator-view.jsx';
 import { LandingPage } from './features/LandingPage.jsx';
+import TevoStudioWorkspace from './features/TevoStudioWorkspace.jsx';
 import { OnboardingFlow } from './features/OnboardingFlow.jsx';
 
 export const PAGE_MAP = {
+  'tevo-studio': TevoStudioWorkspace,
   'dashboard': SovereignIntelligenceDashboard,
   'workspace': WorkspaceShell,
   'prompt-registry': PromptRegistry,
