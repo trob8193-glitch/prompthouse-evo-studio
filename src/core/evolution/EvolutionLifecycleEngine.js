@@ -43,6 +43,13 @@ function gitHead(rootDir) {
   }
 }
 
+function resolveTarget(rootDir, targetFile) {
+  const root = path.resolve(rootDir);
+  const absolute = path.resolve(rootDir, targetFile);
+  if (!absolute.startsWith(root + path.sep)) throw new Error('Target file escapes workspace');
+  return absolute;
+}
+
 function fileHash(filePath) {
   if (!fs.existsSync(filePath)) return null;
   return sha256(fs.readFileSync(filePath));
@@ -50,11 +57,7 @@ function fileHash(filePath) {
 
 export async function captureBaseline({ rootDir, runId, targetFile, commands = ['npm run build'] }) {
   const startedAt = new Date().toISOString();
-  const absolute = path.resolve(rootDir, targetFile);
-  const root = path.resolve(rootDir);
-  if (!absolute.startsWith(root + path.sep)) {
-    throw new Error('Target file escapes workspace');
-  }
+  const absolute = resolveTarget(rootDir, targetFile);
 
   const snapshotDir = SNAPSHOT_DIR(rootDir, runId);
   ensureDir(snapshotDir);
@@ -93,7 +96,7 @@ function normalizeProof(proof) {
 
 export async function verifyPromotion({ rootDir, runId, baseline, targetFile, commands = ['npm run build'] }) {
   const startedAt = new Date().toISOString();
-  const absolute = path.resolve(rootDir, targetFile);
+  const absolute = resolveTarget(rootDir, targetFile);
   const snapshotDir = SNAPSHOT_DIR(rootDir, runId);
 
   const proof = await runProofCommands({
@@ -131,9 +134,7 @@ export async function verifyPromotion({ rootDir, runId, baseline, targetFile, co
 }
 
 export function rollbackToBaseline({ rootDir, runId, baseline }) {
-  const absolute = path.resolve(rootDir, baseline.targetFile);
-  const root = path.resolve(rootDir);
-  if (!absolute.startsWith(root + path.sep)) throw new Error('Rollback target escapes workspace');
+  const absolute = resolveTarget(rootDir, baseline.targetFile);
   if (!baseline.snapshotPath || !fs.existsSync(baseline.snapshotPath)) {
     return { rolledBack: false, reason: 'No snapshot available' };
   }
