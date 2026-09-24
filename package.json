@@ -169,7 +169,10 @@
     "crucible": "node scripts/crucible-full-sweep.mjs",
     "tevo:desktop": "npm run desktop",
     "tevo:desktop:dev": "npm run desktop:dev",
-    "tevo:workspace": "npm run dev"
+    "tevo:workspace": "npm run dev",
+    "tevo:evolve": "node scripts/tevo-evolution-cycle.mjs",
+    "tevo:evolve:proof": "node scripts/tevo-evolution-cycle.mjs --proof",
+    "tevo:evidence:test": "vitest run tests/tevo-evolution-lifecycle.test.js"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8",
