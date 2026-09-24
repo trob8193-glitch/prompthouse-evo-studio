@@ -1,4 +1,4 @@
-name: CI
+name: TEVO Production Proof
 
 on:
   push:
@@ -6,15 +6,34 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  production-proof:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20.x'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Production build
+        run: npm run build --if-present
+      - name: Tests
+        run: npm test
+      - name: No-mock production gate
+        run: npm run audit:no-mock
+      - name: Comprehensive TEVO proof
+        run: npm run prove:tevo
+      - name: Upload proof receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tevo-production-proof
+          path: .prompthouse-data/proof/
+          if-no-files-found: ignore
