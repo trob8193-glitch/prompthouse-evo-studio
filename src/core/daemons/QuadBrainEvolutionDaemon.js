@@ -109,7 +109,7 @@ export class QuadBrainEvolutionDaemon {
         startedAt: new Date().toISOString(),
         truthState: 'PROOF_PASSED',
         proof: { passed: true, commandCount: 1 },
-        comparison: { improved: true },
+        comparison: { improved: null, promotionEligible: false, reason: 'Proof-only cycle does not mutate or claim improvement.' },
         receipt: { workspace: { strategy: 'proof_only_no_source_mutation' } },
         completedAt: new Date().toISOString()
       };
@@ -330,8 +330,8 @@ export class QuadBrainEvolutionDaemon {
       await this.learningManager.ingestKnowledgeChunk({
         id: `evolution_${runId}`,
         source: 'quadbrain_evolution',
-        signal_strength: applied ? 1.0 : 0.3,
-        context_summary: `[Evolution] ${applied ? 'Applied' : 'Failed'}: ${suggestion.description}`
+        signal_strength: run.truthState === 'PROMOTED' ? 1.0 : 0.3,
+        context_summary: `[Evolution] ${run.truthState === 'PROMOTED' ? 'Promoted after verification' : 'Rejected/failed'}: ${suggestion.description}`
       });
 
       if (run.truthState === 'PROMOTED' && suggestion.swarmTaskId) {
@@ -350,7 +350,7 @@ export class QuadBrainEvolutionDaemon {
       state.lastCycleAt = new Date().toISOString();
       state.lastRunId = runId;
       state.lastTruthState = run.truthState;
-      if (applied) {
+      if (run.truthState === 'PROMOTED') {
         state.consecutiveFailures = 0;
         state.totalEvolutions = (state.totalEvolutions || 0) + 1;
       } else {
