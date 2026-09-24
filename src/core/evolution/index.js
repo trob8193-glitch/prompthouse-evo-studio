@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { getEvolutionEvidenceMemory } from './EvolutionLifecycleEngine.js';
 
 const DATA_DIR = () => path.join(process.cwd(), '.prompthouse-data', 'evolution');
 const RUNS_FILE = () => path.join(DATA_DIR(), 'runs.jsonl');
@@ -54,6 +55,7 @@ export function getEvolutionStatus() {
   const state = readJsonSafe(STATE_FILE(), { active: false, cycleCount: 0, lastCycleAt: null });
   const runs = readJsonlSafe(RUNS_FILE(), 5);
   const lastRun = runs.length > 0 ? runs[runs.length - 1] : null;
+  const evidenceMemory = getEvolutionEvidenceMemory(process.cwd());
 
   return {
     success: true,
@@ -76,6 +78,12 @@ export function getEvolutionStatus() {
       comparison: lastRun.comparison || null
     } : null,
     recentRuns: runs.slice(-5).reverse(),
+    evidence: {
+      lessons: evidenceMemory.lessons.length,
+      regressionDefenses: evidenceMemory.regressionDefenses.length,
+      promotions: evidenceMemory.promotionHistory.length,
+      lastLesson: evidenceMemory.lessons[evidenceMemory.lessons.length - 1] || null
+    },
     policy: { rule: 'CSS auto-merge, code requires approval', costFirewallActive: true }
   };
 }
