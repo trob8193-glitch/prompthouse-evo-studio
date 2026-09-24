@@ -7,6 +7,7 @@ import {
   FolderTree, Settings2, Rocket, Pause, CheckCircle2
 } from 'lucide-react';
 import { useSovereignStore } from '../store.js';
+import { safeFetchBridge } from '../config/bridge-config.js';
 
 const panel = {
   background: 'rgba(8, 12, 20, 0.88)',
@@ -63,7 +64,16 @@ export default function TevoStudioWorkspace() {
     catch { return { cycles: 0, preferences: {}, skills: [] }; }
   });
 
-  React.useEffect(() => { fetchBridgeStatus(); }, [fetchBridgeStatus]);
+  const [evolutionStatus, setEvolutionStatus] = React.useState(null);
+
+  const refreshEvolutionStatus = React.useCallback(async () => {
+    try {
+      const result = await safeFetchBridge('/api/evolution/status', { timeout: 5000 });
+      if (result.ok) setEvolutionStatus(result.data);
+    } catch {}
+  }, []);
+
+  React.useEffect(() => { fetchBridgeStatus(); refreshEvolutionStatus(); }, [fetchBridgeStatus, refreshEvolutionStatus]);
 
   const runMission = async () => {
     setRunning(true);
@@ -76,6 +86,7 @@ export default function TevoStudioWorkspace() {
       setEvolution(next);
       localStorage.setItem('tevo_user_profile', JSON.stringify(next));
     }
+    await refreshEvolutionStatus();
     setRunning(false);
   };
 
@@ -135,6 +146,8 @@ export default function TevoStudioWorkspace() {
             <div style={{ fontSize: 9, fontWeight: 900, color: '#c5b4ff' }}>USER EVOLUTION</div>
             <div style={{ marginTop: 6, fontSize: 11, color: '#91a0b5' }}>Cycles: <b style={{ color: '#e8f1ff' }}>{evolution.cycles}</b></div>
             <div style={{ fontSize: 11, color: '#91a0b5' }}>Adaptive profile: <b style={{ color: '#e8f1ff' }}>ACTIVE</b></div>
+            <div style={{ fontSize: 11, color: '#91a0b5' }}>Verified promotions: <b style={{ color: '#e8f1ff' }}>{evolutionStatus?.evidence?.promotions ?? 0}</b></div>
+            <div style={{ fontSize: 11, color: '#91a0b5' }}>Regression defenses: <b style={{ color: '#e8f1ff' }}>{evolutionStatus?.evidence?.regressionDefenses ?? 0}</b></div>
           </div>
         </aside>
 
@@ -164,6 +177,11 @@ export default function TevoStudioWorkspace() {
             ) : (
               <div style={{ padding: 18, overflow: 'auto', height: '100%' }}>
                 <h3 style={{ margin: '0 0 10px', fontSize: 15 }}>Adaptive Evolution Loop</h3>
+                <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap', marginBottom: 10 }}>
+                  <Pill active>{evolutionStatus?.stage?.toUpperCase() || 'STATUS UNKNOWN'}</Pill>
+                  <Pill>Cycles: {evolutionStatus?.cycleCount ?? evolution.cycles}</Pill>
+                  <Pill>Lessons: {evolutionStatus?.evidence?.lessons ?? 0}</Pill>
+                </div>
                 <p style={{ color: '#8b99ad', fontSize: 12, lineHeight: 1.6 }}>TEVO records project interactions and uses them as bounded context for future planning. Evolution is evidence-driven: observe → propose → validate → retain.</p>
                 <div style={{ display: 'grid', gap: 8, marginTop: 16 }}>
                   {['Observe user workflow', 'Infer reusable preferences', 'Generate candidate improvement', 'Validate against tests and project constraints', 'Persist only verified improvement'].map((x, i) => (
