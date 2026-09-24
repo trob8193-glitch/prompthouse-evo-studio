@@ -30,6 +30,37 @@ Or, you can click the **"Omni-Bond (Global IDE Fusion)"** button inside the Stud
 - [Five-Minute Demo Workflow](./docs/DEMO_WORKFLOW.md) — Flagship demo loop.
 - [Pilot Roadmap](./docs/PILOT_ROADMAP.md) — Future milestones and criteria.
 
+
+## TEVO Studio Desktop
+
+TEVO Studio is the desktop-facing autonomous development workspace for this repository. The default studio surface now provides a unified environment for:
+
+- AI-assisted application coding and project planning
+- React/Three.js 3D project inspection and viewport work
+- code editing, runtime execution, testing, debugging, and proof gates
+- a TEVO coding agent connected to the existing local bridge
+- bounded autonomy controls with explicit action authority
+- user-specific evolution context stored locally and fed back into future missions
+- evidence-first validation rather than claiming work that was not actually performed
+
+### Desktop development
+
+```bash
+npm install
+npm run tevo:desktop:dev
+```
+
+The desktop shell is Electron-based and keeps Node integration disabled in the renderer. The bridge remains the local execution boundary.
+
+### Evolution loop
+
+TEVO's workspace models the loop as:
+
+`observe → propose → implement → validate → retain verified improvement`
+
+The UI records local evolution-cycle metadata, while consequential operations remain subject to the existing proof and approval rails in the repository. The agent is not granted blanket authority merely because the prompt sounded confident, because apparently software needs boundaries too.
+
+
 ## Runtime
 
 - Frontend: `npm run dev`
