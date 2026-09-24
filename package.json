@@ -1,5 +1,5 @@
 {
-  "name": "prompthouse-evo-studio",
+  "name": "tevo-studio",
   "private": true,
   "version": "1.0.0",
   "workspaces": [
@@ -166,7 +166,10 @@
     "audit:full:quick": "node scripts/audit-full-daemon.mjs --once --quick",
     "audit:full:status": "node scripts/audit-full-daemon.mjs --status",
     "audit:daemon": "node scripts/audit-full-daemon.mjs",
-    "crucible": "node scripts/crucible-full-sweep.mjs"
+    "crucible": "node scripts/crucible-full-sweep.mjs",
+    "tevo:desktop": "npm run desktop",
+    "tevo:desktop:dev": "npm run desktop:dev",
+    "tevo:workspace": "npm run dev"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8",
@@ -230,5 +233,6 @@
     "tailwindcss": "^4.3.1",
     "vite": "^8.0.16",
     "vitest": "^4.1.5"
-  }
+  },
+  "productName": "TEVO Studio"
 }
