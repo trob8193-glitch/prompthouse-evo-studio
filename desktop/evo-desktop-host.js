@@ -27,7 +27,7 @@ function createMainWindow() {
     height: 960,
     minWidth: 1100,
     minHeight: 720,
-    title: 'PH Evo Studio Desktop Host',
+    title: 'TEVO Studio — Autonomous AI Development Environment',
     backgroundColor: '#0a0e1a',
     webPreferences: {
       contextIsolation: true,
