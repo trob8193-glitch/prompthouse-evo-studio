@@ -153,7 +153,7 @@
     "architecture:proof": "node scripts/enterprise_architecture_status.mjs --compact",
     "architecture:audit": "npm run architecture:proof && npm run test -- tests/brain-stack-contracts.test.js",
     "enterprise:edge": "npm run architecture:proof && npm run cost && npm run maturity:check && npm run platform:release-verdict",
-    "enterprise:full-proof": "npm run architecture:proof && npm run test && npm run build && npm run audit:imports && npm run audit:css && npm run audit:dead-surfaces && npm run audit:ui-matrix && npm run maturity:strict && npm run cost && npm run platform:ready",
+    "enterprise:full-proof": "npm run architecture:proof && npm run test && npm run build && npm run audit:no-mock && npm run audit:imports && npm run audit:css && npm run audit:dead-surfaces && npm run audit:ui-matrix && npm run maturity:strict && npm run cost && npm run platform:ready",
     "launch:prove": "node scripts/prove_production_launch.mjs",
     "test:enterprise-license": "node scripts/test-enterprise-license.mjs",
     "evo:app-intelligence": "node scripts/build_app_intelligence_dataset.mjs",
@@ -173,7 +173,8 @@
     "tevo:evolve": "node scripts/tevo-evolution-cycle.mjs",
     "tevo:evolve:proof": "node scripts/tevo-evolution-cycle.mjs --proof",
     "tevo:evidence:test": "vitest run tests/tevo-evolution-lifecycle.test.js",
-    "prove:tevo": "node scripts/prove-tevo-production.mjs"
+    "prove:tevo": "node scripts/prove-tevo-production.mjs",
+    "audit:no-mock": "node scripts/no-mock-production-gate.mjs"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8",
