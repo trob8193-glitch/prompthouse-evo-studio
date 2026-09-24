@@ -172,7 +172,8 @@
     "tevo:workspace": "npm run dev",
     "tevo:evolve": "node scripts/tevo-evolution-cycle.mjs",
     "tevo:evolve:proof": "node scripts/tevo-evolution-cycle.mjs --proof",
-    "tevo:evidence:test": "vitest run tests/tevo-evolution-lifecycle.test.js"
+    "tevo:evidence:test": "vitest run tests/tevo-evolution-lifecycle.test.js",
+    "prove:tevo": "node scripts/prove-tevo-production.mjs"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8",
