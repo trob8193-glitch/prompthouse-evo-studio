@@ -186,7 +186,7 @@ export const useSovereignStore = create((set, get) => ({
 
 
   // ─── Navigation ─────────────────────────────────────────────
-  activePage: 'dashboard',
+  activePage: 'tevo-studio',
   sidebarCollapsed: false,
   activeFile: 'src/App.jsx',
   terminalOpen: true,
