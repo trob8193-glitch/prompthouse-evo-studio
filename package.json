@@ -181,7 +181,9 @@
     "tevo:evolution:promote": "node scripts/tevo-evolution-promote.mjs",
     "tevo:user:profile": "node scripts/tevo-user-adaptation.mjs status",
     "tevo:proof:fabric": "node scripts/tevo-proof-fabric.mjs",
-    "tevo:evolution:full-proof": "npm run tevo:capability:status && npm run tevo:proof:fabric && npm run tevo:valuation:proof"
+    "tevo:evolution:full-proof": "npm run tevo:capability:status && npm run tevo:proof:fabric && npm run tevo:valuation:proof",
+    "tevo:model:register": "node scripts/tevo-model-register.mjs",
+    "tevo:training:run": "node scripts/tevo-training-run.mjs"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8",
