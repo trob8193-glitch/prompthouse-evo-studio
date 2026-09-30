@@ -174,7 +174,10 @@
     "tevo:evolve:proof": "node scripts/tevo-evolution-cycle.mjs --proof",
     "tevo:evidence:test": "vitest run tests/tevo-evolution-lifecycle.test.js",
     "prove:tevo": "node scripts/prove-tevo-production.mjs",
-    "audit:no-mock": "node scripts/no-mock-production-gate.mjs"
+    "audit:no-mock": "node scripts/no-mock-production-gate.mjs",
+    "tevo:proof:benchmark": "node scripts/tevo-production-benchmark.mjs",
+    "tevo:proof:index": "node scripts/tevo-proof-index.mjs",
+    "tevo:valuation:proof": "npm run tevo:proof:benchmark && npm run tevo:proof:index"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8",
